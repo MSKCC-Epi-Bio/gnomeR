@@ -19,3 +19,5 @@ You can install the development version from
 # install.packages("devtools")
 devtools::install_github("margarethannum/gnomeR")
 ```
+
+quick change
