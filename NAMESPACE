@@ -2,5 +2,6 @@
 
 export("%>%")
 export(create.bin.matrix)
+export(dat.oncoPrint)
 import(dplyr)
 importFrom(magrittr,"%>%")

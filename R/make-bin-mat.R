@@ -11,13 +11,20 @@
 #' @param SNP.only Boolean to rather the genetics events to be kept only to be SNPs (insertions and deletions will be removed).
 #' Default is FALSE.
 #' @param include.silent Boolean to keep or remove all silent mutations. TRUE keeps, FALSE removes. Default is FALSE.
+#' @param fusion An optional MAF file for fusions. If inputed the outcome will be added to the matrix with columns ending in ".fus".
+#' Default is NULL.
+#' @param cna An optional CNA files. If inputed the outcome will be added to the matrix with columns ending in ".del" and ".amp".
+#' Default is NULL. Note that this file must have patients as columns and genes as rows. create.bin.matrix expects a matrix with
+#' values between -2 and 2. Please do not use any other format. Other functions in the package are available to deal with more detailed
+#' CNA data.
 #' @return mut : a binary matrix of mutation data
 #' @return no.mu.patients : a character vector of patients having no mutations found in the MAF file.
 #' @export
 #'
 #' @import dplyr
 
-create.bin.matrix <- function(patients=NULL, maf, mut.type = "SOMATIC",SNP.only = F,include.silent = F){
+create.bin.matrix <- function(patients=NULL, maf, mut.type = "SOMATIC",SNP.only = F,include.silent = F,
+                              fusion = NULL,cna = NULL){
 
   # quick data checks #
   if(length(match("Tumor_Sample_Barcode",colnames(maf))) == 0)
@@ -55,6 +62,67 @@ create.bin.matrix <- function(patients=NULL, maf, mut.type = "SOMATIC",SNP.only 
   missing.mut <- apply(mut,1,function(x){sum(x)==0})
   if(sum(missing.mut) > 0)
     warning("Some patients did not have any mutations found in the MAF file.")
+
+
+  # add fusions if needed #
+  if(!is.null(fusion)){
+
+    # quick data checks #
+    if(length(match("Tumor_Sample_Barcode",colnames(fusion))) == 0)
+      stop("The fusion file inputted is missing a patient name column. (Tumor_Sample_Barcode)")
+    if(length(match("Hugo_Symbol",colnames(fusion))) == 0)
+      stop("The fusion file inputted is missing a gene name column. (Hugo_Symbol)")
+
+
+    fusion <- fusion %>%
+      filter(Tumor_Sample_Barcode %in% patients)
+
+    #### out frame
+    fusion.out <- as.data.frame(matrix(0L,nrow=length(patients),ncol=length(unique(fusion$Hugo_Symbol))))
+    colnames(fusion.out) <- unique(fusion$Hugo_Symbol)
+    rownames(fusion.out) <- patients
+
+    for(i in patients){
+      genes <- fusion$Hugo_Symbol[fusion$Tumor_Sample_Barcode %in% i]
+      if(length(genes) != 0){fusion.out[match(i,rownames(fusion.out)),
+                                        match(unique(as.character(genes)),colnames(fusion.out))] <- 1}
+    }
+    colnames(fusion.out) <- paste0(colnames(fusion.out),".fus")
+    mut <- as.data.frame(cbind(mut,fusion.out))
+    rownames(mut) <- patients
+  }
+
+
+  # add CNA if needed #
+  if(!is.null(cna)){
+    rownames(cna) <- cna[,1]
+    cna <- cna[,-1]
+    cna <- as.data.frame(t(cna))
+    rownames(cna) <- gsub("\\.","-",rownames(cna))
+    cna <- cna[rownames(cna) %in% patients,]
+
+    temp <- do.call("cbind",apply(cna,2,function(x){
+      yA <- ifelse(x==2,1,0)
+      yD <- ifelse(x==-2,1,0)
+      out <- as.data.frame(cbind(yA,yD))
+      colnames(out) <- c("Amp","Del")
+      return(out)
+    }))
+
+    cna <- temp[,apply(temp,2,function(x){sum(x,na.rm=T) > 0})]
+
+    # add missing
+    missing <- patients[which(is.na(match(patients,rownames(cna))))]
+    add <- as.data.frame(matrix(0L,nrow = length(missing),ncol = ncol(cna)))
+    rownames(add )  <- missing
+    colnames(add )<- colnames(cna)
+    cna <- as.data.frame(rbind(cna,add))
+    cna <- cna[match(patients,rownames(cna)),]
+
+    # merge #
+    mut <- as.data.frame(cbind(mut,cna))
+    rownames(mut) <- patients
+  }
 
   return(list("mut"=mut,"no.mut.patients"=rownames(mut)[missing.mut]))
 }

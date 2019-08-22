@@ -5,7 +5,7 @@
 \title{create.bin.matrix}
 \usage{
 create.bin.matrix(patients = NULL, maf, mut.type = "SOMATIC",
-  SNP.only = F, include.silent = F)
+  SNP.only = F, include.silent = F, fusion = NULL, cna = NULL)
 }
 \arguments{
 \item{patients}{a character vector that let's the user specify the patients to be used to create the matrix.
@@ -20,6 +20,14 @@ keep all mutations regardless of status (not recommended). Default is SOMATIC.}
 Default is FALSE.}
 
 \item{include.silent}{Boolean to keep or remove all silent mutations. TRUE keeps, FALSE removes. Default is FALSE.}
+
+\item{fusion}{An optional MAF file for fusions. If inputed the outcome will be added to the matrix with columns ending in ".fus".
+Default is NULL.}
+
+\item{cna}{An optional CNA files. If inputed the outcome will be added to the matrix with columns ending in ".del" and ".amp".
+Default is NULL. Note that this file must have patients as columns and genes as rows. create.bin.matrix expects a matrix with
+values between -2 and 2. Please do not use any other format. Other functions in the package are available to deal with more detailed
+CNA data.}
 }
 \value{
 mut : a binary matrix of mutation data
