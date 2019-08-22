@@ -38,3 +38,8 @@ no.mu.patients : a character vector of patients having no mutations found in the
 Enables creation of a binary matrix from a maf file with
 a predifined list of patients (rows are patients and columns are genes)
 }
+\examples{
+library(gnomeR)
+mut.only <- create.bin.matrix(maf = mut)
+all.platforms <- create.bin.matrix(patients = unique(mut$Tumor_Sample_Barcode)[1:100],maf = mut,fusion = fusion,cna = cna)
+}

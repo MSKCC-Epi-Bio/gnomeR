@@ -21,3 +21,9 @@ p : an oncoprint object
 \description{
 Creates the OncoPrint corresponding to the inputted genetic data
 }
+\examples{
+library(gnomeR)
+mut.only <- create.bin.matrix(maf = mut)
+all.platforms <- create.bin.matrix(patients = unique(mut$Tumor_Sample_Barcode)[1:100],maf = mut,fusion = fusion,cna = cna)
+plot.oncoPrint(gen.dat = all.platforms$mut)
+}
