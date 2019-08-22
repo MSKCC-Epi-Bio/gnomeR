@@ -38,6 +38,16 @@ create.bin.matrix <- function(patients=NULL, maf, mut.type = "SOMATIC",SNP.only 
   if(length(match("Mutation_Status",colnames(maf))) == 0)
     stop("The MAF file inputted is missing a mutation status column. (Mutation_Status)")
 
+  if (sum(grepl("KMT2D", maf$Hugo_Symbol)) > 1) {
+    maf <- maf %>%
+      mutate(Hugo_Symbol = case_when(
+        Hugo_Symbol == "KMT2D" ~ "MLL2",
+        TRUE ~ Hugo_Symbol
+      ))
+
+    warning("KMT2D has been recoded to MLL2")
+  }
+
   maf <- as.data.frame(maf)
 
   # filter/define patients #
@@ -52,6 +62,7 @@ create.bin.matrix <- function(patients=NULL, maf, mut.type = "SOMATIC",SNP.only 
   maf <- maf %>% filter(Variant_Classification != Variant.filt,
                         Variant_Type %in% SNP.filt,
                         Mutation_Status %in% Mut.filt)
+
 
   #### out frame
   mut <- as.data.frame(matrix(0L,nrow=length(patients),ncol=length(unique(maf$Hugo_Symbol))))
