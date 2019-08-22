@@ -1,4 +1,4 @@
-#' plot.oncoPrint
+#' plot_oncoPrint
 #'
 #' Creates the OncoPrint corresponding to the inputted genetic data
 #'
@@ -8,7 +8,9 @@
 #' @param ordered An optional vector of length equal to the number of patients under consideration. Indicates the new order (from left to right)
 #' to be plotted.
 #' @return p : an oncoprint object
+#'
 #' @export
+#'
 #' @examples library(gnomeR)
 #' mut.only <- create.bin.matrix(maf = mut)
 #' all.platforms <- create.bin.matrix(patients = unique(mut$Tumor_Sample_Barcode)[1:100],maf = mut,fusion = fusion,cna = cna)
@@ -16,7 +18,7 @@
 #' @import ComplexHeatmap
 
 
-plot.oncoPrint <- function(gen.dat,clin.dat=NULL,ordered=NULL){
+plot_oncoPrint <- function(gen.dat,clin.dat=NULL,ordered=NULL){
 
   # make data #
   mat <- dat.oncoPrint(gen.dat,clin.dat)
