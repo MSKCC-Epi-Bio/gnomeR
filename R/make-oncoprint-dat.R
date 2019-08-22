@@ -39,59 +39,64 @@ dat.oncoPrint <- function(gen.dat,clin.dat=NULL){
   }
 
   # del #
-  del <- gen.dat[,na.omit(match(paste0(genes,".Del"),colnames(gen.dat)))]
-  if(is.null(dim(del))) {
-    del <- as.data.frame(del)
-    rownames(del) <- rownames(gen.dat)
-  }
-  colnames(del) <- gsub(".Del","",colnames(gen.dat)[na.omit(match(paste0(genes,".Del"),colnames(gen.dat)))])
-  for(i in 1:nrow(del)){
-    for(j in 1:ncol(del)){
-      if(del[i,j]==1) {
-        if(!is.na(mat[match(colnames(del)[j],rownames(mat)),match(rownames(del)[i],colnames(mat))])){
-          mat[match(colnames(del)[j],rownames(mat)),match(rownames(del)[i],colnames(mat))] <-
-            paste0(mat[match(colnames(del)[j],rownames(mat)),match(rownames(del)[i],colnames(mat))],"DEL;")}
-        else{mat[match(colnames(del)[j],rownames(mat)),match(rownames(del)[i],colnames(mat))] <- "DEL;"}
+  if(length(na.omit(match(paste0(genes,".Del"),colnames(gen.dat)))) > 0){
+    del <- gen.dat[,na.omit(match(paste0(genes,".Del"),colnames(gen.dat)))]
+    if(is.null(dim(del))) {
+      del <- as.data.frame(del)
+      rownames(del) <- rownames(gen.dat)
+    }
+    colnames(del) <- gsub(".Del","",colnames(gen.dat)[na.omit(match(paste0(genes,".Del"),colnames(gen.dat)))])
+    for(i in 1:nrow(del)){
+      for(j in 1:ncol(del)){
+        if(del[i,j]==1) {
+          if(!is.na(mat[match(colnames(del)[j],rownames(mat)),match(rownames(del)[i],colnames(mat))])){
+            mat[match(colnames(del)[j],rownames(mat)),match(rownames(del)[i],colnames(mat))] <-
+              paste0(mat[match(colnames(del)[j],rownames(mat)),match(rownames(del)[i],colnames(mat))],"DEL;")}
+          else{mat[match(colnames(del)[j],rownames(mat)),match(rownames(del)[i],colnames(mat))] <- "DEL;"}
+        }
       }
     }
   }
 
   # amp #
-  amp <- gen.dat[,na.omit(match(paste0(genes,".Amp"),colnames(gen.dat)))]
-  if(is.null(dim(amp))) {
-    amp <- as.data.frame(amp)
-    rownames(amp) <- rownames(gen.dat)
-  }
-  colnames(amp) <- gsub(".Amp","",colnames(gen.dat)[na.omit(match(paste0(genes,".Amp"),colnames(gen.dat)))])
-  for(i in 1:nrow(amp)){
-    for(j in 1:ncol(amp)){
-      if(amp[i,j]==1) {
-        if(!is.na(mat[match(colnames(amp)[j],rownames(mat)),match(rownames(amp)[i],colnames(mat))])){
-          mat[match(colnames(amp)[j],rownames(mat)),match(rownames(amp)[i],colnames(mat))] <-
-            paste0(mat[match(colnames(amp)[j],rownames(mat)),match(rownames(amp)[i],colnames(mat))],"AMP;")}
-        else{mat[match(colnames(amp)[j],rownames(mat)),match(rownames(amp)[i],colnames(mat))] <- "AMP;"}
+  if(length(na.omit(match(paste0(genes,".Amp"),colnames(gen.dat)))) > 0){
+    amp <- gen.dat[,na.omit(match(paste0(genes,".Amp"),colnames(gen.dat)))]
+    if(is.null(dim(amp))) {
+      amp <- as.data.frame(amp)
+      rownames(amp) <- rownames(gen.dat)
+    }
+    colnames(amp) <- gsub(".Amp","",colnames(gen.dat)[na.omit(match(paste0(genes,".Amp"),colnames(gen.dat)))])
+    for(i in 1:nrow(amp)){
+      for(j in 1:ncol(amp)){
+        if(amp[i,j]==1) {
+          if(!is.na(mat[match(colnames(amp)[j],rownames(mat)),match(rownames(amp)[i],colnames(mat))])){
+            mat[match(colnames(amp)[j],rownames(mat)),match(rownames(amp)[i],colnames(mat))] <-
+              paste0(mat[match(colnames(amp)[j],rownames(mat)),match(rownames(amp)[i],colnames(mat))],"AMP;")}
+          else{mat[match(colnames(amp)[j],rownames(mat)),match(rownames(amp)[i],colnames(mat))] <- "AMP;"}
+        }
       }
     }
   }
 
   # fusions #
-  fusion <- gen.dat[,na.omit(match(paste0(genes,".fus"),colnames(gen.dat)))]
-  if(is.null(dim(fusion))) {
-    fusion <- as.data.frame(fusion)
-    rownames(fusion) <- rownames(gen.dat)
-  }
-  colnames(fusion) <- gsub(".fus","",colnames(gen.dat)[na.omit(match(paste0(genes,".fus"),colnames(gen.dat)))])
-  for(i in 1:nrow(fusion)){
-    for(j in 1:ncol(fusion)){
-      if(fusion[i,j]==1) {
-        if(!is.na(mat[match(colnames(fusion)[j],rownames(mat)),match(rownames(fusion)[i],colnames(mat))])){
-          mat[match(colnames(fusion)[j],rownames(mat)),match(rownames(fusion)[i],colnames(mat))] <-
-            paste0(mat[match(colnames(fusion)[j],rownames(mat)),match(rownames(fusion)[i],colnames(mat))],"FUS;")}
-        else{mat[match(colnames(fusion)[j],rownames(mat)),match(rownames(fusion)[i],colnames(mat))] <- "FUS;"}
+  if(length(na.omit(match(paste0(genes,".fus"),colnames(gen.dat)))) > 0){
+    fusion <- gen.dat[,na.omit(match(paste0(genes,".fus"),colnames(gen.dat)))]
+    if(is.null(dim(fusion))) {
+      fusion <- as.data.frame(fusion)
+      rownames(fusion) <- rownames(gen.dat)
+    }
+    colnames(fusion) <- gsub(".fus","",colnames(gen.dat)[na.omit(match(paste0(genes,".fus"),colnames(gen.dat)))])
+    for(i in 1:nrow(fusion)){
+      for(j in 1:ncol(fusion)){
+        if(fusion[i,j]==1) {
+          if(!is.na(mat[match(colnames(fusion)[j],rownames(mat)),match(rownames(fusion)[i],colnames(mat))])){
+            mat[match(colnames(fusion)[j],rownames(mat)),match(rownames(fusion)[i],colnames(mat))] <-
+              paste0(mat[match(colnames(fusion)[j],rownames(mat)),match(rownames(fusion)[i],colnames(mat))],"FUS;")}
+          else{mat[match(colnames(fusion)[j],rownames(mat)),match(rownames(fusion)[i],colnames(mat))] <- "FUS;"}
+        }
       }
     }
   }
-
   ### clin ###
   if(!is.null(clin.dat)){
     temp <- clin.dat
