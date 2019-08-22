@@ -18,3 +18,5 @@ biocViews: ComplexHeatmap
 Imports: 
     magrittr,
     dplyr
+Depends:
+    ComplexHeatmap
