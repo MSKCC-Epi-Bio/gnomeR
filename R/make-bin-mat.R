@@ -20,7 +20,9 @@
 #' @return mut : a binary matrix of mutation data
 #' @return no.mu.patients : a character vector of patients having no mutations found in the MAF file.
 #' @export
-#'
+#' @examples library(gnomeR)
+#' mut.only <- create.bin.matrix(maf = mut)
+#' all.platforms <- create.bin.matrix(patients = unique(mut$Tumor_Sample_Barcode)[1:100],maf = mut,fusion = fusion,cna = cna)
 #' @import dplyr
 
 create.bin.matrix <- function(patients=NULL, maf, mut.type = "SOMATIC",SNP.only = F,include.silent = F,
@@ -35,6 +37,8 @@ create.bin.matrix <- function(patients=NULL, maf, mut.type = "SOMATIC",SNP.only 
     stop("The MAF file inputted is missing a variant classification column. (Variant_Classification)")
   if(length(match("Mutation_Status",colnames(maf))) == 0)
     stop("The MAF file inputted is missing a mutation status column. (Mutation_Status)")
+
+  maf <- as.data.frame(maf)
 
   # filter/define patients #
   if(!is.null(patients)) maf <- maf[maf$Tumor_Sample_Barcode %in% patients,]
@@ -66,7 +70,7 @@ create.bin.matrix <- function(patients=NULL, maf, mut.type = "SOMATIC",SNP.only 
 
   # add fusions if needed #
   if(!is.null(fusion)){
-
+    fusion <- as.data.frame(fusion)
     # quick data checks #
     if(length(match("Tumor_Sample_Barcode",colnames(fusion))) == 0)
       stop("The fusion file inputted is missing a patient name column. (Tumor_Sample_Barcode)")
@@ -95,6 +99,7 @@ create.bin.matrix <- function(patients=NULL, maf, mut.type = "SOMATIC",SNP.only 
 
   # add CNA if needed #
   if(!is.null(cna)){
+    cna <- as.data.frame(cna)
     rownames(cna) <- cna[,1]
     cna <- cna[,-1]
     cna <- as.data.frame(t(cna))
