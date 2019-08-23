@@ -25,5 +25,5 @@ Creates the OncoPrint corresponding to the inputted genetic data
 library(gnomeR)
 mut.only <- create.bin.matrix(maf = mut)
 all.platforms <- create.bin.matrix(patients = unique(mut$Tumor_Sample_Barcode)[1:100],maf = mut,fusion = fusion,cna = cna)
-plot.oncoPrint(gen.dat = all.platforms$mut)
+plot_oncoPrint(gen.dat = all.platforms$mut[,names(sort(apply(all.platforms$mut,2,sum),decreasing =T)[1:20])])
 }

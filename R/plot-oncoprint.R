@@ -13,8 +13,14 @@
 #'
 #' @examples library(gnomeR)
 #' mut.only <- create.bin.matrix(maf = mut)
-#' all.platforms <- create.bin.matrix(patients = unique(mut$Tumor_Sample_Barcode)[1:100],maf = mut,fusion = fusion,cna = cna)
-#' plot_oncoPrint(gen.dat = all.platforms$mut[,sample(1:ncol(all.platforms$mut),20)])
+#' all.platforms <- create.bin.matrix(patients = unique(mut$Tumor_Sample_Barcode)[1:500],maf = mut,fusion = fusion,cna = cna)
+#' plot_oncoPrint(gen.dat = all.platforms$mut[,c(grep("TP53",colnames(all.platforms$mut)),
+#' grep("EGFR",colnames(all.platforms$mut)),
+#' grep("KRAS",colnames(all.platforms$mut)),
+#' grep("STK11",colnames(all.platforms$mut)),
+#' grep("KEAP1",colnames(all.platforms$mut)),
+#' grep("ALK",colnames(all.platforms$mut)),
+#' grep("CDKN2A",colnames(all.platforms$mut)))])
 #' @import ComplexHeatmap
 
 
