@@ -3,6 +3,7 @@
 export("%>%")
 export(create.bin.matrix)
 export(dat.oncoPrint)
+export(gen.tab)
 export(plot_oncoPrint)
 import(ComplexHeatmap)
 import(dplyr)
