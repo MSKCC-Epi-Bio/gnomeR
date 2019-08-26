@@ -61,7 +61,7 @@ create.bin.matrix <- function(patients=NULL, maf, mut.type = "SOMATIC",SNP.only 
 
   maf <- maf %>% filter(Variant_Classification != Variant.filt,
                         Variant_Type %in% SNP.filt,
-                        Mutation_Status %in% Mut.filt)
+                        grepl(Mut.filt,Mutation_Status,ignore.case = T))
 
 
   #### out frame
