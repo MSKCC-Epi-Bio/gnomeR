@@ -38,6 +38,7 @@ create.bin.matrix <- function(patients=NULL, maf, mut.type = "SOMATIC",SNP.only 
   if(length(match("Mutation_Status",colnames(maf))) == 0)
     stop("The MAF file inputted is missing a mutation status column. (Mutation_Status)")
 
+  # recode gene names that have been changed between panel versions to make sure they are consistent and counted as the same gene
   if (sum(grepl("KMT2D", maf$Hugo_Symbol)) > 1) {
     maf <- maf %>%
       mutate(Hugo_Symbol = case_when(
