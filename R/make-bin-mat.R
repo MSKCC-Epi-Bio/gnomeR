@@ -48,6 +48,16 @@ create.bin.matrix <- function(patients=NULL, maf, mut.type = "SOMATIC",SNP.only 
     warning("KMT2D has been recoded to MLL2")
   }
 
+  if (sum(grepl("KMT2C", maf$Hugo_Symbol)) > 1) {
+    maf <- maf %>%
+      mutate(Hugo_Symbol = case_when(
+        Hugo_Symbol == "KMT2C" ~ "MLL3",
+        TRUE ~ Hugo_Symbol
+      ))
+
+    warning("KMT2C has been recoded to MLL3")
+  }
+
   maf <- as.data.frame(maf)
 
   # filter/define patients #
