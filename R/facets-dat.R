@@ -16,7 +16,6 @@
 #' @examples library(gnomeR)
 #'
 #' @import
-#' facets
 #' iClusterPlus
 #' dplyr
 #' cluster

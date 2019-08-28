@@ -17,11 +17,9 @@ RoxygenNote: 6.1.1
 biocViews: 
     ComplexHeatmap,
     iClusterPlus
-Remotes: github::mskcc/facets
 Imports: 
     magrittr,
     dplyr
 Depends:
     ComplexHeatmap,
-    iClusterPlus,
-    facets
+    iClusterPlus
