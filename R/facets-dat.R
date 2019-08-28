@@ -1,8 +1,6 @@
-#' gen.tab
+#' facets.dat
 #'
-#' Creates a summary table of the distribution of the genetic features by a specific outcome/covariate of interest. The difference
-#' is tested using Fisher's exact test and further adjusted for multiple comparisons. Note that continuous genetic factors
-#' are dichotomized at their median.
+#' Creates a copy number alteration matrix from segment files.
 #'
 #' @param filenames the names of the segment files to be loaded and processed (Note must end in ".Rdata").
 #' @param path the relative path to the files folder from your current directory
@@ -24,7 +22,7 @@
 #' cluster
 
 
-make.facets <- function(filenames, path, patients=NULL, min.purity = 0.3, epsilon = 0.005){
+facets.dat <- function(filenames, path, patients=NULL, min.purity = 0.3, epsilon = 0.005){
 
   if (!file.exists(path)) stop("The path provided cannot be found")
   if(!is.null(patients))
