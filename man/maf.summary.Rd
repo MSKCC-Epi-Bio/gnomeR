@@ -12,6 +12,9 @@ maf.summary(maf, mut.type = "SOMATIC")
 \item{mut.type}{The mutation type to be used. Options are "SOMATIC", "GERMLINE" or "ALL". Note "ALL" will
 keep all mutations regardless of status (not recommended). Default is SOMATIC.}
 }
+\value{
+A series of plot summarising information about the maf file inputted.
+}
 \description{
 Creates a set of plot summarising a maf file.
 }

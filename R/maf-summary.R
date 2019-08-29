@@ -5,7 +5,7 @@
 #' @param maf the names of the segment files to be loaded and processed (Note must end in ".Rdata").
 #' @param mut.type The mutation type to be used. Options are "SOMATIC", "GERMLINE" or "ALL". Note "ALL" will
 #' keep all mutations regardless of status (not recommended). Default is SOMATIC.
-#' @return
+#' @return A series of plot summarising information about the maf file inputted.
 #' @export
 #'
 #' @examples library(gnomeR)
