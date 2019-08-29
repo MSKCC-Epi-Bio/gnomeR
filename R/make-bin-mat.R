@@ -24,6 +24,7 @@
 #' mut.only <- create.bin.matrix(maf = mut)
 #' all.platforms <- create.bin.matrix(patients = unique(mut$Tumor_Sample_Barcode)[1:100],maf = mut,fusion = fusion,cna = cna)
 #' @import dplyr
+#' @import stringr
 
 create.bin.matrix <- function(patients=NULL, maf, mut.type = "SOMATIC",SNP.only = F,include.silent = F,
                               fusion = NULL,cna = NULL){
@@ -68,11 +69,11 @@ create.bin.matrix <- function(patients=NULL, maf, mut.type = "SOMATIC",SNP.only 
   # clean gen dat #
   if(SNP.only) SNP.filt = "SNP" else SNP.filt = unique(maf$Variant_Type)
   if(!include.silent) Variant.filt = "Silent" else Variant.filt = ""
-  if(mut.type == "ALL") Mut.filt = unique(maf$Mutation_Status) else Mut.filt = mut.type
+  if(tolower(mut.type) == "all") Mut.filt = unique(maf$Mutation_Status) else Mut.filt = mut.type
 
   maf <- maf %>% filter(Variant_Classification != Variant.filt,
                         Variant_Type %in% SNP.filt,
-                        grepl(Mut.filt,Mutation_Status,ignore.case = T))
+                        tolower(Mutation_Status) %in% tolower(Mut.filt))
 
 
   #### out frame
