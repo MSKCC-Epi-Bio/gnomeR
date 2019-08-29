@@ -19,7 +19,8 @@ biocViews:
     iClusterPlus
 Imports: 
     magrittr,
-    dplyr
+    dplyr,
+    ggplot2
 Depends:
     ComplexHeatmap,
     iClusterPlus
