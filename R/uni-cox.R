@@ -6,6 +6,9 @@
 #' @param surv.dat a surv.dat frame containing the survival information. This can be made of 2 or 3 columns. 1 or 2 for time,
 #' and one for status (where 1 is event and 0 is no event).
 #' @param surv.formula a survival formula with names matching those in surv.dat eg: Surv(time,status)~.
+#' @param filter a numeric value between 0 and 1 (1 not included) that is the lower bound for the proportion of patients
+#' having a genetic event (only for binary features). All features with an event rate lower than that value will be removed.
+#' Default is 0 (all features included).
 #' @return tab A table of all the fits performed sorted by adjusted pvalues.
 #' @return p An interactive plot of log(pvalue) by hazard ration.
 #' @export
@@ -26,7 +29,21 @@
 #' survival
 
 
-uni.cox <- function(X,surv.dat,surv.formula){
+uni.cox <- function(X,surv.dat,surv.formula,filter = 0){
+
+  # filtering #
+  if(!(filter >= 0 && filter < 1))
+    stop("Please select a filter value between 0 and 1")
+  if(filter > 0){
+    # get binary cases #
+    temp <- apply(X, 2, function(x){length(unique(x)) == 2})
+    genes.bin <- names(temp[which(temp)])
+    rm <- apply(X[,genes.bin], 2, function(x){sum(x)/length(x) < filter})
+    genes.rm <- names(rm[which(rm)])
+    X <- X %>%
+      select(-one_of(genes.rm))
+  }
+
 
   # appropriate formula
   survFormula <- as.formula(surv.formula)

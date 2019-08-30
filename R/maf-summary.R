@@ -15,6 +15,7 @@
 #' stringr
 #' ggplot2
 #' reshape2
+#' RColorBrewer
 
 
 maf.summary <- function(maf,mut.type = "SOMATIC"){
@@ -58,7 +59,7 @@ maf.summary <- function(maf,mut.type = "SOMATIC"){
   # maf <- as.data.frame(maf)
   if(mut.type == "ALL") Mut.filt = unique(maf$Mutation_Status) else Mut.filt = mut.type
   maf <- maf %>% filter(tolower(Mutation_Status) %in% tolower(Mut.filt))
-
+  nb.cols <- length(unique(maf$Variant_Classification))
   ## summarise variant wise ##
 
   # variants call summary plot #
@@ -70,7 +71,8 @@ maf.summary <- function(maf,mut.type = "SOMATIC"){
 
   p.class <- maf %>% ggplot(aes(x = Variant_Classification,color=Variant_Classification,fill = Variant_Classification)) +
     geom_bar() + coord_flip() + theme(legend.position="none") +
-    ggtitle("Variant Classification count") + xlab("Variant Classification")
+    ggtitle("Variant Classification count") + xlab("Variant Classification") +
+    scale_fill_manual(values = colorRampPalette(brewer.pal(8, "Accent"))(nb.cols) )
 
 
   # variants type summary plot #
@@ -91,7 +93,8 @@ maf.summary <- function(maf,mut.type = "SOMATIC"){
     filter(!grepl("N",SNV_Class)) %>%
     ggplot(aes(x = SNV_Class,color=SNV_Class,fill = SNV_Class)) +
     geom_bar() + coord_flip() + theme(legend.position="none") +
-    ggtitle("SNV Class count") + xlab("SNV Class")
+    ggtitle("SNV Class count") + xlab("SNV Class") +
+    scale_fill_manual(values = colorRampPalette(brewer.pal(8, "Accent"))(nb.cols) )
 
 
 
@@ -108,7 +111,8 @@ maf.summary <- function(maf,mut.type = "SOMATIC"){
     ggtitle("Variants per sample") + ylab("Variant Count") +
     theme(axis.title.x=element_blank(),
           axis.text.x=element_blank(),
-          axis.ticks.x=element_blank())
+          axis.ticks.x=element_blank()) +
+    scale_fill_manual(values = colorRampPalette(brewer.pal(8, "Accent"))(nb.cols) )
 
   # same but in boxplot format # --> simpler to read
   p.variant.bp <- maf %>%
@@ -116,7 +120,8 @@ maf.summary <- function(maf,mut.type = "SOMATIC"){
     summarise(N = n()) %>%
     ggplot(aes(x = Variant_Classification, y = N,color = Variant_Classification)) +
     ggtitle("Variant classification distribution") + xlab("Variant Classification") +
-    geom_boxplot() + theme(axis.text.x = element_text(angle = 90, hjust = 1))
+    geom_boxplot() + theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
+    scale_fill_manual(values = colorRampPalette(brewer.pal(8, "Accent"))(nb.cols) )
 
 
   # most mutated genes and class distrib #
@@ -131,7 +136,8 @@ maf.summary <- function(maf,mut.type = "SOMATIC"){
     filter(Hugo_Symbol %in% top.genes[1:10]) %>%
     ggplot(aes(x = Hugo_Symbol)) + geom_bar(aes(fill = Variant_Classification)) +
     coord_flip() +
-    ggtitle("Top genes variants classification") + xlab("Gene Name")
+    ggtitle("Top genes variants classification") + xlab("Gene Name") +
+    scale_fill_manual(values = colorRampPalette(brewer.pal(8, "Accent"))(nb.cols) )
 
 
   return(list("p.class"=p.class,"p.type"=p.type,"p.SNV" = p.SNV,

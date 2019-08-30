@@ -4,7 +4,7 @@
 \alias{uni.cox}
 \title{uni.cox}
 \usage{
-uni.cox(X, surv.dat, surv.formula)
+uni.cox(X, surv.dat, surv.formula, filter = 0)
 }
 \arguments{
 \item{X}{Matrix/surv.datframe of genomic features, continuous or binary (note cannot handle categorical surv.dat for the moment).}
@@ -13,6 +13,10 @@ uni.cox(X, surv.dat, surv.formula)
 and one for status (where 1 is event and 0 is no event).}
 
 \item{surv.formula}{a survival formula with names matching those in surv.dat eg: Surv(time,status)~.}
+
+\item{filter}{a numeric value between 0 and 1 (1 not included) that is the lower bound for the proportion of patients
+having a genetic event (only for binary features). All features with an event rate lower than that value will be removed.
+Default is 0 (all features included).}
 }
 \value{
 tab A table of all the fits performed sorted by adjusted pvalues.
