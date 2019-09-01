@@ -86,10 +86,11 @@ maf.summary <- function(maf,mut.type = "SOMATIC"){
     ggtitle("Variant Type count") + xlab("Variant Type")
 
   # SNV #
-  p.SNV <- maf %>%
+  maf <- maf %>%
     filter(Variant_Type == "SNP",
            HGVSc != "") %>%
-    mutate(SNV_Class = substrRight(HGVSc,3)) %>%
+    mutate(SNV_Class = substrRight(HGVSc,3))
+  p.SNV <- maf %>%
     filter(!grepl("N",SNV_Class)) %>%
     ggplot(aes(x = SNV_Class,color=SNV_Class,fill = SNV_Class)) +
     geom_bar() + coord_flip() + theme(legend.position="none") +
@@ -136,10 +137,49 @@ maf.summary <- function(maf,mut.type = "SOMATIC"){
     filter(Hugo_Symbol %in% top.genes[1:10]) %>%
     ggplot(aes(x = Hugo_Symbol)) + geom_bar(aes(fill = Variant_Classification)) +
     coord_flip() +
-    ggtitle("Top genes variants classification") + xlab("Gene Name") +
+    ggtitle("Top genes variants classification") + xlab("Gene Name")+
     scale_fill_manual(values = colorRampPalette(brewer.pal(8, "Accent"))(nb.cols) )
 
 
+  # distrib of variants per patient #
+  varprop.maf <- maf %>% tbl_df() %>%
+    group_by(Tumor_Sample_Barcode) %>%
+    mutate(totalMut = n()) %>%
+    ungroup() %>%
+    group_by(Tumor_Sample_Barcode,Variant_Classification) %>%
+    summarise(N=n(),
+              varProp = N/unique(totalMut))
+
+  p.variant.dist <- varprop.maf %>%
+    ggplot(aes(x = Variant_Classification,y = varProp)) + geom_boxplot(aes(fill = Variant_Classification))+
+    scale_fill_manual(values = colorRampPalette(brewer.pal(8, "Accent"))(nb.cols) ) +
+    theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
+    theme(legend.position="none") + ylab("% Variant")
+
+  p.variant.dist.bar <- varprop.maf %>%
+    ggplot(aes(x = Tumor_Sample_Barcode, y=varProp)) +
+    geom_bar(aes(fill = Variant_Classification),stat = "identity") +
+    theme(axis.title.x=element_blank(),
+          axis.text.x=element_blank(),
+          axis.ticks.x=element_blank()) +
+    scale_fill_manual(values = colorRampPalette(brewer.pal(8, "Accent"))(nb.cols) ) +
+    ylab("% Variants")
+
+
+  # distrib of mutations per patient #
+  p.SNV.dist <- maf %>% tbl_df() %>%
+    group_by(Tumor_Sample_Barcode) %>%
+    mutate(totalMut = n()) %>%
+    ungroup() %>%
+    group_by(Tumor_Sample_Barcode,SNV_Class) %>%
+    summarise(N=n(),
+              varProp = N/unique(totalMut)) %>%
+    ggplot(aes(x = SNV_Class,y = varProp)) + geom_boxplot(aes(fill = SNV_Class))+
+    scale_fill_manual(values = colorRampPalette(brewer.pal(8, "Accent"))(nb.cols) ) +
+    theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
+    theme(legend.position="none") + ylab("% SNV")
+
   return(list("p.class"=p.class,"p.type"=p.type,"p.SNV" = p.SNV,
-    "p.patient.variant"=p.patient.variant,"p.variant.bp" = p.variant.bp,"p.genes" = p.genes))
+              "p.patient.variant"=p.patient.variant,"p.variant.bp" = p.variant.bp,"p.genes" = p.genes,
+              "p.variant.dist"=p.variant.dist,"p.variant.dist.bar"=p.variant.dist.bar,"p.SNV.dist"=p.SNV.dist))
 }
