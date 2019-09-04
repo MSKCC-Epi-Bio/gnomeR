@@ -35,6 +35,6 @@ surv.dat <-clin[match(patients,clin$DMPID),match(c("time","status") ,colnames(cl
 surv.dat$status <- ifelse(surv.dat$status == "DECEASED",1,0)
 surv.dat$time <- as.numeric(as.character(surv.dat$time))
 
-cox.fits <- uni.cox(X = gen.dat,surv.dat = surv.dat, surv.formula = Surv(time,status)~.)
+cox.fits <- uni.cox(X = gen.dat,surv.dat = surv.dat, surv.formula = Surv(time,status)~.,filter = 0.03)
 
 }
