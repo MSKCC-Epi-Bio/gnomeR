@@ -5,7 +5,16 @@
 #' @param maf the names of the segment files to be loaded and processed (Note must end in ".Rdata").
 #' @param mut.type The mutation type to be used. Options are "SOMATIC", "GERMLINE" or "ALL". Note "ALL" will
 #' keep all mutations regardless of status (not recommended). Default is SOMATIC.
-#' @return A series of plot summarising information about the maf file inputted.
+#' @return p.class Barplot of counts of each variant classification
+#' @return p.type Barplot of counts of each variant type
+#' @return p.SNV Histogram of counts of each SNV class
+#' @return p.patient.variant Histogram of counts variants per patient
+#' @return p.variant.bp Boxplot of the distribution of variant classification per patient
+#' @return p.variant.dist Boxplot of the relative proportion of each variant class in individual patients
+#' @return p.variant.dist.bar Stacked barplot of the variants distribution in all patients
+#' @return p.SNV.dist Boxplot of the relative proportion of each SNV class in individual patients
+#' @return p.corr Correlation heatmap of the top 10 genes
+#' @return p.comut Heatmap of the comutation of the top 10 genes
 #' @export
 #'
 #' @examples library(gnomeR)
@@ -16,6 +25,7 @@
 #' ggplot2
 #' reshape2
 #' RColorBrewer
+#' GGally
 
 
 maf.summary <- function(maf,mut.type = "SOMATIC"){
@@ -179,7 +189,24 @@ maf.summary <- function(maf,mut.type = "SOMATIC"){
     theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
     theme(legend.position="none") + ylab("% SNV")
 
+
+  # comutation patterns #
+  bin.maf <- create.bin.matrix(maf = maf,mut.type = mut.type)
+  bin.maf <- bin.maf$mut
+  keep <- names(sort(apply(bin.maf,2,function(x){sum(x)}),decreasing = T))[1:10]
+  bin.maf <- bin.maf[,keep]
+  p.corr <- ggcorr(bin.maf,limits = NULL)
+
+
+  co.mut <- apply(bin.maf,2,function(x){
+    apply(bin.maf,2,function(y){
+      sum(y == 1 & x == 1)/length(x)
+    })
+  })
+  p.comut <- ggcorr(co.mut,limits = NULL)
+
   return(list("p.class"=p.class,"p.type"=p.type,"p.SNV" = p.SNV,
               "p.patient.variant"=p.patient.variant,"p.variant.bp" = p.variant.bp,"p.genes" = p.genes,
-              "p.variant.dist"=p.variant.dist,"p.variant.dist.bar"=p.variant.dist.bar,"p.SNV.dist"=p.SNV.dist))
+              "p.variant.dist"=p.variant.dist,"p.variant.dist.bar"=p.variant.dist.bar,"p.SNV.dist"=p.SNV.dist,
+              "p.corr"=p.corr,"p.comut"=p.comut))
 }

@@ -31,7 +31,6 @@ facets.heatmap <- function(filenames, path, patients=NULL, min.purity = 0.3,
   imagedata[imagedata< -1.5]= -1.5
 
   cl=hclust(dist(imagedata), method="ward")
-  plot(cl,hang= -1)
 
   imagedata.ordered=imagedata[cl$order,]
   imagedata.ordered=as.matrix(rev(as.data.frame(imagedata.ordered)))

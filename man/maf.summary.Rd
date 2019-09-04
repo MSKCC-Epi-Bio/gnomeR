@@ -13,7 +13,25 @@ maf.summary(maf, mut.type = "SOMATIC")
 keep all mutations regardless of status (not recommended). Default is SOMATIC.}
 }
 \value{
-A series of plot summarising information about the maf file inputted.
+p.class Barplot of counts of each variant classification
+
+p.type Barplot of counts of each variant type
+
+p.SNV Histogram of counts of each SNV class
+
+p.patient.variant Histogram of counts variants per patient
+
+p.variant.bp Boxplot of the distribution of variant classification per patient
+
+p.variant.dist Boxplot of the relative proportion of each variant class in individual patients
+
+p.variant.dist.bar Stacked barplot of the variants distribution in all patients
+
+p.SNV.dist Boxplot of the relative proportion of each SNV class in individual patients
+
+p.corr Correlation heatmap of the top 10 genes
+
+p.comut Heatmap of the comutation of the top 10 genes
 }
 \description{
 Creates a set of plot summarising a maf file.

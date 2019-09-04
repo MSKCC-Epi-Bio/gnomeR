@@ -21,7 +21,7 @@
 #' surv.dat$status <- ifelse(surv.dat$status == "DECEASED",1,0)
 #' surv.dat$time <- as.numeric(as.character(surv.dat$time))
 #'
-#' cox.fits <- uni.cox(X = gen.dat,surv.dat = surv.dat, surv.formula = Surv(time,status)~.)
+#' cox.fits <- uni.cox(X = gen.dat,surv.dat = surv.dat, surv.formula = Surv(time,status)~.,filter = 0.03)
 #'
 #' @import
 #' dplyr
@@ -76,7 +76,7 @@ uni.cox <- function(X,surv.dat,surv.formula,filter = 0){
   if(LT == F){
     uni <- as.data.frame(t(apply(X,2,function(x){
       fit <- coxph(Surv(surv.dat$time,surv.dat$status)~x)
-      out <- as.numeric(summary(fit)$coefficients[c(1,5)])
+      out <- c(as.numeric(summary(fit)$coefficients[c(1,5)]),sum(x)/length(x))
       return(out)
     })))
   }
@@ -84,11 +84,11 @@ uni.cox <- function(X,surv.dat,surv.formula,filter = 0){
   if(LT == T){
     uni <- as.data.frame(t(apply(X,2,function(x){
       fit <- coxph(Surv(surv.dat$time1,surv.dat$time2,surv.dat$status)~x)
-      out <- as.numeric(summary(fit)$coefficients[c(1,5)])
+      out <- c(as.numeric(summary(fit)$coefficients[c(1,5)]),sum(x)/length(x))
       return(out)
     })))
   }
-  colnames(uni) <- c("Coefficient","Pvalue")
+  colnames(uni) <- c("Coefficient","Pvalue","MutationFrequency")
   uni$Feature <- colnames(X)
   uni$FDR <- p.adjust(uni$Pvalue, method = "fdr")
   uni <- uni[order(uni$Pvalue),]
@@ -96,7 +96,7 @@ uni.cox <- function(X,surv.dat,surv.formula,filter = 0){
   uniVolcano <- plot_ly(data = uni, x = ~Coefficient, y = ~-log10(Pvalue),
                         text = ~paste('Feature :',Feature,
                                       '<br> Hazard Ratio :',round(exp(Coefficient),digits=3)),
-                        mode = "markers") %>%
+                        mode = "markers",size = ~MutationFrequency,color = ~MutationFrequency) %>%
     layout(title ="Volcano Plot")
 
 
