@@ -5,6 +5,7 @@
 #' @param maf the names of the segment files to be loaded and processed (Note must end in ".Rdata").
 #' @param mut.type The mutation type to be used. Options are "SOMATIC", "GERMLINE" or "ALL". Note "ALL" will
 #' keep all mutations regardless of status (not recommended). Default is SOMATIC.
+#'
 #' @return p.class Barplot of counts of each variant classification
 #' @return p.type Barplot of counts of each variant type
 #' @return p.SNV Histogram of counts of each SNV class

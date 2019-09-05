@@ -4,15 +4,21 @@
 \alias{gen.tab}
 \title{gen.tab}
 \usage{
-gen.tab(gen.dat, outcome)
+gen.tab(gen.dat, outcome, filter = 0)
 }
 \arguments{
 \item{gen.dat}{A matrix or dataframe, with patients as rows and features as columns.}
 
 \item{outcome}{A leveled vector of length equal to the number of rows in gen.dat.}
+
+\item{filter}{a numeric value between 0 and 1 (1 not included) that is the lower bound for the proportion of patients
+having a genetic event (only for binary features). All features with an event rate lower than that value will be removed.
+Default is 0 (all features included).}
 }
 \value{
-p : an oncoprint object
+fits : a table of odds ratio and pvalues.
+
+forest.plot : A forest plot of the top 10 hits.
 }
 \description{
 Creates a summary table of the distribution of the genetic features by a specific outcome/covariate of interest. The difference
@@ -26,5 +32,6 @@ mut.only <- create.bin.matrix(patients = patients,maf = mut)
 gen.dat <- mut.only$mut
 outcome = as.factor(as.character(clin$Sex[match(patients,clin$DMPID)]))
 test <- gen.tab(gen.dat,outcome)
-head(test)
+head(test$fits)
+test$forest.plot
 }

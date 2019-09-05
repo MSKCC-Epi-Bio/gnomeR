@@ -9,8 +9,10 @@
 #' @param filter a numeric value between 0 and 1 (1 not included) that is the lower bound for the proportion of patients
 #' having a genetic event (only for binary features). All features with an event rate lower than that value will be removed.
 #' Default is 0 (all features included).
+#' @param genes a character vector of gene names that will be the only ones to be kept. Default is NULL, all genes are used.
 #' @return tab A table of all the fits performed sorted by adjusted pvalues.
 #' @return p An interactive plot of log(pvalue) by hazard ration.
+#' @return KM List of survival plots of the top 10 most significant genes
 #' @export
 #'
 #' @examples library(gnomeR)
@@ -27,23 +29,36 @@
 #' dplyr
 #' plotly
 #' survival
+#' survminer
 
 
-uni.cox <- function(X,surv.dat,surv.formula,filter = 0){
+uni.cox <- function(X,surv.dat,surv.formula,filter = 0,genes = NULL){
 
   # filtering #
   if(!(filter >= 0 && filter < 1))
     stop("Please select a filter value between 0 and 1")
+  if(!is.null(genes) && sum(colnames(X) %in% genes) == 0)
+    stop("The genes argument inputted did not match any of the columns in the features matrix X.")
+  else if(!is.null(genes) && sum(colnames(X) %in% genes) > 0){
+    genes <- genes[genes %in% colnames(X)]
+    X <- as.data.frame(X %>%
+      select(genes))
+  }
+  print(dim(X))
+  if(is.null(dim(X)) )
+    stop("Only one or fewer genes were found from the 'genes' argument. We need a minimum of two.")
   if(filter > 0){
     # get binary cases #
     temp <- apply(X, 2, function(x){length(unique(x)) == 2})
     genes.bin <- names(temp[which(temp)])
-    rm <- apply(X[,genes.bin], 2, function(x){sum(x)/length(x) < filter})
+    if(length(genes.bin) == ncol(X)) rm <- apply(X, 2, function(x){sum(x)/length(x) < filter})
+    else rm <- apply(X[,genes.bin], 2, function(x){sum(x)/length(x) < filter})
     genes.rm <- names(rm[which(rm)])
     X <- X %>%
       select(-one_of(genes.rm))
   }
-
+  if(is.null(dim(X)) )
+    stop("Only one or fewer genes are left after filtering. We need a minimum of two. Please relax the filter argument.")
 
   # appropriate formula
   survFormula <- as.formula(surv.formula)
@@ -68,10 +83,7 @@ uni.cox <- function(X,surv.dat,surv.formula,filter = 0){
                             c(1:ncol(surv.dat))[-timevars])]
   }
 
-  #################################
-
-
-
+  ###################################
   ##### univariate volcano plot #####
   if(LT == F){
     uni <- as.data.frame(t(apply(X,2,function(x){
@@ -100,6 +112,33 @@ uni.cox <- function(X,surv.dat,surv.formula,filter = 0){
     layout(title ="Volcano Plot")
 
 
-  return(list("tab" = uni,"p"=uniVolcano))
+  # top KM #
+  top.genes <- rownames(uni)[1:10]
+  top.genes <- top.genes[!is.na(top.genes)]
+  KM.plots <- lapply(top.genes,function(x){
+    y <- factor(ifelse(X[,x] == 1,"Mutant","WildType"),levels = c("WildType","Mutant"))
+    temp <- as.data.frame(cbind(surv.dat,y))
+    # colnames(temp)[ncol(temp)] <- x
+    if(LT == F) fit <- survfit(Surv(time,status)~y,data=temp)
+    if(LT == T) fit <- survfit(Surv(time1,time2,status)~y,data=temp)
+
+    ggsurvplot(
+      fit,
+      data = temp,
+      size = 1,
+      palette =
+        c("#E7B800", "#2E9FDF"),
+      conf.int = TRUE,
+      pval = TRUE,
+      risk.table = TRUE,
+      legend.labs =
+        c("WildType", "Mutant"),
+      risk.table.col = "strata",
+      risk.table.height = 0.25,
+      ggtheme = theme_bw()
+    ) + labs(title = x)
+  })
+
+  return(list("tab" = uni,"p"=uniVolcano,"KM"=KM.plots))
 }
 
