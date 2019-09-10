@@ -12,7 +12,7 @@ oncoKB.annotate <- function(input,output,lib.path = NULL){
 
   if(is.null(lib.path)) lib.path <- .libPaths()
 
-  system(paste0("python ",lib.path,"/python/MafAnnotator.py -i ",input," -o ",output ))
+  system(paste0("python ",lib.path,"/MafAnnotator.py -i ",input," -o ",output ))
 
 }
 
