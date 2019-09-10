@@ -53,8 +53,8 @@ def main(argv):
 
 if __name__ == "__main__":
     # argv = [
-    #     '-i', '/Users/jgao/projects/oncokb-annotator/process/mskimpact/data_clinical_2017-11-01.oncokb.txt',#'data/example_clinical.oncokb.txt',
-    #     '-o', '/Users/jgao/projects/oncokb-annotator/process/mskimpact/data_clinical_2017-11-01.oncokb.pdf',#'data/example_clinical.oncokb.pdf',
+    #     '-i', '/Users/jgao/projects/oncokb-annotator/process/mskimpact/data_clinical_2017-11-01.oncokb.txt',#'example_clinical.oncokb.txt',
+    #     '-o', '/Users/jgao/projects/oncokb-annotator/process/mskimpact/data_clinical_2017-11-01.oncokb.pdf',#'example_clinical.oncokb.pdf',
     #     '-c', 'CANCER_TYPE',
     #     '-n', '100',
     #     '-l', 'LEVEL_1,LEVEL_2A,LEVEL_2B,LEVEL_3A,LEVEL_3B,LEVEL_4'

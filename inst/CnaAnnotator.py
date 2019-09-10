@@ -62,9 +62,9 @@ def main(argv):
 
 if __name__ == "__main__":
     # argv = [
-    #     '-i', 'data/example_cna.txt',
-    #     '-o', 'data/example_cna.oncokb.txt',
-    #     '-c', 'data/example_clinical.txt',
+    #     '-i', 'example_cna.txt',
+    #     '-o', 'example_cna.oncokb.txt',
+    #     '-c', 'example_clinical.txt',
     # ]
     # main(argv)
 
