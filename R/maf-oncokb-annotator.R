@@ -7,8 +7,6 @@
 #' @export
 #'
 #' @examples
-#'
-#' @import
 
 oncoKB.annotate <- function(input,output,lib.path = NULL){
 
