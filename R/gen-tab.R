@@ -64,6 +64,7 @@ gen.tab <- function(gen.dat,outcome,filter=0){
   fits$FDR <- p.adjust(fits$Pvalue,method="fdr")
   fits <- fits[order(fits$Pvalue),]
 
+  if (!is.null(f.dat$OddsRatio)){
   # forest plot #
   f.dat <- fits
   f.dat$Gene <- rownames(f.dat)
@@ -77,5 +78,9 @@ gen.tab <- function(gen.dat,outcome,filter=0){
     xlab('Gene')+ ylab("Risk Ratio (95% Confidence Interval)")+
     geom_errorbar(aes(ymin=Lower, ymax=Upper,col=Gene),width=0.5,cex=1)+
     coord_flip()
+  }
+  else{
+    forest.plot <- NULL
+  }
   return(list("fits"=fits,"forest.plot"=forest.plot))
 }
