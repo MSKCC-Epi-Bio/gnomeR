@@ -39,18 +39,25 @@ gen.tab <- function(gen.dat,outcome,filter=0){
     stop("Only one or fewer genes are left after filtering. We need a minimum of two. Please relax the filter argument.")
 
 
-  fits <- as.data.frame(t(apply(gen.dat,2,function(x){
-    #print(x)
-    if(length(unique(x)) > 20){x <- ifelse(x>median(x,na.rm = T) ,1 ,0)}
-    test <- fisher.test(x,outcome)
-    out <- c()
-    for(i in 1:length(levels(outcome))){
-      out <- c(out,sum(x[which(outcome == levels(outcome)[i])]))
+  fits <- as.data.frame(t(apply(gen.dat, 2, function(x) {
+    if (length(unique(x)) > 20) {
+      x <- ifelse(x > median(x, na.rm = T), 1, 0)
     }
-    out <- c(out,test$estimate,test$p.value,as.numeric(test$conf.int))
-    if(!is.null(test$estimate)){
-      names(out) <- c(levels(outcome)[1:length(levels(outcome))],"OddsRatio","Pvalue","Lower","Upper")}
-    else{names(out) <- c(levels(outcome)[1:length(levels(outcome))],"Pvalue")}
+    test <- fisher.test(x, outcome)
+    out <- c()
+    for (i in 1:length(levels(outcome))) {
+      out <- c(out, sum(x[which(outcome == levels(outcome)[i])])/length(x))
+    }
+    if (!is.null(test$estimate)) {
+      out <- c(out, test$estimate, test$p.value, as.numeric(test$conf.int))
+      names(out) <- c(levels(outcome)[1:length(levels(outcome))],
+                      "OddsRatio", "Pvalue", "Lower", "Upper")
+    }
+    else {
+      out <- c(out, test$p.value, as.numeric(test$conf.int))
+      names(out) <- c(levels(outcome)[1:length(levels(outcome))],
+                      "Pvalue")
+    }
     return(out)
   })))
 
