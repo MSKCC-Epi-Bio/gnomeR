@@ -64,7 +64,7 @@ gen.tab <- function(gen.dat,outcome,filter=0){
   fits$FDR <- p.adjust(fits$Pvalue,method="fdr")
   fits <- fits[order(fits$Pvalue),]
 
-  if (!is.null(f.dat$OddsRatio)){
+  if (!is.null(fits$OddsRatio)){
   # forest plot #
   f.dat <- fits
   f.dat$Gene <- rownames(f.dat)
