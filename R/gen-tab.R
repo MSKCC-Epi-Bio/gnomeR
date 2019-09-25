@@ -46,7 +46,7 @@ gen.tab <- function(gen.dat,outcome,filter=0){
     test <- fisher.test(x, outcome)
     out <- c()
     for (i in 1:length(levels(outcome))) {
-      out <- c(out, sum(x[which(outcome == levels(outcome)[i])])/length(x))
+      out <- c(out, sum(x[which(outcome == levels(outcome)[i])])/length(which(outcome == levels(outcome)[i])))
     }
     if (!is.null(test$estimate)) {
       out <- c(out, test$estimate, test$p.value, as.numeric(test$conf.int))
