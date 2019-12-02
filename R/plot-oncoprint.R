@@ -58,7 +58,7 @@ plot_oncoPrint <- function(gen.dat,clin.dat=NULL,ordered=NULL){
                  alter_fun = alter_fun, col = col, column_order = NULL,row_order = NULL,
                  # column_title = "OncoPrint for Meso",
                  barplot_ignore = c("CLIN"),
-                 heatmap_legend_param = list(title = "Alternations", at = c("MUT","DEL","AMP","FUS","CLIN"),
+                 heatmap_legend_param = list(title = "Alterations", at = c("MUT","DEL","AMP","FUS","CLIN"),
                                              labels = c("Mutation","Deletion","Amplification","Fusion","ClinicalMarker")))
   return(p)
 }
