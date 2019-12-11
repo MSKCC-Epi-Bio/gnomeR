@@ -54,12 +54,22 @@ plot_oncoPrint <- function(gen.dat,clin.dat=NULL,ordered=NULL){
 
   if(!is.null(ordered)) sorted.mat <- mat[,ordered]
   else sorted.mat <- mat
+
+
+  if(!is.null(clin.dat)){
   p <- oncoPrint(sorted.mat, get_type = function(x) strsplit(x, ";")[[1]],
                  alter_fun = alter_fun, col = col, column_order = NULL,row_order = NULL,
                  # column_title = "OncoPrint for Meso",
                  barplot_ignore = c("CLIN"),
                  heatmap_legend_param = list(title = "Alterations", at = c("MUT","DEL","AMP","FUS","CLIN"),
-                                             labels = c("Mutation","Deletion","Amplification","Fusion","ClinicalMarker")))
+                                             labels = c("Mutation","Deletion","Amplification","Fusion","ClinicalMarker")))}
+
+  else{
+    p <- oncoPrint(sorted.mat, get_type = function(x) strsplit(x, ";")[[1]],
+                   alter_fun = alter_fun, col = col, column_order = NULL,row_order = NULL,
+                   heatmap_legend_param = list(title = "Alterations", at = c("MUT","DEL","AMP","FUS"),
+                                               labels = c("Mutation","Deletion","Amplification","Fusion")))
+  }
   return(p)
 }
 
