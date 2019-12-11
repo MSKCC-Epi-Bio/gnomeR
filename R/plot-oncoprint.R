@@ -29,47 +29,67 @@ plot_oncoPrint <- function(gen.dat,clin.dat=NULL,ordered=NULL){
   # make data #
   mat <- dat.oncoPrint(gen.dat,clin.dat)
   #############
-  col = c("MUT" = "#008000", "AMP" = "red", "DEL" = "blue", "FUS" = "orange", "CLIN" = "black")
-  alter_fun = list(
-    background = function(x, y, w, h) {
-      grid.rect(x, y, w-unit(0.5, "mm"), h-unit(0.5, "mm"), gp = gpar(fill = "#CCCCCC", col = NA))
-    },
-    DEL = function(x, y, w, h) {
-      grid.rect(x, y, w-unit(0.5, "mm"), h-unit(0.5, "mm"), gp = gpar(fill = "blue", col = NA))
-    },
-    AMP = function(x, y, w, h) {
-      grid.rect(x, y, w-unit(0.5, "mm"), h-unit(0.5, "mm"), gp = gpar(fill = "red", col = NA))
-    },
-    MUT = function(x, y, w, h) {
-      grid.rect(x, y, w-unit(0.5, "mm"), h*0.33, gp = gpar(fill = "#008000", col = NA))
-    },
-    FUS = function(x, y, w, h) {
-      grid.rect(x, y, w-unit(0.5, "mm"), h*0.33, gp = gpar(fill = "orange", col = NA))
-    },
-    CLIN = function(x, y, w, h) {
-      grid.rect(x, y, w-unit(0.5, "mm"), h*0.33, gp = gpar(fill = "black", col = NA))
-    }
-  )
-
-
-  if(!is.null(ordered)) sorted.mat <- mat[,ordered]
-  else sorted.mat <- mat
-
-
   if(!is.null(clin.dat)){
-  p <- oncoPrint(sorted.mat, get_type = function(x) strsplit(x, ";")[[1]],
-                 alter_fun = alter_fun, col = col, column_order = NULL,row_order = NULL,
-                 # column_title = "OncoPrint for Meso",
-                 barplot_ignore = c("CLIN"),
-                 heatmap_legend_param = list(title = "Alterations", at = c("MUT","DEL","AMP","FUS","CLIN"),
-                                             labels = c("Mutation","Deletion","Amplification","Fusion","ClinicalMarker")))}
+    col = c("MUT" = "#008000", "AMP" = "red", "DEL" = "blue", "FUS" = "orange", "CLIN" = "black")
+    alter_fun = list(
+      background = function(x, y, w, h) {
+        grid.rect(x, y, w-unit(0.5, "mm"), h-unit(0.5, "mm"), gp = gpar(fill = "#CCCCCC", col = NA))
+      },
+      DEL = function(x, y, w, h) {
+        grid.rect(x, y, w-unit(0.5, "mm"), h-unit(0.5, "mm"), gp = gpar(fill = "blue", col = NA))
+      },
+      AMP = function(x, y, w, h) {
+        grid.rect(x, y, w-unit(0.5, "mm"), h-unit(0.5, "mm"), gp = gpar(fill = "red", col = NA))
+      },
+      MUT = function(x, y, w, h) {
+        grid.rect(x, y, w-unit(0.5, "mm"), h*0.33, gp = gpar(fill = "#008000", col = NA))
+      },
+      FUS = function(x, y, w, h) {
+        grid.rect(x, y, w-unit(0.5, "mm"), h*0.33, gp = gpar(fill = "orange", col = NA))
+      },
+      CLIN = function(x, y, w, h) {
+        grid.rect(x, y, w-unit(0.5, "mm"), h*0.33, gp = gpar(fill = "black", col = NA))
+      }
+    )
 
-  else{
+
+    if(!is.null(ordered)) sorted.mat <- mat[,ordered]
+    else sorted.mat <- mat
+
+    p <- oncoPrint(sorted.mat, get_type = function(x) strsplit(x, ";")[[1]],
+                   alter_fun = alter_fun, col = col, column_order = NULL,row_order = NULL,
+                   barplot_ignore = c("CLIN"),
+                   heatmap_legend_param = list(title = "Alterations", at = c("MUT","DEL","AMP","FUS","CLIN"),
+                                               labels = c("Mutation","Deletion","Amplification","Fusion","ClinicalMarker")))}
+
+
+  if(is.null(clin.dat)){
+    col = c("MUT" = "#008000", "AMP" = "red", "DEL" = "blue", "FUS" = "orange", "CLIN" = "black")
+    alter_fun = list(
+      background = function(x, y, w, h) {
+        grid.rect(x, y, w-unit(0.5, "mm"), h-unit(0.5, "mm"), gp = gpar(fill = "#CCCCCC", col = NA))
+      },
+      DEL = function(x, y, w, h) {
+        grid.rect(x, y, w-unit(0.5, "mm"), h-unit(0.5, "mm"), gp = gpar(fill = "blue", col = NA))
+      },
+      AMP = function(x, y, w, h) {
+        grid.rect(x, y, w-unit(0.5, "mm"), h-unit(0.5, "mm"), gp = gpar(fill = "red", col = NA))
+      },
+      MUT = function(x, y, w, h) {
+        grid.rect(x, y, w-unit(0.5, "mm"), h*0.33, gp = gpar(fill = "#008000", col = NA))
+      },
+      FUS = function(x, y, w, h) {
+        grid.rect(x, y, w-unit(0.5, "mm"), h*0.33, gp = gpar(fill = "orange", col = NA))
+      }
+    )
+
+    if(!is.null(ordered)) sorted.mat <- mat[,ordered]
+    else sorted.mat <- mat
+
     p <- oncoPrint(sorted.mat, get_type = function(x) strsplit(x, ";")[[1]],
                    alter_fun = alter_fun, col = col, column_order = NULL,row_order = NULL,
                    heatmap_legend_param = list(title = "Alterations", at = c("MUT","DEL","AMP","FUS"),
-                                               labels = c("Mutation","Deletion","Amplification","Fusion")))
-  }
+                                               labels = c("Mutation","Deletion","Amplification","Fusion")))}
   return(p)
 }
 
