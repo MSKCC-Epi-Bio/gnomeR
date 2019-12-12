@@ -44,18 +44,18 @@ gen.tab <- function(gen.dat,outcome,filter=0){
       x <- ifelse(x > median(x, na.rm = T), 1, 0)
     }
     test <- fisher.test(x, outcome)
-    out <- c()
+    out <- c(sum(x)/length(x))
     for (i in 1:length(levels(outcome))) {
       out <- c(out, sum(x[which(outcome == levels(outcome)[i])])/length(which(outcome == levels(outcome)[i])))
     }
     if (!is.null(test$estimate)) {
       out <- c(out, test$estimate, test$p.value, as.numeric(test$conf.int))
-      names(out) <- c(levels(outcome)[1:length(levels(outcome))],
+      names(out) <- c("Overall",levels(outcome)[1:length(levels(outcome))],
                       "OddsRatio", "Pvalue", "Lower", "Upper")
     }
     else {
       out <- c(out, test$p.value, as.numeric(test$conf.int))
-      names(out) <- c(levels(outcome)[1:length(levels(outcome))],
+      names(out) <- c("Overall",levels(outcome)[1:length(levels(outcome))],
                       "Pvalue")
     }
     return(out)
