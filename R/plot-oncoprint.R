@@ -58,7 +58,7 @@ plot_oncoPrint <- function(gen.dat,clin.dat=NULL,ordered=NULL){
 
     p <- oncoPrint(sorted.mat, get_type = function(x) strsplit(x, ";")[[1]],
                    alter_fun = alter_fun, col = col, column_order = NULL,row_order = NULL,
-                   barplot_ignore = c("CLIN"),
+                   top_annotation =  HeatmapAnnotation(cbar = anno_oncoprint_barplot(type = c("MUT","DEL","AMP","FUS"))),
                    heatmap_legend_param = list(title = "Alterations", at = c("MUT","DEL","AMP","FUS","CLIN"),
                                                labels = c("Mutation","Deletion","Amplification","Fusion","ClinicalMarker")))}
 
