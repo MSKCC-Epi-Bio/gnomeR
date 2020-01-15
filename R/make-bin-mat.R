@@ -24,6 +24,7 @@
 #' mut.only <- create.bin.matrix(maf = mut)
 #' all.platforms <- create.bin.matrix(patients = unique(mut$Tumor_Sample_Barcode)[1:100],maf = mut,fusion = fusion,cna = cna)
 #' @import dplyr
+#' @import stringr
 
 create.bin.matrix <- function(patients=NULL, maf, mut.type = "SOMATIC",SNP.only = F,include.silent = F,
                               fusion = NULL,cna = NULL){
@@ -37,7 +38,8 @@ create.bin.matrix <- function(patients=NULL, maf, mut.type = "SOMATIC",SNP.only 
     stop("The MAF file inputted is missing a variant classification column. (Variant_Classification)")
   if(length(match("Mutation_Status",colnames(maf))) == 0)
     stop("The MAF file inputted is missing a mutation status column. (Mutation_Status)")
-
+  maf$Hugo_Symbol <- as.character(maf$Hugo_Symbol)
+  # recode gene names that have been changed between panel versions to make sure they are consistent and counted as the same gene
   if (sum(grepl("KMT2D", maf$Hugo_Symbol)) > 1) {
     maf <- maf %>%
       mutate(Hugo_Symbol = case_when(
@@ -46,6 +48,16 @@ create.bin.matrix <- function(patients=NULL, maf, mut.type = "SOMATIC",SNP.only 
       ))
 
     warning("KMT2D has been recoded to MLL2")
+  }
+
+  if (sum(grepl("KMT2C", maf$Hugo_Symbol)) > 1) {
+    maf <- maf %>%
+      mutate(Hugo_Symbol = case_when(
+        Hugo_Symbol == "KMT2C" ~ "MLL3",
+        TRUE ~ Hugo_Symbol
+      ))
+
+    warning("KMT2C has been recoded to MLL3")
   }
 
   maf <- as.data.frame(maf)
@@ -57,11 +69,11 @@ create.bin.matrix <- function(patients=NULL, maf, mut.type = "SOMATIC",SNP.only 
   # clean gen dat #
   if(SNP.only) SNP.filt = "SNP" else SNP.filt = unique(maf$Variant_Type)
   if(!include.silent) Variant.filt = "Silent" else Variant.filt = ""
-  if(mut.type == "ALL") Mut.filt = unique(maf$Mutation_Status) else Mut.filt = mut.type
+  if(tolower(mut.type) == "all") Mut.filt = unique(maf$Mutation_Status) else Mut.filt = mut.type
 
   maf <- maf %>% filter(Variant_Classification != Variant.filt,
                         Variant_Type %in% SNP.filt,
-                        grepl(Mut.filt,Mutation_Status,ignore.case = T))
+                        tolower(Mutation_Status) %in% tolower(Mut.filt))
 
 
   #### out frame

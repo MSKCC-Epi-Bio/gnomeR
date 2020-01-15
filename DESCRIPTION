@@ -14,9 +14,14 @@ LazyData: true
 URL: https://github.com/margarethannum/gnomeR
 BugReports: https://github.com/margarethannum/gnomeR/issues
 RoxygenNote: 6.1.1
-biocViews: ComplexHeatmap
+biocViews: 
+    ComplexHeatmap,
+    iClusterPlus
 Imports: 
     magrittr,
-    dplyr
+    dplyr,
+    ggplot2
 Depends:
-    ComplexHeatmap
+    ComplexHeatmap,
+    iClusterPlus,
+    cluster
