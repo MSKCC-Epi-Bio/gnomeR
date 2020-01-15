@@ -53,14 +53,22 @@ plot_oncoPrint <- function(gen.dat,clin.dat=NULL,ordered=NULL){
     )
 
 
-    if(!is.null(ordered)) sorted.mat <- mat[,ordered]
-    else sorted.mat <- mat
+    if(!is.null(ordered)) {
+      sorted.mat <- mat[,ordered]
 
-    p <- oncoPrint(sorted.mat, get_type = function(x) strsplit(x, ";")[[1]],
-                   alter_fun = alter_fun, col = col, column_order = NULL,row_order = NULL,
-                   top_annotation =  HeatmapAnnotation(cbar = anno_oncoprint_barplot(type = c("MUT","DEL","AMP","FUS"))),
-                   heatmap_legend_param = list(title = "Alterations", at = c("MUT","DEL","AMP","FUS","CLIN"),
-                                               labels = c("Mutation","Deletion","Amplification","Fusion","ClinicalMarker")))}
+      p <- oncoPrint(sorted.mat, get_type = function(x) strsplit(x, ";")[[1]],
+                     alter_fun = alter_fun, col = col, column_order = 1:ncol(sorted.mat),row_order = 1:nrow(sorted.mat),
+                     heatmap_legend_param = list(title = "Alterations", at = c("MUT","DEL","AMP","FUS"),
+                                                 labels = c("Mutation","Deletion","Amplification","Fusion")))
+    }
+    else{
+      sorted.mat <- mat
+      p <- oncoPrint(sorted.mat, get_type = function(x) strsplit(x, ";")[[1]],
+                     alter_fun = alter_fun, col = col, column_order = NULL,row_order = NULL,
+                     heatmap_legend_param = list(title = "Alterations", at = c("MUT","DEL","AMP","FUS"),
+                                                 labels = c("Mutation","Deletion","Amplification","Fusion")))
+    }
+  }
 
 
   if(is.null(clin.dat)){
@@ -83,13 +91,22 @@ plot_oncoPrint <- function(gen.dat,clin.dat=NULL,ordered=NULL){
       }
     )
 
-    if(!is.null(ordered)) sorted.mat <- mat[,ordered]
-    else sorted.mat <- mat
+    if(!is.null(ordered)) {
+      sorted.mat <- mat[,ordered]
 
-    p <- oncoPrint(sorted.mat, get_type = function(x) strsplit(x, ";")[[1]],
-                   alter_fun = alter_fun, col = col, column_order = NULL,row_order = NULL,
-                   heatmap_legend_param = list(title = "Alterations", at = c("MUT","DEL","AMP","FUS"),
-                                               labels = c("Mutation","Deletion","Amplification","Fusion")))}
+      p <- oncoPrint(sorted.mat, get_type = function(x) strsplit(x, ";")[[1]],
+                     alter_fun = alter_fun, col = col, column_order = 1:ncol(sorted.mat),row_order = 1:nrow(sorted.mat),
+                     heatmap_legend_param = list(title = "Alterations", at = c("MUT","DEL","AMP","FUS"),
+                                                 labels = c("Mutation","Deletion","Amplification","Fusion")))
+    }
+    else{
+      sorted.mat <- mat
+      p <- oncoPrint(sorted.mat, get_type = function(x) strsplit(x, ";")[[1]],
+                     alter_fun = alter_fun, col = col, column_order = NULL,row_order = NULL,
+                     heatmap_legend_param = list(title = "Alterations", at = c("MUT","DEL","AMP","FUS"),
+                                                 labels = c("Mutation","Deletion","Amplification","Fusion")))
+    }
+  }
   return(p)
 }
 
