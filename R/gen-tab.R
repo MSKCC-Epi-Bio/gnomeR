@@ -47,8 +47,8 @@ gen.tab <- function(gen.dat,outcome,filter=0){
     out <- c(sum(x)/length(x))
     for (i in 1:length(levels(outcome))) {
       out <- c(out, sum(x[which(outcome == levels(outcome)[i])])/length(which(outcome == levels(outcome)[i])))
-      out <- paste0(round(as.numeric(out)*100,digits = 2),"%")
     }
+    out <- paste0(round(as.numeric(out)*100,digits = 2),"%")
     if (!is.null(test$estimate)) {
       out <- c(out, test$estimate, test$p.value, round(as.numeric(test$conf.int),digits =2))
       names(out) <- c("Overall",levels(outcome)[1:length(levels(outcome))],
