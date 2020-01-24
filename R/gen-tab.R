@@ -9,6 +9,7 @@
 #' @param filter a numeric value between 0 and 1 (1 not included) that is the lower bound for the proportion of patients
 #' having a genetic event (only for binary features). All features with an event rate lower than that value will be removed.
 #' Default is 0 (all features included).
+#' @param paired Boolean if the data are paired. Default is FALSE.
 #' @return fits : a table of odds ratio and pvalues.
 #' @return forest.plot : A forest plot of the top 10 hits.
 #'
@@ -23,7 +24,7 @@
 #' head(test$fits)
 #' test$forest.plot
 
-gen.tab <- function(gen.dat,outcome,filter=0){
+gen.tab <- function(gen.dat,outcome,filter=0,paired = F){
 
   if(filter > 0){
     # get binary cases #
@@ -43,18 +44,23 @@ gen.tab <- function(gen.dat,outcome,filter=0){
     if (length(unique(x)) > 20) {
       x <- ifelse(x > median(x, na.rm = T), 1, 0)
     }
-    test <- fisher.test(x, outcome)
+    if(paired == F) test <- fisher.test(x, outcome)
+    if(paired == T){
+      tt = with(as.data.frame(cbind(x,outcome)), table(x,outcome))
+      test <- mcnemar.exact(tt)
+    }
     out <- c(sum(x)/length(x))
     for (i in 1:length(levels(outcome))) {
       out <- c(out, sum(x[which(outcome == levels(outcome)[i])])/length(which(outcome == levels(outcome)[i])))
     }
+    out <- paste0(round(as.numeric(out)*100,digits = 2),"%")
     if (!is.null(test$estimate)) {
-      out <- c(out, test$estimate, test$p.value, as.numeric(test$conf.int))
+      out <- c(out, as.numeric(test$estimate), test$p.value, round(as.numeric(test$conf.int),digits =2))
       names(out) <- c("Overall",levels(outcome)[1:length(levels(outcome))],
                       "OddsRatio", "Pvalue", "Lower", "Upper")
     }
     else {
-      out <- c(out, test$p.value, as.numeric(test$conf.int))
+      out <- c(out, test$p.value, round(as.numeric(test$conf.int),digits =2))
       names(out) <- c("Overall",levels(outcome)[1:length(levels(outcome))],
                       "Pvalue")
     }

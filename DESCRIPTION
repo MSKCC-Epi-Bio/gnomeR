@@ -20,7 +20,8 @@ biocViews:
 Imports: 
     magrittr,
     dplyr,
-    ggplot2
+    ggplot2,
+    exact2x2
 Depends:
     ComplexHeatmap,
     iClusterPlus,
