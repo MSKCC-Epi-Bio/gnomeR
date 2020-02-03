@@ -75,7 +75,12 @@ gen.tab <- function(gen.dat,outcome,filter=0,paired = F){
   f.dat <- fits
   f.dat$Gene <- rownames(f.dat)
   f.dat <- f.dat %>%
-    filter(!is.infinite(OddsRatio))
+    filter(!is.infinite(OddsRatio)) %>%
+    mutate(
+      OddsRatio = as.numeric(as.character(OddsRatio)),
+      Lower = as.numeric(as.character(Lower)),
+      Upper = as.numeric(as.character(Upper)),
+    )
   f.dat <- f.dat[1:min(10,nrow(f.dat)),]
   forest.plot <- f.dat %>%
     ggplot(aes(x = Gene,y = OddsRatio, ymin = Lower, ymax = Upper ))+
