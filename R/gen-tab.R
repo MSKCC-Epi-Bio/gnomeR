@@ -44,7 +44,7 @@ gen.tab <- function(gen.dat,outcome,filter=0,paired = F){
 
 
   fits <- as.data.frame(t(apply(gen.dat, 2, function(x) {
-    if (length(unique(x)) > 20) {
+    if (length(unique(x))/length(x) > 0.5) {
       x <- ifelse(x > median(x, na.rm = T), 1, 0)
     }
     if(paired == F) test <- fisher.test(x, outcome)
