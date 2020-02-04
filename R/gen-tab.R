@@ -27,7 +27,8 @@
 gen.tab <- function(gen.dat,outcome,filter=0,paired = F){
 
   # remove all columns that are constant #
-  gen.dat <- gen.dat[,-which(apply(gen.dat, 2, function(x){length(unique(x)) == 1}))]
+  if(length(which(apply(gen.dat, 2, function(x){length(unique(x)) == 1}))) > 0)
+    gen.dat <- gen.dat[,-which(apply(gen.dat, 2, function(x){length(unique(x)) == 1}))]
 
   if(filter > 0){
     # get binary cases #
