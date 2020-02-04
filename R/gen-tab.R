@@ -115,11 +115,11 @@ gen.tab <- function(gen.dat,outcome,filter=0,paired = F,cont=F){
       out <- temp[2,c(1,2,4,5)]
     })))
     fits$FDR <- p.adjust(fits$Pvalue,method = "fdr")
-
+    fits$GeneName <- rownames(fits)
     vPlot <- plot_ly(data = fits, x = ~Estimate, y = ~-log10(Pvalue),
-                              text = ~paste('Gene :',GeneName,
-                                            '</br> Estimate :',round(Estimate,digits=2)),
-                              mode = "markers",size = ~MutationFreq,color = ~Estimate) %>%
+                     text = ~paste('Gene :',GeneName,
+                                   '</br> Estimate :',round(Estimate,digits=2)),
+                     mode = "markers",size = ~MutationFreq,color = ~Estimate) %>%
       layout(title ="Volcano Plot")
     return(list("fits"=fits,"vPlot"=vPlot))
   }
