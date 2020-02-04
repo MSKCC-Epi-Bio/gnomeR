@@ -110,8 +110,7 @@ gen.tab <- function(gen.dat,outcome,filter=0,paired = F,cont=F){
       fit <- lm(outcome ~ x)
       temp <- as.data.frame(summary(fit)$coefficient)
       colnames(temp) <-  c("Estimate","SD", "tvalue","Pvalue")
-      if(is.numeric(x)){
-      temp$MutationFreq <- sum(x,na.rm = T)/length(x[!is.na(x)])}
+      if(is.numeric(x)) temp$MutationFreq <- sum(x,na.rm = T)/length(x[!is.na(x)])
       else temp$MutationFreq <- ""
       out <- temp[2,c(1,2,4,5)]
     })))
