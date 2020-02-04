@@ -111,7 +111,7 @@ gen.tab <- function(gen.dat,outcome,filter=0,paired = F,cont=F){
       temp <- as.data.frame(summary(fit)$coefficient)
       colnames(temp) <-  c("Estimate","SD", "tvalue","Pvalue")
       if(is.numeric(x)) temp$MutationFreq <- sum(x,na.rm = T)/length(x[!is.na(x)])
-      else temp$MutationFreq <- ""
+      else temp$MutationFreq <- 0
       out <- temp[2,c(1,2,4,5)]
     })))
     fits$FDR <- p.adjust(fits$Pvalue,method = "fdr")
