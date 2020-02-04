@@ -131,6 +131,8 @@ gen.tab <- function(gen.dat,outcome,filter=0,paired = F,cont=F){
                        mode = "markers") %>%
         layout(title ="Volcano Plot")
     }
+    # fits <- fits[,-match("GeneName",colnames(fits))]
+    fits <- fits[order(fits$Pvalue),]
     return(list("fits"=fits,"vPlot"=vPlot))
   }
 }
