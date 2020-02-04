@@ -37,7 +37,7 @@ gen.tab <- function(gen.dat,outcome,filter=0,paired = F){
     if(length(genes.bin) == ncol(gen.dat)) rm <- apply(gen.dat, 2, function(x){sum(x)/length(x) < filter})
     else rm <- apply(gen.dat[,genes.bin], 2, function(x){sum(x)/length(x) < filter})
     genes.rm <- names(rm[which(rm)])
-    print(genes.rm)
+    # print(genes.rm)
     gen.dat <- gen.dat %>%
       select(-one_of(genes.rm))
   }
