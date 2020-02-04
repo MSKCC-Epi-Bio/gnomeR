@@ -117,7 +117,7 @@ gen.tab <- function(gen.dat,outcome,filter=0,paired = F,cont=F){
     fits$FDR <- p.adjust(fits$Pvalue,method = "fdr")
     fits$GeneName <- rownames(fits)
 
-    if(all(apply(gen.data,2,is.numeric))){
+    if(all(apply(gen.dat,2,is.numeric))){
     vPlot <- plot_ly(data = fits, x = ~Estimate, y = ~-log10(Pvalue),
                      text = ~paste('Gene :',GeneName,
                                    '</br> Estimate :',round(Estimate,digits=2)),
