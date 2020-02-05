@@ -9,6 +9,7 @@
 #' @param min.purity the minimum purity of the sample required to be kept in the final dataset. Default is 0.3.
 #' @param epsilon level of unions when aggregating segments between
 #' @param ordered order in which patients should be printed. Default NUll leads to hierarchical clustering.
+#' @param outcome for seg file only, if outcome associated with study it will be printed along the x axis for each patient
 #' @return p a heatmap corresponding to the segnment files inputted
 #' @export
 #'
@@ -20,7 +21,7 @@
 
 
 facets.heatmap <- function(seg = NULL,filenames = NULL, path, patients=NULL, min.purity = 0.3,
-                           epsilon = 0.005,ordered = NULL){
+                           epsilon = 0.005,ordered = NULL,outcome = NULL){
 
   if(is.null(seg) && is.null(filenames))
     stop("You must provide either a complete segmentation file
@@ -124,7 +125,13 @@ facets.heatmap <- function(seg = NULL,filenames = NULL, path, patients=NULL, min
     colorkey = list(space = "right", height = 0.3, tick.number = 5)
 
     n <- nrow(reducedM)
-    scales = list(x = list(at=1:n,labels=rep(1,n)[cl$order],rot=90),
+
+    if(!is.null(outcome)) x.lab <- outcome
+    else x.lab <- rep(1,n)
+    if(!is.null(ordered)) x.lab <- x.lab[ordered]
+    else x.lab <- x.lab[cl$order]
+
+    scales = list(x = list(at=1:n,labels=x.lab,rot=90),
                   y = list(at = len - chrom.mids, labels = names(table(chr))),
                   z = list(at=n:1,labels=rep(1,n)[cl$order],rot=90))
 
