@@ -74,6 +74,8 @@ gen.tab <- function(gen.dat,outcome,filter=0,paired = F,cont=F){
       return(out)
     })))
 
+    colnames(out)[2:(length(levels(outcome))+1)] <- paste0(colnames(out)[2:(length(levels(outcome))+1)],
+                                                           "(N=",as.numeric(summary(outcome)),")")
     fits$FDR <- p.adjust(fits$Pvalue,method="fdr")
     fits <- fits[order(fits$Pvalue),]
 
@@ -114,6 +116,8 @@ gen.tab <- function(gen.dat,outcome,filter=0,paired = F,cont=F){
       else temp$MutationFreq <- 0
       out <- temp[2,c(1,2,4,5)]
     })))
+
+
     fits$FDR <- p.adjust(fits$Pvalue,method = "fdr")
     fits$GeneName <- rownames(fits)
 
