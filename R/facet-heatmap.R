@@ -138,6 +138,7 @@ facets.heatmap <- function(seg = NULL,filenames = NULL, path, patients=NULL, min
 
     p=levelplot(imagedata.ordered, panel = my.panel, scales=scales,
                 col.regions = bluered(256), xlab = "", ylab = "",colorkey=colorkey)
+
     return(list("p"=p,"out.cn"=dat$out.cn))
   }
 

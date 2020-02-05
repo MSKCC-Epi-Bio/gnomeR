@@ -2,7 +2,7 @@
 #'
 #' Creates a copy number alteration matrix from segment files.
 #'
-#' @param seg a segmentation file containing the segmentation information of multiple pateints
+#' @param seg a segmentation file containing the segmentation information of multiple patients
 #' @param filenames the names of the segment files to be loaded and processed (Note must end in ".Rdata").
 #' @param path the relative path to the files folder from your current directory
 #' @param patients the names of the patients of the respective filenames. Default simply 1 to number of files.
