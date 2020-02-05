@@ -143,7 +143,7 @@ facets.heatmap <- function(seg = NULL,filenames = NULL, path, patients=NULL, min
 
     scales = list(x = list(at=1:n,labels=x.lab,rot=90),
                   y = list(at = len - chrom.mids, labels = names(table(chr))),
-                  z = list(at=n:1,labels=rep(1,n)[cl$order],rot=90))
+                  z = list(at=n:1,labels=rep(1,n),rot=90)) #[cl$order]
 
 
     my.panel.levelplot.2 <- function(...) {
