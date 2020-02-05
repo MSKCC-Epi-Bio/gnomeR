@@ -124,7 +124,7 @@ facets.heatmap <- function(seg = NULL,filenames = NULL, path, patients=NULL, min
     colorkey = list(space = "right", height = 0.3, tick.number = 5)
 
     n <- nrow(reducedM)
-    scales = list(x = list(at=1:n,labels=rep(1,n)[cl$order],rot=90,cex = 3),
+    scales = list(x = list(at=1:n,labels=rep(1,n)[cl$order],rot=90),
                   y = list(at = len - chrom.mids, labels = names(table(chr))),
                   z = list(at=n:1,labels=rep(1,n)[cl$order],rot=90))
 
@@ -136,7 +136,7 @@ facets.heatmap <- function(seg = NULL,filenames = NULL, path, patients=NULL, min
     }
     my.panel = my.panel.levelplot.2
 
-    p=levelplot(imagedata.ordered, panel = my.panel, scales=scales,
+    p=levelplot(imagedata.ordered, panel = my.panel, scales=scales,par.settings=list(axis.line=list(lwd=3)),
                 col.regions = bluered(256), xlab = "", ylab = "",colorkey=colorkey)
 
     return(list("p"=p,"out.cn"=dat$out.cn))
