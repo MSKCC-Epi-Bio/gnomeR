@@ -33,6 +33,9 @@ facets.dat <- function(seg = NULL,filenames = NULL, path,
     stop("Please provide either a complete segmentation file or a
          list of segmentation files to be loaded")
 
+  ######################################
+
+
   if(!is.null(filenames)){
     if (!file.exists(path)) stop("The path provided cannot be found")
     if(!is.null(patients))
@@ -111,7 +114,6 @@ facets.dat <- function(seg = NULL,filenames = NULL, path,
 
       cncf <- as.data.frame(seg.filt %>%
                               filter(ID == patients[i]) %>%
-                              # select(ID,chrom,loc.start,loc.end,seg.mean,num.mark) %>%
                               rename(sample = ID,start = loc.start, end = loc.end) %>%
                               mutate(chrom = as.numeric(as.character(chrom)),
                                      start = as.numeric(as.character(start)),
@@ -123,8 +125,6 @@ facets.dat <- function(seg = NULL,filenames = NULL, path,
     }
     all.dat <- all.dat[complete.cases(all.dat),]
     out.cn <- CNregions(seg = all.dat,epsilon = epsilon)
-    names(ploidy) <- rownames(out.cn)
-    names(purity) <- rownames(out.cn)
     return(list("out.cn"=out.cn))
   }
 
