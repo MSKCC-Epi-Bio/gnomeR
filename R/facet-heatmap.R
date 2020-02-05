@@ -124,7 +124,7 @@ facets.heatmap <- function(seg = NULL,filenames = NULL, path, patients=NULL, min
     colorkey = list(space = "right", height = 0.3, tick.number = 5)
 
     n <- nrow(reducedM)
-    scales = list(x = list(at=1:n,labels=rep(1,n)[cl$order],rot=90),
+    scales = list(x = list(at=1:n,labels=rep(1,n)[cl$order],rot=90,cex = 3),
                   y = list(at = len - chrom.mids, labels = names(table(chr))),
                   z = list(at=n:1,labels=rep(1,n)[cl$order],rot=90))
 
