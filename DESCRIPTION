@@ -21,7 +21,8 @@ Imports:
     magrittr,
     dplyr,
     ggplot2,
-    exact2x2
+    exact2x2,
+    plotly
 Depends:
     ComplexHeatmap,
     iClusterPlus,
