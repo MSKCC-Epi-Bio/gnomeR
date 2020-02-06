@@ -105,7 +105,7 @@ facets.dat <- function(seg = NULL,filenames = NULL, path,
 
   if(!is.null(seg)){
     if(is.null(patients)) patients <- as.character(unique(seg[,1]))
-    else patients <- intersect(patients,unique(seg$ID))
+    # else patients <- intersect(patients,unique(seg$ID))
     seg.filt <- seg %>%
       filter(ID %in% patients)
     all.dat <- data.frame()
@@ -126,7 +126,7 @@ facets.dat <- function(seg = NULL,filenames = NULL, path,
     }
     all.dat <- all.dat[complete.cases(all.dat),]
     out.cn <- CNregions(seg = all.dat,epsilon = epsilon)
-    out.cn <- out.cn[match(rownames(out.cn),patients),]
+    # out.cn <- out.cn[match(rownames(out.cn),patients),]
     return(list("out.cn"=out.cn,"patients" = patients))
   }
 
