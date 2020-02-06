@@ -125,6 +125,7 @@ facets.dat <- function(seg = NULL,filenames = NULL, path,
     }
     all.dat <- all.dat[complete.cases(all.dat),]
     out.cn <- CNregions(seg = all.dat,epsilon = epsilon)
+    out.cn <- out.cn[match(rownames(out.cn),patients),]
     return(list("out.cn"=out.cn))
   }
 
