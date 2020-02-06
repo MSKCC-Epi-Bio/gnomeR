@@ -94,11 +94,9 @@ facets.heatmap <- function(seg = NULL,filenames = NULL, path, patients=NULL, min
   if(!is.null(seg)){
     dat <- facets.dat(seg,patients = patients)
     reducedM <- dat$out.cn
-    if(!is.null(ordered) && !is.null(outcome)) {
-      patients <- patients[match(rownames(reducedM),patients)]
-      outcome <- outcome[match(rownames(reducedM),names(outcome))]
-      ordered <- order(outcome)
-    }
+    patients <- patients[match(rownames(reducedM),patients)]
+    if(!is.null(outcome)) outcome <- outcome[match(rownames(reducedM),names(outcome))]
+    if(!is.null(ordered) && !is.null(outcome)) ordered <- order(outcome)
     # if(!is.null(ordered) && !is.null(outcome)) {
     #   if(length(-which(is.na(match(patients,rownames(reducedM))))) > 0){
     #     outcome <- outcome[-which(is.na(match(patients,rownames(reducedM))))]
