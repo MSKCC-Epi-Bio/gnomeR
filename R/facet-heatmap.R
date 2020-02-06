@@ -141,10 +141,10 @@ facets.heatmap <- function(seg = NULL,filenames = NULL, path, patients=NULL, min
 
     n <- nrow(reducedM)
 
-    if(!is.null(outcome)) x.lab <- outcome[ordered]
+    if(!is.null(outcome)) x.lab <- outcome
     else x.lab <- rep(1,n)
-    # if(!is.null(ordered)) x.lab <- x.lab[ordered]
     if(is.null(ordered)) x.lab <- x.lab[cl$order]
+    else x.lab <- x.lab[ordered]
 
     scales = list(x = list(at=1:n,labels=x.lab,rot=90),
                   y = list(at = len - chrom.mids, labels = names(table(chr))),
