@@ -133,7 +133,7 @@ create.bin.matrix <- function(patients=NULL, maf, mut.type = "SOMATIC",SNP.only 
     temp <- do.call("cbind",apply(cna,2,function(x){
       if(cna.relax){
         yA <- ifelse(x>=0.9,1,0)
-        yD <- ifelse(x<=0.9,1,0)
+        yD <- ifelse(x<=-0.9,1,0)
       }
       if(!cna.relax){
         yA <- ifelse(x==2,1,0)
