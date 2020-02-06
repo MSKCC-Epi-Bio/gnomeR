@@ -94,8 +94,16 @@ facets.heatmap <- function(seg = NULL,filenames = NULL, path, patients=NULL, min
   if(!is.null(seg)){
     dat <- facets.dat(seg,patients = patients)
     reducedM <- dat$out.cn
-    if(!is.null(ordered)) ordered <- ordered[,-which(is.na(match(patients,rownames(reducedM))))]
-
+    patients <- patients[match(rownames(reducedM),patients)]
+    if(!is.null(outcome)) outcome <- outcome[match(rownames(reducedM),names(outcome))]
+    if(!is.null(ordered) && !is.null(outcome)) ordered <- order(outcome)
+    # if(!is.null(ordered) && !is.null(outcome)) {
+    #   if(length(-which(is.na(match(patients,rownames(reducedM))))) > 0){
+    #     outcome <- outcome[-which(is.na(match(patients,rownames(reducedM))))]
+    #     ordered <- order(outcome)
+    #     outcome <- outcome[ordered]
+    #   }
+    # }
     rownames(reducedM) <- abbreviate(rownames(reducedM),minlength = 10)
     imagedata=reducedM
     imagedata[imagedata>1.5]=1.5
@@ -134,13 +142,13 @@ facets.heatmap <- function(seg = NULL,filenames = NULL, path, patients=NULL, min
     n <- nrow(reducedM)
 
     if(!is.null(outcome)) x.lab <- outcome
-    else x.lab <- rep(1,n)
-    if(!is.null(ordered)) x.lab <- x.lab[ordered]
-    else x.lab <- x.lab[cl$order]
+    if(is.null(outcome)) x.lab <- rep(1,n)
+    if(is.null(ordered)) x.lab <- as.character(x.lab[cl$order])
+    if(!is.null(ordered)) x.lab <- as.character(x.lab[ordered])
 
     scales = list(x = list(at=1:n,labels=x.lab,rot=90),
                   y = list(at = len - chrom.mids, labels = names(table(chr))),
-                  z = list(at=n:1,labels=rep(1,n)[cl$order],rot=90))
+                  z = list(at=n:1,labels=rep(1,n),rot=90)) #[cl$order]
 
 
     my.panel.levelplot.2 <- function(...) {
