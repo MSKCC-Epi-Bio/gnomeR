@@ -97,8 +97,8 @@ facets.heatmap <- function(seg = NULL,filenames = NULL, path, patients=NULL, min
     if(!is.null(ordered) && !is.null(outcome)) {
       if(length(-which(is.na(match(patients,rownames(reducedM))))) > 0){
         outcome <- outcome[-which(is.na(match(patients,rownames(reducedM))))]
-        # ordered <- order(outcome)
-        # outcome <- outcome[ordered]
+        ordered <- order(outcome)
+        outcome <- outcome[ordered]
       }
     }
     rownames(reducedM) <- abbreviate(rownames(reducedM),minlength = 10)
@@ -138,10 +138,10 @@ facets.heatmap <- function(seg = NULL,filenames = NULL, path, patients=NULL, min
 
     n <- nrow(reducedM)
 
-    if(!is.null(outcome)) x.lab <- outcome[cl$order]
+    if(!is.null(outcome)) x.lab <- outcome#[cl$order]
     else x.lab <- rep(1,n)
     # if(!is.null(ordered)) x.lab <- x.lab[ordered]
-    # if(is.null(ordered)) x.lab <- x.lab[cl$order]
+    if(is.null(ordered)) x.lab <- x.lab[cl$order]
 
     scales = list(x = list(at=1:n,labels=x.lab,rot=90),
                   y = list(at = len - chrom.mids, labels = names(table(chr))),
