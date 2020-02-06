@@ -17,7 +17,5 @@ You can install the development version from
 
 ``` r
 # install.packages("devtools")
-devtools::install_github("margarethannum/gnomeR")
+devtools::install_github("AxelitoMartin/gnomeR")
 ```
-
-quick change

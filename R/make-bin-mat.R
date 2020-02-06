@@ -17,6 +17,7 @@
 #' Default is NULL. Note that this file must have patients as columns and genes as rows. create.bin.matrix expects a matrix with
 #' values between -2 and 2. Please do not use any other format. Other functions in the package are available to deal with more detailed
 #' CNA data.
+#' @param cna.relax for cna data only enables to count both gains and shallow deletions as amplifications and deletions respectively.
 #' @return mut : a binary matrix of mutation data
 #' @return no.mu.patients : a character vector of patients having no mutations found in the MAF file.
 #' @export
@@ -27,7 +28,7 @@
 #' @import stringr
 
 create.bin.matrix <- function(patients=NULL, maf, mut.type = "SOMATIC",SNP.only = F,include.silent = F,
-                              fusion = NULL,cna = NULL){
+                              fusion = NULL,cna = NULL,cna.relax = F){
 
   # quick data checks #
   if(length(match("Tumor_Sample_Barcode",colnames(maf))) == 0)
@@ -130,8 +131,14 @@ create.bin.matrix <- function(patients=NULL, maf, mut.type = "SOMATIC",SNP.only 
     cna <- cna[rownames(cna) %in% patients,]
 
     temp <- do.call("cbind",apply(cna,2,function(x){
-      yA <- ifelse(x==2,1,0)
-      yD <- ifelse(x==-2,1,0)
+      if(cna.relax){
+        yA <- ifelse(x>=0.9,1,0)
+        yD <- ifelse(x<=-0.9,1,0)
+      }
+      if(!cna.relax){
+        yA <- ifelse(x==2,1,0)
+        yD <- ifelse(x==-2,1,0)
+      }
       out <- as.data.frame(cbind(yA,yD))
       colnames(out) <- c("Amp","Del")
       return(out)
