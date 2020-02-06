@@ -141,7 +141,7 @@ facets.heatmap <- function(seg = NULL,filenames = NULL, path, patients=NULL, min
 
     n <- nrow(reducedM)
 
-    if(!is.null(outcome)) x.lab <- outcome#[cl$order]
+    if(!is.null(outcome)) x.lab <- outcome[ordered]
     else x.lab <- rep(1,n)
     # if(!is.null(ordered)) x.lab <- x.lab[ordered]
     if(is.null(ordered)) x.lab <- x.lab[cl$order]
