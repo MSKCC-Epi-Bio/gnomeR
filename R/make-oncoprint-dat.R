@@ -11,9 +11,10 @@
 
 dat.oncoPrint <- function(gen.dat,clin.dat=NULL){
 
-
   if(!is.null(clin.dat)){
     # seet NA's to UNKNOWN #
+    clin.dat <- clin.dat %>%
+      mutate_all(as.character)
     if(anyNA(clin.dat)) clin.dat[is.na(clin.dat)] <- "Unknown"
     # subset data #
     patients <- intersect(rownames(gen.dat),rownames(clin.dat))
@@ -112,7 +113,7 @@ dat.oncoPrint <- function(gen.dat,clin.dat=NULL){
       }
 
       else if(length(unique(y[!is.na(y)])) %in% c(3:5)){
-        mat[match(x,rownames(mat)),] <- paste0(abbreviate(x,1),y,";")
+        mat[match(x,rownames(mat)),] <- paste0(abbreviate(x,1),"_",y,";")
       }
 
       else{
