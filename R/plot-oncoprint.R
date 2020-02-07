@@ -30,28 +30,75 @@ plot_oncoPrint <- function(gen.dat,clin.dat=NULL,ordered=NULL){
   mat <- dat.oncoPrint(gen.dat,clin.dat)
   #############
   if(!is.null(clin.dat)){
-    col = c("MUT" = "#008000", "AMP" = "red", "DEL" = "blue", "FUS" = "orange", "CLIN" = "black")
-    alter_fun = list(
-      background = function(x, y, w, h) {
-        grid.rect(x, y, w-unit(0.5, "mm"), h-unit(0.5, "mm"), gp = gpar(fill = "#CCCCCC", col = NA))
-      },
-      DEL = function(x, y, w, h) {
-        grid.rect(x, y, w-unit(0.5, "mm"), h-unit(0.5, "mm"), gp = gpar(fill = "blue", col = NA))
-      },
-      AMP = function(x, y, w, h) {
-        grid.rect(x, y, w-unit(0.5, "mm"), h-unit(0.5, "mm"), gp = gpar(fill = "red", col = NA))
-      },
-      MUT = function(x, y, w, h) {
-        grid.rect(x, y, w-unit(0.5, "mm"), h*0.33, gp = gpar(fill = "#008000", col = NA))
-      },
-      FUS = function(x, y, w, h) {
-        grid.rect(x, y, w-unit(0.5, "mm"), h*0.33, gp = gpar(fill = "orange", col = NA))
-      },
-      CLIN = function(x, y, w, h) {
-        grid.rect(x, y, w-unit(0.5, "mm"), h*0.33, gp = gpar(fill = "black", col = NA))
-      }
-    )
+    # get all values #
+    clin.factors <- unique(unlist(apply(mat,2,unique)))
+    clin.factors <- clin.factors[-na.omit(match(c("MUT;","AMP;","DEL;","FUS;","CLIN;","  "),clin.factors))]
+    if(length(clin.factors) == 0){
+      col = c("MUT" = "#008000", "AMP" = "red", "DEL" = "blue", "FUS" = "orange", "CLIN" = "purple")
+      alter_fun = list(
+        background = function(x, y, w, h) {
+          grid.rect(x, y, w-unit(0.5, "mm"), h-unit(0.5, "mm"), gp = gpar(fill = "#CCCCCC", col = NA))
+        },
+        DEL = function(x, y, w, h) {
+          grid.rect(x, y, w-unit(0.5, "mm"), h-unit(0.5, "mm"), gp = gpar(fill = "blue", col = NA))
+        },
+        AMP = function(x, y, w, h) {
+          grid.rect(x, y, w-unit(0.5, "mm"), h-unit(0.5, "mm"), gp = gpar(fill = "red", col = NA))
+        },
+        MUT = function(x, y, w, h) {
+          grid.rect(x, y, w-unit(0.5, "mm"), h*0.33, gp = gpar(fill = "#008000", col = NA))
+        },
+        FUS = function(x, y, w, h) {
+          grid.rect(x, y, w-unit(0.5, "mm"), h*0.33, gp = gpar(fill = "orange", col = NA))
+        },
+        CLIN = function(x, y, w, h) {
+          grid.rect(x, y, w-unit(0.5, "mm"), h*0.33, gp = gpar(fill = "purple", col = NA))
+        }
+      )
+    }
 
+    if(length(clin.factors) > 0){
+      clin.factors <- gsub(";","",clin.factors)
+      added <- palette()[c(3,7,5,6)][1:length(clin.factors)]
+      names(added) <- clin.factors
+      for(i in 1:length(clin))
+        col = c("MUT" = "#008000", "AMP" = "red", "DEL" = "blue", "FUS" = "orange", "CLIN" = "purple",added)
+      alter_fun = list(
+        background = function(x, y, w, h) {
+          grid.rect(x, y, w-unit(0.5, "mm"), h-unit(0.5, "mm"), gp = gpar(fill = "#CCCCCC", col = NA))
+        },
+        DEL = function(x, y, w, h) {
+          grid.rect(x, y, w-unit(0.5, "mm"), h-unit(0.5, "mm"), gp = gpar(fill = "blue", col = NA))
+        },
+        AMP = function(x, y, w, h) {
+          grid.rect(x, y, w-unit(0.5, "mm"), h-unit(0.5, "mm"), gp = gpar(fill = "red", col = NA))
+        },
+        MUT = function(x, y, w, h) {
+          grid.rect(x, y, w-unit(0.5, "mm"), h*0.33, gp = gpar(fill = "#008000", col = NA))
+        },
+        FUS = function(x, y, w, h) {
+          grid.rect(x, y, w-unit(0.5, "mm"), h*0.33, gp = gpar(fill = "orange", col = NA))
+        },
+        CLIN = function(x, y, w, h) {
+          grid.rect(x, y, w-unit(0.5, "mm"), h*0.33, gp = gpar(fill = "purple", col = NA))
+        }
+      )
+
+      # temp <- letters
+      # names(temp) <- rep("lol",length(temp))
+      for(i in 1:length(clin.factors)){
+        alter_fun[[clin.factors[i]]] <- function(x, y, w, h) {
+          grid.rect(x, y, w-unit(0.5, "mm"), h*0.33, gp = gpar(fill = ascharacter(added[i]), col = NA))
+        }
+      }
+      # for(i in 1:length(clin.factors)){
+      #   names(temp)[i] <- as.character(added[i])
+      #   alter_fun[[clin.factors[i]]] <- function(x, y, w, h, fill = ) {
+      #     grid.rect(x, y, w-unit(0.5, "mm"), h*0.33, gp = gpar(fill = fill, col = NA))
+      #   }
+      # }
+
+    }
 
     if(!is.null(ordered)) {
       sorted.mat <- mat[,ordered]
@@ -65,8 +112,8 @@ plot_oncoPrint <- function(gen.dat,clin.dat=NULL,ordered=NULL){
       sorted.mat <- mat
       p <- oncoPrint(sorted.mat, get_type = function(x) strsplit(x, ";")[[1]],
                      alter_fun = alter_fun, col = col, column_order = NULL,row_order = NULL,
-                     heatmap_legend_param = list(title = "Alterations", at = c("MUT","DEL","AMP","FUS"),
-                                                 labels = c("Mutation","Deletion","Amplification","Fusion")))
+                     heatmap_legend_param = list(title = "Alterations", at = c("MUT","DEL","AMP","FUS",clin.factors),
+                                                 labels = c("Mutation","Deletion","Amplification","Fusion",clin.factors)))
     }
   }
 
@@ -107,6 +154,7 @@ plot_oncoPrint <- function(gen.dat,clin.dat=NULL,ordered=NULL){
                                                  labels = c("Mutation","Deletion","Amplification","Fusion")))
     }
   }
+
   return(p)
 }
 
