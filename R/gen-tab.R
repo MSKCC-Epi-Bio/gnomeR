@@ -11,6 +11,7 @@
 #' Default is 0 (all features included).
 #' @param paired Boolean if the data are paired. Default is FALSE.
 #' @param cont Should the outcome be treated as a continuous value. Default is FALSE treated as categorical.
+#' @param rank Should the table returned be oredered by Pvalue. Boolean, default is T
 #' @return fits : a table of odds ratio and pvalues.
 #' @return forest.plot : A forest plot of the top 10 hits.
 #'
@@ -25,7 +26,7 @@
 #' head(test$fits)
 #' test$forest.plot
 
-gen.tab <- function(gen.dat,outcome,filter=0,paired = F,cont=F){
+gen.tab <- function(gen.dat,outcome,filter=0,paired = F,cont=F,rank = T){
 
   # remove all columns that are constant #
   if(length(which(apply(gen.dat, 2, function(x){length(unique(x)) == 1}))) > 0)
@@ -75,9 +76,9 @@ gen.tab <- function(gen.dat,outcome,filter=0,paired = F,cont=F){
     })))
 
     colnames(fits)[2:(length(levels(outcome))+1)] <- paste0(colnames(fits)[2:(length(levels(outcome))+1)],
-                                                           "(N=",as.numeric(summary(outcome)),")")
+                                                            "(N=",as.numeric(summary(outcome)),")")
     fits$FDR <- p.adjust(fits$Pvalue,method="fdr")
-    fits <- fits[order(fits$Pvalue),]
+    if(rank) fits <- fits[order(fits$Pvalue),]
 
     if (!is.null(fits$OddsRatio)){
       # forest plot #
@@ -107,14 +108,29 @@ gen.tab <- function(gen.dat,outcome,filter=0,paired = F,cont=F){
 
 
   ############
+
+
   if(cont){
     fits <- as.data.frame(do.call('rbind',apply(gen.dat, 2, function(x) {
-      fit <- lm(outcome ~ x)
-      temp <- as.data.frame(summary(fit)$coefficient)
-      colnames(temp) <-  c("Estimate","SD", "tvalue","Pvalue")
-      if(is.numeric(x)) temp$MutationFreq <- sum(x,na.rm = T)/length(x[!is.na(x)])
-      else temp$MutationFreq <- 0
-      out <- temp[2,c(1,2,4,5)]
+      if(length(unique(x))/length(x) > 0.25){
+        fit <- lm(outcome ~ x)
+        temp <- as.data.frame(summary(fit)$coefficient)
+        colnames(temp) <-  c("Estimate","SD", "tvalue","Pvalue")
+        if(is.numeric(x)) temp$MutationFreq <- sum(x,na.rm = T)/length(x[!is.na(x)])
+        else temp$MutationFreq <- 0
+        out <- temp[2,c(1,2,4,5)]
+      }
+      else{
+        fit <- lm(outcome ~ as.factor(x))
+        temp <- as.data.frame(summary(fit)$coefficient)
+        colnames(temp) <-  c("Estimate","SD", "tvalue","Pvalue")
+        # if(is.numeric(x)) temp$MutationFreq <- sum(x,na.rm = T)/length(x[!is.na(x)])
+        # else
+        temp$MutationFreq <- 0#rep(0,nrow(temp))
+        out <- as.data.frame(temp[2:nrow(temp),c(1,2,4,5)])
+        rownames(out) <- gsub("as.factor\\(x\\)","",rownames(out))
+      }
+      return(out)
     })))
 
 
@@ -122,21 +138,21 @@ gen.tab <- function(gen.dat,outcome,filter=0,paired = F,cont=F){
     fits$GeneName <- rownames(fits)
 
     if(all(apply(gen.dat,2,is.numeric))){
-    vPlot <- plot_ly(data = fits, x = ~Estimate, y = ~-log10(Pvalue),
-                     text = ~paste('Gene :',GeneName,
-                                   '</br> Estimate :',round(Estimate,digits=2)),
-                     mode = "markers",size = ~MutationFreq,color = ~Estimate) %>%
-      layout(title ="Volcano Plot")
+      vPlot <- try(plot_ly(data = fits %>% filter(!is.na(Pvalue),is.numeric(Pvalue)), x = ~Estimate, y = ~-log10(Pvalue),
+                       text = ~paste('Gene :',GeneName,
+                                     '</br> Estimate :',round(Estimate,digits=2)),
+                       mode = "markers",size = ~MutationFreq,color = ~Estimate) %>%
+        layout(title ="Volcano Plot"),silent = T)
     }
     else{
-      vPlot <- plot_ly(data = fits, x = ~Estimate, y = ~-log10(Pvalue),
+      vPlot <- try(plot_ly(data = fits %>% filter(!is.na(Pvalue),is.numeric(Pvalue)), x = ~Estimate, y = ~-log10(Pvalue),
                        text = ~paste('Gene :',GeneName,
                                      '</br> Estimate :',round(Estimate,digits=2)),
                        mode = "markers") %>%
-        layout(title ="Volcano Plot")
+        layout(title ="Volcano Plot"),silent =T)
     }
     # fits <- fits[,-match("GeneName",colnames(fits))]
-    fits <- fits[order(fits$Pvalue),]
+    if(rank) fits <- fits[order(fits$Pvalue),]
     return(list("fits"=fits,"vPlot"=vPlot))
   }
 }
