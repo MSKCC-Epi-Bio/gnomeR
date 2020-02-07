@@ -11,7 +11,10 @@
 
 dat.oncoPrint <- function(gen.dat,clin.dat=NULL){
 
+
   if(!is.null(clin.dat)){
+    # seet NA's to UNKNOWN #
+    if(anyNA(clin.dat)) clin.dat[is.na(clin.dat)] <- "Unknown"
     # subset data #
     patients <- intersect(rownames(gen.dat),rownames(clin.dat))
     gen.dat <- gen.dat[match(patients,rownames(gen.dat)),]
