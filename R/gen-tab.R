@@ -75,7 +75,7 @@ gen.tab <- function(gen.dat,outcome,filter=0,paired = F,cont=F){
     })))
 
     colnames(fits)[2:(length(levels(outcome))+1)] <- paste0(colnames(fits)[2:(length(levels(outcome))+1)],
-                                                           "(N=",as.numeric(summary(outcome)),")")
+                                                            "(N=",as.numeric(summary(outcome)),")")
     fits$FDR <- p.adjust(fits$Pvalue,method="fdr")
     fits <- fits[order(fits$Pvalue),]
 
@@ -107,14 +107,27 @@ gen.tab <- function(gen.dat,outcome,filter=0,paired = F,cont=F){
 
 
   ############
+
+
   if(cont){
     fits <- as.data.frame(do.call('rbind',apply(gen.dat, 2, function(x) {
-      fit <- lm(outcome ~ x)
-      temp <- as.data.frame(summary(fit)$coefficient)
-      colnames(temp) <-  c("Estimate","SD", "tvalue","Pvalue")
-      if(is.numeric(x)) temp$MutationFreq <- sum(x,na.rm = T)/length(x[!is.na(x)])
-      else temp$MutationFreq <- 0
-      out <- temp[2,c(1,2,4,5)]
+      if(length(unique(x))/length(x) > 0.25){
+        fit <- lm(outcome ~ x)
+        temp <- as.data.frame(summary(fit)$coefficient)
+        colnames(temp) <-  c("Estimate","SD", "tvalue","Pvalue")
+        if(is.numeric(x)) temp$MutationFreq <- sum(x,na.rm = T)/length(x[!is.na(x)])
+        else temp$MutationFreq <- 0
+        out <- temp[2,c(1,2,4,5)]
+      }
+      else{
+        fit <- lm(outcome ~ as.factor(x))
+        temp <- as.data.frame(summary(fit)$coefficient)
+        colnames(temp) <-  c("Estimate","SD", "tvalue","Pvalue")
+        # if(is.numeric(x)) temp$MutationFreq <- sum(x,na.rm = T)/length(x[!is.na(x)])
+        # else
+        temp$MutationFreq <- rep(0,nrow(temp)-1)
+        out <- temp[2:nrow(temp),c(1,2,4,5)]
+      }
     })))
 
 
@@ -122,11 +135,11 @@ gen.tab <- function(gen.dat,outcome,filter=0,paired = F,cont=F){
     fits$GeneName <- rownames(fits)
 
     if(all(apply(gen.dat,2,is.numeric))){
-    vPlot <- plot_ly(data = fits, x = ~Estimate, y = ~-log10(Pvalue),
-                     text = ~paste('Gene :',GeneName,
-                                   '</br> Estimate :',round(Estimate,digits=2)),
-                     mode = "markers",size = ~MutationFreq,color = ~Estimate) %>%
-      layout(title ="Volcano Plot")
+      vPlot <- plot_ly(data = fits, x = ~Estimate, y = ~-log10(Pvalue),
+                       text = ~paste('Gene :',GeneName,
+                                     '</br> Estimate :',round(Estimate,digits=2)),
+                       mode = "markers",size = ~MutationFreq,color = ~Estimate) %>%
+        layout(title ="Volcano Plot")
     }
     else{
       vPlot <- plot_ly(data = fits, x = ~Estimate, y = ~-log10(Pvalue),
