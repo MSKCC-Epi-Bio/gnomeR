@@ -129,6 +129,7 @@ gen.tab <- function(gen.dat,outcome,filter=0,paired = F,cont=F){
         out <- as.data.frame(temp[2:nrow(temp),c(1,2,4,5)])
         rownames(out) <- gsub("as.factor\\(x\\)","",rownames(out))
       }
+      return(out)
     })))
 
 
