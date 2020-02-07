@@ -136,18 +136,18 @@ gen.tab <- function(gen.dat,outcome,filter=0,paired = F,cont=F){
     fits$GeneName <- rownames(fits)
 
     if(all(apply(gen.dat,2,is.numeric))){
-      vPlot <- plot_ly(data = fits %>% filter(!is.na(Pvalue),is.numeric(Pvalue)), x = ~Estimate, y = ~-log10(Pvalue),
+      vPlot <- try(plot_ly(data = fits %>% filter(!is.na(Pvalue),is.numeric(Pvalue)), x = ~Estimate, y = ~-log10(Pvalue),
                        text = ~paste('Gene :',GeneName,
                                      '</br> Estimate :',round(Estimate,digits=2)),
                        mode = "markers",size = ~MutationFreq,color = ~Estimate) %>%
-        layout(title ="Volcano Plot")
+        layout(title ="Volcano Plot"),silent = T)
     }
     else{
-      vPlot <- plot_ly(data = fits %>% filter(!is.na(Pvalue),is.numeric(Pvalue)), x = ~Estimate, y = ~-log10(Pvalue),
+      vPlot <- try(plot_ly(data = fits %>% filter(!is.na(Pvalue),is.numeric(Pvalue)), x = ~Estimate, y = ~-log10(Pvalue),
                        text = ~paste('Gene :',GeneName,
                                      '</br> Estimate :',round(Estimate,digits=2)),
                        mode = "markers") %>%
-        layout(title ="Volcano Plot")
+        layout(title ="Volcano Plot"),silent =T)
     }
     # fits <- fits[,-match("GeneName",colnames(fits))]
     fits <- fits[order(fits$Pvalue),]
