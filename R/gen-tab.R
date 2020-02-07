@@ -111,7 +111,7 @@ gen.tab <- function(gen.dat,outcome,filter=0,paired = F,cont=F){
 
   if(cont){
     fits <- as.data.frame(do.call('rbind',apply(gen.dat, 2, function(x) {
-      if(length(unique(x))/length(x) < 0.25){
+      if(length(unique(x))/length(x) > 0.25){
         fit <- lm(outcome ~ x)
         temp <- as.data.frame(summary(fit)$coefficient)
         colnames(temp) <-  c("Estimate","SD", "tvalue","Pvalue")
