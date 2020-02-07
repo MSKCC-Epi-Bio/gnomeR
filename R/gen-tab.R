@@ -125,7 +125,7 @@ gen.tab <- function(gen.dat,outcome,filter=0,paired = F,cont=F){
         colnames(temp) <-  c("Estimate","SD", "tvalue","Pvalue")
         # if(is.numeric(x)) temp$MutationFreq <- sum(x,na.rm = T)/length(x[!is.na(x)])
         # else
-        temp$MutationFreq <- rep(0,nrow(temp))
+        temp$MutationFreq <- 0#rep(0,nrow(temp))
         out <- temp[2:nrow(temp),c(1,2,4,5)]
       }
     })))
