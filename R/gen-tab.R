@@ -126,7 +126,7 @@ gen.tab <- function(gen.dat,outcome,filter=0,paired = F,cont=F){
         # if(is.numeric(x)) temp$MutationFreq <- sum(x,na.rm = T)/length(x[!is.na(x)])
         # else
         temp$MutationFreq <- 0#rep(0,nrow(temp))
-        out <- temp[2:nrow(temp),c(1,2,4,5)]
+        out <- as.data.frame(temp[2:nrow(temp),c(1,2,4,5)])
         rownames(out) <- gsub("as.factor\\(x\\)","",rownames(out))
       }
     })))
