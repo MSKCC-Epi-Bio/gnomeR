@@ -14,12 +14,19 @@ dat.oncoPrint <- function(gen.dat,clin.dat=NULL){
   if(!is.null(clin.dat)){
     # seet NA's to UNKNOWN #
     clin.dat <- clin.dat %>%
-      mutate_all(as.character)
+      rownames_to_column('sample') %>%
+      mutate_all(as.character) %>%
+      column_to_rownames('sample')
     if(anyNA(clin.dat)) clin.dat[is.na(clin.dat)] <- "Unknown"
     # subset data #
     patients <- intersect(rownames(gen.dat),rownames(clin.dat))
     gen.dat <- gen.dat[match(patients,rownames(gen.dat)),]
-    clin.dat <- clin.dat[match(patients,rownames(clin.dat)),]
+    clin.dat <- clin.dat %>%
+      rownames_to_column('sample')
+    clin.dat <- clin.dat[match(patients,clin.dat$sample),]
+    rownames(clin.dat) <- clin.dat$sample
+    clin.dat <- clin.dat %>%
+      select(-one_of("sample"))
     ## names ##
     genes <- c(colnames(clin.dat),unique(gsub(".Amp|.Del|.fus","",colnames(gen.dat))))
   }
