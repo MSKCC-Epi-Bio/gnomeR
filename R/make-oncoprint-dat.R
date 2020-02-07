@@ -120,7 +120,7 @@ dat.oncoPrint <- function(gen.dat,clin.dat=NULL){
       }
 
       else if(length(unique(y[!is.na(y)])) %in% c(3:5)){
-        mat[match(x,rownames(mat)),] <- paste0(abbreviate(x,1),"_",y,";")
+        mat[match(x,rownames(mat)),] <- paste0(x,"_",y,";") #abbreviate(x,1)
       }
 
       else{
