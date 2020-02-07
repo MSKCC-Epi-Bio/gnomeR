@@ -11,6 +11,7 @@
 #' Default is 0 (all features included).
 #' @param paired Boolean if the data are paired. Default is FALSE.
 #' @param cont Should the outcome be treated as a continuous value. Default is FALSE treated as categorical.
+#' @param rank Should the table returned be oredered by Pvalue. Boolean, default is T
 #' @return fits : a table of odds ratio and pvalues.
 #' @return forest.plot : A forest plot of the top 10 hits.
 #'
@@ -25,7 +26,7 @@
 #' head(test$fits)
 #' test$forest.plot
 
-gen.tab <- function(gen.dat,outcome,filter=0,paired = F,cont=F){
+gen.tab <- function(gen.dat,outcome,filter=0,paired = F,cont=F,rank = T){
 
   # remove all columns that are constant #
   if(length(which(apply(gen.dat, 2, function(x){length(unique(x)) == 1}))) > 0)
@@ -77,7 +78,7 @@ gen.tab <- function(gen.dat,outcome,filter=0,paired = F,cont=F){
     colnames(fits)[2:(length(levels(outcome))+1)] <- paste0(colnames(fits)[2:(length(levels(outcome))+1)],
                                                             "(N=",as.numeric(summary(outcome)),")")
     fits$FDR <- p.adjust(fits$Pvalue,method="fdr")
-    fits <- fits[order(fits$Pvalue),]
+    if(rank) fits <- fits[order(fits$Pvalue),]
 
     if (!is.null(fits$OddsRatio)){
       # forest plot #
@@ -151,7 +152,7 @@ gen.tab <- function(gen.dat,outcome,filter=0,paired = F,cont=F){
         layout(title ="Volcano Plot"),silent =T)
     }
     # fits <- fits[,-match("GeneName",colnames(fits))]
-    fits <- fits[order(fits$Pvalue),]
+    if(rank) fits <- fits[order(fits$Pvalue),]
     return(list("fits"=fits,"vPlot"=vPlot))
   }
 }
