@@ -59,10 +59,19 @@ plot_oncoPrint <- function(gen.dat,clin.dat=NULL,ordered=NULL){
 
     if(length(clin.factors) > 0){
       clin.factors <- gsub(";","",clin.factors)
-      added <- palette()[c(3,7,5,6)][1:length(clin.factors)]
-      names(added) <- clin.factors
-      for(i in 1:length(clin))
-        col = c("MUT" = "#008000", "AMP" = "red", "DEL" = "blue", "FUS" = "orange", "CLIN" = "purple",added)
+      sum.factors <- summary(as.factor(gsub("_.*","",clin.factors)))
+      added <- c()
+      names.toadd <- c()
+      for(k in 1:length(sum.factors)){
+        added <- c(added,palette()[c(3,7,2,6,5,4,1)][1:as.numeric(sum.factors[k])])
+
+        names.toadd <- c(names.toadd,
+                          clin.factors[grep(names(sum.factors)[k],clin.factors)])
+      }
+      names(added) <- names.toadd
+      # added <- palette()[c(3,7,5,6)][1:length(clin.factors)]
+      # names(added) <- clin.factors
+      col = c("MUT" = "#008000", "AMP" = "red", "DEL" = "blue", "FUS" = "orange", "CLIN" = "purple",added)
       alter_fun = list(
         background = function(x, y, w, h) {
           grid.rect(x, y, w-unit(0.5, "mm"), h-unit(0.5, "mm"), gp = gpar(fill = "#CCCCCC", col = NA))
@@ -84,20 +93,13 @@ plot_oncoPrint <- function(gen.dat,clin.dat=NULL,ordered=NULL){
         }
       )
 
-      # temp <- letters
-      # names(temp) <- rep("lol",length(temp))
-      for(i in 1:length(clin.factors)){
-        alter_fun[[clin.factors[i]]] <- function(x, y, w, h) {
-          grid.rect(x, y, w-unit(0.5, "mm"), h*0.33, gp = gpar(fill = ascharacter(added[i]), col = NA))
+      to.add <- lapply(as.character(added),function(val){
+        temp <- function(x, y, w, h) {
+          grid.rect(x, y, w-unit(0.5, "mm"), h*0.33, gp = gpar(fill = val, col = NA))
         }
-      }
-      # for(i in 1:length(clin.factors)){
-      #   names(temp)[i] <- as.character(added[i])
-      #   alter_fun[[clin.factors[i]]] <- function(x, y, w, h, fill = ) {
-      #     grid.rect(x, y, w-unit(0.5, "mm"), h*0.33, gp = gpar(fill = fill, col = NA))
-      #   }
-      # }
-
+      })
+      names(to.add) <- clin.factors
+      alter_fun <- c(alter_fun,to.add)
     }
 
     if(!is.null(ordered)) {
