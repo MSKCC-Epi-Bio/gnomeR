@@ -50,7 +50,7 @@ CNregions.mod <- function (seg, epsilon = 0.005, adaptive = FALSE, rmCNV = FALSE
                                                         6], 1))
       outi = cbind(outi, outj)
     }
-    print(paste0(i,",",dim(outi)))
+    # print(paste0(i,",",dim(outi)))
     u.start = u.breakpts
     u.se = sort(union(unique(subdata$end), unique(subdata$start)))
     u.end = lapply(2:length(u.start), FUN = function(x) u.se[which(u.start[x] <=
