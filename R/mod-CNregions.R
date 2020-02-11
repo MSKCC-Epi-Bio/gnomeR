@@ -34,7 +34,7 @@ CNregions.mod <- function (seg, epsilon = 0.005, adaptive = FALSE, rmCNV = FALSE
     stop("seg file is empty.")
   samples = unique(seg$sample)
   chr = start.maploc = end.maploc = nur = out = NULL
-  for (i in 1:22) {#unique(as.numeric(seg[, 2]))
+  for(i in unique(as.numeric(seg[, 2]))) { #unique(as.numeric(seg[, 2]))
     subdata = subset(seg, chromosome == i)
     u.breakpts = sort(unique(subdata[, 3]))
     l = length(u.breakpts)
@@ -56,6 +56,7 @@ CNregions.mod <- function (seg, epsilon = 0.005, adaptive = FALSE, rmCNV = FALSE
     u.end = lapply(2:length(u.start), FUN = function(x) u.se[which(u.start[x] <=
                                                                      u.se)[1]])
     u.end = unlist(u.end)
+    u.end = u.end[complete.cases(u.end)]
     u.end = c(u.end, max(u.se))
     if(nrow(outi) > 1) adjrow.dist = apply(sqrt(diff(outi)^2), 1, mean)
     else adjrow.dist = mean(sqrt(diff(outi[1,])^2))
@@ -67,16 +68,22 @@ CNregions.mod <- function (seg, epsilon = 0.005, adaptive = FALSE, rmCNV = FALSE
     if (length(seg.break) == 0)
       stop("Check parameter setting. Set lower epsilon value.")
     start = seg.break
-    if (start[1] > 1) {
-      start = c(1, start)
+    if(length(u.start) > 1){
+      if (start[1] > 1) {
+        start = c(1, start)
+      }
+      end = seg.break - 1
+      if (end[1] == 0) {
+        end = end[-1]
+      }
+      len = dim(outi)[1]
+      if (tail(end, 1) < len) {
+        end = c(end, len)
+      }
     }
-    end = seg.break - 1
-    if (end[1] == 0) {
-      end = end[-1]
-    }
-    len = dim(outi)[1]
-    if (tail(end, 1) < len) {
-      end = c(end, len)
+    else{
+      start = 1
+      end = 1
     }
     nuri = end - start + 1
     rowidx = rep(c(1:length(nuri)), nuri)
