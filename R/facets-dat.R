@@ -88,7 +88,7 @@ facets.dat <- function(seg = NULL,filenames = NULL, path,
     }
 
 
-    out.cn <- CNregions(seg = all.dat,epsilon = epsilon)
+    out.cn <- CNregions.mod(seg = all.dat,epsilon = epsilon)
     names(ploidy) <- rownames(out.cn)
     names(purity) <- rownames(out.cn)
 
@@ -125,7 +125,7 @@ facets.dat <- function(seg = NULL,filenames = NULL, path,
       all.dat <- rbind(all.dat,cncf)
     }
     all.dat <- all.dat[complete.cases(all.dat),]
-    out.cn <- CNregions(seg = all.dat,epsilon = epsilon)
+    out.cn <- CNregions.mod(seg = all.dat,epsilon = epsilon)
     # out.cn <- out.cn[match(rownames(out.cn),patients),]
     return(list("out.cn"=out.cn,"patients" = patients))
   }
