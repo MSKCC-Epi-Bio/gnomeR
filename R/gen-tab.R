@@ -48,6 +48,8 @@ gen.tab <- function(gen.dat,outcome,filter=0,paired = F,cont=F,rank = T){
 
 
   if(!cont){
+    if(is.character(outcome)) outcome <- as.factor(outcome)
+
     fits <- as.data.frame(t(apply(gen.dat, 2, function(x) {
       if (length(unique(x))/length(x) > 0.5) {
         x <- ifelse(x > median(x, na.rm = T), 1, 0)
@@ -63,7 +65,7 @@ gen.tab <- function(gen.dat,outcome,filter=0,paired = F,cont=F,rank = T){
       }
       out <- paste0(round(as.numeric(out)*100,digits = 2),"%")
       if (!is.null(test$estimate)) {
-        out <- c(out, as.numeric(test$estimate), test$p.value, round(as.numeric(test$conf.int),digits =2))
+        out <- c(out, round(as.numeric(test$estimate),digits = 2), round(test$p.value,digits = 5), round(as.numeric(test$conf.int),digits =2))
         names(out) <- c("Overall",levels(outcome)[1:length(levels(outcome))],
                         "OddsRatio", "Pvalue", "Lower", "Upper")
       }
@@ -77,7 +79,7 @@ gen.tab <- function(gen.dat,outcome,filter=0,paired = F,cont=F,rank = T){
 
     colnames(fits)[2:(length(levels(outcome))+1)] <- paste0(colnames(fits)[2:(length(levels(outcome))+1)],
                                                             "(N=",as.numeric(summary(outcome)),")")
-    fits$FDR <- p.adjust(fits$Pvalue,method="fdr")
+    fits$FDR <- p.adjust(as.numeric(as.character(fits$Pvalue)),method="fdr")
     if(rank) fits <- fits[order(fits$Pvalue),]
 
     if (!is.null(fits$OddsRatio)){
