@@ -48,6 +48,8 @@ gen.tab <- function(gen.dat,outcome,filter=0,paired = F,cont=F,rank = T){
 
 
   if(!cont){
+    if(is.character(outcome)) outcome <- as.factor(outcome)
+
     fits <- as.data.frame(t(apply(gen.dat, 2, function(x) {
       if (length(unique(x))/length(x) > 0.5) {
         x <- ifelse(x > median(x, na.rm = T), 1, 0)
