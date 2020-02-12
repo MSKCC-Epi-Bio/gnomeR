@@ -21,7 +21,7 @@
 #' lattice
 
 
-facets.heatmap <- function(seg = NULL,filenames = NULL, path, patients=NULL, min.purity = 0.3,
+facets.heatmap <- function(seg = NULL,filenames = NULL, path =NULL, patients=NULL, min.purity = 0.3,
                            epsilon = 0.005,ordered = NULL,outcome = NULL, adaptive = F){
 
   if(is.null(seg) && is.null(filenames))
@@ -93,7 +93,7 @@ facets.heatmap <- function(seg = NULL,filenames = NULL, path, patients=NULL, min
   ###############################################################################
 
   if(!is.null(seg)){
-    dat <- facets.dat(seg,patients = patients,adaptive = adaptive)
+    dat <- facets.dat(seg,filenames, path, patients, min.purity, epsilon,adaptive)
     reducedM <- dat$out.cn
     patients <- patients[match(rownames(reducedM),patients)]
     if(!is.null(outcome)) outcome <- outcome[match(rownames(reducedM),names(outcome))]
