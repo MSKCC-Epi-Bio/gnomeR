@@ -7,6 +7,9 @@
 #' @param clin.dat An optional clinical file, including only the features the user wishes to add to the plot. Default is NULL.
 #' @return mat : a matrix ready to be plotted using plot.Oncoprint().
 #' @export
+#'
+#' @import
+#' tibble
 
 
 dat.oncoPrint <- function(gen.dat,clin.dat=NULL){

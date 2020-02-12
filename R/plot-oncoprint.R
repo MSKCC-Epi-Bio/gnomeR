@@ -21,7 +21,9 @@
 #' grep("KEAP1",colnames(all.platforms$mut)),
 #' grep("ALK",colnames(all.platforms$mut)),
 #' grep("CDKN2A",colnames(all.platforms$mut)))])
-#' @import ComplexHeatmap
+#' @import
+#' ComplexHeatmap
+#' tibble
 
 
 plot_oncoPrint <- function(gen.dat,clin.dat=NULL,ordered=NULL){
