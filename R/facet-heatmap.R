@@ -93,6 +93,8 @@ facets.heatmap <- function(seg = NULL,filenames = NULL, path =NULL, patients=NUL
   ###############################################################################
 
   if(!is.null(seg)){
+    if(!is.null(outcome)) names(outcome) <- patients
+    if(!is.null(ordered)) names(ordered) <- patients
     dat <- facets.dat(seg,filenames, path, patients, min.purity, epsilon,adaptive)
     reducedM <- dat$out.cn
     patients <- patients[match(rownames(reducedM),patients)]
