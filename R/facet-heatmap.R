@@ -10,6 +10,7 @@
 #' @param epsilon level of unions when aggregating segments between
 #' @param ordered order in which patients should be printed. Default NUll leads to hierarchical clustering.
 #' @param outcome for seg file only, if outcome associated with study it will be printed along the x axis for each patient
+#' @param adaptive
 #' @return p a heatmap corresponding to the segnment files inputted
 #' @export
 #'
@@ -21,7 +22,7 @@
 
 
 facets.heatmap <- function(seg = NULL,filenames = NULL, path, patients=NULL, min.purity = 0.3,
-                           epsilon = 0.005,ordered = NULL,outcome = NULL){
+                           epsilon = 0.005,ordered = NULL,outcome = NULL, adaptive = F){
 
   if(is.null(seg) && is.null(filenames))
     stop("You must provide either a complete segmentation file
@@ -34,7 +35,7 @@ facets.heatmap <- function(seg = NULL,filenames = NULL, path, patients=NULL, min
   ######################################
 
   if(!is.null(filenames)){
-    dat <- facets.dat(seg = NULL,filenames, path, patients, min.purity, epsilon)
+    dat <- facets.dat(seg = NULL,filenames, path, patients, min.purity, epsilon,adaptive)
     reducedM <- dat$out.cn
     ploidy <- dat$ploidy
     purity <- dat$purity
@@ -92,7 +93,7 @@ facets.heatmap <- function(seg = NULL,filenames = NULL, path, patients=NULL, min
   ###############################################################################
 
   if(!is.null(seg)){
-    dat <- facets.dat(seg,patients = patients)
+    dat <- facets.dat(seg,patients = patients,adaptive = adaptive)
     reducedM <- dat$out.cn
     patients <- patients[match(rownames(reducedM),patients)]
     if(!is.null(outcome)) outcome <- outcome[match(rownames(reducedM),names(outcome))]
