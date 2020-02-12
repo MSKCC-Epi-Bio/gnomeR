@@ -21,7 +21,9 @@
 #' grep("KEAP1",colnames(all.platforms$mut)),
 #' grep("ALK",colnames(all.platforms$mut)),
 #' grep("CDKN2A",colnames(all.platforms$mut)))])
-#' @import ComplexHeatmap
+#' @import
+#' ComplexHeatmap
+#' tibble
 
 
 plot_oncoPrint <- function(gen.dat,clin.dat=NULL,ordered=NULL){
@@ -107,8 +109,8 @@ plot_oncoPrint <- function(gen.dat,clin.dat=NULL,ordered=NULL){
 
       p <- oncoPrint(sorted.mat, get_type = function(x) strsplit(x, ";")[[1]],
                      alter_fun = alter_fun, col = col, column_order = 1:ncol(sorted.mat),row_order = 1:nrow(sorted.mat),
-                     heatmap_legend_param = list(title = "Alterations", at = c("MUT","DEL","AMP","FUS"),
-                                                 labels = c("Mutation","Deletion","Amplification","Fusion")))
+                     heatmap_legend_param = list(title = "Alterations", at = c("MUT","DEL","AMP","FUS",clin.factors),
+                                                 labels = c("Mutation","Deletion","Amplification","Fusion",clin.factors)))
     }
     else{
       sorted.mat <- mat
