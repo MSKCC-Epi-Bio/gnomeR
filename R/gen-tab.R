@@ -65,7 +65,7 @@ gen.tab <- function(gen.dat,outcome,filter=0,paired = F,cont=F,rank = T){
       }
       out <- paste0(round(as.numeric(out)*100,digits = 2),"%")
       if (!is.null(test$estimate)) {
-        out <- c(out, as.numeric(test$estimate), test$p.value, round(as.numeric(test$conf.int),digits =2))
+        out <- c(out, round(as.numeric(test$estimate),digits = 2), round(test$p.value,digits = 5), round(as.numeric(test$conf.int),digits =2))
         names(out) <- c("Overall",levels(outcome)[1:length(levels(outcome))],
                         "OddsRatio", "Pvalue", "Lower", "Upper")
       }
