@@ -23,7 +23,7 @@
 #' cluster
 
 
-facets.dat <- function(seg = NULL,filenames = NULL, path,
+facets.dat <- function(seg = NULL,filenames = NULL, path=NULL,
                        patients=NULL, min.purity = 0.3, epsilon = 0.005,
                        adaptive = F){
 
