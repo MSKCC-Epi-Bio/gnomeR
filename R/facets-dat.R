@@ -8,6 +8,7 @@
 #' @param patients the names of the patients of the respective filenames. Default simply 1 to number of files.
 #' @param min.purity the minimum purity of the sample required to be kept in the final dataset. Default is 0.3.
 #' @param epsilon level of unions when aggregating segments between
+#' @param adaptive
 #' @return out.cn : a matrix of the union of all segment files with patients as rows and segments as columns
 #' @return ploidy : a vector of the ploidy values for the patients in out.cn
 #' @return purity : a vector of the purity values for the patients in out.cn
@@ -23,7 +24,8 @@
 
 
 facets.dat <- function(seg = NULL,filenames = NULL, path,
-                       patients=NULL, min.purity = 0.3, epsilon = 0.005){
+                       patients=NULL, min.purity = 0.3, epsilon = 0.005,
+                       adaptive = F){
 
   if(is.null(seg) && is.null(filenames))
     stop("You must provide either a complete segmentation file
