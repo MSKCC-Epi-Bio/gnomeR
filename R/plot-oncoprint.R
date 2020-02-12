@@ -109,7 +109,7 @@ plot_oncoPrint <- function(gen.dat,clin.dat=NULL,ordered=NULL){
 
       p <- oncoPrint(sorted.mat, get_type = function(x) strsplit(x, ";")[[1]],
                      alter_fun = alter_fun, col = col, column_order = 1:ncol(sorted.mat),row_order = 1:nrow(sorted.mat),
-                     heatmap_legend_param = list(title = "Alterations", at = c("MUT","DEL","AMP","FUS",clin.factor),
+                     heatmap_legend_param = list(title = "Alterations", at = c("MUT","DEL","AMP","FUS",clin.factors),
                                                  labels = c("Mutation","Deletion","Amplification","Fusion",clin.factors)))
     }
     else{
