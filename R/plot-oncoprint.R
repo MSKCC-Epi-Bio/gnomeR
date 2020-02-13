@@ -71,6 +71,8 @@ plot_oncoPrint <- function(gen.dat,clin.dat=NULL,ordered=NULL){
                          levels(as.factor(clin.factors[grep(names(sum.factors)[k],clin.factors)])))
       }
       names(added) <- names.toadd
+      # added <- palette()[c(3,7,5,6)][1:length(clin.factors)]
+      # names(added) <- clin.factors
       col = c("MUT" = "#008000", "AMP" = "red", "DEL" = "blue", "FUS" = "orange", "CLIN" = "purple",added)
       alter_fun = list(
         background = function(x, y, w, h) {
