@@ -33,6 +33,9 @@ library(gnomeR)
 
 ```{r,include=F}
 library(knitr)
+library(dplyr)
+library(dtplyr)
+library(tibble)
 ```
 
 # Introduction {.tabset .tabset-fade .tabset-pills}
@@ -42,7 +45,7 @@ library(knitr)
 ## Mutations 
 
 ```{r}
-mut %>% select(Tumor_Sample_Barcode,Hugo_Symbol,Variant_Classification,Mutation_Status)
+as.tbl(mut) %>% select(Tumor_Sample_Barcode,Hugo_Symbol,Variant_Classification,Mutation_Status)
 ```
 
 ## CNA
@@ -67,3 +70,8 @@ kable(head(clin))
 # MAF processing
 
 MAF files are the standard file format for mutation information. Each line represents a single mutation mapped to a sample, a particular gene and specific effect. All these fields are required in order to properly process the file. The IMPACT platform sequences a set of targeted oncogenic genes that are on cBioportal. 
+
+## Creating a binary matrix
+
+
+## Visualizing genetics
