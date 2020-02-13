@@ -25,7 +25,7 @@ devtools::install_github("AxelitoMartin/gnomeR")
 
 # Requirements
 
-<i>gnomeR</i> requires the following packages - ComplexHeatmap, iClusterPlus, cluster
+<i>gnomeR</i> requires the following packages - ComplexHeatmap, iClusterPlus, cluster (installed with gnomeR).
 
 ```{r}
 library(gnomeR)
