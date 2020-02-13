@@ -67,12 +67,10 @@ plot_oncoPrint <- function(gen.dat,clin.dat=NULL,ordered=NULL){
       for(k in 1:length(sum.factors)){
         added <- c(added,palette()[c(3,7,2,6,5,4,1)][1:as.numeric(sum.factors[k])])
 
-        names.toadd <- c(names.toadd,names(sum.factors)[k])
-                          # clin.factors[grep(names(sum.factors)[k],clin.factors)])
+        names.toadd <- c(names.toadd,
+                         levels(as.factor(clin.factors[grep(names(sum.factors)[k],clin.factors)])))
       }
       names(added) <- names.toadd
-      # added <- palette()[c(3,7,5,6)][1:length(clin.factors)]
-      # names(added) <- clin.factors
       col = c("MUT" = "#008000", "AMP" = "red", "DEL" = "blue", "FUS" = "orange", "CLIN" = "purple",added)
       alter_fun = list(
         background = function(x, y, w, h) {
