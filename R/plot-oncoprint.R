@@ -68,7 +68,7 @@ plot_oncoPrint <- function(gen.dat,clin.dat=NULL,ordered=NULL){
         added <- c(added,palette()[c(3,7,2,6,5,4,1)][1:as.numeric(sum.factors[k])])
 
         names.toadd <- c(names.toadd,
-                          clin.factors[grep(names(sum.factors)[k],clin.factors)])
+                         levels(as.factor(clin.factors[grep(names(sum.factors)[k],clin.factors)])))
       }
       names(added) <- names.toadd
       # added <- palette()[c(3,7,5,6)][1:length(clin.factors)]
@@ -100,7 +100,7 @@ plot_oncoPrint <- function(gen.dat,clin.dat=NULL,ordered=NULL){
           grid.rect(x, y, w-unit(0.5, "mm"), h*0.33, gp = gpar(fill = val, col = NA))
         }
       })
-      names(to.add) <- clin.factors
+      names(to.add) <- names(added)
       alter_fun <- c(alter_fun,to.add)
     }
 
@@ -109,15 +109,15 @@ plot_oncoPrint <- function(gen.dat,clin.dat=NULL,ordered=NULL){
 
       p <- oncoPrint(sorted.mat, get_type = function(x) strsplit(x, ";")[[1]],
                      alter_fun = alter_fun, col = col, column_order = 1:ncol(sorted.mat),row_order = 1:nrow(sorted.mat),
-                     heatmap_legend_param = list(title = "Alterations", at = c("MUT","DEL","AMP","FUS",clin.factors),
-                                                 labels = c("Mutation","Deletion","Amplification","Fusion",clin.factors)))
+                     heatmap_legend_param = list(title = "Alterations", at = c("MUT","DEL","AMP","FUS",names(added)),
+                                                 labels = c("Mutation","Deletion","Amplification","Fusion",names(added))))
     }
     else{
       sorted.mat <- mat
       p <- oncoPrint(sorted.mat, get_type = function(x) strsplit(x, ";")[[1]],
                      alter_fun = alter_fun, col = col, column_order = NULL,row_order = NULL,
-                     heatmap_legend_param = list(title = "Alterations", at = c("MUT","DEL","AMP","FUS",clin.factors),
-                                                 labels = c("Mutation","Deletion","Amplification","Fusion",clin.factors)))
+                     heatmap_legend_param = list(title = "Alterations", at = c("MUT","DEL","AMP","FUS",names(added)),
+                                                 labels = c("Mutation","Deletion","Amplification","Fusion",names(added))))
     }
   }
 
