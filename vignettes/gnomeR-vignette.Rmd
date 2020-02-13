@@ -17,7 +17,7 @@ knitr::opts_chunk$set(
 
 # Installation
 
-```{r setup,eval=F}
+```{r setup,eval=F,message=F,warning=F}
 install.packages("devtools")
 devtools::install_github("AxelitoMartin/gnomeR")
 ```
@@ -42,7 +42,7 @@ library(knitr)
 ## Mutations 
 
 ```{r}
-kable(head(mut))
+mut %>% select(Tumor_Sample_Barcode,Hugo_Symbol,Variant_Classification,Mutation_Status)
 ```
 
 ## CNA
