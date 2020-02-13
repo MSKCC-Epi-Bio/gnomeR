@@ -28,3 +28,7 @@ Depends:
     ComplexHeatmap,
     iClusterPlus,
     cluster
+Suggests: 
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr

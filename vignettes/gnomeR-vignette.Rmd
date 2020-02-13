@@ -1,0 +1,69 @@
+---
+title: "gnomeR for IMPACT data"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{gnomeR-vignette}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+
+# Installation
+
+```{r setup,eval=F}
+install.packages("devtools")
+devtools::install_github("AxelitoMartin/gnomeR")
+```
+
+
+# Requirements
+
+<i>gnomeR</i> requires the following packages - ComplexHeatmap, iClusterPlus, cluster
+
+```{r}
+library(gnomeR)
+```
+
+```{r,include=F}
+library(knitr)
+```
+
+# Introduction {.tabset .tabset-fade .tabset-pills}
+
+<i>gnomeR</i> is a R package that aims to process and analyze genetic data from cBioportal. We include in this package the mutation, copy number alteration (CNA), fusion and clinical information of all publicly available data from cBioPortal.
+
+## Mutations 
+
+```{r}
+kable(head(mut))
+```
+
+## CNA
+
+```{r}
+kable(cna[1:5,1:5])
+```
+
+## Fusions
+
+```{r}
+kable(head(fusion))
+```
+
+## Clinical 
+
+```{r}
+kable(head(clin))
+```
+
+
+# MAF processing
+
+MAF files are the standard file format for mutation information. Each line represents a single mutation mapped to a sample, a particular gene and specific effect. All these fields are required in order to properly process the file. The IMPACT platform sequences a set of targeted oncogenic genes that are on cBioportal. 
