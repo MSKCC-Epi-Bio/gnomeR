@@ -10,14 +10,15 @@ vignette: >
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>"
+  comment = "#>",
+  message=F,warning=F
 )
 ```
 
 
 # Installation
 
-```{r setup,eval=F,message=F,warning=F}
+```{r setup,eval=F}
 install.packages("devtools")
 devtools::install_github("AxelitoMartin/gnomeR")
 ```
