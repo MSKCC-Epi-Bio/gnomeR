@@ -11,7 +11,9 @@ vignette: >
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
-  message=F,warning=F
+  message=F,warning=F,
+  fig.width = 10,
+  fig.height = 8
 )
 ```
 
@@ -58,7 +60,7 @@ as.tbl(cna[1:5,1:5])
 ## Fusions
 
 ```{r}
-as.tbl(fusion) %>% select(Tumor_Sample_Barcode,Fusion)
+as.tbl(fusion) %>% select(Tumor_Sample_Barcode,Hugo_Symbol,Fusion)
 ```
 
 ## Clinical 
