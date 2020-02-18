@@ -158,7 +158,7 @@ gen.tab(gen.dat = gen.dat,
 OncoPrints are a convenient way to study comutation patterns in our cohort through the `plot_oncoPrint` function. 
 
 ```{r}
-plot_oncoPrint(bin.mut$mut)
+# plot_oncoPrint(bin.mut$mut)
 ```
 
 
