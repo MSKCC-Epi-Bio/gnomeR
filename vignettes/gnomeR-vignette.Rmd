@@ -46,7 +46,7 @@ library(tibble)
 ## Mutations 
 
 ```{r}
-as.tbl(mut) %>% select(Tumor_Sample_Barcode,Hugo_Symbol,Fusion)
+as.tbl(mut) %>% select(Tumor_Sample_Barcode,Hugo_Symbol,Hugo_Symbol,Variant_Classification,Mutation_Status)
 ```
 
 ## CNA
@@ -58,7 +58,7 @@ as.tbl(cna[1:5,1:5])
 ## Fusions
 
 ```{r}
-as.tbl(fusion) %>% select(Tumor_Sample_Barcode,Hugo_Symbol,Variant_Classification,Mutation_Status)
+as.tbl(fusion) %>% select(Tumor_Sample_Barcode,Fusion)
 ```
 
 ## Clinical 
