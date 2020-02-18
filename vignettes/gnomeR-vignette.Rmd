@@ -52,19 +52,19 @@ as.tbl(mut) %>% select(Tumor_Sample_Barcode,Hugo_Symbol,Variant_Classification,M
 ## CNA
 
 ```{r}
-kable(cna[1:5,1:5])
+as.tbl(cna[1:5,1:5])
 ```
 
 ## Fusions
 
 ```{r}
-kable(head(fusion))
+as.tbl(usion) %>% select(Tumor_Sample_Barcode,Hugo_Symbol,Variant_Classification,Mutation_Status)
 ```
 
 ## Clinical 
 
 ```{r}
-kable(head(clin))
+as.tbl(head(clin))
 ```
 
 
@@ -74,5 +74,39 @@ MAF files are the standard file format for mutation information. Each line repre
 
 ## Creating a binary matrix
 
+We can create a binary matrix of genetic events from the files described above. If a patient has a mutation in gene X the entry will be marked with a 1, otherwise it will be a 0. This function has the following arguments:
+
+- patients : a character vector of sample IDs to be matched in the MAF file. Default is NULL in which case all samples will be used.
+- maf : the corresponding MAF file (required)
+- mut.type : the mutation type to be used, options are "SOMATIC", "GERMLINE" or "ALL". Default is "SOMATIC"
+- SNP.only : boolean specifying if only SNPs should be used. Default is F
+- include.silent : boolean specifying if silent mutations should be included. Default is F (recommended)
+- fusion : optional fusion file to be included. Fusions will be added as their own column with ".fus" suffix
+- cna : optional copy number alteration file to be included. CNAs will be added as their column with ".Amp" suffix for amplifications and ".Del" suffix for deletions
+- cna.relax : boolean specifying if shallow deletions and low level gains should be counted as deletions and amplifications respectively
+
+This function will return a binary matrix of genetics events with patients as rows and columns as genes. Along with a list of patients that weren't found to have any events (if any).
+
+```{r}
+patients <- as.character(unique(mut$Tumor_Sample_Barcode[1:500]))
+bin.mut <- create.bin.matrix(patients = patients,maf = mut,mut.type = "SOMATIC",SNP.only = F,include.silent = F)
+as.tbl(bin.mut$mut)
+```
+
+Similarly including fusions and CNAs:
+
+```{r}
+bin.mut <- create.bin.matrix(patients = patients,maf = mut,mut.type = "SOMATIC",SNP.only = F,include.silent = F, fusion = fusion, cna = cna)
+as.tbl(bin.mut$mut)
+```
 
 ## Visualizing genetics
+
+We include a function to visualize summaries of the mutations in a given cohort:
+
+```{r}
+maf.summary(maf = mut %>% filter(Tumor_Sample_Barcode %in% patients),
+            mut.type = "SOMATIC")
+```
+
+

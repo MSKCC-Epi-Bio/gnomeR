@@ -23,7 +23,8 @@ Imports:
     ggplot2,
     exact2x2,
     plotly,
-    tibble
+    tibble,
+    dtplyr
 Depends:
     ComplexHeatmap,
     iClusterPlus,
