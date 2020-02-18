@@ -39,6 +39,7 @@ library(knitr)
 library(dplyr)
 library(dtplyr)
 library(tibble)
+library(plotly)
 ```
 
 # Introduction {.tabset .tabset-fade .tabset-pills}
