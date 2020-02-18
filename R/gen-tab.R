@@ -80,7 +80,7 @@ gen.tab <- function(gen.dat,outcome,filter=0,paired = F,cont=F,rank = T){
     colnames(fits)[2:(length(levels(outcome))+1)] <- paste0(colnames(fits)[2:(length(levels(outcome))+1)],
                                                             "(N=",as.numeric(summary(outcome)),")")
     fits$FDR <- p.adjust(as.numeric(as.character(fits$Pvalue)),method="fdr")
-    if(rank) fits <- fits[order(fits$Pvalue),]
+    if(rank) fits <- fits[order(as.numeric(as.character(fits$Pvalue))),]
 
     if (!is.null(fits$OddsRatio)){
       # forest plot #
@@ -154,7 +154,7 @@ gen.tab <- function(gen.dat,outcome,filter=0,paired = F,cont=F,rank = T){
         layout(title ="Volcano Plot"),silent =T)
     }
     # fits <- fits[,-match("GeneName",colnames(fits))]
-    if(rank) fits <- fits[order(fits$Pvalue),]
+    if(rank) fits <- fits[order(fits$Pvalue),-ncol(fits)]
     return(list("fits"=fits,"vPlot"=vPlot))
   }
 }

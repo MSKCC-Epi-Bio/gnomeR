@@ -13,7 +13,7 @@ knitr::opts_chunk$set(
   comment = "#>",
   message=F,warning=F,
   fig.width = 8,
-  fig.height = 6
+  fig.height = 4
 )
 ```
 
@@ -111,4 +111,57 @@ maf.summary(maf = mut %>% filter(Tumor_Sample_Barcode %in% patients),
             mut.type = "SOMATIC")
 ```
 
+# Correlating genetics with outcome
+
+## Binary outcome
+
+The `gen.tab` function allows us to test for potential differences in genetic event frequencies using Fisher's exact test for unpaired data and the McNemar exact test for paired data. This function takes the following arguments:
+
+- gen.dat : a binary matrix of genetic events with patients as rows and columns as genes
+- outcome : a binary vector corresponding to the patients in the gen.dat argument
+- filter : a value in [0,1) that will remove all genes that have a frequency below that threshold. Default is 0, including all
+- paired : boolean specifying is the observations are paired. Default is false
+- cont : boolean specifying if the outcome is continuous. Default is false (see following section for an example)
+- rank : boolean specifying if the output table should be ranked by pvalue
+
+```{r}
+outcome <- as.character(clin$Sex[match(patients,clin$DMPID)])
+rmv <- ifelse(outcome %in% c("Male","Female"),F,T)
+outcome <- outcome[-which(rmv)]
+gen.dat <- bin.mut$mut[-which(rmv),]
+gen.tab(gen.dat = gen.dat,
+        outcome = outcome,
+        filter = 0.05,paired = F,cont = F,rank = T)
+```
+
+
+## Continuous outcome
+
+Similarly we show here an example with a simulated continuous outcome:
+
+```{r}
+outcome <-  rnorm(n = nrow(gen.dat))
+gen.tab(gen.dat = gen.dat,
+        outcome = outcome,
+        filter = 0.05,paired = F,cont = T,rank = T)
+```
+
+
+## Time to event outcome
+
+
+
+# Advanced genetic visuals
+
+## OncoPrints
+
+OncoPrints are a convenient way to study comutation patterns in our cohort through the `plot_oncoPrint` function. 
+
+```{r}
+plot_oncoPrint(bin.mut$mut)
+```
+
+
+
+## FACETs 
 
