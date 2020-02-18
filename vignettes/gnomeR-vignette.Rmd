@@ -58,7 +58,7 @@ as.tbl(cna[1:5,1:5])
 ## Fusions
 
 ```{r}
-as.tbl(usion) %>% select(Tumor_Sample_Barcode,Hugo_Symbol,Variant_Classification,Mutation_Status)
+as.tbl(fusion) %>% select(Tumor_Sample_Barcode,Hugo_Symbol,Variant_Classification,Mutation_Status)
 ```
 
 ## Clinical 
