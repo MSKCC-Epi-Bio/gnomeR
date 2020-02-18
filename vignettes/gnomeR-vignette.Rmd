@@ -88,7 +88,7 @@ We can create a binary matrix of genetic events from the files described above. 
 This function will return a binary matrix of genetics events with patients as rows and columns as genes. Along with a list of patients that weren't found to have any events (if any).
 
 ```{r}
-patients <- as.character(unique(mut$Tumor_Sample_Barcode[1:500]))
+patients <- as.character(unique(mut$Tumor_Sample_Barcode[1:10000]))
 bin.mut <- create.bin.matrix(patients = patients,maf = mut,mut.type = "SOMATIC",SNP.only = F,include.silent = F)
 as.tbl(bin.mut$mut)
 ```
