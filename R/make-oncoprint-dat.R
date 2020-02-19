@@ -119,7 +119,7 @@ dat.oncoPrint <- function(gen.dat,clin.dat=NULL){
 
       # if binary #
       if(length(unique(y[!is.na(y)])) == 2){
-        mat[match(x,rownames(mat)),] <- ifelse(y==1,"CLIN;",NA)
+        mat[match(x,rownames(mat)),] <- paste0(x,"_",y,";") #ifelse(y==1,"CLIN;",NA)
       }
 
       else if(length(unique(y[!is.na(y)])) %in% c(3:5)){
