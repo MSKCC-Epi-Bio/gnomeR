@@ -44,7 +44,7 @@ library(plotly)
 
 # Introduction {.tabset .tabset-fade .tabset-pills}
 
-<i>gnomeR</i> is a R package that aims to process and analyze genetic data from cBioportal. We include in this package the mutation, copy number alteration (CNA), fusion and clinical information of all publicly available data from cBioPortal.
+<i>gnomeR</i> is a R package that aims to process and analyze genetic data from cBioportal. We include in this package the mutation, copy number alteration (CNA), fusion and clin.patientsical information of all publicly available data from cBioPortal.
 
 ## Mutations 
 
@@ -64,10 +64,18 @@ as.tbl(cna[1:5,1:5])
 as.tbl(fusion) %>% select(Tumor_Sample_Barcode,Hugo_Symbol,Fusion)
 ```
 
-## Clinical 
+## clin.patientsical 
+
+### Patients information 
 
 ```{r}
-as.tbl(head(clin))
+as.tbl(head(clin.patients))
+```
+
+### Samples information 
+
+```{r}
+as.tbl(head(clin.sample))
 ```
 
 
@@ -126,7 +134,7 @@ The `gen.tab` function allows us to test for potential differences in genetic ev
 - rank : boolean specifying if the output table should be ranked by pvalue
 
 ```{r}
-outcome <- as.character(clin$Sex[match(patients,clin$DMPID)])
+outcome <- as.character(clin.patients$Sex[match(patients,clin.patients$DMPID)])
 rmv <- ifelse(outcome %in% c("Male","Female"),F,T)
 outcome <- outcome[-which(rmv)]
 gen.dat <- bin.mut$mut[-which(rmv),]
@@ -160,7 +168,7 @@ We further include `uni.cox` for univariate survival analysis if time to event d
 - filter : a value in [0,1) that will remove all genes that have a frequency below that threshold. Default is 0, including all
 
 ```{r}
-surv.dat <- clin %>%
+surv.dat <- clin.patients %>%
   filter(DMPID %in% patients,!is.na(time)) %>%
   select(DMPID,time,status) %>% 
   mutate(time = as.numeric(as.character(time)),
@@ -177,7 +185,7 @@ uni.cox(X = X, surv.dat = surv.dat,surv.formula = Surv(time,status)~.,filter = 0
 OncoPrints are a convenient way to study comutation patterns in our cohort through the `plot_oncoPrint` function. It takes as argument:
 
 - gen.dat : data frame of binary genetic events as created by the `create.bin.matrix` function
-- clin.dat : optional data frame of clinical covariates
+- clin.patients.dat : optional data frame of clin.patientsical covariates
 - ordered : order in which patients should be printed in the OncoPrint
 
 We show here an example with the most common genes.
@@ -188,19 +196,36 @@ plot_oncoPrint(gen.dat)
 ```
 
 
-Similarly we include here an example adding clinical variables:
+Similarly we include here an example adding clin.patientsical variables:
 
 ```{r}
-clin.dat <- clin[match(rownames(gen.dat),clin$DMPID),] %>% 
+clin.patients.dat <- clin.patients[match(rownames(gen.dat),clin.patients$DMPID),] %>% 
   select(DMPID, Sex,Smoker) %>% 
   filter(!is.na(DMPID))
-gen.dat <- gen.dat[match(clin.dat$DMPID,rownames(gen.dat)),]
-clin.dat <- clin.dat %>%
+gen.dat <- gen.dat[match(clin.patients.dat$DMPID,rownames(gen.dat)),]
+clin.patients.dat <- clin.patients.dat %>%
   tibble::column_to_rownames('DMPID')
-plot_oncoPrint(gen.dat = gen.dat,clin.dat = clin.dat)
+plot_oncoPrint(gen.dat = gen.dat,clin.patients.dat = clin.patients.dat)
 ```
 
 
 
 ## FACETs 
+
+[FACETs](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5027494/) is a fully integrated stand-alone pipeline that includes sequencing BAM file post-processing, joint segmentation of total- and allele-specific read counts, and integer copy number calls corrected for tumor purity, ploidy and clonal heterogeneity, with comprehensive output and integrated visualization. We integrate the output of this tool to our package to vizualise the copy number alteration events in our cohort. 
+The segmentation file is now integrated to the cBioPortal and we include it in our package. The FACETs output can be vizualized using the `facets.heatmap` function which takes as input:
+
+- seg : a segmentation file containing all the samples of interest
+- filenames : character vector of file names in case you are given individual segmentation files for each patients
+- path : the path to the files of the filenames character vector
+- patients : DMPIDs of the samples to be included in the heatmap. Default is NULL where all patients will be used
+- min.purity : if filenames argument is provided you may select a minimum purity to be included in the heatmap. Default is 0.3
+- epsilon : the maximum Euclidean distance between adjacent probes tolerated for denying a nonredundant region. epsilon=0 is equivalent to taking the union of all unique break points across the n samples. See CNregions function iClusterPlus for more information. Default is 0.005
+- ordered : order in which patients should be printed in the heatmap
+- outcome : potential outcome of interest to be plotted along the X-axis
+
+```{r}
+# facets.heatmap(seg = seg, patients=patients[50:100])
+```
+
 
