@@ -49,7 +49,7 @@ library(plotly)
 ## Mutations 
 
 ```{r}
-as.tbl(mut) %>% select(Tumor_Sample_Barcode,Hugo_Symbol,Hugo_Symbol,Variant_Classification,Mutation_Status)
+as.tbl(mut) %>% select(Tumor_Sample_Barcode,Hugo_Symbol,Variant_Classification,Variant_Type,Reference_Allele,Tumor_Seq_Allele2)
 ```
 
 ## CNA
