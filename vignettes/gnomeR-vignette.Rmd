@@ -174,10 +174,30 @@ uni.cox(X = X, surv.dat = surv.dat,surv.formula = Surv(time,status)~.,filter = 0
 
 ## OncoPrints
 
-OncoPrints are a convenient way to study comutation patterns in our cohort through the `plot_oncoPrint` function. 
+OncoPrints are a convenient way to study comutation patterns in our cohort through the `plot_oncoPrint` function. It takes as argument:
+
+- gen.dat : data frame of binary genetic events as created by the `create.bin.matrix` function
+- clin.dat : optional data frame of clinical covariates
+- ordered : order in which patients should be printed in the OncoPrint
+
+We show here an example with the most common genes.
 
 ```{r}
-# plot_oncoPrint(bin.mut$mut)
+gen.dat <- bin.mut$mut[,names(sort(apply(bin.mut$mut,2, sum),decreasing = T))[1:15]]
+plot_oncoPrint(gen.dat)
+```
+
+
+Similarly we include here an example adding clinical variables:
+
+```{r}
+clin.dat <- clin[match(rownames(gen.dat),clin$DMPID),] %>% 
+  select(DMPID, Sex,Smoker) %>% 
+  filter(!is.na(DMPID))
+gen.dat <- gen.dat[match(clin.dat$DMPID,rownames(gen.dat)),]
+clin.dat <- clin.dat %>%
+  tibble::column_to_rownames('DMPID')
+plot_oncoPrint(gen.dat = gen.dat,clin.dat = clin.dat)
 ```
 
 
