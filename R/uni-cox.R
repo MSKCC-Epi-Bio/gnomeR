@@ -49,7 +49,7 @@ uni.cox <- function(X,surv.dat,surv.formula,filter = 0,genes = NULL){
     stop("Only one or fewer genes were found from the 'genes' argument. We need a minimum of two.")
   if(filter > 0){
     # get binary cases #
-    temp <- apply(X, 2, function(x){length(unique(x)) == 2})
+    temp <- apply(X, 2, function(x){length(unique(x)) <= 2})
     genes.bin <- names(temp[which(temp)])
     if(length(genes.bin) == ncol(X)) rm <- apply(X, 2, function(x){sum(x)/length(x) < filter})
     else rm <- apply(X[,genes.bin], 2, function(x){sum(x)/length(x) < filter})
