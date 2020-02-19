@@ -142,14 +142,32 @@ Similarly we show here an example with a simulated continuous outcome:
 
 ```{r}
 outcome <-  rnorm(n = nrow(gen.dat))
-gen.tab(gen.dat = gen.dat,
+tab.out <- gen.tab(gen.dat = gen.dat,
         outcome = outcome,
         filter = 0.05,paired = F,cont = T,rank = T)
+tab.out$fits
+tab.out$vPlot
 ```
 
 
 ## Time to event outcome
 
+We further include `uni.cox` for univariate survival analysis if time to event data is available. This function takes as inputs: 
+
+- X : a data frame containing the covariates to be used
+- surv.dat : a data frame containing the time and status information 
+- surv.formula : survival formula of the form `Surv(time,status)~.` . Note that delayed entry is allowed of the form `Surv(time1,time2,status)~.`
+- filter : a value in [0,1) that will remove all genes that have a frequency below that threshold. Default is 0, including all
+
+```{r}
+surv.dat <- clin %>%
+  filter(DMPID %in% patients,!is.na(time)) %>%
+  select(DMPID,time,status) %>% 
+  mutate(time = as.numeric(as.character(time)),
+    status = ifelse(status == "LIVING",0,1))
+X <- bin.mut$mut[match(surv.dat$DMPID,rownames(bin.mut$mut)),]
+uni.cox(X = X, surv.dat = surv.dat,surv.formula = Surv(time,status)~.,filter = 0.05)
+```
 
 
 # Advanced genetic visuals

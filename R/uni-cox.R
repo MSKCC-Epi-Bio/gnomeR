@@ -44,7 +44,7 @@ uni.cox <- function(X,surv.dat,surv.formula,filter = 0,genes = NULL){
     X <- as.data.frame(X %>%
       select(genes))
   }
-  print(dim(X))
+
   if(is.null(dim(X)) )
     stop("Only one or fewer genes were found from the 'genes' argument. We need a minimum of two.")
   if(filter > 0){
