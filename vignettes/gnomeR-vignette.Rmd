@@ -64,7 +64,7 @@ as.tbl(cna[1:5,1:5])
 as.tbl(fusion) %>% select(Tumor_Sample_Barcode,Hugo_Symbol,Fusion)
 ```
 
-## clin.patientsical 
+## Clinical 
 
 ### Patients information 
 
@@ -101,15 +101,15 @@ We can create a binary matrix of genetic events from the files described above. 
 This function will return a binary matrix of genetics events with patients as rows and columns as genes. Along with a list of patients that weren't found to have any events (if any).
 
 ```{r}
-patients <- unique(mut$Tumor_Sample_Barcode[1:10000]) #as.character(unique(mut$Tumor_Sample_Barcode[1:10000]))
-bin.mut <- create.bin.matrix(patients = patients,maf = mut,mut.type = "SOMATIC",SNP.only = F,include.silent = F)
+patients <- unique(mut$Tumor_Sample_Barcode) #as.character(unique(mut$Tumor_Sample_Barcode[1:10000]))
+bin.mut <- create.bin.matrix(patients = patients,maf = mut,mut.type = "SOMATIC",SNP.only = F,include.silent = F, spe.plat = T)
 as.tbl(bin.mut$mut)
 ```
 
 Similarly including fusions and CNAs:
 
 ```{r}
-bin.mut <- create.bin.matrix(patients = patients,maf = mut,mut.type = "SOMATIC",SNP.only = F,include.silent = F, fusion = fusion, cna = cna)
+bin.mut <- create.bin.matrix(patients = patients,maf = mut,mut.type = "SOMATIC",SNP.only = F,include.silent = F, fusion = fusion, cna = cna, spe.plat = T)
 as.tbl(bin.mut$mut)
 ```
 

@@ -166,12 +166,14 @@ create.bin.matrix <- function(patients=NULL, maf, mut.type = "SOMATIC",SNP.only 
     v=unlist(lapply(1:length(v), function(x)v[[x]][2]))
 
     # remove 410 platform patients #
-    missing <- setdiff(g.impact$g468, g.impact$g410)
+    missing <- setdiff(paste0(g.impact$g468,c("",".fus",".Del",".Amp")),
+                       paste0(g.impact$g410,c("",".fus",".Del",".Amp")))
     if(sum(v == "5") > 0 && sum(missing %in% colnames(mut)) > 0)
       mut[which(v == "5"), na.omit(match(missing, colnames(mut)))] <- NA
 
     # remove 341 platform patients #
-    missing <- setdiff(g.impact$g468, g.impact$g341)
+    missing <- setdiff(paste0(g.impact$g468,c("",".fus",".Del",".Amp")),
+                       paste0(g.impact$g341,c("",".fus",".Del",".Amp")))
     if(sum(v == "3") > 0 && sum(missing %in% colnames(mut)) > 0)
       mut[which(v == "3"), na.omit(match(missing, colnames(mut)))] <- NA
   }
