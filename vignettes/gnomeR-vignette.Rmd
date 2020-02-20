@@ -95,11 +95,13 @@ We can create a binary matrix of genetic events from the files described above. 
 - fusion : optional fusion file to be included. Fusions will be added as their own column with ".fus" suffix
 - cna : optional copy number alteration file to be included. CNAs will be added as their column with ".Amp" suffix for amplifications and ".Del" suffix for deletions
 - cna.relax : boolean specifying if shallow deletions and low level gains should be counted as deletions and amplifications respectively
+- spe.plat : boolean specifying if specific IMPACT platforms should be considered. When TRUE NAs will fill the cells for genes
+#' of patients that were not sequenced on that plaform
 
 This function will return a binary matrix of genetics events with patients as rows and columns as genes. Along with a list of patients that weren't found to have any events (if any).
 
 ```{r}
-patients <- as.character(unique(mut$Tumor_Sample_Barcode[1:10000]))
+patients <- unique(mut$Tumor_Sample_Barcode[1:10000]) #as.character(unique(mut$Tumor_Sample_Barcode[1:10000]))
 bin.mut <- create.bin.matrix(patients = patients,maf = mut,mut.type = "SOMATIC",SNP.only = F,include.silent = F)
 as.tbl(bin.mut$mut)
 ```
@@ -191,7 +193,7 @@ OncoPrints are a convenient way to study comutation patterns in our cohort throu
 We show here an example with the most common genes.
 
 ```{r}
-gen.dat <- bin.mut$mut[,names(sort(apply(bin.mut$mut,2, sum),decreasing = T))[1:15]]
+gen.dat <- bin.mut$mut[1:1000,names(sort(apply(bin.mut$mut,2, sum),decreasing = T))[1:15]]
 plot_oncoPrint(gen.dat)
 ```
 
