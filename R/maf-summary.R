@@ -193,7 +193,7 @@ maf.summary <- function(maf,mut.type = "SOMATIC"){
 
 
   # comutation patterns #
-  bin.maf <- create.bin.matrix(maf = maf,mut.type = mut.type)
+  bin.maf <- create.bin.matrix(maf = maf,mut.type = mut.type, spe.plat = T)
   bin.maf <- bin.maf$mut
   keep <- names(sort(apply(bin.maf,2,function(x){sum(x)}),decreasing = T))[1:10]
   bin.maf <- bin.maf[,keep]
