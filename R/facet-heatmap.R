@@ -19,7 +19,6 @@
 #' @import
 #' gplots
 #' lattice
-#' tibble
 
 
 facets.heatmap <- function(seg = NULL,filenames = NULL, path =NULL, patients=NULL, min.purity = 0.3,
@@ -37,7 +36,7 @@ facets.heatmap <- function(seg = NULL,filenames = NULL, path =NULL, patients=NUL
 
   if(!is.null(filenames)){
     dat <- facets.dat(seg = NULL,filenames, path, patients, min.purity, epsilon,adaptive)
-    reducedM <- as.data.frame(dat$out.cn)
+    reducedM <- dat$out.cn
     ploidy <- dat$ploidy
     purity <- dat$purity
     rownames(reducedM) <- abbreviate(rownames(reducedM),minlength = 10)
@@ -87,7 +86,7 @@ facets.heatmap <- function(seg = NULL,filenames = NULL, path =NULL, patients=NUL
 
     p=levelplot(imagedata.ordered, panel = my.panel, scales=scales,
                 col.regions = bluered(256), xlab = "", ylab = "",colorkey=colorkey)
-    return(list("p"=p,"out.cn"=as.tbl(dat$out.cn),"ploidy"=ploidy,"purity"=purity,"FGA"=dat$FGA))
+    return(list("p"=p,"out.cn"=dat$out.cn,"ploidy"=ploidy,"purity"=purity,"FGA"=dat$FGA))
   }
 
 
@@ -97,7 +96,7 @@ facets.heatmap <- function(seg = NULL,filenames = NULL, path =NULL, patients=NUL
     if(!is.null(outcome)) names(outcome) <- patients
     if(!is.null(ordered)) names(ordered) <- patients
     dat <- facets.dat(seg,filenames, path, patients, min.purity, epsilon,adaptive)
-    reducedM <- as.data.frame(dat$out.cn)
+    reducedM <- dat$out.cn
     patients <- patients[match(rownames(reducedM),patients)]
     if(!is.null(outcome)) outcome <- outcome[match(rownames(reducedM),names(outcome))]
     if(!is.null(ordered) && !is.null(outcome)) ordered <- order(outcome)
@@ -165,7 +164,7 @@ facets.heatmap <- function(seg = NULL,filenames = NULL, path =NULL, patients=NUL
     p=levelplot(imagedata.ordered, panel = my.panel, scales=scales,aspect="fill",
                 col.regions = bluered(256), xlab = "", ylab = "",colorkey=colorkey)
 
-    return(list("p"=p,"out.cn"=as.tbl(dat$out.cn)))
+    return(list("p"=p,"out.cn"=dat$out.cn))
   }
 
 }

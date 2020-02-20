@@ -231,7 +231,9 @@ This function returns the a heatmap and the merged segmentation dataset used to 
 
 ```{r}
 patients.seg <- as.character(unlist(clin.sample %>% filter(Sample.Identifier %in% patients, as.numeric(as.character(Tumor.Purity)) > 30) %>% select(Sample.Identifier)))
-facets.heatmap(seg = seg, patients=patients.seg[0:100])
+facet <- facets.heatmap(seg = seg, patients=patients.seg[0:100])
+facet$p
+as.tbl(facet$out.cn)
 ```
 
 
