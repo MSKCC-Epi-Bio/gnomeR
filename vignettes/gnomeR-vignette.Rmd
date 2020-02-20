@@ -149,6 +149,7 @@ gen.tab(gen.dat = gen.dat,
 Similarly we show here an example with a simulated continuous outcome:
 
 ```{r}
+set.seed(1)
 outcome <-  rnorm(n = nrow(gen.dat))
 tab.out <- gen.tab(gen.dat = gen.dat,
         outcome = outcome,
