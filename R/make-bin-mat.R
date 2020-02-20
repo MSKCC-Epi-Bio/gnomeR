@@ -18,6 +18,8 @@
 #' values between -2 and 2. Please do not use any other format. Other functions in the package are available to deal with more detailed
 #' CNA data.
 #' @param cna.relax for cna data only enables to count both gains and shallow deletions as amplifications and deletions respectively.
+#' @param spe.plat boolean specifying if specific IMPACT platforms should be considered. When TRUE NAs will fill the cells for genes
+#' of patients that were not sequenced on that plaform. Default is F
 #' @return mut : a binary matrix of mutation data
 #' @return no.mu.patients : a character vector of patients having no mutations found in the MAF file.
 #' @export
@@ -28,7 +30,7 @@
 #' @import stringr
 
 create.bin.matrix <- function(patients=NULL, maf, mut.type = "SOMATIC",SNP.only = F,include.silent = F,
-                              fusion = NULL,cna = NULL,cna.relax = F){
+                              fusion = NULL,cna = NULL,cna.relax = F, spe.plat = F){
 
   # quick data checks #
   if(length(match("Tumor_Sample_Barcode",colnames(maf))) == 0)
@@ -157,6 +159,23 @@ create.bin.matrix <- function(patients=NULL, maf, mut.type = "SOMATIC",SNP.only 
     # merge #
     mut <- as.data.frame(cbind(mut,cna))
     rownames(mut) <- patients
+  }
+
+  if(spe.plat){
+    v=strsplit(patients, "-IM")
+    v=unlist(lapply(1:length(v), function(x)v[[x]][2]))
+
+    # remove 410 platform patients #
+    missing <- setdiff(c(g.impact$g468, paste0(g.impact$g468,".fus"),paste0(g.impact$g468,".Del"),paste0(g.impact$g468,".Amp")),
+                       c(g.impact$g410, paste0(g.impact$g410,".fus"),paste0(g.impact$g410,".Del"),paste0(g.impact$g410,".Amp")))
+    if(sum(v == "5") > 0 && sum(missing %in% colnames(mut)) > 0)
+      mut[which(v == "5"), na.omit(match(missing, colnames(mut)))] <- NA
+
+    # remove 341 platform patients #
+    missing <- setdiff(c(g.impact$g468, paste0(g.impact$g468,".fus"),paste0(g.impact$g468,".Del"),paste0(g.impact$g468,".Amp")),
+                       c(g.impact$g341, paste0(g.impact$g341,".fus"),paste0(g.impact$g341,".Del"),paste0(g.impact$g341,".Amp")))
+    if(sum(v == "3") > 0 && sum(missing %in% colnames(mut)) > 0)
+      mut[which(v == "3"), na.omit(match(missing, colnames(mut)))] <- NA
   }
 
   return(list("mut"=mut,"no.mut.patients"=rownames(mut)[missing.mut]))
