@@ -202,7 +202,7 @@ maf.summary <- function(maf,mut.type = "SOMATIC"){
 
   co.mut <- apply(bin.maf,2,function(x){
     apply(bin.maf,2,function(y){
-      sum(y == 1 & x == 1)/length(x)
+      sum(y == 1 & x == 1,na.rm = T)/length(x)
     })
   })
   p.comut <- ggcorr(co.mut,limits = NULL)
