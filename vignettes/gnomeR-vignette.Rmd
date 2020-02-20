@@ -224,11 +224,11 @@ The segmentation file is now integrated to the cBioPortal and we include it in o
 - patients : DMPIDs of the samples to be included in the heatmap. Default is NULL where all patients will be used
 - min.purity : if filenames argument is provided you may select a minimum purity to be included in the heatmap. Default is 0.3
 - epsilon : the maximum Euclidean distance between adjacent probes tolerated for denying a nonredundant region. epsilon=0 is equivalent to taking the union of all unique break points across the n samples. See CNregions function iClusterPlus for more information. Default is 0.005
-- ordered : order in which patients should be printed in the heatmap
+- ordered : order in which patients should be printed in the heatmap. Default is NULL, where we use hierarchical clustering.
 - outcome : potential outcome of interest to be plotted along the X-axis
 
 ```{r}
-# facets.heatmap(seg = seg, patients=patients[50:100])
+facets.heatmap(seg = seg, patients=patients[50:150])
 ```
 
 
