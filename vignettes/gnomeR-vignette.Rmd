@@ -134,10 +134,8 @@ The `gen.tab` function allows us to test for potential differences in genetic ev
 - rank : boolean specifying if the output table should be ranked by pvalue
 
 ```{r}
-outcome <- as.character(clin.patients$Sex[match(patients,clin.patients$DMPID)])
-rmv <- ifelse(outcome %in% c("Male","Female"),F,T)
-outcome <- outcome[-which(rmv)]
-gen.dat <- bin.mut$mut[-which(rmv),]
+outcome <- as.character(clin.sample$Sample.Type[match(patients,clin.sample$Sample.Identifier)])
+gen.dat <- bin.mut$mut
 gen.tab(gen.dat = gen.dat,
         outcome = outcome,
         filter = 0.05,paired = F,cont = F,rank = T)
@@ -169,11 +167,13 @@ We further include `uni.cox` for univariate survival analysis if time to event d
 
 ```{r}
 surv.dat <- clin.patients %>%
-  filter(DMPID %in% patients,!is.na(time)) %>%
-  select(DMPID,time,status) %>% 
+  filter(X.Patient.Identifier %in% abbreviate(patients,strict = T, minlength = 9)) %>%
+  select(X.Patient.Identifier,Overall.Survival..Months., Overall.Survival.Status) %>% 
+  rename(DMPID = X.Patient.Identifier, time = Overall.Survival..Months.,status = Overall.Survival.Status) %>% 
   mutate(time = as.numeric(as.character(time)),
-    status = ifelse(status == "LIVING",0,1))
-X <- bin.mut$mut[match(surv.dat$DMPID,rownames(bin.mut$mut)),]
+    status = ifelse(status == "LIVING",0,1)) %>%
+    filter(!is.na(time))
+X <- bin.mut$mut[match(surv.dat$DMPID,abbreviate(rownames(bin.mut$mut),strict = T, minlength = 9)),]
 uni.cox(X = X, surv.dat = surv.dat,surv.formula = Surv(time,status)~.,filter = 0.05)
 ```
 
@@ -196,16 +196,19 @@ plot_oncoPrint(gen.dat)
 ```
 
 
-Similarly we include here an example adding clin.patientsical variables:
+Similarly we include here an example adding patients' clinical variables:
 
 ```{r}
-clin.patients.dat <- clin.patients[match(rownames(gen.dat),clin.patients$DMPID),] %>% 
+clin.patients.dat <- clin.patients[match(abbreviate(rownames(gen.dat),strict = T, minlength = 9),clin.patients$X.Patient.Identifier),] %>% 
+  rename(DMPID = X.Patient.Identifier, Smoker = Smoking.History) %>% 
   select(DMPID, Sex,Smoker) %>% 
-  filter(!is.na(DMPID))
-gen.dat <- gen.dat[match(clin.patients.dat$DMPID,rownames(gen.dat)),]
+  filter(!is.na(DMPID)) %>%
+  distinct(DMPID,.keep_all = TRUE)
+gen.dat <- gen.dat[match(clin.patients.dat$DMPID,abbreviate(rownames(gen.dat),strict = T, minlength = 9)),]
 clin.patients.dat <- clin.patients.dat %>%
   tibble::column_to_rownames('DMPID')
-plot_oncoPrint(gen.dat = gen.dat,clin.patients.dat = clin.patients.dat)
+rownames(gen.dat) <- rownames(clin.patients.dat)
+plot_oncoPrint(gen.dat = gen.dat,clin.dat = clin.patients.dat)
 ```
 
 
