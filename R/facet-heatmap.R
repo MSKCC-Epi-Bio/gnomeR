@@ -86,7 +86,7 @@ facets.heatmap <- function(seg = NULL,filenames = NULL, path =NULL, patients=NUL
 
     p=levelplot(imagedata.ordered, panel = my.panel, scales=scales,
                 col.regions = bluered(256), xlab = "", ylab = "",colorkey=colorkey)
-    return(list("p"=p,"out.cn"=dat$out.cn,"ploidy"=ploidy,"purity"=purity,"FGA"=dat$FGA))
+    return(list("p"=p,"out.cn"=as.tbl(dat$out.cn),"ploidy"=ploidy,"purity"=purity,"FGA"=dat$FGA))
   }
 
 
@@ -164,7 +164,7 @@ facets.heatmap <- function(seg = NULL,filenames = NULL, path =NULL, patients=NUL
     p=levelplot(imagedata.ordered, panel = my.panel, scales=scales,aspect="fill",
                 col.regions = bluered(256), xlab = "", ylab = "",colorkey=colorkey)
 
-    return(list("p"=p,"out.cn"=dat$out.cn))
+    return(list("p"=p,"out.cn"=as.tbl(dat$out.cn)))
   }
 
 }
