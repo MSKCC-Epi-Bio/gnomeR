@@ -71,7 +71,7 @@ maf.summary <- function(maf,mut.type = "SOMATIC"){
   # maf <- as.data.frame(maf)
   if(mut.type == "ALL") Mut.filt = unique(maf$Mutation_Status) else Mut.filt = mut.type
   maf <- maf %>% filter(tolower(Mutation_Status) %in% tolower(Mut.filt))
-  nb.cols <- length(unique(maf$Variant_Classification))
+  nb.cols <- 20 #length(unique(maf$Variant_Classification))
   ## summarise variant wise ##
 
   # variants call summary plot #
@@ -107,7 +107,7 @@ maf.summary <- function(maf,mut.type = "SOMATIC"){
     ggplot(aes(x = SNV_Class,color=SNV_Class,fill = SNV_Class)) +
     geom_bar() + coord_flip() + theme(legend.position="none") +
     ggtitle("SNV Class count") + xlab("SNV Class") +
-    scale_fill_manual(values = colorRampPalette(brewer.pal(8, "Accent"))(20) )
+    scale_fill_manual(values = colorRampPalette(brewer.pal(8, "Accent"))(nb.cols) )
 
 
 
@@ -187,7 +187,7 @@ maf.summary <- function(maf,mut.type = "SOMATIC"){
     summarise(N=n(),
               varProp = N/unique(totalMut)) %>%
     ggplot(aes(x = SNV_Class,y = varProp)) + geom_boxplot(aes(fill = SNV_Class))+
-    scale_fill_manual(values = colorRampPalette(brewer.pal(8, "Accent"))(20) ) +
+    scale_fill_manual(values = colorRampPalette(brewer.pal(8, "Accent"))(nb.cols) ) +
     theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
     theme(legend.position="none") + ylab("% SNV")
 
