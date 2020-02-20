@@ -107,7 +107,7 @@ maf.summary <- function(maf,mut.type = "SOMATIC"){
     ggplot(aes(x = SNV_Class,color=SNV_Class,fill = SNV_Class)) +
     geom_bar() + coord_flip() + theme(legend.position="none") +
     ggtitle("SNV Class count") + xlab("SNV Class") +
-    scale_fill_manual(values = colorRampPalette(brewer.pal(8, "Accent"))(nb.cols) )
+    scale_fill_manual(values = colorRampPalette(brewer.pal(8, "Accent"))(12) )
 
 
 
@@ -187,7 +187,7 @@ maf.summary <- function(maf,mut.type = "SOMATIC"){
     summarise(N=n(),
               varProp = N/unique(totalMut)) %>%
     ggplot(aes(x = SNV_Class,y = varProp)) + geom_boxplot(aes(fill = SNV_Class))+
-    scale_fill_manual(values = colorRampPalette(brewer.pal(8, "Accent"))(nb.cols) ) +
+    scale_fill_manual(values = colorRampPalette(brewer.pal(8, "Accent"))(12) ) +
     theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
     theme(legend.position="none") + ylab("% SNV")
 
