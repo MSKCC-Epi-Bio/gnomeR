@@ -19,6 +19,7 @@
 #' @import
 #' gplots
 #' lattice
+#' tibble
 
 
 facets.heatmap <- function(seg = NULL,filenames = NULL, path =NULL, patients=NULL, min.purity = 0.3,
@@ -36,7 +37,7 @@ facets.heatmap <- function(seg = NULL,filenames = NULL, path =NULL, patients=NUL
 
   if(!is.null(filenames)){
     dat <- facets.dat(seg = NULL,filenames, path, patients, min.purity, epsilon,adaptive)
-    reducedM <- dat$out.cn
+    reducedM <- as.data.frame(dat$out.cn)
     ploidy <- dat$ploidy
     purity <- dat$purity
     rownames(reducedM) <- abbreviate(rownames(reducedM),minlength = 10)
@@ -96,7 +97,7 @@ facets.heatmap <- function(seg = NULL,filenames = NULL, path =NULL, patients=NUL
     if(!is.null(outcome)) names(outcome) <- patients
     if(!is.null(ordered)) names(ordered) <- patients
     dat <- facets.dat(seg,filenames, path, patients, min.purity, epsilon,adaptive)
-    reducedM <- dat$out.cn
+    reducedM <- as.data.frame(dat$out.cn)
     patients <- patients[match(rownames(reducedM),patients)]
     if(!is.null(outcome)) outcome <- outcome[match(rownames(reducedM),names(outcome))]
     if(!is.null(ordered) && !is.null(outcome)) ordered <- order(outcome)
