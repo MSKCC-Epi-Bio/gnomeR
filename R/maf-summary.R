@@ -71,7 +71,7 @@ maf.summary <- function(maf,mut.type = "SOMATIC"){
   # maf <- as.data.frame(maf)
   if(mut.type == "ALL") Mut.filt = unique(maf$Mutation_Status) else Mut.filt = mut.type
   maf <- maf %>% filter(tolower(Mutation_Status) %in% tolower(Mut.filt))
-  nb.cols <- length(unique(maf$Variant_Classification))
+  nb.cols <- 20 #length(unique(maf$Variant_Classification))
   ## summarise variant wise ##
 
   # variants call summary plot #
@@ -193,7 +193,7 @@ maf.summary <- function(maf,mut.type = "SOMATIC"){
 
 
   # comutation patterns #
-  bin.maf <- create.bin.matrix(maf = maf,mut.type = mut.type)
+  bin.maf <- create.bin.matrix(maf = maf,mut.type = mut.type, spe.plat = T)
   bin.maf <- bin.maf$mut
   keep <- names(sort(apply(bin.maf,2,function(x){sum(x)}),decreasing = T))[1:10]
   bin.maf <- bin.maf[,keep]
@@ -202,7 +202,7 @@ maf.summary <- function(maf,mut.type = "SOMATIC"){
 
   co.mut <- apply(bin.maf,2,function(x){
     apply(bin.maf,2,function(y){
-      sum(y == 1 & x == 1)/length(x)
+      sum(y == 1 & x == 1,na.rm = T)/length(x)
     })
   })
   p.comut <- ggcorr(co.mut,limits = NULL)
