@@ -6,9 +6,16 @@
 \usage{
 oncoKB.annotate(input, output, lib.path = NULL)
 }
+\arguments{
+\item{maf}{**NEED DESCRIPTION**}
+}
 \value{
 OncoKb annotate MAF.
 }
 \description{
-OncoKB annotaor for MAF files.
+OncoKB annotator for MAF files.
+}
+\examples{
+
+# NEED EXAMPLE, doesn't necessarily have to run
 }

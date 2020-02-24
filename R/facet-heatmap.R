@@ -10,8 +10,8 @@
 #' @param epsilon level of unions when aggregating segments between
 #' @param ordered order in which patients should be printed. Default NUll leads to hierarchical clustering.
 #' @param outcome for seg file only, if outcome associated with study it will be printed along the x axis for each patient
-#' @param adaptive
-#' @return p a heatmap corresponding to the segnment files inputted
+#' @param adaptive **NEED DESCRIPTION**
+#' @return p a heatmap corresponding to the segment files inputted
 #' @export
 #'
 #' @examples library(gnomeR)

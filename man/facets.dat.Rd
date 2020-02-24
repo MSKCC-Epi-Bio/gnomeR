@@ -4,8 +4,15 @@
 \alias{facets.dat}
 \title{facets.dat}
 \usage{
-facets.dat(seg = NULL, filenames = NULL, path = NULL,
-  patients = NULL, min.purity = 0.3, epsilon = 0.005, adaptive = F)
+facets.dat(
+  seg = NULL,
+  filenames = NULL,
+  path = NULL,
+  patients = NULL,
+  min.purity = 0.3,
+  epsilon = 0.005,
+  adaptive = F
+)
 }
 \arguments{
 \item{seg}{a segmentation file containing the segmentation information of multiple patients}
@@ -19,6 +26,8 @@ facets.dat(seg = NULL, filenames = NULL, path = NULL,
 \item{min.purity}{the minimum purity of the sample required to be kept in the final dataset. Default is 0.3.}
 
 \item{epsilon}{level of unions when aggregating segments between}
+
+\item{adaptive}{**NEED DESCRIPTION**}
 }
 \value{
 out.cn : a matrix of the union of all segment files with patients as rows and segments as columns

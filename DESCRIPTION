@@ -18,7 +18,7 @@ Authors@R:
              family = "Hannum",
              role = "aut",
              comment = c(ORCID = "0000-0002-2953-0449")))
-Description: 
+Description: Prepare raw IMPACT and TCGA mutation data for analysis. Annotate OncoKB, summarize maf files, visualize results and more. 
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
@@ -43,5 +43,7 @@ Depends:
 Suggests: 
     knitr,
     rmarkdown,
-    testthat
+    testthat,
+    spelling
 VignetteBuilder: knitr
+Language: en-US

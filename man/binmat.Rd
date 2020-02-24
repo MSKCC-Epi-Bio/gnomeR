@@ -4,9 +4,17 @@
 \alias{binmat}
 \title{binmat}
 \usage{
-binmat(patients = NULL, maf, mut.type = "SOMATIC", SNP.only = F,
-  include.silent = F, fusion = NULL, cna = NULL, cna.relax = F,
-  spe.plat = F)
+binmat(
+  patients = NULL,
+  maf = NULL,
+  mut.type = "SOMATIC",
+  SNP.only = F,
+  include.silent = F,
+  fusion = NULL,
+  cna = NULL,
+  cna.relax = F,
+  spe.plat = F
+)
 }
 \arguments{
 \item{patients}{a character vector that let's the user specify the patients to be used to create the matrix.
@@ -37,12 +45,10 @@ of patients that were not sequenced on that plaform. Default is TRUE.}
 }
 \value{
 mut : a binary matrix of mutation data
-
-no.mu.patients : a character vector of patients having no mutations found in the MAF file.
 }
 \description{
 Enables creation of a binary matrix from a maf file with
-a predifined list of patients (rows are patients and columns are genes)
+a predefined list of patients (rows are patients and columns are genes)
 }
 \examples{
 library(gnomeR)

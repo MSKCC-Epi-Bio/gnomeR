@@ -4,9 +4,17 @@
 \alias{facets.heatmap}
 \title{facets.heatmap}
 \usage{
-facets.heatmap(seg = NULL, filenames = NULL, path = NULL,
-  patients = NULL, min.purity = 0.3, epsilon = 0.005,
-  ordered = NULL, outcome = NULL, adaptive = F)
+facets.heatmap(
+  seg = NULL,
+  filenames = NULL,
+  path = NULL,
+  patients = NULL,
+  min.purity = 0.3,
+  epsilon = 0.005,
+  ordered = NULL,
+  outcome = NULL,
+  adaptive = F
+)
 }
 \arguments{
 \item{seg}{a segmentation file containing the segmentation information of multiple patients}
@@ -24,9 +32,11 @@ facets.heatmap(seg = NULL, filenames = NULL, path = NULL,
 \item{ordered}{order in which patients should be printed. Default NUll leads to hierarchical clustering.}
 
 \item{outcome}{for seg file only, if outcome associated with study it will be printed along the x axis for each patient}
+
+\item{adaptive}{**NEED DESCRIPTION**}
 }
 \value{
-p a heatmap corresponding to the segnment files inputted
+p a heatmap corresponding to the segment files inputted
 }
 \description{
 Creates a heatmap of copy number profiles from segment files.

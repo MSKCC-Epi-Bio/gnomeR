@@ -11,7 +11,7 @@
 #' Default is 0 (all features included).
 #' @param paired Boolean if the data are paired. Default is FALSE.
 #' @param cont Should the outcome be treated as a continuous value. Default is FALSE treated as categorical.
-#' @param rank Should the table returned be oredered by Pvalue. Boolean, default is T
+#' @param rank Should the table returned be ordered by Pvalue. Boolean, default is T
 #' @return fits : a table of odds ratio and pvalues.
 #' @return forest.plot : A forest plot of the top 10 hits.
 #'

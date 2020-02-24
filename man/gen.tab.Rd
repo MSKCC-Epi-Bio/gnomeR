@@ -4,8 +4,7 @@
 \alias{gen.tab}
 \title{gen.tab}
 \usage{
-gen.tab(gen.dat, outcome, filter = 0, paired = F, cont = F,
-  rank = T)
+gen.tab(gen.dat, outcome, filter = 0, paired = F, cont = F, rank = T)
 }
 \arguments{
 \item{gen.dat}{A matrix or dataframe, with patients as rows and features as columns.}
@@ -20,7 +19,7 @@ Default is 0 (all features included).}
 
 \item{cont}{Should the outcome be treated as a continuous value. Default is FALSE treated as categorical.}
 
-\item{rank}{Should the table returned be oredered by Pvalue. Boolean, default is T}
+\item{rank}{Should the table returned be ordered by Pvalue. Boolean, default is T}
 }
 \value{
 fits : a table of odds ratio and pvalues.

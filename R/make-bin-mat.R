@@ -1,7 +1,7 @@
 #' binmat
 #'
 #' Enables creation of a binary matrix from a maf file with
-#' a predifined list of patients (rows are patients and columns are genes)
+#' a predefined list of patients (rows are patients and columns are genes)
 #'
 #' @param patients a character vector that let's the user specify the patients to be used to create the matrix.
 #' Default is NULL is which case all patients in the MAF file will be used.

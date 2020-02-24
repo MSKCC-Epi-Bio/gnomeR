@@ -44,7 +44,7 @@ library(plotly)
 
 # Introduction {.tabset .tabset-fade .tabset-pills}
 
-<i>gnomeR</i> is a R package that aims to process and analyze genetic data from cBioportal. We include in this package the mutation, copy number alteration (CNA), fusion and clin.patientsical information of all publicly available data from cBioPortal.
+<i>gnomeR</i> is a R package that aims to process and analyze genetic data from cBioPortal. We include in this package the mutation, copy number alteration (CNA), fusion and clin.patientsical information of all publicly available data from cBioPortal.
 
 ## Mutations 
 
@@ -218,8 +218,8 @@ plot_oncoPrint(gen.dat = gen.dat,clin.dat = clin.patients.dat)
 
 ## FACETs 
 
-[FACETs](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5027494/) is a fully integrated stand-alone pipeline that includes sequencing BAM file post-processing, joint segmentation of total- and allele-specific read counts, and integer copy number calls corrected for tumor purity, ploidy and clonal heterogeneity, with comprehensive output and integrated visualization. We integrate the output of this tool to our package to vizualise the copy number alteration events in our cohort. 
-The segmentation file is now integrated to the cBioPortal and we include it in our package. The FACETs output can be vizualized using the `facets.heatmap` function which takes as input:
+[FACETs](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5027494/) is a fully integrated stand-alone pipeline that includes sequencing BAM file post-processing, joint segmentation of total- and allele-specific read counts, and integer copy number calls corrected for tumor purity, ploidy and clonal heterogeneity, with comprehensive output and integrated visualization. We integrate the output of this tool to our package to visualise the copy number alteration events in our cohort. 
+The segmentation file is now integrated to the cBioPortal and we include it in our package. The FACETs output can be visualised using the `facets.heatmap` function which takes as input:
 
 - seg : a segmentation file containing all the samples of interest
 - filenames : character vector of file names in case you are given individual segmentation files for each patients
