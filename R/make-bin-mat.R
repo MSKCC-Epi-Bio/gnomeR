@@ -21,7 +21,6 @@
 #' @param spe.plat boolean specifying if specific IMPACT platforms should be considered. When TRUE NAs will fill the cells for genes
 #' of patients that were not sequenced on that plaform. Default is TRUE.
 #' @return mut : a binary matrix of mutation data
-#' @return no.mu.patients : a character vector of patients having no mutations found in the MAF file.
 #' @export
 #' @examples library(gnomeR)
 #' mut.only <- binmat(maf = mut)
@@ -34,25 +33,31 @@
 ###### MAIN FUNCTION GROUPING EVERYTHING ######
 ###############################################
 
-binmat <- function(patients=NULL, maf, mut.type = "SOMATIC",SNP.only = F,include.silent = F,
+binmat <- function(patients=NULL, maf = NULL, mut.type = "SOMATIC",SNP.only = F,include.silent = F,
                    fusion = NULL,cna = NULL,cna.relax = F, spe.plat = F){
 
-  # quick data checks #
-  if(length(match("Tumor_Sample_Barcode",colnames(maf))) == 0)
-    stop("The MAF file inputted is missing a patient name column. (Tumor_Sample_Barcode)")
-  if(length(match("Hugo_Symbol",colnames(maf))) == 0)
-    stop("The MAF file inputted is missing a gene name column. (Hugo_Symbol)")
-  if(length(match("Variant_Classification",colnames(maf))) == 0)
-    stop("The MAF file inputted is missing a variant classification column. (Variant_Classification)")
-  if(length(match("Mutation_Status",colnames(maf))) == 0)
-    warning("The MAF file inputted is missing a mutation status column (Mutation_Status). It will be assumed that
+  if(is.null(maf) && is.null(fusion) && is.null(cna)) stop("You must provided one of the three following files: MAF, fusion or CNA.")
+
+  mut <- NULL
+
+  if(!is.null(maf)){
+    # quick data checks #
+    if(length(match("Tumor_Sample_Barcode",colnames(maf))) == 0)
+      stop("The MAF file inputted is missing a patient name column. (Tumor_Sample_Barcode)")
+    if(length(match("Hugo_Symbol",colnames(maf))) == 0)
+      stop("The MAF file inputted is missing a gene name column. (Hugo_Symbol)")
+    if(length(match("Variant_Classification",colnames(maf))) == 0)
+      stop("The MAF file inputted is missing a variant classification column. (Variant_Classification)")
+    if(length(match("Mutation_Status",colnames(maf))) == 0)
+      warning("The MAF file inputted is missing a mutation status column (Mutation_Status). It will be assumed that
             all variants are of the same type (SOMATIC/GERMLINE).")
 
-  # set maf to maf class #
-  maf <- structure(maf,class = c("data.frame","maf"))
-  # getting mutation binary matrix #
-  mut <- createbin(obj = maf, patients = patients, mut.type = mut.type,cna.relax = cna.relax,
-                   SNP.only = SNP.only, include.silent = include.silent, spe.plat = spe.plat)
+    # set maf to maf class #
+    maf <- structure(maf,class = c("data.frame","maf"))
+    # getting mutation binary matrix #
+    mut <- createbin(obj = maf, patients = patients, mut.type = mut.type,cna.relax = cna.relax,
+                     SNP.only = SNP.only, include.silent = include.silent, spe.plat = spe.plat)
+  }
 
   # fusions #
   if(!is.null(fusion)){
@@ -60,8 +65,10 @@ binmat <- function(patients=NULL, maf, mut.type = "SOMATIC",SNP.only = F,include
     fusion <- structure(fusion,class = c("data.frame","fusion"))
     fusion <- createbin(obj = fusion, patients = patients, mut.type = mut.type,
                         SNP.only = SNP.only, include.silent = include.silent, spe.plat = spe.plat)
-    mut <- as.data.frame(cbind(mut,fusion))
-    rownames(mut) <- patients
+    if(!is.null(mut)){
+      mut <- as.data.frame(cbind(mut,fusion))
+      rownames(mut) <- patients}
+    else mut <- fusion
   }
 
   # cna #
@@ -70,26 +77,37 @@ binmat <- function(patients=NULL, maf, mut.type = "SOMATIC",SNP.only = F,include
     cna <- structure(cna,class = c("data.frame","cna"))
     cna <- createbin(obj = cna, patients = patients, mut.type = mut.type,cna.relax = cna.relax,
                      SNP.only = SNP.only, include.silent = include.silent, spe.plat = spe.plat)
-    mut <- as.data.frame(cbind(mut,cna))
-    rownames(mut) <- patients
+    if(!is.null(mut)){
+      mut <- as.data.frame(cbind(mut,cna))
+      rownames(mut) <- patients}
+    else mut <- cna
   }
 
   # specific platform for IMPACT #
   if(spe.plat){
     v=strsplit(patients, "-IM")
-    v=unlist(lapply(1:length(v), function(x)v[[x]][2]))
+    if(!all(lapply(v, length) == 2))
+      warning("All patients were not sequenced on the IMPACT platform or some were mispecified. '-IM' requiered in sample ID.
+              The spe.plat argument has been overwritten to FALSE.")
+    else{
+      v=unlist(lapply(1:length(v), function(x)v[[x]][2]))
+      if(length(unique(v)) == 1)
+        warning("All patients were not sequenced on the IMPACT platform or some were mispecified. '-IM' requiered in sample ID.
+              The spe.plat argument has been overwritten to FALSE.")
+      else{
+        # remove 410 platform patients #
+        missing <- setdiff(c(g.impact$g468, paste0(g.impact$g468,".fus"),paste0(g.impact$g468,".Del"),paste0(g.impact$g468,".Amp")),
+                           c(g.impact$g410, paste0(g.impact$g410,".fus"),paste0(g.impact$g410,".Del"),paste0(g.impact$g410,".Amp")))
+        if(sum(v == "5") > 0 && sum(missing %in% colnames(mut)) > 0)
+          mut[which(v == "5"), na.omit(match(missing, colnames(mut)))] <- NA
 
-    # remove 410 platform patients #
-    missing <- setdiff(c(g.impact$g468, paste0(g.impact$g468,".fus"),paste0(g.impact$g468,".Del"),paste0(g.impact$g468,".Amp")),
-                       c(g.impact$g410, paste0(g.impact$g410,".fus"),paste0(g.impact$g410,".Del"),paste0(g.impact$g410,".Amp")))
-    if(sum(v == "5") > 0 && sum(missing %in% colnames(mut)) > 0)
-      mut[which(v == "5"), na.omit(match(missing, colnames(mut)))] <- NA
-
-    # remove 341 platform patients #
-    missing <- setdiff(c(g.impact$g468, paste0(g.impact$g468,".fus"),paste0(g.impact$g468,".Del"),paste0(g.impact$g468,".Amp")),
-                       c(g.impact$g341, paste0(g.impact$g341,".fus"),paste0(g.impact$g341,".Del"),paste0(g.impact$g341,".Amp")))
-    if(sum(v == "3") > 0 && sum(missing %in% colnames(mut)) > 0)
-      mut[which(v == "3"), na.omit(match(missing, colnames(mut)))] <- NA
+        # remove 341 platform patients #
+        missing <- setdiff(c(g.impact$g468, paste0(g.impact$g468,".fus"),paste0(g.impact$g468,".Del"),paste0(g.impact$g468,".Amp")),
+                           c(g.impact$g341, paste0(g.impact$g341,".fus"),paste0(g.impact$g341,".Del"),paste0(g.impact$g341,".Amp")))
+        if(sum(v == "3") > 0 && sum(missing %in% colnames(mut)) > 0)
+          mut[which(v == "3"), na.omit(match(missing, colnames(mut)))] <- NA
+      }
+    }
   }
 
   return(mut)
@@ -170,7 +188,7 @@ createbin.maf <- function(obj, patients, mut.type, SNP.only, include.silent, cna
 
   missing.mut <- apply(mut,1,function(x){sum(x)==0})
   if(sum(missing.mut) > 0)
-    warning("Some patients did not have any mutations found in the MAF file.")
+    warning(paste0("Some patients did not have any mutations found in the MAF file.", rownames(mut)[missing.mut], collapse = ","))
 
   return(mut)
 }
