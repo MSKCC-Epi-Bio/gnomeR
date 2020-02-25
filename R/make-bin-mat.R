@@ -20,6 +20,8 @@
 #' @param cna.relax for cna data only enables to count both gains and shallow deletions as amplifications and deletions respectively.
 #' @param spe.plat boolean specifying if specific IMPACT platforms should be considered. When TRUE NAs will fill the cells for genes
 #' of patients that were not sequenced on that plaform. Default is TRUE.
+#' @param set.plat character argument specifying which IMPACT platform the data should be reduced to if spe.plat is set to FALSE.
+#'  Options are "341", "410", "468". Default is NULL.
 #' @return mut : a binary matrix of mutation data
 #' @export
 #' @examples library(gnomeR)
@@ -34,7 +36,7 @@
 ###############################################
 
 binmat <- function(patients=NULL, maf = NULL, mut.type = "SOMATIC",SNP.only = F,include.silent = F,
-                   fusion = NULL,cna = NULL,cna.relax = F, spe.plat = F){
+                   fusion = NULL,cna = NULL,cna.relax = F, spe.plat = F, set.plat = NULL){
 
   if(is.null(maf) && is.null(fusion) && is.null(cna)) stop("You must provided one of the three following files: MAF, fusion or CNA.")
 
@@ -85,6 +87,20 @@ binmat <- function(patients=NULL, maf = NULL, mut.type = "SOMATIC",SNP.only = F,
 
   # specific platform for IMPACT #
   if(spe.plat){
+
+    if(!is.null(set.plat)){
+      if(set.plat == "341"){
+        keep <- c(g.impact$g341, paste0(g.impact$g341,".fus"),paste0(g.impact$g341,".Del"),paste0(g.impact$g341,".Amp"))
+        mut <- mut[, na.omit(match(keep, colnames(mut)))]
+        missing <- setdiff(c(g.impact$g341, paste0(g.impact$g341,".fus"),paste0(g.impact$g341,".Del"),paste0(g.impact$g341,".Amp")),
+                           colnames(mut))
+        add <- as.data.frame(matrix(0L,nrow=nrow(mut), ncol = length(missing)))
+        rownames(add) <- rownames(mut)
+        colnames(add) <- missing
+        mut <- as.data.frame(cbind(mut,add))
+      }
+    }
+
     v=strsplit(patients, "-IM")
     if(!all(lapply(v, length) == 2))
       warning("All patients were not sequenced on the IMPACT platform or some were mispecified. '-IM' requiered in sample ID.
