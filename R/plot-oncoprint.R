@@ -25,12 +25,6 @@
 #' ComplexHeatmap
 #' tibble
 
-
-gen.dat = gen.dat
-clin.dat = clin.dat
-ordered = order(as.numeric(results$risk.raw))
-
-
 plot_oncoPrint <- function(gen.dat,clin.dat=NULL,ordered=NULL){
 
   # make data #
