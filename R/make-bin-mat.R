@@ -20,8 +20,8 @@
 #' @param cna.relax for cna data only enables to count both gains and shallow deletions as amplifications and deletions respectively.
 #' @param spe.plat boolean specifying if specific IMPACT platforms should be considered. When TRUE NAs will fill the cells for genes
 #' of patients that were not sequenced on that plaform. Default is TRUE.
-#' @param set.plat character argument specifying which IMPACT platform the data should be reduced to if spe.plat is set to FALSE.
-#'  Options are "341", "410", "468". Default is NULL.
+#' @param set.plat character argument specifying which IMPACT platform the data should be reduced to if spe.plat is set to TRUE.
+#'  Options are "341" and "410". Default is NULL.
 #' @return mut : a binary matrix of mutation data
 #' @export
 #' @examples library(gnomeR)
@@ -93,6 +93,16 @@ binmat <- function(patients=NULL, maf = NULL, mut.type = "SOMATIC",SNP.only = F,
         keep <- c(g.impact$g341, paste0(g.impact$g341,".fus"),paste0(g.impact$g341,".Del"),paste0(g.impact$g341,".Amp"))
         mut <- mut[, na.omit(match(keep, colnames(mut)))]
         missing <- setdiff(c(g.impact$g341, paste0(g.impact$g341,".fus"),paste0(g.impact$g341,".Del"),paste0(g.impact$g341,".Amp")),
+                           colnames(mut))
+        add <- as.data.frame(matrix(0L,nrow=nrow(mut), ncol = length(missing)))
+        rownames(add) <- rownames(mut)
+        colnames(add) <- missing
+        mut <- as.data.frame(cbind(mut,add))
+      }
+      if(set.plat == "410"){
+        keep <- c(g.impact$g410, paste0(g.impact$g410,".fus"),paste0(g.impact$g410,".Del"),paste0(g.impact$g410,".Amp"))
+        mut <- mut[, na.omit(match(keep, colnames(mut)))]
+        missing <- setdiff(c(g.impact$g410, paste0(g.impact$g410,".fus"),paste0(g.impact$g410,".Del"),paste0(g.impact$g410,".Amp")),
                            colnames(mut))
         add <- as.data.frame(matrix(0L,nrow=nrow(mut), ncol = length(missing)))
         rownames(add) <- rownames(mut)
