@@ -57,7 +57,7 @@ gen.tab <- function(gen.dat,outcome,filter=0,paired = F,cont=F,rank = T){
       if(paired == F) test <- fisher.test(x, outcome)
       if(paired == T){
         # tt = with(as.data.frame(cbind(x,outcome)), table(x,outcome))
-        test <- exact2x2::mcnemar.exact(x = x[1:(length(x)/2)],y = x[(length(x)/2+1):length(x)])
+        test <- mcnemar.exact(x = x[1:(length(x)/2)],y = x[(length(x)/2+1):length(x)]) #exact2x2::
       }
       out <- c(sum(x, na.rm = T)/length(x))
       for (i in 1:length(levels(outcome))) {
