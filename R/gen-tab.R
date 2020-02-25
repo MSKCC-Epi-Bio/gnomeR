@@ -19,7 +19,7 @@
 #'
 #' @examples library(gnomeR)
 #' patients <- unique(clin$DMPID)[1:500]
-#' mut.only <- create.bin.matrix(patients = patients,maf = mut)
+#' mut.only <- binmat(patients = patients,maf = mut)
 #' gen.dat <- mut.only$mut
 #' outcome = as.factor(as.character(clin$Sex[match(patients,clin$DMPID)]))
 #' test <- gen.tab(gen.dat,outcome)
