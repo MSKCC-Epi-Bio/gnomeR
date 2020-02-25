@@ -135,7 +135,7 @@ binmat <- function(patients=NULL, maf = NULL, mut.type = "SOMATIC",SNP.only = F,
       }
     }
   }
-
+  if(length(which(apply(gen.dat,2,sum)>0))) mut <- mut[,which(apply(gen.dat,2,sum)>0)]
   return(mut)
 }
 
