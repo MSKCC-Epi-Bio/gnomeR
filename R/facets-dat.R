@@ -110,11 +110,13 @@ facets.dat <- function(seg = NULL,filenames = NULL, path=NULL,
     # else patients <- intersect(patients,unique(seg$ID))
     seg.filt <- seg %>%
       filter(ID %in% patients)
+    if(length(grep("purity",colnames(seg.filt))) > 0){
+      seg.filt <- seg.filt %>%
+        filter(purity >= min.purity)
+    }
     all.dat <- data.frame()
     ### segment files ###
     for(i in 1:length(patients)){
-
-
       cncf <- as.data.frame(seg.filt %>%
                               filter(ID == patients[i]) %>%
                               rename(sample = ID,start = loc.start, end = loc.end) %>%
