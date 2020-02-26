@@ -112,7 +112,8 @@ facets.dat <- function(seg = NULL,filenames = NULL, path=NULL,
       filter(ID %in% patients)
     if(length(grep("purity",colnames(seg.filt))) > 0){
       seg.filt <- seg.filt %>%
-        filter(purity >= min.purity)
+        filter(!is.na(purity),
+          purity >= min.purity)
     }
     all.dat <- data.frame()
     ### segment files ###
