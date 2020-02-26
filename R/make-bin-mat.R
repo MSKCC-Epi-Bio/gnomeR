@@ -113,14 +113,13 @@ binmat <- function(patients=NULL, maf = NULL, mut.type = "SOMATIC",SNP.only = F,
     }
 
     v=strsplit(patients, "-IM")
-    v=unlist(lapply(1:length(v), function(x)v[[x]][2]))
-    if(!all(lapply(v, length) == 2) || length(unique(v)) == 1){
+    if(!all(lapply(v, length) == 2) || length(unique(unlist(lapply(1:length(v), function(x)v[[x]][2])))) == 1){
       warning("All patients were not sequenced on the IMPACT platform or some were mispecified. '-IM' requiered in sample ID.
               The spe.plat argument has been overwritten to FALSE.")
       spe.plat = F
     }
     if(spe.plat){
-
+      v=unlist(lapply(1:length(v), function(x)v[[x]][2]))
       # remove 410 platform patients #
       missing <- setdiff(c(g.impact$g468, paste0(g.impact$g468,".fus"),paste0(g.impact$g468,".Del"),paste0(g.impact$g468,".Amp")),
                          c(g.impact$g410, paste0(g.impact$g410,".fus"),paste0(g.impact$g410,".Del"),paste0(g.impact$g410,".Amp")))
