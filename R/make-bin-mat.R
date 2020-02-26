@@ -59,6 +59,7 @@ binmat <- function(patients=NULL, maf = NULL, mut.type = "SOMATIC",SNP.only = F,
     # getting mutation binary matrix #
     mut <- createbin(obj = maf, patients = patients, mut.type = mut.type,cna.relax = cna.relax,
                      SNP.only = SNP.only, include.silent = include.silent, spe.plat = spe.plat)
+
   }
 
   # fusions #
@@ -213,7 +214,7 @@ createbin.maf <- function(obj, patients, mut.type, SNP.only, include.silent, cna
 
   missing.mut <- apply(mut,1,function(x){sum(x)==0})
   if(sum(missing.mut) > 0)
-    warning(paste0("Some patients did not have any mutations found in the MAF file.", rownames(mut)[missing.mut], collapse = ","))
+    warning(paste0("Some patients did not have any mutations found in the MAF file.", paste0(rownames(mut)[missing.mut], collapse = ",")))
 
   return(mut)
 }
