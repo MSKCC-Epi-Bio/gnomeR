@@ -128,8 +128,7 @@ facets.heatmap <- function(seg = NULL,filenames = NULL, path =NULL, patients=NUL
       chrom.ends[d] <- max(which(chr == r))
       d = d + 1
     }
-    chrom.starts <- c(1, chrom.ends[-length(table(chr))] +
-                        1)
+    chrom.starts <- c(1, chrom.ends[-length(table(chr))] + 1)
     chrom.mids <- (chrom.starts + chrom.ends)/2
 
     bw=colorpanel(2,low="white",high="cadetblue4")

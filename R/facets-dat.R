@@ -118,7 +118,7 @@ facets.dat <- function(seg = NULL,filenames = NULL, path=NULL,
     all.dat <- data.frame()
     ### segment files ###
     for(i in 1:length(patients)){
-      if(grepl("tcn",colnames(seg.filt)) && grepl("ploidy",colnames(seg.filt))){
+      if(any(grepl("tcn",colnames(seg.filt))) && any(grepl("ploidy",colnames(seg.filt)))){
         cncf <- as.data.frame(seg.filt %>%
                                 filter(ID == patients[i]) %>%
                                 rename(sample = ID,start = loc.start, end = loc.end) %>%
@@ -126,7 +126,7 @@ facets.dat <- function(seg = NULL,filenames = NULL, path=NULL,
                                        start = as.numeric(as.character(start)),
                                        end = as.numeric(as.character(end)),
                                        num.mark = as.numeric(as.character(num.mark)),
-                                       seg.mean = log2(facetsseg$tcn/facetsseg$ploidy+ 1*10^(-6)))%>%
+                                       seg.mean = log2(facetsseg$tcn/facetsseg$ploidy + 1*10^(-6)))%>%
                                 # select(sample,chrom, start,end,num.mark,seg.mean) %>%
                                 filter(!is.infinite(seg.mean) & !is.na(seg.mean))
         )
