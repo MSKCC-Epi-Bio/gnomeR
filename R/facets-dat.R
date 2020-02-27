@@ -126,7 +126,7 @@ facets.dat <- function(seg = NULL,filenames = NULL, path=NULL,
                                        start = as.numeric(as.character(start)),
                                        end = as.numeric(as.character(end)),
                                        num.mark = as.numeric(as.character(num.mark)),
-                                       seg.mean = log2(facetsseg$tcn/facetsseg$ploidy + 1*10^(-6)))%>%
+                                       seg.mean = log2(tcn/ploidy + 1*10^(-6)))%>%
                                 # select(sample,chrom, start,end,num.mark,seg.mean) %>%
                                 filter(!is.infinite(seg.mean) & !is.na(seg.mean))
         )
