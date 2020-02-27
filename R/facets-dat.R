@@ -118,7 +118,20 @@ facets.dat <- function(seg = NULL,filenames = NULL, path=NULL,
     all.dat <- data.frame()
     ### segment files ###
     for(i in 1:length(patients)){
-      cncf <- as.data.frame(seg.filt %>%
+      if(grepl("tcn",colnames(seg.filt)) && grepl("ploidy",colnames(seg.filt))){
+        cncf <- as.data.frame(seg.filt %>%
+                                filter(ID == patients[i]) %>%
+                                rename(sample = ID,start = loc.start, end = loc.end) %>%
+                                mutate(chrom = as.numeric(as.character(chrom)),
+                                       start = as.numeric(as.character(start)),
+                                       end = as.numeric(as.character(end)),
+                                       num.mark = as.numeric(as.character(num.mark)),
+                                       seg.mean = log2(facetsseg$tcn/facetsseg$ploidy+ 1*10^(-6)))%>%
+                                select(sample,chrom, start,end,num.mark,seg.mean)
+        )
+      }
+      else
+        cncf <- as.data.frame(seg.filt %>%
                               filter(ID == patients[i]) %>%
                               rename(sample = ID,start = loc.start, end = loc.end) %>%
                               mutate(chrom = as.numeric(as.character(chrom)),
