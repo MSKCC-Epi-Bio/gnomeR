@@ -125,7 +125,8 @@ facets.dat <- function(seg = NULL,filenames = NULL, path=NULL,
                                      start = as.numeric(as.character(start)),
                                      end = as.numeric(as.character(end)),
                                      num.mark = as.numeric(as.character(num.mark)),
-                                     seg.mean = as.numeric(as.character(seg.mean)))
+                                     seg.mean = as.numeric(as.character(seg.mean)))%>%
+                              select(sample,chrom, start,end,num.mark,seg.mean)
       )
       all.dat <- rbind(all.dat,cncf)
     }
