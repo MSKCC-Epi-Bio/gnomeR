@@ -100,13 +100,7 @@ facets.heatmap <- function(seg = NULL,filenames = NULL, path =NULL, patients=NUL
     patients <- patients[match(rownames(reducedM),patients)]
     if(!is.null(outcome)) outcome <- outcome[match(rownames(reducedM),names(outcome))]
     if(!is.null(ordered) && !is.null(outcome)) ordered <- order(outcome)
-    # if(!is.null(ordered) && !is.null(outcome)) {
-    #   if(length(-which(is.na(match(patients,rownames(reducedM))))) > 0){
-    #     outcome <- outcome[-which(is.na(match(patients,rownames(reducedM))))]
-    #     ordered <- order(outcome)
-    #     outcome <- outcome[ordered]
-    #   }
-    # }
+
     rownames(reducedM) <- abbreviate(rownames(reducedM),minlength = 10)
     imagedata=reducedM
     imagedata[imagedata>1.5]=1.5
@@ -149,7 +143,12 @@ facets.heatmap <- function(seg = NULL,filenames = NULL, path =NULL, patients=NUL
     if(is.null(ordered)) x.lab <- as.character(x.lab[cl$order])
     if(!is.null(ordered)) x.lab <- as.character(x.lab[ordered])
 
-    scales = list(x = list(at=1:n,labels=x.lab,rot=90),
+    if(grepl("tcn",colnames(reducedM)) && grepl("ploidy",colnames(reducedM)))
+      scales = list(x = list(at=1:n,labels=ploidy[cl$order],rot=90),
+                       y = list(at = len - chrom.mids, labels = names(table(chr))),
+                       z = list(at=n:1,labels=purity[cl$order],rot=90))
+
+    else scales = list(x = list(at=1:n,labels=x.lab,rot=90),
                   y = list(at = len - chrom.mids, labels = names(table(chr))),
                   z = list(at=n:1,labels=rep(1,n),rot=90)) #[cl$order]
 

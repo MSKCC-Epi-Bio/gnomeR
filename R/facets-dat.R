@@ -127,7 +127,7 @@ facets.dat <- function(seg = NULL,filenames = NULL, path=NULL,
                                        end = as.numeric(as.character(end)),
                                        num.mark = as.numeric(as.character(num.mark)),
                                        seg.mean = log2(facetsseg$tcn/facetsseg$ploidy+ 1*10^(-6)))%>%
-                                select(sample,chrom, start,end,num.mark,seg.mean) %>%
+                                # select(sample,chrom, start,end,num.mark,seg.mean) %>%
                                 filter(!is.infinite(seg.mean) & !is.na(seg.mean))
         )
       }
@@ -144,9 +144,8 @@ facets.dat <- function(seg = NULL,filenames = NULL, path=NULL,
       )
       all.dat <- rbind(all.dat,cncf)
     }
-    all.dat <- all.dat[complete.cases(all.dat),]
+    # all.dat <- all.dat[complete.cases(all.dat),]
     out.cn <- CNregions.mod(seg = all.dat,epsilon = epsilon,adaptive = adaptive)
-    # out.cn <- out.cn[match(rownames(out.cn),patients),]
     return(list("out.cn"=out.cn,"patients" = patients))
   }
 
