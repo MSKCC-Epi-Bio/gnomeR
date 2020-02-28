@@ -35,7 +35,8 @@ Imports:
     exact2x2,
     plotly,
     tibble,
-    dtplyr
+    dtplyr,
+    ggrepel
 Depends:
     ComplexHeatmap,
     iClusterPlus,

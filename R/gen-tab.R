@@ -101,11 +101,21 @@ gen.tab <- function(gen.dat,outcome,filter=0,paired = F,cont=F,rank = T){
         xlab('Gene')+ ylab("Risk Ratio (95% Confidence Interval)")+
         geom_errorbar(aes(ymin=Lower, ymax=Upper,col=Gene),width=0.5,cex=1)+
         coord_flip()
+
+      vplot <- fits %>%
+        rownames_to_column('Gene') %>%
+        mutate(Pvalue = as.numeric(as.character(Pvalue)),
+               OddsRatio = as.numeric(as.character(OddsRatio)),
+               FDRsign = ifelse(as.numeric(as.character(FDR)) < 0.05,"Significant", "Non signifcant")) %>%
+        ggplot(aes(x = OddsRatio, y = -log10(Pvalue), fill = FDRsign,color = FDRsign)) +
+        geom_point() +
+        geom_label_repel(aes(label = ifelse(FDRsign == "Significant",as.character(Gene),'')), color = "white")
     }
     else{
       forest.plot <- NULL
+      vplot <- NULL
     }
-    return(list("fits"=fits,"forest.plot"=forest.plot))
+    return(list("fits"=fits,"forest.plot"=forest.plot,"vPlot"=vplot))
   }
 
 
