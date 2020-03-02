@@ -21,8 +21,8 @@
 #' @param spe.plat boolean specifying if specific IMPACT platforms should be considered. When TRUE NAs will fill the cells for genes
 #' of patients that were not sequenced on that plaform. Default is TRUE.
 #' @param set.plat character argument specifying which IMPACT platform the data should be reduced to if spe.plat is set to TRUE.
-#'  Options are "341" and "410". Default is NULL.
-#' @param rm.empty boolean specifying if columns with no events founds should be removed
+#'  Options are "341", "410" and "468". Default is NULL.
+#' @param rm.empty boolean specifying if columns with no events founds should be removed. Default is TRUE.
 #' @return mut : a binary matrix of mutation data
 #' @export
 #' @examples library(gnomeR)
@@ -105,6 +105,16 @@ binmat <- function(patients=NULL, maf = NULL, mut.type = "SOMATIC",SNP.only = F,
         keep <- c(g.impact$g410, paste0(g.impact$g410,".fus"),paste0(g.impact$g410,".Del"),paste0(g.impact$g410,".Amp"))
         mut <- mut[, na.omit(match(keep, colnames(mut)))]
         missing <- setdiff(c(g.impact$g410, paste0(g.impact$g410,".fus"),paste0(g.impact$g410,".Del"),paste0(g.impact$g410,".Amp")),
+                           colnames(mut))
+        add <- as.data.frame(matrix(0L,nrow=nrow(mut), ncol = length(missing)))
+        rownames(add) <- rownames(mut)
+        colnames(add) <- missing
+        mut <- as.data.frame(cbind(mut,add))
+      }
+      if(set.plat == "468"){
+        keep <- c(g.impact$g468, paste0(g.impact$g468,".fus"),paste0(g.impact$g468,".Del"),paste0(g.impact$g468,".Amp"))
+        mut <- mut[, na.omit(match(keep, colnames(mut)))]
+        missing <- setdiff(c(g.impact$g468, paste0(g.impact$g468,".fus"),paste0(g.impact$g468,".Del"),paste0(g.impact$g468,".Amp")),
                            colnames(mut))
         add <- as.data.frame(matrix(0L,nrow=nrow(mut), ncol = length(missing)))
         rownames(add) <- rownames(mut)
