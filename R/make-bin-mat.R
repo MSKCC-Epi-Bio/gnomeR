@@ -22,6 +22,7 @@
 #' of patients that were not sequenced on that plaform. Default is TRUE.
 #' @param set.plat character argument specifying which IMPACT platform the data should be reduced to if spe.plat is set to TRUE.
 #'  Options are "341" and "410". Default is NULL.
+#' @param rm.empty boolean specifying if columns with no events founds should be removed
 #' @return mut : a binary matrix of mutation data
 #' @export
 #' @examples library(gnomeR)
@@ -36,7 +37,7 @@
 ###############################################
 
 binmat <- function(patients=NULL, maf = NULL, mut.type = "SOMATIC",SNP.only = F,include.silent = F,
-                   fusion = NULL,cna = NULL,cna.relax = F, spe.plat = F, set.plat = NULL){
+                   fusion = NULL,cna = NULL,cna.relax = F, spe.plat = F, set.plat = NULL,rm.empty = T){
 
   if(is.null(maf) && is.null(fusion) && is.null(cna)) stop("You must provided one of the three following files: MAF, fusion or CNA.")
 
@@ -139,7 +140,7 @@ binmat <- function(patients=NULL, maf = NULL, mut.type = "SOMATIC",SNP.only = F,
 
     }
   }
-  if(length(which(apply(mut,2,sum)>0))) mut <- mut[,which(apply(mut,2,sum)>0)]
+  if(rm.empty && length(which(apply(mut,2,sum)>0))) mut <- mut[,which(apply(mut,2,sum)>0)]
   return(mut)
 }
 
