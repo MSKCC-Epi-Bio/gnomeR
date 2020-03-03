@@ -4,20 +4,27 @@
 \name{gnomeR-package}
 \alias{gnomeR}
 \alias{gnomeR-package}
-\title{gnomeR: What the Package Does (One Line, Title Case)}
+\title{gnomeR: Wrangle and analyze IMPACT and TCGA mutation data}
 \description{
-What the package does (one paragraph).
+Prepare raw IMPACT and TCGA mutation data for analysis. Annotate OncoKB, summarize maf files, visualize results and more.
 }
 \seealso{
 Useful links:
 \itemize{
-  \item \url{https://github.com/margarethannum/gnomeR}
-  \item Report bugs at \url{https://github.com/margarethannum/gnomeR/issues}
+  \item \url{https://github.com/AxelitoMartin/gnomeR}
+  \item Report bugs at \url{https://github.com/AxelitoMartin/gnomeR/issues}
 }
 
 }
 \author{
-\strong{Maintainer}: First Last \email{first.last@example.com} (YOUR-ORCID-ID)
+\strong{Maintainer}: Axel Martin \email{first.last@example.com} (YOUR-ORCID-ID)
+
+Authors:
+\itemize{
+  \item Arshi Arora
+  \item Karissa Whiting (0000-0002-4683-1868)
+  \item Margie Hannum (0000-0002-2953-0449)
+}
 
 }
 \keyword{internal}

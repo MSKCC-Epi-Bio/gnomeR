@@ -1,19 +1,30 @@
 Package: gnomeR
-Title: What the Package Does (One Line, Title Case)
+Title: Wrangle and analyze IMPACT and TCGA mutation data 
 Version: 0.0.0.9000
 Authors@R: 
-    person(given = "First",
-           family = "Last",
+    c(person(given = "Axel",
+           family = "Martin",
            role = c("aut", "cre"),
            email = "first.last@example.com",
-           comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: What the package does (one paragraph).
+           comment = c(ORCID = "YOUR-ORCID-ID")),
+      person(given = "Arshi",
+             family = "Arora",
+             role = "aut"),
+      person(given = "Karissa",
+             family = "Whiting",
+             role = "aut",
+             comment = c(ORCID = "0000-0002-4683-1868")),   
+      person(given = "Margie",
+             family = "Hannum",
+             role = "aut",
+             comment = c(ORCID = "0000-0002-2953-0449")))
+Description: Prepare raw IMPACT and TCGA mutation data for analysis. Annotate OncoKB, summarize maf files, visualize results and more. 
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
-URL: https://github.com/margarethannum/gnomeR
-BugReports: https://github.com/margarethannum/gnomeR/issues
-RoxygenNote: 6.1.1
+URL: https://github.com/AxelitoMartin/gnomeR
+BugReports: https://github.com/AxelitoMartin/gnomeR/issues
+RoxygenNote: 7.0.2
 biocViews: 
     ComplexHeatmap,
     iClusterPlus
@@ -24,12 +35,16 @@ Imports:
     exact2x2,
     plotly,
     tibble,
-    dtplyr
+    dtplyr,
+    ggrepel
 Depends:
     ComplexHeatmap,
     iClusterPlus,
     cluster
 Suggests: 
     knitr,
-    rmarkdown
+    rmarkdown,
+    testthat,
+    spelling
 VignetteBuilder: knitr
+Language: en-US

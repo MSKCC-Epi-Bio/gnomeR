@@ -16,14 +16,16 @@
 #' @export
 #'
 #' @examples library(gnomeR)
-#' patients <- unique(clin$DMPID)[1:100]
-#' mut.only <- create.bin.matrix(patients = patients,maf = mut)
-#' gen.dat <- mut.only$mut
-#' surv.dat <-clin[match(patients,clin$DMPID),match(c("time","status") ,colnames(clin))]
-#' surv.dat$status <- ifelse(surv.dat$status == "DECEASED",1,0)
-#' surv.dat$time <- as.numeric(as.character(surv.dat$time))
-#'
-#' cox.fits <- uni.cox(X = gen.dat,surv.dat = surv.dat, surv.formula = Surv(time,status)~.,filter = 0.03)
+#' patients <- as.character(unique(mut$Tumor_Sample_Barcode))[1:1000]
+#' surv.dat <- clin.patients %>%
+#' filter(X.Patient.Identifier %in% abbreviate(patients,strict = T, minlength = 9)) %>%
+#'   select(X.Patient.Identifier,Overall.Survival..Months., Overall.Survival.Status) %>%
+#'   rename(DMPID = X.Patient.Identifier, time = Overall.Survival..Months.,status = Overall.Survival.Status) %>%
+#'   mutate(time = as.numeric(as.character(time)),
+#'          status = ifelse(status == "LIVING",0,1)) %>%
+#'   filter(!is.na(time))
+#' X <- bin.mut[match(surv.dat$DMPID,abbreviate(rownames(bin.mut),strict = T, minlength = 9)),]
+#' uni.cox(X = X, surv.dat = surv.dat,surv.formula = Surv(time,status)~.,filter = 0.05)
 #'
 #' @import
 #' dplyr

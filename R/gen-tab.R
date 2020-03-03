@@ -11,20 +11,31 @@
 #' Default is 0 (all features included).
 #' @param paired Boolean if the data are paired. Default is FALSE.
 #' @param cont Should the outcome be treated as a continuous value. Default is FALSE treated as categorical.
-#' @param rank Should the table returned be oredered by Pvalue. Boolean, default is T
+#' @param rank Should the table returned be ordered by Pvalue. Boolean, default is T
 #' @return fits : a table of odds ratio and pvalues.
 #' @return forest.plot : A forest plot of the top 10 hits.
 #'
 #' @export
 #'
 #' @examples library(gnomeR)
-#' patients <- unique(clin$DMPID)[1:500]
-#' mut.only <- create.bin.matrix(patients = patients,maf = mut)
-#' gen.dat <- mut.only$mut
-#' outcome = as.factor(as.character(clin$Sex[match(patients,clin$DMPID)]))
-#' test <- gen.tab(gen.dat,outcome)
-#' head(test$fits)
-#' test$forest.plot
+#' patients <- as.character(unique(mut$Tumor_Sample_Barcode))[1:1000]
+#' ## binary outcome ##
+#' outcome <- as.character(clin.sample$Sample.Type[match(patients,clin.sample$Sample.Identifier)])
+#' gen.dat <- binmat(patients = patients,maf = mut)
+#' gen.tab(gen.dat = gen.dat,
+#'         outcome = outcome,
+#'         filter = 0.05,paired = F,cont = F,rank = T)
+#'
+#' ## Continuous outcome ##
+#' set.seed(1)
+#' outcome <-  rnorm(n = nrow(gen.dat))
+#' tab.out <- gen.tab(gen.dat = gen.dat,
+#'                    outcome = outcome,
+#'                    filter = 0.05,paired = F,cont = T,rank = T)
+#' tab.out$fits
+#' tab.out$vPlot
+#' @import
+#' ggrepel
 
 gen.tab <- function(gen.dat,outcome,filter=0,paired = F,cont=F,rank = T){
 
@@ -57,7 +68,7 @@ gen.tab <- function(gen.dat,outcome,filter=0,paired = F,cont=F,rank = T){
       if(paired == F) test <- fisher.test(x, outcome)
       if(paired == T){
         # tt = with(as.data.frame(cbind(x,outcome)), table(x,outcome))
-        test <- exact2x2::mcnemar.exact(x = x[1:(length(x)/2)],y = x[(length(x)/2+1):length(x)])
+        test <- mcnemar.exact(x = x[1:(length(x)/2)],y = x[(length(x)/2+1):length(x)]) #exact2x2::
       }
       out <- c(sum(x, na.rm = T)/length(x))
       for (i in 1:length(levels(outcome))) {
@@ -101,11 +112,21 @@ gen.tab <- function(gen.dat,outcome,filter=0,paired = F,cont=F,rank = T){
         xlab('Gene')+ ylab("Risk Ratio (95% Confidence Interval)")+
         geom_errorbar(aes(ymin=Lower, ymax=Upper,col=Gene),width=0.5,cex=1)+
         coord_flip()
+
+      vplot <- fits %>%
+        rownames_to_column('Gene') %>%
+        mutate(Pvalue = as.numeric(as.character(Pvalue)),
+               OddsRatio = as.numeric(as.character(OddsRatio)),
+               FDRsign = ifelse(as.numeric(as.character(FDR)) < 0.05,"Significant", "Non signifcant")) %>%
+        ggplot(aes(x = OddsRatio, y = -log10(Pvalue), fill = FDRsign,color = FDRsign)) +
+        geom_point() +
+        geom_label_repel(aes(label = ifelse(FDRsign == "Significant",as.character(Gene),'')), color = "white")
     }
     else{
       forest.plot <- NULL
+      vplot <- NULL
     }
-    return(list("fits"=fits,"forest.plot"=forest.plot))
+    return(list("fits"=fits,"forest.plot"=forest.plot,"vPlot"=vplot))
   }
 
 

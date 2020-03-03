@@ -12,19 +12,25 @@
 #' @export
 #'
 #' @examples library(gnomeR)
-#' mut.only <- create.bin.matrix(maf = mut)
-#' all.platforms <- create.bin.matrix(patients = unique(mut$Tumor_Sample_Barcode)[1:500],maf = mut,fusion = fusion,cna = cna)
-#' plot_oncoPrint(gen.dat = all.platforms$mut[,c(grep("TP53",colnames(all.platforms$mut)),
-#' grep("EGFR",colnames(all.platforms$mut)),
-#' grep("KRAS",colnames(all.platforms$mut)),
-#' grep("STK11",colnames(all.platforms$mut)),
-#' grep("KEAP1",colnames(all.platforms$mut)),
-#' grep("ALK",colnames(all.platforms$mut)),
-#' grep("CDKN2A",colnames(all.platforms$mut)))])
+#' patients <- as.character(unique(mut$Tumor_Sample_Barcode))[1:1000]
+#' bin.mut <- binmat(patients = patients,maf = mut,fusion = fusion, cna = cna,mut.type = "SOMATIC",SNP.only = F,include.silent = F, spe.plat = F)
+#' gen.dat <- bin.mut[1:1000,names(sort(apply(bin.mut,2, sum),decreasing = T))[1:15]]
+#' plot_oncoPrint(gen.dat)
+#'
+#' ## adding clinical ##
+#' clin.patients.dat <- clin.patients[match(abbreviate(rownames(gen.dat),strict = T, minlength = 9),clin.patients$X.Patient.Identifier),] %>%
+#' rename(DMPID = X.Patient.Identifier, Smoker = Smoking.History) %>%
+#'   select(DMPID, Sex,Smoker) %>%
+#'   filter(!is.na(DMPID)) %>%
+#'   distinct(DMPID,.keep_all = TRUE)
+#' gen.dat <- gen.dat[match(clin.patients.dat$DMPID,abbreviate(rownames(gen.dat),strict = T, minlength = 9)),]
+#' clin.patients.dat <- clin.patients.dat %>%
+#'   tibble::column_to_rownames('DMPID')
+#' rownames(gen.dat) <- rownames(clin.patients.dat)
+#' plot_oncoPrint(gen.dat = gen.dat,clin.dat = clin.patients.dat)
 #' @import
 #' ComplexHeatmap
 #' tibble
-
 
 plot_oncoPrint <- function(gen.dat,clin.dat=NULL,ordered=NULL){
 
@@ -64,11 +70,19 @@ plot_oncoPrint <- function(gen.dat,clin.dat=NULL,ordered=NULL){
       sum.factors <- summary(as.factor(gsub("_.*","",clin.factors)))
       added <- c()
       names.toadd <- c()
-      for(k in 1:length(sum.factors)){
-        added <- c(added,palette()[c(3,7,2,6,5,4,1)][1:as.numeric(sum.factors[k])])
 
-        names.toadd <- c(names.toadd,
-                         levels(as.factor(clin.factors[grep(names(sum.factors)[k],clin.factors)])))
+      for(k in 1:length(sum.factors)){
+        if(as.numeric(sum.factors[k]) == 2){
+          added <- c(added, c("black", "#CCCCCC"))
+          names.toadd <- c(names.toadd,
+                           levels(as.factor(clin.factors[grep(names(sum.factors)[k],clin.factors)])))
+        }
+        else{
+          added <- c(added,palette()[c(3,7,2,6,5,4,1)][1:as.numeric(sum.factors[k])])
+
+          names.toadd <- c(names.toadd,
+                           levels(as.factor(clin.factors[grep(names(sum.factors)[k],clin.factors)])))
+        }
       }
       names(added) <- names.toadd
       col = c("MUT" = "#008000", "AMP" = "red", "DEL" = "blue", "FUS" = "orange", "CLIN" = "purple",added)
@@ -108,14 +122,18 @@ plot_oncoPrint <- function(gen.dat,clin.dat=NULL,ordered=NULL){
       p <- oncoPrint(sorted.mat, get_type = function(x) strsplit(x, ";")[[1]],
                      alter_fun = alter_fun, col = col, column_order = 1:ncol(sorted.mat),row_order = 1:nrow(sorted.mat),
                      heatmap_legend_param = list(title = "Alterations", at = c("MUT","DEL","AMP","FUS",names(added)),
-                                                 labels = c("Mutation","Deletion","Amplification","Fusion",names(added))))
+                                                 labels = c("Mutation","Deletion","Amplification","Fusion",names(added))),
+                     top_annotation = HeatmapAnnotation(
+                       column_barplot = anno_oncoprint_barplot(c("MUT","DEL","AMP"))))
     }
     else{
       sorted.mat <- mat
       p <- oncoPrint(sorted.mat, get_type = function(x) strsplit(x, ";")[[1]],
                      alter_fun = alter_fun, col = col, column_order = NULL,row_order = NULL,
                      heatmap_legend_param = list(title = "Alterations", at = c("MUT","DEL","AMP","FUS",names(added)),
-                                                 labels = c("Mutation","Deletion","Amplification","Fusion",names(added))))
+                                                 labels = c("Mutation","Deletion","Amplification","Fusion",names(added))),
+                     top_annotation = HeatmapAnnotation(
+                       column_barplot = anno_oncoprint_barplot(c("MUT","DEL","AMP"))))
     }
   }
 
@@ -146,14 +164,18 @@ plot_oncoPrint <- function(gen.dat,clin.dat=NULL,ordered=NULL){
       p <- oncoPrint(sorted.mat, get_type = function(x) strsplit(x, ";")[[1]],
                      alter_fun = alter_fun, col = col, column_order = 1:ncol(sorted.mat),row_order = 1:nrow(sorted.mat),
                      heatmap_legend_param = list(title = "Alterations", at = c("MUT","DEL","AMP","FUS"),
-                                                 labels = c("Mutation","Deletion","Amplification","Fusion")))
+                                                 labels = c("Mutation","Deletion","Amplification","Fusion")),
+                     top_annotation = HeatmapAnnotation(
+                       column_barplot = anno_oncoprint_barplot(c("MUT","DEL","AMP"))))
     }
     else{
       sorted.mat <- mat
       p <- oncoPrint(sorted.mat, get_type = function(x) strsplit(x, ";")[[1]],
                      alter_fun = alter_fun, col = col, column_order = NULL,row_order = NULL,
                      heatmap_legend_param = list(title = "Alterations", at = c("MUT","DEL","AMP","FUS"),
-                                                 labels = c("Mutation","Deletion","Amplification","Fusion")))
+                                                 labels = c("Mutation","Deletion","Amplification","Fusion")),
+                     top_annotation = HeatmapAnnotation(
+                       column_barplot = anno_oncoprint_barplot(c("MUT","DEL","AMP"))))
     }
   }
 

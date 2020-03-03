@@ -4,7 +4,8 @@
 \alias{gen.tab}
 \title{gen.tab}
 \usage{
-gen.tab(gen.dat, outcome, filter = 0)
+gen.tab(gen.dat, outcome, filter = 0, paired = F, cont = F,
+  rank = T)
 }
 \arguments{
 \item{gen.dat}{A matrix or dataframe, with patients as rows and features as columns.}
@@ -14,6 +15,12 @@ gen.tab(gen.dat, outcome, filter = 0)
 \item{filter}{a numeric value between 0 and 1 (1 not included) that is the lower bound for the proportion of patients
 having a genetic event (only for binary features). All features with an event rate lower than that value will be removed.
 Default is 0 (all features included).}
+
+\item{paired}{Boolean if the data are paired. Default is FALSE.}
+
+\item{cont}{Should the outcome be treated as a continuous value. Default is FALSE treated as categorical.}
+
+\item{rank}{Should the table returned be ordered by Pvalue. Boolean, default is T}
 }
 \value{
 fits : a table of odds ratio and pvalues.
@@ -27,11 +34,20 @@ are dichotomized at their median.
 }
 \examples{
 library(gnomeR)
-patients <- unique(clin$DMPID)[1:500]
-mut.only <- create.bin.matrix(patients = patients,maf = mut)
-gen.dat <- mut.only$mut
-outcome = as.factor(as.character(clin$Sex[match(patients,clin$DMPID)]))
-test <- gen.tab(gen.dat,outcome)
-head(test$fits)
-test$forest.plot
+patients <- as.character(unique(mut$Tumor_Sample_Barcode))[1:1000]
+## binary outcome ##
+outcome <- as.character(clin.sample$Sample.Type[match(patients,clin.sample$Sample.Identifier)])
+gen.dat <- binmat(patients = patients,maf = mut)
+gen.tab(gen.dat = gen.dat,
+        outcome = outcome,
+        filter = 0.05,paired = F,cont = F,rank = T)
+
+## Continuous outcome ##
+set.seed(1)
+outcome <-  rnorm(n = nrow(gen.dat))
+tab.out <- gen.tab(gen.dat = gen.dat,
+                   outcome = outcome,
+                   filter = 0.05,paired = F,cont = T,rank = T)
+tab.out$fits
+tab.out$vPlot
 }

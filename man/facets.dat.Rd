@@ -4,10 +4,12 @@
 \alias{facets.dat}
 \title{facets.dat}
 \usage{
-facets.dat(filenames, path, patients = NULL, min.purity = 0.3,
-  epsilon = 0.005)
+facets.dat(seg = NULL, filenames = NULL, path = NULL,
+  patients = NULL, min.purity = 0.3, epsilon = 0.005, adaptive = F)
 }
 \arguments{
+\item{seg}{a segmentation file containing the segmentation information of multiple patients}
+
 \item{filenames}{the names of the segment files to be loaded and processed (Note must end in ".Rdata").}
 
 \item{path}{the relative path to the files folder from your current directory}
@@ -17,6 +19,8 @@ facets.dat(filenames, path, patients = NULL, min.purity = 0.3,
 \item{min.purity}{the minimum purity of the sample required to be kept in the final dataset. Default is 0.3.}
 
 \item{epsilon}{level of unions when aggregating segments between}
+
+\item{adaptive}{CNregions option to create adaptive segments}
 }
 \value{
 out.cn : a matrix of the union of all segment files with patients as rows and segments as columns
@@ -32,5 +36,9 @@ Creates a copy number alteration matrix from segment files.
 }
 \examples{
 library(gnomeR)
-
+patients <- as.character(unique(mut$Tumor_Sample_Barcode))[1:1000]
+patients.seg <- as.character(unlist(clin.sample \%>\%
+filter(Sample.Identifier \%in\% patients, as.numeric(as.character(Tumor.Purity)) > 30) \%>\%
+ select(Sample.Identifier)))
+facet <- facets.dat(seg = seg, patients=patients.seg[0:100])
 }

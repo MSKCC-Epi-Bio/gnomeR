@@ -10,15 +10,21 @@
 #' @param epsilon level of unions when aggregating segments between
 #' @param ordered order in which patients should be printed. Default NUll leads to hierarchical clustering.
 #' @param outcome for seg file only, if outcome associated with study it will be printed along the x axis for each patient
-#' @param adaptive
-#' @return p a heatmap corresponding to the segnment files inputted
+#' @param adaptive CNregions option to create adaptive segments
+#' @return p a heatmap corresponding to the segment files inputted
 #' @export
 #'
 #' @examples library(gnomeR)
-#'
+#' patients <- as.character(unique(mut$Tumor_Sample_Barcode))[1:1000]
+#' patients.seg <- as.character(unlist(clin.sample %>%
+#' filter(Sample.Identifier %in% patients, as.numeric(as.character(Tumor.Purity)) > 30) %>%
+#'  select(Sample.Identifier)))
+#' facet <- facets.heatmap(seg = seg, patients=patients.seg[0:100])
+#' facet$p
 #' @import
 #' gplots
 #' lattice
+#' tibble
 
 
 facets.heatmap <- function(seg = NULL,filenames = NULL, path =NULL, patients=NULL, min.purity = 0.3,
@@ -86,7 +92,7 @@ facets.heatmap <- function(seg = NULL,filenames = NULL, path =NULL, patients=NUL
 
     p=levelplot(imagedata.ordered, panel = my.panel, scales=scales,
                 col.regions = bluered(256), xlab = "", ylab = "",colorkey=colorkey)
-    return(list("p"=p,"out.cn"=as.tbl(as.data.frame(dat$out.cn)),"ploidy"=ploidy,"purity"=purity,"FGA"=dat$FGA))
+    return(list("p"=p,"out.cn"=as.data.frame(dat$out.cn),"ploidy"=ploidy,"purity"=purity,"FGA"=dat$FGA))
   }
 
 
@@ -100,13 +106,7 @@ facets.heatmap <- function(seg = NULL,filenames = NULL, path =NULL, patients=NUL
     patients <- patients[match(rownames(reducedM),patients)]
     if(!is.null(outcome)) outcome <- outcome[match(rownames(reducedM),names(outcome))]
     if(!is.null(ordered) && !is.null(outcome)) ordered <- order(outcome)
-    # if(!is.null(ordered) && !is.null(outcome)) {
-    #   if(length(-which(is.na(match(patients,rownames(reducedM))))) > 0){
-    #     outcome <- outcome[-which(is.na(match(patients,rownames(reducedM))))]
-    #     ordered <- order(outcome)
-    #     outcome <- outcome[ordered]
-    #   }
-    # }
+
     rownames(reducedM) <- abbreviate(rownames(reducedM),minlength = 10)
     imagedata=reducedM
     imagedata[imagedata>1.5]=1.5
@@ -134,8 +134,7 @@ facets.heatmap <- function(seg = NULL,filenames = NULL, path =NULL, patients=NUL
       chrom.ends[d] <- max(which(chr == r))
       d = d + 1
     }
-    chrom.starts <- c(1, chrom.ends[-length(table(chr))] +
-                        1)
+    chrom.starts <- c(1, chrom.ends[-length(table(chr))] + 1)
     chrom.mids <- (chrom.starts + chrom.ends)/2
 
     bw=colorpanel(2,low="white",high="cadetblue4")
@@ -149,7 +148,12 @@ facets.heatmap <- function(seg = NULL,filenames = NULL, path =NULL, patients=NUL
     if(is.null(ordered)) x.lab <- as.character(x.lab[cl$order])
     if(!is.null(ordered)) x.lab <- as.character(x.lab[ordered])
 
-    scales = list(x = list(at=1:n,labels=x.lab,rot=90),
+    if(grepl("tcn",colnames(reducedM)) && grepl("ploidy",colnames(reducedM)))
+      scales = list(x = list(at=1:n,labels=ploidy[cl$order],rot=90),
+                       y = list(at = len - chrom.mids, labels = names(table(chr))),
+                       z = list(at=n:1,labels=purity[cl$order],rot=90))
+
+    else scales = list(x = list(at=1:n,labels=x.lab,rot=90),
                   y = list(at = len - chrom.mids, labels = names(table(chr))),
                   z = list(at=n:1,labels=rep(1,n),rot=90)) #[cl$order]
 
@@ -164,7 +168,7 @@ facets.heatmap <- function(seg = NULL,filenames = NULL, path =NULL, patients=NUL
     p=levelplot(imagedata.ordered, panel = my.panel, scales=scales,aspect="fill",
                 col.regions = bluered(256), xlab = "", ylab = "",colorkey=colorkey)
 
-    return(list("p"=p,"out.cn"=as.tbl(as.data.frame(dat$out.cn))))
+    return(list("p"=p,"out.cn"=as.data.frame(dat$out.cn)))
   }
 
 }
