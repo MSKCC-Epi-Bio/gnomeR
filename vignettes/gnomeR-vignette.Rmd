@@ -97,6 +97,7 @@ We can create a binary matrix of genetic events from the files described above. 
 - cna.relax : boolean specifying if shallow deletions and low level gains should be counted as deletions and amplifications respectively
 - spe.plat : boolean specifying if specific IMPACT platforms should be considered. When TRUE NAs will fill the cells for genes of patients that were not sequenced on that plaform
 - set.plat : character argument specifying which IMPACT platform the data should be reduced to if spe.plat is set to TRUE. Options are "341" and "410". Default is NULL.
+- rm.empty : boolean specifying if columns with no events founds should be removed. Default is TRUE.
 
 This function will return a binary matrix of genetics events with patients as rows and columns as genes. Along with a list of patients that weren't found to have any events (if any).
 

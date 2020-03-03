@@ -4,7 +4,8 @@
 \alias{scale_color_pancan}
 \title{Color scale creator to add gnomeR colors in ggplot}
 \usage{
-scale_color_pancan(palette = "main", discrete = TRUE, reverse = FALSE, ...)
+scale_color_pancan(palette = "main", discrete = TRUE,
+  reverse = FALSE, ...)
 }
 \arguments{
 \item{palette}{Character name of palette in msk_palettes, supplied in quotes.

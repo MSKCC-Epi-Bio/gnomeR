@@ -42,4 +42,5 @@ Creates a set of plot summarising a maf file.
 \examples{
 library(gnomeR)
 all.plots <- maf.summary(maf=mut)
+all.plots <- maf.summary(maf=mut,spe.plat = T)
 }

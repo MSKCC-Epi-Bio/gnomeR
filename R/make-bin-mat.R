@@ -27,7 +27,10 @@
 #' @export
 #' @examples library(gnomeR)
 #' mut.only <- binmat(maf = mut)
-#' all.platforms <- binmat(patients = unique(mut$Tumor_Sample_Barcode)[1:100],maf = mut,fusion = fusion,cna = cna)
+#' patients <- as.character(unique(mut$Tumor_Sample_Barcode))[1:1000]
+#' bin.mut <- binmat(patients = patients,maf = mut,mut.type = "SOMATIC",SNP.only = F,include.silent = F, spe.plat = F)
+#' bin.mut <- binmat(patients = patients,maf = mut,mut.type = "SOMATIC",SNP.only = F,include.silent = F,
+#' cna.relax = T, spe.plat = F, set.plat = "410", rm.empty = F)
 #' @import dplyr
 #' @import stringr
 
@@ -57,6 +60,9 @@ binmat <- function(patients=NULL, maf = NULL, mut.type = "SOMATIC",SNP.only = F,
 
     # set maf to maf class #
     maf <- structure(maf,class = c("data.frame","maf"))
+    # filter/define patients #
+    if(!is.null(patients)) maf <- maf[maf$Tumor_Sample_Barcode %in% patients,]
+    else patients <- as.character(unique(maf$Tumor_Sample_Barcode))
     # getting mutation binary matrix #
     mut <- createbin(obj = maf, patients = patients, mut.type = mut.type,cna.relax = cna.relax,
                      SNP.only = SNP.only, include.silent = include.silent, spe.plat = spe.plat)
@@ -67,6 +73,8 @@ binmat <- function(patients=NULL, maf = NULL, mut.type = "SOMATIC",SNP.only = F,
   if(!is.null(fusion)){
     fusion <- as.data.frame(fusion)
     fusion <- structure(fusion,class = c("data.frame","fusion"))
+    # filter/define patients #
+    if(is.null(patients)) patients <- as.character(unique(fusion$Tumor_Sample_Barcode))
     fusion <- createbin(obj = fusion, patients = patients, mut.type = mut.type,
                         SNP.only = SNP.only, include.silent = include.silent, spe.plat = spe.plat)
     if(!is.null(mut)){
@@ -79,6 +87,7 @@ binmat <- function(patients=NULL, maf = NULL, mut.type = "SOMATIC",SNP.only = F,
   if(!is.null(cna)){
     cna <- as.data.frame(cna)
     cna <- structure(cna,class = c("data.frame","cna"))
+    if(is.null(patients)) patients <- as.character(colnames(cna))
     cna <- createbin(obj = cna, patients = patients, mut.type = mut.type,cna.relax = cna.relax,
                      SNP.only = SNP.only, include.silent = include.silent, spe.plat = spe.plat)
     if(!is.null(mut)){
@@ -196,11 +205,6 @@ createbin.maf <- function(obj, patients, mut.type, SNP.only, include.silent, cna
 
     warning("KMT2C has been recoded to MLL3")
   }
-
-
-  # filter/define patients #
-  if(!is.null(patients)) maf <- maf[maf$Tumor_Sample_Barcode %in% patients,]
-  else patients <- as.character(unique(maf$Tumor_Sample_Barcode))
 
   # # clean gen dat #
   if(SNP.only) SNP.filt = "SNP"

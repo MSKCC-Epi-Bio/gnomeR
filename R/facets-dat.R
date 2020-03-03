@@ -8,7 +8,7 @@
 #' @param patients the names of the patients of the respective filenames. Default simply 1 to number of files.
 #' @param min.purity the minimum purity of the sample required to be kept in the final dataset. Default is 0.3.
 #' @param epsilon level of unions when aggregating segments between
-#' @param adaptive **NEED DESCRIPTION**
+#' @param adaptive CNregions option to create adaptive segments
 #' @return out.cn : a matrix of the union of all segment files with patients as rows and segments as columns
 #' @return ploidy : a vector of the ploidy values for the patients in out.cn
 #' @return purity : a vector of the purity values for the patients in out.cn
@@ -16,11 +16,16 @@
 #' @export
 #'
 #' @examples library(gnomeR)
-#'
+#' patients <- as.character(unique(mut$Tumor_Sample_Barcode))[1:1000]
+#' patients.seg <- as.character(unlist(clin.sample %>%
+#' filter(Sample.Identifier %in% patients, as.numeric(as.character(Tumor.Purity)) > 30) %>%
+#'  select(Sample.Identifier)))
+#' facet <- facets.dat(seg = seg, patients=patients.seg[0:100])
 #' @import
 #' iClusterPlus
 #' dplyr
 #' cluster
+#' tibble
 
 
 facets.dat <- function(seg = NULL,filenames = NULL, path=NULL,

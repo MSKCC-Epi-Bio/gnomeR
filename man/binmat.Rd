@@ -4,17 +4,9 @@
 \alias{binmat}
 \title{binmat}
 \usage{
-binmat(
-  patients = NULL,
-  maf = NULL,
-  mut.type = "SOMATIC",
-  SNP.only = F,
-  include.silent = F,
-  fusion = NULL,
-  cna = NULL,
-  cna.relax = F,
-  spe.plat = F
-)
+binmat(patients = NULL, maf = NULL, mut.type = "SOMATIC",
+  SNP.only = F, include.silent = F, fusion = NULL, cna = NULL,
+  cna.relax = F, spe.plat = F, set.plat = NULL, rm.empty = T)
 }
 \arguments{
 \item{patients}{a character vector that let's the user specify the patients to be used to create the matrix.
@@ -42,6 +34,11 @@ CNA data.}
 
 \item{spe.plat}{boolean specifying if specific IMPACT platforms should be considered. When TRUE NAs will fill the cells for genes
 of patients that were not sequenced on that plaform. Default is TRUE.}
+
+\item{set.plat}{character argument specifying which IMPACT platform the data should be reduced to if spe.plat is set to TRUE.
+Options are "341", "410" and "468". Default is NULL.}
+
+\item{rm.empty}{boolean specifying if columns with no events founds should be removed. Default is TRUE.}
 }
 \value{
 mut : a binary matrix of mutation data
@@ -53,5 +50,8 @@ a predefined list of patients (rows are patients and columns are genes)
 \examples{
 library(gnomeR)
 mut.only <- binmat(maf = mut)
-all.platforms <- binmat(patients = unique(mut$Tumor_Sample_Barcode)[1:100],maf = mut,fusion = fusion,cna = cna)
+patients <- as.character(unique(mut$Tumor_Sample_Barcode))[1:1000]
+bin.mut <- binmat(patients = patients,maf = mut,mut.type = "SOMATIC",SNP.only = F,include.silent = F, spe.plat = F)
+bin.mut <- binmat(patients = patients,maf = mut,mut.type = "SOMATIC",SNP.only = F,include.silent = F,
+cna.relax = T, spe.plat = F, set.plat = "410", rm.empty = F)
 }

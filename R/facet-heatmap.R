@@ -10,15 +10,21 @@
 #' @param epsilon level of unions when aggregating segments between
 #' @param ordered order in which patients should be printed. Default NUll leads to hierarchical clustering.
 #' @param outcome for seg file only, if outcome associated with study it will be printed along the x axis for each patient
-#' @param adaptive **NEED DESCRIPTION**
+#' @param adaptive CNregions option to create adaptive segments
 #' @return p a heatmap corresponding to the segment files inputted
 #' @export
 #'
 #' @examples library(gnomeR)
-#'
+#' patients <- as.character(unique(mut$Tumor_Sample_Barcode))[1:1000]
+#' patients.seg <- as.character(unlist(clin.sample %>%
+#' filter(Sample.Identifier %in% patients, as.numeric(as.character(Tumor.Purity)) > 30) %>%
+#'  select(Sample.Identifier)))
+#' facet <- facets.heatmap(seg = seg, patients=patients.seg[0:100])
+#' facet$p
 #' @import
 #' gplots
 #' lattice
+#' tibble
 
 
 facets.heatmap <- function(seg = NULL,filenames = NULL, path =NULL, patients=NULL, min.purity = 0.3,
@@ -86,7 +92,7 @@ facets.heatmap <- function(seg = NULL,filenames = NULL, path =NULL, patients=NUL
 
     p=levelplot(imagedata.ordered, panel = my.panel, scales=scales,
                 col.regions = bluered(256), xlab = "", ylab = "",colorkey=colorkey)
-    return(list("p"=p,"out.cn"=as.tbl(as.data.frame(dat$out.cn)),"ploidy"=ploidy,"purity"=purity,"FGA"=dat$FGA))
+    return(list("p"=p,"out.cn"=as.data.frame(dat$out.cn),"ploidy"=ploidy,"purity"=purity,"FGA"=dat$FGA))
   }
 
 
@@ -162,7 +168,7 @@ facets.heatmap <- function(seg = NULL,filenames = NULL, path =NULL, patients=NUL
     p=levelplot(imagedata.ordered, panel = my.panel, scales=scales,aspect="fill",
                 col.regions = bluered(256), xlab = "", ylab = "",colorkey=colorkey)
 
-    return(list("p"=p,"out.cn"=dat$out.cn))
+    return(list("p"=p,"out.cn"=as.data.frame(dat$out.cn)))
   }
 
 }

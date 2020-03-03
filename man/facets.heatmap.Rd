@@ -4,17 +4,9 @@
 \alias{facets.heatmap}
 \title{facets.heatmap}
 \usage{
-facets.heatmap(
-  seg = NULL,
-  filenames = NULL,
-  path = NULL,
-  patients = NULL,
-  min.purity = 0.3,
-  epsilon = 0.005,
-  ordered = NULL,
-  outcome = NULL,
-  adaptive = F
-)
+facets.heatmap(seg = NULL, filenames = NULL, path = NULL,
+  patients = NULL, min.purity = 0.3, epsilon = 0.005,
+  ordered = NULL, outcome = NULL, adaptive = F)
 }
 \arguments{
 \item{seg}{a segmentation file containing the segmentation information of multiple patients}
@@ -33,7 +25,7 @@ facets.heatmap(
 
 \item{outcome}{for seg file only, if outcome associated with study it will be printed along the x axis for each patient}
 
-\item{adaptive}{**NEED DESCRIPTION**}
+\item{adaptive}{CNregions option to create adaptive segments}
 }
 \value{
 p a heatmap corresponding to the segment files inputted
@@ -43,5 +35,10 @@ Creates a heatmap of copy number profiles from segment files.
 }
 \examples{
 library(gnomeR)
-
+patients <- as.character(unique(mut$Tumor_Sample_Barcode))[1:1000]
+patients.seg <- as.character(unlist(clin.sample \%>\%
+filter(Sample.Identifier \%in\% patients, as.numeric(as.character(Tumor.Purity)) > 30) \%>\%
+ select(Sample.Identifier)))
+facet <- facets.heatmap(seg = seg, patients=patients.seg[0:100])
+facet$p
 }

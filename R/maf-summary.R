@@ -21,6 +21,7 @@
 #'
 #' @examples library(gnomeR)
 #' all.plots <- maf.summary(maf=mut)
+#' all.plots <- maf.summary(maf=mut,spe.plat = T)
 #' @import
 #' dplyr
 #' stringr
@@ -40,10 +41,12 @@ maf.summary <- function(maf,mut.type = "SOMATIC", spe.plat = F){
   if(length(match("Variant_Classification",colnames(maf))) == 0)
     stop("The MAF file inputted is missing a variant classification column. (Variant_Classification)")
   if(length(match("Mutation_Status",colnames(maf))) == 0)
-    stop("The MAF file inputted is missing a mutation status column. (Mutation_Status)")
+    warning("The MAF file inputted is missing a mutation status column (Mutation_Status). It will be assumed that
+            all variants are of the same type (SOMATIC/GERMLINE).")
 
   # recode gene names that have been changed between panel versions to make sure they are consistent and counted as the same gene
   if(!is.character(maf$Hugo_Symbol)) maf$Hugo_Symbol <- as.character(maf$Hugo_Symbol)
+  if(!is.character(maf$Tumor_Sample_Barcode)) maf$Tumor_Sample_Barcode <- as.character(maf$Tumor_Sample_Barcode)
   if (sum(grepl("KMT2D", maf$Hugo_Symbol)) > 1) {
     maf <- maf %>%
       mutate(Hugo_Symbol = case_when(

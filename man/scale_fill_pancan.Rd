@@ -4,7 +4,8 @@
 \alias{scale_fill_pancan}
 \title{Fill scale creator to add gnomeR colors in ggplot}
 \usage{
-scale_fill_pancan(palette = "sunset", discrete = TRUE, reverse = FALSE, ...)
+scale_fill_pancan(palette = "sunset", discrete = TRUE,
+  reverse = FALSE, ...)
 }
 \arguments{
 \item{palette}{Character name of palette in msk_palettes, supplied in quotes.
