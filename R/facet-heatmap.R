@@ -77,7 +77,7 @@ facets.heatmap <- function(seg = NULL,filenames = NULL, path =NULL, patients=NUL
 
     n <- length(ploidy)
     #scales = list(x = list(at=1:n,labels=ploidy[cl$order],rot=90), y = list(at = len - chrom.mids, labels = names(table(chr))), z = list(at=n:1,labels=purity[cl$order],rot=90))
-    scales = list(x = list(at=1:n,labels=ploidy[cl$order],rot=90),
+    scales = list(x = list(at=1:n,labels=rep(" ",n),rot=90), #ploidy[cl$order]
                   y = list(at = len - chrom.mids, labels = names(table(chr))),
                   z = list(at=n:1,labels=purity[cl$order],rot=90))
 
