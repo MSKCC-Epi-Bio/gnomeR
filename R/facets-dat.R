@@ -51,15 +51,15 @@ facets.dat <- function(seg = NULL,filenames = NULL, path=NULL,
     if(min.purity < 0 || min.purity > 1) stop("Please select a purity between 0 and 1, included.")
 
     ### segment files ###
+    ## set up ##
+    all.dat <- data.frame()
+    FGAs <- c()
+    dipLogR <- c()
+    ploidy <- c()
+    purity <- c()
+    missing <- c()
+    s <- 0
     for(i in 1:length(filenames)){
-      ## set up ##
-      all.dat <- data.frame()
-      FGAs <- c()
-      dipLogR <- c()
-      ploidy <- c()
-      purity <- c()
-      missing <- c()
-      s <- 0
       ##
       fit <- NULL
       try(load(paste0(path,"/",filenames[i])),silent=T)
