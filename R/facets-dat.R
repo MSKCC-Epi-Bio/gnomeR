@@ -64,7 +64,7 @@ facets.dat <- function(seg = NULL,filenames = NULL, path=NULL,
       fit <- NULL
       try(load(paste0(path,"/",filenames[i])),silent=T)
 
-      if(!is.null(fit) && !is.na(fit$purity) && fit$purity > min.purity){
+      if(!is.null(fit) && !is.na(fit$purity) && fit$purity >= min.purity){
         ## keep track ##
         s = s + 1
         dipLogR[s] <- fit$dipLogR
@@ -118,7 +118,7 @@ facets.dat <- function(seg = NULL,filenames = NULL, path=NULL,
     if(length(grep("purity",colnames(seg.filt))) > 0){
       seg.filt <- seg.filt %>%
         filter(!is.na(purity),
-          purity > min.purity)
+          purity >= min.purity)
     }
     all.dat <- data.frame()
     ### segment files ###
