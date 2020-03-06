@@ -48,7 +48,7 @@ facets.dat <- function(seg = NULL,filenames = NULL, path=NULL,
     if(!is.null(patients))
       if(length(patients) != length(filenames)) stop("Length of patients differs from length of filenames")
     if(is.null(patients)) patients <- as.character(1:length(filenames))
-    if(min.purity < 0 || min.purity > 1) stop("Please select a purity between 0 and 1, included.")
+    if(min.purity <= 0 || min.purity >= 1) stop("Please select a purity between 0 and 1, included.")
 
     ### segment files ###
     ## set up ##
