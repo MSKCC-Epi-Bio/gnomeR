@@ -125,32 +125,47 @@ uni.cox <- function(X,surv.dat,surv.formula,filter = 0,genes = NULL,is.gen = T){
   top.genes <- top.genes[!is.na(top.genes)]
   if(any(apply(X %>% select(top.genes),2,
                function(x){length(unique(x))/length(x)}) > 0.1)){
-    rm <- which(apply(X %>% select(top.genes),2,
-                      function(x){length(unique(x))/length(x)}) > 0.1)
-warning(cat("Some covariate were seemingly continuous and therefore the Kaplan-Meier
+    rm <- as.numeric(which(apply(X %>% select(top.genes),2,
+                                 function(x){length(unique(x))/length(x)}) > 0.1))
+    warning(paste0("Some covariate were seemingly continuous and therefore the Kaplan-Meier
             estimates will not be calculated for the following:",
-            paste0(colnames(X %>% select(top.genes))[rm],collapse = ",")))
-    X <- X[,-rm]
+                   paste0(colnames(X %>% select(top.genes))[rm],collapse = ",")))
+    X <- (X %>% select(top.genes))[,-rm]
+    top.genes <- top.genes[-rm]
   }
 
   KM.plots <- lapply(top.genes,function(x){
-    y <- factor(ifelse(X[,x] == 1,"Mutant","WildType"),levels = c("WildType","Mutant"))
+    print(x)
+    if(is.gen) y <- factor(ifelse(X[,x] == 1,"Mutant","WildType"),levels = c("WildType","Mutant"))
+    y <- factor(X[,x], levels = as.character(unique(X[,x])))
     temp <- as.data.frame(cbind(surv.dat,y))
     # colnames(temp)[ncol(temp)] <- x
     if(LT == F) fit <- survfit(Surv(time,status)~y,data=temp)
     if(LT == T) fit <- survfit(Surv(time1,time2,status)~y,data=temp)
 
-    ggsurvplot(
+    if(is.gen) ggsurvplot(
       fit,
       data = temp,
       size = 1,
       palette =
         c("#E7B800", "#2E9FDF"),
       conf.int = TRUE,
-      pval = TRUE,
+      pval = ifelse(LT,F,T),
       risk.table = TRUE,
       legend.labs =
         c("WildType", "Mutant"),
+      risk.table.col = "strata",
+      risk.table.height = 0.25,
+      ggtheme = theme_bw()
+    ) + labs(title = x)
+
+    else ggsurvplot(
+      fit,
+      data = temp,
+      size = 1,
+      conf.int = TRUE,
+      pval = ifelse(LT,F,T),
+      risk.table = TRUE,
       risk.table.col = "strata",
       risk.table.height = 0.25,
       ggtheme = theme_bw()
