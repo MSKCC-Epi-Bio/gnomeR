@@ -129,7 +129,7 @@ uni.cox <- function(X,surv.dat,surv.formula,filter = 0,genes = NULL,is.gen = T){
                       function(x){length(unique(x))/length(x)}) > 0.1)
 warning(cat("Some covariate were seemingly continuous and therefore the Kaplan-Meier
             estimates will not be calculated for the following:",
-            paste0(colnames(X)[rm],collapse = ",")))
+            paste0(colnames(X %>% select(top.genes))[rm],collapse = ",")))
     X <- X[,-rm]
   }
 
