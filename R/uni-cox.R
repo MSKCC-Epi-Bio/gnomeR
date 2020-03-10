@@ -135,7 +135,7 @@ uni.cox <- function(X,surv.dat,surv.formula,filter = 0,genes = NULL,is.gen = T){
   }
 
   KM.plots <- lapply(top.genes,function(x){
-    print(x)
+    # print(x)
     if(is.gen) y <- factor(ifelse(X[,x] == 1,"Mutant","WildType"),levels = c("WildType","Mutant"))
     y <- factor(X[,x], levels = as.character(unique(X[,x])))
     temp <- as.data.frame(cbind(surv.dat,y))
