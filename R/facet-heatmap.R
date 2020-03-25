@@ -49,7 +49,7 @@ facets.heatmap <- function(seg = NULL,filenames = NULL, path =NULL, patients=NUL
     ploidy <- dat$ploidy
     purity <- dat$purity
     rownames(reducedM) <- abbreviate(rownames(reducedM),minlength = 10)
-    patients <- patients[match(rownames(reducedM),patients)]
+    # patients <- patients[match(rownames(reducedM),patients)]
     if(!is.null(outcome)) outcome <- outcome[match(rownames(reducedM),names(outcome))]
     if(!is.null(ordered) && !is.null(outcome)) ordered <- order(outcome)
 
