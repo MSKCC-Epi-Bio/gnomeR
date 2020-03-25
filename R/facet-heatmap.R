@@ -42,19 +42,32 @@ facets.heatmap <- function(seg = NULL,filenames = NULL, path =NULL, patients=NUL
 
   if(!is.null(filenames)){
     dat <- facets.dat(seg = NULL,filenames, path, patients, min.purity, epsilon,adaptive)
+    if(!is.null(outcome)) names(outcome) <- patients
+    if(!is.null(ordered)) names(ordered) <- patients
+    dat <- facets.dat(seg,filenames, path, patients, min.purity, epsilon,adaptive)
     reducedM <- dat$out.cn
     ploidy <- dat$ploidy
     purity <- dat$purity
+    rownames(reducedM) <- abbreviate(rownames(reducedM),minlength = 10)
+    patients <- patients[match(rownames(reducedM),patients)]
+    if(!is.null(outcome)) outcome <- outcome[match(rownames(reducedM),names(outcome))]
+    if(!is.null(ordered) && !is.null(outcome)) ordered <- order(outcome)
+
     rownames(reducedM) <- abbreviate(rownames(reducedM),minlength = 10)
     imagedata=reducedM
     imagedata[imagedata>1.5]=1.5
     imagedata[imagedata< -1.5]= -1.5
 
-    cl=hclust(dist(imagedata), method="ward")
+    if(is.null(ordered)){
+      cl=hclust(dist(imagedata), method="ward")
 
-    imagedata.ordered=imagedata[cl$order,]
-    imagedata.ordered=as.matrix(rev(as.data.frame(imagedata.ordered)))
-
+      imagedata.ordered=imagedata[cl$order,]
+      imagedata.ordered=as.matrix(rev(as.data.frame(imagedata.ordered)))
+    }
+    if(!is.null(ordered)){
+      imagedata.ordered=imagedata[ordered,]
+      imagedata.ordered=as.matrix(rev(as.data.frame(imagedata.ordered)))
+    }
     chr=strsplit(colnames(imagedata),"\\.")
     chr=unlist(lapply(1:length(chr),function(x)chr[[x]][1]))
     chr=gsub("chr","",chr)
@@ -67,24 +80,32 @@ facets.heatmap <- function(seg = NULL,filenames = NULL, path =NULL, patients=NUL
       chrom.ends[d] <- max(which(chr == r))
       d = d + 1
     }
-    chrom.starts <- c(1, chrom.ends[-length(table(chr))] +
-                        1)
+    chrom.starts <- c(1, chrom.ends[-length(table(chr))] + 1)
     chrom.mids <- (chrom.starts + chrom.ends)/2
 
     bw=colorpanel(2,low="white",high="cadetblue4")
 
     colorkey = list(space = "right", height = 0.3, tick.number = 5)
 
-    n <- length(ploidy)
-    #scales = list(x = list(at=1:n,labels=ploidy[cl$order],rot=90), y = list(at = len - chrom.mids, labels = names(table(chr))), z = list(at=n:1,labels=purity[cl$order],rot=90))
-    scales = list(x = list(at=1:n,labels=rep(" ",n),rot=90), #ploidy[cl$order]
-                  y = list(at = len - chrom.mids, labels = names(table(chr))),
-                  z = list(at=n:1,labels=purity[cl$order],rot=90))
+    n <- nrow(reducedM)
+
+    if(!is.null(outcome)) x.lab <- outcome
+    if(is.null(outcome)) x.lab <- rep(" ",n)
+    if(is.null(ordered)) x.lab <- as.character(x.lab[cl$order])
+    if(!is.null(ordered)) x.lab <- as.character(x.lab[ordered])
+
+    if(grepl("tcn",colnames(reducedM)) && grepl("ploidy",colnames(reducedM)))
+      scales = list(x = list(at=1:n,labels=ploidy[cl$order],rot=90),
+                    y = list(at = len - chrom.mids, labels = names(table(chr))),
+                    z = list(at=n:1,labels=purity[cl$order],rot=90))
+
+    else scales = list(x = list(at=1:n,labels=x.lab,rot=90),
+                       y = list(at = len - chrom.mids, labels = names(table(chr))),
+                       z = list(at=n:1,labels=rep(1,n),rot=90)) #[cl$order]
 
 
     my.panel.levelplot.2 <- function(...) {
       panel.levelplot(...)
-      #panel.abline(v = (cluster.start[-1] - 0.5), col = "black", lwd = 1, lty = 1)
       panel.abline(h = len - chrom.starts[-1], col = "gray", lwd = 1)
       panel.scales = list(x = list(at=1:n), y = list(at = len - chrom.mids), z = list())
     }
@@ -92,6 +113,7 @@ facets.heatmap <- function(seg = NULL,filenames = NULL, path =NULL, patients=NUL
 
     p=levelplot(imagedata.ordered, panel = my.panel, scales=scales,aspect="fill",
                 col.regions = bluered(256), xlab = "", ylab = "",colorkey=colorkey)
+
     return(list("p"=p,"out.cn"=as.data.frame(dat$out.cn),"ploidy"=ploidy,"purity"=purity,"FGA"=dat$FGA))
   }
 
