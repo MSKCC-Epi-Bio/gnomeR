@@ -42,18 +42,16 @@ facets.heatmap <- function(seg = NULL,filenames = NULL, path =NULL, patients=NUL
 
   if(!is.null(filenames)){
     dat <- facets.dat(seg = NULL,filenames, path, patients, min.purity, epsilon,adaptive)
-    if(!is.null(outcome)) names(outcome) <- patients
-    if(!is.null(ordered)) names(ordered) <- patients
-    dat <- facets.dat(seg,filenames, path, patients, min.purity, epsilon,adaptive)
     reducedM <- dat$out.cn
     ploidy <- dat$ploidy
     purity <- dat$purity
-    rownames(reducedM) <- abbreviate(rownames(reducedM),minlength = 10)
-    # patients <- patients[match(rownames(reducedM),patients)]
+    rownames(reducedM) <- as.character(abbreviate(rownames(reducedM),minlength = 13))
+    patients <- rownames(reducedM)
+    if(!is.null(outcome)) names(outcome) <- patients
+    if(!is.null(ordered)) names(ordered) <- patients
     if(!is.null(outcome)) outcome <- outcome[match(rownames(reducedM),names(outcome))]
     if(!is.null(ordered) && !is.null(outcome)) ordered <- order(outcome)
 
-    rownames(reducedM) <- abbreviate(rownames(reducedM),minlength = 10)
     imagedata=reducedM
     imagedata[imagedata>1.5]=1.5
     imagedata[imagedata< -1.5]= -1.5
@@ -94,7 +92,7 @@ facets.heatmap <- function(seg = NULL,filenames = NULL, path =NULL, patients=NUL
     if(is.null(ordered)) x.lab <- as.character(x.lab[cl$order])
     if(!is.null(ordered)) x.lab <- as.character(x.lab[ordered])
 
-    if(grepl("tcn",colnames(reducedM)) && grepl("ploidy",colnames(reducedM)))
+    if(is.null(outcome) && is.null(ordered))
       scales = list(x = list(at=1:n,labels=ploidy[cl$order],rot=90),
                     y = list(at = len - chrom.mids, labels = names(table(chr))),
                     z = list(at=n:1,labels=purity[cl$order],rot=90))
