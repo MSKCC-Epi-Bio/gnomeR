@@ -47,7 +47,7 @@ facets.dat <- function(seg = NULL,filenames = NULL, path=NULL,
     if (!file.exists(path)) stop("The path provided cannot be found")
     if(!is.null(patients))
       if(length(patients) != length(filenames)) stop("Length of patients differs from length of filenames")
-    if(is.null(patients)) patients <- abbreviate(filenames,minlength = 13)
+    if(is.null(patients)) patients <- abbreviate(filenames,minlength = 17)
     if(min.purity < 0 || min.purity > 1) stop("Please select a purity between 0 and 1, included.")
 
     ### segment files ###
@@ -96,8 +96,10 @@ facets.dat <- function(seg = NULL,filenames = NULL, path=NULL,
 
     }
 
+    patients <- patients[-match(patients,abbreviate(missing,minlength = 17))]
 
     out.cn <- CNregions.mod(seg = all.dat,epsilon = epsilon,adaptive = adaptive)
+    out.cn <- out.cn[match(patients,out.cn),]
     names(ploidy) <- rownames(out.cn)
     names(purity) <- rownames(out.cn)
 
