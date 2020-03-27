@@ -99,7 +99,7 @@ facets.dat <- function(seg = NULL,filenames = NULL, path=NULL,
     patients <- patients[-match(patients,as.character(abbreviate(missing,minlength = 17)))]
 
     out.cn <- CNregions.mod(seg = all.dat,epsilon = epsilon,adaptive = adaptive)
-    out.cn <- as.character(abbreviate(rownames(out.cn),minlength = 17))
+    rownames(out.cn) <- as.character(abbreviate(rownames(out.cn),minlength = 17))
     out.cn <- out.cn[match(patients,rownames(out.cn)),]
     names(ploidy) <- rownames(out.cn)
     names(purity) <- rownames(out.cn)
