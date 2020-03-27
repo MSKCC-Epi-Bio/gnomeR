@@ -47,10 +47,6 @@ facets.heatmap <- function(seg = NULL,filenames = NULL, path =NULL, patients=NUL
     purity <- dat$purity
     rownames(reducedM) <- as.character(abbreviate(rownames(reducedM),minlength = 17))
     patients <- rownames(reducedM)
-    if(!is.null(outcome)) names(outcome) <- patients
-    if(!is.null(ordered)) names(ordered) <- patients
-    if(!is.null(outcome)) outcome <- outcome[match(rownames(reducedM),names(outcome))]
-    if(!is.null(ordered) && !is.null(outcome)) ordered <- order(outcome)
 
     imagedata=reducedM
     imagedata[imagedata>1.5]=1.5
@@ -58,7 +54,6 @@ facets.heatmap <- function(seg = NULL,filenames = NULL, path =NULL, patients=NUL
 
     if(is.null(ordered)){
       cl=hclust(dist(imagedata), method="ward")
-
       imagedata.ordered=imagedata[cl$order,]
       imagedata.ordered=as.matrix(rev(as.data.frame(imagedata.ordered)))
     }
