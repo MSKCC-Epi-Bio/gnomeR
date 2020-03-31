@@ -4,9 +4,19 @@
 \alias{binmat}
 \title{binmat}
 \usage{
-binmat(patients = NULL, maf = NULL, mut.type = "SOMATIC",
-  SNP.only = F, include.silent = F, fusion = NULL, cna = NULL,
-  cna.relax = F, spe.plat = F, set.plat = NULL, rm.empty = T)
+binmat(
+  patients = NULL,
+  maf = NULL,
+  mut.type = "SOMATIC",
+  SNP.only = F,
+  include.silent = F,
+  fusion = NULL,
+  cna = NULL,
+  cna.relax = F,
+  spe.plat = F,
+  set.plat = NULL,
+  rm.empty = T
+)
 }
 \arguments{
 \item{patients}{a character vector that let's the user specify the patients to be used to create the matrix.

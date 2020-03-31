@@ -17,13 +17,13 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Axel Martin \email{first.last@example.com} (YOUR-ORCID-ID)
+\strong{Maintainer}: Axel Martin \email{first.last@example.com} (\href{https://orcid.org/YOUR-ORCID-ID}{ORCID})
 
 Authors:
 \itemize{
   \item Arshi Arora
-  \item Karissa Whiting (0000-0002-4683-1868)
-  \item Margie Hannum (0000-0002-2953-0449)
+  \item Karissa Whiting (\href{https://orcid.org/0000-0002-4683-1868}{ORCID})
+  \item Margie Hannum (\href{https://orcid.org/0000-0002-2953-0449}{ORCID})
 }
 
 }
