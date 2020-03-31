@@ -10,6 +10,7 @@
 #' having a genetic event (only for binary features). All features with an event rate lower than that value will be removed.
 #' Default is 0 (all features included).
 #' @param genes a character vector of gene names that will be the only ones to be kept. Default is NULL, all genes are used.
+#' @param is.gen boolean specifying is the matrix X inputted is of binary genetic factors. Default is TRUE.
 #' @return tab A table of all the fits performed sorted by adjusted pvalues.
 #' @return p An interactive plot of log(pvalue) by hazard ration.
 #' @return KM List of survival plots of the top 10 most significant genes
@@ -34,7 +35,7 @@
 #' survminer
 
 
-uni.cox <- function(X,surv.dat,surv.formula,filter = 0,genes = NULL){
+uni.cox <- function(X,surv.dat,surv.formula,filter = 0,genes = NULL,is.gen = T){
 
   # filtering #
   if(!(filter >= 0 && filter < 1))
@@ -122,24 +123,47 @@ uni.cox <- function(X,surv.dat,surv.formula,filter = 0,genes = NULL){
   # top KM #
   top.genes <- rownames(uni)[1:10]
   top.genes <- top.genes[!is.na(top.genes)]
+  if(any(apply(X %>% select(top.genes),2,
+               function(x){length(unique(x))/length(x)}) > 0.1)){
+    rm <- as.numeric(which(apply(X %>% select(top.genes),2,
+                                 function(x){length(unique(x))/length(x)}) > 0.1))
+    warning(paste0("Some covariate were seemingly continuous and therefore the Kaplan-Meier
+            estimates will not be calculated for the following:",
+                   paste0(colnames(X %>% select(top.genes))[rm],collapse = ",")))
+    X <- (X %>% select(top.genes))[,-rm]
+    top.genes <- top.genes[-rm]
+  }
+
   KM.plots <- lapply(top.genes,function(x){
-    y <- factor(ifelse(X[,x] == 1,"Mutant","WildType"),levels = c("WildType","Mutant"))
+    if(is.gen) y <- factor(ifelse(X[,x] == 1,"Mutant","WildType"),levels = c("WildType","Mutant"))
+    y <- factor(X[,x], levels = as.character(unique(X[,x])))
     temp <- as.data.frame(cbind(surv.dat,y))
-    # colnames(temp)[ncol(temp)] <- x
     if(LT == F) fit <- survfit(Surv(time,status)~y,data=temp)
     if(LT == T) fit <- survfit(Surv(time1,time2,status)~y,data=temp)
 
-    ggsurvplot(
+    if(is.gen) ggsurvplot(
       fit,
       data = temp,
       size = 1,
       palette =
         c("#E7B800", "#2E9FDF"),
       conf.int = TRUE,
-      pval = TRUE,
+      pval = ifelse(LT,F,T),
       risk.table = TRUE,
       legend.labs =
         c("WildType", "Mutant"),
+      risk.table.col = "strata",
+      risk.table.height = 0.25,
+      ggtheme = theme_bw()
+    ) + labs(title = x)
+
+    else ggsurvplot(
+      fit,
+      data = temp,
+      size = 1,
+      conf.int = TRUE,
+      pval = ifelse(LT,F,T),
+      risk.table = TRUE,
       risk.table.col = "strata",
       risk.table.height = 0.25,
       ggtheme = theme_bw()

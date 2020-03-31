@@ -207,7 +207,7 @@ facets.dat <- function(seg = NULL,filenames = NULL, path=NULL,
     if (!file.exists(path)) stop("The path provided cannot be found")
     if(!is.null(patients))
       if(length(patients) != length(filenames)) stop("Length of patients differs from length of filenames")
-    if(is.null(patients)) patients <- as.character(1:length(filenames))
+    if(is.null(patients)) patients <- as.character(abbreviate(filenames,minlength = 17))
     if(min.purity < 0 || min.purity > 1) stop("Please select a purity between 0 and 1, included.")
 
     ### segment files ###
@@ -224,7 +224,9 @@ facets.dat <- function(seg = NULL,filenames = NULL, path=NULL,
       fit <- NULL
       try(load(paste0(path,"/",filenames[i])),silent=T)
 
-      if(!is.null(fit) && !is.na(fit$purity) && fit$purity > min.purity){
+      if(is.na(fit$purity)) fit$purity = 0
+      if(is.na(fit$ploidy)) fit$ploidy = 0
+      if(!is.null(fit) && !is.na(fit$purity) && fit$purity >= min.purity){
         ## keep track ##
         s = s + 1
         dipLogR[s] <- fit$dipLogR
@@ -254,8 +256,12 @@ facets.dat <- function(seg = NULL,filenames = NULL, path=NULL,
 
     }
 
+    if(length(as.character(abbreviate(missing,minlength = 17))) > 0)
+      patients <- patients[-match(patients,as.character(abbreviate(missing,minlength = 17)))]
 
     out.cn <- CNregions.mod(seg = all.dat,epsilon = epsilon,adaptive = adaptive)
+    # rownames(out.cn) <- as.character(abbreviate(rownames(out.cn),minlength = 17))
+    out.cn <- out.cn[match(patients,rownames(out.cn)),]
     names(ploidy) <- rownames(out.cn)
     names(purity) <- rownames(out.cn)
 
@@ -278,7 +284,7 @@ facets.dat <- function(seg = NULL,filenames = NULL, path=NULL,
     if(length(grep("purity",colnames(seg.filt))) > 0){
       seg.filt <- seg.filt %>%
         filter(!is.na(purity),
-          purity > min.purity)
+          purity >= min.purity)
     }
     all.dat <- data.frame()
     ### segment files ###
