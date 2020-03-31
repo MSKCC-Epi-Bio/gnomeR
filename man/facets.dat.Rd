@@ -4,8 +4,15 @@
 \alias{facets.dat}
 \title{facets.dat}
 \usage{
-facets.dat(seg = NULL, filenames = NULL, path = NULL,
-  patients = NULL, min.purity = 0.3, epsilon = 0.005, adaptive = F)
+facets.dat(
+  seg = NULL,
+  filenames = NULL,
+  path = NULL,
+  patients = NULL,
+  min.purity = 0.3,
+  epsilon = 0.005,
+  adaptive = F
+)
 }
 \arguments{
 \item{seg}{a segmentation file containing the segmentation information of multiple patients}

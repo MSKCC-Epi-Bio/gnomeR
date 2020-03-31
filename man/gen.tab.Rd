@@ -4,8 +4,7 @@
 \alias{gen.tab}
 \title{gen.tab}
 \usage{
-gen.tab(gen.dat, outcome, filter = 0, paired = F, cont = F,
-  rank = T)
+gen.tab(gen.dat, outcome, filter = 0, paired = F, cont = F, rank = T)
 }
 \arguments{
 \item{gen.dat}{A matrix or dataframe, with patients as rows and features as columns.}

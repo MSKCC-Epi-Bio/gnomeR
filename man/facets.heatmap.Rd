@@ -4,9 +4,17 @@
 \alias{facets.heatmap}
 \title{facets.heatmap}
 \usage{
-facets.heatmap(seg = NULL, filenames = NULL, path = NULL,
-  patients = NULL, min.purity = 0.3, epsilon = 0.005,
-  ordered = NULL, outcome = NULL, adaptive = F)
+facets.heatmap(
+  seg = NULL,
+  filenames = NULL,
+  path = NULL,
+  patients = NULL,
+  min.purity = 0.3,
+  epsilon = 0.005,
+  ordered = NULL,
+  outcome = NULL,
+  adaptive = F
+)
 }
 \arguments{
 \item{seg}{a segmentation file containing the segmentation information of multiple patients}
