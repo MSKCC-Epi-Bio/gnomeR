@@ -28,9 +28,9 @@
 #' @examples library(gnomeR)
 #' mut.only <- binmat(maf = mut)
 #' patients <- as.character(unique(mut$Tumor_Sample_Barcode))[1:1000]
-#' bin.mut <- binmat(patients = patients,maf = mut,mut.type = "SOMATIC",SNP.only = F,include.silent = F, spe.plat = F)
-#' bin.mut <- binmat(patients = patients,maf = mut,mut.type = "SOMATIC",SNP.only = F,include.silent = F,
-#' cna.relax = T, spe.plat = F, set.plat = "410", rm.empty = F)
+#' bin.mut <- binmat(patients = patients,maf = mut,mut.type = "SOMATIC",SNP.only = FALSE,include.silent = FALSE, spe.plat = FALSE)
+#' bin.mut <- binmat(patients = patients,maf = mut,mut.type = "SOMATIC",SNP.only = FALSE,include.silent = FALSE,
+#' cna.relax = TRUE, spe.plat = FALSE, set.plat = "410", rm.empty = FALSE)
 #' @import dplyr
 #' @import stringr
 
@@ -39,8 +39,8 @@
 ###### MAIN FUNCTION GROUPING EVERYTHING ######
 ###############################################
 
-binmat <- function(patients=NULL, maf = NULL, mut.type = "SOMATIC",SNP.only = F,include.silent = F,
-                   fusion = NULL,cna = NULL,cna.relax = F, spe.plat = F, set.plat = NULL,rm.empty = T){
+binmat <- function(patients=NULL, maf = NULL, mut.type = "SOMATIC",SNP.only = FALSE,include.silent = FALSE,
+                   fusion = NULL,cna = NULL,cna.relax = FALSE, spe.plat = FALSE, set.plat = NULL,rm.empty = TRUE){
 
   if(is.null(maf) && is.null(fusion) && is.null(cna)) stop("You must provided one of the three following files: MAF, fusion or CNA.")
 

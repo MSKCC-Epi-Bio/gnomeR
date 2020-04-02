@@ -4,7 +4,9 @@
 \name{gnomer_colors}
 \alias{gnomer_colors}
 \title{List of suggested color palettes for when you need a large palette}
-\format{An object of class \code{character} of length 66.}
+\format{
+An object of class \code{character} of length 66.
+}
 \usage{
 gnomer_colors
 }
