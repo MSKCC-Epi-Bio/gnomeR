@@ -17,15 +17,18 @@
 #' @export
 #'
 #' @examples library(gnomeR)
+#' library(dplyr)
+#' library(dtplyr)
 #' patients <- as.character(unique(mut$Tumor_Sample_Barcode))[1:1000]
+#' gen.dat <- binmat(patients = patients,maf = mut)
 #' surv.dat <- clin.patients %>%
-#' filter(X.Patient.Identifier %in% abbreviate(patients,strict = T, minlength = 9)) %>%
+#' filter(X.Patient.Identifier %in% abbreviate(patients,strict = TRUE, minlength = 9)) %>%
 #'   select(X.Patient.Identifier,Overall.Survival..Months., Overall.Survival.Status) %>%
 #'   rename(DMPID = X.Patient.Identifier, time = Overall.Survival..Months.,status = Overall.Survival.Status) %>%
 #'   mutate(time = as.numeric(as.character(time)),
 #'          status = ifelse(status == "LIVING",0,1)) %>%
 #'   filter(!is.na(time))
-#' X <- bin.mut[match(surv.dat$DMPID,abbreviate(rownames(bin.mut),strict = T, minlength = 9)),]
+#' X <- gen.dat[match(surv.dat$DMPID,abbreviate(rownames(gen.dat),strict = TRUE, minlength = 9)),]
 #' uni.cox(X = X, surv.dat = surv.dat,surv.formula = Surv(time,status)~.,filter = 0.05)
 #'
 #' @import
@@ -35,7 +38,7 @@
 #' survminer
 
 
-uni.cox <- function(X,surv.dat,surv.formula,filter = 0,genes = NULL,is.gen = T){
+uni.cox <- function(X,surv.dat,surv.formula,filter = 0,genes = NULL,is.gen = TRUE){
 
   # filtering #
   if(!(filter >= 0 && filter < 1))
@@ -93,7 +96,7 @@ uni.cox <- function(X,surv.dat,surv.formula,filter = 0,genes = NULL,is.gen = T){
 
   ###################################
   ##### univariate volcano plot #####
-  if(LT == F){
+  if(!LT){
     uni <- as.data.frame(t(apply(X,2,function(x){
       fit <- coxph(Surv(surv.dat$time,surv.dat$status)~x)
       out <- c(as.numeric(summary(fit)$coefficients[c(1,5)]),sum(x)/length(x))
@@ -101,7 +104,7 @@ uni.cox <- function(X,surv.dat,surv.formula,filter = 0,genes = NULL,is.gen = T){
     })))
   }
 
-  if(LT == T){
+  if(LT){
     uni <- as.data.frame(t(apply(X,2,function(x){
       fit <- coxph(Surv(surv.dat$time1,surv.dat$time2,surv.dat$status)~x)
       out <- c(as.numeric(summary(fit)$coefficients[c(1,5)]),sum(x)/length(x))
@@ -148,7 +151,7 @@ uni.cox <- function(X,surv.dat,surv.formula,filter = 0,genes = NULL,is.gen = T){
       palette =
         c("#E7B800", "#2E9FDF"),
       conf.int = TRUE,
-      pval = ifelse(LT,F,T),
+      pval = ifelse(LT,FALSE,TRUE),
       risk.table = TRUE,
       legend.labs =
         c("WildType", "Mutant"),
@@ -162,7 +165,7 @@ uni.cox <- function(X,surv.dat,surv.formula,filter = 0,genes = NULL,is.gen = T){
       data = temp,
       size = 1,
       conf.int = TRUE,
-      pval = ifelse(LT,F,T),
+      pval = ifelse(LT,FALSE,TRUE),
       risk.table = TRUE,
       risk.table.col = "strata",
       risk.table.height = 0.25,

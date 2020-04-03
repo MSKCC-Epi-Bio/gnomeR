@@ -15,6 +15,8 @@
 #' @export
 #'
 #' @examples library(gnomeR)
+#' library(dplyr)
+#' library(dtplyr)
 #' patients <- as.character(unique(mut$Tumor_Sample_Barcode))[1:1000]
 #' patients.seg <- as.character(unlist(clin.sample %>%
 #' filter(Sample.Identifier %in% patients, as.numeric(as.character(Tumor.Purity)) > 30) %>%
@@ -29,7 +31,7 @@
 
 facets.heatmap <- function (seg = NULL, filenames = NULL, path = NULL, patients = NULL,
                             min.purity = 0.3, epsilon = 0.005, ordered = NULL, outcome = NULL,
-                            adaptive = F)
+                            adaptive = FALSE)
 {
   if (is.null(seg) && is.null(filenames))
     stop("You must provide either a complete segmentation file\n         or a list of files to be loaded with their corresponding path")
@@ -155,8 +157,8 @@ facets.heatmap <- function (seg = NULL, filenames = NULL, path = NULL, patients 
       x.lab <- as.character(x.lab[cl$order])
     if (!is.null(ordered))
       x.lab <- as.character(x.lab[ordered])
-    if (grepl("tcn", colnames(reducedM)) && grepl("ploidy",
-                                                  colnames(reducedM)))
+    if (any(grepl("tcn", colnames(reducedM))) && any(grepl("ploidy",
+                                                  colnames(reducedM))))
       scales = list(x = list(at = 1:n, labels = ploidy[cl$order],
                              rot = 90), y = list(at = len - chrom.mids, labels = names(table(chr))),
                     z = list(at = n:1, labels = purity[cl$order],

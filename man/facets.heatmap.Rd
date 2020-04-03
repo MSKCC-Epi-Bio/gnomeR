@@ -13,7 +13,7 @@ facets.heatmap(
   epsilon = 0.005,
   ordered = NULL,
   outcome = NULL,
-  adaptive = F
+  adaptive = FALSE
 )
 }
 \arguments{
@@ -43,6 +43,8 @@ Creates a heatmap of copy number profiles from segment files.
 }
 \examples{
 library(gnomeR)
+library(dplyr)
+library(dtplyr)
 patients <- as.character(unique(mut$Tumor_Sample_Barcode))[1:1000]
 patients.seg <- as.character(unlist(clin.sample \%>\%
 filter(Sample.Identifier \%in\% patients, as.numeric(as.character(Tumor.Purity)) > 30) \%>\%

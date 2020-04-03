@@ -12,18 +12,21 @@
 #' @export
 #'
 #' @examples library(gnomeR)
+#' library(dplyr)
+#' library(dtplyr)
 #' patients <- as.character(unique(mut$Tumor_Sample_Barcode))[1:1000]
-#' bin.mut <- binmat(patients = patients,maf = mut,fusion = fusion, cna = cna,mut.type = "SOMATIC",SNP.only = F,include.silent = F, spe.plat = F)
-#' gen.dat <- bin.mut[1:1000,names(sort(apply(bin.mut,2, sum),decreasing = T))[1:15]]
+#' bin.mut <- binmat(patients = patients,maf = mut,fusion = fusion, cna = cna,mut.type = "SOMATIC",
+#' SNP.only = FALSE,include.silent = FALSE, spe.plat = FALSE)
+#' gen.dat <- bin.mut[1:1000,names(sort(apply(bin.mut,2, sum),decreasing = TRUE))[1:15]]
 #' plot_oncoPrint(gen.dat)
 #'
 #' ## adding clinical ##
-#' clin.patients.dat <- clin.patients[match(abbreviate(rownames(gen.dat),strict = T, minlength = 9),clin.patients$X.Patient.Identifier),] %>%
+#' clin.patients.dat <- clin.patients[match(abbreviate(rownames(gen.dat),strict = TRUE, minlength = 9),clin.patients$X.Patient.Identifier),] %>%
 #' rename(DMPID = X.Patient.Identifier, Smoker = Smoking.History) %>%
 #'   select(DMPID, Sex,Smoker) %>%
 #'   filter(!is.na(DMPID)) %>%
 #'   distinct(DMPID,.keep_all = TRUE)
-#' gen.dat <- gen.dat[match(clin.patients.dat$DMPID,abbreviate(rownames(gen.dat),strict = T, minlength = 9)),]
+#' gen.dat <- gen.dat[match(clin.patients.dat$DMPID,abbreviate(rownames(gen.dat),strict = TRUE, minlength = 9)),]
 #' clin.patients.dat <- clin.patients.dat %>%
 #'   tibble::column_to_rownames('DMPID')
 #' rownames(gen.dat) <- rownames(clin.patients.dat)

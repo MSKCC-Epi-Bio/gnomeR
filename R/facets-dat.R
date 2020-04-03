@@ -16,6 +16,8 @@
 #' @export
 #'
 #' @examples library(gnomeR)
+#' library(dplyr)
+#' library(dtplyr)
 #' patients <- as.character(unique(mut$Tumor_Sample_Barcode))[1:1000]
 #' patients.seg <- as.character(unlist(clin.sample %>%
 #' filter(Sample.Identifier %in% patients, as.numeric(as.character(Tumor.Purity)) > 30) %>%
@@ -29,7 +31,7 @@
 
 
 facets.dat <- function (seg = NULL, filenames = NULL, path = NULL, patients = NULL,
-          min.purity = 0.3, epsilon = 0.005, adaptive = F)
+          min.purity = 0.3, epsilon = 0.005, adaptive = FALSE)
 {
   if (is.null(seg) && is.null(filenames))
     stop("You must provide either a complete segmentation file\n         or a list of files to be loaded with their corresponding path")

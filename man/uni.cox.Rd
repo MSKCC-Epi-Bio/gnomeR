@@ -4,7 +4,7 @@
 \alias{uni.cox}
 \title{uni.cox}
 \usage{
-uni.cox(X, surv.dat, surv.formula, filter = 0, genes = NULL, is.gen = T)
+uni.cox(X, surv.dat, surv.formula, filter = 0, genes = NULL, is.gen = TRUE)
 }
 \arguments{
 \item{X}{Matrix/surv.datframe of genomic features, continuous or binary (note cannot handle categorical surv.dat for the moment).}
@@ -34,15 +34,18 @@ Performs univariate cox proportional hazard model on every feature
 }
 \examples{
 library(gnomeR)
+library(dplyr)
+library(dtplyr)
 patients <- as.character(unique(mut$Tumor_Sample_Barcode))[1:1000]
+gen.dat <- binmat(patients = patients,maf = mut)
 surv.dat <- clin.patients \%>\%
-filter(X.Patient.Identifier \%in\% abbreviate(patients,strict = T, minlength = 9)) \%>\%
+filter(X.Patient.Identifier \%in\% abbreviate(patients,strict = TRUE, minlength = 9)) \%>\%
   select(X.Patient.Identifier,Overall.Survival..Months., Overall.Survival.Status) \%>\%
   rename(DMPID = X.Patient.Identifier, time = Overall.Survival..Months.,status = Overall.Survival.Status) \%>\%
   mutate(time = as.numeric(as.character(time)),
          status = ifelse(status == "LIVING",0,1)) \%>\%
   filter(!is.na(time))
-X <- bin.mut[match(surv.dat$DMPID,abbreviate(rownames(bin.mut),strict = T, minlength = 9)),]
+X <- gen.dat[match(surv.dat$DMPID,abbreviate(rownames(gen.dat),strict = TRUE, minlength = 9)),]
 uni.cox(X = X, surv.dat = surv.dat,surv.formula = Surv(time,status)~.,filter = 0.05)
 
 }

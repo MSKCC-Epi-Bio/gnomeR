@@ -8,14 +8,14 @@ binmat(
   patients = NULL,
   maf = NULL,
   mut.type = "SOMATIC",
-  SNP.only = F,
-  include.silent = F,
+  SNP.only = FALSE,
+  include.silent = FALSE,
   fusion = NULL,
   cna = NULL,
-  cna.relax = F,
-  spe.plat = F,
+  cna.relax = FALSE,
+  spe.plat = FALSE,
   set.plat = NULL,
-  rm.empty = T
+  rm.empty = TRUE
 )
 }
 \arguments{
@@ -61,7 +61,7 @@ a predefined list of patients (rows are patients and columns are genes)
 library(gnomeR)
 mut.only <- binmat(maf = mut)
 patients <- as.character(unique(mut$Tumor_Sample_Barcode))[1:1000]
-bin.mut <- binmat(patients = patients,maf = mut,mut.type = "SOMATIC",SNP.only = F,include.silent = F, spe.plat = F)
-bin.mut <- binmat(patients = patients,maf = mut,mut.type = "SOMATIC",SNP.only = F,include.silent = F,
-cna.relax = T, spe.plat = F, set.plat = "410", rm.empty = F)
+bin.mut <- binmat(patients = patients,maf = mut,mut.type = "SOMATIC",SNP.only = FALSE,include.silent = FALSE, spe.plat = FALSE)
+bin.mut <- binmat(patients = patients,maf = mut,mut.type = "SOMATIC",SNP.only = FALSE,include.silent = FALSE,
+cna.relax = TRUE, spe.plat = FALSE, set.plat = "410", rm.empty = FALSE)
 }

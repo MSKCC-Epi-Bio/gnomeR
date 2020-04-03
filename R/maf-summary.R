@@ -21,7 +21,7 @@
 #'
 #' @examples library(gnomeR)
 #' all.plots <- maf.summary(maf=mut)
-#' all.plots <- maf.summary(maf=mut,spe.plat = T)
+#' all.plots <- maf.summary(maf=mut,spe.plat = TRUE)
 #' @import
 #' dplyr
 #' stringr

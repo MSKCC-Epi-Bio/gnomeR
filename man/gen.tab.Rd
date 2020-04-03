@@ -39,14 +39,14 @@ outcome <- as.character(clin.sample$Sample.Type[match(patients,clin.sample$Sampl
 gen.dat <- binmat(patients = patients,maf = mut)
 gen.tab(gen.dat = gen.dat,
         outcome = outcome,
-        filter = 0.05,paired = F,cont = F,rank = T)
+        filter = 0.05,paired = FALSE,cont = FALSE,rank = TRUE)
 
 ## Continuous outcome ##
 set.seed(1)
 outcome <-  rnorm(n = nrow(gen.dat))
 tab.out <- gen.tab(gen.dat = gen.dat,
                    outcome = outcome,
-                   filter = 0.05,paired = F,cont = T,rank = T)
+                   filter = 0.05,paired = FALSE,cont = TRUE,rank = TRUE)
 tab.out$fits
 tab.out$vPlot
 }
