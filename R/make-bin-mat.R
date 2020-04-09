@@ -137,15 +137,15 @@ binmat <- function(patients=NULL, maf = NULL, mut.type = "SOMATIC",SNP.only = FA
       }
     }
 
-    v=strsplit(patients, "-IM")
+    v=strsplit(patients, "-IM|-IH")
     if(!all(lapply(v, length) == 2)){
-      warning("All patients were not sequenced on the IMPACT platform or some were mispecified. '-IM' requiered in sample ID.
+      warning("All patients were not sequenced on the IMPACT platform or some were mispecified. '-IM' or '-IH' requiered in sample ID.
               The spe.plat argument has been overwritten to FALSE.")
       spe.plat = F
     }
     v=unlist(lapply(1:length(v), function(x)v[[x]][2]))
     if(length(unique(v)) == 1){
-      warning("All patients were not sequenced on the IMPACT platform or some were mispecified. '-IM' requiered in sample ID.
+      warning("All patients were not sequenced on the IMPACT platform or some were mispecified. '-IM' or '-IH' requiered in sample ID.
               The spe.plat argument has been overwritten to FALSE.")
       spe.plat = F
     }
