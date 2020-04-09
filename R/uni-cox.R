@@ -41,7 +41,7 @@
 #' dplyr
 #' survival
 #' survminer
-#' plotly
+#' @importFrom plotly plot_ly layout
 #'
 # @importFrom plotly plot_ly
 
