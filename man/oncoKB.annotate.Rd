@@ -7,7 +7,11 @@
 oncoKB.annotate(input, output, lib.path = NULL)
 }
 \arguments{
-\item{maf}{**NEED DESCRIPTION**}
+\item{input}{A MAF file to be annotated.}
+
+\item{output}{Name of the output file}
+
+\item{lib.path}{Path to the}
 }
 \value{
 OncoKb annotate MAF.
@@ -17,5 +21,6 @@ OncoKB annotator for MAF files.
 }
 \examples{
 
-# NEED EXAMPLE, doesn't necessarily have to run
+# Needs to be run on LINUX with python
+# oncoKB.annotate(input = "ExampleMaf", out = "ExampleOut")
 }

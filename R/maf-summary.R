@@ -20,10 +20,15 @@
 #' @export
 #'
 #' @examples library(gnomeR)
-#' all.plots <- maf.summary(maf=mut)
-#' all.plots <- maf.summary(maf=mut,spe.plat = TRUE)
+#' library(dplyr)
+#' library(dtplyr)
+#' patients <- as.character(unique(mut$Tumor_Sample_Barcode))[1:200]
+#' all.plots <- maf.summary(maf=mut %>% filter(Tumor_Sample_Barcode %in% patients) )
+#' all.plots <- maf.summary(maf=mut %>%
+#' filter(Tumor_Sample_Barcode %in% patients),spe.plat = TRUE)
 #' @import
 #' dplyr
+#' dtplyr
 #' stringr
 #' ggplot2
 #' reshape2

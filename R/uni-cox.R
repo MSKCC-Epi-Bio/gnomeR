@@ -19,24 +19,31 @@
 #' @examples library(gnomeR)
 #' library(dplyr)
 #' library(dtplyr)
-#' patients <- as.character(unique(mut$Tumor_Sample_Barcode))[1:1000]
+#' patients <- as.character(unique(mut$Tumor_Sample_Barcode))[1:200]
 #' gen.dat <- binmat(patients = patients,maf = mut)
 #' surv.dat <- clin.patients %>%
-#' filter(X.Patient.Identifier %in% abbreviate(patients,strict = TRUE, minlength = 9)) %>%
-#'   select(X.Patient.Identifier,Overall.Survival..Months., Overall.Survival.Status) %>%
-#'   rename(DMPID = X.Patient.Identifier, time = Overall.Survival..Months.,status = Overall.Survival.Status) %>%
+#' filter(X.Patient.Identifier %in%
+#' abbreviate(patients,strict = TRUE, minlength = 9)) %>%
+#'   select(X.Patient.Identifier,Overall.Survival..Months.,
+#'    Overall.Survival.Status) %>%
+#'   rename(DMPID = X.Patient.Identifier,
+#'    time = Overall.Survival..Months.,
+#'    status = Overall.Survival.Status) %>%
 #'   mutate(time = as.numeric(as.character(time)),
 #'          status = ifelse(status == "LIVING",0,1)) %>%
 #'   filter(!is.na(time))
-#' X <- gen.dat[match(surv.dat$DMPID,abbreviate(rownames(gen.dat),strict = TRUE, minlength = 9)),]
-#' uni.cox(X = X, surv.dat = surv.dat,surv.formula = Surv(time,status)~.,filter = 0.05)
+#' X <- gen.dat[match(surv.dat$DMPID,
+#' abbreviate(rownames(gen.dat),strict = TRUE, minlength = 9)),]
+#' uni.cox(X = X, surv.dat = surv.dat,
+#' surv.formula = Surv(time,status)~.,filter = 0.05)
 #'
 #' @import
 #' dplyr
-#' plotly
 #' survival
 #' survminer
-
+#' plotly
+#'
+# @importFrom plotly plot_ly
 
 uni.cox <- function(X,surv.dat,surv.formula,filter = 0,genes = NULL,is.gen = TRUE){
 
@@ -48,7 +55,7 @@ uni.cox <- function(X,surv.dat,surv.formula,filter = 0,genes = NULL,is.gen = TRU
   else if(!is.null(genes) && sum(colnames(X) %in% genes) > 0){
     genes <- genes[genes %in% colnames(X)]
     X <- as.data.frame(X %>%
-      select(genes))
+                         select(genes))
   }
 
   if(is.null(dim(X)) )

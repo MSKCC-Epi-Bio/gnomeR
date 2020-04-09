@@ -26,11 +26,16 @@
 #' @return mut : a binary matrix of mutation data
 #' @export
 #' @examples library(gnomeR)
-#' mut.only <- binmat(maf = mut)
-#' patients <- as.character(unique(mut$Tumor_Sample_Barcode))[1:1000]
-#' bin.mut <- binmat(patients = patients,maf = mut,mut.type = "SOMATIC",SNP.only = FALSE,include.silent = FALSE, spe.plat = FALSE)
-#' bin.mut <- binmat(patients = patients,maf = mut,mut.type = "SOMATIC",SNP.only = FALSE,include.silent = FALSE,
-#' cna.relax = TRUE, spe.plat = FALSE, set.plat = "410", rm.empty = FALSE)
+#' # mut.only <- binmat(maf = mut)
+#' patients <- as.character(unique(mut$Tumor_Sample_Barcode))[1:200]
+#' bin.mut <- binmat(patients = patients,maf = mut,
+#' mut.type = "SOMATIC",SNP.only = FALSE,
+#' include.silent = FALSE, spe.plat = FALSE)
+#' bin.mut <- binmat(patients = patients,maf = mut,
+#' mut.type = "SOMATIC",SNP.only = FALSE,
+#' include.silent = FALSE,
+#' cna.relax = TRUE, spe.plat = FALSE,
+#'  set.plat = "410", rm.empty = FALSE)
 #' @import dplyr
 #' @import stringr
 

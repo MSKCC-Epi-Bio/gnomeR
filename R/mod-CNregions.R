@@ -1,5 +1,20 @@
-## CNregions function modified to not throw errors in small sample sizes ##
-
+#' CNregions.mod
+#'
+#' Modified CNregions function from the facets package to handle small sample sizes.
+#'
+#' @param seg a segmentation file containing the segmentation information of multiple patients
+#' @param epsilon the maximum Euclidean distance between adjacent probes tolerated for denying a nonredundant region. epsilon=0 is equivalent to taking the union of all unique break points across the n samples.
+#' @param adaptive Vector of length-m lasso penalty terms.
+#' @param rmCNV If TRUE, remove germline CNV.
+#' @param cnv A data frame containing germline CNV data.
+#' @param frac.overlap A parameter needed to be explain.
+#' @param rmSmallseg If TRUE, remove small segment.
+#' @param nProbes The segment length threshold below which the segment will be removed if rmSmallseq = TRUE.
+#' @return reducedM : A matrix ready for plotting.
+#' @export
+#'
+#' @examples library(gnomeR)
+#' # CNregions.mod(seg)
 CNregions.mod <- function (seg, epsilon = 0.005, adaptive = FALSE, rmCNV = FALSE,
                            cnv = NULL, frac.overlap = 0.5, rmSmallseg = TRUE, nProbes = 15)
 {

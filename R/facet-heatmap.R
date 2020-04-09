@@ -19,7 +19,8 @@
 #' library(dtplyr)
 #' patients <- as.character(unique(mut$Tumor_Sample_Barcode))[1:1000]
 #' patients.seg <- as.character(unlist(clin.sample %>%
-#' filter(Sample.Identifier %in% patients, as.numeric(as.character(Tumor.Purity)) > 30) %>%
+#' filter(Sample.Identifier %in% patients,
+#'  as.numeric(as.character(Tumor.Purity)) > 30) %>%
 #'  select(Sample.Identifier)))
 #' facet <- facets.heatmap(seg = seg, patients=patients.seg[0:100])
 #' facet$p
@@ -45,16 +46,26 @@ facets.heatmap <- function (seg = NULL, filenames = NULL, path = NULL, patients 
     purity <- dat$purity
     rownames(reducedM) <- as.character(abbreviate(rownames(reducedM),
                                                   minlength = 17))
-    patients <- rownames(reducedM)
+    if(!is.null(outcome)) {
+      missing <- which(is.na(match(names(outcome),rownames(reducedM))))
+      if(length(missing)>0)
+        outcome <- outcome[-missing]
+
+      reducedM <- reducedM[match(names(outcome),rownames(reducedM)),]
+    }
+
     imagedata = reducedM
     imagedata[imagedata > 1.5] = 1.5
     imagedata[imagedata < -1.5] = -1.5
+
     if (is.null(ordered)) {
       cl = hclust(dist(imagedata), method = "ward")
       imagedata.ordered = imagedata[cl$order, ]
       imagedata.ordered = as.matrix(rev(as.data.frame(imagedata.ordered)))
     }
     if (!is.null(ordered)) {
+      if(length(missing) > 0)
+        ordered <- order(outcome)
       imagedata.ordered = imagedata[ordered, ]
       imagedata.ordered = as.matrix(rev(as.data.frame(imagedata.ordered)))
     }
@@ -158,7 +169,7 @@ facets.heatmap <- function (seg = NULL, filenames = NULL, path = NULL, patients 
     if (!is.null(ordered))
       x.lab <- as.character(x.lab[ordered])
     if (any(grepl("tcn", colnames(reducedM))) && any(grepl("ploidy",
-                                                  colnames(reducedM))))
+                                                           colnames(reducedM))))
       scales = list(x = list(at = 1:n, labels = ploidy[cl$order],
                              rot = 90), y = list(at = len - chrom.mids, labels = names(table(chr))),
                     z = list(at = n:1, labels = purity[cl$order],

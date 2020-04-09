@@ -2,13 +2,16 @@
 #'
 #' OncoKB annotator for MAF files.
 #'
-#' @param maf **NEED DESCRIPTION**
+#' @param input A MAF file to be annotated.
+#' @param output Name of the output file
+#' @param lib.path Path to the
 #' @return OncoKb annotate MAF.
 #' @export
 #'
 #' @examples
 #'
-#' # NEED EXAMPLE, doesn't necessarily have to run
+#' # Needs to be run on LINUX with python
+#' # oncoKB.annotate(input = "ExampleMaf", out = "ExampleOut")
 
 oncoKB.annotate <- function(input,output,lib.path = NULL){
 

@@ -102,7 +102,7 @@ We can create a binary matrix of genetic events from the files described above. 
 This function will return a binary matrix of genetics events with patients as rows and columns as genes. Along with a list of patients that weren't found to have any events (if any).
 
 ```{r}
-patients <- as.character(unique(mut$Tumor_Sample_Barcode))[1:1000]
+patients <- as.character(unique(mut$Tumor_Sample_Barcode))[1:200]
 bin.mut <- binmat(patients = patients,maf = mut,mut.type = "SOMATIC",SNP.only = FALSE,include.silent = FALSE, spe.plat = TRUE)
 as.tbl(bin.mut)
 ```
@@ -195,7 +195,7 @@ OncoPrints are a convenient way to study comutation patterns in our cohort throu
 We show here an example with the most common genes.
 
 ```{r}
-gen.dat <- bin.mut[1:1000,names(sort(apply(bin.mut,2, sum),decreasing = T))[1:15]]
+gen.dat <- bin.mut[,names(sort(apply(bin.mut,2, sum),decreasing = T))[1:15]]
 plot_oncoPrint(gen.dat)
 ```
 

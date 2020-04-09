@@ -2,6 +2,7 @@
 
 S3method(print,palette)
 export("%>%")
+export(CNregions.mod)
 export(binmat)
 export(dat.oncoPrint)
 export(facets.dat)

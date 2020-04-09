@@ -47,7 +47,8 @@ library(dplyr)
 library(dtplyr)
 patients <- as.character(unique(mut$Tumor_Sample_Barcode))[1:1000]
 patients.seg <- as.character(unlist(clin.sample \%>\%
-filter(Sample.Identifier \%in\% patients, as.numeric(as.character(Tumor.Purity)) > 30) \%>\%
+filter(Sample.Identifier \%in\% patients,
+as.numeric(as.character(Tumor.Purity)) > 30) \%>\%
  select(Sample.Identifier)))
 facet <- facets.dat(seg = seg, patients=patients.seg[0:100])
 }

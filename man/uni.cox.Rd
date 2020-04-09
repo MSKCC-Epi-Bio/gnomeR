@@ -36,16 +36,22 @@ Performs univariate cox proportional hazard model on every feature
 library(gnomeR)
 library(dplyr)
 library(dtplyr)
-patients <- as.character(unique(mut$Tumor_Sample_Barcode))[1:1000]
+patients <- as.character(unique(mut$Tumor_Sample_Barcode))[1:200]
 gen.dat <- binmat(patients = patients,maf = mut)
 surv.dat <- clin.patients \%>\%
-filter(X.Patient.Identifier \%in\% abbreviate(patients,strict = TRUE, minlength = 9)) \%>\%
-  select(X.Patient.Identifier,Overall.Survival..Months., Overall.Survival.Status) \%>\%
-  rename(DMPID = X.Patient.Identifier, time = Overall.Survival..Months.,status = Overall.Survival.Status) \%>\%
+filter(X.Patient.Identifier \%in\%
+abbreviate(patients,strict = TRUE, minlength = 9)) \%>\%
+  select(X.Patient.Identifier,Overall.Survival..Months.,
+   Overall.Survival.Status) \%>\%
+  rename(DMPID = X.Patient.Identifier,
+   time = Overall.Survival..Months.,
+   status = Overall.Survival.Status) \%>\%
   mutate(time = as.numeric(as.character(time)),
          status = ifelse(status == "LIVING",0,1)) \%>\%
   filter(!is.na(time))
-X <- gen.dat[match(surv.dat$DMPID,abbreviate(rownames(gen.dat),strict = TRUE, minlength = 9)),]
-uni.cox(X = X, surv.dat = surv.dat,surv.formula = Surv(time,status)~.,filter = 0.05)
+X <- gen.dat[match(surv.dat$DMPID,
+abbreviate(rownames(gen.dat),strict = TRUE, minlength = 9)),]
+uni.cox(X = X, surv.dat = surv.dat,
+surv.formula = Surv(time,status)~.,filter = 0.05)
 
 }
