@@ -2,7 +2,8 @@
 % Please edit documentation in R/maf-oncokb-annotator.R
 \name{oncoKB.annotate}
 \alias{oncoKB.annotate}
-\title{oncoKB.annotate}
+\title{oncoKB.annotate
+OncoKB annotator for MAF files.}
 \usage{
 oncoKB.annotate(input, output, lib.path = NULL)
 }
@@ -17,10 +18,10 @@ oncoKB.annotate(input, output, lib.path = NULL)
 OncoKb annotate MAF.
 }
 \description{
+oncoKB.annotate
 OncoKB annotator for MAF files.
 }
 \examples{
-
 # Needs to be run on LINUX with python
 # oncoKB.annotate(input = "ExampleMaf", out = "ExampleOut")
 }

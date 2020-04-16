@@ -1,7 +1,5 @@
 #' uni.cox
-#'
 #' Performs univariate cox proportional hazard model on every feature
-#'
 #' @param X Matrix/surv.datframe of genomic features, continuous or binary (note cannot handle categorical surv.dat for the moment).
 #' @param surv.dat a surv.dat frame containing the survival information. This can be made of 2 or 3 columns. 1 or 2 for time,
 #' and one for status (where 1 is event and 0 is no event).
@@ -15,7 +13,6 @@
 #' @return p An interactive plot of log(pvalue) by hazard ration.
 #' @return KM List of survival plots of the top 10 most significant genes
 #' @export
-#'
 #' @examples library(gnomeR)
 #' library(dplyr)
 #' library(dtplyr)
@@ -36,14 +33,12 @@
 #' abbreviate(rownames(gen.dat),strict = TRUE, minlength = 9)),]
 #' uni.cox(X = X, surv.dat = surv.dat,
 #' surv.formula = Surv(time,status)~.,filter = 0.05)
-#'
 #' @import
 #' dplyr
 #' survival
 #' survminer
 #' @importFrom plotly plot_ly layout
-#'
-# @importFrom plotly plot_ly
+
 
 uni.cox <- function(X,surv.dat,surv.formula,filter = 0,genes = NULL,is.gen = TRUE){
 

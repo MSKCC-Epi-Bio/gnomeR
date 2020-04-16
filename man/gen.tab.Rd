@@ -41,7 +41,6 @@ gen.tab(gen.dat = gen.dat,
         outcome = outcome,
         filter = 0.05,paired = FALSE,
         cont = FALSE,rank = TRUE)
-
 ## Continuous outcome ##
 set.seed(1)
 outcome <-  rnorm(n = nrow(gen.dat))

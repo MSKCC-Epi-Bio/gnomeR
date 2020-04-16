@@ -2,7 +2,8 @@
 % Please edit documentation in R/uni-cox.R
 \name{uni.cox}
 \alias{uni.cox}
-\title{uni.cox}
+\title{uni.cox
+Performs univariate cox proportional hazard model on every feature}
 \usage{
 uni.cox(X, surv.dat, surv.formula, filter = 0, genes = NULL, is.gen = TRUE)
 }
@@ -30,6 +31,7 @@ p An interactive plot of log(pvalue) by hazard ration.
 KM List of survival plots of the top 10 most significant genes
 }
 \description{
+uni.cox
 Performs univariate cox proportional hazard model on every feature
 }
 \examples{
@@ -53,5 +55,4 @@ X <- gen.dat[match(surv.dat$DMPID,
 abbreviate(rownames(gen.dat),strict = TRUE, minlength = 9)),]
 uni.cox(X = X, surv.dat = surv.dat,
 surv.formula = Surv(time,status)~.,filter = 0.05)
-
 }

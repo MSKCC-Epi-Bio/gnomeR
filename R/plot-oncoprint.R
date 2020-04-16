@@ -1,16 +1,12 @@
 #' plot_oncoPrint
-#'
 #' Creates the OncoPrint corresponding to the inputted genetic data
-#'
 #' @param gen.dat A binary matrix or dataframe, with patients as rows and features as columns. Note that the names of the
 #' columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see create.bin.matrix for more details on this format).
 #' @param clin.dat An optional clinical file, including only the features the user wishes to add to the plot. Default is NULL.
 #' @param ordered An optional vector of length equal to the number of patients under consideration. Indicates the new order (from left to right)
 #' to be plotted.
 #' @return p : an oncoprint object
-#'
 #' @export
-#'
 #' @examples library(gnomeR)
 #' library(dplyr)
 #' library(dtplyr)
@@ -21,7 +17,6 @@
 #' gen.dat <- bin.mut[,
 #' names(sort(apply(bin.mut,2, sum),decreasing = TRUE))[1:15]]
 #' plot_oncoPrint(gen.dat)
-#'
 #' ## adding clinical ##
 #' clin.patients.dat <- clin.patients[match(
 #' abbreviate(rownames(gen.dat),strict = TRUE, minlength = 9),

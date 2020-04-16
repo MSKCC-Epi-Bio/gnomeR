@@ -2,7 +2,8 @@
 % Please edit documentation in R/mod-CNregions.R
 \name{CNregions.mod}
 \alias{CNregions.mod}
-\title{CNregions.mod}
+\title{CNregions.mod
+Modified CNregions function from the facets package to handle small sample sizes.}
 \usage{
 CNregions.mod(
   seg,
@@ -36,6 +37,7 @@ CNregions.mod(
 reducedM : A matrix ready for plotting.
 }
 \description{
+CNregions.mod
 Modified CNregions function from the facets package to handle small sample sizes.
 }
 \examples{

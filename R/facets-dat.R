@@ -14,7 +14,6 @@
 #' @return purity : a vector of the purity values for the patients in out.cn
 #' @return FGAs : a vector of the fragment of genome altered values for the patients in out.cn
 #' @export
-#'
 #' @examples library(gnomeR)
 #' library(dplyr)
 #' library(dtplyr)

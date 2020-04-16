@@ -14,9 +14,7 @@
 #' @param rank Should the table returned be ordered by Pvalue. Boolean, default is T
 #' @return fits : a table of odds ratio and pvalues.
 #' @return forest.plot : A forest plot of the top 10 hits.
-#'
 #' @export
-#'
 #' @examples library(gnomeR)
 #' patients <- as.character(unique(mut$Tumor_Sample_Barcode))[1:1000]
 #' ## binary outcome ##
@@ -26,7 +24,6 @@
 #'         outcome = outcome,
 #'         filter = 0.05,paired = FALSE,
 #'         cont = FALSE,rank = TRUE)
-#'
 #' ## Continuous outcome ##
 #' set.seed(1)
 #' outcome <-  rnorm(n = nrow(gen.dat))

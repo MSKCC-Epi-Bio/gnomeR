@@ -13,7 +13,6 @@
 #' @param adaptive CNregions option to create adaptive segments
 #' @return p a heatmap corresponding to the segment files inputted
 #' @export
-#'
 #' @examples library(gnomeR)
 #' library(dplyr)
 #' library(dtplyr)

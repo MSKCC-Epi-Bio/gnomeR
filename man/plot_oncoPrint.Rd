@@ -2,7 +2,8 @@
 % Please edit documentation in R/plot-oncoprint.R
 \name{plot_oncoPrint}
 \alias{plot_oncoPrint}
-\title{plot_oncoPrint}
+\title{plot_oncoPrint
+Creates the OncoPrint corresponding to the inputted genetic data}
 \usage{
 plot_oncoPrint(gen.dat, clin.dat = NULL, ordered = NULL)
 }
@@ -19,6 +20,7 @@ to be plotted.}
 p : an oncoprint object
 }
 \description{
+plot_oncoPrint
 Creates the OncoPrint corresponding to the inputted genetic data
 }
 \examples{
@@ -32,7 +34,6 @@ SNP.only = FALSE,include.silent = FALSE, spe.plat = FALSE)
 gen.dat <- bin.mut[,
 names(sort(apply(bin.mut,2, sum),decreasing = TRUE))[1:15]]
 plot_oncoPrint(gen.dat)
-
 ## adding clinical ##
 clin.patients.dat <- clin.patients[match(
 abbreviate(rownames(gen.dat),strict = TRUE, minlength = 9),

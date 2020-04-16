@@ -1,7 +1,5 @@
 #' CNregions.mod
-#'
 #' Modified CNregions function from the facets package to handle small sample sizes.
-#'
 #' @param seg a segmentation file containing the segmentation information of multiple patients
 #' @param epsilon the maximum Euclidean distance between adjacent probes tolerated for denying a nonredundant region. epsilon=0 is equivalent to taking the union of all unique break points across the n samples.
 #' @param adaptive Vector of length-m lasso penalty terms.
@@ -12,7 +10,6 @@
 #' @param nProbes The segment length threshold below which the segment will be removed if rmSmallseq = TRUE.
 #' @return reducedM : A matrix ready for plotting.
 #' @export
-#'
 #' @examples library(gnomeR)
 #' # CNregions.mod(seg)
 CNregions.mod <- function (seg, epsilon = 0.005, adaptive = FALSE, rmCNV = FALSE,

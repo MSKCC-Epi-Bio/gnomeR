@@ -1,7 +1,5 @@
 #' maf.summary
-#'
 #' Creates a set of plot summarising a maf file.
-#'
 #' @param maf the names of the segment files to be loaded and processed (Note must end in ".Rdata").
 #' @param mut.type The mutation type to be used. Options are "SOMATIC", "GERMLINE" or "ALL". Note "ALL" will
 #' keep all mutations regardless of status (not recommended). Default is SOMATIC.
@@ -18,7 +16,6 @@
 #' @return p.corr Correlation heatmap of the top 10 genes
 #' @return p.comut Heatmap of the comutation of the top 10 genes
 #' @export
-#'
 #' @examples library(gnomeR)
 #' library(dplyr)
 #' library(dtplyr)

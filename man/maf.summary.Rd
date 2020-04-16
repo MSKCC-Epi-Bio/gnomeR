@@ -2,7 +2,8 @@
 % Please edit documentation in R/maf-summary.R
 \name{maf.summary}
 \alias{maf.summary}
-\title{maf.summary}
+\title{maf.summary
+Creates a set of plot summarising a maf file.}
 \usage{
 maf.summary(maf, mut.type = "SOMATIC", spe.plat = F)
 }
@@ -37,6 +38,7 @@ p.corr Correlation heatmap of the top 10 genes
 p.comut Heatmap of the comutation of the top 10 genes
 }
 \description{
+maf.summary
 Creates a set of plot summarising a maf file.
 }
 \examples{

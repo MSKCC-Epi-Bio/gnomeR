@@ -2,7 +2,9 @@
 % Please edit documentation in R/make-bin-mat.R
 \name{binmat}
 \alias{binmat}
-\title{binmat}
+\title{binmat
+Enables creation of a binary matrix from a maf file with
+a predefined list of patients (rows are patients and columns are genes)}
 \usage{
 binmat(
   patients = NULL,
@@ -54,6 +56,7 @@ Options are "341", "410" and "468". Default is NULL.}
 mut : a binary matrix of mutation data
 }
 \description{
+binmat
 Enables creation of a binary matrix from a maf file with
 a predefined list of patients (rows are patients and columns are genes)
 }

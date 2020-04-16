@@ -2,7 +2,8 @@
 % Please edit documentation in R/make-oncoprint-dat.R
 \name{dat.oncoPrint}
 \alias{dat.oncoPrint}
-\title{dat.oncoPrint}
+\title{dat.oncoPrint
+Enables creation of a matrix used to generate an OncoPrint heatmap.}
 \usage{
 dat.oncoPrint(gen.dat, clin.dat = NULL)
 }
@@ -16,6 +17,7 @@ columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see 
 mat : a matrix ready to be plotted using plot.Oncoprint().
 }
 \description{
+dat.oncoPrint
 Enables creation of a matrix used to generate an OncoPrint heatmap.
 }
 \examples{
@@ -26,7 +28,6 @@ SNP.only = FALSE,include.silent = FALSE, spe.plat = FALSE)
 gen.dat <- bin.mut[1:1000,
 names(sort(apply(bin.mut,2, sum),decreasing = TRUE))[1:15]]
 #dat.oncoPrint(gen.dat)
-
 ## adding clinical ##
 clin.patients.dat <-
 clin.patients[match(abbreviate(rownames(gen.dat),
