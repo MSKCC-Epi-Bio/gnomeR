@@ -12,7 +12,7 @@ The file is organized with each line corresponding to the information of each pa
 \format{
   A data frame with 10340 observations on the following 6 variables.
   \describe{
-
+Data goes here.
   }
 }
 \details{

@@ -11,6 +11,7 @@ This set contains the publicly available data from cbioPortal sample level clini
 \format{
   A data frame with 10949 observations on the following 16 variables.
   \describe{
+  Data goes here.
   }
 }
 \details{

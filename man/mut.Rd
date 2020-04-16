@@ -12,6 +12,7 @@ The file is organized a classical MAF file.
 \format{
   A data frame with 78263 observations on the following 45 variables.
   \describe{
+  Data goes here.
   }
 }
 \details{

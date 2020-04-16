@@ -11,6 +11,7 @@ Segmentation file provided by the processing of IMPACT sequencing using FACETS.
 \format{
   A data frame with 628178 observations on the following 6 variables.
   \describe{
+  Data goes here.
   }
 }
 \details{

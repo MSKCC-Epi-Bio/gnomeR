@@ -12,6 +12,7 @@ The file is organized with the first column being the gene name and all other co
 \format{
   A data frame with 410 observations on the following 10946 variables.
   \describe{
+  Data goes here.
   }
 }
 \details{

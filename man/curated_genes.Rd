@@ -11,6 +11,7 @@ We include the curated genes for the IMPACT sequencing for the oncoKB annotation
 \format{
   A data frame with 417 observations on the following 2 variables.
   \describe{
+  Data goes here.
   }
 }
 \details{
