@@ -54,6 +54,7 @@ Suggests:
     knitr,
     rmarkdown,
     testthat,
-    spelling
+    spelling,
+    covr
 VignetteBuilder: knitr
 Language: en-US
