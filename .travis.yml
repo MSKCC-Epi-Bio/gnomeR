@@ -3,3 +3,4 @@
 language: R
 cache: packages
 osx_image: xcode9.2
+latex: false
