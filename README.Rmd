@@ -15,6 +15,7 @@ knitr::opts_chunk$set(
 # gnomeR
 
 <!-- badges: start -->
+[![Travis build status](https://travis-ci.org/AxelitoMartin/gnomeR.svg?branch=master)](https://travis-ci.org/AxelitoMartin/gnomeR)
 <!-- badges: end -->
 
 The goal of gnomeR is to collect common functions we need to use for wrangling and visualizing specific genomic data types. 
