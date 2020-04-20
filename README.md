@@ -6,9 +6,9 @@
 <!-- badges: start -->
 
 [![Travis build
-status](https://travis-ci.org/AxelitoMartin/gnomeR.svg?branch=master)](https://travis-ci.org/AxelitoMartin/gnomeR)
+status](https://travis-ci.org/AxelitoMartin/gnomeR.svg?branch=development)](https://travis-ci.org/AxelitoMartin/gnomeR)
 [![Codecov test
-coverage](https://codecov.io/gh/AxelitoMartin/gnomeR/branch/master/graph/badge.svg)](https://codecov.io/gh/AxelitoMartin/gnomeR?branch=master)
+coverage](https://codecov.io/gh/AxelitoMartin/gnomeR/branch/development/graph/badge.svg)](https://codecov.io/gh/AxelitoMartin/gnomeR?branch=development)
 <!-- badges: end -->
 
 The goal of gnomeR is to collect common functions we need to use for
