@@ -4,7 +4,7 @@ test_that("missing column error",{
 
   mat = matrix(rnorm(1,100), ncol=4)
   colnames(mat) = c("Hugo_Symbol", "Variant_Classification", "A","B")
-  expect_error(binmat(maf = mat ))
+  expect_error(maf.summary(maf = mat ))
 
 })
 
