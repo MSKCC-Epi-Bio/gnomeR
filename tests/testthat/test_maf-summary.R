@@ -8,13 +8,13 @@ test_that("missing column error",{
 
 })
 
-# test_that("missing column warning",{
-#
-#   mat = matrix(rnorm(1,100), ncol=4)
-#   colnames(mat) = c("Hugo_Symbol", "Variant_Classification", "Tumor_Sample_Barcode","B")
-#   expect_error(binmat(maf =mat ))
-#
-# })
+test_that("missing column warning",{
+
+  mat = matrix(rnorm(1,100), ncol=4)
+  colnames(mat) = c("Hugo_Symbol", "Variant_Classification", "Tumor_Sample_Barcode","B")
+  expect_error(maf.summary(maf = mat ))
+
+})
 #
 # test_that("read in 1000 patients with spe.plat", {
 #   set.seed(123)
