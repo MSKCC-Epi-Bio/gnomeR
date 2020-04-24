@@ -51,15 +51,17 @@ binmat <- function(patients=NULL, maf = NULL, mut.type = "SOMATIC",SNP.only = FA
 
   if(!is.null(maf)){
     # quick data checks #
-    if(length(match("Tumor_Sample_Barcode",colnames(maf))) == 0)
+    if(is.na(match("Tumor_Sample_Barcode",colnames(maf))))
       stop("The MAF file inputted is missing a patient name column. (Tumor_Sample_Barcode)")
-    if(length(match("Hugo_Symbol",colnames(maf))) == 0)
+    if(is.na(match("Hugo_Symbol",colnames(maf))))
       stop("The MAF file inputted is missing a gene name column. (Hugo_Symbol)")
-    if(length(match("Variant_Classification",colnames(maf))) == 0)
+    if(is.na(match("Variant_Classification",colnames(maf))))
       stop("The MAF file inputted is missing a variant classification column. (Variant_Classification)")
-    if(length(match("Mutation_Status",colnames(maf))) == 0)
+    if(is.na(match("Mutation_Status",colnames(maf)))){
       warning("The MAF file inputted is missing a mutation status column (Mutation_Status). It will be assumed that
             all variants are of the same type (SOMATIC/GERMLINE).")
+      maf$Mutation_Status <- rep("SOMATIC",nrow(maf))
+    }
 
     # set maf to maf class #
     maf <- structure(maf,class = c("data.frame","maf"))
