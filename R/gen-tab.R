@@ -35,10 +35,14 @@
 #' tab.out$vPlot
 #' @import
 #' ggrepel
+#' exact2x2
 
 gen.tab <- function (gen.dat, outcome, filter = 0, paired = F, cont = F,
                      rank = T)
 {
+  if(filter < 0 || filter >= 1)
+    stop("The filter should be between 0 and 1 (1 non included) to proceed.")
+
   if (length(which(apply(gen.dat, 2, function(x) {
     length(unique(x[!is.na(x)])) == 1
   } || all(is.na(x))))) > 0)
@@ -60,7 +64,7 @@ gen.tab <- function (gen.dat, outcome, filter = 0, paired = F, cont = F,
     genes.rm <- names(rm[which(rm)])
     gen.dat <- gen.dat %>% select(-one_of(genes.rm))
   }
-  if (is.null(dim(gen.dat)))
+  if (is.null(dim(gen.dat)) || dim(gen.dat)[2] == 0)
     stop("Only one or fewer genes are left after filtering. We need a minimum of two. Please relax the filter argument.")
   if (!cont) {
     if (is.character(outcome))
@@ -106,28 +110,28 @@ gen.tab <- function (gen.dat, outcome, filter = 0, paired = F, cont = F,
       fits <- fits[order(as.numeric(as.character(fits$Pvalue))),
                    ]
     if (!is.null(fits$OddsRatio)) {
-      f.dat <- fits
-      f.dat$Gene <- rownames(f.dat)
-      f.dat <- f.dat %>% filter(!is.infinite(OddsRatio)) %>%
-        mutate(OddsRatio = as.numeric(as.character(OddsRatio)),
-               Lower = as.numeric(as.character(Lower)), Upper = as.numeric(as.character(Upper)),
-        )
-      f.dat <- f.dat[1:min(10, nrow(f.dat)), ]
-      forest.plot <- f.dat %>% ggplot(aes(x = Gene, y = OddsRatio,
-                                          ymin = Lower, ymax = Upper)) + geom_pointrange(aes(col = Gene)) +
-        geom_hline(aes(fill = Gene), yintercept = 1,
-                   linetype = 2) + xlab("Gene") + ylab("Risk Ratio (95% Confidence Interval)") +
-        geom_errorbar(aes(ymin = Lower, ymax = Upper,
-                          col = Gene), width = 0.5, cex = 1) + coord_flip()
-      vplot <- fits %>% rownames_to_column("Gene") %>%
-        mutate(Pvalue = as.numeric(as.character(Pvalue)),
-               OddsRatio = as.numeric(as.character(OddsRatio)),
-               FDRsign = ifelse(as.numeric(as.character(FDR)) <
-                                  0.05, "Significant", "Non signifcant")) %>%
-        ggplot(aes(x = OddsRatio, y = -log10(Pvalue),
-                   fill = FDRsign, color = FDRsign)) + geom_point() +
-        geom_label_repel(aes(label = ifelse(FDRsign ==
-                                              "Significant", as.character(Gene), "")), color = "white")
+    f.dat <- fits
+    f.dat$Gene <- rownames(f.dat)
+    f.dat <- f.dat %>% filter(!is.infinite(OddsRatio)) %>%
+      mutate(OddsRatio = as.numeric(as.character(OddsRatio)),
+             Lower = as.numeric(as.character(Lower)), Upper = as.numeric(as.character(Upper)),
+      )
+    f.dat <- f.dat[1:min(10, nrow(f.dat)), ]
+    forest.plot <- f.dat %>% ggplot(aes(x = Gene, y = OddsRatio,
+                                        ymin = Lower, ymax = Upper)) + geom_pointrange(aes(col = Gene)) +
+      geom_hline(aes(fill = Gene), yintercept = 1,
+                 linetype = 2) + xlab("Gene") + ylab("Risk Ratio (95% Confidence Interval)") +
+      geom_errorbar(aes(ymin = Lower, ymax = Upper,
+                        col = Gene), width = 0.5, cex = 1) + coord_flip()
+    vplot <- fits %>% rownames_to_column("Gene") %>%
+      mutate(Pvalue = as.numeric(as.character(Pvalue)),
+             OddsRatio = as.numeric(as.character(OddsRatio)),
+             FDRsign = ifelse(as.numeric(as.character(FDR)) <
+                                0.05, "Significant", "Non signifcant")) %>%
+      ggplot(aes(x = OddsRatio, y = -log10(Pvalue),
+                 fill = FDRsign, color = FDRsign)) + geom_point() +
+      geom_label_repel(aes(label = ifelse(FDRsign ==
+                                            "Significant", as.character(Gene), "")), color = "white")
     }
     else {
       forest.plot <- NULL
@@ -165,6 +169,7 @@ gen.tab <- function (gen.dat, outcome, filter = 0, paired = F, cont = F,
     fits$FDR <- p.adjust(fits$Pvalue, method = "fdr")
     fits$GeneName <- rownames(fits)
     if (all(apply(gen.dat, 2, is.numeric))) {
+
       vPlot <- try(plot_ly(data = fits %>% filter(!is.na(Pvalue),
                                                   is.numeric(Pvalue)), x = ~Estimate, y = ~-log10(Pvalue),
                            text = ~paste("Gene :", GeneName, "</br> Estimate :",

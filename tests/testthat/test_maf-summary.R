@@ -122,19 +122,3 @@ test_that("Using all mutation statuses",{
   expect_true(is.ggplot(plots$p.comut))
 
 })
-
-
-#devtools::test_coverage()
-# plot_fun <- function(df) {
-#   p1 <- ggplot(df, aes(Response, Proportion)) +
-#     geom_bar(stat='identity') +
-#     scale_y_continuous(labels = percent)
-#   return(p1)
-# }
-#
-# df <- data.frame(
-#   Response = LETTERS[1:5],
-#   Proportion = c(0.1,0.2,0.1,0.2,0.4)
-# )
-# p <- plot_fun(df)
-
