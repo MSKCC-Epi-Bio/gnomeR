@@ -45,7 +45,8 @@ plot_oncoPrint <- function(gen.dat,clin.dat=NULL,ordered=NULL){
   if(!is.null(clin.dat)){
     # get all values #
     clin.factors <- unique(unlist(apply(mat,2,unique)))
-    clin.factors <- clin.factors[-na.omit(match(c("MUT;","AMP;","DEL;","FUS;","CLIN;","  "),clin.factors))]
+    clin.factors <- clin.factors[-na.omit(match(c("MUT;","AMP;","DEL;","FUS;","CLIN;","  ",
+                                                  "MUT;FUS;","MUT;DEL;","MUT;AMP;"),clin.factors))]
     if(length(clin.factors) == 0){
       col = c("MUT" = "#008000", "AMP" = "red", "DEL" = "blue", "FUS" = "orange", "CLIN" = "purple")
       alter_fun = list(
@@ -68,6 +69,9 @@ plot_oncoPrint <- function(gen.dat,clin.dat=NULL,ordered=NULL){
           grid::grid.rect(x, y, w-unit(0.5, "mm"), h*0.33, gp = grid::gpar(fill = "purple", col = NA))
         }
       )
+
+      to.add <- NULL
+      added <- NULL
     }
 
     if(length(clin.factors) > 0){

@@ -5,13 +5,14 @@
 #' @param clin.dat An optional clinical file, including only the features the user wishes to add to the plot. Default is NULL.
 #' @return mat : a matrix ready to be plotted using plot.Oncoprint().
 #' @export
-#' @examples library(gnomeR)
-#' patients <- as.character(unique(mut$Tumor_Sample_Barcode))[1:1000]
+#' @examples
+#' library(gnomeR)
+#' patients <- as.character(unique(mut$Tumor_Sample_Barcode))[1:500]
 #' bin.mut <- binmat(patients = patients,maf = mut,mut.type = "SOMATIC",
 #' SNP.only = FALSE,include.silent = FALSE, spe.plat = FALSE)
-#' gen.dat <- bin.mut[1:1000,
+#' gen.dat <- bin.mut[1:500,
 #' names(sort(apply(bin.mut,2, sum),decreasing = TRUE))[1:15]]
-#' #dat.oncoPrint(gen.dat)
+#' dat.oncoPrint(gen.dat)
 #' ## adding clinical ##
 #' clin.patients.dat <-
 #' clin.patients[match(abbreviate(rownames(gen.dat),
@@ -39,6 +40,18 @@ dat.oncoPrint <- function(gen.dat,clin.dat=NULL){
   # would be best if genetics also had an unknown #
   if(anyNA(gen.dat))
     gen.dat[is.na(gen.dat)] <- 0
+
+  # check that gen.dat is a binary matrix #
+  if(anyNA(apply(gen.dat, 2, as.numeric))){
+    warning("All genetic components were not numeric. Those which weren't will be removed")
+    gen.dat <- gen.dat[,-which(apply(gen.dat,2,function(x){anyNA(as.numeric(x))}))]
+  }
+
+  if(!all(apply(gen.dat,2,function(x){length(unique(x)) == 2}))){
+    warning("All genetic components were not binary. Those which weren't will be removed")
+    gen.dat <- gen.dat[,which(apply(gen.dat,2,function(x){length(unique(x)) == 2}))]
+  }
+
 
   if(!is.null(clin.dat)){
     # seet NA's to UNKNOWN #
@@ -153,7 +166,8 @@ dat.oncoPrint <- function(gen.dat,clin.dat=NULL){
       }
 
       else{
-        mat[match(x,rownames(mat)),] <- ifelse(y > median(y),"CLIN;",NA)
+        y <- as.numeric(y)
+        mat[match(x,rownames(mat)),] <- ifelse(y > median(y,na.rm = T),"CLIN;",NA)
       }
     }
   }
