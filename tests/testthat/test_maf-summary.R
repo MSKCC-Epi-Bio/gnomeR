@@ -1,4 +1,5 @@
 context("check make maf summary")
+source_test_helpers(path = "tests/testthat/helper_dat.R", env = test_env())
 
 test_that("missing column error (Tumor_Sample_Barcode)",{
 
@@ -25,9 +26,7 @@ test_that("missing column warning",{
 
 
 test_that("read in 1000 patients with spe.plat", {
-  set.seed(123)
-  patients <- as.character(unique(mut$Tumor_Sample_Barcode))[sample(1:length(unique(mut$Tumor_Sample_Barcode)), 1000, replace=FALSE)]
-  mat <- mut %>%
+   mat <- mut %>%
     filter(Tumor_Sample_Barcode %in% patients)
   plots <- maf.summary(maf = mat)
   expect_true(is.ggplot(plots$p.class))
@@ -52,9 +51,7 @@ test_that("read in 1000 patients with spe.plat", {
 
 test_that("missing column warning but still run",{
 
-  set.seed(123)
-  patients <- as.character(unique(mut$Tumor_Sample_Barcode))[sample(1:length(unique(mut$Tumor_Sample_Barcode)), 1000, replace=FALSE)]
-  mat <- mut %>%
+   mat <- mut %>%
     filter(Tumor_Sample_Barcode %in% patients) %>%
     select(-one_of("Mutation_Status"))
   expect_warning(plots <- maf.summary(maf = mat))
@@ -75,8 +72,6 @@ test_that("missing column warning but still run",{
 
 test_that("Renaming genes",{
 
-  set.seed(123)
-  patients <- as.character(unique(mut$Tumor_Sample_Barcode))[sample(1:length(unique(mut$Tumor_Sample_Barcode)), 1000, replace=FALSE)]
   mat <- mut %>%
     filter(Tumor_Sample_Barcode %in% patients) %>%
     mutate(
@@ -104,8 +99,6 @@ test_that("Renaming genes",{
 
 test_that("Using all mutation statuses",{
 
-  set.seed(123)
-  patients <- as.character(unique(mut$Tumor_Sample_Barcode))[sample(1:length(unique(mut$Tumor_Sample_Barcode)), 1000, replace=FALSE)]
   mat <- mut %>%
     filter(Tumor_Sample_Barcode %in% patients)
   plots <- maf.summary(maf = mat,mut.type = "ALL")
