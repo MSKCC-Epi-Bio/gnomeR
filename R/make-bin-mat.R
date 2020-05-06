@@ -35,6 +35,7 @@
 #' cna.relax = TRUE, spe.plat = FALSE,
 #'  set.plat = "410", rm.empty = FALSE)
 #' @import dplyr
+#' @import dtplyr
 #' @import stringr
 
 
@@ -43,7 +44,7 @@
 ###############################################
 
 binmat <- function(patients=NULL, maf = NULL, mut.type = "SOMATIC",SNP.only = FALSE,include.silent = FALSE,
-                   fusion = NULL,cna = NULL,cna.relax = FALSE, spe.plat = FALSE, set.plat = NULL,rm.empty = TRUE){
+                   fusion = NULL,cna = NULL,cna.relax = FALSE, spe.plat = TRUE, set.plat = NULL,rm.empty = TRUE){
 
   if(is.null(maf) && is.null(fusion) && is.null(cna)) stop("You must provided one of the three following files: MAF, fusion or CNA.")
 
@@ -104,39 +105,6 @@ binmat <- function(patients=NULL, maf = NULL, mut.type = "SOMATIC",SNP.only = FA
   # specific platform for IMPACT #
   if(spe.plat){
 
-    if(!is.null(set.plat)){
-      if(set.plat == "341"){
-        keep <- c(g.impact$g341, paste0(g.impact$g341,".fus"),paste0(g.impact$g341,".Del"),paste0(g.impact$g341,".Amp"))
-        mut <- mut[, na.omit(match(keep, colnames(mut)))]
-        missing <- setdiff(c(g.impact$g341, paste0(g.impact$g341,".fus"),paste0(g.impact$g341,".Del"),paste0(g.impact$g341,".Amp")),
-                           colnames(mut))
-        add <- as.data.frame(matrix(0L,nrow=nrow(mut), ncol = length(missing)))
-        rownames(add) <- rownames(mut)
-        colnames(add) <- missing
-        mut <- as.data.frame(cbind(mut,add))
-      }
-      if(set.plat == "410"){
-        keep <- c(g.impact$g410, paste0(g.impact$g410,".fus"),paste0(g.impact$g410,".Del"),paste0(g.impact$g410,".Amp"))
-        mut <- mut[, na.omit(match(keep, colnames(mut)))]
-        missing <- setdiff(c(g.impact$g410, paste0(g.impact$g410,".fus"),paste0(g.impact$g410,".Del"),paste0(g.impact$g410,".Amp")),
-                           colnames(mut))
-        add <- as.data.frame(matrix(0L,nrow=nrow(mut), ncol = length(missing)))
-        rownames(add) <- rownames(mut)
-        colnames(add) <- missing
-        mut <- as.data.frame(cbind(mut,add))
-      }
-      if(set.plat == "468"){
-        keep <- c(g.impact$g468, paste0(g.impact$g468,".fus"),paste0(g.impact$g468,".Del"),paste0(g.impact$g468,".Amp"))
-        mut <- mut[, na.omit(match(keep, colnames(mut)))]
-        missing <- setdiff(c(g.impact$g468, paste0(g.impact$g468,".fus"),paste0(g.impact$g468,".Del"),paste0(g.impact$g468,".Amp")),
-                           colnames(mut))
-        add <- as.data.frame(matrix(0L,nrow=nrow(mut), ncol = length(missing)))
-        rownames(add) <- rownames(mut)
-        colnames(add) <- missing
-        mut <- as.data.frame(cbind(mut,add))
-      }
-    }
-
     v=strsplit(patients, "-IM|-IH")
     if(!all(lapply(v, length) == 2)){
       warning("All patients were not sequenced on the IMPACT platform or some were mispecified. '-IM' or '-IH' requiered in sample ID.
@@ -164,7 +132,19 @@ binmat <- function(patients=NULL, maf = NULL, mut.type = "SOMATIC",SNP.only = FA
 
     }
   }
-  if(rm.empty && length(which(apply(mut,2,sum)>0))) mut <- mut[,which(apply(mut,2,sum)>0)]
+
+  if(!is.null(set.plat)){
+    if(set.plat == "341"){
+      keep <- c(g.impact$g341, paste0(g.impact$g341,".fus"),paste0(g.impact$g341,".Del"),paste0(g.impact$g341,".Amp"))
+      mut <- mut[,colnames(mut) %in% keep]
+    }
+    if(set.plat == "410"){
+      keep <- c(g.impact$g410, paste0(g.impact$g410,".fus"),paste0(g.impact$g410,".Del"),paste0(g.impact$g410,".Amp"))
+      mut <- mut[,colnames(mut) %in% keep]
+    }
+  }
+
+  if(rm.empty && length(which(apply(mut,2,function(x){sum(x,na.rm=TRUE)})>0))) mut <- mut[,which(apply(mut,2,function(x){sum(x,na.rm=TRUE)})>0)]
   return(mut)
 }
 

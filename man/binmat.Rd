@@ -15,7 +15,7 @@ binmat(
   fusion = NULL,
   cna = NULL,
   cna.relax = FALSE,
-  spe.plat = FALSE,
+  spe.plat = TRUE,
   set.plat = NULL,
   rm.empty = TRUE
 )
