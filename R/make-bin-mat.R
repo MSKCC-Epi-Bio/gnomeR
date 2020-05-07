@@ -44,13 +44,19 @@
 ###############################################
 
 binmat <- function(patients=NULL, maf = NULL, mut.type = "SOMATIC",SNP.only = FALSE,include.silent = FALSE,
-                   fusion = NULL,cna = NULL,cna.relax = FALSE, spe.plat = TRUE, set.plat = NULL,rm.empty = TRUE){
+                   fusion = NULL,cna = NULL,cna.relax = FALSE, spe.plat = TRUE, set.plat = NULL,rm.empty = TRUE,
+                   col.names = c(Tumor_Sample_Barcode = NULL, Hugo_Symbol = NULL,
+                                 Variant_Classification = NULL, Mutation_Status = NULL)){
 
   if(is.null(maf) && is.null(fusion) && is.null(cna)) stop("You must provided one of the three following files: MAF, fusion or CNA.")
 
   mut <- NULL
 
   if(!is.null(maf)){
+
+    maf <- maf %>%
+      rename(col.names)
+
     # quick data checks #
     if(is.na(match("Tumor_Sample_Barcode",colnames(maf))))
       stop("The MAF file inputted is missing a patient name column. (Tumor_Sample_Barcode)")
