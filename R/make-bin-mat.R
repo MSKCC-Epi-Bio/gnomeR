@@ -191,6 +191,16 @@ createbin.maf <- function(obj, patients, mut.type, SNP.only, include.silent, cna
     warning("KMT2C has been recoded to MLL3")
   }
 
+  if (sum(grepl("MYCL", maf$Hugo_Symbol)) > 1) {
+    maf <- maf %>%
+      mutate(Hugo_Symbol = case_when(
+        Hugo_Symbol == "MYCL" ~ "MYCL1",
+        TRUE ~ Hugo_Symbol
+      ))
+
+    warning("MYCL has been recoded to MYCL1")
+  }
+
   # # clean gen dat #
   if(SNP.only) SNP.filt = "SNP"
   else SNP.filt = unique(maf$Variant_Type)
