@@ -19,7 +19,7 @@ binmat(
   set.plat = NULL,
   rm.empty = TRUE,
   col.names = c(Tumor_Sample_Barcode = NULL, Hugo_Symbol = NULL, Variant_Classification
-    = NULL, Mutation_Status = NULL)
+    = NULL, Mutation_Status = NULL, Variant_Type = NULL)
 )
 }
 \arguments{
@@ -55,7 +55,7 @@ Options are "341", "410" and "468". Default is NULL.}
 \item{rm.empty}{boolean specifying if columns with no events founds should be removed. Default is TRUE.}
 
 \item{col.names}{character vector of the necessary columns to be used. By default: col.names = c(Tumor_Sample_Barcode = NULL,
-Hugo_Symbol = NULL, Variant_Classification = NULL, Mutation_Status = NULL)}
+Hugo_Symbol = NULL, Variant_Classification = NULL, Mutation_Status = NULL, Variant_Type = NULL)}
 }
 \value{
 mut : a binary matrix of mutation data
