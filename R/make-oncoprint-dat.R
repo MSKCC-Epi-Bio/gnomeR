@@ -7,7 +7,7 @@
 #' @export
 #' @examples
 #' library(gnomeR)
-#' patients <- as.character(unique(mut$Tumor_Sample_Barcode))[1:500]
+#' patients <- as.character(unique(mut$Tumor_Sample_Barcode))
 #' bin.mut <- binmat(patients = patients,maf = mut,mut.type = "SOMATIC",
 #' SNP.only = FALSE,include.silent = FALSE, spe.plat = FALSE)
 #' gen.dat <- bin.mut[1:500,

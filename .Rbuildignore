@@ -6,3 +6,5 @@
 ^codecov\.yml$
 ^doc$
 ^Meta$
+^docs$
+^_pkgdown\.yml$
