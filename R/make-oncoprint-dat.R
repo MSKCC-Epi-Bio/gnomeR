@@ -1,32 +1,38 @@
 #' dat.oncoPrint
-#'
 #' Enables creation of a matrix used to generate an OncoPrint heatmap.
-#'
 #' @param gen.dat A binary matrix or dataframe, with patients as rows and features as columns. Note that the names of the
 #' columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see create.bin.matrix for more details on this format).
 #' @param clin.dat An optional clinical file, including only the features the user wishes to add to the plot. Default is NULL.
 #' @return mat : a matrix ready to be plotted using plot.Oncoprint().
 #' @export
-#'
-#' @examples library(gnomeR)
-#' patients <- as.character(unique(mut$Tumor_Sample_Barcode))[1:1000]
-#' bin.mut <- binmat(patients = patients,maf = mut,mut.type = "SOMATIC",SNP.only = F,include.silent = F, spe.plat = F)
-#' gen.dat <- bin.mut[1:1000,names(sort(apply(bin.mut,2, sum),decreasing = T))[1:15]]
+#' @examples
+#' library(gnomeR)
+#' patients <- as.character(unique(mut$Tumor_Sample_Barcode))[1:500]
+#' bin.mut <- binmat(patients = patients,maf = mut,mut.type = "SOMATIC",
+#' SNP.only = FALSE,include.silent = FALSE, spe.plat = FALSE)
+#' gen.dat <- bin.mut[1:500,
+#' names(sort(apply(bin.mut,2, sum),decreasing = TRUE))[1:15]]
 #' dat.oncoPrint(gen.dat)
-#'
 #' ## adding clinical ##
-#' clin.patients.dat <- clin.patients[match(abbreviate(rownames(gen.dat),strict = T, minlength = 9),clin.patients$X.Patient.Identifier),] %>%
-#' rename(DMPID = X.Patient.Identifier, Smoker = Smoking.History) %>%
-#'   select(DMPID, Sex,Smoker) %>%
-#'   filter(!is.na(DMPID)) %>%
-#'   distinct(DMPID,.keep_all = TRUE)
-#' gen.dat <- gen.dat[match(clin.patients.dat$DMPID,abbreviate(rownames(gen.dat),strict = T, minlength = 9)),]
+#' clin.patients.dat <-
+#' clin.patients[match(abbreviate(rownames(gen.dat),
+#' strict = TRUE, minlength = 9),
+#' clin.patients$X.Patient.Identifier),] %>%
+#' dplyr::rename(DMPID = X.Patient.Identifier,
+#'  Smoker = Smoking.History) %>%
+#'   dplyr::select(DMPID, Sex,Smoker) %>%
+#'   dplyr::filter(!is.na(DMPID)) %>%
+#'   dplyr::distinct(DMPID,.keep_all = TRUE)
+#' gen.dat <- gen.dat[match(clin.patients.dat$DMPID,
+#' abbreviate(rownames(gen.dat),strict = TRUE, minlength = 9)),]
 #' clin.patients.dat <- clin.patients.dat %>%
 #'   tibble::column_to_rownames('DMPID')
 #' rownames(gen.dat) <- rownames(clin.patients.dat)
 #' dat.oncoPrint(gen.dat = gen.dat,clin.dat = clin.patients.dat)
 #' @import
 #' tibble
+#' dplyr
+#' dtplyr
 
 
 dat.oncoPrint <- function(gen.dat,clin.dat=NULL){
@@ -34,6 +40,18 @@ dat.oncoPrint <- function(gen.dat,clin.dat=NULL){
   # would be best if genetics also had an unknown #
   if(anyNA(gen.dat))
     gen.dat[is.na(gen.dat)] <- 0
+
+  # check that gen.dat is a binary matrix #
+  if(anyNA(apply(gen.dat, 2, as.numeric))){
+    warning("All genetic components were not numeric. Those which weren't will be removed")
+    gen.dat <- gen.dat[,-which(apply(gen.dat,2,function(x){anyNA(as.numeric(x))}))]
+  }
+
+  if(!all(apply(gen.dat,2,function(x){length(unique(x)) == 2}))){
+    warning("All genetic components were not binary. Those which weren't will be removed")
+    gen.dat <- gen.dat[,which(apply(gen.dat,2,function(x){length(unique(x)) == 2}))]
+  }
+
 
   if(!is.null(clin.dat)){
     # seet NA's to UNKNOWN #
@@ -148,7 +166,8 @@ dat.oncoPrint <- function(gen.dat,clin.dat=NULL){
       }
 
       else{
-        mat[match(x,rownames(mat)),] <- ifelse(y > median(y),"CLIN;",NA)
+        y <- as.numeric(y)
+        mat[match(x,rownames(mat)),] <- ifelse(y > median(y,na.rm = T),"CLIN;",NA)
       }
     }
   }

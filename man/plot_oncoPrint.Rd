@@ -2,7 +2,8 @@
 % Please edit documentation in R/plot-oncoprint.R
 \name{plot_oncoPrint}
 \alias{plot_oncoPrint}
-\title{plot_oncoPrint}
+\title{plot_oncoPrint
+Creates the OncoPrint corresponding to the inputted genetic data}
 \usage{
 plot_oncoPrint(gen.dat, clin.dat = NULL, ordered = NULL)
 }
@@ -19,24 +20,34 @@ to be plotted.}
 p : an oncoprint object
 }
 \description{
+plot_oncoPrint
 Creates the OncoPrint corresponding to the inputted genetic data
 }
 \examples{
 library(gnomeR)
-patients <- as.character(unique(mut$Tumor_Sample_Barcode))[1:1000]
-bin.mut <- binmat(patients = patients,maf = mut,fusion = fusion, cna = cna,mut.type = "SOMATIC",SNP.only = F,include.silent = F, spe.plat = F)
-gen.dat <- bin.mut[1:1000,names(sort(apply(bin.mut,2, sum),decreasing = T))[1:15]]
+library(dplyr)
+library(dtplyr)
+patients <- as.character(unique(mut$Tumor_Sample_Barcode))[1:200]
+bin.mut <- binmat(patients = patients,maf = mut,
+fusion = fusion, cna = cna,mut.type = "SOMATIC",
+SNP.only = FALSE,include.silent = FALSE, spe.plat = FALSE)
+gen.dat <- bin.mut[,
+names(sort(apply(bin.mut,2, sum),decreasing = TRUE))[1:15]]
 plot_oncoPrint(gen.dat)
-
 ## adding clinical ##
-clin.patients.dat <- clin.patients[match(abbreviate(rownames(gen.dat),strict = T, minlength = 9),clin.patients$X.Patient.Identifier),] \%>\%
+clin.patients.dat <- clin.patients[match(
+abbreviate(rownames(gen.dat),strict = TRUE, minlength = 9),
+clin.patients$X.Patient.Identifier),] \%>\%
 rename(DMPID = X.Patient.Identifier, Smoker = Smoking.History) \%>\%
   select(DMPID, Sex,Smoker) \%>\%
   filter(!is.na(DMPID)) \%>\%
   distinct(DMPID,.keep_all = TRUE)
-gen.dat <- gen.dat[match(clin.patients.dat$DMPID,abbreviate(rownames(gen.dat),strict = T, minlength = 9)),]
+gen.dat <- gen.dat[match(clin.patients.dat$DMPID,
+abbreviate(rownames(gen.dat),strict = TRUE,
+ minlength = 9)),]
 clin.patients.dat <- clin.patients.dat \%>\%
   tibble::column_to_rownames('DMPID')
 rownames(gen.dat) <- rownames(clin.patients.dat)
-plot_oncoPrint(gen.dat = gen.dat,clin.dat = clin.patients.dat)
+plot_oncoPrint(gen.dat = gen.dat,
+clin.dat = clin.patients.dat)
 }

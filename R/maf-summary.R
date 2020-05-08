@@ -1,7 +1,5 @@
 #' maf.summary
-#'
 #' Creates a set of plot summarising a maf file.
-#'
 #' @param maf the names of the segment files to be loaded and processed (Note must end in ".Rdata").
 #' @param mut.type The mutation type to be used. Options are "SOMATIC", "GERMLINE" or "ALL". Note "ALL" will
 #' keep all mutations regardless of status (not recommended). Default is SOMATIC.
@@ -18,12 +16,16 @@
 #' @return p.corr Correlation heatmap of the top 10 genes
 #' @return p.comut Heatmap of the comutation of the top 10 genes
 #' @export
-#'
 #' @examples library(gnomeR)
-#' all.plots <- maf.summary(maf=mut)
-#' all.plots <- maf.summary(maf=mut,spe.plat = T)
+#' library(dplyr)
+#' library(dtplyr)
+#' patients <- as.character(unique(mut$Tumor_Sample_Barcode))[1:200]
+#' all.plots <- maf.summary(maf=mut %>% filter(Tumor_Sample_Barcode %in% patients) )
+#' all.plots <- maf.summary(maf=mut %>%
+#' filter(Tumor_Sample_Barcode %in% patients),spe.plat = TRUE)
 #' @import
 #' dplyr
+#' dtplyr
 #' stringr
 #' ggplot2
 #' reshape2
@@ -34,16 +36,17 @@
 maf.summary <- function(maf,mut.type = "SOMATIC", spe.plat = F){
 
   # quick data checks #
-  if(length(match("Tumor_Sample_Barcode",colnames(maf))) == 0)
+  if(is.na(match("Tumor_Sample_Barcode",colnames(maf))))
     stop("The MAF file inputted is missing a patient name column. (Tumor_Sample_Barcode)")
-  if(length(match("Hugo_Symbol",colnames(maf))) == 0)
+  if(is.na(match("Hugo_Symbol",colnames(maf))))
     stop("The MAF file inputted is missing a gene name column. (Hugo_Symbol)")
-  if(length(match("Variant_Classification",colnames(maf))) == 0)
+  if(is.na(match("Variant_Classification",colnames(maf))))
     stop("The MAF file inputted is missing a variant classification column. (Variant_Classification)")
-  if(length(match("Mutation_Status",colnames(maf))) == 0)
+  if(is.na(match("Mutation_Status",colnames(maf)))){
     warning("The MAF file inputted is missing a mutation status column (Mutation_Status). It will be assumed that
             all variants are of the same type (SOMATIC/GERMLINE).")
-
+    maf$Mutation_Status <- rep("SOMATIC",nrow(maf))
+  }
   # recode gene names that have been changed between panel versions to make sure they are consistent and counted as the same gene
   if(!is.character(maf$Hugo_Symbol)) maf$Hugo_Symbol <- as.character(maf$Hugo_Symbol)
   if(!is.character(maf$Tumor_Sample_Barcode)) maf$Tumor_Sample_Barcode <- as.character(maf$Tumor_Sample_Barcode)

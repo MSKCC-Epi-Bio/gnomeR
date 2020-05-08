@@ -102,15 +102,15 @@ We can create a binary matrix of genetic events from the files described above. 
 This function will return a binary matrix of genetics events with patients as rows and columns as genes. Along with a list of patients that weren't found to have any events (if any).
 
 ```{r}
-patients <- as.character(unique(mut$Tumor_Sample_Barcode))[1:1000]
-bin.mut <- binmat(patients = patients,maf = mut,mut.type = "SOMATIC",SNP.only = F,include.silent = F, spe.plat = T)
+patients <- as.character(unique(mut$Tumor_Sample_Barcode))[1:200]
+bin.mut <- binmat(patients = patients,maf = mut,mut.type = "SOMATIC",SNP.only = FALSE,include.silent = FALSE, spe.plat = TRUE)
 as.tbl(bin.mut)
 ```
 
 Similarly including fusions and CNAs:
 
 ```{r}
-bin.mut <- binmat(patients = patients,maf = mut,mut.type = "SOMATIC",SNP.only = F,include.silent = F, fusion = fusion, cna = cna, spe.plat = T)
+bin.mut <- binmat(patients = patients,maf = mut,mut.type = "SOMATIC",SNP.only = FALSE,include.silent = FALSE, fusion = fusion, cna = cna, spe.plat = TRUE)
 as.tbl(bin.mut)
 ```
 
@@ -195,7 +195,7 @@ OncoPrints are a convenient way to study comutation patterns in our cohort throu
 We show here an example with the most common genes.
 
 ```{r}
-gen.dat <- bin.mut[1:1000,names(sort(apply(bin.mut,2, sum),decreasing = T))[1:15]]
+gen.dat <- bin.mut[,names(sort(apply(bin.mut,2, sum),decreasing = T))[1:15]]
 plot_oncoPrint(gen.dat)
 ```
 
@@ -203,12 +203,12 @@ plot_oncoPrint(gen.dat)
 Similarly we include here an example adding patients' clinical variables:
 
 ```{r}
-clin.patients.dat <- clin.patients[match(abbreviate(rownames(gen.dat),strict = T, minlength = 9),clin.patients$X.Patient.Identifier),] %>% 
+clin.patients.dat <- clin.patients[match(abbreviate(rownames(gen.dat),strict = TRUE, minlength = 9),clin.patients$X.Patient.Identifier),] %>% 
   rename(DMPID = X.Patient.Identifier, Smoker = Smoking.History) %>% 
   select(DMPID, Sex,Smoker) %>% 
   filter(!is.na(DMPID)) %>%
   distinct(DMPID,.keep_all = TRUE)
-gen.dat <- gen.dat[match(clin.patients.dat$DMPID,abbreviate(rownames(gen.dat),strict = T, minlength = 9)),]
+gen.dat <- gen.dat[match(clin.patients.dat$DMPID,abbreviate(rownames(gen.dat),strict = TRUE, minlength = 9)),]
 clin.patients.dat <- clin.patients.dat %>%
   tibble::column_to_rownames('DMPID')
 rownames(gen.dat) <- rownames(clin.patients.dat)

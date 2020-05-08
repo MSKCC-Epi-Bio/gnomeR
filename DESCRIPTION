@@ -24,7 +24,8 @@ Encoding: UTF-8
 LazyData: true
 URL: https://github.com/AxelitoMartin/gnomeR
 BugReports: https://github.com/AxelitoMartin/gnomeR/issues
-RoxygenNote: 7.0.2
+RoxygenNote: 7.1.0
+Depends: R (>= 3.6)
 biocViews: 
     ComplexHeatmap,
     iClusterPlus
@@ -33,18 +34,27 @@ Imports:
     dplyr,
     ggplot2,
     exact2x2,
-    plotly,
     tibble,
     dtplyr,
-    ggrepel
-Depends:
+    ggrepel,
     ComplexHeatmap,
     iClusterPlus,
-    cluster
+    cluster,
+    grid,
+    survminer,
+    GGally,
+    RColorBrewer,
+    gplots,
+    lattice,
+    reshape2,
+    stringr,
+    survival,
+    plotly
 Suggests: 
     knitr,
     rmarkdown,
     testthat,
-    spelling
+    spelling,
+    covr
 VignetteBuilder: knitr
 Language: en-US

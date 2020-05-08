@@ -5,6 +5,10 @@
 
 <!-- badges: start -->
 
+[![Travis build
+status](https://travis-ci.com/AxelitoMartin/gnomeR.svg?branch=development)](https://travis-ci.org/AxelitoMartin/gnomeR)
+[![Codecov test
+coverage](https://codecov.io/gh/AxelitoMartin/gnomeR/branch/development/graph/badge.svg)](https://codecov.io/gh/AxelitoMartin/gnomeR?branch=development)
 <!-- badges: end -->
 
 The goal of gnomeR is to collect common functions we need to use for
@@ -17,5 +21,5 @@ You can install the development version from
 
 ``` r
 # install.packages("devtools")
-devtools::install_github("AxelitoMartin/gnomeR", build_vignettes = T)
+devtools::install_github("AxelitoMartin/gnomeR")
 ```

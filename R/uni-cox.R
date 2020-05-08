@@ -1,7 +1,5 @@
 #' uni.cox
-#'
 #' Performs univariate cox proportional hazard model on every feature
-#'
 #' @param X Matrix/surv.datframe of genomic features, continuous or binary (note cannot handle categorical surv.dat for the moment).
 #' @param surv.dat a surv.dat frame containing the survival information. This can be made of 2 or 3 columns. 1 or 2 for time,
 #' and one for status (where 1 is event and 0 is no event).
@@ -15,27 +13,34 @@
 #' @return p An interactive plot of log(pvalue) by hazard ration.
 #' @return KM List of survival plots of the top 10 most significant genes
 #' @export
-#'
 #' @examples library(gnomeR)
-#' patients <- as.character(unique(mut$Tumor_Sample_Barcode))[1:1000]
+#' library(dplyr)
+#' library(dtplyr)
+#' patients <- as.character(unique(mut$Tumor_Sample_Barcode))[1:200]
+#' gen.dat <- binmat(patients = patients,maf = mut)
 #' surv.dat <- clin.patients %>%
-#' filter(X.Patient.Identifier %in% abbreviate(patients,strict = T, minlength = 9)) %>%
-#'   select(X.Patient.Identifier,Overall.Survival..Months., Overall.Survival.Status) %>%
-#'   rename(DMPID = X.Patient.Identifier, time = Overall.Survival..Months.,status = Overall.Survival.Status) %>%
+#' filter(X.Patient.Identifier %in%
+#' abbreviate(patients,strict = TRUE, minlength = 9)) %>%
+#'   select(X.Patient.Identifier,Overall.Survival..Months.,
+#'    Overall.Survival.Status) %>%
+#'   rename(DMPID = X.Patient.Identifier,
+#'    time = Overall.Survival..Months.,
+#'    status = Overall.Survival.Status) %>%
 #'   mutate(time = as.numeric(as.character(time)),
 #'          status = ifelse(status == "LIVING",0,1)) %>%
 #'   filter(!is.na(time))
-#' X <- bin.mut[match(surv.dat$DMPID,abbreviate(rownames(bin.mut),strict = T, minlength = 9)),]
-#' uni.cox(X = X, surv.dat = surv.dat,surv.formula = Surv(time,status)~.,filter = 0.05)
-#'
+#' X <- gen.dat[match(surv.dat$DMPID,
+#' abbreviate(rownames(gen.dat),strict = TRUE, minlength = 9)),]
+#' uni.cox(X = X, surv.dat = surv.dat,
+#' surv.formula = Surv(time,status)~.,filter = 0.05)
 #' @import
 #' dplyr
-#' plotly
 #' survival
 #' survminer
+#' @importFrom plotly plot_ly layout
 
 
-uni.cox <- function(X,surv.dat,surv.formula,filter = 0,genes = NULL,is.gen = T){
+uni.cox <- function(X,surv.dat,surv.formula,filter = 0,genes = NULL,is.gen = TRUE){
 
   # filtering #
   if(!(filter >= 0 && filter < 1))
@@ -45,7 +50,7 @@ uni.cox <- function(X,surv.dat,surv.formula,filter = 0,genes = NULL,is.gen = T){
   else if(!is.null(genes) && sum(colnames(X) %in% genes) > 0){
     genes <- genes[genes %in% colnames(X)]
     X <- as.data.frame(X %>%
-      select(genes))
+                         select(genes))
   }
 
   if(is.null(dim(X)) )
@@ -93,7 +98,7 @@ uni.cox <- function(X,surv.dat,surv.formula,filter = 0,genes = NULL,is.gen = T){
 
   ###################################
   ##### univariate volcano plot #####
-  if(LT == F){
+  if(!LT){
     uni <- as.data.frame(t(apply(X,2,function(x){
       fit <- coxph(Surv(surv.dat$time,surv.dat$status)~x)
       out <- c(as.numeric(summary(fit)$coefficients[c(1,5)]),sum(x)/length(x))
@@ -101,7 +106,7 @@ uni.cox <- function(X,surv.dat,surv.formula,filter = 0,genes = NULL,is.gen = T){
     })))
   }
 
-  if(LT == T){
+  if(LT){
     uni <- as.data.frame(t(apply(X,2,function(x){
       fit <- coxph(Surv(surv.dat$time1,surv.dat$time2,surv.dat$status)~x)
       out <- c(as.numeric(summary(fit)$coefficients[c(1,5)]),sum(x)/length(x))
@@ -148,7 +153,7 @@ uni.cox <- function(X,surv.dat,surv.formula,filter = 0,genes = NULL,is.gen = T){
       palette =
         c("#E7B800", "#2E9FDF"),
       conf.int = TRUE,
-      pval = ifelse(LT,F,T),
+      pval = ifelse(LT,FALSE,TRUE),
       risk.table = TRUE,
       legend.labs =
         c("WildType", "Mutant"),
@@ -162,7 +167,7 @@ uni.cox <- function(X,surv.dat,surv.formula,filter = 0,genes = NULL,is.gen = T){
       data = temp,
       size = 1,
       conf.int = TRUE,
-      pval = ifelse(LT,F,T),
+      pval = ifelse(LT,FALSE,TRUE),
       risk.table = TRUE,
       risk.table.col = "strata",
       risk.table.height = 0.25,

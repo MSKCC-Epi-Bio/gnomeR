@@ -2,20 +2,24 @@
 % Please edit documentation in R/make-bin-mat.R
 \name{binmat}
 \alias{binmat}
-\title{binmat}
+\title{binmat
+Enables creation of a binary matrix from a maf file with
+a predefined list of patients (rows are patients and columns are genes)}
 \usage{
 binmat(
   patients = NULL,
   maf = NULL,
   mut.type = "SOMATIC",
-  SNP.only = F,
-  include.silent = F,
+  SNP.only = FALSE,
+  include.silent = FALSE,
   fusion = NULL,
   cna = NULL,
-  cna.relax = F,
-  spe.plat = F,
+  cna.relax = FALSE,
+  spe.plat = TRUE,
   set.plat = NULL,
-  rm.empty = T
+  rm.empty = TRUE,
+  col.names = c(Tumor_Sample_Barcode = NULL, Hugo_Symbol = NULL, Variant_Classification
+    = NULL, Mutation_Status = NULL, Variant_Type = NULL)
 )
 }
 \arguments{
@@ -49,19 +53,28 @@ of patients that were not sequenced on that plaform. Default is TRUE.}
 Options are "341", "410" and "468". Default is NULL.}
 
 \item{rm.empty}{boolean specifying if columns with no events founds should be removed. Default is TRUE.}
+
+\item{col.names}{character vector of the necessary columns to be used. By default: col.names = c(Tumor_Sample_Barcode = NULL,
+Hugo_Symbol = NULL, Variant_Classification = NULL, Mutation_Status = NULL, Variant_Type = NULL)}
 }
 \value{
 mut : a binary matrix of mutation data
 }
 \description{
+binmat
 Enables creation of a binary matrix from a maf file with
 a predefined list of patients (rows are patients and columns are genes)
 }
 \examples{
 library(gnomeR)
-mut.only <- binmat(maf = mut)
-patients <- as.character(unique(mut$Tumor_Sample_Barcode))[1:1000]
-bin.mut <- binmat(patients = patients,maf = mut,mut.type = "SOMATIC",SNP.only = F,include.silent = F, spe.plat = F)
-bin.mut <- binmat(patients = patients,maf = mut,mut.type = "SOMATIC",SNP.only = F,include.silent = F,
-cna.relax = T, spe.plat = F, set.plat = "410", rm.empty = F)
+# mut.only <- binmat(maf = mut)
+patients <- as.character(unique(mut$Tumor_Sample_Barcode))[1:200]
+bin.mut <- binmat(patients = patients,maf = mut,
+mut.type = "SOMATIC",SNP.only = FALSE,
+include.silent = FALSE, spe.plat = FALSE)
+bin.mut <- binmat(patients = patients,maf = mut,
+mut.type = "SOMATIC",SNP.only = FALSE,
+include.silent = FALSE,
+cna.relax = TRUE, spe.plat = FALSE,
+ set.plat = "410", rm.empty = FALSE)
 }
