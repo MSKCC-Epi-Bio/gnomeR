@@ -22,7 +22,7 @@
 #'  Options are "341", "410" and "468". Default is NULL.
 #' @param rm.empty boolean specifying if columns with no events founds should be removed. Default is TRUE.
 #' @param col.names character vector of the necessary columns to be used. By default: col.names = c(Tumor_Sample_Barcode = NULL,
-#'  Hugo_Symbol = NULL, Variant_Classification = NULL, Mutation_Status = NULL)
+#'  Hugo_Symbol = NULL, Variant_Classification = NULL, Mutation_Status = NULL, Variant_Type = NULL)
 #' @return mut : a binary matrix of mutation data
 #' @export
 #' @examples library(gnomeR)
@@ -48,7 +48,7 @@
 binmat <- function(patients=NULL, maf = NULL, mut.type = "SOMATIC",SNP.only = FALSE,include.silent = FALSE,
                    fusion = NULL,cna = NULL,cna.relax = FALSE, spe.plat = TRUE, set.plat = NULL,rm.empty = TRUE,
                    col.names = c(Tumor_Sample_Barcode = NULL, Hugo_Symbol = NULL,
-                                 Variant_Classification = NULL, Mutation_Status = NULL)){
+                                 Variant_Classification = NULL, Mutation_Status = NULL, Variant_Type = NULL)){
 
   if(is.null(maf) && is.null(fusion) && is.null(cna)) stop("You must provided one of the three following files: MAF, fusion or CNA.")
 
@@ -70,6 +70,11 @@ binmat <- function(patients=NULL, maf = NULL, mut.type = "SOMATIC",SNP.only = FA
       warning("The MAF file inputted is missing a mutation status column (Mutation_Status). It will be assumed that
             all variants are of the same type (SOMATIC/GERMLINE).")
       maf$Mutation_Status <- rep("SOMATIC",nrow(maf))
+    }
+    if(is.na(match("Variant_Type",colnames(maf)))){
+      warning("The MAF file inputted is missing a mutation status column (Variant_Type). It will be assumed that
+            all variants are of the same type (SNPs).")
+      maf$Variant_Type <- rep("SNPs",nrow(maf))
     }
 
     # set maf to maf class #
