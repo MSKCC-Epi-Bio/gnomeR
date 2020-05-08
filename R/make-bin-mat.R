@@ -51,13 +51,27 @@ binmat <- function(patients=NULL, maf = NULL, mut.type = "SOMATIC",SNP.only = FA
                                  Variant_Classification = NULL, Mutation_Status = NULL, Variant_Type = NULL)){
 
   if(is.null(maf) && is.null(fusion) && is.null(cna)) stop("You must provided one of the three following files: MAF, fusion or CNA.")
+  # reformat columns #
+  if(!is.null(maf)) maf <- maf %>%
+      rename(col.names)
+  if(!is.null(fusion)) fusion <- fusion %>%
+      rename(col.names)
+
+  ## if data from API need to split mutations and fusions ##
+  if(!is.null(maf) && is.null(fusion) &&
+     nrow(maf %>%
+          filter(Variant_Classification == "Fusion")) > 0){
+    fusion <- maf %>%
+      filter(Variant_Classification == "Fusion")
+    maf <- maf %>%
+      filter(Variant_Classification != "Fusion")
+    warning("Fusions were found in the maf file, they were removed and a fusion file was created.")
+  }
+
 
   mut <- NULL
 
   if(!is.null(maf)){
-
-    maf <- maf %>%
-      rename(col.names)
 
     # quick data checks #
     if(is.na(match("Tumor_Sample_Barcode",colnames(maf))))
@@ -90,6 +104,7 @@ binmat <- function(patients=NULL, maf = NULL, mut.type = "SOMATIC",SNP.only = FA
 
   # fusions #
   if(!is.null(fusion)){
+
     fusion <- as.data.frame(fusion)
     fusion <- structure(fusion,class = c("data.frame","fusion"))
     # filter/define patients #
