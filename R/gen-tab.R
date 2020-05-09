@@ -71,10 +71,10 @@ gen.tab <- function (gen.dat, outcome, filter = 0, paired = F, cont = F,
       outcome <- as.factor(outcome)
     fits <- as.data.frame(t(apply(gen.dat, 2, function(x) {
       if (length(unique(x))/length(x) > 0.5) {
-        x <- ifelse(x > median(x, na.rm = T), 1, 0)
+        x <- ifelse(x > stats::median(x, na.rm = T), 1, 0)
       }
       if (paired == F)
-        test <- fisher.test(x, outcome)
+        test <- stats::fisher.test(x, outcome)
       if (paired == T) {
         test <- mcnemar.exact(x = x[1:(length(x)/2)],
                               y = x[(length(x)/2 + 1):length(x)])
@@ -104,7 +104,7 @@ gen.tab <- function (gen.dat, outcome, filter = 0, paired = F, cont = F,
     })))
     colnames(fits)[2:(length(levels(outcome)) + 1)] <- paste0(colnames(fits)[2:(length(levels(outcome)) +
                                                                                   1)], "(N=", as.numeric(summary(outcome)), ")")
-    fits$FDR <- formatC(p.adjust(as.numeric(as.character(fits$Pvalue)),
+    fits$FDR <- formatC(stats::p.adjust(as.numeric(as.character(fits$Pvalue)),
                                  method = "fdr"), format = "e", digits = 2)
     if (rank)
       fits <- fits[order(as.numeric(as.character(fits$Pvalue))),
@@ -112,9 +112,9 @@ gen.tab <- function (gen.dat, outcome, filter = 0, paired = F, cont = F,
     if (!is.null(fits$OddsRatio)) {
     f.dat <- fits
     f.dat$Gene <- rownames(f.dat)
-    f.dat <- f.dat %>% filter(!is.infinite(OddsRatio)) %>%
-      mutate(OddsRatio = as.numeric(as.character(OddsRatio)),
-             Lower = as.numeric(as.character(Lower)), Upper = as.numeric(as.character(Upper)),
+    f.dat <- f.dat %>% filter(!is.infinite(.data$OddsRatio)) %>%
+      mutate(OddsRatio = as.numeric(as.character(.data$OddsRatio)),
+             Lower = as.numeric(as.character(.data$Lower)), Upper = as.numeric(as.character(.data$Upper)),
       )
     f.dat <- f.dat[1:min(10, nrow(f.dat)), ]
     forest.plot <- f.dat %>% ggplot(aes(x = Gene, y = OddsRatio,
@@ -125,7 +125,7 @@ gen.tab <- function (gen.dat, outcome, filter = 0, paired = F, cont = F,
                         col = Gene), width = 0.5, cex = 1) + coord_flip()
     vplot <- fits %>% rownames_to_column("Gene") %>%
       mutate(Pvalue = as.numeric(as.character(Pvalue)),
-             OddsRatio = as.numeric(as.character(OddsRatio)),
+             OddsRatio = as.numeric(as.character(.data$OddsRatio)),
              FDRsign = ifelse(as.numeric(as.character(FDR)) <
                                 0.05, "Significant", "Non signifcant")) %>%
       ggplot(aes(x = OddsRatio, y = -log10(Pvalue),
@@ -166,7 +166,7 @@ gen.tab <- function (gen.dat, outcome, filter = 0, paired = F, cont = F,
                                                    }
                                                    return(out)
                                                  })))
-    fits$FDR <- p.adjust(fits$Pvalue, method = "fdr")
+    fits$FDR <- stats::p.adjust(fits$Pvalue, method = "fdr")
     fits$GeneName <- rownames(fits)
     if (all(apply(gen.dat, 2, is.numeric))) {
 
@@ -178,8 +178,8 @@ gen.tab <- function (gen.dat, outcome, filter = 0, paired = F, cont = F,
                      layout(title = "Volcano Plot"), silent = T)
     }
     else {
-      vPlot <- try(plot_ly(data = fits %>% filter(!is.na(Pvalue),
-                                                  is.numeric(Pvalue)), x = ~Estimate, y = ~-log10(Pvalue),
+      vPlot <- try(plot_ly(data = fits %>% filter(!is.na(.data$Pvalue),
+                                                  is.numeric(.data$Pvalue)), x = ~Estimate, y = ~-log10(Pvalue),
                            text = ~paste("Gene :", GeneName, "</br> Estimate :",
                                          round(Estimate, digits = 2)), mode = "markers") %>%
                      layout(title = "Volcano Plot"), silent = T)
