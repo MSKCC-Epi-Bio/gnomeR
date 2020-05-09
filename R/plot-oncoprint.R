@@ -45,7 +45,7 @@ plot_oncoPrint <- function(gen.dat,clin.dat=NULL,ordered=NULL){
   if(!is.null(clin.dat)){
     # get all values #
     clin.factors <- unique(unlist(apply(mat,2,unique)))
-    clin.factors <- clin.factors[-na.omit(match(c("MUT;","AMP;","DEL;","FUS;","CLIN;","  ",
+    clin.factors <- clin.factors[-stats::na.omit(match(c("MUT;","AMP;","DEL;","FUS;","CLIN;","  ",
                                                   "MUT;FUS;","MUT;DEL;","MUT;AMP;"),clin.factors))]
     if(length(clin.factors) == 0){
       col = c("MUT" = "#008000", "AMP" = "red", "DEL" = "blue", "FUS" = "orange", "CLIN" = "purple")
@@ -87,7 +87,7 @@ plot_oncoPrint <- function(gen.dat,clin.dat=NULL,ordered=NULL){
                            levels(as.factor(clin.factors[grep(names(sum.factors)[k],clin.factors)])))
         }
         else{
-          added <- c(added,palette()[c(3,7,2,6,5,4,1)][1:as.numeric(sum.factors[k])])
+          added <- c(added, grDevices::palette()[c(3,7,2,6,5,4,1)][1:as.numeric(sum.factors[k])])
 
           names.toadd <- c(names.toadd,
                            levels(as.factor(clin.factors[grep(names(sum.factors)[k],clin.factors)])))

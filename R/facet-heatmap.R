@@ -58,7 +58,7 @@ facets.heatmap <- function (seg = NULL, filenames = NULL, path = NULL, patients 
     imagedata[imagedata < -1.5] = -1.5
 
     if (is.null(ordered)) {
-      cl = hclust(dist(imagedata), method = "ward")
+      cl = stats::hclust(stats::dist(imagedata), method = "ward")
       imagedata.ordered = imagedata[cl$order, ]
       imagedata.ordered = as.matrix(rev(as.data.frame(imagedata.ordered)))
     }
@@ -134,7 +134,7 @@ facets.heatmap <- function (seg = NULL, filenames = NULL, path = NULL, patients 
     imagedata[imagedata > 1.5] = 1.5
     imagedata[imagedata < -1.5] = -1.5
     if (is.null(ordered)) {
-      cl = hclust(dist(imagedata), method = "ward")
+      cl = stats::hclust(stats::dist(imagedata), method = "ward")
       imagedata.ordered = imagedata[cl$order, ]
       imagedata.ordered = as.matrix(rev(as.data.frame(imagedata.ordered)))
     }

@@ -2,7 +2,7 @@
 #' @importFrom dplyr mutate select n group_by ungroup filter pull case_when
 #' if_else full_join left_join distinct bind_rows count coalesce arrange rename
 #' rename_at bind_cols mutate_all mutate_at slice desc
-#'
+#' @importFrom utils tail
 #' @keywords internal
 "_PACKAGE"
 

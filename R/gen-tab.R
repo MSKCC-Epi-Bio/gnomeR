@@ -117,21 +117,21 @@ gen.tab <- function (gen.dat, outcome, filter = 0, paired = F, cont = F,
              Lower = as.numeric(as.character(.data$Lower)), Upper = as.numeric(as.character(.data$Upper)),
       )
     f.dat <- f.dat[1:min(10, nrow(f.dat)), ]
-    forest.plot <- f.dat %>% ggplot(aes(x = Gene, y = OddsRatio,
-                                        ymin = Lower, ymax = Upper)) + geom_pointrange(aes(col = Gene)) +
-      geom_hline(aes(fill = Gene), yintercept = 1,
+    forest.plot <- f.dat %>% ggplot(aes(x = .data$Gene, y = .data$OddsRatio,
+                                        ymin = .data$Lower, ymax = .data$Upper)) + geom_pointrange(aes(col = .data$Gene)) +
+      geom_hline(aes(fill = .data$Gene), yintercept = 1,
                  linetype = 2) + xlab("Gene") + ylab("Risk Ratio (95% Confidence Interval)") +
-      geom_errorbar(aes(ymin = Lower, ymax = Upper,
-                        col = Gene), width = 0.5, cex = 1) + coord_flip()
+      geom_errorbar(aes(ymin = .data$Lower, ymax = .data$Upper,
+                        col = .data$Gene), width = 0.5, cex = 1) + coord_flip()
     vplot <- fits %>% rownames_to_column("Gene") %>%
-      mutate(Pvalue = as.numeric(as.character(Pvalue)),
+      mutate(Pvalue = as.numeric(as.character(.data$Pvalue)),
              OddsRatio = as.numeric(as.character(.data$OddsRatio)),
-             FDRsign = ifelse(as.numeric(as.character(FDR)) <
+             FDRsign = ifelse(as.numeric(as.character(.data$FDR)) <
                                 0.05, "Significant", "Non signifcant")) %>%
-      ggplot(aes(x = OddsRatio, y = -log10(Pvalue),
-                 fill = FDRsign, color = FDRsign)) + geom_point() +
-      geom_label_repel(aes(label = ifelse(FDRsign ==
-                                            "Significant", as.character(Gene), "")), color = "white")
+      ggplot(aes(x = .data$OddsRatio, y = -log10(.data$Pvalue),
+                 fill = .data$FDRsign, color = .data$FDRsign)) + geom_point() +
+      geom_label_repel(aes(label = ifelse(.data$FDRsign ==
+                                            "Significant", as.character(.data$Gene), "")), color = "white")
     }
     else {
       forest.plot <- NULL
@@ -144,7 +144,7 @@ gen.tab <- function (gen.dat, outcome, filter = 0, paired = F, cont = F,
                                                  2, function(x) {
                                                    if (length(unique(x))/length(x) > 0.25 || length(unique(x)) ==
                                                        2) {
-                                                     fit <- lm(outcome ~ x)
+                                                     fit <- stats::lm(outcome ~ x)
                                                      temp <- as.data.frame(summary(fit)$coefficient)
                                                      colnames(temp) <- c("Estimate", "SD", "tvalue",
                                                                          "Pvalue")
@@ -154,7 +154,7 @@ gen.tab <- function (gen.dat, outcome, filter = 0, paired = F, cont = F,
                                                      out <- temp[2, c(1, 2, 4, 5)]
                                                    }
                                                    else {
-                                                     fit <- lm(outcome ~ as.factor(x))
+                                                     fit <- stats::lm(outcome ~ as.factor(x))
                                                      temp <- as.data.frame(summary(fit)$coefficient)
                                                      colnames(temp) <- c("Estimate", "SD", "tvalue",
                                                                          "Pvalue")
@@ -170,8 +170,8 @@ gen.tab <- function (gen.dat, outcome, filter = 0, paired = F, cont = F,
     fits$GeneName <- rownames(fits)
     if (all(apply(gen.dat, 2, is.numeric))) {
 
-      vPlot <- try(plot_ly(data = fits %>% filter(!is.na(Pvalue),
-                                                  is.numeric(Pvalue)), x = ~Estimate, y = ~-log10(Pvalue),
+      vPlot <- try(plot_ly(data = fits %>% filter(!is.na(.data$Pvalue),
+                                                  is.numeric(.data$Pvalue)), x = ~Estimate, y = ~-log10(.data$Pvalue),
                            text = ~paste("Gene :", GeneName, "</br> Estimate :",
                                          round(Estimate, digits = 2)), mode = "markers",
                            size = ~MutationFreq, color = ~Estimate) %>%
@@ -179,7 +179,7 @@ gen.tab <- function (gen.dat, outcome, filter = 0, paired = F, cont = F,
     }
     else {
       vPlot <- try(plot_ly(data = fits %>% filter(!is.na(.data$Pvalue),
-                                                  is.numeric(.data$Pvalue)), x = ~Estimate, y = ~-log10(Pvalue),
+                                                  is.numeric(.data$Pvalue)), x = ~Estimate, y = ~-log10(.data$Pvalue),
                            text = ~paste("Gene :", GeneName, "</br> Estimate :",
                                          round(Estimate, digits = 2)), mode = "markers") %>%
                      layout(title = "Volcano Plot"), silent = T)
