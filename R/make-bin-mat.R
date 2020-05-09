@@ -60,11 +60,11 @@ binmat <- function(patients=NULL, maf = NULL, mut.type = "SOMATIC",SNP.only = FA
   ## if data from API need to split mutations and fusions ##
   if(!is.null(maf) && is.null(fusion) &&
      nrow(maf %>%
-          filter(Variant_Classification == "Fusion")) > 0){
+          filter(.data$Variant_Classification == "Fusion")) > 0){
     fusion <- maf %>%
-      filter(Variant_Classification == "Fusion")
+      filter(.data$Variant_Classification == "Fusion")
     maf <- maf %>%
-      filter(Variant_Classification != "Fusion")
+      filter(.data$Variant_Classification != "Fusion")
     warning("Fusions were found in the maf file, they were removed and a fusion file was created.")
   }
 
@@ -150,13 +150,13 @@ binmat <- function(patients=NULL, maf = NULL, mut.type = "SOMATIC",SNP.only = FA
       missing <- setdiff(c(g.impact$g468, paste0(g.impact$g468,".fus"),paste0(g.impact$g468,".Del"),paste0(g.impact$g468,".Amp")),
                          c(g.impact$g410, paste0(g.impact$g410,".fus"),paste0(g.impact$g410,".Del"),paste0(g.impact$g410,".Amp")))
       if(sum(v == "5") > 0 && sum(missing %in% colnames(mut)) > 0)
-        mut[which(v == "5"), na.omit(match(missing, colnames(mut)))] <- NA
+        mut[which(v == "5"), stats::na.omit(match(missing, colnames(mut)))] <- NA
 
       # remove 341 platform patients #
       missing <- setdiff(c(g.impact$g468, paste0(g.impact$g468,".fus"),paste0(g.impact$g468,".Del"),paste0(g.impact$g468,".Amp")),
                          c(g.impact$g341, paste0(g.impact$g341,".fus"),paste0(g.impact$g341,".Del"),paste0(g.impact$g341,".Amp")))
       if(sum(v == "3") > 0 && sum(missing %in% colnames(mut)) > 0)
-        mut[which(v == "3"), na.omit(match(missing, colnames(mut)))] <- NA
+        mut[which(v == "3"), stats::na.omit(match(missing, colnames(mut)))] <- NA
 
     }
   }
@@ -239,9 +239,9 @@ createbin.maf <- function(obj, patients, mut.type, SNP.only, include.silent, cna
   if(tolower(mut.type) == "all") Mut.filt = unique(maf$Mutation_Status)
   else Mut.filt = mut.type
 
-  maf <- maf %>% filter(Variant_Classification != Variant.filt,
-                        Variant_Type %in% SNP.filt,
-                        tolower(Mutation_Status) %in% tolower(Mut.filt))
+  maf <- maf %>% filter(.data$Variant_Classification != Variant.filt,
+                        .data$Variant_Type %in% SNP.filt,
+                        tolower(.data$Mutation_Status) %in% tolower(Mut.filt))
 
 
   #### out frame
@@ -276,7 +276,7 @@ createbin.fusion <- function(obj, patients, mut.type, SNP.only,include.silent, c
 
 
   fusion <- fusion %>%
-    filter(Tumor_Sample_Barcode %in% patients)
+    filter(.data$Tumor_Sample_Barcode %in% patients)
 
   #### out frame
   fusion.out <- as.data.frame(matrix(0L,nrow=length(patients),ncol=length(unique(fusion$Hugo_Symbol))))

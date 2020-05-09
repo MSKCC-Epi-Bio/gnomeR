@@ -33,7 +33,7 @@ are dichotomized at their median.
 }
 \examples{
 library(gnomeR)
-patients <- as.character(unique(mut$Tumor_Sample_Barcode))[1:1000]
+patients <- as.character(unique(mut$Tumor_Sample_Barcode))
 ## binary outcome ##
 outcome <- as.character(clin.sample$Sample.Type[match(patients,clin.sample$Sample.Identifier)])
 gen.dat <- binmat(patients = patients,maf = mut)

@@ -42,5 +42,5 @@ Modified CNregions function from the facets package to handle small sample sizes
 }
 \examples{
 library(gnomeR)
-# CNregions.mod(seg)
+CNregions.mod(seg)
 }

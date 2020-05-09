@@ -11,16 +11,17 @@
 #' @return reducedM : A matrix ready for plotting.
 #' @export
 #' @examples library(gnomeR)
-#' # CNregions.mod(seg)
+#' CNregions.mod(seg)
 CNregions.mod <- function (seg, epsilon = 0.005, adaptive = FALSE, rmCNV = FALSE,
                            cnv = NULL, frac.overlap = 0.5, rmSmallseg = TRUE, nProbes = 15)
 {
   colnames(seg) = c("sample", "chromosome", "start", "end",
                     "num.mark", "seg.mean")
-  seg = subset(seg, chromosome <= 22)
+  seg <- seg %>% mutate(chromosome = as.numeric(.data$chromosome))
+  seg = subset(seg, seg$chromosome <= 22)
   seg = seg[order(seg[, 1], seg[, 2], seg[, 3]), ]
   if (rmSmallseg) {
-    seg = subset(seg, num.mark >= nProbes)
+    seg = subset(seg, seg$num.mark >= nProbes)
   }
   if (rmCNV) {
     cat("Removing CNV...", "\n")
@@ -47,7 +48,7 @@ CNregions.mod <- function (seg, epsilon = 0.005, adaptive = FALSE, rmCNV = FALSE
   samples = unique(seg$sample)
   chr = start.maploc = end.maploc = nur = out = NULL
   for(i in unique(as.numeric(seg[, 2]))) { #unique(as.numeric(seg[, 2]))
-    subdata = subset(seg, chromosome == i)
+    subdata = subset(seg, seg$chromosome == i)
     u.breakpts = sort(unique(subdata[, 3]))
     l = length(u.breakpts)
     outi = NULL
@@ -58,7 +59,7 @@ CNregions.mod <- function (seg, epsilon = 0.005, adaptive = FALSE, rmCNV = FALSE
       outj = rep(NA, l)
       sj$start[1] = u.breakpts[1]
       idx = c(match(sj$start, u.breakpts), l)
-      outj = c(rep(sj[, 6], times = diff(idx)), tail(sj[,
+      outj = c(rep(sj[, 6], times = diff(idx)), utils::tail(sj[,
                                                         6], 1))
       outi = cbind(outi, outj)
     }
@@ -68,13 +69,13 @@ CNregions.mod <- function (seg, epsilon = 0.005, adaptive = FALSE, rmCNV = FALSE
     u.end = lapply(2:length(u.start), FUN = function(x) u.se[which(u.start[x] <=
                                                                      u.se)[1]])
     u.end = unlist(u.end)
-    u.end = u.end[complete.cases(u.end)]
+    u.end = u.end[stats::complete.cases(u.end)]
     u.end = c(u.end, max(u.se))
     if(nrow(outi) > 1) adjrow.dist = apply(sqrt(diff(outi)^2), 1, mean)
     else adjrow.dist = mean(sqrt(diff(outi[1,])^2))
     adjrow.dist = c(0, adjrow.dist)
     if (adaptive) {
-      epsilon = quantile(adjrow.dist, prob = 0.97)
+      epsilon = stats::quantile(adjrow.dist, prob = 0.97)
     }
     seg.break = which(adjrow.dist >= epsilon)
     if (length(seg.break) == 0)
