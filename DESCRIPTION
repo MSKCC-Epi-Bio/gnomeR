@@ -53,8 +53,9 @@ Imports:
     reshape2,
     stringr,
     survival,
-    plotly, 
-    rlang
+    plotly,
+    rlang,
+    gt
 Suggests: 
     knitr,
     rmarkdown,
