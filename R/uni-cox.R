@@ -74,7 +74,7 @@ uni.cox <- function(X,surv.dat,surv.formula,filter = 0,genes = NULL,is.gen = TRU
     stop("Only one or fewer genes are left after filtering. We need a minimum of two. Please relax the filter argument.")
 
   # appropriate formula
-  survFormula <- as.formula(surv.formula)
+  survFormula <- stats::as.formula(surv.formula)
   survResponse <- survFormula[[2]]
 
   if(!length(as.list(survResponse)) %in% c(3,4)){
@@ -115,7 +115,7 @@ uni.cox <- function(X,surv.dat,surv.formula,filter = 0,genes = NULL,is.gen = TRU
   }
   colnames(uni) <- c("Coefficient","Pvalue","MutationFrequency")
   uni$Feature <- colnames(X)
-  uni$FDR <- p.adjust(uni$Pvalue, method = "fdr")
+  uni$FDR <- stats::p.adjust(uni$Pvalue, method = "fdr")
   uni <- uni[order(uni$Pvalue),]
 
   uniVolcano <- plot_ly(data = uni, x = ~Coefficient, y = ~-log10(Pvalue),
