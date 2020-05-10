@@ -53,8 +53,8 @@ maf.summary <- function(maf,mut.type = "SOMATIC", spe.plat = F){
   if (sum(grepl("KMT2D", maf$Hugo_Symbol)) > 1) {
     maf <- maf %>%
       mutate(Hugo_Symbol = case_when(
-        Hugo_Symbol == "KMT2D" ~ "MLL2",
-        TRUE ~ Hugo_Symbol
+        .data$Hugo_Symbol == "KMT2D" ~ "MLL2",
+        TRUE ~ .data$Hugo_Symbol
       ))
 
     warning("KMT2D has been recoded to MLL2")
@@ -63,8 +63,8 @@ maf.summary <- function(maf,mut.type = "SOMATIC", spe.plat = F){
   if (sum(grepl("KMT2C", maf$Hugo_Symbol)) > 1) {
     maf <- maf %>%
       mutate(Hugo_Symbol = case_when(
-        Hugo_Symbol == "KMT2C" ~ "MLL3",
-        TRUE ~ Hugo_Symbol
+        .data$Hugo_Symbol == "KMT2C" ~ "MLL3",
+        TRUE ~ .data$Hugo_Symbol
       ))
 
     warning("KMT2C has been recoded to MLL3")
@@ -77,124 +77,124 @@ maf.summary <- function(maf,mut.type = "SOMATIC", spe.plat = F){
 
   # maf <- as.data.frame(maf)
   if(mut.type == "ALL") Mut.filt = unique(maf$Mutation_Status) else Mut.filt = mut.type
-  maf <- maf %>% filter(tolower(Mutation_Status) %in% tolower(Mut.filt))
+  maf <- maf %>% filter(tolower(.data$Mutation_Status) %in% tolower(Mut.filt))
   nb.cols <- 20 #length(unique(maf$Variant_Classification))
   ## summarise variant wise ##
 
   # variants call summary plot #
   maf$Variant_Classification <- factor(as.character(maf$Variant_Classification),
                                        levels =  as.character(unlist(maf %>%
-                                                                       group_by(Variant_Classification) %>%
+                                                                       group_by(.data$Variant_Classification) %>%
                                                                        summarise(N = n()) %>%
-                                                                       arrange(-N) %>% select(Variant_Classification))))
+                                                                       arrange(-.data$N) %>% select(.data$Variant_Classification))))
 
-  p.class <- maf %>% ggplot(aes(x = Variant_Classification,color=Variant_Classification,fill = Variant_Classification)) +
+  p.class <- maf %>% ggplot(aes(x = .data$Variant_Classification,color=.data$Variant_Classification,fill = .data$Variant_Classification)) +
     geom_bar() + coord_flip() + theme(legend.position="none") +
     ggtitle("Variant Classification count") + xlab("Variant Classification") +
-    scale_fill_manual(values = colorRampPalette(brewer.pal(8, "Accent"))(nb.cols) )
+    scale_fill_manual(values = grDevices::colorRampPalette(brewer.pal(8, "Accent"))(nb.cols) )
 
 
   # variants type summary plot #
   maf$Variant_Type <- factor(as.character(maf$Variant_Type),
                              levels =  as.character(unlist(maf %>%
-                                                             group_by(Variant_Type) %>%
+                                                             group_by(.data$Variant_Type) %>%
                                                              summarise(N = n()) %>%
-                                                             arrange(-N) %>% select(Variant_Type))))
-  p.type <- maf %>% ggplot(aes(x = Variant_Type,color=Variant_Type,fill = Variant_Type)) +
+                                                             arrange(-.data$N) %>% select(.data$Variant_Type))))
+  p.type <- maf %>% ggplot(aes(x = .data$Variant_Type,color=.data$Variant_Type,fill = .data$Variant_Type)) +
     geom_bar() + coord_flip() + theme(legend.position="none") +
     ggtitle("Variant Type count") + xlab("Variant Type")
 
   # SNV #
   maf <- maf %>%
-    filter(Variant_Type == "SNP",
-           HGVSc != "") %>%
-    mutate(SNV_Class = substrRight(HGVSc,3))
+    filter(.data$Variant_Type == "SNP",
+           .data$HGVSc != "") %>%
+    mutate(SNV_Class = substrRight(.data$HGVSc,3))
   p.SNV <- maf %>%
-    filter(!grepl("N",SNV_Class)) %>%
-    ggplot(aes(x = SNV_Class,color=SNV_Class,fill = SNV_Class)) +
+    filter(!grepl("N",.data$SNV_Class)) %>%
+    ggplot(aes(x = .data$SNV_Class,color=.data$SNV_Class,fill = .data$SNV_Class)) +
     geom_bar() + coord_flip() + theme(legend.position="none") +
     ggtitle("SNV Class count") + xlab("SNV Class") +
-    scale_fill_manual(values = colorRampPalette(brewer.pal(8, "Accent"))(nb.cols) )
+    scale_fill_manual(values = grDevices::colorRampPalette(brewer.pal(8, "Accent"))(nb.cols) )
 
 
 
   ## summarise patient wise ##
   # distribution of variant per sample #
   maf$Tumor_Sample_Barcode <- factor(as.character(maf$Tumor_Sample_Barcode),levels = as.character(unlist(maf %>%
-                                                                                                           group_by(Tumor_Sample_Barcode) %>%
+                                                                                                           group_by(.data$Tumor_Sample_Barcode) %>%
                                                                                                            summarise(N = n()) %>%
-                                                                                                           arrange(-N) %>% select(Tumor_Sample_Barcode))))
+                                                                                                           arrange(-.data$N) %>% select(.data$Tumor_Sample_Barcode))))
 
   p.patient.variant <- maf %>%
-    group_by(Tumor_Sample_Barcode,Variant_Classification) %>%
-    ggplot(aes(x = Tumor_Sample_Barcode)) + geom_bar(aes(fill = Variant_Classification)) +
+    group_by(.data$Tumor_Sample_Barcode,.data$Variant_Classification) %>%
+    ggplot(aes(x = .data$Tumor_Sample_Barcode)) + geom_bar(aes(fill = .data$Variant_Classification)) +
     ggtitle("Variants per sample") + ylab("Variant Count") +
     theme(axis.title.x=element_blank(),
           axis.text.x=element_blank(),
           axis.ticks.x=element_blank()) +
-    scale_fill_manual(values = colorRampPalette(brewer.pal(8, "Accent"))(nb.cols) )
+    scale_fill_manual(values = grDevices::colorRampPalette(brewer.pal(8, "Accent"))(nb.cols) )
 
   # same but in boxplot format # --> simpler to read
   p.variant.bp <- maf %>%
-    group_by(Tumor_Sample_Barcode,Variant_Classification) %>%
+    group_by(.data$Tumor_Sample_Barcode,.data$Variant_Classification) %>%
     summarise(N = n()) %>%
-    ggplot(aes(x = Variant_Classification, y = N,color = Variant_Classification)) +
+    ggplot(aes(x = .data$Variant_Classification, y = .data$N,color = .data$Variant_Classification)) +
     ggtitle("Variant classification distribution") + xlab("Variant Classification") +
     geom_boxplot() + theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
-    scale_fill_manual(values = colorRampPalette(brewer.pal(8, "Accent"))(nb.cols) )
+    scale_fill_manual(values = grDevices::colorRampPalette(brewer.pal(8, "Accent"))(nb.cols) )
 
 
   # most mutated genes and class distrib #
   top.genes <- as.character(unlist(maf %>%
-                                     group_by(Hugo_Symbol) %>%
+                                     group_by(.data$Hugo_Symbol) %>%
                                      summarise(N = n()) %>%
-                                     arrange(-N) %>%
-                                     select(Hugo_Symbol)))
+                                     arrange(-.data$N) %>%
+                                     select(.data$Hugo_Symbol)))
   maf$Hugo_Symbol <- factor(as.character(maf$Hugo_Symbol),levels = top.genes)
 
   p.genes <-  maf %>%
-    filter(Hugo_Symbol %in% top.genes[1:10]) %>%
-    ggplot(aes(x = Hugo_Symbol)) + geom_bar(aes(fill = Variant_Classification)) +
+    filter(.data$Hugo_Symbol %in% top.genes[1:10]) %>%
+    ggplot(aes(x = .data$Hugo_Symbol)) + geom_bar(aes(fill = .data$Variant_Classification)) +
     coord_flip() +
     ggtitle("Top genes variants classification") + xlab("Gene Name")+
-    scale_fill_manual(values = colorRampPalette(brewer.pal(8, "Accent"))(nb.cols) )
+    scale_fill_manual(values = grDevices::colorRampPalette(brewer.pal(8, "Accent"))(nb.cols) )
 
 
   # distrib of variants per patient #
   varprop.maf <- maf %>% tbl_df() %>%
-    group_by(Tumor_Sample_Barcode) %>%
+    group_by(.data$Tumor_Sample_Barcode) %>%
     mutate(totalMut = n()) %>%
     ungroup() %>%
-    group_by(Tumor_Sample_Barcode,Variant_Classification) %>%
+    group_by(.data$Tumor_Sample_Barcode,.data$Variant_Classification) %>%
     summarise(N=n(),
-              varProp = N/unique(totalMut))
+              varProp = .data$N/unique(.data$totalMut))
 
   p.variant.dist <- varprop.maf %>%
-    ggplot(aes(x = Variant_Classification,y = varProp)) + geom_boxplot(aes(fill = Variant_Classification))+
-    scale_fill_manual(values = colorRampPalette(brewer.pal(8, "Accent"))(nb.cols) ) +
+    ggplot(aes(x = .data$Variant_Classification,y = .data$varProp)) + geom_boxplot(aes(fill = .data$Variant_Classification))+
+    scale_fill_manual(values = grDevices::colorRampPalette(brewer.pal(8, "Accent"))(nb.cols) ) +
     theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
     theme(legend.position="none") + ylab("% Variant")
 
   p.variant.dist.bar <- varprop.maf %>%
-    ggplot(aes(x = Tumor_Sample_Barcode, y=varProp)) +
-    geom_bar(aes(fill = Variant_Classification),stat = "identity") +
+    ggplot(aes(x = .data$Tumor_Sample_Barcode, y=.data$varProp)) +
+    geom_bar(aes(fill = .data$Variant_Classification),stat = "identity") +
     theme(axis.title.x=element_blank(),
           axis.text.x=element_blank(),
           axis.ticks.x=element_blank()) +
-    scale_fill_manual(values = colorRampPalette(brewer.pal(8, "Accent"))(nb.cols) ) +
+    scale_fill_manual(values = grDevices::colorRampPalette(brewer.pal(8, "Accent"))(nb.cols) ) +
     ylab("% Variants")
 
 
   # distrib of mutations per patient #
   p.SNV.dist <- maf %>% tbl_df() %>%
-    group_by(Tumor_Sample_Barcode) %>%
+    group_by(.data$Tumor_Sample_Barcode) %>%
     mutate(totalMut = n()) %>%
     ungroup() %>%
-    group_by(Tumor_Sample_Barcode,SNV_Class) %>%
+    group_by(.data$Tumor_Sample_Barcode,.data$SNV_Class) %>%
     summarise(N=n(),
-              varProp = N/unique(totalMut)) %>%
-    ggplot(aes(x = SNV_Class,y = varProp)) + geom_boxplot(aes(fill = SNV_Class))+
-    scale_fill_manual(values = colorRampPalette(brewer.pal(8, "Accent"))(nb.cols) ) +
+              varProp = .data$N/unique(.data$totalMut)) %>%
+    ggplot(aes(x = .data$SNV_Class,y = .data$varProp)) + geom_boxplot(aes(fill = .data$SNV_Class))+
+    scale_fill_manual(values = grDevices::colorRampPalette(brewer.pal(8, "Accent"))(nb.cols) ) +
     theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
     theme(legend.position="none") + ylab("% SNV")
 

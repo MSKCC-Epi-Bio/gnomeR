@@ -27,11 +27,11 @@ CNregions.mod <- function (seg, epsilon = 0.005, adaptive = FALSE, rmCNV = FALSE
     cat("Removing CNV...", "\n")
     if (is.null(cnv))
       stop("To remove CNV, please include the cnv file. Otherwise set rmCNV=F")
-    gr.cnv = GRanges(seqnames = as.character(cnv[, 1]), ranges = IRanges(start = as.numeric(cnv[,
+    gr.cnv = GenomicRanges::GRanges(seqnames = as.character(cnv[, 1]), ranges = IRanges::IRanges(start = as.numeric(cnv[,
                                                                                                 2]), end = as.numeric(cnv[, 3])))
-    gr.seg = GRanges(seqnames = paste("chr", seg[, 2], sep = ""),
-                     ranges = IRanges(start = seg[, 3], end = seg[, 4]))
-    overlap = findOverlaps(gr.cnv, gr.seg)
+    gr.seg = GenomicRanges::GRanges(seqnames = paste("chr", seg[, 2], sep = ""),
+                     ranges = IRanges::IRanges(start = seg[, 3], end = seg[, 4]))
+    overlap = GenomicRanges::findOverlaps(gr.cnv, gr.seg)
     queryHits = queryHits(overlap)
     subjectHits = subjectHits(overlap)
     start = pmax(seg[subjectHits, 3], cnv[queryHits, 2])
