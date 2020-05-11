@@ -40,7 +40,6 @@ library(dplyr)
 library(dtplyr)
 library(tibble)
 library(plotly)
-library(gt)
 ```
 
 # Introduction {.tabset .tabset-fade .tabset-pills}
@@ -143,7 +142,7 @@ gen.dat <- bin.mut
 bin.test <- gen.tab(gen.dat = gen.dat,
         outcome = outcome,
         filter = 0.05,paired = F,cont = F,rank = T)
-gt(bin.test$fits,rownames_to_stub = T)
+kable(bin.test$fits,row.names = T)
 bin.test$forest.plot
 bin.test$vPlot
 ```
@@ -159,7 +158,7 @@ outcome <-  rnorm(n = nrow(gen.dat))
 tab.out <- gen.tab(gen.dat = gen.dat,
         outcome = outcome,
         filter = 0.05,paired = F,cont = T,rank = T)
-gt(tab.out$fits,rownames_to_stub = T)
+kable(tab.out$fits,row.names = T)
 tab.out$vPlot
 ```
 
@@ -183,7 +182,7 @@ surv.dat <- clin.patients %>%
     filter(!is.na(time))
 X <- bin.mut[match(surv.dat$DMPID,abbreviate(rownames(bin.mut),strict = T, minlength = 9)),]
 surv.test <- uni.cox(X = X, surv.dat = surv.dat,surv.formula = Surv(time,status)~.,filter = 0.05)
-gt(surv.test$tab)
+kable(surv.test$tab,row.names = T)
 surv.test$p
 surv.test$KM
 ```

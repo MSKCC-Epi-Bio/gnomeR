@@ -54,8 +54,7 @@ Imports:
     stringr,
     survival,
     plotly,
-    rlang,
-    gt
+    rlang
 Suggests: 
     knitr,
     rmarkdown,
