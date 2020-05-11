@@ -19,7 +19,6 @@ test_that("missing column error",{
 
   mat = mut
   colnames(mat)[which(colnames(mat)=="Mutation_Status")] = "AA"
-  patients <- as.character(unique(mat$Tumor_Sample_Barcode))[sample(1:length(unique(mat$Tumor_Sample_Barcode)), 1000, replace=FALSE)]
   expect_warning(binmat(patients=patients, maf =mat ))
 })
 
@@ -40,12 +39,12 @@ test_that("read in 1000 patients with SNP.only", {
 })
 
 
-#test_that("read in 1000 patients with rm.empty", {
+test_that("read in 1000 patients with rm.empty", {
   #with SNP.only=T, some samples have no mutation. this generates a warning.
-#  bin.mut = binmat(patients = patients,maf = mut,SNP.only = T,include.silent = F, spe.plat = T, rm.empty = TRUE)
+bin.mut = binmat(patients = patients,maf = mut,SNP.only = T,include.silent = F, spe.plat = T, rm.empty = TRUE)
   #this sample if set.seed is same has no mutations.
- #expect_equal(nrow(bin.mut),"405")
-#})
+ expect_equal(ncol(bin.mut),405)
+})
 
 #and set.plat  - do we need?
 
