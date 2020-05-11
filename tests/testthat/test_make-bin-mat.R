@@ -19,10 +19,6 @@ test_that("missing column error",{
 
   mat = mut
   colnames(mat)[which(colnames(mat)=="Mutation_Status")] = "AA"
-<<<<<<< HEAD
-=======
-  patients <- as.character(unique(mat$Tumor_Sample_Barcode))[sample(1:length(unique(mat$Tumor_Sample_Barcode)), 300, replace=FALSE)]
->>>>>>> upstream/development
   expect_warning(binmat(patients=patients, maf =mat ))
 })
 
