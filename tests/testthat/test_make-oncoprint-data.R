@@ -50,13 +50,13 @@ test_that("make data while throwing warnings",{
 test_that("make data with clinical",{
 
   set.seed(123)
-  patients <- as.character(unique(mut$Tumor_Sample_Barcode))[1:200]
+  patients <- as.character(unique(mut$Tumor_Sample_Barcode))
   bin.mut <- binmat(patients = patients,maf = mut, fusion = fusion,
                     cna = cna, mut.type = "SOMATIC",
                     SNP.only = FALSE,include.silent = FALSE, spe.plat = FALSE)
   gen.dat <- bin.mut[,
-                     c("TP53","TP53.fus","CDKN2A","CDKN2A.Del","PIK3CA","PIK3CA.Amp")]
-  gen.dat$TP53.fus <- rbinom(nrow(gen.dat),1,1/2)
+                     c("TP53","CDKN2A","CDKN2A.Del","PIK3CA","PIK3CA.Amp")]
+  gen.dat$TP53 <- rbinom(nrow(gen.dat),1,1/2)
   gen.dat$CDKN2A.Del <- rbinom(nrow(gen.dat),1,1/2)
   clin.patients.dat <-
   clin.patients[match(abbreviate(rownames(gen.dat),
@@ -76,6 +76,6 @@ test_that("make data with clinical",{
   rownames(gen.dat) <- rownames(clin.patients.dat)
   out <- dat.oncoPrint(gen.dat,clin.patients.dat)
   expect_true(is.matrix(out))
-  expect_true(all(dim(out) == c(6,194)))
+  expect_true(all(dim(out) == c(6,454)))
 
 })

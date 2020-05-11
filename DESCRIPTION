@@ -28,7 +28,9 @@ RoxygenNote: 7.1.0
 Depends: R (>= 3.6)
 biocViews: 
     ComplexHeatmap,
-    iClusterPlus
+    iClusterPlus,
+    GenomicRanges,
+    IRanges
 Imports: 
     magrittr,
     dplyr,
@@ -39,6 +41,8 @@ Imports:
     ggrepel,
     ComplexHeatmap,
     iClusterPlus,
+    GenomicRanges,
+    IRanges,
     cluster,
     grid,
     survminer,
@@ -49,7 +53,9 @@ Imports:
     reshape2,
     stringr,
     survival,
-    plotly
+    plotly,
+    rlang,
+    gt
 Suggests: 
     knitr,
     rmarkdown,

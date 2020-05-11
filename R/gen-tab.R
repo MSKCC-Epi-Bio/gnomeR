@@ -16,7 +16,7 @@
 #' @return forest.plot : A forest plot of the top 10 hits.
 #' @export
 #' @examples library(gnomeR)
-#' patients <- as.character(unique(mut$Tumor_Sample_Barcode))[1:1000]
+#' patients <- as.character(unique(mut$Tumor_Sample_Barcode))
 #' ## binary outcome ##
 #' outcome <- as.character(clin.sample$Sample.Type[match(patients,clin.sample$Sample.Identifier)])
 #' gen.dat <- binmat(patients = patients,maf = mut)
@@ -71,10 +71,10 @@ gen.tab <- function (gen.dat, outcome, filter = 0, paired = F, cont = F,
       outcome <- as.factor(outcome)
     fits <- as.data.frame(t(apply(gen.dat, 2, function(x) {
       if (length(unique(x))/length(x) > 0.5) {
-        x <- ifelse(x > median(x, na.rm = T), 1, 0)
+        x <- ifelse(x > stats::median(x, na.rm = T), 1, 0)
       }
       if (paired == F)
-        test <- fisher.test(x, outcome)
+        test <- stats::fisher.test(x, outcome)
       if (paired == T) {
         test <- mcnemar.exact(x = x[1:(length(x)/2)],
                               y = x[(length(x)/2 + 1):length(x)])
@@ -104,7 +104,7 @@ gen.tab <- function (gen.dat, outcome, filter = 0, paired = F, cont = F,
     })))
     colnames(fits)[2:(length(levels(outcome)) + 1)] <- paste0(colnames(fits)[2:(length(levels(outcome)) +
                                                                                   1)], "(N=", as.numeric(summary(outcome)), ")")
-    fits$FDR <- formatC(p.adjust(as.numeric(as.character(fits$Pvalue)),
+    fits$FDR <- formatC(stats::p.adjust(as.numeric(as.character(fits$Pvalue)),
                                  method = "fdr"), format = "e", digits = 2)
     if (rank)
       fits <- fits[order(as.numeric(as.character(fits$Pvalue))),
@@ -112,26 +112,26 @@ gen.tab <- function (gen.dat, outcome, filter = 0, paired = F, cont = F,
     if (!is.null(fits$OddsRatio)) {
     f.dat <- fits
     f.dat$Gene <- rownames(f.dat)
-    f.dat <- f.dat %>% filter(!is.infinite(OddsRatio)) %>%
-      mutate(OddsRatio = as.numeric(as.character(OddsRatio)),
-             Lower = as.numeric(as.character(Lower)), Upper = as.numeric(as.character(Upper)),
+    f.dat <- f.dat %>% filter(!is.infinite(.data$OddsRatio)) %>%
+      mutate(OddsRatio = as.numeric(as.character(.data$OddsRatio)),
+             Lower = as.numeric(as.character(.data$Lower)), Upper = as.numeric(as.character(.data$Upper)),
       )
     f.dat <- f.dat[1:min(10, nrow(f.dat)), ]
-    forest.plot <- f.dat %>% ggplot(aes(x = Gene, y = OddsRatio,
-                                        ymin = Lower, ymax = Upper)) + geom_pointrange(aes(col = Gene)) +
-      geom_hline(aes(fill = Gene), yintercept = 1,
+    forest.plot <- f.dat %>% ggplot(aes(x = .data$Gene, y = .data$OddsRatio,
+                                        ymin = .data$Lower, ymax = .data$Upper)) + geom_pointrange(aes(col = .data$Gene)) +
+      geom_hline(aes(fill = .data$Gene), yintercept = 1,
                  linetype = 2) + xlab("Gene") + ylab("Risk Ratio (95% Confidence Interval)") +
-      geom_errorbar(aes(ymin = Lower, ymax = Upper,
-                        col = Gene), width = 0.5, cex = 1) + coord_flip()
+      geom_errorbar(aes(ymin = .data$Lower, ymax = .data$Upper,
+                        col = .data$Gene), width = 0.5, cex = 1) + coord_flip()
     vplot <- fits %>% rownames_to_column("Gene") %>%
-      mutate(Pvalue = as.numeric(as.character(Pvalue)),
-             OddsRatio = as.numeric(as.character(OddsRatio)),
-             FDRsign = ifelse(as.numeric(as.character(FDR)) <
+      mutate(Pvalue = as.numeric(as.character(.data$Pvalue)),
+             OddsRatio = as.numeric(as.character(.data$OddsRatio)),
+             FDRsign = ifelse(as.numeric(as.character(.data$FDR)) <
                                 0.05, "Significant", "Non signifcant")) %>%
-      ggplot(aes(x = OddsRatio, y = -log10(Pvalue),
-                 fill = FDRsign, color = FDRsign)) + geom_point() +
-      geom_label_repel(aes(label = ifelse(FDRsign ==
-                                            "Significant", as.character(Gene), "")), color = "white")
+      ggplot(aes(x = .data$OddsRatio, y = -log10(.data$Pvalue),
+                 fill = .data$FDRsign, color = .data$FDRsign)) + geom_point() +
+      geom_label_repel(aes(label = ifelse(.data$FDRsign ==
+                                            "Significant", as.character(.data$Gene), "")), color = "white")
     }
     else {
       forest.plot <- NULL
@@ -144,7 +144,7 @@ gen.tab <- function (gen.dat, outcome, filter = 0, paired = F, cont = F,
                                                  2, function(x) {
                                                    if (length(unique(x))/length(x) > 0.25 || length(unique(x)) ==
                                                        2) {
-                                                     fit <- lm(outcome ~ x)
+                                                     fit <- stats::lm(outcome ~ x)
                                                      temp <- as.data.frame(summary(fit)$coefficient)
                                                      colnames(temp) <- c("Estimate", "SD", "tvalue",
                                                                          "Pvalue")
@@ -154,7 +154,7 @@ gen.tab <- function (gen.dat, outcome, filter = 0, paired = F, cont = F,
                                                      out <- temp[2, c(1, 2, 4, 5)]
                                                    }
                                                    else {
-                                                     fit <- lm(outcome ~ as.factor(x))
+                                                     fit <- stats::lm(outcome ~ as.factor(x))
                                                      temp <- as.data.frame(summary(fit)$coefficient)
                                                      colnames(temp) <- c("Estimate", "SD", "tvalue",
                                                                          "Pvalue")
@@ -166,20 +166,20 @@ gen.tab <- function (gen.dat, outcome, filter = 0, paired = F, cont = F,
                                                    }
                                                    return(out)
                                                  })))
-    fits$FDR <- p.adjust(fits$Pvalue, method = "fdr")
+    fits$FDR <- stats::p.adjust(fits$Pvalue, method = "fdr")
     fits$GeneName <- rownames(fits)
     if (all(apply(gen.dat, 2, is.numeric))) {
 
-      vPlot <- try(plot_ly(data = fits %>% filter(!is.na(Pvalue),
-                                                  is.numeric(Pvalue)), x = ~Estimate, y = ~-log10(Pvalue),
+      vPlot <- try(plot_ly(data = fits %>% filter(!is.na(.data$Pvalue),
+                                                  is.numeric(.data$Pvalue)), x = ~Estimate, y = ~-log10(.data$Pvalue),
                            text = ~paste("Gene :", GeneName, "</br> Estimate :",
                                          round(Estimate, digits = 2)), mode = "markers",
                            size = ~MutationFreq, color = ~Estimate) %>%
                      layout(title = "Volcano Plot"), silent = T)
     }
     else {
-      vPlot <- try(plot_ly(data = fits %>% filter(!is.na(Pvalue),
-                                                  is.numeric(Pvalue)), x = ~Estimate, y = ~-log10(Pvalue),
+      vPlot <- try(plot_ly(data = fits %>% filter(!is.na(.data$Pvalue),
+                                                  is.numeric(.data$Pvalue)), x = ~Estimate, y = ~-log10(.data$Pvalue),
                            text = ~paste("Gene :", GeneName, "</br> Estimate :",
                                          round(Estimate, digits = 2)), mode = "markers") %>%
                      layout(title = "Volcano Plot"), silent = T)

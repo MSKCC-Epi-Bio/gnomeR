@@ -40,6 +40,7 @@ library(dplyr)
 library(dtplyr)
 library(tibble)
 library(plotly)
+library(gt)
 ```
 
 # Introduction {.tabset .tabset-fade .tabset-pills}
@@ -139,9 +140,12 @@ The `gen.tab` function allows us to test for potential differences in genetic ev
 ```{r}
 outcome <- as.character(clin.sample$Sample.Type[match(patients,clin.sample$Sample.Identifier)])
 gen.dat <- bin.mut
-gen.tab(gen.dat = gen.dat,
+bin.test <- gen.tab(gen.dat = gen.dat,
         outcome = outcome,
         filter = 0.05,paired = F,cont = F,rank = T)
+gt(bin.test$fits,rownames_to_stub = T)
+bin.test$forest.plot
+bin.test$vPlot
 ```
 
 
@@ -155,7 +159,7 @@ outcome <-  rnorm(n = nrow(gen.dat))
 tab.out <- gen.tab(gen.dat = gen.dat,
         outcome = outcome,
         filter = 0.05,paired = F,cont = T,rank = T)
-tab.out$fits
+gt(tab.out$fits,rownames_to_stub = T)
 tab.out$vPlot
 ```
 
@@ -178,7 +182,10 @@ surv.dat <- clin.patients %>%
     status = ifelse(status == "LIVING",0,1)) %>%
     filter(!is.na(time))
 X <- bin.mut[match(surv.dat$DMPID,abbreviate(rownames(bin.mut),strict = T, minlength = 9)),]
-uni.cox(X = X, surv.dat = surv.dat,surv.formula = Surv(time,status)~.,filter = 0.05)
+surv.test <- uni.cox(X = X, surv.dat = surv.dat,surv.formula = Surv(time,status)~.,filter = 0.05)
+gt(surv.test$tab)
+surv.test$p
+surv.test$KM
 ```
 
 

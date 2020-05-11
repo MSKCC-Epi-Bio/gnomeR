@@ -21,6 +21,8 @@
 #' @param set.plat character argument specifying which IMPACT platform the data should be reduced to if spe.plat is set to TRUE.
 #'  Options are "341", "410" and "468". Default is NULL.
 #' @param rm.empty boolean specifying if columns with no events founds should be removed. Default is TRUE.
+#' @param col.names character vector of the necessary columns to be used. By default: col.names = c(Tumor_Sample_Barcode = NULL,
+#'  Hugo_Symbol = NULL, Variant_Classification = NULL, Mutation_Status = NULL, Variant_Type = NULL)
 #' @return mut : a binary matrix of mutation data
 #' @export
 #' @examples library(gnomeR)
@@ -44,13 +46,33 @@
 ###############################################
 
 binmat <- function(patients=NULL, maf = NULL, mut.type = "SOMATIC",SNP.only = FALSE,include.silent = FALSE,
-                   fusion = NULL,cna = NULL,cna.relax = FALSE, spe.plat = TRUE, set.plat = NULL,rm.empty = TRUE){
+                   fusion = NULL,cna = NULL,cna.relax = FALSE, spe.plat = TRUE, set.plat = NULL,rm.empty = TRUE,
+                   col.names = c(Tumor_Sample_Barcode = NULL, Hugo_Symbol = NULL,
+                                 Variant_Classification = NULL, Mutation_Status = NULL, Variant_Type = NULL)){
 
   if(is.null(maf) && is.null(fusion) && is.null(cna)) stop("You must provided one of the three following files: MAF, fusion or CNA.")
+  # reformat columns #
+  if(!is.null(maf)) maf <- maf %>%
+      rename(col.names)
+  if(!is.null(fusion)) fusion <- fusion %>%
+      rename(col.names)
+
+  ## if data from API need to split mutations and fusions ##
+  if(!is.null(maf) && is.null(fusion) &&
+     nrow(maf %>%
+          filter(.data$Variant_Classification == "Fusion")) > 0){
+    fusion <- maf %>%
+      filter(.data$Variant_Classification == "Fusion")
+    maf <- maf %>%
+      filter(.data$Variant_Classification != "Fusion")
+    warning("Fusions were found in the maf file, they were removed and a fusion file was created.")
+  }
+
 
   mut <- NULL
 
   if(!is.null(maf)){
+
     # quick data checks #
     if(is.na(match("Tumor_Sample_Barcode",colnames(maf))))
       stop("The MAF file inputted is missing a patient name column. (Tumor_Sample_Barcode)")
@@ -62,6 +84,11 @@ binmat <- function(patients=NULL, maf = NULL, mut.type = "SOMATIC",SNP.only = FA
       warning("The MAF file inputted is missing a mutation status column (Mutation_Status). It will be assumed that
             all variants are of the same type (SOMATIC/GERMLINE).")
       maf$Mutation_Status <- rep("SOMATIC",nrow(maf))
+    }
+    if(is.na(match("Variant_Type",colnames(maf)))){
+      warning("The MAF file inputted is missing a mutation status column (Variant_Type). It will be assumed that
+            all variants are of the same type (SNPs).")
+      maf$Variant_Type <- rep("SNPs",nrow(maf))
     }
 
     # set maf to maf class #
@@ -77,6 +104,7 @@ binmat <- function(patients=NULL, maf = NULL, mut.type = "SOMATIC",SNP.only = FA
 
   # fusions #
   if(!is.null(fusion)){
+
     fusion <- as.data.frame(fusion)
     fusion <- structure(fusion,class = c("data.frame","fusion"))
     # filter/define patients #
@@ -118,17 +146,18 @@ binmat <- function(patients=NULL, maf = NULL, mut.type = "SOMATIC",SNP.only = FA
       spe.plat = F
     }
     if(spe.plat){
+      g.impact <- g.impact
       # remove 410 platform patients #
       missing <- setdiff(c(g.impact$g468, paste0(g.impact$g468,".fus"),paste0(g.impact$g468,".Del"),paste0(g.impact$g468,".Amp")),
                          c(g.impact$g410, paste0(g.impact$g410,".fus"),paste0(g.impact$g410,".Del"),paste0(g.impact$g410,".Amp")))
       if(sum(v == "5") > 0 && sum(missing %in% colnames(mut)) > 0)
-        mut[which(v == "5"), na.omit(match(missing, colnames(mut)))] <- NA
+        mut[which(v == "5"), stats::na.omit(match(missing, colnames(mut)))] <- NA
 
       # remove 341 platform patients #
       missing <- setdiff(c(g.impact$g468, paste0(g.impact$g468,".fus"),paste0(g.impact$g468,".Del"),paste0(g.impact$g468,".Amp")),
                          c(g.impact$g341, paste0(g.impact$g341,".fus"),paste0(g.impact$g341,".Del"),paste0(g.impact$g341,".Amp")))
       if(sum(v == "3") > 0 && sum(missing %in% colnames(mut)) > 0)
-        mut[which(v == "3"), na.omit(match(missing, colnames(mut)))] <- NA
+        mut[which(v == "3"), stats::na.omit(match(missing, colnames(mut)))] <- NA
 
     }
   }
@@ -191,6 +220,16 @@ createbin.maf <- function(obj, patients, mut.type, SNP.only, include.silent, cna
     warning("KMT2C has been recoded to MLL3")
   }
 
+  if (sum(grepl("MYCL", maf$Hugo_Symbol)) > 1) {
+    maf <- maf %>%
+      mutate(Hugo_Symbol = case_when(
+        Hugo_Symbol == "MYCL" ~ "MYCL1",
+        TRUE ~ Hugo_Symbol
+      ))
+
+    warning("MYCL has been recoded to MYCL1")
+  }
+
   # # clean gen dat #
   if(SNP.only) SNP.filt = "SNP"
   else SNP.filt = unique(maf$Variant_Type)
@@ -201,9 +240,9 @@ createbin.maf <- function(obj, patients, mut.type, SNP.only, include.silent, cna
   if(tolower(mut.type) == "all") Mut.filt = unique(maf$Mutation_Status)
   else Mut.filt = mut.type
 
-  maf <- maf %>% filter(Variant_Classification != Variant.filt,
-                        Variant_Type %in% SNP.filt,
-                        tolower(Mutation_Status) %in% tolower(Mut.filt))
+  maf <- maf %>% filter(.data$Variant_Classification != Variant.filt,
+                        .data$Variant_Type %in% SNP.filt,
+                        tolower(.data$Mutation_Status) %in% tolower(Mut.filt))
 
 
   #### out frame
@@ -238,7 +277,7 @@ createbin.fusion <- function(obj, patients, mut.type, SNP.only,include.silent, c
 
 
   fusion <- fusion %>%
-    filter(Tumor_Sample_Barcode %in% patients)
+    filter(.data$Tumor_Sample_Barcode %in% patients)
 
   #### out frame
   fusion.out <- as.data.frame(matrix(0L,nrow=length(patients),ncol=length(unique(fusion$Hugo_Symbol))))

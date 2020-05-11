@@ -7,7 +7,7 @@
 #' @export
 #' @examples
 #' library(gnomeR)
-#' patients <- as.character(unique(mut$Tumor_Sample_Barcode))[1:500]
+#' patients <- as.character(unique(mut$Tumor_Sample_Barcode))
 #' bin.mut <- binmat(patients = patients,maf = mut,mut.type = "SOMATIC",
 #' SNP.only = FALSE,include.silent = FALSE, spe.plat = FALSE)
 #' gen.dat <- bin.mut[1:500,
@@ -79,7 +79,7 @@ dat.oncoPrint <- function(gen.dat,clin.dat=NULL){
   rownames(mat) <- genes
 
   # mutations #
-  mut <- gen.dat[,na.omit(match(genes,colnames(gen.dat)))]
+  mut <- gen.dat[,stats::na.omit(match(genes,colnames(gen.dat)))]
 
   for(i in 1:nrow(mut)){
     for(j in 1:ncol(mut)){
@@ -92,13 +92,13 @@ dat.oncoPrint <- function(gen.dat,clin.dat=NULL){
   }
 
   # del #
-  if(length(na.omit(match(paste0(genes,".Del"),colnames(gen.dat)))) > 0){
-    del <- gen.dat[,na.omit(match(paste0(genes,".Del"),colnames(gen.dat)))]
+  if(length(stats::na.omit(match(paste0(genes,".Del"),colnames(gen.dat)))) > 0){
+    del <- gen.dat[,stats::na.omit(match(paste0(genes,".Del"),colnames(gen.dat)))]
     if(is.null(dim(del))) {
       del <- as.data.frame(del)
       rownames(del) <- rownames(gen.dat)
     }
-    colnames(del) <- gsub(".Del","",colnames(gen.dat)[na.omit(match(paste0(genes,".Del"),colnames(gen.dat)))])
+    colnames(del) <- gsub(".Del","",colnames(gen.dat)[stats::na.omit(match(paste0(genes,".Del"),colnames(gen.dat)))])
     for(i in 1:nrow(del)){
       for(j in 1:ncol(del)){
         if(del[i,j]==1) {
@@ -112,13 +112,13 @@ dat.oncoPrint <- function(gen.dat,clin.dat=NULL){
   }
 
   # amp #
-  if(length(na.omit(match(paste0(genes,".Amp"),colnames(gen.dat)))) > 0){
-    amp <- gen.dat[,na.omit(match(paste0(genes,".Amp"),colnames(gen.dat)))]
+  if(length(stats::na.omit(match(paste0(genes,".Amp"),colnames(gen.dat)))) > 0){
+    amp <- gen.dat[,stats::na.omit(match(paste0(genes,".Amp"),colnames(gen.dat)))]
     if(is.null(dim(amp))) {
       amp <- as.data.frame(amp)
       rownames(amp) <- rownames(gen.dat)
     }
-    colnames(amp) <- gsub(".Amp","",colnames(gen.dat)[na.omit(match(paste0(genes,".Amp"),colnames(gen.dat)))])
+    colnames(amp) <- gsub(".Amp","",colnames(gen.dat)[stats::na.omit(match(paste0(genes,".Amp"),colnames(gen.dat)))])
     for(i in 1:nrow(amp)){
       for(j in 1:ncol(amp)){
         if(amp[i,j]==1) {
@@ -132,13 +132,13 @@ dat.oncoPrint <- function(gen.dat,clin.dat=NULL){
   }
 
   # fusions #
-  if(length(na.omit(match(paste0(genes,".fus"),colnames(gen.dat)))) > 0){
-    fusion <- gen.dat[,na.omit(match(paste0(genes,".fus"),colnames(gen.dat)))]
+  if(length(stats::na.omit(match(paste0(genes,".fus"),colnames(gen.dat)))) > 0){
+    fusion <- gen.dat[,stats::na.omit(match(paste0(genes,".fus"),colnames(gen.dat)))]
     if(is.null(dim(fusion))) {
       fusion <- as.data.frame(fusion)
       rownames(fusion) <- rownames(gen.dat)
     }
-    colnames(fusion) <- gsub(".fus","",colnames(gen.dat)[na.omit(match(paste0(genes,".fus"),colnames(gen.dat)))])
+    colnames(fusion) <- gsub(".fus","",colnames(gen.dat)[stats::na.omit(match(paste0(genes,".fus"),colnames(gen.dat)))])
     for(i in 1:nrow(fusion)){
       for(j in 1:ncol(fusion)){
         if(fusion[i,j]==1) {
@@ -167,7 +167,7 @@ dat.oncoPrint <- function(gen.dat,clin.dat=NULL){
 
       else{
         y <- as.numeric(y)
-        mat[match(x,rownames(mat)),] <- ifelse(y > median(y,na.rm = T),"CLIN;",NA)
+        mat[match(x,rownames(mat)),] <- ifelse(y > stats::median(y,na.rm = T),"CLIN;",NA)
       }
     }
   }

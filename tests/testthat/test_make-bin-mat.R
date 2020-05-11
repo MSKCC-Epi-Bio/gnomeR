@@ -19,23 +19,31 @@ test_that("missing column error",{
 
   mat = mut
   colnames(mat)[which(colnames(mat)=="Mutation_Status")] = "AA"
+<<<<<<< HEAD
+=======
+  patients <- as.character(unique(mat$Tumor_Sample_Barcode))[sample(1:length(unique(mat$Tumor_Sample_Barcode)), 300, replace=FALSE)]
+>>>>>>> upstream/development
   expect_warning(binmat(patients=patients, maf =mat ))
 })
 
-test_that("read in 1000 patients with spe.plat", {
+test_that("read in patients with spe.plat", {
+  set.seed(123)
+  patients <- as.character(unique(mut$Tumor_Sample_Barcode))[sample(1:length(unique(mut$Tumor_Sample_Barcode)), 300, replace=FALSE)]
   bin.mut <- binmat(patients = patients,maf = mut,SNP.only = F,include.silent = F, spe.plat = T, rm.empty = FALSE)
-  expect_equal(names(table(colSums(is.na(bin.mut))))[2], "230")
-  expect_equivalent(table(bin.mut[,"TP53"])[2], 454 )
+  expect_equal(names(table(colSums(is.na(bin.mut))))[2], "145")
+  expect_equivalent(table(bin.mut[,"TP53"])[2], 124)
 })
 
 #same patients but with different parameters of reading in binmat
 
-test_that("read in 1000 patients with SNP.only", {
+test_that("read in patients with SNP.only", {
+  set.seed(123)
+  patients <- as.character(unique(mut$Tumor_Sample_Barcode))[sample(1:length(unique(mut$Tumor_Sample_Barcode)), 300, replace=FALSE)]
   #with SNP.only=T, some samples have no mutation. this generates a warning.
-  expect_warning(binmat(patients = patients,maf = mut,SNP.only = T,include.silent = F, spe.plat = T, rm.empty = FALSE))
-  bin.mut = binmat(patients = patients,maf = mut,SNP.only = T,include.silent = F, spe.plat = T, rm.empty = FALSE)
+  expect_warning(bin.mut <- binmat(patients = patients,maf = mut,SNP.only = T,include.silent = F, spe.plat = T, rm.empty = FALSE))
+
   #this sample if set.seed is same has no mutations.
-  expect_equal(names(table(t(bin.mut["P-0006305-T01-IM5",]))),"0")
+  expect_equal(names(table(t(bin.mut["P-0006282-T02-IM5",]))),"0")
 })
 
 
