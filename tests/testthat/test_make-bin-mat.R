@@ -23,8 +23,6 @@ test_that("missing column error",{
 })
 
 test_that("read in patients with spe.plat", {
-  set.seed(123)
-  patients <- as.character(unique(mut$Tumor_Sample_Barcode))[sample(1:length(unique(mut$Tumor_Sample_Barcode)), 300, replace=FALSE)]
   bin.mut <- binmat(patients = patients,maf = mut,SNP.only = F,include.silent = F, spe.plat = T, rm.empty = FALSE)
   expect_equal(names(table(colSums(is.na(bin.mut))))[2], "145")
   expect_equivalent(table(bin.mut[,"TP53"])[2], 124)
@@ -33,8 +31,6 @@ test_that("read in patients with spe.plat", {
 #same patients but with different parameters of reading in binmat
 
 test_that("read in patients with SNP.only", {
-  set.seed(123)
-  patients <- as.character(unique(mut$Tumor_Sample_Barcode))[sample(1:length(unique(mut$Tumor_Sample_Barcode)), 300, replace=FALSE)]
   #with SNP.only=T, some samples have no mutation. this generates a warning.
   expect_warning(bin.mut <- binmat(patients = patients,maf = mut,SNP.only = T,include.silent = F, spe.plat = T, rm.empty = FALSE))
 
