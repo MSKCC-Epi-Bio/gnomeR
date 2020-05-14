@@ -1,29 +1,30 @@
 context("check make maf summary")
 source_test_helpers(path = "tests/testthat/helper_dat.R", env = test_env())
 
-test_that("missing column error (Tumor_Sample_Barcode)",{
+test_that("missing column error",{
 
-  mat = matrix(rnorm(1,100), ncol=4)
-  colnames(mat) = c("Hugo_Symbol", "Variant_Classification", "A","B")
-  expect_error(maf.summary(maf = mat ))
+  mat = mut
+  colnames(mat)[which(colnames(mat)=="Tumor_Sample_Barcode")] = "AA"
+  expect_error(binmat(maf=mat), "The MAF file inputted is missing a patient name column. (Tumor_Sample_Barcode)", fixed=TRUE)
+
+  mat = mut
+  colnames(mat)[which(colnames(mat)=="Hugo_Symbol")] = "AA"
+  expect_error(binmat(maf=mat), "The MAF file inputted is missing a gene name column. (Hugo_Symbol)", fixed=TRUE)
+
+  mat = mut
+  colnames(mat)[which(colnames(mat)=="Variant_Classification")] = "AA"
+  #expect_error(binmat(maf=mat), "The MAF file inputted is missing a variant classification column. (Variant_Classification)", fixed=TRUE)
+  expect_error(binmat(maf=mat))
+
+  mat = mut
+  colnames(mat)[which(colnames(mat)=="Mutation_Status")] = "AA"
+  expect_warning(binmat(patients=patients, maf =mat ))
+
+  mat = mut
+  colnames(mat)[which(colnames(mat)=="Variant_Type")] = "AA"
+  expect_warning(binmat(patients=patients, maf =mat ))
 
 })
-
-test_that("missing column error (Hugo_Symbol)",{
-
-  mat = matrix(rnorm(1,100), ncol=4)
-  colnames(mat) = c("Tumor_Sample_Barcode", "Variant_Classification", "A","B")
-  expect_error(maf.summary(maf = mat ))
-
-})
-
-test_that("missing column warning",{
-
-  mat = matrix(rnorm(1,100), ncol=4)
-  colnames(mat) = c("Hugo_Symbol", "Missing", "Tumor_Sample_Barcode","B")
-  expect_error(maf.summary(maf = mat ))
-})
-
 
 test_that("read in 1000 patients with spe.plat", {
    mat <- mut %>%

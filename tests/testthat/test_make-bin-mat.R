@@ -7,21 +7,38 @@ test_that("missing/null variables",{
 
 test_that("missing column error",{
 
-  mat = matrix(rnorm(1,100), ncol=4)
-  colnames(mat) = c("Hugo_Symbol", "Variant_Classification", "A","B")
-  expect_error(binmat(maf =mat ))
+  mat = mut
+  colnames(mat)[which(colnames(mat)=="Tumor_Sample_Barcode")] = "AA"
+  expect_error(binmat(maf=mat), "The MAF file inputted is missing a patient name column. (Tumor_Sample_Barcode)", fixed=TRUE)
 
-  colnames(mat) = c("A", "Variant_Classification", "Tumor_Sample_Barcode","B")
-  expect_error(binmat(maf =mat ))
+  mat = mut
+  colnames(mat)[which(colnames(mat)=="Hugo_Symbol")] = "AA"
+  expect_error(binmat(maf=mat), "The MAF file inputted is missing a gene name column. (Hugo_Symbol)", fixed=TRUE)
 
-  colnames(mat) = c("Hugo_Symbol", "A", "Tumor_Sample_Barcode","B")
-  expect_error(binmat(maf =mat ))
+  mat = mut
+  colnames(mat)[which(colnames(mat)=="Variant_Classification")] = "AA"
+  #expect_error(binmat(maf=mat), "The MAF file inputted is missing a variant classification column. (Variant_Classification)", fixed=TRUE)
+  expect_error(binmat(maf=mat))
 
   mat = mut
   colnames(mat)[which(colnames(mat)=="Mutation_Status")] = "AA"
   expect_warning(binmat(patients=patients, maf =mat ))
+
+  mat = mut
+  colnames(mat)[which(colnames(mat)=="Variant_Type")] = "AA"
+  expect_warning(binmat(patients=patients, maf =mat ))
+
 })
 
+#patients=NULL
+
+test_that("when patients is NULL", {
+  mat = binmat(maf=mut)
+  expect_equal(ncol(mat), 376)
+  expect_equal(nrow(mat), 457)
+})
+
+#spe.plat, also checks patients
 test_that("read in patients with spe.plat", {
   bin.mut <- binmat(patients = patients,maf = mut,SNP.only = F,include.silent = F, spe.plat = T, rm.empty = FALSE)
   expect_equal(names(table(colSums(is.na(bin.mut))))[2], "145")
@@ -39,16 +56,31 @@ test_that("read in patients with SNP.only", {
 })
 
 
-test_that("read in 1000 patients with rm.empty", {
+test_that("read in 300 patients with rm.empty", {
   #with SNP.only=T, some samples have no mutation. this generates a warning.
 bin.mut = binmat(patients = patients,maf = mut,SNP.only = T,include.silent = F, spe.plat = T, rm.empty = TRUE)
   #this sample if set.seed is same has no mutations.
- expect_equal(ncol(bin.mut),405)
+  #samples have changed, now there are 457 samples
+ expect_equal(ncol(bin.mut),331)
 })
+
+#what if we don't have impact samples
+test_that("no impact samples",{
+  mat = mut
+  mat$Tumor_Sample_Barcode = substr(as.character(mat$Tumor_Sample_Barcode),1,12)
+  expect_warning(bin.mut<-binmat(maf=mat, spe.plat = TRUE))
+  expect_equal(ncol(bin.mut),376)
+  #some samples are repeat
+  expect_equal(nrow(bin.mut),454)
+})
+
+
 
 #and set.plat  - do we need?
 
 #check from 140-145? do we need?
+#line number 154
+#read in fusions
 
 
 
