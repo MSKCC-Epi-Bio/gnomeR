@@ -14,6 +14,7 @@ binmat(
   include.silent = FALSE,
   fusion = NULL,
   cna = NULL,
+  cna.binary = TRUE,
   cna.relax = FALSE,
   spe.plat = TRUE,
   set.plat = NULL,
@@ -43,6 +44,9 @@ Default is NULL.}
 Default is NULL. Note that this file must have patients as columns and genes as rows. binmat expects a matrix with
 values between -2 and 2. Please do not use any other format. Other functions in the package are available to deal with more detailed
 CNA data.}
+
+\item{cna.binary}{A boolean argument specifying if the cna events should be enforced as binary. In which case separate columns for
+amplifications and deletions will be created.}
 
 \item{cna.relax}{for cna data only enables to count both gains and shallow deletions as amplifications and deletions respectively.}
 

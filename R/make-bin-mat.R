@@ -15,6 +15,8 @@
 #' Default is NULL. Note that this file must have patients as columns and genes as rows. binmat expects a matrix with
 #' values between -2 and 2. Please do not use any other format. Other functions in the package are available to deal with more detailed
 #' CNA data.
+#' @param cna.binary A boolean argument specifying if the cna events should be enforced as binary. In which case separate columns for
+#' amplifications and deletions will be created.
 #' @param cna.relax for cna data only enables to count both gains and shallow deletions as amplifications and deletions respectively.
 #' @param spe.plat boolean specifying if specific IMPACT platforms should be considered. When TRUE NAs will fill the cells for genes
 #' of patients that were not sequenced on that plaform. Default is TRUE.
@@ -46,7 +48,7 @@
 ###############################################
 
 binmat <- function(patients=NULL, maf = NULL, mut.type = "SOMATIC",SNP.only = FALSE,include.silent = FALSE,
-                   fusion = NULL,cna = NULL,cna.relax = FALSE, spe.plat = TRUE, set.plat = NULL,rm.empty = TRUE,
+                   fusion = NULL,cna = NULL,cna.binary = TRUE,cna.relax = FALSE, spe.plat = TRUE, set.plat = NULL,rm.empty = TRUE,
                    col.names = c(Tumor_Sample_Barcode = NULL, Hugo_Symbol = NULL,
                                  Variant_Classification = NULL, Mutation_Status = NULL, Variant_Type = NULL)){
 
@@ -97,7 +99,7 @@ binmat <- function(patients=NULL, maf = NULL, mut.type = "SOMATIC",SNP.only = FA
     if(!is.null(patients)) maf <- maf[maf$Tumor_Sample_Barcode %in% patients,]
     else patients <- as.character(unique(maf$Tumor_Sample_Barcode))
     # getting mutation binary matrix #
-    mut <- createbin(obj = maf, patients = patients, mut.type = mut.type,cna.relax = cna.relax,
+    mut <- createbin(obj = maf, patients = patients, mut.type = mut.type, cna.binary = cna.binary,cna.relax = cna.relax,
                      SNP.only = SNP.only, include.silent = include.silent, spe.plat = spe.plat)
 
   }
@@ -109,7 +111,7 @@ binmat <- function(patients=NULL, maf = NULL, mut.type = "SOMATIC",SNP.only = FA
     fusion <- structure(fusion,class = c("data.frame","fusion"))
     # filter/define patients #
     if(is.null(patients)) patients <- as.character(unique(fusion$Tumor_Sample_Barcode))
-    fusion <- createbin(obj = fusion, patients = patients, mut.type = mut.type,
+    fusion <- createbin(obj = fusion, patients = patients, mut.type = mut.type, cna.binary = cna.binary,
                         SNP.only = SNP.only, include.silent = include.silent, spe.plat = spe.plat)
     if(!is.null(mut)){
       mut <- as.data.frame(cbind(mut,fusion))
@@ -119,11 +121,19 @@ binmat <- function(patients=NULL, maf = NULL, mut.type = "SOMATIC",SNP.only = FA
 
   # cna #
   if(!is.null(cna)){
-    cna <- as.data.frame(cna)
-    cna <- structure(cna,class = c("data.frame","cna"))
-    if(is.null(patients)) patients <- as.character(colnames(cna))
-    cna <- createbin(obj = cna, patients = patients, mut.type = mut.type,cna.relax = cna.relax,
-                     SNP.only = SNP.only, include.silent = include.silent, spe.plat = spe.plat)
+    if("api" %in% class(cna)){
+      if(is.null(patients)) patients <- unique(cna$sampleId)
+      cna <- createbin(obj = cna, patients = patients, mut.type = mut.type, cna.binary = cna.binary,cna.relax = cna.relax,
+                       SNP.only = SNP.only, include.silent = include.silent, spe.plat = spe.plat)
+    }
+
+    else{
+      cna <- as.data.frame(cna)
+      cna <- structure(cna,class = c("data.frame","cna"))
+      if(is.null(patients)) patients <- gsub("\\.","-",as.character(colnames(cna)))[-1]
+      cna <- createbin(obj = cna, patients = patients, mut.type = mut.type, cna.binary = cna.binary,cna.relax = cna.relax,
+                       SNP.only = SNP.only, include.silent = include.silent, spe.plat = spe.plat)
+    }
     if(!is.null(mut)){
       mut <- as.data.frame(cbind(mut,cna))
       rownames(mut) <- patients}
@@ -173,7 +183,10 @@ binmat <- function(patients=NULL, maf = NULL, mut.type = "SOMATIC",SNP.only = FA
     }
   }
 
-  if(rm.empty && length(which(apply(mut,2,function(x){sum(x,na.rm=TRUE)})>0))) mut <- mut[,which(apply(mut,2,function(x){sum(x,na.rm=TRUE)})>0)]
+  # if(rm.empty && length(which(apply(mut,2,function(x){sum(x,na.rm=TRUE)})>0))) mut <- mut[,which(apply(mut,2,function(x){sum(x,na.rm=TRUE)})>0)]
+  if(rm.empty && length(which(apply(mut,2,function(x){length(unique(x[!is.na(x)]))})>0)))
+    mut <- mut[,which(apply(mut,2,function(x){length(unique(x[!is.na(x)]))})>0)]
+
   return(mut)
 }
 
@@ -183,7 +196,7 @@ binmat <- function(patients=NULL, maf = NULL, mut.type = "SOMATIC",SNP.only = FA
 ##############################################
 
 
-createbin <- function(obj, patients, mut.type, SNP.only,include.silent, cna.relax, spe.plat){
+createbin <- function(obj, patients, mut.type, cna.binary, SNP.only,include.silent, cna.relax, spe.plat){
   UseMethod("createbin")
 }
 
@@ -196,7 +209,7 @@ createbin.default <- function(obj) {
 ############# MUTATION MATRIX ################
 ##############################################
 
-createbin.maf <- function(obj, patients, mut.type, SNP.only, include.silent, cna.relax, spe.plat){
+createbin.maf <- function(obj, patients, mut.type, cna.binary, SNP.only, include.silent, cna.relax, spe.plat){
   maf <- obj
   maf$Hugo_Symbol <- as.character(maf$Hugo_Symbol)
   # recode gene names that have been changed between panel versions to make sure they are consistent and counted as the same gene
@@ -267,7 +280,7 @@ createbin.maf <- function(obj, patients, mut.type, SNP.only, include.silent, cna
 ############# FUSION MATRIX ###############
 ###########################################
 
-createbin.fusion <- function(obj, patients, mut.type, SNP.only,include.silent, cna.relax, spe.plat){
+createbin.fusion <- function(obj, patients, mut.type,cna.binary, SNP.only,include.silent, cna.relax, spe.plat){
   fusion <- obj
   # quick data checks #
   if(length(match("Tumor_Sample_Barcode",colnames(fusion))) == 0)
@@ -298,7 +311,7 @@ createbin.fusion <- function(obj, patients, mut.type, SNP.only,include.silent, c
 ############# COPY NUMBER MATRIX ###############
 ################################################
 
-createbin.cna <- function(obj, patients, mut.type, SNP.only,include.silent, cna.relax, spe.plat){
+createbin.cna <- function(obj, patients, mut.type,cna.binary, SNP.only,include.silent, cna.relax, spe.plat){
   cna <- obj
   rownames(cna) <- cna[,1]
   cna <- cna[,-1]
@@ -306,29 +319,113 @@ createbin.cna <- function(obj, patients, mut.type, SNP.only,include.silent, cna.
   rownames(cna) <- gsub("\\.","-",rownames(cna))
   cna <- cna[rownames(cna) %in% patients,]
 
-  temp <- do.call("cbind",apply(cna,2,function(x){
-    if(cna.relax){
-      yA <- ifelse(x>=0.9,1,0)
-      yD <- ifelse(x<=-0.9,1,0)
-    }
-    if(!cna.relax){
-      yA <- ifelse(x==2,1,0)
-      yD <- ifelse(x==-2,1,0)
-    }
-    out <- as.data.frame(cbind(yA,yD))
-    colnames(out) <- c("Amp","Del")
-    return(out)
-  }))
+  if(cna.binary){
+    temp <- do.call("cbind",apply(cna,2,function(x){
+      if(cna.relax){
+        yA <- ifelse(x>=0.9,1,0)
+        yD <- ifelse(x<=-0.9,1,0)
+      }
+      if(!cna.relax){
+        yA <- ifelse(x==2,1,0)
+        yD <- ifelse(x==-2,1,0)
+      }
+      out <- as.data.frame(cbind(yA,yD))
+      colnames(out) <- c("Amp","Del")
+      return(out)
+    }))
 
-  cna <- temp[,apply(temp,2,function(x){sum(x,na.rm=T) > 0})]
+    cna <- temp[,apply(temp,2,function(x){sum(x,na.rm=T) > 0})]
+    # add missing
+    if(length(which(is.na(match(patients,rownames(cna))))) > 0){
+      missing <- patients[which(is.na(match(patients,rownames(cna))))]
+      add <- as.data.frame(matrix(0L,nrow = length(missing),ncol = ncol(cna)))
+      rownames(add )  <- missing
+      colnames(add) <- colnames(cna)
+      cna <- as.data.frame(rbind(cna,add))
+      cna <- cna[match(patients,rownames(cna)),]
+    }
+  }
+  if(!cna.binary){
+    # add missing
+    if(length(which(is.na(match(patients,rownames(cna))))) > 0){
+      missing <- patients[which(is.na(match(patients,rownames(cna))))]
+      add <- as.data.frame(matrix(0L,nrow = length(missing),ncol = ncol(cna)))
+      rownames(add )  <- missing
+      colnames(add) <- colnames(cna)
+      cna <- as.data.frame(rbind(cna,add))
+      cna <- cna[match(patients,rownames(cna)),]
+    }
 
-  # add missing
-  missing <- patients[which(is.na(match(patients,rownames(cna))))]
-  add <- as.data.frame(matrix(0L,nrow = length(missing),ncol = ncol(cna)))
-  rownames(add )  <- missing
-  colnames(add )<- colnames(cna)
-  cna <- as.data.frame(rbind(cna,add))
-  cna <- cna[match(patients,rownames(cna)),]
+    cna <- cna %>%
+      mutate_all(~ factor(as.numeric(as.character(.)),
+                          levels = c("0","-2","-1.5","2")[which(c(0,-2,-1.5,2) %in% as.numeric(as.character(.)))]))
+    colnames(cna) <- paste0(colnames(cna),".cna")
+  }
+
+  return(cna)
+}
+
+### cna from API ###
+createbin.api <- function(obj, patients, mut.type,cna.binary, SNP.only,include.silent, cna.relax, spe.plat){
+  cna <- obj
+
+  # recreate orginal format #
+  temp <- as.data.frame(matrix(0L,ncol = length(patients)+1, nrow = length(unique(cna$Hugo_Symbol))))
+  colnames(temp) <- c("Hugo_Symbol",patients)
+  temp[,1] <- unique(cna$Hugo_Symbol)
+  for(i in patients){
+    temp[match(as.character(unlist(cna %>% filter(sampleId %in% i) %>% select(Hugo_Symbol))),temp[,1]),
+               match(i, colnames(temp))] <- as.numeric(unlist(cna %>% filter(sampleId %in% i) %>% select(alteration)))
+  }
+
+  cna <- temp
+  rownames(cna) <- cna[,1]
+  cna <- cna[,-1]
+  cna <- as.data.frame(t(cna))
+  cna <- cna[rownames(cna) %in% patients,]
+
+  if(cna.binary){
+    temp <- do.call("cbind",apply(cna,2,function(x){
+      if(cna.relax){
+        yA <- ifelse(x>=0.9,1,0)
+        yD <- ifelse(x<=-0.9,1,0)
+      }
+      if(!cna.relax){
+        yA <- ifelse(x==2,1,0)
+        yD <- ifelse(x==-2,1,0)
+      }
+      out <- as.data.frame(cbind(yA,yD))
+      colnames(out) <- c("Amp","Del")
+      return(out)
+    }))
+
+    cna <- temp[,apply(temp,2,function(x){sum(x,na.rm=T) > 0})]
+    # add missing
+    if(length(which(is.na(match(patients,rownames(cna))))) > 0){
+      missing <- patients[which(is.na(match(patients,rownames(cna))))]
+      add <- as.data.frame(matrix(0L,nrow = length(missing),ncol = ncol(cna)))
+      rownames(add )  <- missing
+      colnames(add) <- colnames(cna)
+      cna <- as.data.frame(rbind(cna,add))
+      cna <- cna[match(patients,rownames(cna)),]
+    }
+  }
+  if(!cna.binary){
+    # add missing
+    if(length(which(is.na(match(patients,rownames(cna))))) > 0){
+      missing <- patients[which(is.na(match(patients,rownames(cna))))]
+      add <- as.data.frame(matrix(0L,nrow = length(missing),ncol = ncol(cna)))
+      rownames(add )  <- missing
+      colnames(add) <- colnames(cna)
+      cna <- as.data.frame(rbind(cna,add))
+      cna <- cna[match(patients,rownames(cna)),]
+    }
+
+    cna <- cna %>%
+      mutate_all(~ factor(as.numeric(as.character(.)),
+                          levels = c("0","-2","-1.5","2")[which(c(0,-2,-1.5,2) %in% as.numeric(as.character(.)))]))
+    colnames(cna) <- paste0(colnames(cna),".cna")
+  }
 
   return(cna)
 }
