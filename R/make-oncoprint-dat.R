@@ -41,6 +41,23 @@ dat.oncoPrint <- function(gen.dat,clin.dat=NULL){
   if(anyNA(gen.dat))
     gen.dat[is.na(gen.dat)] <- 0
 
+  # check if data has non binary cna data and fix it #
+  if(length(grep(".cna", colnames(gen.dat))) > 0){
+    temp <- gen.dat[,grep(".cna",colnames(gen.dat))]
+
+    temp2 <- do.call("cbind",apply(temp,2,function(x){
+      x <- as.numeric(as.character(x))
+      yA <- ifelse(x>=0.9,1,0)
+      yD <- ifelse(x<=-0.9,1,0)
+      out <- as.data.frame(cbind(yA,yD))
+      colnames(out) <- c("Amp","Del")
+      return(out)
+    }))
+    colnames(temp2) <- gsub("\\.cna","",colnames(temp2))
+    gen.dat <- as.data.frame(cbind(gen.dat[,-grep(".cna",colnames(gen.dat))],
+                             temp2))
+  }
+
   # check that gen.dat is a binary matrix #
   if(anyNA(apply(gen.dat, 2, as.numeric))){
     warning("All genetic components were not numeric. Those which weren't will be removed")

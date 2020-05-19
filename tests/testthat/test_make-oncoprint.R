@@ -86,3 +86,19 @@ test_that("make data single clinical",{
   expect_true(typeof(out) == "S4")
 
 })
+
+
+test_that("make data with cna non binary",{
+
+  set.seed(123)
+  patients <- as.character(unique(mut$Tumor_Sample_Barcode))[1:200]
+  bin.mut <- binmat(patients = patients,maf = mut,cna = cna, cna.binary = FALSE,
+                    mut.type = "SOMATIC",
+                    SNP.only = FALSE,include.silent = FALSE, spe.plat = FALSE)
+  keep <- c("TP53|PIK3CA|ALK")
+  gen.dat <- bin.mut[,grep(keep,colnames(bin.mut))]
+  expect_warning(out <- plot_oncoPrint(gen.dat))
+  expect_true(typeof(out) == "S4")
+
+})
+

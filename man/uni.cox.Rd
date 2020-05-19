@@ -5,7 +5,7 @@
 \title{uni.cox
 Performs univariate cox proportional hazard model on every feature}
 \usage{
-uni.cox(X, surv.dat, surv.formula, filter = 0, genes = NULL, is.gen = TRUE)
+uni.cox(X, surv.dat, surv.formula, filter = 0, genes = NULL)
 }
 \arguments{
 \item{X}{Matrix/surv.datframe of genomic features, continuous or binary (note cannot handle categorical surv.dat for the moment).}
@@ -20,8 +20,6 @@ having a genetic event (only for binary features). All features with an event ra
 Default is 0 (all features included).}
 
 \item{genes}{a character vector of gene names that will be the only ones to be kept. Default is NULL, all genes are used.}
-
-\item{is.gen}{boolean specifying is the matrix X inputted is of binary genetic factors. Default is TRUE.}
 }
 \value{
 tab A table of all the fits performed sorted by adjusted pvalues.

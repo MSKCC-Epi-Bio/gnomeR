@@ -184,8 +184,8 @@ binmat <- function(patients=NULL, maf = NULL, mut.type = "SOMATIC",SNP.only = FA
   }
 
   # if(rm.empty && length(which(apply(mut,2,function(x){sum(x,na.rm=TRUE)})>0))) mut <- mut[,which(apply(mut,2,function(x){sum(x,na.rm=TRUE)})>0)]
-  if(rm.empty && length(which(apply(mut,2,function(x){length(unique(x[!is.na(x)]))})>0)))
-    mut <- mut[,which(apply(mut,2,function(x){length(unique(x[!is.na(x)]))})>0)]
+  if(rm.empty && length(which(apply(mut,2,function(x){length(unique(x[!is.na(x)]))})>1)))
+    mut <- mut[,which(apply(mut,2,function(x){length(unique(x[!is.na(x)]))})>1)]
 
   return(mut)
 }
