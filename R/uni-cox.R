@@ -152,14 +152,14 @@ uni.cox <- function(X,surv.dat,surv.formula,filter = 0,genes = NULL){
   uni$FDR <- stats::p.adjust(as.numeric(as.character(uni$Pvalue)), method = "fdr")
   uni <- uni %>%
     mutate(
-      Pvalue = as.numeric(formatC(stats::p.adjust(as.numeric(as.character(Pvalue)),
+      Pvalue = as.numeric(formatC(stats::p.adjust(as.numeric(as.character(.data$Pvalue)),
                                        method = "fdr"), format = "e", digits = 2)),
-      HR = as.numeric(exp(as.numeric(as.character(Coefficient)))),
-      Coefficient = as.numeric(formatC(stats::p.adjust(as.numeric(as.character(Coefficient)),
+      HR = as.numeric(exp(as.numeric(as.character(.data$Coefficient)))),
+      Coefficient = as.numeric(formatC(stats::p.adjust(as.numeric(as.character(.data$Coefficient)),
                                             method = "fdr"), format = "e", digits = 2)),
-      HR = as.numeric(formatC(stats::p.adjust(as.numeric(as.character(HR)),
+      HR = as.numeric(formatC(stats::p.adjust(as.numeric(as.character(.data$HR)),
                                             method = "fdr"), format = "e", digits = 2)),
-      MutationFrequency = as.numeric(round(as.numeric(as.character(MutationFrequency)), digits = 4))
+      MutationFrequency = as.numeric(round(as.numeric(as.character(.data$MutationFrequency)), digits = 4))
     )
   uniVolcano <- plot_ly(data = uni, x = ~Coefficient, y = ~-log10(Pvalue),
                         text = ~paste('Feature :',Feature,

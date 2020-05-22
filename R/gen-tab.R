@@ -128,7 +128,7 @@ gen.tab <- function (gen.dat, outcome, filter = 0, paired = F, cont = F,
                             digits = 2),
                  formatC(test$p.value, format = "e",
                          digits = 2),
-                 formatC(p.adjust(test$p.value, method ="fdr",n = ncol(gen.dat)), format = "e",
+                 formatC(stats::p.adjust(test$p.value, method ="fdr",n = ncol(gen.dat)), format = "e",
                          digits = 2),
                  round(as.numeric(test$conf.int),
                        digits = 2))
@@ -140,7 +140,7 @@ gen.tab <- function (gen.dat, outcome, filter = 0, paired = F, cont = F,
           out <- c(out, "",
                    formatC(test$p.value, format = "e",
                            digits = 2),
-                   formatC(p.adjust(test$p.value, method ="fdr",n = ncol(gen.dat)), format = "e",
+                   formatC(stats::p.adjust(test$p.value, method ="fdr",n = ncol(gen.dat)), format = "e",
                            digits = 2),
                    "","")
           names(out) <- c("Overall", levels(outcome)[1:length(levels(outcome))],
@@ -150,7 +150,7 @@ gen.tab <- function (gen.dat, outcome, filter = 0, paired = F, cont = F,
           out <- cbind(out, rep("",nrow(out)),
                        c(formatC(test$p.value, format = "e",
                                  digits = 2),rep("",nrow(out)-1)),
-                       formatC(p.adjust(test$p.value, method ="fdr",n = ncol(gen.dat)), format = "e",
+                       formatC(stats::p.adjust(test$p.value, method ="fdr",n = ncol(gen.dat)), format = "e",
                                digits = 2),
                        rep("",nrow(out)),rep("",nrow(out)))
           colnames(out) <- c("Overall", levels(outcome)[1:length(levels(outcome))],
@@ -207,7 +207,7 @@ gen.tab <- function (gen.dat, outcome, filter = 0, paired = F, cont = F,
                OddsRatio = as.numeric(as.character(.data$OddsRatio)),
                FDRsign = ifelse(as.numeric(as.character(.data$FDR)) <
                                   0.05, "Significant", "Non signifcant")) %>%
-        filter(!is.na(Pvalue)) %>%
+        filter(!is.na(.data$Pvalue)) %>%
         ggplot(aes(x = .data$OddsRatio, y = -log10(.data$Pvalue),
                    fill = .data$FDRsign, color = .data$FDRsign)) + geom_point() +
         geom_label_repel(aes(label = ifelse(.data$FDRsign ==

@@ -374,8 +374,8 @@ createbin.api <- function(obj, patients, mut.type,cna.binary, SNP.only,include.s
   colnames(temp) <- c("Hugo_Symbol",patients)
   temp[,1] <- unique(cna$Hugo_Symbol)
   for(i in patients){
-    temp[match(as.character(unlist(cna %>% filter(sampleId %in% i) %>% select(Hugo_Symbol))),temp[,1]),
-               match(i, colnames(temp))] <- as.numeric(unlist(cna %>% filter(sampleId %in% i) %>% select(alteration)))
+    temp[match(as.character(unlist(cna %>% filter(.data$sampleId %in% i) %>% select(.data$Hugo_Symbol))),temp[,1]),
+               match(i, colnames(temp))] <- as.numeric(unlist(cna %>% filter(.data$sampleId %in% i) %>% select(.data$alteration)))
   }
 
   cna <- temp
