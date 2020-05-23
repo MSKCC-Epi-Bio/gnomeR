@@ -54,16 +54,14 @@ usethis::edit_r_environ()
 
 And pasting the token you were given in the .Renviron file that was created and saving after pasting your token.
 
-```{r}
+```{r, eval=F}
 CBIOPORTAL_TOKEN = 'YOUR_TOKEN'
 ```
 
 You can test your connection using:
 
 ```{r,eval = F}
-mycgds = CGDS("https://cbioportal.mskcc.org/",
-              token = YOUR_TOKEN)
-test(mycgds)
+get_cbioportal_token()
 ```
 
 
@@ -72,15 +70,9 @@ test(mycgds)
 Now that the Cbioportal API is set up in your environment, you must first specify the database of interest (IMPACT or TCGA are the two available options). Following this one can either sepcify the samples or study of interest:
 
 ```{r, eval = F}
-get_cbioportal_db("msk_impact")
 ids <- as.character(unique(mut$Tumor_Sample_Barcode)[1:100])
-df <- get_mutations(sample_ids = ids)
-
-## match genes ##
-# This will be included in the future #
-df.genes <- df %>% 
-  mutate(Hugo_Symbol = as.character(info_impact$Hugo_Symbol[match(entrezGeneId,
-                                                                  info_impact$Entrez_Gene_Id)]))
+df <- get_genetics(sample_ids = ids,database = "msk_impact",
+                       mutations = TRUE, fusions = TRUE, cna = TRUE)
 ```
 
 
@@ -88,15 +80,12 @@ df.genes <- df %>%
 
 The `binmat()` function is the feature of the data processing of `gnomeR`. It takes genomic inputs from various sources of CbioPortal (mutation files, fusion files and copy number raw counts) to give out a clean binary matrix of n samples by all the events that were found in the files.
 
-Still need to deal with stuff for the API here (CNA mostly):
 
 ```{r, eval = F}
-test2 <- df.genes %>% 
-  binmat(maf = ., col.names = c(Tumor_Sample_Barcode = "sampleId", Hugo_Symbol = NULL, Variant_Classification
-                                = "mutationType", Mutation_Status = "mutationStatus", Variant_Type = "variantType"))
+df.clean <- binmat(maf = df$mut, cna = df$cna)
 ```
 
-Example with example data in the package for now:
+We further included example datasets from the raw dowloaded files on CbioPortal (`mut`, `fusion`, `cna`) which we will use for the following examples.
 
 ```{r}
 set.seed(123)

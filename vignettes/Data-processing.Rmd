@@ -1,0 +1,89 @@
+---
+title: "Data-processing"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Data-processing}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r}
+library(gnomeR)
+```
+
+```{r, echo=F}
+library(tibble)
+```
+
+# Introduction 
+
+The main purpose of `gnomeR` is to streamline the processing of genomic files provided by CbioPortal. If you wish to learn how to use the integrated API please read the `API-tutorial` article first. The core function of the processing of these files is performed by the `binmat()` function. It takes the following arguments:
+
+- patients: A character vector that let's the user specify the patients to be used to create the matrix. Default is NULL, in which case all samples found in the provided genetic files will be used.
+- maf: A MAF file.
+- mut.type: The mutation type to be used. Options are "SOMATIC", "GERMLINE" or "ALL". Note "ALL" will keep all mutations regardless of status (not recommended). Default is SOMATIC.
+- SNP.only Boolean to rather the genetics events to be kept only to be SNPs (insertions and deletions will be removed). Default is FALSE.
+- include.silent: Boolean to keep or remove all silent mutations. TRUE keeps, FALSE removes. Default is FALSE.
+- fusion: An optional MAF file for fusions. If inputed the outcome will be added to the matrix with columns ending in ".fus". Default is NULL. Note if fusions are found in the MAF file in the previous input then these will be added automatically.
+- cna: An optional CNA files. If inputed the outcome will be added to the matrix with columns ending in ".cna", .del" and ".amp" (depending on subsequent arguments).
+- cna.binary: A boolean argument specifying if the cna events should be enforced as binary. In which case separate columns for amplifications and deletions will be created. Default is FALSE in which case columns ending in ".cna" will be added to the output.
+- cna.relax: If cna.binary is TRUE, cna data only enables to count both gains and shallow deletions as amplifications and deletions respectively.
+- spe.plat: boolean specifying if specific IMPACT platforms should be considered. When TRUE NAs will fill the cells for genes of patients that were not sequenced on that plaform. Default is TRUE.
+- set.plat character argument specifying which IMPACT platform the data should be reduced to if spe.plat is set to TRUE. Options are "341" and "410". Default is NULL.
+- rm.empty: boolean specifying if columns with no events founds should be removed. Default is TRUE.
+- col.names character vector of the necessary columns to be used. By default: col.names = c(Tumor_Sample_Barcode = NULL, Hugo_Symbol = NULL, Variant_Classification = NULL, Mutation_Status = NULL, Variant_Type = NULL)
+
+This function returns a matrix containing all the genetic information with rows as samples and columns as features.
+A warning will be thrown if some samples were found to have no mutations in the MAF file.
+
+In the follwing sections we will present examples to process each of the datatypes in cbioportal.
+
+# Processing genetic data
+
+## Mutations
+
+The most commmon type of genetic features used in genomic studies at MSKCC. The IMPACT sequencing panel consist of a curated list of genes that are known to have cancer related properties when altered. You can find a complete list of these genes and which platform they were added on in the `impact_genes` datafile.
+Note that the MAF files provided through the API embedded in this package and the one provided through raw download on the website are slightly different and we will thus present examples using both these datasets.
+
+### Processing raw mutation data
+
+We included in `gnomeR` an example of raw downloaded MAF file directly from the website in the `mut` dataset. We show here an example selecting a random subset of 100 samples in the `mut` dataset:
+
+```{r}
+as_tibble(mut)
+samples <- as.character(unique(mut$Tumor_Sample_Barcode))[sample(1:length(unique(mut$Tumor_Sample_Barcode)), 100, replace=FALSE)]
+df <- binmat(patients = samples ,maf = mut)
+as_tibble(df)
+```
+
+Note that by default in the situation above the outputted dataframe is a binary matrix made from all types of mutations and adjusting the features for the platform they were added on. Thus all samples that were sequenced on the original platform have NA's in the cells of for features that were added on subsequent platforms.
+In the case where the user plans on using methods that do not accept missing values, the `spe.plat` argument can be changed to FALSE to replace all the NA's mentioned above to 0. We show below such an example, we moreover make this example including only SNPs (including silent mutations):
+
+```{r}
+df <- binmat(patients = samples ,maf = mut, SNP.only = TRUE, include.silent = TRUE, spe.plat = FALSE)
+as_tibble(df)
+```
+
+### Processing mutation data from the API
+
+In this section we show the same examples as above but using the data downloaded through the API:
+
+```{r}
+dat <- get_genetics(sample_ids = samples, fusions = FALSE, cna = FALSE)
+df <- binmat(maf = dat$mut)
+as_tibble(df)
+```
+
+Similarly, 
+
+```{r}
+df <- binmat(maf = dat$mut, SNP.only = TRUE, include.silent = TRUE, spe.plat = FALSE)
+as_tibble(df)
+```

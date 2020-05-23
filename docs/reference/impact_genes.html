@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>An example of fusions calls file from IMPACT cbioPortal dataset — fusion • gnomeR</title>
+<title>List of genes entrezID for the API — impact_genes • gnomeR</title>
 
 
 <!-- jquery -->
@@ -39,9 +39,8 @@
 
 
 
-<meta property="og:title" content="An example of fusions calls file from IMPACT cbioPortal dataset — fusion" />
-<meta property="og:description" content="This set contains the publicly available data from cbioPortal
-fusion data. The file is organized a classical MAF file." />
+<meta property="og:title" content="List of genes entrezID for the API — impact_genes" />
+<meta property="og:description" content="We include all the gene IDs in IMPACT" />
 
 
 
@@ -130,39 +129,26 @@ fusion data. The file is organized a classical MAF file." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>An example of fusions calls file from IMPACT cbioPortal dataset</h1>
+    <h1>List of genes entrezID for the API</h1>
     <small class="dont-index">Source: <a href='https://github.com/AxelitoMartin/gnomeR/blob/master/R/data.R'><code>R/data.R</code></a></small>
-    <div class="hidden name"><code>fusion.Rd</code></div>
+    <div class="hidden name"><code>impact_genes.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>This set contains the publicly available data from cbioPortal
-fusion data. The file is organized a classical MAF file.</p>
+    <p>We include all the gene IDs in IMPACT</p>
     </div>
 
-    <pre class="usage"><span class='no'>fusion</span></pre>
+    <pre class="usage"><span class='no'>impact_genes</span></pre>
 
 
     <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
 
-    <p>A data frame with 127 observations with 10 variables</p><dl'>
- <dt>Hugo_Symbol</dt><dd><p>Factor w/ 574 levels,
-   Column containing all HUGO symbols genes</p></dd>
- <dt>Entrez_Gene_Id</dt><dd><p>Entrez Gene ID (NA in this dataset)</p></dd>
- <dt>Center</dt><dd><p>Cancer Center ID. All are `MSKCC-DMP` in this dataset</p></dd>
- <dt>Tumor_Sample_Barcode</dt><dd><p>Factor, IMPACT sample ID</p></dd>
- <dt>Fusion</dt><dd><p>Factor, type of fusion</p></dd>
- <dt>DNA_support</dt><dd><p>Factor, all are `yes` in this data</p></dd>
- <dt>RNA_support</dt><dd><p>Factor, all are `unknown` in this data</p></dd>
- <dt>Method</dt><dd><p>All are NA in this data</p></dd>
- <dt>Frame</dt><dd><p>Factor, `in frame`, `out of frame` or `unknown`</p></dd>
- <dt>Comments</dt><dd><p></p></dd>
+    <p>dataframe of the IDs</p><dl'>
+ <dt>id</dt><dd><p>EntrezID</p></dd>
+ <dt>hugo_symbol</dt><dd><p>Gene name</p></dd>
 
 </dl>
 
-    <h2 class="hasAnchor" id="source"><a class="anchor" href="#source"></a>Source</h2>
-
-    <p><a href='https://cbioportal.mskcc.org/'>https://cbioportal.mskcc.org/</a></p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
