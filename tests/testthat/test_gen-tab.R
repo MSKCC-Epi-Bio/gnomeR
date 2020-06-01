@@ -30,7 +30,7 @@ test_that("working binary example",{
   cont = FALSE,rank = TRUE)
 
   expect_true(is.data.frame(test$fits))
-  expect_true(ncol(test$fits) == 8)
+  expect_true(ncol(test$fits) == 9)
   expect_true(is.ggplot(test$forest.plot))
   expect_true(is.ggplot(test$vPlot))
 })
@@ -69,7 +69,7 @@ test_that("working binary example with a feature that is only 1's",{
                   cont = FALSE,rank = TRUE)
 
   expect_true(is.data.frame(test$fits))
-  expect_true(ncol(test$fits) == 8)
+  expect_true(ncol(test$fits) == 9)
   expect_true(is.ggplot(test$forest.plot))
   expect_true(is.ggplot(test$vPlot))
 })
@@ -100,7 +100,7 @@ test_that("continuous features",{
           filter = 0,paired = FALSE,
           cont = FALSE,rank = TRUE)
   expect_true(is.data.frame(test$fits))
-  expect_true(ncol(test$fits) == 8)
+  expect_true(ncol(test$fits) == 9)
   expect_true(is.ggplot(test$forest.plot))
   expect_true(is.ggplot(test$vPlot))
 
@@ -110,14 +110,14 @@ test_that("continuous features",{
 test_that("paired test",{
 
   set.seed(123)
-  gen.dat <- matrix(rbinom(500,1,1/2),nrow = 100, ncol = 5)
+  gen.dat <- as.data.frame(matrix(rbinom(500,1,1/2),nrow = 100, ncol = 5))
   outcome <- c(rep("Time1",50),rep("Time2",50))
   test <- gen.tab(gen.dat = gen.dat,
                   outcome = outcome,
                   filter = 0,paired = TRUE,
                   cont = FALSE,rank = TRUE)
   expect_true(is.data.frame(test$fits))
-  expect_true(ncol(test$fits) == 8)
+  expect_true(ncol(test$fits) == 9)
   expect_true(is.ggplot(test$forest.plot))
   expect_true(is.ggplot(test$vPlot))
 
@@ -127,14 +127,14 @@ test_that("paired test",{
 test_that("three level outcome",{
 
   set.seed(123)
-  gen.dat <- matrix(rbinom(500,1,1/2),nrow = 100, ncol = 5)
+  gen.dat <- as.data.frame(matrix(rbinom(500,1,1/2),nrow = 100, ncol = 5))
   outcome <- sample(c("A","B","C"),100,replace = TRUE)
   test <- gen.tab(gen.dat = gen.dat,
                   outcome = outcome,
                   filter = 0,paired = FALSE,
                   cont = FALSE,rank = TRUE)
   expect_true(is.data.frame(test$fits))
-  expect_true(ncol(test$fits) == 6)
+  expect_true(ncol(test$fits) == 10)
   expect_true(is.null(test$forest.plot))
   expect_true(is.null(test$vPlot))
 
@@ -145,7 +145,7 @@ test_that("factors hidden in continuous variables",{
   set.seed(123)
   patients <- as.character(unique(mut$Tumor_Sample_Barcode))[1:100]
   gen.dat <- binmat(patients = patients,maf = mut)
-  gen.dat[,1] <- sample(c("A","B","C"),nrow(gen.dat),replace = TRUE)
+  gen.dat[,1] <- sample(c("0","-2","-2"),nrow(gen.dat),replace = TRUE)
   outcome <-  rnorm(n = nrow(gen.dat))
   test <- gen.tab(gen.dat = gen.dat,
                   outcome = outcome,

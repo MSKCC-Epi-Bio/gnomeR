@@ -156,3 +156,15 @@
 #'  \item{g468}{}
 #' }
 "g.impact"
+
+
+#' List of genes entrezID for the API
+#'
+#' We include all the gene IDs in IMPACT
+#'
+#' @format dataframe of the IDs
+#' \describe{
+#'  \item{id}{EntrezID}
+#'  \item{hugo_symbol}{Gene name}
+#' }
+"impact_genes"

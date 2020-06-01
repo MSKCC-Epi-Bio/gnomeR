@@ -54,7 +54,8 @@ Imports:
     stringr,
     survival,
     plotly,
-    rlang
+    rlang,
+    cbioportalr
 Suggests: 
     knitr,
     rmarkdown,

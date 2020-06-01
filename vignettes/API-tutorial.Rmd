@@ -1,0 +1,112 @@
+---
+title: "API-tutorial"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{API-tutorial}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r, message = F, warning = F}
+library(gnomeR)
+```
+
+# Setting up the API
+
+In order to download the data from CbioPortal, one must first require a token from the website [CbioPortal](https://cbiologin.mskcc.org/) wich will prompt a login page with your MSKCC credentials. Then navigate to "Web API" in the top bar menu, following this simply download a token and copy it after running the following command in R:
+
+
+```{r,eval=F}
+usethis::edit_r_environ()
+```
+
+And pasting the token you were given in the .Renviron file that was created and saving after pasting your token.
+
+```{r,eval = F}
+CBIOPORTAL_TOKEN = 'YOUR_TOKEN'
+```
+
+You can test your connection using:
+
+```{r, eval = F}
+get_cbioportal_token()
+```
+
+# Datasets
+
+There exist multiple datasets available in cbioPortal, and are available through our API:
+
+- IMPACT (integrated mutation profiling of actionable cancer targets) dataset, which consist of multiple targeted panels on which all new MSKCC patients are sequencing.
+- TCGA (the cancer genomic atlas) dataset, which consist of a completed pan-cancer study of full exon sequencing.
+
+The `get_genetics()` function let's the user download the mutation, fusion and copy-number alterations data in a Mutation Annotation Format (MAF) file for either the sample DMPID provided or a specific study. It takes the following arguments:
+
+- sample_ids: A character vector of sample ids from either IMPACT or TCGA
+- sample_list_id: A character vector naming a pre-specified list of samples (e.g. `"mskimpact_Colorectal_Cancer"`)
+- genes: A list of genes to query. Default is all impact genes (recommended). A complete list of IDs can be found in the `impact_gene_info` dataset.
+- database: A character string of the database to be used. Options are "msk_impact" or "tcga", default is "msk_impact".
+- mutations: Boolean specifying if mutation data should be fected. Default is TRUE.
+- fusions: Boolean specifying if fusion data should be fected. Default is TRUE.
+- cna: Boolean specifying if cna data should be fected. Default is TRUE.
+
+This function returns either a MAF file or a copy-number alterations summary file, or both (`mut` and/or `cna`).
+
+## IMPACT database
+
+In this section we show how to retrieve IMPACT genomic data for a single IMPACT sample, this can be easily extended to multiple patients or a complete study.
+
+### Mutations
+
+```{r,message=F}
+df.mut <- get_genetics("P-0000062-T01-IM3",database = "msk_impact",
+                       mutations = TRUE, fusions = FALSE, cna = FALSE)
+df.mut
+```
+
+### Adding Fusions
+
+```{r,message=F}
+df.fus <- get_genetics("P-0000062-T01-IM3",database = "msk_impact",
+                       mutations = TRUE, fusions = FALSE, cna = FALSE)
+df.fus
+```
+
+### Copy-number alterations
+
+```{r,message=F}
+df.cna <- get_genetics("P-0000062-T01-IM3",database = "msk_impact",
+                       mutations = FALSE, fusions = FALSE, cna = TRUE)
+df.cna
+```
+
+### All together
+
+In gnomeR we provide a wrapper function that enables the 
+
+```{r,message=F}
+df.gen <- get_genetics("P-0000062-T01-IM3",database = "msk_impact",
+                       mutations = TRUE, fusions = TRUE, cna = TRUE)
+df.gen
+```
+
+### By study
+
+We show here an example to retrieve all the samples in a study. A complete list of these studies can be found on the CbioPortal website.
+Not working yet.
+```{r}
+# df.gen <- get_genetics(sample_list_id = "mskimpact_Colorectal_Cancer",database = "msk_impact",
+#                        mutations = TRUE, fusions = TRUE, cna = TRUE)
+```
+
+
+## TCGA database
+
+Not working yet.
+
