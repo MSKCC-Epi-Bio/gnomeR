@@ -5,16 +5,12 @@
 \title{maf.summary
 Creates a set of plot summarising a maf file.}
 \usage{
-maf.summary(maf, mut.type = "SOMATIC", spe.plat = F)
+maf.summary(maf, ...)
 }
 \arguments{
 \item{maf}{the names of the segment files to be loaded and processed (Note must end in ".Rdata").}
 
-\item{mut.type}{The mutation type to be used. Options are "SOMATIC", "GERMLINE" or "ALL". Note "ALL" will
-keep all mutations regardless of status (not recommended). Default is SOMATIC.}
-
-\item{spe.plat}{boolean specifying if specific IMPACT platforms should be considered. When TRUE NAs will fill the cells for genes
-of patients that were not sequenced on that plaform. Default is FALSE.}
+\item{...}{any argument belonging to the binmat method}
 }
 \value{
 p.class Barplot of counts of each variant classification
