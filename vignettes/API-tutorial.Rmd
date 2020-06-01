@@ -14,7 +14,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-```{r}
+```{r, message = F, warning = F}
 library(gnomeR)
 ```
 

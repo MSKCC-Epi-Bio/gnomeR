@@ -3,7 +3,9 @@ pkgdown: 1.5.1
 pkgdown_sha: ~
 articles:
   API-tutorial: API-tutorial.html
+  Analizing-genomic-data: Analizing-genomic-data.html
   Data-processing: Data-processing.html
+  Visualizations: Visualizations.html
   gnomeR-vignette: gnomeR-vignette.html
-last_built: 2020-05-23T03:06Z
+last_built: 2020-06-01T21:13Z
 

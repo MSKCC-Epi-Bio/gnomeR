@@ -57,7 +57,13 @@
       <a href="../articles/API-tutorial.html">API-tutorial</a>
     </li>
     <li>
+      <a href="../articles/Analizing-genomic-data.html">Analizing genomic data</a>
+    </li>
+    <li>
       <a href="../articles/Data-processing.html">Data-processing</a>
+    </li>
+    <li>
+      <a href="../articles/Visualizations.html">Visualizations</a>
     </li>
     <li>
       <a href="../articles/gnomeR-vignette.html">gnomeR for IMPACT data</a>
@@ -98,10 +104,7 @@
 
     
     
-<div class="sourceCode" id="cb1"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">gnomeR</span>)
-<span class="co">#&gt; Registered S3 method overwritten by 'GGally':</span>
-<span class="co">#&gt;   method from   </span>
-<span class="co">#&gt;   +.gg   ggplot2</span></pre></body></html></div>
+<div class="sourceCode" id="cb1"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">gnomeR</span>)</pre></body></html></div>
 <div id="introduction" class="section level1">
 <h1 class="hasAnchor">
 <a href="#introduction" class="anchor"></a>Introduction</h1>
@@ -165,77 +168,304 @@
 <span class="co">#&gt; #   Protein_position &lt;int&gt;, Codons &lt;fct&gt;, Hotspot &lt;int&gt;</span>
 <span class="no">samples</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html">as.character</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span>(<span class="no">mut</span>$<span class="no">Tumor_Sample_Barcode</span>))[<span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample</a></span>(<span class="fl">1</span>:<span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span>(<span class="no">mut</span>$<span class="no">Tumor_Sample_Barcode</span>)), <span class="fl">100</span>, <span class="kw">replace</span><span class="kw">=</span><span class="fl">FALSE</span>)]
 <span class="no">df</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/binmat.html">binmat</a></span>(<span class="kw">patients</span> <span class="kw">=</span> <span class="no">samples</span> ,<span class="kw">maf</span> <span class="kw">=</span> <span class="no">mut</span>)
-<span class="fu">as_tibble</span>(<span class="no">df</span>)
-<span class="co">#&gt; # A tibble: 100 x 216</span>
-<span class="co">#&gt;     TP53  EZH2  MDM2 IGF1R KEAP1 KDM5C  KRAS  TERT MAP2K1 NCOR1  AKT1 ARID1A</span>
-<span class="co">#&gt;    &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;</span>
-<span class="co">#&gt;  1     1     0     0     0     0     0     1     0      0     0     0      0</span>
-<span class="co">#&gt;  2     1     0     0     0     0     0     0     1      0     0     0      0</span>
-<span class="co">#&gt;  3     0     0     0     0     0     0     0     1      0     0     0      0</span>
-<span class="co">#&gt;  4     0     0     0     0     0     0     1     0      0     0     0      0</span>
-<span class="co">#&gt;  5     0     0     0     0     0     0     0     1      0     0     0      0</span>
-<span class="co">#&gt;  6     0     0     0     0     0     0     0     1      0     0     0      0</span>
-<span class="co">#&gt;  7     0     0     0     0     0     0     0     0      0     0     0      0</span>
-<span class="co">#&gt;  8     1     0     0     0     0     0     0     0      0     0     0      0</span>
-<span class="co">#&gt;  9     0     0     0     0     0     0     0     0      0     0     0      0</span>
-<span class="co">#&gt; 10     0     0     0     0     0     0     0     0      0     0     0      0</span>
-<span class="co">#&gt; # … with 90 more rows, and 204 more variables: CTNNB1 &lt;dbl&gt;, PDPK1 &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   CTCF &lt;dbl&gt;, CDH1 &lt;dbl&gt;, EGFR &lt;dbl&gt;, RPS6KA4 &lt;dbl&gt;, AKT3 &lt;dbl&gt;, NTRK3 &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   ATRX &lt;dbl&gt;, STAG2 &lt;dbl&gt;, EPHA3 &lt;dbl&gt;, RECQL4 &lt;dbl&gt;, CREBBP &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   DOT1L &lt;dbl&gt;, PIK3CA &lt;dbl&gt;, FBXW7 &lt;dbl&gt;, APC &lt;dbl&gt;, ETV1 &lt;dbl&gt;, AXIN1 &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   SOX9 &lt;dbl&gt;, DICER1 &lt;dbl&gt;, FGFR2 &lt;dbl&gt;, CD276 &lt;dbl&gt;, MPL &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   RAD54L &lt;dbl&gt;, FLT4 &lt;dbl&gt;, ARID1B &lt;dbl&gt;, FGFR1 &lt;dbl&gt;, WT1 &lt;dbl&gt;, MLL &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   TBX3 &lt;dbl&gt;, FLT3 &lt;dbl&gt;, RNF43 &lt;dbl&gt;, STK11 &lt;dbl&gt;, PTPRS &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   DNMT3B &lt;dbl&gt;, MYD88 &lt;dbl&gt;, SETD2 &lt;dbl&gt;, SMAD3 &lt;dbl&gt;, RPTOR &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   SMAD2 &lt;dbl&gt;, AXIN2 &lt;dbl&gt;, CDK6 &lt;dbl&gt;, JAK3 &lt;dbl&gt;, ESR1 &lt;dbl&gt;, PIK3CB &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   CCND1 &lt;dbl&gt;, SPOP &lt;dbl&gt;, RB1 &lt;dbl&gt;, ERBB2 &lt;dbl&gt;, PTPRD &lt;dbl&gt;, ATM &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   ERBB3 &lt;dbl&gt;, NF1 &lt;dbl&gt;, MEN1 &lt;dbl&gt;, BAP1 &lt;dbl&gt;, PBRM1 &lt;dbl&gt;, H3F3C &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   NOTCH2 &lt;dbl&gt;, SHQ1 &lt;dbl&gt;, LATS1 &lt;dbl&gt;, BRCA1 &lt;dbl&gt;, RBM10 &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   RFWD2 &lt;dbl&gt;, HIST1H3B &lt;dbl&gt;, NOTCH4 &lt;dbl&gt;, PTCH1 &lt;dbl&gt;, IDH1 &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   POLE &lt;dbl&gt;, SMARCA4 &lt;dbl&gt;, INPP4A &lt;dbl&gt;, MLL2 &lt;dbl&gt;, FAT1 &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   PLK2 &lt;dbl&gt;, BRCA2 &lt;dbl&gt;, SMAD4 &lt;dbl&gt;, BRIP1 &lt;dbl&gt;, TP63 &lt;dbl&gt;, SPEN &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   RAF1 &lt;dbl&gt;, EPHA5 &lt;dbl&gt;, CCND2 &lt;dbl&gt;, FOXP1 &lt;dbl&gt;, EP300 &lt;dbl&gt;, BCOR &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   MSH2 &lt;dbl&gt;, NOTCH1 &lt;dbl&gt;, GRIN2A &lt;dbl&gt;, FOXA1 &lt;dbl&gt;, GATA2 &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   HNF1A &lt;dbl&gt;, BRAF &lt;dbl&gt;, GNAQ &lt;dbl&gt;, ASXL1 &lt;dbl&gt;, MED12 &lt;dbl&gt;, IRS1 &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   MLH1 &lt;dbl&gt;, PDGFRA &lt;dbl&gt;, NPM1 &lt;dbl&gt;, YES1 &lt;dbl&gt;, …</span></pre></body></html></div>
+<span class="fu">kable</span>(<span class="no">df</span>[<span class="fl">1</span>:<span class="fl">10</span>, <span class="fl">1</span>:<span class="fl">10</span>])</pre></body></html></div>
+<table class="table">
+<thead><tr class="header">
+<th></th>
+<th align="right">FLT4</th>
+<th align="right">KRAS</th>
+<th align="right">TP53</th>
+<th align="right">NF1</th>
+<th align="right">ARID1A</th>
+<th align="right">CARD11</th>
+<th align="right">ARID5B</th>
+<th align="right">BCOR</th>
+<th align="right">MLL2</th>
+<th align="right">SMAD3</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td>P-0010604-T01-IM5</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td>P-0002651-T01-IM3</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td>P-0000270-T01-IM3</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td>P-0002915-T01-IM3</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td>P-0011099-T01-IM5</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td>P-0000080-T01-IM3</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td>P-0001741-T01-IM3</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td>P-0003964-T01-IM3</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td>P-0003842-T01-IM5</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td>P-0002597-T02-IM5</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+</tbody>
+</table>
 <p>Note that by default in the situation above the outputted dataframe is a binary matrix made from all types of mutations and adjusting the features for the platform they were added on. Thus all samples that were sequenced on the original platform have NA’s in the cells of for features that were added on subsequent platforms. In the case where the user plans on using methods that do not accept missing values, the <code>spe.plat</code> argument can be changed to FALSE to replace all the NA’s mentioned above to 0. We show below such an example, we moreover make this example including only SNPs (including silent mutations):</p>
 <div class="sourceCode" id="cb3"><html><body><pre class="r"><span class="no">df</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/binmat.html">binmat</a></span>(<span class="kw">patients</span> <span class="kw">=</span> <span class="no">samples</span> ,<span class="kw">maf</span> <span class="kw">=</span> <span class="no">mut</span>, <span class="kw">SNP.only</span> <span class="kw">=</span> <span class="fl">TRUE</span>, <span class="kw">include.silent</span> <span class="kw">=</span> <span class="fl">TRUE</span>, <span class="kw">spe.plat</span> <span class="kw">=</span> <span class="fl">FALSE</span>)
-<span class="co">#&gt; Warning in createbin.maf(obj = maf, patients = patients, mut.type = mut.type, :</span>
-<span class="co">#&gt; Some patients did not have any mutations found in the MAF file.P-0003319-T01-</span>
-<span class="co">#&gt; IM5,P-0004637-T01-IM5,P-0001585-T01-IM3,P-0006755-T01-IM5</span>
-<span class="fu">as_tibble</span>(<span class="no">df</span>)
-<span class="co">#&gt; # A tibble: 100 x 201</span>
-<span class="co">#&gt;     TP53  EZH2  MDM2 IGF1R KEAP1 KDM5C  KRAS  TERT MAP2K1 NCOR1  AKT1 CTNNB1</span>
-<span class="co">#&gt;    &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;</span>
-<span class="co">#&gt;  1     1     0     0     0     0     0     1     0      0     0     0      1</span>
-<span class="co">#&gt;  2     1     0     0     0     0     0     0     0      0     0     0      0</span>
-<span class="co">#&gt;  3     0     0     0     0     0     0     0     1      0     0     0      0</span>
-<span class="co">#&gt;  4     0     0     0     0     0     0     1     0      0     0     0      0</span>
-<span class="co">#&gt;  5     0     0     0     0     0     0     0     1      0     0     0      0</span>
-<span class="co">#&gt;  6     0     0     0     0     0     0     0     1      0     0     0      0</span>
-<span class="co">#&gt;  7     0     0     0     0     0     0     0     0      0     0     0      0</span>
-<span class="co">#&gt;  8     1     0     0     0     0     0     0     0      0     0     0      0</span>
-<span class="co">#&gt;  9     0     0     0     0     0     0     0     0      0     0     0      0</span>
-<span class="co">#&gt; 10     0     0     0     0     0     0     0     0      0     0     0      0</span>
-<span class="co">#&gt; # … with 90 more rows, and 189 more variables: PDPK1 &lt;dbl&gt;, EGFR &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   RPS6KA4 &lt;dbl&gt;, AKT3 &lt;dbl&gt;, NTRK3 &lt;dbl&gt;, ATRX &lt;dbl&gt;, STAG2 &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   EPHA3 &lt;dbl&gt;, RECQL4 &lt;dbl&gt;, CREBBP &lt;dbl&gt;, DOT1L &lt;dbl&gt;, PIK3CA &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   FBXW7 &lt;dbl&gt;, APC &lt;dbl&gt;, ETV1 &lt;dbl&gt;, AXIN1 &lt;dbl&gt;, SOX9 &lt;dbl&gt;, DICER1 &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   FGFR2 &lt;dbl&gt;, CD276 &lt;dbl&gt;, MPL &lt;dbl&gt;, RAD54L &lt;dbl&gt;, FLT4 &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   ARID1B &lt;dbl&gt;, FGFR1 &lt;dbl&gt;, WT1 &lt;dbl&gt;, MLL &lt;dbl&gt;, TBX3 &lt;dbl&gt;, FLT3 &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   RNF43 &lt;dbl&gt;, STK11 &lt;dbl&gt;, PTPRS &lt;dbl&gt;, DNMT3B &lt;dbl&gt;, MYD88 &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   SETD2 &lt;dbl&gt;, SMAD3 &lt;dbl&gt;, RPTOR &lt;dbl&gt;, SMAD2 &lt;dbl&gt;, CDK6 &lt;dbl&gt;, JAK3 &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   ESR1 &lt;dbl&gt;, CCND1 &lt;dbl&gt;, SPOP &lt;dbl&gt;, RB1 &lt;dbl&gt;, ERBB2 &lt;dbl&gt;, PTPRD &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   ATM &lt;dbl&gt;, ERBB3 &lt;dbl&gt;, NF1 &lt;dbl&gt;, BAP1 &lt;dbl&gt;, PBRM1 &lt;dbl&gt;, H3F3C &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   NOTCH2 &lt;dbl&gt;, SHQ1 &lt;dbl&gt;, LATS1 &lt;dbl&gt;, BRCA1 &lt;dbl&gt;, RBM10 &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   RFWD2 &lt;dbl&gt;, HIST1H3B &lt;dbl&gt;, NOTCH4 &lt;dbl&gt;, PTCH1 &lt;dbl&gt;, IDH1 &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   POLE &lt;dbl&gt;, SMARCA4 &lt;dbl&gt;, INPP4A &lt;dbl&gt;, CDH1 &lt;dbl&gt;, MLL2 &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   FAT1 &lt;dbl&gt;, PLK2 &lt;dbl&gt;, BRCA2 &lt;dbl&gt;, SMAD4 &lt;dbl&gt;, BRIP1 &lt;dbl&gt;, TP63 &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   SPEN &lt;dbl&gt;, ARID1A &lt;dbl&gt;, RAF1 &lt;dbl&gt;, EPHA5 &lt;dbl&gt;, CCND2 &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   FOXP1 &lt;dbl&gt;, EP300 &lt;dbl&gt;, MSH2 &lt;dbl&gt;, NOTCH1 &lt;dbl&gt;, GRIN2A &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   GATA2 &lt;dbl&gt;, HNF1A &lt;dbl&gt;, BRAF &lt;dbl&gt;, GNAQ &lt;dbl&gt;, ASXL1 &lt;dbl&gt;, MED12 &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   IRS1 &lt;dbl&gt;, MLH1 &lt;dbl&gt;, PDGFRA &lt;dbl&gt;, NPM1 &lt;dbl&gt;, YES1 &lt;dbl&gt;, ERCC2 &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   PAK7 &lt;dbl&gt;, BCOR &lt;dbl&gt;, AR &lt;dbl&gt;, FUBP1 &lt;dbl&gt;, ROS1 &lt;dbl&gt;, …</span></pre></body></html></div>
+<span class="fu">kable</span>(<span class="no">df</span>[<span class="fl">1</span>:<span class="fl">10</span>, <span class="fl">1</span>:<span class="fl">10</span>])</pre></body></html></div>
+<table class="table">
+<thead><tr class="header">
+<th></th>
+<th align="right">FLT4</th>
+<th align="right">KRAS</th>
+<th align="right">TP53</th>
+<th align="right">NF1</th>
+<th align="right">ARID1A</th>
+<th align="right">CARD11</th>
+<th align="right">ARID5B</th>
+<th align="right">MLL2</th>
+<th align="right">SMAD3</th>
+<th align="right">CIC</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td>P-0010604-T01-IM5</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td>P-0002651-T01-IM3</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td>P-0000270-T01-IM3</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td>P-0002915-T01-IM3</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td>P-0011099-T01-IM5</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td>P-0000080-T01-IM3</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td>P-0001741-T01-IM3</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td>P-0003964-T01-IM3</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td>P-0003842-T01-IM5</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td>P-0002597-T02-IM5</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+</tbody>
+</table>
 </div>
 <div id="processing-mutation-data-from-the-api" class="section level3">
 <h3 class="hasAnchor">
@@ -243,48 +473,164 @@
 <p>In this section we show the same examples as above but using the data downloaded through the API:</p>
 <div class="sourceCode" id="cb4"><html><body><pre class="r"><span class="no">dat</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/get_genetics.html">get_genetics</a></span>(<span class="kw">sample_ids</span> <span class="kw">=</span> <span class="no">samples</span>, <span class="kw">fusions</span> <span class="kw">=</span> <span class="fl">FALSE</span>, <span class="kw">cna</span> <span class="kw">=</span> <span class="fl">FALSE</span>)
 <span class="co">#&gt; [1] "https://cbioportal.mskcc.org/api/molecular-profiles/mskimpact_mutations/mutations/fetch?"</span>
+<span class="co">#&gt; No encoding supplied: defaulting to UTF-8.</span>
 <span class="no">df</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/binmat.html">binmat</a></span>(<span class="kw">maf</span> <span class="kw">=</span> <span class="no">dat</span>$<span class="no">mut</span>)
 <span class="co">#&gt; Warning in createbin.maf(obj = maf, patients = patients, mut.type = mut.type, :</span>
 <span class="co">#&gt; KMT2D has been recoded to MLL2</span>
 <span class="co">#&gt; Warning in createbin.maf(obj = maf, patients = patients, mut.type = mut.type, :</span>
 <span class="co">#&gt; KMT2C has been recoded to MLL3</span>
 <span class="co">#&gt; Warning in createbin.maf(obj = maf, patients = patients, mut.type = mut.type, :</span>
-<span class="co">#&gt; Some patients did not have any mutations found in the MAF file.P-0000788-</span>
-<span class="co">#&gt; T01-IM3,P-0010898-T01-IM5,P-0008071-T01-IM5,P-0007306-T01-IM5,P-0001181-T01-</span>
-<span class="co">#&gt; IM3,P-0001942-T03-IM3</span>
-<span class="fu">as_tibble</span>(<span class="no">df</span>)
-<span class="co">#&gt; # A tibble: 99 x 204</span>
-<span class="co">#&gt;     ABL1  AKT1   ALK ALOX12B   APC BIRC3    AR  ARAF ZFHX3   ATM  ATRX   AXL</span>
-<span class="co">#&gt;    &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;</span>
-<span class="co">#&gt;  1     1     0     0       0     0     0     0     0     0     0     0     0</span>
-<span class="co">#&gt;  2     1     0     1       0     0     1     0     0     0     0     0     0</span>
-<span class="co">#&gt;  3     0     1     0       0     0    NA     0     0    NA     0     0     0</span>
-<span class="co">#&gt;  4     0     1     0       0     0     0     0     0     0     0     0     0</span>
-<span class="co">#&gt;  5     0     1     0       0     0     0     0     0     0     0     0     0</span>
-<span class="co">#&gt;  6     0     0     1       0     0    NA     0     0    NA     0     0     0</span>
-<span class="co">#&gt;  7     0     0     0       1     0     0     0     0     0     0     0     0</span>
-<span class="co">#&gt;  8     0     0     0       0     1    NA     0     0    NA     0     0     0</span>
-<span class="co">#&gt;  9     0     0     0       0     1    NA     0     0    NA     0     0     0</span>
-<span class="co">#&gt; 10     0     0     0       0     1    NA     0     0    NA     0     0     0</span>
-<span class="co">#&gt; # … with 89 more rows, and 192 more variables: B2M &lt;dbl&gt;, CCND1 &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   BCL6 &lt;dbl&gt;, PRDM1 &lt;dbl&gt;, BLM &lt;dbl&gt;, BRCA1 &lt;dbl&gt;, BRAF &lt;dbl&gt;, BRCA2 &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   BTK &lt;dbl&gt;, CBFB &lt;dbl&gt;, CBL &lt;dbl&gt;, CCND2 &lt;dbl&gt;, CDH1 &lt;dbl&gt;, CDK4 &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   CDK6 &lt;dbl&gt;, CDKN2A &lt;dbl&gt;, CREBBP &lt;dbl&gt;, CSF3R &lt;dbl&gt;, CTNNB1 &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   DAXX &lt;dbl&gt;, DNMT3B &lt;dbl&gt;, EGFR &lt;dbl&gt;, EP300 &lt;dbl&gt;, EPHA3 &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   EPHA5 &lt;dbl&gt;, EPHA7 &lt;dbl&gt;, EPHB1 &lt;dbl&gt;, ERBB2 &lt;dbl&gt;, ERBB3 &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   ERBB4 &lt;dbl&gt;, ERCC2 &lt;dbl&gt;, ESR1 &lt;dbl&gt;, ETV1 &lt;dbl&gt;, EZH2 &lt;dbl&gt;, FANCA &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   FANCC &lt;dbl&gt;, FAT1 &lt;dbl&gt;, FGF4 &lt;dbl&gt;, FGFR1 &lt;dbl&gt;, FGFR3 &lt;dbl&gt;, FGFR2 &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   FGFR4 &lt;dbl&gt;, FOXO1 &lt;dbl&gt;, FLT3 &lt;dbl&gt;, FLT4 &lt;dbl&gt;, GATA2 &lt;dbl&gt;, GATA3 &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   GNAQ &lt;dbl&gt;, GNAS &lt;dbl&gt;, GRIN2A &lt;dbl&gt;, GSK3B &lt;dbl&gt;, `HLA-A` &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   FOXA1 &lt;dbl&gt;, IDH1 &lt;dbl&gt;, IGF1 &lt;dbl&gt;, IGF1R &lt;dbl&gt;, INHA &lt;dbl&gt;, INHBA &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   INPP4A &lt;dbl&gt;, INSR &lt;dbl&gt;, IRF4 &lt;dbl&gt;, IRS1 &lt;dbl&gt;, JAK1 &lt;dbl&gt;, JAK3 &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   KIT &lt;dbl&gt;, KRAS &lt;dbl&gt;, SMAD2 &lt;dbl&gt;, SMAD3 &lt;dbl&gt;, SMAD4 &lt;dbl&gt;, MDM2 &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   MAP3K1 &lt;dbl&gt;, MEN1 &lt;dbl&gt;, MET &lt;dbl&gt;, MITF &lt;dbl&gt;, MLH1 &lt;dbl&gt;, KMT2A &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   MPL &lt;dbl&gt;, MRE11A &lt;dbl&gt;, MSH2 &lt;dbl&gt;, NBN &lt;dbl&gt;, NF1 &lt;dbl&gt;, NF2 &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   NFE2L2 &lt;dbl&gt;, NOTCH1 &lt;dbl&gt;, NOTCH2 &lt;dbl&gt;, NOTCH3 &lt;dbl&gt;, NOTCH4 &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   NPM1 &lt;dbl&gt;, NRAS &lt;dbl&gt;, NTRK3 &lt;dbl&gt;, PAK1 &lt;dbl&gt;, PARK2 &lt;dbl&gt;, PDGFRA &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   PDGFRB &lt;dbl&gt;, PDPK1 &lt;dbl&gt;, PIK3CA &lt;dbl&gt;, PIK3CB &lt;dbl&gt;, PIK3CD &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   PIK3CG &lt;dbl&gt;, PLCG2 &lt;dbl&gt;, …</span></pre></body></html></div>
+<span class="co">#&gt; Some patients did not have any mutations found in the MAF file.P-0012381-</span>
+<span class="co">#&gt; T01-IM5,P-0007149-T01-IM5,P-0001308-T01-IM3,P-0000427-T01-IM3,P-0000955-T01-</span>
+<span class="co">#&gt; IM3,P-0001890-T01-IM3,P-0004491-T01-IM5</span>
+<span class="fu">kable</span>(<span class="no">df</span>[<span class="fl">1</span>:<span class="fl">10</span>, <span class="fl">1</span>:<span class="fl">10</span>])</pre></body></html></div>
+<table class="table">
+<thead><tr class="header">
+<th></th>
+<th align="right">ABL1</th>
+<th align="right">PARP1</th>
+<th align="right">AKT1</th>
+<th align="right">AKT2</th>
+<th align="right">ALK</th>
+<th align="right">APC</th>
+<th align="right">BIRC3</th>
+<th align="right">XIAP</th>
+<th align="right">AR</th>
+<th align="right">ARAF</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td>P-0004559-T01-IM5</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td>P-0006717-T01-IM5</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td>P-0006437-T01-IM5</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td>P-0007151-T01-IM5</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td>P-0010309-T01-IM5</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td>P-0001485-T01-IM3</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">NA</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td>P-0003950-T01-IM5</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td>P-0005322-T02-IM5</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td>P-0002463-T01-IM3</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">NA</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td>P-0000625-T01-IM3</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">NA</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+</tbody>
+</table>
 <p>Similarly,</p>
 <div class="sourceCode" id="cb5"><html><body><pre class="r"><span class="no">df</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/binmat.html">binmat</a></span>(<span class="kw">maf</span> <span class="kw">=</span> <span class="no">dat</span>$<span class="no">mut</span>, <span class="kw">SNP.only</span> <span class="kw">=</span> <span class="fl">TRUE</span>, <span class="kw">include.silent</span> <span class="kw">=</span> <span class="fl">TRUE</span>, <span class="kw">spe.plat</span> <span class="kw">=</span> <span class="fl">FALSE</span>)
 <span class="co">#&gt; Warning in createbin.maf(obj = maf, patients = patients, mut.type = mut.type, :</span>
@@ -292,43 +638,1457 @@
 <span class="co">#&gt; Warning in createbin.maf(obj = maf, patients = patients, mut.type = mut.type, :</span>
 <span class="co">#&gt; KMT2C has been recoded to MLL3</span>
 <span class="co">#&gt; Warning in createbin.maf(obj = maf, patients = patients, mut.type = mut.type, :</span>
-<span class="co">#&gt; Some patients did not have any mutations found in the MAF file.P-0000788-</span>
-<span class="co">#&gt; T01-IM3,P-0010898-T01-IM5,P-0008071-T01-IM5,P-0007306-T01-IM5,P-0001181-</span>
-<span class="co">#&gt; T01-IM3,P-0001942-T03-IM3,P-0003319-T01-IM5,P-0006755-T01-IM5,P-0004637-T01-</span>
-<span class="co">#&gt; IM5,P-0001585-T01-IM3</span>
-<span class="fu">as_tibble</span>(<span class="no">df</span>)
-<span class="co">#&gt; # A tibble: 99 x 192</span>
-<span class="co">#&gt;     ABL1  AKT1   ALK ALOX12B   APC BIRC3    AR  ARAF ZFHX3   ATM  ATRX   AXL</span>
-<span class="co">#&gt;    &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;</span>
-<span class="co">#&gt;  1     1     0     0       0     0     0     0     0     0     0     0     0</span>
-<span class="co">#&gt;  2     0     0     1       0     0     0     0     0     0     0     0     0</span>
-<span class="co">#&gt;  3     0     1     0       0     0     0     0     0     0     0     0     0</span>
-<span class="co">#&gt;  4     0     1     0       0     0     0     0     0     0     0     0     0</span>
-<span class="co">#&gt;  5     0     0     0       0     0     0     0     0     0     0     0     0</span>
-<span class="co">#&gt;  6     0     0     1       0     0     0     0     0     0     0     0     0</span>
-<span class="co">#&gt;  7     0     0     0       1     0     0     0     0     0     0     0     0</span>
-<span class="co">#&gt;  8     0     0     0       0     1     0     0     0     0     0     0     0</span>
-<span class="co">#&gt;  9     0     0     0       0     1     0     0     0     0     0     0     0</span>
-<span class="co">#&gt; 10     0     0     0       0     0     0     0     0     0     0     0     0</span>
-<span class="co">#&gt; # … with 89 more rows, and 180 more variables: B2M &lt;dbl&gt;, CCND1 &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   BCL6 &lt;dbl&gt;, PRDM1 &lt;dbl&gt;, BLM &lt;dbl&gt;, BRCA1 &lt;dbl&gt;, BRAF &lt;dbl&gt;, BRCA2 &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   BTK &lt;dbl&gt;, CBL &lt;dbl&gt;, CCND2 &lt;dbl&gt;, CDH1 &lt;dbl&gt;, CDK4 &lt;dbl&gt;, CDK6 &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   CDKN2A &lt;dbl&gt;, CREBBP &lt;dbl&gt;, CSF3R &lt;dbl&gt;, CTNNB1 &lt;dbl&gt;, DAXX &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   DNMT3B &lt;dbl&gt;, EGFR &lt;dbl&gt;, EP300 &lt;dbl&gt;, EPHA3 &lt;dbl&gt;, EPHA5 &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   EPHA7 &lt;dbl&gt;, EPHB1 &lt;dbl&gt;, ERBB2 &lt;dbl&gt;, ERBB3 &lt;dbl&gt;, ERBB4 &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   ERCC2 &lt;dbl&gt;, ESR1 &lt;dbl&gt;, ETV1 &lt;dbl&gt;, EZH2 &lt;dbl&gt;, FANCA &lt;dbl&gt;, FANCC &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   FAT1 &lt;dbl&gt;, FGF4 &lt;dbl&gt;, FGFR1 &lt;dbl&gt;, FGFR3 &lt;dbl&gt;, FGFR2 &lt;dbl&gt;, FGFR4 &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   FOXO1 &lt;dbl&gt;, FLT3 &lt;dbl&gt;, FLT4 &lt;dbl&gt;, GATA2 &lt;dbl&gt;, GATA3 &lt;dbl&gt;, GNAQ &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   GNAS &lt;dbl&gt;, GRIN2A &lt;dbl&gt;, GSK3B &lt;dbl&gt;, `HLA-A` &lt;dbl&gt;, FOXA1 &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   IDH1 &lt;dbl&gt;, IGF1R &lt;dbl&gt;, INHA &lt;dbl&gt;, INHBA &lt;dbl&gt;, INPP4A &lt;dbl&gt;, IRF4 &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   IRS1 &lt;dbl&gt;, JAK1 &lt;dbl&gt;, JAK3 &lt;dbl&gt;, KIT &lt;dbl&gt;, KRAS &lt;dbl&gt;, SMAD2 &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   SMAD3 &lt;dbl&gt;, SMAD4 &lt;dbl&gt;, MDM2 &lt;dbl&gt;, MAP3K1 &lt;dbl&gt;, MEN1 &lt;dbl&gt;, MET &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   MITF &lt;dbl&gt;, MLH1 &lt;dbl&gt;, KMT2A &lt;dbl&gt;, MPL &lt;dbl&gt;, MRE11A &lt;dbl&gt;, MSH2 &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   NBN &lt;dbl&gt;, NF1 &lt;dbl&gt;, NFE2L2 &lt;dbl&gt;, NOTCH1 &lt;dbl&gt;, NOTCH2 &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   NOTCH3 &lt;dbl&gt;, NOTCH4 &lt;dbl&gt;, NPM1 &lt;dbl&gt;, NRAS &lt;dbl&gt;, NTRK3 &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   PAK1 &lt;dbl&gt;, PARK2 &lt;dbl&gt;, PDGFRA &lt;dbl&gt;, PDGFRB &lt;dbl&gt;, PDPK1 &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   PIK3CA &lt;dbl&gt;, PIK3CD &lt;dbl&gt;, PIK3CG &lt;dbl&gt;, POLE &lt;dbl&gt;, MAP2K1 &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   PTCH1 &lt;dbl&gt;, PTPN11 &lt;dbl&gt;, PTPRD &lt;dbl&gt;, PTPRS &lt;dbl&gt;, …</span></pre></body></html></div>
+<span class="co">#&gt; Some patients did not have any mutations found in the MAF file.P-0012381-</span>
+<span class="co">#&gt; T01-IM5,P-0007149-T01-IM5,P-0001308-T01-IM3,P-0000427-T01-IM3,P-0000955-T01-</span>
+<span class="co">#&gt; IM3,P-0001890-T01-IM3,P-0004491-T01-IM5</span>
+<span class="fu">kable</span>(<span class="no">df</span>[<span class="fl">1</span>:<span class="fl">10</span>, <span class="fl">1</span>:<span class="fl">10</span>])</pre></body></html></div>
+<table class="table">
+<thead><tr class="header">
+<th></th>
+<th align="right">ABL1</th>
+<th align="right">PARP1</th>
+<th align="right">AKT1</th>
+<th align="right">AKT2</th>
+<th align="right">ALK</th>
+<th align="right">APC</th>
+<th align="right">BIRC3</th>
+<th align="right">XIAP</th>
+<th align="right">AR</th>
+<th align="right">ARAF</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td>P-0004559-T01-IM5</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td>P-0006717-T01-IM5</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td>P-0006437-T01-IM5</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td>P-0007151-T01-IM5</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td>P-0010309-T01-IM5</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td>P-0001485-T01-IM3</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td>P-0003950-T01-IM5</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td>P-0005322-T02-IM5</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td>P-0002463-T01-IM3</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td>P-0000625-T01-IM3</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="fusions" class="section level2">
+<h2 class="hasAnchor">
+<a href="#fusions" class="anchor"></a>Fusions</h2>
+<p>Fusions are a particular genetic event where two genes merge to create a fusion gene which is a hybrid gene formed from the two previously independent genes. It can occur as a result of translocation, interstitial deletion, or chromosomal inversion. In IMPACT datasets these can be found either in their own file or aggregated in the MAF file for mutations. In general the file containing the fusions will be very similar to a MAF file, explaining why they may be found together. We show here how to process these alterations in both cases listed above. Note that fusions are particularly rare events and thus the resulting data is very sparse.</p>
+<div id="processing-raw-fusion-data" class="section level3">
+<h3 class="hasAnchor">
+<a href="#processing-raw-fusion-data" class="anchor"></a>Processing raw fusion data</h3>
+<p>We included in <code>gnomeR</code> an example of raw downloaded MAF file directly from the website in the <code>fusion</code> dataset. We show here an example selecting the same random subset of 100 samples as in the previous section:</p>
+<div class="sourceCode" id="cb6"><html><body><pre class="r"><span class="fu">as_tibble</span>(<span class="no">fusion</span>)
+<span class="co">#&gt; # A tibble: 127 x 10</span>
+<span class="co">#&gt;    Hugo_Symbol Entrez_Gene_Id Center Tumor_Sample_Ba… Fusion DNA_support</span>
+<span class="co">#&gt;    &lt;fct&gt;                &lt;int&gt; &lt;fct&gt;  &lt;fct&gt;            &lt;fct&gt;  &lt;fct&gt;      </span>
+<span class="co">#&gt;  1 PAX8                    NA MSKCC… P-0010011-T01-I… PAX8-… yes        </span>
+<span class="co">#&gt;  2 TFE3                    NA MSKCC… P-0010977-T01-I… ASPSC… yes        </span>
+<span class="co">#&gt;  3 ASPSCR1                 NA MSKCC… P-0010977-T01-I… ASPSC… yes        </span>
+<span class="co">#&gt;  4 BRAF                    NA MSKCC… P-0010398-T01-I… OSBPL… yes        </span>
+<span class="co">#&gt;  5 OSBPL9                  NA MSKCC… P-0010398-T01-I… OSBPL… yes        </span>
+<span class="co">#&gt;  6 ALK                     NA MSKCC… P-0010177-T01-I… EML4-… yes        </span>
+<span class="co">#&gt;  7 EML4                    NA MSKCC… P-0010177-T01-I… EML4-… yes        </span>
+<span class="co">#&gt;  8 MLL3                    NA MSKCC… P-0010604-T01-I… MLL3-… yes        </span>
+<span class="co">#&gt;  9 ERG                     NA MSKCC… P-0010794-T01-I… TMPRS… yes        </span>
+<span class="co">#&gt; 10 TMPRSS2                 NA MSKCC… P-0010794-T01-I… TMPRS… yes        </span>
+<span class="co">#&gt; # … with 117 more rows, and 4 more variables: RNA_support &lt;fct&gt;, Method &lt;lgl&gt;,</span>
+<span class="co">#&gt; #   Frame &lt;fct&gt;, Comments &lt;fct&gt;</span>
+<span class="no">df</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/binmat.html">binmat</a></span>(<span class="kw">patients</span> <span class="kw">=</span> <span class="no">samples</span> ,<span class="kw">fusion</span> <span class="kw">=</span> <span class="no">fusion</span>)
+<span class="fu">kable</span>(<span class="no">df</span>[<span class="fl">1</span>:<span class="fl">10</span>, <span class="fl">1</span>:<span class="fl">10</span>])</pre></body></html></div>
+<table class="table">
+<thead><tr class="header">
+<th></th>
+<th align="right">BRAF.fus</th>
+<th align="right">OSBPL9.fus</th>
+<th align="right">ALK.fus</th>
+<th align="right">EML4.fus</th>
+<th align="right">MLL3.fus</th>
+<th align="right">BRCA2.fus</th>
+<th align="right">ERG.fus</th>
+<th align="right">TMPRSS2.fus</th>
+<th align="right">ATM.fus</th>
+<th align="right">ELOVL4.fus</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td>P-0010604-T01-IM5</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td>P-0002651-T01-IM3</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td>P-0000270-T01-IM3</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td>P-0002915-T01-IM3</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td>P-0011099-T01-IM5</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td>P-0000080-T01-IM3</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td>P-0001741-T01-IM3</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td>P-0003964-T01-IM3</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td>P-0003842-T01-IM5</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td>P-0002597-T02-IM5</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="processing-fusions-from-the-api" class="section level3">
+<h3 class="hasAnchor">
+<a href="#processing-fusions-from-the-api" class="anchor"></a>Processing fusions from the API</h3>
+<p>In the API provided in <code>gnomeR</code> the fusion data comes merged with the mutation data. Note that we included an option to automatically filter them out if the user wishes so.</p>
+<div class="sourceCode" id="cb7"><html><body><pre class="r"><span class="no">dat</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/get_genetics.html">get_genetics</a></span>(<span class="kw">sample_ids</span> <span class="kw">=</span> <span class="no">samples</span>,<span class="kw">mutations</span> <span class="kw">=</span> <span class="fl">FALSE</span>, <span class="kw">fusions</span> <span class="kw">=</span> <span class="fl">TRUE</span>, <span class="kw">cna</span> <span class="kw">=</span> <span class="fl">FALSE</span>)
+<span class="co">#&gt; [1] "https://cbioportal.mskcc.org/api/molecular-profiles/mskimpact_mutations/mutations/fetch?"</span>
+<span class="co">#&gt; No encoding supplied: defaulting to UTF-8.</span>
+<span class="no">df</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/binmat.html">binmat</a></span>(<span class="kw">maf</span> <span class="kw">=</span> <span class="no">dat</span>$<span class="no">mut</span>)
+<span class="co">#&gt; Warning in binmat(maf = dat$mut): Fusions were found in the maf file, they were</span>
+<span class="co">#&gt; removed and a fusion file was created.</span>
+<span class="co">#&gt; Warning in createbin.maf(obj = maf, patients = patients, mut.type = mut.type, :</span>
+<span class="co">#&gt; KMT2D has been recoded to MLL2</span>
+<span class="co">#&gt; Warning in createbin.maf(obj = maf, patients = patients, mut.type = mut.type, :</span>
+<span class="co">#&gt; KMT2C has been recoded to MLL3</span>
+<span class="co">#&gt; Warning in createbin.maf(obj = maf, patients = patients, mut.type = mut.type, :</span>
+<span class="co">#&gt; Some patients did not have any mutations found in the MAF file.P-0012381-</span>
+<span class="co">#&gt; T01-IM5,P-0007149-T01-IM5,P-0001308-T01-IM3,P-0000427-T01-IM3,P-0000955-T01-</span>
+<span class="co">#&gt; IM3,P-0001890-T01-IM3,P-0004491-T01-IM5</span>
+<span class="fu">kable</span>(<span class="no">df</span>[<span class="fl">1</span>:<span class="fl">10</span>, <span class="fl">1</span>:<span class="fl">10</span>])</pre></body></html></div>
+<table class="table">
+<thead><tr class="header">
+<th></th>
+<th align="right">ABL1</th>
+<th align="right">PARP1</th>
+<th align="right">AKT1</th>
+<th align="right">AKT2</th>
+<th align="right">ALK</th>
+<th align="right">APC</th>
+<th align="right">BIRC3</th>
+<th align="right">XIAP</th>
+<th align="right">AR</th>
+<th align="right">ARAF</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td>P-0004559-T01-IM5</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td>P-0006717-T01-IM5</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td>P-0006437-T01-IM5</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td>P-0007151-T01-IM5</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td>P-0010309-T01-IM5</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td>P-0001485-T01-IM3</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">NA</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td>P-0003950-T01-IM5</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td>P-0005322-T02-IM5</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td>P-0002463-T01-IM3</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">NA</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td>P-0000625-T01-IM3</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">NA</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+</tbody>
+</table>
+<p>Similarly to the mutation data the fusions are affected by the <code>spe.plat</code> and <code>set.plat</code> arguments as well.</p>
+</div>
+</div>
+<div id="copy-number-alterations-cna" class="section level2">
+<h2 class="hasAnchor">
+<a href="#copy-number-alterations-cna" class="anchor"></a>Copy-number alterations (CNA)</h2>
+<p>The final type of data we have left to cover are CNAs. This a phenomenon in which sections of the genome are repeated and the number of repeats in the genome varies between individuals. Copy number variation is a type of structural variation: specifically, it is a type of duplication or deletion event that affects a considerable number of base pairs. We will show in this section how to process CNA from IMPACT data. Once again we include an example dataset, <code>cna</code> in <code>gnomeR</code>. We will show in this section how to process raw CNA data and CNA data from the API.</p>
+<p>The processing function for CNA is affected by two additional arguments:</p>
+<ul>
+<li>
+<code>cna.binary</code>: boolean declaring if the CNA data should be segregated between amplification and deletions or kept as factor variable with its original levels</li>
+<li>
+<code>cna.relax</code>: a boolean declaring if only deep deletions and full amplifications should be annotated in the case where <code>cna.binary</code> is set to FALSE.</li>
+</ul>
+<p>Note that the <code>spe.plat</code> and <code>set.plat</code> also affect CNA.</p>
+<div id="processing-raw-cna-data" class="section level3">
+<h3 class="hasAnchor">
+<a href="#processing-raw-cna-data" class="anchor"></a>Processing raw CNA data</h3>
+<p>By default amplifications and deletions will be separated and only deep deletions/full amplifications will accounted as shown below.</p>
+<div class="sourceCode" id="cb8"><html><body><pre class="r"><span class="no">df</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/binmat.html">binmat</a></span>(<span class="kw">patients</span> <span class="kw">=</span> <span class="no">samples</span>, <span class="kw">cna</span> <span class="kw">=</span> <span class="no">cna</span>)
+<span class="fu">kable</span>(<span class="no">df</span>[<span class="fl">1</span>:<span class="fl">10</span>, <span class="fl">1</span>:<span class="fl">10</span>])</pre></body></html></div>
+<table class="table">
+<thead><tr class="header">
+<th></th>
+<th align="right">AKT2.Amp</th>
+<th align="right">AR.Amp</th>
+<th align="right">ARID5B.Del</th>
+<th align="right">AURKA.Amp</th>
+<th align="right">AXIN1.Amp</th>
+<th align="right">AXIN2.Amp</th>
+<th align="right">BRIP1.Amp</th>
+<th align="right">CCND1.Amp</th>
+<th align="right">CCND3.Amp</th>
+<th align="right">CCNE1.Amp</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td>P-0001890-T01-IM3</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td>P-0000569-T01-IM3</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td>P-0002651-T01-IM3</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td>P-0001388-T01-IM3</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td>P-0002374-T01-IM3</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td>P-0002463-T01-IM3</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td>P-0000407-T01-IM3</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td>P-0001724-T01-IM3</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td>P-0001239-T01-IM3</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td>P-0001296-T01-IM3</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+</tr>
+</tbody>
+</table>
+<p>Setting <code>cna.binary</code> argument to FALSE yields the following events coded in a single column with their original levels:</p>
+<div class="sourceCode" id="cb9"><html><body><pre class="r"><span class="no">df</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/binmat.html">binmat</a></span>(<span class="kw">patients</span> <span class="kw">=</span> <span class="no">samples</span>, <span class="kw">cna</span> <span class="kw">=</span> <span class="no">cna</span>, <span class="kw">cna.binary</span> <span class="kw">=</span> <span class="fl">FALSE</span>)
+<span class="fu">kable</span>(<span class="no">df</span>[<span class="fl">1</span>:<span class="fl">10</span>, <span class="fl">1</span>:<span class="fl">10</span>])</pre></body></html></div>
+<table class="table">
+<thead><tr class="header">
+<th align="left">AKT2.cna</th>
+<th align="left">AKT3.cna</th>
+<th align="left">AR.cna</th>
+<th align="left">ARID5B.cna</th>
+<th align="left">AURKA.cna</th>
+<th align="left">AXIN1.cna</th>
+<th align="left">AXIN2.cna</th>
+<th align="left">BRCA2.cna</th>
+<th align="left">BRIP1.cna</th>
+<th align="left">CCND1.cna</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+</tr>
+<tr class="even">
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+</tr>
+<tr class="odd">
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">2</td>
+</tr>
+<tr class="even">
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+</tr>
+<tr class="odd">
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+</tr>
+<tr class="even">
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+</tr>
+<tr class="odd">
+<td align="left">2</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+</tr>
+<tr class="even">
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">2</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+</tr>
+<tr class="odd">
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+</tr>
+<tr class="even">
+<td align="left">2</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="processing-cna-data-from-the-api" class="section level3">
+<h3 class="hasAnchor">
+<a href="#processing-cna-data-from-the-api" class="anchor"></a>Processing CNA data from the API</h3>
+<p>Setting the <code>cna</code> argument to TRUE in the <code><a href="../reference/get_genetics.html">get_genetics()</a></code> function will retrieve the CNA data for the specified samples that can then further be processed in a similar fashion to the above:</p>
+<div class="sourceCode" id="cb10"><html><body><pre class="r"><span class="no">dat</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/get_genetics.html">get_genetics</a></span>(<span class="kw">sample_ids</span> <span class="kw">=</span> <span class="no">samples</span>,<span class="kw">mutations</span> <span class="kw">=</span> <span class="fl">FALSE</span>, <span class="kw">fusions</span> <span class="kw">=</span> <span class="fl">FALSE</span>, <span class="kw">cna</span> <span class="kw">=</span> <span class="fl">TRUE</span>)
+<span class="co">#&gt; [1] "https://cbioportal.mskcc.org/api/molecular-profiles/mskimpact_cna/discrete-copy-number/fetch?"</span>
+<span class="co">#&gt; No encoding supplied: defaulting to UTF-8.</span>
+<span class="no">df</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/binmat.html">binmat</a></span>(<span class="kw">patients</span> <span class="kw">=</span> <span class="no">samples</span>, <span class="kw">cna</span> <span class="kw">=</span> <span class="no">dat</span>$<span class="no">cna</span>)
+<span class="fu">kable</span>(<span class="no">df</span>[<span class="fl">1</span>:<span class="fl">10</span>, <span class="fl">1</span>:<span class="fl">10</span>])</pre></body></html></div>
+<table class="table">
+<thead><tr class="header">
+<th></th>
+<th align="right">AKT2.Amp</th>
+<th align="right">AR.Amp</th>
+<th align="right">CCND1.Amp</th>
+<th align="right">PRDM1.Del</th>
+<th align="right">BRCA2.Del</th>
+<th align="right">CCND3.Amp</th>
+<th align="right">CCNE1.Amp</th>
+<th align="right">CD79B.Amp</th>
+<th align="right">CDK4.Amp</th>
+<th align="right">CDK6.Amp</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td>P-0010604-T01-IM5</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td>P-0002651-T01-IM3</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td>P-0000270-T01-IM3</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td>P-0002915-T01-IM3</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td>P-0011099-T01-IM5</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td>P-0000080-T01-IM3</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td>P-0001741-T01-IM3</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td>P-0003964-T01-IM3</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td>P-0003842-T01-IM5</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td>P-0002597-T02-IM5</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+</tbody>
+</table>
+<p>Setting <code>cna.binary</code> argument to FALSE yields the following events coded in a single column with their original levels:</p>
+<div class="sourceCode" id="cb11"><html><body><pre class="r"><span class="no">dat</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/get_genetics.html">get_genetics</a></span>(<span class="kw">sample_ids</span> <span class="kw">=</span> <span class="no">samples</span>,<span class="kw">mutations</span> <span class="kw">=</span> <span class="fl">FALSE</span>, <span class="kw">fusions</span> <span class="kw">=</span> <span class="fl">FALSE</span>, <span class="kw">cna</span> <span class="kw">=</span> <span class="fl">TRUE</span>)
+<span class="co">#&gt; [1] "https://cbioportal.mskcc.org/api/molecular-profiles/mskimpact_cna/discrete-copy-number/fetch?"</span>
+<span class="co">#&gt; No encoding supplied: defaulting to UTF-8.</span>
+<span class="no">df</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/binmat.html">binmat</a></span>(<span class="kw">patients</span> <span class="kw">=</span> <span class="no">samples</span>, <span class="kw">cna</span> <span class="kw">=</span> <span class="no">dat</span>$<span class="no">cna</span>,<span class="kw">cna.binary</span> <span class="kw">=</span> <span class="fl">FALSE</span>)
+<span class="fu">kable</span>(<span class="no">df</span>[<span class="fl">1</span>:<span class="fl">10</span>, <span class="fl">1</span>:<span class="fl">10</span>])</pre></body></html></div>
+<table class="table">
+<thead><tr class="header">
+<th align="left">AKT2.cna</th>
+<th align="left">AR.cna</th>
+<th align="left">CCND1.cna</th>
+<th align="left">PRDM1.cna</th>
+<th align="left">BRCA2.cna</th>
+<th align="left">CCND3.cna</th>
+<th align="left">CCNE1.cna</th>
+<th align="left">CD79B.cna</th>
+<th align="left">CDK4.cna</th>
+<th align="left">CDK6.cna</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+</tr>
+<tr class="even">
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">2</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+</tr>
+<tr class="odd">
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+</tr>
+<tr class="even">
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+</tr>
+<tr class="odd">
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+</tr>
+<tr class="even">
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+</tr>
+<tr class="odd">
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+</tr>
+<tr class="even">
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+</tr>
+<tr class="odd">
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+</tr>
+<tr class="even">
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="processing-full-genetic-profiles-for-samples" class="section level2">
+<h2 class="hasAnchor">
+<a href="#processing-full-genetic-profiles-for-samples" class="anchor"></a>Processing full genetic profiles for samples</h2>
+<p>By combining all the types of data presented above, <code><a href="../reference/binmat.html">binmat()</a></code> will provide a complete genomic profile for the specified samples. This can be done with any combination of the arguments presented above.</p>
+<div id="using-raw-data-files" class="section level3">
+<h3 class="hasAnchor">
+<a href="#using-raw-data-files" class="anchor"></a>Using raw data files</h3>
+<p>Once again we show how to perform this using the files directly downloaded from cBioPortal, combining the example sets <code>mut</code>, <code>fusion</code> and <code>cna</code>:</p>
+<div class="sourceCode" id="cb12"><html><body><pre class="r"><span class="no">df</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/binmat.html">binmat</a></span>(<span class="kw">patients</span> <span class="kw">=</span> <span class="no">samples</span>,<span class="kw">maf</span> <span class="kw">=</span> <span class="no">mut</span>, <span class="kw">fusion</span> <span class="kw">=</span> <span class="no">fusion</span>, <span class="kw">cna</span> <span class="kw">=</span> <span class="no">cna</span>, <span class="kw">cna.binary</span> <span class="kw">=</span> <span class="fl">FALSE</span>)
+<span class="fu">kable</span>(<span class="no">df</span>[<span class="fl">1</span>:<span class="fl">10</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>:<span class="fl">3</span>,<span class="fl">243</span>,<span class="fl">244</span>,<span class="fl">300</span>:<span class="fl">305</span>)])</pre></body></html></div>
+<table class="table">
+<thead><tr class="header">
+<th></th>
+<th align="right">FLT4</th>
+<th align="right">KRAS</th>
+<th align="right">TP53</th>
+<th align="right">BRAF.fus</th>
+<th align="right">OSBPL9.fus</th>
+<th align="left">FANCA.cna</th>
+<th align="left">FGF19.cna</th>
+<th align="left">FGF3.cna</th>
+<th align="left">FGF4.cna</th>
+<th align="left">FGFR1.cna</th>
+<th align="left">FGFR2.cna</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td>P-0010604-T01-IM5</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+</tr>
+<tr class="even">
+<td>P-0002651-T01-IM3</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+</tr>
+<tr class="odd">
+<td>P-0000270-T01-IM3</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="left">0</td>
+<td align="left">2</td>
+<td align="left">2</td>
+<td align="left">2</td>
+<td align="left">0</td>
+<td align="left">0</td>
+</tr>
+<tr class="even">
+<td>P-0002915-T01-IM3</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+</tr>
+<tr class="odd">
+<td>P-0011099-T01-IM5</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">2</td>
+<td align="left">0</td>
+</tr>
+<tr class="even">
+<td>P-0000080-T01-IM3</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+</tr>
+<tr class="odd">
+<td>P-0001741-T01-IM3</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+</tr>
+<tr class="even">
+<td>P-0003964-T01-IM3</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+</tr>
+<tr class="odd">
+<td>P-0003842-T01-IM5</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+</tr>
+<tr class="even">
+<td>P-0002597-T02-IM5</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">2</td>
+<td align="left">0</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="from-the-api" class="section level3">
+<h3 class="hasAnchor">
+<a href="#from-the-api" class="anchor"></a>From the API</h3>
+<p>Similarly we get retrieve all the genetic events at once through the <code><a href="../reference/get_genetics.html">get_genetics()</a></code> function and proceed to process them.</p>
+<div class="sourceCode" id="cb13"><html><body><pre class="r"><span class="no">dat</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/get_genetics.html">get_genetics</a></span>(<span class="kw">sample_ids</span> <span class="kw">=</span> <span class="no">samples</span>,<span class="kw">mutations</span> <span class="kw">=</span> <span class="fl">TRUE</span>, <span class="kw">fusions</span> <span class="kw">=</span> <span class="fl">TRUE</span>, <span class="kw">cna</span> <span class="kw">=</span> <span class="fl">TRUE</span>)
+<span class="co">#&gt; [1] "https://cbioportal.mskcc.org/api/molecular-profiles/mskimpact_mutations/mutations/fetch?"</span>
+<span class="co">#&gt; No encoding supplied: defaulting to UTF-8.</span>
+<span class="co">#&gt; [1] "https://cbioportal.mskcc.org/api/molecular-profiles/mskimpact_cna/discrete-copy-number/fetch?"</span>
+<span class="co">#&gt; No encoding supplied: defaulting to UTF-8.</span>
+<span class="no">df</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/binmat.html">binmat</a></span>(<span class="kw">patients</span> <span class="kw">=</span> <span class="no">samples</span>,<span class="kw">maf</span> <span class="kw">=</span> <span class="no">dat</span>$<span class="no">mut</span>, <span class="kw">cna</span> <span class="kw">=</span> <span class="no">dat</span>$<span class="no">cna</span>,<span class="kw">cna.binary</span> <span class="kw">=</span> <span class="fl">FALSE</span>)
+<span class="co">#&gt; Warning in binmat(patients = samples, maf = dat$mut, cna = dat$cna, cna.binary =</span>
+<span class="co">#&gt; FALSE): Fusions were found in the maf file, they were removed and a fusion file</span>
+<span class="co">#&gt; was created.</span>
+<span class="co">#&gt; Warning in createbin.maf(obj = maf, patients = patients, mut.type = mut.type, :</span>
+<span class="co">#&gt; KMT2D has been recoded to MLL2</span>
+<span class="co">#&gt; Warning in createbin.maf(obj = maf, patients = patients, mut.type = mut.type, :</span>
+<span class="co">#&gt; KMT2C has been recoded to MLL3</span>
+<span class="co">#&gt; Warning in createbin.maf(obj = maf, patients = patients, mut.type = mut.type, :</span>
+<span class="co">#&gt; Some patients did not have any mutations found in the MAF file.P-0007149-</span>
+<span class="co">#&gt; T01-IM5,P-0001890-T01-IM3,P-0012381-T01-IM5,P-0003064-T01-IM3,P-0004491-T01-</span>
+<span class="co">#&gt; IM5,P-0001308-T01-IM3,P-0000244-T01-IM3,P-0000427-T01-IM3,P-0000955-T01-IM3</span>
+<span class="fu">kable</span>(<span class="no">df</span>[<span class="fl">1</span>:<span class="fl">10</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>:<span class="fl">3</span>,<span class="fl">243</span>,<span class="fl">244</span>,<span class="fl">300</span>:<span class="fl">305</span>)])</pre></body></html></div>
+<table class="table">
+<thead><tr class="header">
+<th></th>
+<th align="right">ABL1</th>
+<th align="right">PARP1</th>
+<th align="right">AKT1</th>
+<th align="right">ROS1.fus</th>
+<th align="right">TMPRSS2.fus</th>
+<th align="left">NBN.cna</th>
+<th align="left">NF1.cna</th>
+<th align="left">NFKBIA.cna</th>
+<th align="left">NOTCH1.cna</th>
+<th align="left">NTRK3.cna</th>
+<th align="left">PAK1.cna</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td>P-0010604-T01-IM5</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+</tr>
+<tr class="even">
+<td>P-0002651-T01-IM3</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+</tr>
+<tr class="odd">
+<td>P-0000270-T01-IM3</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+</tr>
+<tr class="even">
+<td>P-0002915-T01-IM3</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+</tr>
+<tr class="odd">
+<td>P-0011099-T01-IM5</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+</tr>
+<tr class="even">
+<td>P-0000080-T01-IM3</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+</tr>
+<tr class="odd">
+<td>P-0001741-T01-IM3</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+</tr>
+<tr class="even">
+<td>P-0003964-T01-IM3</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+</tr>
+<tr class="odd">
+<td>P-0003842-T01-IM5</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+</tr>
+<tr class="even">
+<td>P-0002597-T02-IM5</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+</tr>
+</tbody>
+</table>
+<p>Note that here the fusions are embedded in the mutation file.</p>
 </div>
 </div>
 </div>

@@ -1,10 +1,7 @@
 #' maf.summary
 #' Creates a set of plot summarising a maf file.
 #' @param maf the names of the segment files to be loaded and processed (Note must end in ".Rdata").
-#' @param mut.type The mutation type to be used. Options are "SOMATIC", "GERMLINE" or "ALL". Note "ALL" will
-#' keep all mutations regardless of status (not recommended). Default is SOMATIC.
-#' @param spe.plat boolean specifying if specific IMPACT platforms should be considered. When TRUE NAs will fill the cells for genes
-#' of patients that were not sequenced on that plaform. Default is FALSE.
+#' @param ... any argument belonging to the binmat method
 #' @return p.class Barplot of counts of each variant classification
 #' @return p.type Barplot of counts of each variant type
 #' @return p.SNV Histogram of counts of each SNV class
@@ -33,7 +30,7 @@
 #' GGally
 
 
-maf.summary <- function(maf,mut.type = "SOMATIC", spe.plat = F){
+maf.summary <- function(maf,...){
 
   # quick data checks #
   if(is.na(match("Tumor_Sample_Barcode",colnames(maf))))
@@ -76,8 +73,8 @@ maf.summary <- function(maf,mut.type = "SOMATIC", spe.plat = F){
   }
 
   # maf <- as.data.frame(maf)
-  if(mut.type == "ALL") Mut.filt = unique(maf$Mutation_Status) else Mut.filt = mut.type
-  maf <- maf %>% filter(tolower(.data$Mutation_Status) %in% tolower(Mut.filt))
+  # if(mut.type == "ALL") Mut.filt = unique(maf$Mutation_Status) else Mut.filt = mut.type
+  # maf <- maf %>% filter(tolower(.data$Mutation_Status) %in% tolower(Mut.filt))
   nb.cols <- 20 #length(unique(maf$Variant_Classification))
   ## summarise variant wise ##
 
@@ -200,7 +197,7 @@ maf.summary <- function(maf,mut.type = "SOMATIC", spe.plat = F){
 
 
   # comutation patterns #
-  bin.maf <- binmat(maf = maf,mut.type = mut.type, spe.plat = spe.plat)
+  bin.maf <- binmat(maf = maf,...)
   bin.maf <- bin.maf
   keep <- names(sort(apply(bin.maf,2,function(x){sum(x)}),decreasing = T))[1:10]
   bin.maf <- bin.maf[,keep]

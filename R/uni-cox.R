@@ -59,15 +59,15 @@ uni.cox <- function(X,surv.dat,surv.formula,filter = 0,genes = NULL){
     X <- X[,-which(apply(X, 2, function(x){length(unique(x[!is.na(x)])) <= 1 || all(is.na(x))}))]
 
   if(filter > 0){
-    # get binary cases #
-    temp <- apply(X, 2, function(x){length(unique(x[!is.na(x)])) == 2})
-    genes.bin <- names(temp[which(temp)])
-    if(length(genes.bin) == ncol(X)) rm <- apply(X, 2, function(x){sum(x, na.rm = T)/length(x) < filter})
-    else rm <- apply(X[,genes.bin], 2, function(x){sum(x, na.rm = T)/length(x) < filter})
+    rm <- apply(X, 2, function(x) {
+      # if(is.numeric(x))
+      #   sum(x, na.rm = T)/length(x) < filter
+      # else
+      any(summary(as.factor(x[!is.na(x)]))/length(x[!is.na(x)]) < filter)
+    })
     genes.rm <- names(rm[which(rm)])
-    # print(genes.rm)
-    X <- X %>%
-      select(-one_of(genes.rm))
+    length(genes.rm)
+    X <- X %>% select(-one_of(genes.rm))
   }
   if(is.null(dim(X)) )
     stop("Only one or fewer genes are left after filtering. We need a minimum of two. Please relax the filter argument.")

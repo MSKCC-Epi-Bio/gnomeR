@@ -14,12 +14,14 @@ knitr::opts_chunk$set(
 )
 ```
 
-```{r}
+```{r, message = F, warning = F}
 library(gnomeR)
 ```
 
 ```{r, echo=F}
 library(tibble)
+library(knitr)
+set.seed(123)
 ```
 
 # Introduction 
@@ -60,7 +62,7 @@ We included in `gnomeR` an example of raw downloaded MAF file directly from the 
 as_tibble(mut)
 samples <- as.character(unique(mut$Tumor_Sample_Barcode))[sample(1:length(unique(mut$Tumor_Sample_Barcode)), 100, replace=FALSE)]
 df <- binmat(patients = samples ,maf = mut)
-as_tibble(df)
+kable(df[1:10, 1:10])
 ```
 
 Note that by default in the situation above the outputted dataframe is a binary matrix made from all types of mutations and adjusting the features for the platform they were added on. Thus all samples that were sequenced on the original platform have NA's in the cells of for features that were added on subsequent platforms.
@@ -68,7 +70,7 @@ In the case where the user plans on using methods that do not accept missing val
 
 ```{r}
 df <- binmat(patients = samples ,maf = mut, SNP.only = TRUE, include.silent = TRUE, spe.plat = FALSE)
-as_tibble(df)
+kable(df[1:10, 1:10])
 ```
 
 ### Processing mutation data from the API
@@ -78,12 +80,111 @@ In this section we show the same examples as above but using the data downloaded
 ```{r}
 dat <- get_genetics(sample_ids = samples, fusions = FALSE, cna = FALSE)
 df <- binmat(maf = dat$mut)
-as_tibble(df)
+kable(df[1:10, 1:10])
 ```
 
 Similarly, 
 
 ```{r}
 df <- binmat(maf = dat$mut, SNP.only = TRUE, include.silent = TRUE, spe.plat = FALSE)
-as_tibble(df)
+kable(df[1:10, 1:10])
 ```
+
+## Fusions
+
+Fusions are a particular genetic event where two genes merge to create a fusion gene which is a hybrid gene formed from the two previously independent genes. It can occur as a result of translocation, interstitial deletion, or chromosomal inversion. In IMPACT datasets these can be found either in their own file or aggregated in the MAF file for mutations. In general the file containing the fusions will be very similar to a MAF file, explaining why they may be found together. We show here how to process these alterations in both cases listed above. Note that fusions are particularly rare events and thus the resulting data is very sparse.
+
+### Processing raw fusion data
+
+We included in `gnomeR` an example of raw downloaded MAF file directly from the website in the `fusion` dataset. We show here an example selecting the same random subset of 100 samples as in the previous section:
+
+```{r}
+as_tibble(fusion)
+df <- binmat(patients = samples ,fusion = fusion)
+kable(df[1:10, 1:10])
+```
+
+### Processing fusions from the API
+
+In the API provided in `gnomeR` the fusion data comes merged with the mutation data. Note that we included an option to automatically filter them out if the user wishes so. 
+
+```{r}
+dat <- get_genetics(sample_ids = samples,mutations = FALSE, fusions = TRUE, cna = FALSE)
+df <- binmat(maf = dat$mut)
+kable(df[1:10, 1:10])
+```
+
+Similarly to the mutation data the fusions are affected by the `spe.plat` and `set.plat` arguments as well. 
+
+
+## Copy-number alterations (CNA)
+
+The final type of data we have left to cover are CNAs. This a phenomenon in which sections of the genome are repeated and the number of repeats in the genome varies between individuals. Copy number variation is a type of structural variation: specifically, it is a type of duplication or deletion event that affects a considerable number of base pairs. We will show in this section how to process CNA from IMPACT data. Once again we include an example dataset, `cna` in `gnomeR`. We will show in this section how to process raw CNA data and CNA data from the API.
+
+The processing function for CNA is affected by two additional arguments:
+
+- `cna.binary`: boolean declaring if the CNA data should be segregated between amplification and deletions or kept as factor variable with its original levels
+- `cna.relax`: a boolean declaring if only deep deletions and full amplifications should be annotated in the case where `cna.binary` is set to FALSE. 
+
+Note that the `spe.plat` and `set.plat` also affect CNA.
+
+### Processing raw CNA data
+
+By default amplifications and deletions will be separated and only deep deletions/full amplifications will accounted as shown below.
+
+```{r}
+df <- binmat(patients = samples, cna = cna)
+kable(df[1:10, 1:10])
+```
+
+Setting `cna.binary` argument to FALSE yields the following events coded in a single column with their original levels:
+
+```{r}
+df <- binmat(patients = samples, cna = cna, cna.binary = FALSE)
+kable(df[1:10, 1:10])
+```
+
+
+### Processing CNA data from the API
+
+Setting the `cna` argument to TRUE in the `get_genetics()` function will retrieve the CNA data for the specified samples that can then further be processed in a similar fashion to the above:
+
+```{r}
+dat <- get_genetics(sample_ids = samples,mutations = FALSE, fusions = FALSE, cna = TRUE)
+df <- binmat(patients = samples, cna = dat$cna)
+kable(df[1:10, 1:10])
+```
+
+Setting `cna.binary` argument to FALSE yields the following events coded in a single column with their original levels:
+
+```{r}
+dat <- get_genetics(sample_ids = samples,mutations = FALSE, fusions = FALSE, cna = TRUE)
+df <- binmat(patients = samples, cna = dat$cna,cna.binary = FALSE)
+kable(df[1:10, 1:10])
+```
+
+## Processing full genetic profiles for samples
+
+By combining all the types of data presented above, `binmat()` will provide a complete genomic profile for the specified samples. This can be done with any combination of the arguments presented above.
+
+### Using raw data files
+
+Once again we show how to perform this using the files directly downloaded from cBioPortal, combining the example sets `mut`, `fusion` and `cna`:
+
+```{r}
+df <- binmat(patients = samples,maf = mut, fusion = fusion, cna = cna, cna.binary = FALSE)
+kable(df[1:10, c(1:3,243,244,300:305)])
+```
+
+
+### From the API
+
+Similarly we get retrieve all the genetic events at once through the `get_genetics()` function and proceed to process them. 
+
+```{r}
+dat <- get_genetics(sample_ids = samples,mutations = TRUE, fusions = TRUE, cna = TRUE)
+df <- binmat(patients = samples,maf = dat$mut, cna = dat$cna,cna.binary = FALSE)
+kable(df[1:10, c(1:3,243,244,300:305)])
+```
+
+Note that here the fusions are embedded in the mutation file.

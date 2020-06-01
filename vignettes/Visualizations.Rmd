@@ -1,0 +1,104 @@
+---
+title: "Visualizations"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Visualizations}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+  
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+collapse = TRUE,
+comment = "#>"
+)
+```
+
+```{r, warning=F, message =F}
+library(gnomeR)
+library(dplyr)
+```
+
+# Introduction 
+
+In this article we will explore the different automatized plotting functions included in `gnomeR`. There are two main functions in `gnomeR` to visualize genomic data: 
+
+- `maf.summary()` provides an extensive summary of the mutations found in the MAF file provided
+- `plot_oncoPrint()` provides an OncoPrint that let's the user explore the comutation (or any genetic event and clinical factors) patterns in the cohort of interest
+
+
+# Summarizing a MAF file
+
+The `maf.summary()` function takes the following inputs:
+
+- `maf` a MAF file
+- `...` any arguments that belong to the `binmat` method
+
+`maf.summary()` will return a list of plots:
+
+- `p.class` summarise the variant classification counts across the MAF 
+- `p.type` summarise the variant type counts across the MAF 
+- `p.SNV` summarise the SNV class counts across the MAF 
+- `p.patient.variant` summarise the variants per sample counts across the MAF 
+- `p.variant.bp` summarise the variants classification distribution 
+- `p.genes` summarise the most frequently mutated genes counts
+- `p.variant.dist` summarise the variants classification distribution as a percent of total variants
+- `p.variant.dist.bar` summarise the variants classification distribution as a percent of total variants in a single sample
+- `p.SNV.dist` summarise the SNV distribution as a percent of total SNV
+- `p.corr` summarise the correlation of genes that are most frequently mutated in a heatmap
+- `p.comut` summarise the comutation of genes that are most frequently mutated in a heatmap
+
+An example of a subset of these plots is shown below.
+
+```{r}
+plots_summary <- maf.summary(maf = mut)
+plots_summary$p.genes
+plots_summary$p.variant.dist
+plots_summary$p.comut
+```
+
+
+# OncoPrints
+
+OncoPrint is a way to visualize multiple genomic alteration events by heatmap provided through the `ComplexHeatmap` package. We implemented an altered version of this function in `gnomeR` through the `plot_oncoPrint()` function that enables the user to explore the co-occurences in genomic and clinical features selected.
+
+The `plot_oncoPrint()` function takes as arguments:
+- `gen.dat` a genetic dataframe from `binmat()`
+- `clin.dat` a set of clinical factors for the patients listed in gen.dat
+- `ordered` a numeric vector specifying which order the samples should be plotted in (optional)
+
+## Genetics only 
+
+In the first section we show how to use the output of the `binmat()` output to create an OncoPrint for a selected subset of genes. For consistency we will use the 10 genes used in the comutation plot above.
+
+```{r,fig.width=10, fig.height=7}
+genes <- c("ATM","BRAF","MLL2","APC","EGFR","MLL3","PIK3CA","KRAS","TP53")
+dat.gen <- binmat(maf = mut, fusion = fusion, cna = cna)
+dat.gen <- dat.gen %>% select(starts_with(genes))
+plot_oncoPrint(gen.dat = dat.gen)
+```
+
+## Adding clinical information 
+
+In this section we will show how the user can further add clinical information to this plot.
+
+```{r,fig.width=10, fig.height=7}
+genes <- c("ATM","BRAF","MLL2","APC","EGFR","MLL3","PIK3CA","KRAS","TP53")
+dat.gen <- binmat(maf = mut, fusion = fusion, cna = cna)
+dat.gen <- dat.gen %>% select(starts_with(genes))
+clin.patients.dat <- clin.patients[match(
+  abbreviate(rownames(dat.gen),strict = TRUE, minlength = 9),
+  clin.patients$X.Patient.Identifier),] %>%
+  rename(DMPID = X.Patient.Identifier, Smoker = Smoking.History) %>%
+  select(DMPID, Sex,Smoker) %>%
+  filter(!is.na(DMPID)) %>%
+  distinct(DMPID,.keep_all = TRUE)
+dat.gen <- dat.gen[match(clin.patients.dat$DMPID,
+                         abbreviate(rownames(dat.gen),strict = TRUE,
+                                    minlength = 9)),]
+clin.patients.dat <- clin.patients.dat %>%
+  tibble::column_to_rownames('DMPID')
+rownames(dat.gen) <- rownames(clin.patients.dat)
+plot_oncoPrint(gen.dat = dat.gen,
+               clin.dat = clin.patients.dat)
+```

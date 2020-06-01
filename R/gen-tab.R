@@ -60,26 +60,6 @@ gen.tab <- function (gen.dat, outcome, filter = 0, paired = F, cont = F,
     genes.rm <- names(rm[which(rm)])
     length(genes.rm)
     gen.dat <- gen.dat %>% select(-one_of(genes.rm))
-
-    # temp <- apply(gen.dat, 2, function(x) {
-    #   length(unique(x[!is.na(x)])) == 2
-    # })
-    # genes.bin <- names(temp[which(temp)])
-    # if (length(genes.bin) == ncol(gen.dat))
-    #   rm <- apply(gen.dat, 2, function(x) {
-    #     if(is.numeric(x))
-    #       sum(x, na.rm = T)/length(x) < filter
-    #     else
-    #       all(summary(as.factor(x[!is.na(x)]))/length(x[!is.na(x)]) < filter)
-    #   })
-    # else rm <- apply(gen.dat[, genes.bin], 2, function(x) {
-    #   if(length(unique(x)) == 2){
-    #     sum(as.numeric(x), na.rm = T)/length(x[!is.na(x)]) < filter}
-    #   else
-    #     any(summary(as.factor(x[!is.na(x)]))/length(x[!is.na(x)]) < filter)
-    # })
-    # genes.rm <- names(rm[which(rm)])
-    # gen.dat <- gen.dat %>% select(-one_of(genes.rm))
   }
   if (is.null(dim(gen.dat)) || dim(gen.dat)[2] == 0)
     stop("Only one or fewer genes are left after filtering. We need a minimum of two. Please relax the filter argument.")
