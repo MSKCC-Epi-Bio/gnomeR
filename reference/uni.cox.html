@@ -98,6 +98,18 @@ Performs univariate cox proportional hazard model on every feature" />
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
+      <a href="../articles/API-tutorial.html">API-tutorial</a>
+    </li>
+    <li>
+      <a href="../articles/Analizing-genomic-data.html">Analizing genomic data</a>
+    </li>
+    <li>
+      <a href="../articles/Data-processing.html">Data-processing</a>
+    </li>
+    <li>
+      <a href="../articles/Visualizations.html">Visualizations</a>
+    </li>
+    <li>
       <a href="../articles/gnomeR-vignette.html">gnomeR for IMPACT data</a>
     </li>
   </ul>
@@ -137,7 +149,7 @@ Performs univariate cox proportional hazard model on every feature</h1>
 Performs univariate cox proportional hazard model on every feature</p>
     </div>
 
-    <pre class="usage"><span class='fu'>uni.cox</span>(<span class='no'>X</span>, <span class='no'>surv.dat</span>, <span class='no'>surv.formula</span>, <span class='kw'>filter</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>genes</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>is.gen</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
+    <pre class="usage"><span class='fu'>uni.cox</span>(<span class='no'>X</span>, <span class='no'>surv.dat</span>, <span class='no'>surv.formula</span>, <span class='kw'>filter</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>genes</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -164,10 +176,6 @@ Default is 0 (all features included).</p></td>
     <tr>
       <th>genes</th>
       <td><p>a character vector of gene names that will be the only ones to be kept. Default is NULL, all genes are used.</p></td>
-    </tr>
-    <tr>
-      <th>is.gen</th>
-      <td><p>boolean specifying is the matrix X inputted is of binary genetic factors. Default is TRUE.</p></td>
     </tr>
     </table>
 
@@ -208,33 +216,33 @@ Default is 0 (all features included).</p></td>
 #&gt; <span class='warning'>Results may be unexpected or may change in future versions of ggplot2.</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Vectorized input to `element_text()` is not officially supported.</span>
 #&gt; <span class='warning'>Results may be unexpected or may change in future versions of ggplot2.</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Vectorized input to `element_text()` is not officially supported.</span>
 #&gt; <span class='warning'>Results may be unexpected or may change in future versions of ggplot2.</span></div><div class='output co'>#&gt; $tab
-#&gt;          Coefficient      Pvalue MutationFrequency Feature       FDR
-#&gt; EGFR      0.84016994 0.008213418        0.10000000    EGFR 0.2135489
-#&gt; MLL       0.94371748 0.019632556        0.06428571     MLL 0.2266402
-#&gt; RB1       0.72107855 0.034831100        0.09285714     RB1 0.2266402
-#&gt; CREBBP    0.90205238 0.034867716        0.05714286  CREBBP 0.2266402
-#&gt; MLL2      0.56298861 0.085882224        0.10000000    MLL2 0.3411547
-#&gt; TP53      0.40028485 0.087817442        0.44285714    TP53 0.3411547
-#&gt; ATRX     -1.20905337 0.091849333        0.07142857    ATRX 0.3411547
-#&gt; NF1       0.62398882 0.147897134        0.06428571     NF1 0.4551796
-#&gt; KRAS      0.48280269 0.157562157        0.12857143    KRAS 0.4551796
-#&gt; CDH1     -0.97210425 0.175320775        0.05714286    CDH1 0.4558340
-#&gt; APC      -0.65024059 0.270369373        0.07142857     APC 0.6173839
-#&gt; KEAP1     0.42011277 0.291446637        0.07857143   KEAP1 0.6173839
-#&gt; PTEN     -0.60074354 0.308691943        0.05714286    PTEN 0.6173839
-#&gt; TERT      0.29749633 0.347663039        0.13571429    TERT 0.6456599
-#&gt; EPHA5    -0.26751294 0.603085439        0.06428571   EPHA5 0.9957052
-#&gt; PIK3CA    0.15982029 0.670554504        0.10714286  PIK3CA 0.9957052
-#&gt; NOTCH1   -0.21260472 0.679426264        0.07142857  NOTCH1 0.9957052
-#&gt; SMARCA4  -0.18352777 0.721267649        0.06428571 SMARCA4 0.9957052
-#&gt; ARID1A    0.11594954 0.785894284        0.07857143  ARID1A 0.9957052
-#&gt; POLE     -0.11830097 0.841188641        0.05000000    POLE 0.9957052
-#&gt; FAT1     -0.06671197 0.866799501        0.10714286    FAT1 0.9957052
-#&gt; MLL3     -0.06205582 0.893527316        0.06428571    MLL3 0.9957052
-#&gt; STK11     0.02001728 0.962548003        0.08571429   STK11 0.9957052
-#&gt; PTPRT    -0.01433085 0.977783322        0.05000000   PTPRT 0.9957052
-#&gt; ATM       0.01293604 0.977809472        0.07142857     ATM 0.9957052
-#&gt; BRCA2   -18.16371626 0.995705178        0.05000000   BRCA2 0.9957052
+#&gt;    Feature Coefficient Pvalue MutationFrequency       FDR       HR
+#&gt; 1     EGFR      0.9100  0.214            0.1000 0.2135489 1.00e+00
+#&gt; 2      MLL      0.9440  0.227            0.0643 0.2266402 1.00e+00
+#&gt; 3      RB1      0.8150  0.227            0.0929 0.2266402 1.00e+00
+#&gt; 4   CREBBP      0.9380  0.227            0.0571 0.2266402 1.00e+00
+#&gt; 5     MLL2      0.6970  0.341            0.1000 0.3411547 1.00e+00
+#&gt; 6     TP53      0.5750  0.341            0.4429 0.3411547 1.00e+00
+#&gt; 7     ATRX    -15.7000  0.341            0.0714 0.3411547 1.00e+00
+#&gt; 8      NF1      0.7370  0.455            0.0643 0.4551796 1.00e+00
+#&gt; 9     KRAS      0.6280  0.455            0.1286 0.4551796 1.00e+00
+#&gt; 10    CDH1     -8.4200  0.456            0.0571 0.4558340 1.00e+00
+#&gt; 11     APC     -4.2300  0.617            0.0714 0.6173839 1.00e+00
+#&gt; 12   KEAP1      0.5750  0.617            0.0786 0.6173839 1.00e+00
+#&gt; 13    PTEN     -3.1200  0.617            0.0571 0.6173839 1.00e+00
+#&gt; 14    TERT      0.4550  0.646            0.1357 0.6456599 1.00e+00
+#&gt; 15   EPHA5     -1.1600  0.996            0.0643 0.9957052 1.00e+00
+#&gt; 16  PIK3CA      0.2600  0.996            0.1071 0.9957052 1.00e+00
+#&gt; 17  NOTCH1     -0.7900  0.996            0.0714 0.9957052 1.00e+00
+#&gt; 18 SMARCA4     -0.5960  0.996            0.0643 0.9957052 1.00e+00
+#&gt; 19  ARID1A      0.2010  0.996            0.0786 0.9957052 1.00e+00
+#&gt; 20    POLE     -0.3420  0.996            0.0500 0.9957052 1.00e+00
+#&gt; 21    FAT1     -0.1730  0.996            0.1071 0.9957052 1.00e+00
+#&gt; 22    MLL3     -0.1470  0.996            0.0643 0.9957052 1.00e+00
+#&gt; 23   STK11      0.0372  0.996            0.0857 0.9957052 1.00e+00
+#&gt; 24   PTPRT     -0.0311  0.996            0.0500 0.9957052 1.00e+00
+#&gt; 25     ATM      0.0259  0.996            0.0714 0.9957052 1.00e+00
+#&gt; 26   BRCA2   -472.0000  0.996            0.0500 0.9957052 3.36e-07
 #&gt; 
 #&gt; $p</div><div class='output co'>#&gt; <span class='message'>No trace type specified:</span>
 #&gt; <span class='message'>  Based on info supplied, a 'scatter' trace seems appropriate.</span>

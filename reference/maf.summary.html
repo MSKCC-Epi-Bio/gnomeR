@@ -98,6 +98,18 @@ Creates a set of plot summarising a maf file." />
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
+      <a href="../articles/API-tutorial.html">API-tutorial</a>
+    </li>
+    <li>
+      <a href="../articles/Analizing-genomic-data.html">Analizing genomic data</a>
+    </li>
+    <li>
+      <a href="../articles/Data-processing.html">Data-processing</a>
+    </li>
+    <li>
+      <a href="../articles/Visualizations.html">Visualizations</a>
+    </li>
+    <li>
       <a href="../articles/gnomeR-vignette.html">gnomeR for IMPACT data</a>
     </li>
   </ul>
@@ -137,7 +149,7 @@ Creates a set of plot summarising a maf file.</h1>
 Creates a set of plot summarising a maf file.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>maf.summary</span>(<span class='no'>maf</span>, <span class='kw'>mut.type</span> <span class='kw'>=</span> <span class='st'>"SOMATIC"</span>, <span class='kw'>spe.plat</span> <span class='kw'>=</span> <span class='no'>F</span>)</pre>
+    <pre class="usage"><span class='fu'>maf.summary</span>(<span class='no'>maf</span>, <span class='no'>...</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -147,14 +159,8 @@ Creates a set of plot summarising a maf file.</p>
       <td><p>the names of the segment files to be loaded and processed (Note must end in ".Rdata").</p></td>
     </tr>
     <tr>
-      <th>mut.type</th>
-      <td><p>The mutation type to be used. Options are "SOMATIC", "GERMLINE" or "ALL". Note "ALL" will
-keep all mutations regardless of status (not recommended). Default is SOMATIC.</p></td>
-    </tr>
-    <tr>
-      <th>spe.plat</th>
-      <td><p>boolean specifying if specific IMPACT platforms should be considered. When TRUE NAs will fill the cells for genes
-of patients that were not sequenced on that plaform. Default is FALSE.</p></td>
+      <th>...</th>
+      <td><p>any argument belonging to the binmat method</p></td>
     </tr>
     </table>
 
@@ -176,8 +182,8 @@ of patients that were not sequenced on that plaform. Default is FALSE.</p></td>
 <span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>dplyr</span>)
 <span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>dtplyr</span>)
 <span class='no'>patients</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>as.character</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/unique.html'>unique</a></span>(<span class='no'>mut</span>$<span class='no'>Tumor_Sample_Barcode</span>))[<span class='fl'>1</span>:<span class='fl'>200</span>]
-<span class='no'>all.plots</span> <span class='kw'>&lt;-</span> <span class='fu'>maf.summary</span>(<span class='kw'>maf</span><span class='kw'>=</span><span class='no'>mut</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span>(<span class='no'>Tumor_Sample_Barcode</span> <span class='kw'>%in%</span> <span class='no'>patients</span>) )
-<span class='no'>all.plots</span> <span class='kw'>&lt;-</span> <span class='fu'>maf.summary</span>(<span class='kw'>maf</span><span class='kw'>=</span><span class='no'>mut</span> <span class='kw'>%&gt;%</span>
+<span class='no'>all.plots</span> <span class='kw'>&lt;-</span> <span class='fu'>maf.summary</span>(<span class='kw'>maf</span><span class='kw'>=</span><span class='no'>mut</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span>(<span class='no'>Tumor_Sample_Barcode</span> <span class='kw'>%in%</span> <span class='no'>patients</span>) )</div><div class='output co'>#&gt; <span class='warning'>Warning: All samples were sequenced on the same platform.</span>
+#&gt; <span class='warning'>              The spe.plat argument has been overwritten to FALSE.</span></div><div class='input'><span class='no'>all.plots</span> <span class='kw'>&lt;-</span> <span class='fu'>maf.summary</span>(<span class='kw'>maf</span><span class='kw'>=</span><span class='no'>mut</span> <span class='kw'>%&gt;%</span>
 <span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span>(<span class='no'>Tumor_Sample_Barcode</span> <span class='kw'>%in%</span> <span class='no'>patients</span>),<span class='kw'>spe.plat</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: All samples were sequenced on the same platform.</span>
 #&gt; <span class='warning'>              The spe.plat argument has been overwritten to FALSE.</span></div></pre>
   </div>

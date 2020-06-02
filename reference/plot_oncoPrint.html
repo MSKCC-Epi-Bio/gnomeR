@@ -98,6 +98,18 @@ Creates the OncoPrint corresponding to the inputted genetic data" />
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
+      <a href="../articles/API-tutorial.html">API-tutorial</a>
+    </li>
+    <li>
+      <a href="../articles/Analizing-genomic-data.html">Analizing genomic data</a>
+    </li>
+    <li>
+      <a href="../articles/Data-processing.html">Data-processing</a>
+    </li>
+    <li>
+      <a href="../articles/Visualizations.html">Visualizations</a>
+    </li>
+    <li>
       <a href="../articles/gnomeR-vignette.html">gnomeR for IMPACT data</a>
     </li>
   </ul>
@@ -187,8 +199,8 @@ to be plotted.</p></td>
   <span class='kw pkg'>tibble</span><span class='kw ns'>::</span><span class='fu'><a href='https://tibble.tidyverse.org/reference/rownames.html'>column_to_rownames</a></span>(<span class='st'>'DMPID'</span>)
 <span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>rownames</a></span>(<span class='no'>gen.dat</span>) <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>rownames</a></span>(<span class='no'>clin.patients.dat</span>)
 <span class='fu'>plot_oncoPrint</span>(<span class='kw'>gen.dat</span> <span class='kw'>=</span> <span class='no'>gen.dat</span>,
-<span class='kw'>clin.dat</span> <span class='kw'>=</span> <span class='no'>clin.patients.dat</span>)</div><div class='output co'>#&gt; <span class='message'>All mutation types: Sex_Male, Smoker_Never, MUT, AMP, Sex_Female,</span>
-#&gt; <span class='message'>Smoker_Prev/Curr Smoker, Smoker_Unknown</span></div><div class='img'><img src='plot_oncoPrint-2.png' alt='' width='700' height='433' /></div></pre>
+<span class='kw'>clin.dat</span> <span class='kw'>=</span> <span class='no'>clin.patients.dat</span>)</div><div class='output co'>#&gt; <span class='message'>All mutation types: Sex_Male, Smoker_Never, MUT, Sex_Female,</span>
+#&gt; <span class='message'>Smoker_Prev/Curr Smoker, Smoker_Unknown, AMP</span></div><div class='img'><img src='plot_oncoPrint-2.png' alt='' width='700' height='433' /></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

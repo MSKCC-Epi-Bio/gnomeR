@@ -97,6 +97,18 @@ are dichotomized at their median." />
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
+      <a href="../articles/API-tutorial.html">API-tutorial</a>
+    </li>
+    <li>
+      <a href="../articles/Analizing-genomic-data.html">Analizing genomic data</a>
+    </li>
+    <li>
+      <a href="../articles/Data-processing.html">Data-processing</a>
+    </li>
+    <li>
+      <a href="../articles/Visualizations.html">Visualizations</a>
+    </li>
+    <li>
       <a href="../articles/gnomeR-vignette.html">gnomeR for IMPACT data</a>
     </li>
   </ul>
@@ -184,40 +196,42 @@ Default is 0 (all features included).</p></td>
         <span class='kw'>outcome</span> <span class='kw'>=</span> <span class='no'>outcome</span>,
         <span class='kw'>filter</span> <span class='kw'>=</span> <span class='fl'>0.05</span>,<span class='kw'>paired</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
         <span class='kw'>cont</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,<span class='kw'>rank</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: geom_hline(): Ignoring `mapping` because `yintercept` was provided.</span></div><div class='output co'>#&gt; $fits
-#&gt;        Overall Metastasis(N=200) Primary(N=257) OddsRatio   Pvalue Lower Upper
-#&gt; FAT1     6.13%                9%          3.89%      0.41 2.99e-02  0.17  0.96
-#&gt; ATRX     5.69%              3.5%          7.39%       2.2 1.02e-01  0.86  6.32
-#&gt; CDKN2A   5.25%                7%          3.89%      0.54 1.46e-01  0.21  1.34
-#&gt; PIK3CA  10.72%               13%          8.95%      0.66 1.73e-01  0.35  1.25
-#&gt; TP53    42.89%               46%         40.47%       0.8 2.54e-01  0.54  1.18
-#&gt; BRAF     5.03%              6.5%          3.89%      0.58 2.81e-01  0.22  1.48
-#&gt; TERT    14.88%             13.5%         15.95%      1.22 5.09e-01   0.7  2.14
-#&gt; NOTCH1   5.47%              4.5%          6.23%      1.41 5.35e-01  0.57   3.7
-#&gt; MLL3     7.22%                8%          6.61%      0.81 5.89e-01  0.38  1.77
-#&gt; EGFR     8.53%              9.5%          7.78%       0.8 6.13e-01  0.39  1.64
-#&gt; KRAS    12.69%             13.5%         12.06%      0.88 6.73e-01  0.49  1.59
-#&gt; RB1      5.03%              4.5%          5.45%      1.22 6.74e-01  0.48  3.27
-#&gt; MLL2        7%              7.5%          6.61%      0.87 7.16e-01   0.4  1.93
-#&gt; ARID1A   7.88%              8.5%          7.39%      0.86 7.27e-01  0.41  1.82
-#&gt; ATM      5.47%              5.5%          5.45%      0.99 1.00e+00  0.41  2.47
-#&gt; APC      7.88%                8%          7.78%      0.97 1.00e+00  0.46  2.06
-#&gt;             FDR
-#&gt; FAT1   4.78e-01
-#&gt; ATRX   6.92e-01
-#&gt; CDKN2A 6.92e-01
-#&gt; PIK3CA 6.92e-01
-#&gt; TP53   7.49e-01
-#&gt; BRAF   7.49e-01
-#&gt; TERT   8.31e-01
-#&gt; NOTCH1 8.31e-01
-#&gt; MLL3   8.31e-01
-#&gt; EGFR   8.31e-01
-#&gt; KRAS   8.31e-01
-#&gt; RB1    8.31e-01
-#&gt; MLL2   8.31e-01
-#&gt; ARID1A 8.31e-01
-#&gt; ATM    1.00e+00
-#&gt; APC    1.00e+00
+#&gt;        Feature Overall Metastasis(N=200) Primary(N=257) OddsRatio   Pvalue
+#&gt; FAT1      FAT1   6.13%                9%          3.89%      0.41 2.99e-02
+#&gt; ATRX      ATRX   5.69%              3.5%          7.39%       2.2 1.02e-01
+#&gt; CDKN2A  CDKN2A   5.25%                7%          3.89%      0.54 1.46e-01
+#&gt; PIK3CA  PIK3CA  10.72%               13%          8.95%      0.66 1.73e-01
+#&gt; TP53      TP53  42.89%               46%         40.47%       0.8 2.54e-01
+#&gt; BRAF      BRAF   5.03%              6.5%          3.89%      0.58 2.81e-01
+#&gt; TERT      TERT  14.88%             13.5%         15.95%      1.22 5.09e-01
+#&gt; NOTCH1  NOTCH1   5.47%              4.5%          6.23%      1.41 5.35e-01
+#&gt; MLL3      MLL3   7.22%                8%          6.61%      0.81 5.89e-01
+#&gt; EGFR      EGFR   8.53%              9.5%          7.78%       0.8 6.13e-01
+#&gt; KRAS      KRAS  12.69%             13.5%         12.06%      0.88 6.73e-01
+#&gt; RB1        RB1   5.03%              4.5%          5.45%      1.22 6.74e-01
+#&gt; MLL2      MLL2      7%              7.5%          6.61%      0.87 7.16e-01
+#&gt; ARID1A  ARID1A   7.88%              8.5%          7.39%      0.86 7.27e-01
+#&gt; ZFHX3    ZFHX3   3.06%              2.5%           3.5%      1.32 7.82e-01
+#&gt; ATM        ATM   5.47%              5.5%          5.45%      0.99 1.00e+00
+#&gt; APC        APC   7.88%                8%          7.78%      0.97 1.00e+00
+#&gt;             FDR Lower Upper
+#&gt; FAT1   5.08e-01  0.17  0.96
+#&gt; ATRX   7.35e-01  0.86  6.32
+#&gt; CDKN2A 7.35e-01  0.21  1.34
+#&gt; PIK3CA 7.35e-01  0.35  1.25
+#&gt; TP53   7.96e-01  0.54  1.18
+#&gt; BRAF   7.96e-01  0.22  1.48
+#&gt; TERT   8.83e-01   0.7  2.14
+#&gt; NOTCH1 8.83e-01  0.57   3.7
+#&gt; MLL3   8.83e-01  0.38  1.77
+#&gt; EGFR   8.83e-01  0.39  1.64
+#&gt; KRAS   8.83e-01  0.49  1.59
+#&gt; RB1    8.83e-01  0.48  3.27
+#&gt; MLL2   8.83e-01   0.4  1.93
+#&gt; ARID1A 8.83e-01  0.41  1.82
+#&gt; ZFHX3  8.86e-01  0.38  5.17
+#&gt; ATM    1.00e+00  0.41  2.47
+#&gt; APC    1.00e+00  0.46  2.06
 #&gt; 
 #&gt; $forest.plot</div><div class='img'><img src='gen.tab-1.png' alt='' width='700' height='433' /></div><div class='output co'>#&gt; 
 #&gt; $vPlot</div><div class='img'><img src='gen.tab-2.png' alt='' width='700' height='433' /></div><div class='output co'>#&gt; </div><div class='input'><span class='co'>## Continuous outcome ##</span>
@@ -228,21 +242,22 @@ Default is 0 (all features included).</p></td>
                    <span class='kw'>filter</span> <span class='kw'>=</span> <span class='fl'>0.05</span>,<span class='kw'>paired</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
                    <span class='kw'>cont</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,<span class='kw'>rank</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
 <span class='no'>tab.out</span>$<span class='no'>fits</span></div><div class='output co'>#&gt;           Estimate         SD     Pvalue MutationFreq       FDR
-#&gt; TERT    0.25771092 0.12896408 0.04627708   0.14879650 0.6777902
-#&gt; BRAF    0.29107349 0.21041434 0.16724057   0.05032823 0.6777902
-#&gt; PIK3CA -0.19670254 0.14870787 0.18658472   0.10722101 0.6777902
-#&gt; RB1    -0.26959944 0.21047721 0.20088266   0.05032823 0.6777902
-#&gt; ATM    -0.23702856 0.20240914 0.24219687   0.05470460 0.6777902
-#&gt; KRAS   -0.13150580 0.13834524 0.34233114   0.12691466 0.6777902
-#&gt; EGFR    0.13080516 0.16488262 0.42800322   0.08533917 0.6777902
-#&gt; MLL2    0.13295169 0.18053747 0.46185367   0.07002188 0.6777902
-#&gt; CDKN2A  0.15020209 0.20653499 0.46744826   0.05251641 0.6777902
-#&gt; MLL3   -0.11928213 0.17800877 0.50313952   0.07221007 0.6777902
-#&gt; APC    -0.11162773 0.17104091 0.51431953   0.07877462 0.6777902
-#&gt; TP53   -0.05910738 0.09310112 0.52583042   0.42888403 0.6777902
-#&gt; ARID1A -0.10214478 0.17105393 0.55070456   0.07877462 0.6777902
-#&gt; ATRX   -0.09403244 0.19895900 0.63670938   0.05689278 0.7276679
-#&gt; FAT1    0.05765920 0.19219623 0.76431286   0.06126915 0.8152671
+#&gt; TERT    0.25771092 0.12896408 0.04627708   0.14879650 0.6687127
+#&gt; BRAF    0.29107349 0.21041434 0.16724057   0.05032823 0.6687127
+#&gt; PIK3CA -0.19670254 0.14870787 0.18658472   0.10722101 0.6687127
+#&gt; RB1    -0.26959944 0.21047721 0.20088266   0.05032823 0.6687127
+#&gt; ATM    -0.23702856 0.20240914 0.24219687   0.05470460 0.6687127
+#&gt; KRAS   -0.13150580 0.13834524 0.34233114   0.12691466 0.6687127
+#&gt; EGFR    0.13080516 0.16488262 0.42800322   0.08533917 0.6687127
+#&gt; MLL2    0.13295169 0.18053747 0.46185367   0.07002188 0.6687127
+#&gt; CDKN2A  0.15020209 0.20653499 0.46744826   0.05251641 0.6687127
+#&gt; MLL3   -0.11928213 0.17800877 0.50313952   0.07221007 0.6687127
+#&gt; APC    -0.11162773 0.17104091 0.51431953   0.07877462 0.6687127
+#&gt; TP53   -0.05910738 0.09310112 0.52583042   0.42888403 0.6687127
+#&gt; ZFHX3  -0.17243487 0.28163447 0.54096218   0.05982906 0.6687127
+#&gt; ARID1A -0.10214478 0.17105393 0.55070456   0.07877462 0.6687127
+#&gt; ATRX   -0.09403244 0.19895900 0.63670938   0.05689278 0.7216040
+#&gt; FAT1    0.05765920 0.19219623 0.76431286   0.06126915 0.8120824
 #&gt; NOTCH1  0.03600625 0.20270690 0.85909483   0.05470460 0.8590948</div><div class='input'><span class='no'>tab.out</span>$<span class='no'>vPlot</span></div><div class='output co'>#&gt; <span class='message'>No trace type specified:</span>
 #&gt; <span class='message'>  Based on info supplied, a 'scatter' trace seems appropriate.</span>
 #&gt; <span class='message'>  Read more about this trace type -&gt; https://plot.ly/r/reference/#scatter</span></div><div class='output co'>#&gt; <span class='warning'>Warning: `line.width` does not currently support multiple values.</span></div></pre>

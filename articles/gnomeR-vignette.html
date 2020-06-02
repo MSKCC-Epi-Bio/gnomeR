@@ -54,6 +54,18 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
+      <a href="../articles/API-tutorial.html">API-tutorial</a>
+    </li>
+    <li>
+      <a href="../articles/Analizing-genomic-data.html">Analizing genomic data</a>
+    </li>
+    <li>
+      <a href="../articles/Data-processing.html">Data-processing</a>
+    </li>
+    <li>
+      <a href="../articles/Visualizations.html">Visualizations</a>
+    </li>
+    <li>
       <a href="../articles/gnomeR-vignette.html">gnomeR for IMPACT data</a>
     </li>
   </ul>
@@ -354,642 +366,335 @@
 <span class="no">bin.test</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/gen.tab.html">gen.tab</a></span>(<span class="kw">gen.dat</span> <span class="kw">=</span> <span class="no">gen.dat</span>,
         <span class="kw">outcome</span> <span class="kw">=</span> <span class="no">outcome</span>,
         <span class="kw">filter</span> <span class="kw">=</span> <span class="fl">0.05</span>,<span class="kw">paired</span> <span class="kw">=</span> <span class="no">F</span>,<span class="kw">cont</span> <span class="kw">=</span> <span class="no">F</span>,<span class="kw">rank</span> <span class="kw">=</span> <span class="no">T</span>)
-<span class="fu">gt</span>(<span class="no">bin.test</span>$<span class="no">fits</span>,<span class="kw">rownames_to_stub</span> <span class="kw">=</span> <span class="no">T</span>)</pre></body></html></div>
-<style>html {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
-}
-
-#ibjowsxqqz .gt_table {
-  display: table;
-  border-collapse: collapse;
-  margin-left: auto;
-  margin-right: auto;
-  color: #333333;
-  font-size: 16px;
-  background-color: #FFFFFF;
-  width: auto;
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #A8A8A8;
-  border-right-style: none;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #A8A8A8;
-  border-left-style: none;
-  border-left-width: 2px;
-  border-left-color: #D3D3D3;
-}
-
-#ibjowsxqqz .gt_heading {
-  background-color: #FFFFFF;
-  text-align: center;
-  border-bottom-color: #FFFFFF;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-}
-
-#ibjowsxqqz .gt_title {
-  color: #333333;
-  font-size: 125%;
-  font-weight: initial;
-  padding-top: 4px;
-  padding-bottom: 4px;
-  border-bottom-color: #FFFFFF;
-  border-bottom-width: 0;
-}
-
-#ibjowsxqqz .gt_subtitle {
-  color: #333333;
-  font-size: 85%;
-  font-weight: initial;
-  padding-top: 0;
-  padding-bottom: 4px;
-  border-top-color: #FFFFFF;
-  border-top-width: 0;
-}
-
-#ibjowsxqqz .gt_bottom_border {
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-}
-
-#ibjowsxqqz .gt_col_headings {
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-}
-
-#ibjowsxqqz .gt_col_heading {
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: normal;
-  text-transform: inherit;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-  vertical-align: bottom;
-  padding-top: 5px;
-  padding-bottom: 6px;
-  padding-left: 5px;
-  padding-right: 5px;
-  overflow-x: hidden;
-}
-
-#ibjowsxqqz .gt_column_spanner_outer {
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: normal;
-  text-transform: inherit;
-  padding-top: 0;
-  padding-bottom: 0;
-  padding-left: 4px;
-  padding-right: 4px;
-}
-
-#ibjowsxqqz .gt_column_spanner_outer:first-child {
-  padding-left: 0;
-}
-
-#ibjowsxqqz .gt_column_spanner_outer:last-child {
-  padding-right: 0;
-}
-
-#ibjowsxqqz .gt_column_spanner {
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  vertical-align: bottom;
-  padding-top: 5px;
-  padding-bottom: 6px;
-  overflow-x: hidden;
-  display: inline-block;
-  width: 100%;
-}
-
-#ibjowsxqqz .gt_group_heading {
-  padding: 8px;
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: initial;
-  text-transform: inherit;
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-  vertical-align: middle;
-}
-
-#ibjowsxqqz .gt_empty_group_heading {
-  padding: 0.5px;
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: initial;
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  vertical-align: middle;
-}
-
-#ibjowsxqqz .gt_striped {
-  background-color: rgba(128, 128, 128, 0.05);
-}
-
-#ibjowsxqqz .gt_from_md > :first-child {
-  margin-top: 0;
-}
-
-#ibjowsxqqz .gt_from_md > :last-child {
-  margin-bottom: 0;
-}
-
-#ibjowsxqqz .gt_row {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  margin: 10px;
-  border-top-style: solid;
-  border-top-width: 1px;
-  border-top-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-  vertical-align: middle;
-  overflow-x: hidden;
-}
-
-#ibjowsxqqz .gt_stub {
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: initial;
-  text-transform: inherit;
-  border-right-style: solid;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-  padding-left: 12px;
-}
-
-#ibjowsxqqz .gt_summary_row {
-  color: #333333;
-  background-color: #FFFFFF;
-  text-transform: inherit;
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#ibjowsxqqz .gt_first_summary_row {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #D3D3D3;
-}
-
-#ibjowsxqqz .gt_grand_summary_row {
-  color: #333333;
-  background-color: #FFFFFF;
-  text-transform: inherit;
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#ibjowsxqqz .gt_first_grand_summary_row {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-top-style: double;
-  border-top-width: 6px;
-  border-top-color: #D3D3D3;
-}
-
-#ibjowsxqqz .gt_table_body {
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-}
-
-#ibjowsxqqz .gt_footnotes {
-  color: #333333;
-  background-color: #FFFFFF;
-  border-bottom-style: none;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 2px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-}
-
-#ibjowsxqqz .gt_footnote {
-  margin: 0px;
-  font-size: 90%;
-  padding: 4px;
-}
-
-#ibjowsxqqz .gt_sourcenotes {
-  color: #333333;
-  background-color: #FFFFFF;
-  border-bottom-style: none;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 2px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-}
-
-#ibjowsxqqz .gt_sourcenote {
-  font-size: 90%;
-  padding: 4px;
-}
-
-#ibjowsxqqz .gt_left {
-  text-align: left;
-}
-
-#ibjowsxqqz .gt_center {
-  text-align: center;
-}
-
-#ibjowsxqqz .gt_right {
-  text-align: right;
-  font-variant-numeric: tabular-nums;
-}
-
-#ibjowsxqqz .gt_font_normal {
-  font-weight: normal;
-}
-
-#ibjowsxqqz .gt_font_bold {
-  font-weight: bold;
-}
-
-#ibjowsxqqz .gt_font_italic {
-  font-style: italic;
-}
-
-#ibjowsxqqz .gt_super {
-  font-size: 65%;
-}
-
-#ibjowsxqqz .gt_footnote_marks {
-  font-style: italic;
-  font-size: 65%;
-}
-</style>
-<div id="ibjowsxqqz" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;"><table class="table gt_table">
-<thead class="gt_col_headings"><tr>
-<th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1"></th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1">Overall</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1">Metastasis(N=94)</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1">Primary(N=106)</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1">OddsRatio</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1">Pvalue</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1">Lower</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1">Upper</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1">FDR</th>
-    </tr></thead>
-<tbody class="gt_table_body">
-<tr>
-<td class="gt_row gt_left gt_stub">MYC.Amp</td>
-      <td class="gt_row gt_center">5%</td>
-      <td class="gt_row gt_center">9.57%</td>
-      <td class="gt_row gt_center">0.94%</td>
-      <td class="gt_row gt_center">0.09</td>
-      <td class="gt_row gt_center">6.84e-03</td>
-      <td class="gt_row gt_center">0</td>
-      <td class="gt_row gt_center">0.68</td>
-      <td class="gt_row gt_left">1.78e-01</td>
-    </tr>
-<tr>
-<td class="gt_row gt_left gt_stub">CREBBP</td>
-      <td class="gt_row gt_center">5%</td>
-      <td class="gt_row gt_center">8.51%</td>
-      <td class="gt_row gt_center">1.89%</td>
-      <td class="gt_row gt_center">0.21</td>
-      <td class="gt_row gt_center">4.82e-02</td>
-      <td class="gt_row gt_center">0.02</td>
-      <td class="gt_row gt_center">1.08</td>
-      <td class="gt_row gt_left">5.49e-01</td>
-    </tr>
-<tr>
-<td class="gt_row gt_left gt_stub">CDKN2A.Del</td>
-      <td class="gt_row gt_center">5.5%</td>
-      <td class="gt_row gt_center">2.13%</td>
-      <td class="gt_row gt_center">8.49%</td>
-      <td class="gt_row gt_center">4.24</td>
-      <td class="gt_row gt_center">6.34e-02</td>
-      <td class="gt_row gt_center">0.85</td>
-      <td class="gt_row gt_center">41.39</td>
-      <td class="gt_row gt_left">5.49e-01</td>
-    </tr>
-<tr>
-<td class="gt_row gt_left gt_stub">FAT1</td>
-      <td class="gt_row gt_center">8%</td>
-      <td class="gt_row gt_center">11.7%</td>
-      <td class="gt_row gt_center">4.72%</td>
-      <td class="gt_row gt_center">0.38</td>
-      <td class="gt_row gt_center">1.15e-01</td>
-      <td class="gt_row gt_center">0.1</td>
-      <td class="gt_row gt_center">1.23</td>
-      <td class="gt_row gt_left">5.94e-01</td>
-    </tr>
-<tr>
-<td class="gt_row gt_left gt_stub">CCND1.Amp</td>
-      <td class="gt_row gt_center">5.5%</td>
-      <td class="gt_row gt_center">8.51%</td>
-      <td class="gt_row gt_center">2.83%</td>
-      <td class="gt_row gt_center">0.31</td>
-      <td class="gt_row gt_center">1.19e-01</td>
-      <td class="gt_row gt_center">0.05</td>
-      <td class="gt_row gt_center">1.36</td>
-      <td class="gt_row gt_left">5.94e-01</td>
-    </tr>
-<tr>
-<td class="gt_row gt_left gt_stub">EGFR</td>
-      <td class="gt_row gt_center">8.5%</td>
-      <td class="gt_row gt_center">11.7%</td>
-      <td class="gt_row gt_center">5.66%</td>
-      <td class="gt_row gt_center">0.45</td>
-      <td class="gt_row gt_center">1.37e-01</td>
-      <td class="gt_row gt_center">0.13</td>
-      <td class="gt_row gt_center">1.41</td>
-      <td class="gt_row gt_left">5.94e-01</td>
-    </tr>
-<tr>
-<td class="gt_row gt_left gt_stub">BRAF</td>
-      <td class="gt_row gt_center">5%</td>
-      <td class="gt_row gt_center">7.45%</td>
-      <td class="gt_row gt_center">2.83%</td>
-      <td class="gt_row gt_center">0.36</td>
-      <td class="gt_row gt_center">1.95e-01</td>
-      <td class="gt_row gt_center">0.06</td>
-      <td class="gt_row gt_center">1.65</td>
-      <td class="gt_row gt_left">7.24e-01</td>
-    </tr>
-<tr>
-<td class="gt_row gt_left gt_stub">ARID1A</td>
-      <td class="gt_row gt_center">7%</td>
-      <td class="gt_row gt_center">9.57%</td>
-      <td class="gt_row gt_center">4.72%</td>
-      <td class="gt_row gt_center">0.47</td>
-      <td class="gt_row gt_center">2.67e-01</td>
-      <td class="gt_row gt_center">0.12</td>
-      <td class="gt_row gt_center">1.63</td>
-      <td class="gt_row gt_left">8.37e-01</td>
-    </tr>
-<tr>
-<td class="gt_row gt_left gt_stub">ATRX</td>
-      <td class="gt_row gt_center">7.5%</td>
-      <td class="gt_row gt_center">5.32%</td>
-      <td class="gt_row gt_center">9.43%</td>
-      <td class="gt_row gt_center">1.85</td>
-      <td class="gt_row gt_center">2.97e-01</td>
-      <td class="gt_row gt_center">0.55</td>
-      <td class="gt_row gt_center">7.17</td>
-      <td class="gt_row gt_left">8.37e-01</td>
-    </tr>
-<tr>
-<td class="gt_row gt_left gt_stub">PTEN</td>
-      <td class="gt_row gt_center">5%</td>
-      <td class="gt_row gt_center">3.19%</td>
-      <td class="gt_row gt_center">6.6%</td>
-      <td class="gt_row gt_center">2.14</td>
-      <td class="gt_row gt_center">3.40e-01</td>
-      <td class="gt_row gt_center">0.47</td>
-      <td class="gt_row gt_center">13.19</td>
-      <td class="gt_row gt_left">8.37e-01</td>
-    </tr>
-<tr>
-<td class="gt_row gt_left gt_stub">CDKN2A</td>
-      <td class="gt_row gt_center">5.5%</td>
-      <td class="gt_row gt_center">7.45%</td>
-      <td class="gt_row gt_center">3.77%</td>
-      <td class="gt_row gt_center">0.49</td>
-      <td class="gt_row gt_center">3.54e-01</td>
-      <td class="gt_row gt_center">0.1</td>
-      <td class="gt_row gt_center">2</td>
-      <td class="gt_row gt_left">8.37e-01</td>
-    </tr>
-<tr>
-<td class="gt_row gt_left gt_stub">SMARCA4</td>
-      <td class="gt_row gt_center">5%</td>
-      <td class="gt_row gt_center">6.38%</td>
-      <td class="gt_row gt_center">3.77%</td>
-      <td class="gt_row gt_center">0.58</td>
-      <td class="gt_row gt_center">5.21e-01</td>
-      <td class="gt_row gt_center">0.12</td>
-      <td class="gt_row gt_center">2.52</td>
-      <td class="gt_row gt_left">1.00e+00</td>
-    </tr>
-<tr>
-<td class="gt_row gt_left gt_stub">MLL2</td>
-      <td class="gt_row gt_center">7%</td>
-      <td class="gt_row gt_center">8.51%</td>
-      <td class="gt_row gt_center">5.66%</td>
-      <td class="gt_row gt_center">0.65</td>
-      <td class="gt_row gt_center">5.80e-01</td>
-      <td class="gt_row gt_center">0.18</td>
-      <td class="gt_row gt_center">2.22</td>
-      <td class="gt_row gt_left">1.00e+00</td>
-    </tr>
-<tr>
-<td class="gt_row gt_left gt_stub">TP53</td>
-      <td class="gt_row gt_center">47%</td>
-      <td class="gt_row gt_center">48.94%</td>
-      <td class="gt_row gt_center">45.28%</td>
-      <td class="gt_row gt_center">0.86</td>
-      <td class="gt_row gt_center">6.71e-01</td>
-      <td class="gt_row gt_center">0.48</td>
-      <td class="gt_row gt_center">1.56</td>
-      <td class="gt_row gt_left">1.00e+00</td>
-    </tr>
-<tr>
-<td class="gt_row gt_left gt_stub">TERT</td>
-      <td class="gt_row gt_center">13.5%</td>
-      <td class="gt_row gt_center">14.89%</td>
-      <td class="gt_row gt_center">12.26%</td>
-      <td class="gt_row gt_center">0.8</td>
-      <td class="gt_row gt_center">6.80e-01</td>
-      <td class="gt_row gt_center">0.32</td>
-      <td class="gt_row gt_center">1.96</td>
-      <td class="gt_row gt_left">1.00e+00</td>
-    </tr>
-<tr>
-<td class="gt_row gt_left gt_stub">ATM</td>
-      <td class="gt_row gt_center">5%</td>
-      <td class="gt_row gt_center">4.26%</td>
-      <td class="gt_row gt_center">5.66%</td>
-      <td class="gt_row gt_center">1.35</td>
-      <td class="gt_row gt_center">7.52e-01</td>
-      <td class="gt_row gt_center">0.31</td>
-      <td class="gt_row gt_center">6.71</td>
-      <td class="gt_row gt_left">1.00e+00</td>
-    </tr>
-<tr>
-<td class="gt_row gt_left gt_stub">MLL3</td>
-      <td class="gt_row gt_center">6.5%</td>
-      <td class="gt_row gt_center">7.45%</td>
-      <td class="gt_row gt_center">5.66%</td>
-      <td class="gt_row gt_center">0.75</td>
-      <td class="gt_row gt_center">7.75e-01</td>
-      <td class="gt_row gt_center">0.2</td>
-      <td class="gt_row gt_center">2.71</td>
-      <td class="gt_row gt_left">1.00e+00</td>
-    </tr>
-<tr>
-<td class="gt_row gt_left gt_stub">MCL1.Amp</td>
-      <td class="gt_row gt_center">6.5%</td>
-      <td class="gt_row gt_center">7.45%</td>
-      <td class="gt_row gt_center">5.66%</td>
-      <td class="gt_row gt_center">0.75</td>
-      <td class="gt_row gt_center">7.75e-01</td>
-      <td class="gt_row gt_center">0.2</td>
-      <td class="gt_row gt_center">2.71</td>
-      <td class="gt_row gt_left">1.00e+00</td>
-    </tr>
-<tr>
-<td class="gt_row gt_left gt_stub">APC</td>
-      <td class="gt_row gt_center">8.5%</td>
-      <td class="gt_row gt_center">7.45%</td>
-      <td class="gt_row gt_center">9.43%</td>
-      <td class="gt_row gt_center">1.29</td>
-      <td class="gt_row gt_center">8.00e-01</td>
-      <td class="gt_row gt_center">0.42</td>
-      <td class="gt_row gt_center">4.19</td>
-      <td class="gt_row gt_left">1.00e+00</td>
-    </tr>
-<tr>
-<td class="gt_row gt_left gt_stub">KRAS</td>
-      <td class="gt_row gt_center">13.5%</td>
-      <td class="gt_row gt_center">12.77%</td>
-      <td class="gt_row gt_center">14.15%</td>
-      <td class="gt_row gt_center">1.13</td>
-      <td class="gt_row gt_center">8.38e-01</td>
-      <td class="gt_row gt_center">0.46</td>
-      <td class="gt_row gt_center">2.8</td>
-      <td class="gt_row gt_left">1.00e+00</td>
-    </tr>
-<tr>
-<td class="gt_row gt_left gt_stub">KEAP1</td>
-      <td class="gt_row gt_center">6%</td>
-      <td class="gt_row gt_center">6.38%</td>
-      <td class="gt_row gt_center">5.66%</td>
-      <td class="gt_row gt_center">0.88</td>
-      <td class="gt_row gt_center">1.00e+00</td>
-      <td class="gt_row gt_center">0.23</td>
-      <td class="gt_row gt_center">3.42</td>
-      <td class="gt_row gt_left">1.00e+00</td>
-    </tr>
-<tr>
-<td class="gt_row gt_left gt_stub">RB1</td>
-      <td class="gt_row gt_center">7%</td>
-      <td class="gt_row gt_center">7.45%</td>
-      <td class="gt_row gt_center">6.6%</td>
-      <td class="gt_row gt_center">0.88</td>
-      <td class="gt_row gt_center">1.00e+00</td>
-      <td class="gt_row gt_center">0.25</td>
-      <td class="gt_row gt_center">3.07</td>
-      <td class="gt_row gt_left">1.00e+00</td>
-    </tr>
-<tr>
-<td class="gt_row gt_left gt_stub">PIK3CA</td>
-      <td class="gt_row gt_center">11.5%</td>
-      <td class="gt_row gt_center">11.7%</td>
-      <td class="gt_row gt_center">11.32%</td>
-      <td class="gt_row gt_center">0.96</td>
-      <td class="gt_row gt_center">1.00e+00</td>
-      <td class="gt_row gt_center">0.37</td>
-      <td class="gt_row gt_center">2.55</td>
-      <td class="gt_row gt_left">1.00e+00</td>
-    </tr>
-<tr>
-<td class="gt_row gt_left gt_stub">NOTCH1</td>
-      <td class="gt_row gt_center">6.5%</td>
-      <td class="gt_row gt_center">6.38%</td>
-      <td class="gt_row gt_center">6.6%</td>
-      <td class="gt_row gt_center">1.04</td>
-      <td class="gt_row gt_center">1.00e+00</td>
-      <td class="gt_row gt_center">0.29</td>
-      <td class="gt_row gt_center">3.89</td>
-      <td class="gt_row gt_left">1.00e+00</td>
-    </tr>
-<tr>
-<td class="gt_row gt_left gt_stub">NF1</td>
-      <td class="gt_row gt_center">7%</td>
-      <td class="gt_row gt_center">7.45%</td>
-      <td class="gt_row gt_center">6.6%</td>
-      <td class="gt_row gt_center">0.88</td>
-      <td class="gt_row gt_center">1.00e+00</td>
-      <td class="gt_row gt_center">0.25</td>
-      <td class="gt_row gt_center">3.07</td>
-      <td class="gt_row gt_left">1.00e+00</td>
-    </tr>
-<tr>
-<td class="gt_row gt_left gt_stub">STK11</td>
-      <td class="gt_row gt_center">6%</td>
-      <td class="gt_row gt_center">6.38%</td>
-      <td class="gt_row gt_center">5.66%</td>
-      <td class="gt_row gt_center">0.88</td>
-      <td class="gt_row gt_center">1.00e+00</td>
-      <td class="gt_row gt_center">0.23</td>
-      <td class="gt_row gt_center">3.42</td>
-      <td class="gt_row gt_left">1.00e+00</td>
-    </tr>
+<span class="fu">kable</span>(<span class="no">bin.test</span>$<span class="no">fits</span>,<span class="kw">row.names</span> <span class="kw">=</span> <span class="no">T</span>)</pre></body></html></div>
+<table class="table">
+<thead><tr class="header">
+<th></th>
+<th align="left">Feature</th>
+<th align="left">Overall</th>
+<th align="left">Metastasis(N=94)</th>
+<th align="left">Primary(N=106)</th>
+<th align="left">OddsRatio</th>
+<th align="left">Pvalue</th>
+<th align="left">FDR</th>
+<th align="left">Lower</th>
+<th align="left">Upper</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td>CREBBP</td>
+<td align="left">CREBBP</td>
+<td align="left">5%</td>
+<td align="left">8.51%</td>
+<td align="left">1.89%</td>
+<td align="left">0.21</td>
+<td align="left">4.82e-02</td>
+<td align="left">8.91e-01</td>
+<td align="left">0.02</td>
+<td align="left">1.08</td>
+</tr>
+<tr class="even">
+<td>FAT1</td>
+<td align="left">FAT1</td>
+<td align="left">8%</td>
+<td align="left">11.7%</td>
+<td align="left">4.72%</td>
+<td align="left">0.38</td>
+<td align="left">1.15e-01</td>
+<td align="left">8.91e-01</td>
+<td align="left">0.1</td>
+<td align="left">1.23</td>
+</tr>
+<tr class="odd">
+<td>CDKN2A.Del</td>
+<td align="left">CDKN2A.Del</td>
+<td align="left">5.5%</td>
+<td align="left">8.51%</td>
+<td align="left">2.83%</td>
+<td align="left">0.31</td>
+<td align="left">1.19e-01</td>
+<td align="left">8.91e-01</td>
+<td align="left">0.05</td>
+<td align="left">1.36</td>
+</tr>
+<tr class="even">
+<td>EGFR</td>
+<td align="left">EGFR</td>
+<td align="left">8.5%</td>
+<td align="left">11.7%</td>
+<td align="left">5.66%</td>
+<td align="left">0.45</td>
+<td align="left">1.37e-01</td>
+<td align="left">8.91e-01</td>
+<td align="left">0.13</td>
+<td align="left">1.41</td>
+</tr>
+<tr class="odd">
+<td>BRAF</td>
+<td align="left">BRAF</td>
+<td align="left">5%</td>
+<td align="left">7.45%</td>
+<td align="left">2.83%</td>
+<td align="left">0.36</td>
+<td align="left">1.95e-01</td>
+<td align="left">9.20e-01</td>
+<td align="left">0.06</td>
+<td align="left">1.65</td>
+</tr>
+<tr class="even">
+<td>CCND1.Amp</td>
+<td align="left">CCND1.Amp</td>
+<td align="left">5.5%</td>
+<td align="left">3.19%</td>
+<td align="left">7.55%</td>
+<td align="left">2.47</td>
+<td align="left">2.23e-01</td>
+<td align="left">9.20e-01</td>
+<td align="left">0.57</td>
+<td align="left">14.87</td>
+</tr>
+<tr class="odd">
+<td>ARID1A</td>
+<td align="left">ARID1A</td>
+<td align="left">7%</td>
+<td align="left">9.57%</td>
+<td align="left">4.72%</td>
+<td align="left">0.47</td>
+<td align="left">2.67e-01</td>
+<td align="left">9.20e-01</td>
+<td align="left">0.12</td>
+<td align="left">1.63</td>
+</tr>
+<tr class="even">
+<td>ATRX</td>
+<td align="left">ATRX</td>
+<td align="left">7.5%</td>
+<td align="left">5.32%</td>
+<td align="left">9.43%</td>
+<td align="left">1.85</td>
+<td align="left">2.97e-01</td>
+<td align="left">9.20e-01</td>
+<td align="left">0.55</td>
+<td align="left">7.17</td>
+</tr>
+<tr class="odd">
+<td>PTEN</td>
+<td align="left">PTEN</td>
+<td align="left">5%</td>
+<td align="left">3.19%</td>
+<td align="left">6.6%</td>
+<td align="left">2.14</td>
+<td align="left">3.40e-01</td>
+<td align="left">9.20e-01</td>
+<td align="left">0.47</td>
+<td align="left">13.19</td>
+</tr>
+<tr class="even">
+<td>CDKN2A</td>
+<td align="left">CDKN2A</td>
+<td align="left">5.5%</td>
+<td align="left">7.45%</td>
+<td align="left">3.77%</td>
+<td align="left">0.49</td>
+<td align="left">3.54e-01</td>
+<td align="left">9.20e-01</td>
+<td align="left">0.1</td>
+<td align="left">2</td>
+</tr>
+<tr class="odd">
+<td>MCL1.Amp</td>
+<td align="left">MCL1.Amp</td>
+<td align="left">6.5%</td>
+<td align="left">8.51%</td>
+<td align="left">4.72%</td>
+<td align="left">0.53</td>
+<td align="left">3.90e-01</td>
+<td align="left">9.22e-01</td>
+<td align="left">0.13</td>
+<td align="left">1.93</td>
+</tr>
+<tr class="even">
+<td>SMARCA4</td>
+<td align="left">SMARCA4</td>
+<td align="left">5%</td>
+<td align="left">6.38%</td>
+<td align="left">3.77%</td>
+<td align="left">0.58</td>
+<td align="left">5.21e-01</td>
+<td align="left">1.00e+00</td>
+<td align="left">0.12</td>
+<td align="left">2.52</td>
+</tr>
+<tr class="odd">
+<td>MLL2</td>
+<td align="left">MLL2</td>
+<td align="left">7%</td>
+<td align="left">8.51%</td>
+<td align="left">5.66%</td>
+<td align="left">0.65</td>
+<td align="left">5.80e-01</td>
+<td align="left">1.00e+00</td>
+<td align="left">0.18</td>
+<td align="left">2.22</td>
+</tr>
+<tr class="even">
+<td>TP53</td>
+<td align="left">TP53</td>
+<td align="left">47%</td>
+<td align="left">48.94%</td>
+<td align="left">45.28%</td>
+<td align="left">0.86</td>
+<td align="left">6.71e-01</td>
+<td align="left">1.00e+00</td>
+<td align="left">0.48</td>
+<td align="left">1.56</td>
+</tr>
+<tr class="odd">
+<td>TERT</td>
+<td align="left">TERT</td>
+<td align="left">13.5%</td>
+<td align="left">14.89%</td>
+<td align="left">12.26%</td>
+<td align="left">0.8</td>
+<td align="left">6.80e-01</td>
+<td align="left">1.00e+00</td>
+<td align="left">0.32</td>
+<td align="left">1.96</td>
+</tr>
+<tr class="even">
+<td>ATM</td>
+<td align="left">ATM</td>
+<td align="left">5%</td>
+<td align="left">4.26%</td>
+<td align="left">5.66%</td>
+<td align="left">1.35</td>
+<td align="left">7.52e-01</td>
+<td align="left">1.00e+00</td>
+<td align="left">0.31</td>
+<td align="left">6.71</td>
+</tr>
+<tr class="odd">
+<td>MYC.Amp</td>
+<td align="left">MYC.Amp</td>
+<td align="left">5%</td>
+<td align="left">4.26%</td>
+<td align="left">5.66%</td>
+<td align="left">1.35</td>
+<td align="left">7.52e-01</td>
+<td align="left">1.00e+00</td>
+<td align="left">0.31</td>
+<td align="left">6.71</td>
+</tr>
+<tr class="even">
+<td>MLL3</td>
+<td align="left">MLL3</td>
+<td align="left">6.5%</td>
+<td align="left">7.45%</td>
+<td align="left">5.66%</td>
+<td align="left">0.75</td>
+<td align="left">7.75e-01</td>
+<td align="left">1.00e+00</td>
+<td align="left">0.2</td>
+<td align="left">2.71</td>
+</tr>
+<tr class="odd">
+<td>APC</td>
+<td align="left">APC</td>
+<td align="left">8.5%</td>
+<td align="left">7.45%</td>
+<td align="left">9.43%</td>
+<td align="left">1.29</td>
+<td align="left">8.00e-01</td>
+<td align="left">1.00e+00</td>
+<td align="left">0.42</td>
+<td align="left">4.19</td>
+</tr>
+<tr class="even">
+<td>KRAS</td>
+<td align="left">KRAS</td>
+<td align="left">13.5%</td>
+<td align="left">12.77%</td>
+<td align="left">14.15%</td>
+<td align="left">1.13</td>
+<td align="left">8.38e-01</td>
+<td align="left">1.00e+00</td>
+<td align="left">0.46</td>
+<td align="left">2.8</td>
+</tr>
+<tr class="odd">
+<td>KEAP1</td>
+<td align="left">KEAP1</td>
+<td align="left">6%</td>
+<td align="left">6.38%</td>
+<td align="left">5.66%</td>
+<td align="left">0.88</td>
+<td align="left">1.00e+00</td>
+<td align="left">1.00e+00</td>
+<td align="left">0.23</td>
+<td align="left">3.42</td>
+</tr>
+<tr class="even">
+<td>RB1</td>
+<td align="left">RB1</td>
+<td align="left">7%</td>
+<td align="left">7.45%</td>
+<td align="left">6.6%</td>
+<td align="left">0.88</td>
+<td align="left">1.00e+00</td>
+<td align="left">1.00e+00</td>
+<td align="left">0.25</td>
+<td align="left">3.07</td>
+</tr>
+<tr class="odd">
+<td>PIK3CA</td>
+<td align="left">PIK3CA</td>
+<td align="left">11.5%</td>
+<td align="left">11.7%</td>
+<td align="left">11.32%</td>
+<td align="left">0.96</td>
+<td align="left">1.00e+00</td>
+<td align="left">1.00e+00</td>
+<td align="left">0.37</td>
+<td align="left">2.55</td>
+</tr>
+<tr class="even">
+<td>NOTCH1</td>
+<td align="left">NOTCH1</td>
+<td align="left">6.5%</td>
+<td align="left">6.38%</td>
+<td align="left">6.6%</td>
+<td align="left">1.04</td>
+<td align="left">1.00e+00</td>
+<td align="left">1.00e+00</td>
+<td align="left">0.29</td>
+<td align="left">3.89</td>
+</tr>
+<tr class="odd">
+<td>NF1</td>
+<td align="left">NF1</td>
+<td align="left">7%</td>
+<td align="left">7.45%</td>
+<td align="left">6.6%</td>
+<td align="left">0.88</td>
+<td align="left">1.00e+00</td>
+<td align="left">1.00e+00</td>
+<td align="left">0.25</td>
+<td align="left">3.07</td>
+</tr>
+<tr class="even">
+<td>STK11</td>
+<td align="left">STK11</td>
+<td align="left">6%</td>
+<td align="left">6.38%</td>
+<td align="left">5.66%</td>
+<td align="left">0.88</td>
+<td align="left">1.00e+00</td>
+<td align="left">1.00e+00</td>
+<td align="left">0.23</td>
+<td align="left">3.42</td>
+</tr>
 </tbody>
-</table></div>
+</table>
 <div class="sourceCode" id="cb22"><html><body><pre class="r"><span class="no">bin.test</span>$<span class="no">forest.plot</span></pre></body></html></div>
 <p><img src="gnomeR-vignette_files/figure-html/unnamed-chunk-12-1.png" width="768"></p>
 <div class="sourceCode" id="cb23"><html><body><pre class="r"><span class="no">bin.test</span>$<span class="no">vPlot</span></pre></body></html></div>
@@ -1004,564 +709,230 @@
 <span class="no">tab.out</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/gen.tab.html">gen.tab</a></span>(<span class="kw">gen.dat</span> <span class="kw">=</span> <span class="no">gen.dat</span>,
         <span class="kw">outcome</span> <span class="kw">=</span> <span class="no">outcome</span>,
         <span class="kw">filter</span> <span class="kw">=</span> <span class="fl">0.05</span>,<span class="kw">paired</span> <span class="kw">=</span> <span class="no">F</span>,<span class="kw">cont</span> <span class="kw">=</span> <span class="no">T</span>,<span class="kw">rank</span> <span class="kw">=</span> <span class="no">T</span>)
-<span class="fu">gt</span>(<span class="no">tab.out</span>$<span class="no">fits</span>,<span class="kw">rownames_to_stub</span> <span class="kw">=</span> <span class="no">T</span>)</pre></body></html></div>
-<style>html {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
-}
-
-#maszwdpqyg .gt_table {
-  display: table;
-  border-collapse: collapse;
-  margin-left: auto;
-  margin-right: auto;
-  color: #333333;
-  font-size: 16px;
-  background-color: #FFFFFF;
-  width: auto;
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #A8A8A8;
-  border-right-style: none;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #A8A8A8;
-  border-left-style: none;
-  border-left-width: 2px;
-  border-left-color: #D3D3D3;
-}
-
-#maszwdpqyg .gt_heading {
-  background-color: #FFFFFF;
-  text-align: center;
-  border-bottom-color: #FFFFFF;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-}
-
-#maszwdpqyg .gt_title {
-  color: #333333;
-  font-size: 125%;
-  font-weight: initial;
-  padding-top: 4px;
-  padding-bottom: 4px;
-  border-bottom-color: #FFFFFF;
-  border-bottom-width: 0;
-}
-
-#maszwdpqyg .gt_subtitle {
-  color: #333333;
-  font-size: 85%;
-  font-weight: initial;
-  padding-top: 0;
-  padding-bottom: 4px;
-  border-top-color: #FFFFFF;
-  border-top-width: 0;
-}
-
-#maszwdpqyg .gt_bottom_border {
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-}
-
-#maszwdpqyg .gt_col_headings {
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-}
-
-#maszwdpqyg .gt_col_heading {
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: normal;
-  text-transform: inherit;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-  vertical-align: bottom;
-  padding-top: 5px;
-  padding-bottom: 6px;
-  padding-left: 5px;
-  padding-right: 5px;
-  overflow-x: hidden;
-}
-
-#maszwdpqyg .gt_column_spanner_outer {
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: normal;
-  text-transform: inherit;
-  padding-top: 0;
-  padding-bottom: 0;
-  padding-left: 4px;
-  padding-right: 4px;
-}
-
-#maszwdpqyg .gt_column_spanner_outer:first-child {
-  padding-left: 0;
-}
-
-#maszwdpqyg .gt_column_spanner_outer:last-child {
-  padding-right: 0;
-}
-
-#maszwdpqyg .gt_column_spanner {
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  vertical-align: bottom;
-  padding-top: 5px;
-  padding-bottom: 6px;
-  overflow-x: hidden;
-  display: inline-block;
-  width: 100%;
-}
-
-#maszwdpqyg .gt_group_heading {
-  padding: 8px;
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: initial;
-  text-transform: inherit;
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-  vertical-align: middle;
-}
-
-#maszwdpqyg .gt_empty_group_heading {
-  padding: 0.5px;
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: initial;
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  vertical-align: middle;
-}
-
-#maszwdpqyg .gt_striped {
-  background-color: rgba(128, 128, 128, 0.05);
-}
-
-#maszwdpqyg .gt_from_md > :first-child {
-  margin-top: 0;
-}
-
-#maszwdpqyg .gt_from_md > :last-child {
-  margin-bottom: 0;
-}
-
-#maszwdpqyg .gt_row {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  margin: 10px;
-  border-top-style: solid;
-  border-top-width: 1px;
-  border-top-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-  vertical-align: middle;
-  overflow-x: hidden;
-}
-
-#maszwdpqyg .gt_stub {
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: initial;
-  text-transform: inherit;
-  border-right-style: solid;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-  padding-left: 12px;
-}
-
-#maszwdpqyg .gt_summary_row {
-  color: #333333;
-  background-color: #FFFFFF;
-  text-transform: inherit;
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#maszwdpqyg .gt_first_summary_row {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #D3D3D3;
-}
-
-#maszwdpqyg .gt_grand_summary_row {
-  color: #333333;
-  background-color: #FFFFFF;
-  text-transform: inherit;
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#maszwdpqyg .gt_first_grand_summary_row {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-top-style: double;
-  border-top-width: 6px;
-  border-top-color: #D3D3D3;
-}
-
-#maszwdpqyg .gt_table_body {
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-}
-
-#maszwdpqyg .gt_footnotes {
-  color: #333333;
-  background-color: #FFFFFF;
-  border-bottom-style: none;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 2px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-}
-
-#maszwdpqyg .gt_footnote {
-  margin: 0px;
-  font-size: 90%;
-  padding: 4px;
-}
-
-#maszwdpqyg .gt_sourcenotes {
-  color: #333333;
-  background-color: #FFFFFF;
-  border-bottom-style: none;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 2px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-}
-
-#maszwdpqyg .gt_sourcenote {
-  font-size: 90%;
-  padding: 4px;
-}
-
-#maszwdpqyg .gt_left {
-  text-align: left;
-}
-
-#maszwdpqyg .gt_center {
-  text-align: center;
-}
-
-#maszwdpqyg .gt_right {
-  text-align: right;
-  font-variant-numeric: tabular-nums;
-}
-
-#maszwdpqyg .gt_font_normal {
-  font-weight: normal;
-}
-
-#maszwdpqyg .gt_font_bold {
-  font-weight: bold;
-}
-
-#maszwdpqyg .gt_font_italic {
-  font-style: italic;
-}
-
-#maszwdpqyg .gt_super {
-  font-size: 65%;
-}
-
-#maszwdpqyg .gt_footnote_marks {
-  font-style: italic;
-  font-size: 65%;
-}
-</style>
-<div id="maszwdpqyg" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;"><table class="table gt_table">
-<thead class="gt_col_headings"><tr>
-<th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1"></th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1">Estimate</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1">SD</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1">Pvalue</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1">MutationFreq</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1">FDR</th>
-    </tr></thead>
-<tbody class="gt_table_body">
-<tr>
-<td class="gt_row gt_left gt_stub">CREBBP</td>
-      <td class="gt_row gt_right">0.706453087</td>
-      <td class="gt_row gt_right">0.2979996</td>
-      <td class="gt_row gt_right">0.01871704</td>
-      <td class="gt_row gt_right">0.050</td>
-      <td class="gt_row gt_right">0.4866429</td>
-    </tr>
-<tr>
-<td class="gt_row gt_left gt_stub">RB1</td>
-      <td class="gt_row gt_right">-0.504577135</td>
-      <td class="gt_row gt_right">0.2556339</td>
-      <td class="gt_row gt_right">0.04979212</td>
-      <td class="gt_row gt_right">0.070</td>
-      <td class="gt_row gt_right">0.6190481</td>
-    </tr>
-<tr>
-<td class="gt_row gt_left gt_stub">BRAF</td>
-      <td class="gt_row gt_right">0.543238493</td>
-      <td class="gt_row gt_right">0.2997231</td>
-      <td class="gt_row gt_right">0.07142863</td>
-      <td class="gt_row gt_right">0.050</td>
-      <td class="gt_row gt_right">0.6190481</td>
-    </tr>
-<tr>
-<td class="gt_row gt_left gt_stub">STK11</td>
-      <td class="gt_row gt_right">-0.392769821</td>
-      <td class="gt_row gt_right">0.2759241</td>
-      <td class="gt_row gt_right">0.15617366</td>
-      <td class="gt_row gt_right">0.060</td>
-      <td class="gt_row gt_right">0.8294738</td>
-    </tr>
-<tr>
-<td class="gt_row gt_left gt_stub">KEAP1</td>
-      <td class="gt_row gt_right">-0.379055669</td>
-      <td class="gt_row gt_right">0.2760210</td>
-      <td class="gt_row gt_right">0.17121660</td>
-      <td class="gt_row gt_right">0.060</td>
-      <td class="gt_row gt_right">0.8294738</td>
-    </tr>
-<tr>
-<td class="gt_row gt_left gt_stub">TERT</td>
-      <td class="gt_row gt_right">0.251565632</td>
-      <td class="gt_row gt_right">0.1919061</td>
-      <td class="gt_row gt_right">0.19141703</td>
-      <td class="gt_row gt_right">0.135</td>
-      <td class="gt_row gt_right">0.8294738</td>
-    </tr>
-<tr>
-<td class="gt_row gt_left gt_stub">MCL1.Amp</td>
-      <td class="gt_row gt_right">-0.301757992</td>
-      <td class="gt_row gt_right">0.2663017</td>
-      <td class="gt_row gt_right">0.25852438</td>
-      <td class="gt_row gt_right">0.065</td>
-      <td class="gt_row gt_right">0.9602334</td>
-    </tr>
-<tr>
-<td class="gt_row gt_left gt_stub">CCND1.Amp</td>
-      <td class="gt_row gt_right">-0.271367028</td>
-      <td class="gt_row gt_right">0.2882525</td>
-      <td class="gt_row gt_right">0.34763618</td>
-      <td class="gt_row gt_right">0.055</td>
-      <td class="gt_row gt_right">0.9711260</td>
-    </tr>
-<tr>
-<td class="gt_row gt_left gt_stub">FAT1</td>
-      <td class="gt_row gt_right">0.207573598</td>
-      <td class="gt_row gt_right">0.2423249</td>
-      <td class="gt_row gt_right">0.39270581</td>
-      <td class="gt_row gt_right">0.080</td>
-      <td class="gt_row gt_right">0.9711260</td>
-    </tr>
-<tr>
-<td class="gt_row gt_left gt_stub">SMARCA4</td>
-      <td class="gt_row gt_right">-0.239201361</td>
-      <td class="gt_row gt_right">0.3017207</td>
-      <td class="gt_row gt_right">0.42884871</td>
-      <td class="gt_row gt_right">0.050</td>
-      <td class="gt_row gt_right">0.9711260</td>
-    </tr>
-<tr>
-<td class="gt_row gt_left gt_stub">APC</td>
-      <td class="gt_row gt_right">0.155662676</td>
-      <td class="gt_row gt_right">0.2359083</td>
-      <td class="gt_row gt_right">0.51012067</td>
-      <td class="gt_row gt_right">0.085</td>
-      <td class="gt_row gt_right">0.9711260</td>
-    </tr>
-<tr>
-<td class="gt_row gt_left gt_stub">NF1</td>
-      <td class="gt_row gt_right">0.160854523</td>
-      <td class="gt_row gt_right">0.2578834</td>
-      <td class="gt_row gt_right">0.53351031</td>
-      <td class="gt_row gt_right">0.070</td>
-      <td class="gt_row gt_right">0.9711260</td>
-    </tr>
-<tr>
-<td class="gt_row gt_left gt_stub">EGFR</td>
-      <td class="gt_row gt_right">-0.144320470</td>
-      <td class="gt_row gt_right">0.2359447</td>
-      <td class="gt_row gt_right">0.54145726</td>
-      <td class="gt_row gt_right">0.085</td>
-      <td class="gt_row gt_right">0.9711260</td>
-    </tr>
-<tr>
-<td class="gt_row gt_left gt_stub">ATM</td>
-      <td class="gt_row gt_right">-0.177916874</td>
-      <td class="gt_row gt_right">0.3019346</td>
-      <td class="gt_row gt_right">0.55636103</td>
-      <td class="gt_row gt_right">0.050</td>
-      <td class="gt_row gt_right">0.9711260</td>
-    </tr>
-<tr>
-<td class="gt_row gt_left gt_stub">MLL3</td>
-      <td class="gt_row gt_right">-0.152630613</td>
-      <td class="gt_row gt_right">0.2669435</td>
-      <td class="gt_row gt_right">0.56812554</td>
-      <td class="gt_row gt_right">0.065</td>
-      <td class="gt_row gt_right">0.9711260</td>
-    </tr>
-<tr>
-<td class="gt_row gt_left gt_stub">ATRX</td>
-      <td class="gt_row gt_right">-0.111901482</td>
-      <td class="gt_row gt_right">0.2499303</td>
-      <td class="gt_row gt_right">0.65483698</td>
-      <td class="gt_row gt_right">0.075</td>
-      <td class="gt_row gt_right">0.9711260</td>
-    </tr>
-<tr>
-<td class="gt_row gt_left gt_stub">PTEN</td>
-      <td class="gt_row gt_right">-0.129519584</td>
-      <td class="gt_row gt_right">0.3020590</td>
-      <td class="gt_row gt_right">0.66854290</td>
-      <td class="gt_row gt_right">0.050</td>
-      <td class="gt_row gt_right">0.9711260</td>
-    </tr>
-<tr>
-<td class="gt_row gt_left gt_stub">CDKN2A</td>
-      <td class="gt_row gt_right">0.122321044</td>
-      <td class="gt_row gt_right">0.2887661</td>
-      <td class="gt_row gt_right">0.67231802</td>
-      <td class="gt_row gt_right">0.055</td>
-      <td class="gt_row gt_right">0.9711260</td>
-    </tr>
-<tr>
-<td class="gt_row gt_left gt_stub">KRAS</td>
-      <td class="gt_row gt_right">-0.067382326</td>
-      <td class="gt_row gt_right">0.1926775</td>
-      <td class="gt_row gt_right">0.72692390</td>
-      <td class="gt_row gt_right">0.135</td>
-      <td class="gt_row gt_right">0.9818790</td>
-    </tr>
-<tr>
-<td class="gt_row gt_left gt_stub">PIK3CA</td>
-      <td class="gt_row gt_right">-0.053412691</td>
-      <td class="gt_row gt_right">0.2064173</td>
-      <td class="gt_row gt_right">0.79608869</td>
-      <td class="gt_row gt_right">0.115</td>
-      <td class="gt_row gt_right">0.9818790</td>
-    </tr>
-<tr>
-<td class="gt_row gt_left gt_stub">MYC.Amp</td>
-      <td class="gt_row gt_right">0.069205605</td>
-      <td class="gt_row gt_right">0.3021592</td>
-      <td class="gt_row gt_right">0.81907663</td>
-      <td class="gt_row gt_right">0.050</td>
-      <td class="gt_row gt_right">0.9818790</td>
-    </tr>
-<tr>
-<td class="gt_row gt_left gt_stub">CDKN2A.Del</td>
-      <td class="gt_row gt_right">-0.044260632</td>
-      <td class="gt_row gt_right">0.2888798</td>
-      <td class="gt_row gt_right">0.87838499</td>
-      <td class="gt_row gt_right">0.055</td>
-      <td class="gt_row gt_right">0.9818790</td>
-    </tr>
-<tr>
-<td class="gt_row gt_left gt_stub">TP53</td>
-      <td class="gt_row gt_right">-0.015388047</td>
-      <td class="gt_row gt_right">0.1319588</td>
-      <td class="gt_row gt_right">0.90728532</td>
-      <td class="gt_row gt_right">0.470</td>
-      <td class="gt_row gt_right">0.9818790</td>
-    </tr>
-<tr>
-<td class="gt_row gt_left gt_stub">ARID1A</td>
-      <td class="gt_row gt_right">-0.016111501</td>
-      <td class="gt_row gt_right">0.2581341</td>
-      <td class="gt_row gt_right">0.95029512</td>
-      <td class="gt_row gt_right">0.070</td>
-      <td class="gt_row gt_right">0.9818790</td>
-    </tr>
-<tr>
-<td class="gt_row gt_left gt_stub">NOTCH1</td>
-      <td class="gt_row gt_right">0.013568427</td>
-      <td class="gt_row gt_right">0.2671621</td>
-      <td class="gt_row gt_right">0.95954625</td>
-      <td class="gt_row gt_right">0.065</td>
-      <td class="gt_row gt_right">0.9818790</td>
-    </tr>
-<tr>
-<td class="gt_row gt_left gt_stub">MLL2</td>
-      <td class="gt_row gt_right">-0.005870519</td>
-      <td class="gt_row gt_right">0.2581363</td>
-      <td class="gt_row gt_right">0.98187903</td>
-      <td class="gt_row gt_right">0.070</td>
-      <td class="gt_row gt_right">0.9818790</td>
-    </tr>
+<span class="fu">kable</span>(<span class="no">tab.out</span>$<span class="no">fits</span>,<span class="kw">row.names</span> <span class="kw">=</span> <span class="no">T</span>)</pre></body></html></div>
+<table class="table">
+<thead><tr class="header">
+<th></th>
+<th align="right">Estimate</th>
+<th align="right">SD</th>
+<th align="right">Pvalue</th>
+<th align="right">MutationFreq</th>
+<th align="right">FDR</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td>CREBBP</td>
+<td align="right">0.7064531</td>
+<td align="right">0.2979996</td>
+<td align="right">0.0187170</td>
+<td align="right">0.050</td>
+<td align="right">0.4866429</td>
+</tr>
+<tr class="even">
+<td>RB1</td>
+<td align="right">-0.5045771</td>
+<td align="right">0.2556339</td>
+<td align="right">0.0497921</td>
+<td align="right">0.070</td>
+<td align="right">0.6190481</td>
+</tr>
+<tr class="odd">
+<td>BRAF</td>
+<td align="right">0.5432385</td>
+<td align="right">0.2997231</td>
+<td align="right">0.0714286</td>
+<td align="right">0.050</td>
+<td align="right">0.6190481</td>
+</tr>
+<tr class="even">
+<td>CDKN2A.Del</td>
+<td align="right">0.4242775</td>
+<td align="right">0.2873191</td>
+<td align="right">0.1413509</td>
+<td align="right">0.055</td>
+<td align="right">0.7109775</td>
+</tr>
+<tr class="odd">
+<td>STK11</td>
+<td align="right">-0.3927698</td>
+<td align="right">0.2759241</td>
+<td align="right">0.1561737</td>
+<td align="right">0.060</td>
+<td align="right">0.7109775</td>
+</tr>
+<tr class="even">
+<td>KEAP1</td>
+<td align="right">-0.3790557</td>
+<td align="right">0.2760210</td>
+<td align="right">0.1712166</td>
+<td align="right">0.060</td>
+<td align="right">0.7109775</td>
+</tr>
+<tr class="odd">
+<td>TERT</td>
+<td align="right">0.2515656</td>
+<td align="right">0.1919061</td>
+<td align="right">0.1914170</td>
+<td align="right">0.135</td>
+<td align="right">0.7109775</td>
+</tr>
+<tr class="even">
+<td>MCL1.Amp</td>
+<td align="right">-0.2984314</td>
+<td align="right">0.2663207</td>
+<td align="right">0.2638276</td>
+<td align="right">0.065</td>
+<td align="right">0.8574396</td>
+</tr>
+<tr class="odd">
+<td>MYC.Amp</td>
+<td align="right">-0.2701692</td>
+<td align="right">0.3015887</td>
+<td align="right">0.3714367</td>
+<td align="right">0.050</td>
+<td align="right">0.8688979</td>
+</tr>
+<tr class="even">
+<td>FAT1</td>
+<td align="right">0.2075736</td>
+<td align="right">0.2423249</td>
+<td align="right">0.3927058</td>
+<td align="right">0.080</td>
+<td align="right">0.8688979</td>
+</tr>
+<tr class="odd">
+<td>SMARCA4</td>
+<td align="right">-0.2392014</td>
+<td align="right">0.3017207</td>
+<td align="right">0.4288487</td>
+<td align="right">0.050</td>
+<td align="right">0.8688979</td>
+</tr>
+<tr class="even">
+<td>CCND1.Amp</td>
+<td align="right">-0.2058845</td>
+<td align="right">0.2885261</td>
+<td align="right">0.4763313</td>
+<td align="right">0.055</td>
+<td align="right">0.8688979</td>
+</tr>
+<tr class="odd">
+<td>APC</td>
+<td align="right">0.1556627</td>
+<td align="right">0.2359083</td>
+<td align="right">0.5101207</td>
+<td align="right">0.085</td>
+<td align="right">0.8688979</td>
+</tr>
+<tr class="even">
+<td>NF1</td>
+<td align="right">0.1608545</td>
+<td align="right">0.2578834</td>
+<td align="right">0.5335103</td>
+<td align="right">0.070</td>
+<td align="right">0.8688979</td>
+</tr>
+<tr class="odd">
+<td>EGFR</td>
+<td align="right">-0.1443205</td>
+<td align="right">0.2359447</td>
+<td align="right">0.5414573</td>
+<td align="right">0.085</td>
+<td align="right">0.8688979</td>
+</tr>
+<tr class="even">
+<td>ATM</td>
+<td align="right">-0.1779169</td>
+<td align="right">0.3019346</td>
+<td align="right">0.5563610</td>
+<td align="right">0.050</td>
+<td align="right">0.8688979</td>
+</tr>
+<tr class="odd">
+<td>MLL3</td>
+<td align="right">-0.1526306</td>
+<td align="right">0.2669435</td>
+<td align="right">0.5681255</td>
+<td align="right">0.065</td>
+<td align="right">0.8688979</td>
+</tr>
+<tr class="even">
+<td>ATRX</td>
+<td align="right">-0.1119015</td>
+<td align="right">0.2499303</td>
+<td align="right">0.6548370</td>
+<td align="right">0.075</td>
+<td align="right">0.8740134</td>
+</tr>
+<tr class="odd">
+<td>PTEN</td>
+<td align="right">-0.1295196</td>
+<td align="right">0.3020590</td>
+<td align="right">0.6685429</td>
+<td align="right">0.050</td>
+<td align="right">0.8740134</td>
+</tr>
+<tr class="even">
+<td>CDKN2A</td>
+<td align="right">0.1223210</td>
+<td align="right">0.2887661</td>
+<td align="right">0.6723180</td>
+<td align="right">0.055</td>
+<td align="right">0.8740134</td>
+</tr>
+<tr class="odd">
+<td>KRAS</td>
+<td align="right">-0.0673823</td>
+<td align="right">0.1926775</td>
+<td align="right">0.7269239</td>
+<td align="right">0.135</td>
+<td align="right">0.9000010</td>
+</tr>
+<tr class="even">
+<td>PIK3CA</td>
+<td align="right">-0.0534127</td>
+<td align="right">0.2064173</td>
+<td align="right">0.7960887</td>
+<td align="right">0.115</td>
+<td align="right">0.9408321</td>
+</tr>
+<tr class="odd">
+<td>TP53</td>
+<td align="right">-0.0153880</td>
+<td align="right">0.1319588</td>
+<td align="right">0.9072853</td>
+<td align="right">0.470</td>
+<td align="right">0.9818790</td>
+</tr>
+<tr class="even">
+<td>ARID1A</td>
+<td align="right">-0.0161115</td>
+<td align="right">0.2581341</td>
+<td align="right">0.9502951</td>
+<td align="right">0.070</td>
+<td align="right">0.9818790</td>
+</tr>
+<tr class="odd">
+<td>NOTCH1</td>
+<td align="right">0.0135684</td>
+<td align="right">0.2671621</td>
+<td align="right">0.9595462</td>
+<td align="right">0.065</td>
+<td align="right">0.9818790</td>
+</tr>
+<tr class="even">
+<td>MLL2</td>
+<td align="right">-0.0058705</td>
+<td align="right">0.2581363</td>
+<td align="right">0.9818790</td>
+<td align="right">0.070</td>
+<td align="right">0.9818790</td>
+</tr>
 </tbody>
-</table></div>
+</table>
 <div class="sourceCode" id="cb25"><html><body><pre class="r"><span class="no">tab.out</span>$<span class="no">vPlot</span></pre></body></html></div>
-<div id="htmlwidget-7e65fcb3cfa1dceca249" style="width:768px;height:384px;" class="plotly html-widget"></div>
-<script type="application/json" data-for="htmlwidget-7e65fcb3cfa1dceca249">{"x":{"visdat":{"ddbd4c9cfbd6":["function () ","plotlyVisDat"]},"cur_data":"ddbd4c9cfbd6","attrs":{"ddbd4c9cfbd6":{"x":{},"y":{},"text":{},"mode":"markers","color":{},"size":{},"alpha_stroke":1,"sizes":[10,100],"spans":[1,20]}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"title":"Volcano Plot","xaxis":{"domain":[0,1],"automargin":true,"title":"Estimate"},"yaxis":{"domain":[0,1],"automargin":true,"title":"-log10(.data$Pvalue)"},"hovermode":"closest","showlegend":false,"legend":{"yanchor":"top","y":0.5}},"source":"A","config":{"showSendToCloud":false},"data":[{"x":[-0.0153880467741214,-0.379055668968149,-0.0673823257351641,0.251565632107747,-0.15263061287434,-0.50457713454332,-0.0534126905560237,0.207573597577214,0.0135684272587205,-0.00587051946324435,0.160854523234948,-0.0161115008789996,-0.144320469821988,0.70645308671508,0.543238492686134,-0.177916873955994,-0.111901481824652,-0.392769821251894,-0.239201361026593,0.155662676437213,-0.129519583576588,0.122321044462183,-0.271367027913781,-0.044260632135584,-0.301757991706273,0.0692056045237993],"y":[0.0422561176565427,0.766454138614024,0.138511052412042,0.71801942166836,0.24555568401527,1.30283939249894,0.0990385465271865,0.405932669877314,0.0179340880729368,0.00794201721997372,0.272857181496432,0.0221415007428096,0.266435816093429,1.72776294332861,1.14612766381849,0.254643297769975,0.18386680482417,0.806392216137775,0.367695896497227,0.292327079654482,0.174870718604305,0.172425247297193,0.458875035836477,0.0563150961421839,0.587498500188867,0.0866754644265514],"text":["Gene : TP53 <\/br> Estimate : -0.02","Gene : KEAP1 <\/br> Estimate : -0.38","Gene : KRAS <\/br> Estimate : -0.07","Gene : TERT <\/br> Estimate : 0.25","Gene : MLL3 <\/br> Estimate : -0.15","Gene : RB1 <\/br> Estimate : -0.5","Gene : PIK3CA <\/br> Estimate : -0.05","Gene : FAT1 <\/br> Estimate : 0.21","Gene : NOTCH1 <\/br> Estimate : 0.01","Gene : MLL2 <\/br> Estimate : -0.01","Gene : NF1 <\/br> Estimate : 0.16","Gene : ARID1A <\/br> Estimate : -0.02","Gene : EGFR <\/br> Estimate : -0.14","Gene : CREBBP <\/br> Estimate : 0.71","Gene : BRAF <\/br> Estimate : 0.54","Gene : ATM <\/br> Estimate : -0.18","Gene : ATRX <\/br> Estimate : -0.11","Gene : STK11 <\/br> Estimate : -0.39","Gene : SMARCA4 <\/br> Estimate : -0.24","Gene : APC <\/br> Estimate : 0.16","Gene : PTEN <\/br> Estimate : -0.13","Gene : CDKN2A <\/br> Estimate : 0.12","Gene : CCND1.Amp <\/br> Estimate : -0.27","Gene : CDKN2A.Del <\/br> Estimate : -0.04","Gene : MCL1.Amp <\/br> Estimate : -0.3","Gene : MYC.Amp <\/br> Estimate : 0.07"],"mode":"markers","type":"scatter","marker":{"colorbar":{"title":"Estimate","ticklen":2},"cmin":-0.50457713454332,"cmax":0.70645308671508,"colorscale":[["0","rgba(68,1,84,1)"],["0.0416666666666667","rgba(70,19,97,1)"],["0.0833333333333333","rgba(72,32,111,1)"],["0.125","rgba(71,45,122,1)"],["0.166666666666667","rgba(68,58,128,1)"],["0.208333333333333","rgba(64,70,135,1)"],["0.25","rgba(60,82,138,1)"],["0.291666666666667","rgba(56,93,140,1)"],["0.333333333333333","rgba(49,104,142,1)"],["0.375","rgba(46,114,142,1)"],["0.416666666666667","rgba(42,123,142,1)"],["0.458333333333333","rgba(38,133,141,1)"],["0.5","rgba(37,144,140,1)"],["0.541666666666667","rgba(33,154,138,1)"],["0.583333333333333","rgba(39,164,133,1)"],["0.625","rgba(47,174,127,1)"],["0.666666666666667","rgba(53,183,121,1)"],["0.708333333333333","rgba(79,191,110,1)"],["0.75","rgba(98,199,98,1)"],["0.791666666666667","rgba(119,207,85,1)"],["0.833333333333333","rgba(147,214,70,1)"],["0.875","rgba(172,220,52,1)"],["0.916666666666667","rgba(199,225,42,1)"],["0.958333333333333","rgba(226,228,40,1)"],["1","rgba(253,231,37,1)"]],"showscale":false,"color":[-0.0153880467741214,-0.379055668968149,-0.0673823257351641,0.251565632107747,-0.15263061287434,-0.50457713454332,-0.0534126905560237,0.207573597577214,0.0135684272587205,-0.00587051946324435,0.160854523234948,-0.0161115008789996,-0.144320469821988,0.70645308671508,0.543238492686134,-0.177916873955994,-0.111901481824652,-0.392769821251894,-0.239201361026593,0.155662676437213,-0.129519583576588,0.122321044462183,-0.271367027913781,-0.044260632135584,-0.301757991706273,0.0692056045237993],"size":[100,12.1428571428571,28.2142857142857,28.2142857142857,13.2142857142857,14.2857142857143,23.9285714285714,16.4285714285714,13.2142857142857,14.2857142857143,14.2857142857143,14.2857142857143,17.5,10,10,10,15.3571428571429,12.1428571428571,10,17.5,10,11.0714285714286,11.0714285714286,11.0714285714286,13.2142857142857,10],"sizemode":"area","line":{"colorbar":{"title":"","ticklen":2},"cmin":-0.50457713454332,"cmax":0.70645308671508,"colorscale":[["0","rgba(68,1,84,1)"],["0.0416666666666667","rgba(70,19,97,1)"],["0.0833333333333333","rgba(72,32,111,1)"],["0.125","rgba(71,45,122,1)"],["0.166666666666667","rgba(68,58,128,1)"],["0.208333333333333","rgba(64,70,135,1)"],["0.25","rgba(60,82,138,1)"],["0.291666666666667","rgba(56,93,140,1)"],["0.333333333333333","rgba(49,104,142,1)"],["0.375","rgba(46,114,142,1)"],["0.416666666666667","rgba(42,123,142,1)"],["0.458333333333333","rgba(38,133,141,1)"],["0.5","rgba(37,144,140,1)"],["0.541666666666667","rgba(33,154,138,1)"],["0.583333333333333","rgba(39,164,133,1)"],["0.625","rgba(47,174,127,1)"],["0.666666666666667","rgba(53,183,121,1)"],["0.708333333333333","rgba(79,191,110,1)"],["0.75","rgba(98,199,98,1)"],["0.791666666666667","rgba(119,207,85,1)"],["0.833333333333333","rgba(147,214,70,1)"],["0.875","rgba(172,220,52,1)"],["0.916666666666667","rgba(199,225,42,1)"],["0.958333333333333","rgba(226,228,40,1)"],["1","rgba(253,231,37,1)"]],"showscale":false,"color":[-0.0153880467741214,-0.379055668968149,-0.0673823257351641,0.251565632107747,-0.15263061287434,-0.50457713454332,-0.0534126905560237,0.207573597577214,0.0135684272587205,-0.00587051946324435,0.160854523234948,-0.0161115008789996,-0.144320469821988,0.70645308671508,0.543238492686134,-0.177916873955994,-0.111901481824652,-0.392769821251894,-0.239201361026593,0.155662676437213,-0.129519583576588,0.122321044462183,-0.271367027913781,-0.044260632135584,-0.301757991706273,0.0692056045237993]}},"textfont":{"size":[100,12.1428571428571,28.2142857142857,28.2142857142857,13.2142857142857,14.2857142857143,23.9285714285714,16.4285714285714,13.2142857142857,14.2857142857143,14.2857142857143,14.2857142857143,17.5,10,10,10,15.3571428571429,12.1428571428571,10,17.5,10,11.0714285714286,11.0714285714286,11.0714285714286,13.2142857142857,10]},"error_y":{"width":[]},"error_x":{"width":[]},"xaxis":"x","yaxis":"y","frame":null},{"x":[-0.50457713454332,0.70645308671508],"y":[0.00794201721997372,1.72776294332861],"type":"scatter","mode":"markers","opacity":0,"hoverinfo":"none","showlegend":false,"marker":{"colorbar":{"title":"Estimate","ticklen":2,"len":0.5,"lenmode":"fraction","y":1,"yanchor":"top"},"cmin":-0.50457713454332,"cmax":0.70645308671508,"colorscale":[["0","rgba(68,1,84,1)"],["0.0416666666666667","rgba(70,19,97,1)"],["0.0833333333333333","rgba(72,32,111,1)"],["0.125","rgba(71,45,122,1)"],["0.166666666666667","rgba(68,58,128,1)"],["0.208333333333333","rgba(64,70,135,1)"],["0.25","rgba(60,82,138,1)"],["0.291666666666667","rgba(56,93,140,1)"],["0.333333333333333","rgba(49,104,142,1)"],["0.375","rgba(46,114,142,1)"],["0.416666666666667","rgba(42,123,142,1)"],["0.458333333333333","rgba(38,133,141,1)"],["0.5","rgba(37,144,140,1)"],["0.541666666666667","rgba(33,154,138,1)"],["0.583333333333333","rgba(39,164,133,1)"],["0.625","rgba(47,174,127,1)"],["0.666666666666667","rgba(53,183,121,1)"],["0.708333333333333","rgba(79,191,110,1)"],["0.75","rgba(98,199,98,1)"],["0.791666666666667","rgba(119,207,85,1)"],["0.833333333333333","rgba(147,214,70,1)"],["0.875","rgba(172,220,52,1)"],["0.916666666666667","rgba(199,225,42,1)"],["0.958333333333333","rgba(226,228,40,1)"],["1","rgba(253,231,37,1)"]],"showscale":true,"color":[-0.50457713454332,0.70645308671508],"line":{"color":"rgba(255,127,14,1)"}},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.2,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-ac6052d99643cff0dab8" style="width:768px;height:384px;" class="plotly html-widget"></div>
+<script type="application/json" data-for="htmlwidget-ac6052d99643cff0dab8">{"x":{"visdat":{"51624927e66b":["function () ","plotlyVisDat"]},"cur_data":"51624927e66b","attrs":{"51624927e66b":{"x":{},"y":{},"text":{},"mode":"markers","color":{},"size":{},"alpha_stroke":1,"sizes":[10,100],"spans":[1,20]}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"title":"Volcano Plot","xaxis":{"domain":[0,1],"automargin":true,"title":"Estimate"},"yaxis":{"domain":[0,1],"automargin":true,"title":"-log10(.data$Pvalue)"},"hovermode":"closest","showlegend":false,"legend":{"yanchor":"top","y":0.5}},"source":"A","config":{"showSendToCloud":false},"data":[{"x":[-0.0153880467741214,-0.379055668968149,-0.0673823257351641,0.251565632107747,-0.15263061287434,-0.50457713454332,-0.0534126905560237,0.207573597577214,0.0135684272587205,-0.00587051946324435,0.160854523234948,-0.0161115008789996,-0.144320469821988,0.70645308671508,0.543238492686134,-0.177916873955994,-0.111901481824652,-0.392769821251894,-0.239201361026593,0.155662676437213,-0.129519583576588,0.122321044462183,-0.205884540646321,0.424277488625844,-0.298431388020534,-0.270169169649623],"y":[0.0422561176565427,0.766454138614024,0.138511052412042,0.71801942166836,0.24555568401527,1.30283939249894,0.0990385465271865,0.405932669877314,0.0179340880729368,0.00794201721997372,0.272857181496432,0.0221415007428096,0.266435816093429,1.72776294332861,1.14612766381849,0.254643297769975,0.18386680482417,0.806392216137775,0.367695896497227,0.292327079654482,0.174870718604305,0.172425247297193,0.32209084603453,0.849701285303992,0.578679821877339,0.430115235890923],"text":["Gene : TP53 <\/br> Estimate : -0.02","Gene : KEAP1 <\/br> Estimate : -0.38","Gene : KRAS <\/br> Estimate : -0.07","Gene : TERT <\/br> Estimate : 0.25","Gene : MLL3 <\/br> Estimate : -0.15","Gene : RB1 <\/br> Estimate : -0.5","Gene : PIK3CA <\/br> Estimate : -0.05","Gene : FAT1 <\/br> Estimate : 0.21","Gene : NOTCH1 <\/br> Estimate : 0.01","Gene : MLL2 <\/br> Estimate : -0.01","Gene : NF1 <\/br> Estimate : 0.16","Gene : ARID1A <\/br> Estimate : -0.02","Gene : EGFR <\/br> Estimate : -0.14","Gene : CREBBP <\/br> Estimate : 0.71","Gene : BRAF <\/br> Estimate : 0.54","Gene : ATM <\/br> Estimate : -0.18","Gene : ATRX <\/br> Estimate : -0.11","Gene : STK11 <\/br> Estimate : -0.39","Gene : SMARCA4 <\/br> Estimate : -0.24","Gene : APC <\/br> Estimate : 0.16","Gene : PTEN <\/br> Estimate : -0.13","Gene : CDKN2A <\/br> Estimate : 0.12","Gene : CCND1.Amp <\/br> Estimate : -0.21","Gene : CDKN2A.Del <\/br> Estimate : 0.42","Gene : MCL1.Amp <\/br> Estimate : -0.3","Gene : MYC.Amp <\/br> Estimate : -0.27"],"mode":"markers","type":"scatter","marker":{"colorbar":{"title":"Estimate","ticklen":2},"cmin":-0.50457713454332,"cmax":0.70645308671508,"colorscale":[["0","rgba(68,1,84,1)"],["0.0416666666666667","rgba(70,19,97,1)"],["0.0833333333333333","rgba(72,32,111,1)"],["0.125","rgba(71,45,122,1)"],["0.166666666666667","rgba(68,58,128,1)"],["0.208333333333333","rgba(64,70,135,1)"],["0.25","rgba(60,82,138,1)"],["0.291666666666667","rgba(56,93,140,1)"],["0.333333333333333","rgba(49,104,142,1)"],["0.375","rgba(46,114,142,1)"],["0.416666666666667","rgba(42,123,142,1)"],["0.458333333333333","rgba(38,133,141,1)"],["0.5","rgba(37,144,140,1)"],["0.541666666666667","rgba(33,154,138,1)"],["0.583333333333333","rgba(39,164,133,1)"],["0.625","rgba(47,174,127,1)"],["0.666666666666667","rgba(53,183,121,1)"],["0.708333333333333","rgba(79,191,110,1)"],["0.75","rgba(98,199,98,1)"],["0.791666666666667","rgba(119,207,85,1)"],["0.833333333333333","rgba(147,214,70,1)"],["0.875","rgba(172,220,52,1)"],["0.916666666666667","rgba(199,225,42,1)"],["0.958333333333333","rgba(226,228,40,1)"],["1","rgba(253,231,37,1)"]],"showscale":false,"color":[-0.0153880467741214,-0.379055668968149,-0.0673823257351641,0.251565632107747,-0.15263061287434,-0.50457713454332,-0.0534126905560237,0.207573597577214,0.0135684272587205,-0.00587051946324435,0.160854523234948,-0.0161115008789996,-0.144320469821988,0.70645308671508,0.543238492686134,-0.177916873955994,-0.111901481824652,-0.392769821251894,-0.239201361026593,0.155662676437213,-0.129519583576588,0.122321044462183,-0.205884540646321,0.424277488625844,-0.298431388020534,-0.270169169649623],"size":[100,12.1428571428571,28.2142857142857,28.2142857142857,13.2142857142857,14.2857142857143,23.9285714285714,16.4285714285714,13.2142857142857,14.2857142857143,14.2857142857143,14.2857142857143,17.5,10,10,10,15.3571428571429,12.1428571428571,10,17.5,10,11.0714285714286,11.0714285714286,11.0714285714286,13.2142857142857,10],"sizemode":"area","line":{"colorbar":{"title":"","ticklen":2},"cmin":-0.50457713454332,"cmax":0.70645308671508,"colorscale":[["0","rgba(68,1,84,1)"],["0.0416666666666667","rgba(70,19,97,1)"],["0.0833333333333333","rgba(72,32,111,1)"],["0.125","rgba(71,45,122,1)"],["0.166666666666667","rgba(68,58,128,1)"],["0.208333333333333","rgba(64,70,135,1)"],["0.25","rgba(60,82,138,1)"],["0.291666666666667","rgba(56,93,140,1)"],["0.333333333333333","rgba(49,104,142,1)"],["0.375","rgba(46,114,142,1)"],["0.416666666666667","rgba(42,123,142,1)"],["0.458333333333333","rgba(38,133,141,1)"],["0.5","rgba(37,144,140,1)"],["0.541666666666667","rgba(33,154,138,1)"],["0.583333333333333","rgba(39,164,133,1)"],["0.625","rgba(47,174,127,1)"],["0.666666666666667","rgba(53,183,121,1)"],["0.708333333333333","rgba(79,191,110,1)"],["0.75","rgba(98,199,98,1)"],["0.791666666666667","rgba(119,207,85,1)"],["0.833333333333333","rgba(147,214,70,1)"],["0.875","rgba(172,220,52,1)"],["0.916666666666667","rgba(199,225,42,1)"],["0.958333333333333","rgba(226,228,40,1)"],["1","rgba(253,231,37,1)"]],"showscale":false,"color":[-0.0153880467741214,-0.379055668968149,-0.0673823257351641,0.251565632107747,-0.15263061287434,-0.50457713454332,-0.0534126905560237,0.207573597577214,0.0135684272587205,-0.00587051946324435,0.160854523234948,-0.0161115008789996,-0.144320469821988,0.70645308671508,0.543238492686134,-0.177916873955994,-0.111901481824652,-0.392769821251894,-0.239201361026593,0.155662676437213,-0.129519583576588,0.122321044462183,-0.205884540646321,0.424277488625844,-0.298431388020534,-0.270169169649623]}},"textfont":{"size":[100,12.1428571428571,28.2142857142857,28.2142857142857,13.2142857142857,14.2857142857143,23.9285714285714,16.4285714285714,13.2142857142857,14.2857142857143,14.2857142857143,14.2857142857143,17.5,10,10,10,15.3571428571429,12.1428571428571,10,17.5,10,11.0714285714286,11.0714285714286,11.0714285714286,13.2142857142857,10]},"error_y":{"width":[]},"error_x":{"width":[]},"xaxis":"x","yaxis":"y","frame":null},{"x":[-0.50457713454332,0.70645308671508],"y":[0.00794201721997372,1.72776294332861],"type":"scatter","mode":"markers","opacity":0,"hoverinfo":"none","showlegend":false,"marker":{"colorbar":{"title":"Estimate","ticklen":2,"len":0.5,"lenmode":"fraction","y":1,"yanchor":"top"},"cmin":-0.50457713454332,"cmax":0.70645308671508,"colorscale":[["0","rgba(68,1,84,1)"],["0.0416666666666667","rgba(70,19,97,1)"],["0.0833333333333333","rgba(72,32,111,1)"],["0.125","rgba(71,45,122,1)"],["0.166666666666667","rgba(68,58,128,1)"],["0.208333333333333","rgba(64,70,135,1)"],["0.25","rgba(60,82,138,1)"],["0.291666666666667","rgba(56,93,140,1)"],["0.333333333333333","rgba(49,104,142,1)"],["0.375","rgba(46,114,142,1)"],["0.416666666666667","rgba(42,123,142,1)"],["0.458333333333333","rgba(38,133,141,1)"],["0.5","rgba(37,144,140,1)"],["0.541666666666667","rgba(33,154,138,1)"],["0.583333333333333","rgba(39,164,133,1)"],["0.625","rgba(47,174,127,1)"],["0.666666666666667","rgba(53,183,121,1)"],["0.708333333333333","rgba(79,191,110,1)"],["0.75","rgba(98,199,98,1)"],["0.791666666666667","rgba(119,207,85,1)"],["0.833333333333333","rgba(147,214,70,1)"],["0.875","rgba(172,220,52,1)"],["0.916666666666667","rgba(199,225,42,1)"],["0.958333333333333","rgba(226,228,40,1)"],["1","rgba(253,231,37,1)"]],"showscale":true,"color":[-0.50457713454332,0.70645308671508],"line":{"color":"rgba(255,127,14,1)"}},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.2,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
 </div>
 <div id="time-to-event-outcome" class="section level2">
 <h2 class="hasAnchor">
@@ -1583,586 +954,311 @@
     <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span>(!<span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span>(<span class="no">time</span>))
 <span class="no">X</span> <span class="kw">&lt;-</span> <span class="no">bin.mut</span>[<span class="fu"><a href="https://rdrr.io/r/base/match.html">match</a></span>(<span class="no">surv.dat</span>$<span class="no">DMPID</span>,<span class="fu"><a href="https://rdrr.io/r/base/abbreviate.html">abbreviate</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span>(<span class="no">bin.mut</span>),<span class="kw">strict</span> <span class="kw">=</span> <span class="no">T</span>, <span class="kw">minlength</span> <span class="kw">=</span> <span class="fl">9</span>)),]
 <span class="no">surv.test</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/uni.cox.html">uni.cox</a></span>(<span class="kw">X</span> <span class="kw">=</span> <span class="no">X</span>, <span class="kw">surv.dat</span> <span class="kw">=</span> <span class="no">surv.dat</span>,<span class="kw">surv.formula</span> <span class="kw">=</span> <span class="fu">Surv</span>(<span class="no">time</span>,<span class="no">status</span>)~<span class="no">.</span>,<span class="kw">filter</span> <span class="kw">=</span> <span class="fl">0.05</span>)
-<span class="fu">gt</span>(<span class="no">surv.test</span>$<span class="no">tab</span>)</pre></body></html></div>
-<style>html {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
-}
-
-#ftpbmcjfgq .gt_table {
-  display: table;
-  border-collapse: collapse;
-  margin-left: auto;
-  margin-right: auto;
-  color: #333333;
-  font-size: 16px;
-  background-color: #FFFFFF;
-  width: auto;
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #A8A8A8;
-  border-right-style: none;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #A8A8A8;
-  border-left-style: none;
-  border-left-width: 2px;
-  border-left-color: #D3D3D3;
-}
-
-#ftpbmcjfgq .gt_heading {
-  background-color: #FFFFFF;
-  text-align: center;
-  border-bottom-color: #FFFFFF;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-}
-
-#ftpbmcjfgq .gt_title {
-  color: #333333;
-  font-size: 125%;
-  font-weight: initial;
-  padding-top: 4px;
-  padding-bottom: 4px;
-  border-bottom-color: #FFFFFF;
-  border-bottom-width: 0;
-}
-
-#ftpbmcjfgq .gt_subtitle {
-  color: #333333;
-  font-size: 85%;
-  font-weight: initial;
-  padding-top: 0;
-  padding-bottom: 4px;
-  border-top-color: #FFFFFF;
-  border-top-width: 0;
-}
-
-#ftpbmcjfgq .gt_bottom_border {
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-}
-
-#ftpbmcjfgq .gt_col_headings {
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-}
-
-#ftpbmcjfgq .gt_col_heading {
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: normal;
-  text-transform: inherit;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-  vertical-align: bottom;
-  padding-top: 5px;
-  padding-bottom: 6px;
-  padding-left: 5px;
-  padding-right: 5px;
-  overflow-x: hidden;
-}
-
-#ftpbmcjfgq .gt_column_spanner_outer {
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: normal;
-  text-transform: inherit;
-  padding-top: 0;
-  padding-bottom: 0;
-  padding-left: 4px;
-  padding-right: 4px;
-}
-
-#ftpbmcjfgq .gt_column_spanner_outer:first-child {
-  padding-left: 0;
-}
-
-#ftpbmcjfgq .gt_column_spanner_outer:last-child {
-  padding-right: 0;
-}
-
-#ftpbmcjfgq .gt_column_spanner {
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  vertical-align: bottom;
-  padding-top: 5px;
-  padding-bottom: 6px;
-  overflow-x: hidden;
-  display: inline-block;
-  width: 100%;
-}
-
-#ftpbmcjfgq .gt_group_heading {
-  padding: 8px;
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: initial;
-  text-transform: inherit;
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-  vertical-align: middle;
-}
-
-#ftpbmcjfgq .gt_empty_group_heading {
-  padding: 0.5px;
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: initial;
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  vertical-align: middle;
-}
-
-#ftpbmcjfgq .gt_striped {
-  background-color: rgba(128, 128, 128, 0.05);
-}
-
-#ftpbmcjfgq .gt_from_md > :first-child {
-  margin-top: 0;
-}
-
-#ftpbmcjfgq .gt_from_md > :last-child {
-  margin-bottom: 0;
-}
-
-#ftpbmcjfgq .gt_row {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  margin: 10px;
-  border-top-style: solid;
-  border-top-width: 1px;
-  border-top-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-  vertical-align: middle;
-  overflow-x: hidden;
-}
-
-#ftpbmcjfgq .gt_stub {
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: initial;
-  text-transform: inherit;
-  border-right-style: solid;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-  padding-left: 12px;
-}
-
-#ftpbmcjfgq .gt_summary_row {
-  color: #333333;
-  background-color: #FFFFFF;
-  text-transform: inherit;
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#ftpbmcjfgq .gt_first_summary_row {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #D3D3D3;
-}
-
-#ftpbmcjfgq .gt_grand_summary_row {
-  color: #333333;
-  background-color: #FFFFFF;
-  text-transform: inherit;
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#ftpbmcjfgq .gt_first_grand_summary_row {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-top-style: double;
-  border-top-width: 6px;
-  border-top-color: #D3D3D3;
-}
-
-#ftpbmcjfgq .gt_table_body {
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-}
-
-#ftpbmcjfgq .gt_footnotes {
-  color: #333333;
-  background-color: #FFFFFF;
-  border-bottom-style: none;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 2px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-}
-
-#ftpbmcjfgq .gt_footnote {
-  margin: 0px;
-  font-size: 90%;
-  padding: 4px;
-}
-
-#ftpbmcjfgq .gt_sourcenotes {
-  color: #333333;
-  background-color: #FFFFFF;
-  border-bottom-style: none;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 2px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-}
-
-#ftpbmcjfgq .gt_sourcenote {
-  font-size: 90%;
-  padding: 4px;
-}
-
-#ftpbmcjfgq .gt_left {
-  text-align: left;
-}
-
-#ftpbmcjfgq .gt_center {
-  text-align: center;
-}
-
-#ftpbmcjfgq .gt_right {
-  text-align: right;
-  font-variant-numeric: tabular-nums;
-}
-
-#ftpbmcjfgq .gt_font_normal {
-  font-weight: normal;
-}
-
-#ftpbmcjfgq .gt_font_bold {
-  font-weight: bold;
-}
-
-#ftpbmcjfgq .gt_font_italic {
-  font-style: italic;
-}
-
-#ftpbmcjfgq .gt_super {
-  font-size: 65%;
-}
-
-#ftpbmcjfgq .gt_footnote_marks {
-  font-style: italic;
-  font-size: 65%;
-}
-</style>
-<div id="ftpbmcjfgq" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;"><table class="table gt_table">
-<thead class="gt_col_headings"><tr>
-<th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1">Coefficient</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1">Pvalue</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1">MutationFrequency</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1">Feature</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1">FDR</th>
-    </tr></thead>
-<tbody class="gt_table_body">
-<tr>
-<td class="gt_row gt_right">0.84016994</td>
-      <td class="gt_row gt_right">0.008213418</td>
-      <td class="gt_row gt_right">0.10000000</td>
-      <td class="gt_row gt_left">EGFR</td>
-      <td class="gt_row gt_right">0.2710428</td>
-    </tr>
-<tr>
-<td class="gt_row gt_right">0.94371748</td>
-      <td class="gt_row gt_right">0.019632556</td>
-      <td class="gt_row gt_right">0.06428571</td>
-      <td class="gt_row gt_left">MLL</td>
-      <td class="gt_row gt_right">0.2876587</td>
-    </tr>
-<tr>
-<td class="gt_row gt_right">0.72107855</td>
-      <td class="gt_row gt_right">0.034831100</td>
-      <td class="gt_row gt_right">0.09285714</td>
-      <td class="gt_row gt_left">RB1</td>
-      <td class="gt_row gt_right">0.2876587</td>
-    </tr>
-<tr>
-<td class="gt_row gt_right">0.90205238</td>
-      <td class="gt_row gt_right">0.034867716</td>
-      <td class="gt_row gt_right">0.05714286</td>
-      <td class="gt_row gt_left">CREBBP</td>
-      <td class="gt_row gt_right">0.2876587</td>
-    </tr>
-<tr>
-<td class="gt_row gt_right">0.56298861</td>
-      <td class="gt_row gt_right">0.085882224</td>
-      <td class="gt_row gt_right">0.10000000</td>
-      <td class="gt_row gt_left">MLL2</td>
-      <td class="gt_row gt_right">0.3788785</td>
-    </tr>
-<tr>
-<td class="gt_row gt_right">0.40028485</td>
-      <td class="gt_row gt_right">0.087817442</td>
-      <td class="gt_row gt_right">0.44285714</td>
-      <td class="gt_row gt_left">TP53</td>
-      <td class="gt_row gt_right">0.3788785</td>
-    </tr>
-<tr>
-<td class="gt_row gt_right">0.78522421</td>
-      <td class="gt_row gt_right">0.091124178</td>
-      <td class="gt_row gt_right">0.05714286</td>
-      <td class="gt_row gt_left">MYC.Amp</td>
-      <td class="gt_row gt_right">0.3788785</td>
-    </tr>
-<tr>
-<td class="gt_row gt_right">-1.20905337</td>
-      <td class="gt_row gt_right">0.091849333</td>
-      <td class="gt_row gt_right">0.07142857</td>
-      <td class="gt_row gt_left">ATRX</td>
-      <td class="gt_row gt_right">0.3788785</td>
-    </tr>
-<tr>
-<td class="gt_row gt_right">0.62398882</td>
-      <td class="gt_row gt_right">0.147897134</td>
-      <td class="gt_row gt_right">0.06428571</td>
-      <td class="gt_row gt_left">NF1</td>
-      <td class="gt_row gt_right">0.5199551</td>
-    </tr>
-<tr>
-<td class="gt_row gt_right">0.48280269</td>
-      <td class="gt_row gt_right">0.157562157</td>
-      <td class="gt_row gt_right">0.12857143</td>
-      <td class="gt_row gt_left">KRAS</td>
-      <td class="gt_row gt_right">0.5199551</td>
-    </tr>
-<tr>
-<td class="gt_row gt_right">-0.97210425</td>
-      <td class="gt_row gt_right">0.175320775</td>
-      <td class="gt_row gt_right">0.05714286</td>
-      <td class="gt_row gt_left">CDH1</td>
-      <td class="gt_row gt_right">0.5259623</td>
-    </tr>
-<tr>
-<td class="gt_row gt_right">0.55320798</td>
-      <td class="gt_row gt_right">0.194971232</td>
-      <td class="gt_row gt_right">0.05714286</td>
-      <td class="gt_row gt_left">CDKN2A.Del</td>
-      <td class="gt_row gt_right">0.5361709</td>
-    </tr>
-<tr>
-<td class="gt_row gt_right">-0.65024059</td>
-      <td class="gt_row gt_right">0.270369373</td>
-      <td class="gt_row gt_right">0.07142857</td>
-      <td class="gt_row gt_left">APC</td>
-      <td class="gt_row gt_right">0.6748753</td>
-    </tr>
-<tr>
-<td class="gt_row gt_right">0.42011277</td>
-      <td class="gt_row gt_right">0.291446637</td>
-      <td class="gt_row gt_right">0.07857143</td>
-      <td class="gt_row gt_left">KEAP1</td>
-      <td class="gt_row gt_right">0.6748753</td>
-    </tr>
-<tr>
-<td class="gt_row gt_right">-0.60074354</td>
-      <td class="gt_row gt_right">0.308691943</td>
-      <td class="gt_row gt_right">0.05714286</td>
-      <td class="gt_row gt_left">PTEN</td>
-      <td class="gt_row gt_right">0.6748753</td>
-    </tr>
-<tr>
-<td class="gt_row gt_right">0.40609721</td>
-      <td class="gt_row gt_right">0.341421917</td>
-      <td class="gt_row gt_right">0.06428571</td>
-      <td class="gt_row gt_left">CCND1.Amp</td>
-      <td class="gt_row gt_right">0.6748753</td>
-    </tr>
-<tr>
-<td class="gt_row gt_right">0.29749633</td>
-      <td class="gt_row gt_right">0.347663039</td>
-      <td class="gt_row gt_right">0.13571429</td>
-      <td class="gt_row gt_left">TERT</td>
-      <td class="gt_row gt_right">0.6748753</td>
-    </tr>
-<tr>
-<td class="gt_row gt_right">-0.28401087</td>
-      <td class="gt_row gt_right">0.581163974</td>
-      <td class="gt_row gt_right">0.05714286</td>
-      <td class="gt_row gt_left">MCL1.Amp</td>
-      <td class="gt_row gt_right">0.9392426</td>
-    </tr>
-<tr>
-<td class="gt_row gt_right">-0.26751294</td>
-      <td class="gt_row gt_right">0.603085439</td>
-      <td class="gt_row gt_right">0.06428571</td>
-      <td class="gt_row gt_left">EPHA5</td>
-      <td class="gt_row gt_right">0.9392426</td>
-    </tr>
-<tr>
-<td class="gt_row gt_right">0.15982029</td>
-      <td class="gt_row gt_right">0.670554504</td>
-      <td class="gt_row gt_right">0.10714286</td>
-      <td class="gt_row gt_left">PIK3CA</td>
-      <td class="gt_row gt_right">0.9392426</td>
-    </tr>
-<tr>
-<td class="gt_row gt_right">-0.21260472</td>
-      <td class="gt_row gt_right">0.679426264</td>
-      <td class="gt_row gt_right">0.07142857</td>
-      <td class="gt_row gt_left">NOTCH1</td>
-      <td class="gt_row gt_right">0.9392426</td>
-    </tr>
-<tr>
-<td class="gt_row gt_right">0.21036542</td>
-      <td class="gt_row gt_right">0.683085510</td>
-      <td class="gt_row gt_right">0.05000000</td>
-      <td class="gt_row gt_left">FGF19.Amp</td>
-      <td class="gt_row gt_right">0.9392426</td>
-    </tr>
-<tr>
-<td class="gt_row gt_right">0.21036542</td>
-      <td class="gt_row gt_right">0.683085510</td>
-      <td class="gt_row gt_right">0.05000000</td>
-      <td class="gt_row gt_left">FGF3.Amp</td>
-      <td class="gt_row gt_right">0.9392426</td>
-    </tr>
-<tr>
-<td class="gt_row gt_right">0.21036542</td>
-      <td class="gt_row gt_right">0.683085510</td>
-      <td class="gt_row gt_right">0.05000000</td>
-      <td class="gt_row gt_left">FGF4.Amp</td>
-      <td class="gt_row gt_right">0.9392426</td>
-    </tr>
-<tr>
-<td class="gt_row gt_right">-0.18352777</td>
-      <td class="gt_row gt_right">0.721267649</td>
-      <td class="gt_row gt_right">0.06428571</td>
-      <td class="gt_row gt_left">SMARCA4</td>
-      <td class="gt_row gt_right">0.9520733</td>
-    </tr>
-<tr>
-<td class="gt_row gt_right">0.11594954</td>
-      <td class="gt_row gt_right">0.785894284</td>
-      <td class="gt_row gt_right">0.07857143</td>
-      <td class="gt_row gt_left">ARID1A</td>
-      <td class="gt_row gt_right">0.9957052</td>
-    </tr>
-<tr>
-<td class="gt_row gt_right">-0.11830097</td>
-      <td class="gt_row gt_right">0.841188641</td>
-      <td class="gt_row gt_right">0.05000000</td>
-      <td class="gt_row gt_left">POLE</td>
-      <td class="gt_row gt_right">0.9957052</td>
-    </tr>
-<tr>
-<td class="gt_row gt_right">-0.06671197</td>
-      <td class="gt_row gt_right">0.866799501</td>
-      <td class="gt_row gt_right">0.10714286</td>
-      <td class="gt_row gt_left">FAT1</td>
-      <td class="gt_row gt_right">0.9957052</td>
-    </tr>
-<tr>
-<td class="gt_row gt_right">-0.06205582</td>
-      <td class="gt_row gt_right">0.893527316</td>
-      <td class="gt_row gt_right">0.06428571</td>
-      <td class="gt_row gt_left">MLL3</td>
-      <td class="gt_row gt_right">0.9957052</td>
-    </tr>
-<tr>
-<td class="gt_row gt_right">0.02001728</td>
-      <td class="gt_row gt_right">0.962548003</td>
-      <td class="gt_row gt_right">0.08571429</td>
-      <td class="gt_row gt_left">STK11</td>
-      <td class="gt_row gt_right">0.9957052</td>
-    </tr>
-<tr>
-<td class="gt_row gt_right">-0.01433085</td>
-      <td class="gt_row gt_right">0.977783322</td>
-      <td class="gt_row gt_right">0.05000000</td>
-      <td class="gt_row gt_left">PTPRT</td>
-      <td class="gt_row gt_right">0.9957052</td>
-    </tr>
-<tr>
-<td class="gt_row gt_right">0.01293604</td>
-      <td class="gt_row gt_right">0.977809472</td>
-      <td class="gt_row gt_right">0.07142857</td>
-      <td class="gt_row gt_left">ATM</td>
-      <td class="gt_row gt_right">0.9957052</td>
-    </tr>
-<tr>
-<td class="gt_row gt_right">-18.16371626</td>
-      <td class="gt_row gt_right">0.995705178</td>
-      <td class="gt_row gt_right">0.05000000</td>
-      <td class="gt_row gt_left">BRCA2</td>
-      <td class="gt_row gt_right">0.9957052</td>
-    </tr>
+<span class="fu">kable</span>(<span class="no">surv.test</span>$<span class="no">tab</span>,<span class="kw">row.names</span> <span class="kw">=</span> <span class="no">T</span>)</pre></body></html></div>
+<table class="table">
+<thead><tr class="header">
+<th></th>
+<th align="left">Feature</th>
+<th align="right">Coefficient</th>
+<th align="right">Pvalue</th>
+<th align="right">MutationFrequency</th>
+<th align="right">FDR</th>
+<th align="right">HR</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td align="left">EGFR</td>
+<td align="right">0.8960</td>
+<td align="right">0.263</td>
+<td align="right">0.1000</td>
+<td align="right">0.2628294</td>
+<td align="right">1e+00</td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td align="left">MLL</td>
+<td align="right">0.9440</td>
+<td align="right">0.279</td>
+<td align="right">0.0643</td>
+<td align="right">0.2789417</td>
+<td align="right">1e+00</td>
+</tr>
+<tr class="odd">
+<td>3</td>
+<td align="left">RB1</td>
+<td align="right">0.7960</td>
+<td align="right">0.279</td>
+<td align="right">0.0929</td>
+<td align="right">0.2789417</td>
+<td align="right">1e+00</td>
+</tr>
+<tr class="even">
+<td>4</td>
+<td align="left">CREBBP</td>
+<td align="right">0.9310</td>
+<td align="right">0.279</td>
+<td align="right">0.0571</td>
+<td align="right">0.2789417</td>
+<td align="right">1e+00</td>
+</tr>
+<tr class="odd">
+<td>5</td>
+<td align="left">CDKN2A.Del</td>
+<td align="right">-28.2000</td>
+<td align="right">0.367</td>
+<td align="right">0.0643</td>
+<td align="right">0.3673973</td>
+<td align="right">1e+00</td>
+</tr>
+<tr class="even">
+<td>6</td>
+<td align="left">MLL2</td>
+<td align="right">0.6670</td>
+<td align="right">0.367</td>
+<td align="right">0.1000</td>
+<td align="right">0.3673973</td>
+<td align="right">1e+00</td>
+</tr>
+<tr class="odd">
+<td>7</td>
+<td align="left">TP53</td>
+<td align="right">0.5340</td>
+<td align="right">0.367</td>
+<td align="right">0.4429</td>
+<td align="right">0.3673973</td>
+<td align="right">1e+00</td>
+</tr>
+<tr class="even">
+<td>8</td>
+<td align="left">ATRX</td>
+<td align="right">-12.9000</td>
+<td align="right">0.367</td>
+<td align="right">0.0714</td>
+<td align="right">0.3673973</td>
+<td align="right">1e+00</td>
+</tr>
+<tr class="odd">
+<td>9</td>
+<td align="left">NF1</td>
+<td align="right">0.7130</td>
+<td align="right">0.504</td>
+<td align="right">0.0643</td>
+<td align="right">0.5041989</td>
+<td align="right">1e+00</td>
+</tr>
+<tr class="even">
+<td>10</td>
+<td align="left">KRAS</td>
+<td align="right">0.5940</td>
+<td align="right">0.504</td>
+<td align="right">0.1286</td>
+<td align="right">0.5041989</td>
+<td align="right">1e+00</td>
+</tr>
+<tr class="odd">
+<td>11</td>
+<td align="left">CDH1</td>
+<td align="right">-7.7800</td>
+<td align="right">0.510</td>
+<td align="right">0.0571</td>
+<td align="right">0.5100241</td>
+<td align="right">1e+00</td>
+</tr>
+<tr class="even">
+<td>12</td>
+<td align="left">APC</td>
+<td align="right">-4.1600</td>
+<td align="right">0.706</td>
+<td align="right">0.0714</td>
+<td align="right">0.7055816</td>
+<td align="right">1e+00</td>
+</tr>
+<tr class="odd">
+<td>13</td>
+<td align="left">KEAP1</td>
+<td align="right">0.5380</td>
+<td align="right">0.706</td>
+<td align="right">0.0786</td>
+<td align="right">0.7055816</td>
+<td align="right">1e+00</td>
+</tr>
+<tr class="even">
+<td>14</td>
+<td align="left">PTEN</td>
+<td align="right">-3.2000</td>
+<td align="right">0.706</td>
+<td align="right">0.0571</td>
+<td align="right">0.7055816</td>
+<td align="right">1e+00</td>
+</tr>
+<tr class="odd">
+<td>15</td>
+<td align="left">TERT</td>
+<td align="right">0.4140</td>
+<td align="right">0.742</td>
+<td align="right">0.1357</td>
+<td align="right">0.7416811</td>
+<td align="right">1e+00</td>
+</tr>
+<tr class="even">
+<td>16</td>
+<td align="left">MCL1.Amp</td>
+<td align="right">0.3740</td>
+<td align="right">0.996</td>
+<td align="right">0.0643</td>
+<td align="right">0.9957052</td>
+<td align="right">1e+00</td>
+</tr>
+<tr class="odd">
+<td>17</td>
+<td align="left">EPHA5</td>
+<td align="right">-1.2200</td>
+<td align="right">0.996</td>
+<td align="right">0.0643</td>
+<td align="right">0.9957052</td>
+<td align="right">1e+00</td>
+</tr>
+<tr class="even">
+<td>18</td>
+<td align="left">PIK3CA</td>
+<td align="right">0.2440</td>
+<td align="right">0.996</td>
+<td align="right">0.1071</td>
+<td align="right">0.9957052</td>
+<td align="right">1e+00</td>
+</tr>
+<tr class="odd">
+<td>19</td>
+<td align="left">NOTCH1</td>
+<td align="right">-0.8500</td>
+<td align="right">0.996</td>
+<td align="right">0.0714</td>
+<td align="right">0.9957052</td>
+<td align="right">1e+00</td>
+</tr>
+<tr class="even">
+<td>20</td>
+<td align="left">SMARCA4</td>
+<td align="right">-0.6530</td>
+<td align="right">0.996</td>
+<td align="right">0.0643</td>
+<td align="right">0.9957052</td>
+<td align="right">1e+00</td>
+</tr>
+<tr class="odd">
+<td>21</td>
+<td align="left">ARID1A</td>
+<td align="right">0.1860</td>
+<td align="right">0.996</td>
+<td align="right">0.0786</td>
+<td align="right">0.9957052</td>
+<td align="right">1e+00</td>
+</tr>
+<tr class="even">
+<td>22</td>
+<td align="left">POLE</td>
+<td align="right">-0.3790</td>
+<td align="right">0.996</td>
+<td align="right">0.0500</td>
+<td align="right">0.9957052</td>
+<td align="right">1e+00</td>
+</tr>
+<tr class="odd">
+<td>23</td>
+<td align="left">FAT1</td>
+<td align="right">-0.1940</td>
+<td align="right">0.996</td>
+<td align="right">0.1071</td>
+<td align="right">0.9957052</td>
+<td align="right">1e+00</td>
+</tr>
+<tr class="even">
+<td>24</td>
+<td align="left">CCND1.Amp</td>
+<td align="right">0.1290</td>
+<td align="right">0.996</td>
+<td align="right">0.0786</td>
+<td align="right">0.9957052</td>
+<td align="right">1e+00</td>
+</tr>
+<tr class="odd">
+<td>25</td>
+<td align="left">MLL3</td>
+<td align="right">-0.1650</td>
+<td align="right">0.996</td>
+<td align="right">0.0643</td>
+<td align="right">0.9957052</td>
+<td align="right">1e+00</td>
+</tr>
+<tr class="even">
+<td>26</td>
+<td align="left">FGF19.Amp</td>
+<td align="right">0.0790</td>
+<td align="right">0.996</td>
+<td align="right">0.0571</td>
+<td align="right">0.9957052</td>
+<td align="right">1e+00</td>
+</tr>
+<tr class="odd">
+<td>27</td>
+<td align="left">FGF3.Amp</td>
+<td align="right">0.0790</td>
+<td align="right">0.996</td>
+<td align="right">0.0571</td>
+<td align="right">0.9957052</td>
+<td align="right">1e+00</td>
+</tr>
+<tr class="even">
+<td>28</td>
+<td align="left">FGF4.Amp</td>
+<td align="right">0.0790</td>
+<td align="right">0.996</td>
+<td align="right">0.0571</td>
+<td align="right">0.9957052</td>
+<td align="right">1e+00</td>
+</tr>
+<tr class="odd">
+<td>29</td>
+<td align="left">STK11</td>
+<td align="right">0.0427</td>
+<td align="right">0.996</td>
+<td align="right">0.0857</td>
+<td align="right">0.9957052</td>
+<td align="right">1e+00</td>
+</tr>
+<tr class="even">
+<td>30</td>
+<td align="left">PTPRT</td>
+<td align="right">-0.0353</td>
+<td align="right">0.996</td>
+<td align="right">0.0500</td>
+<td align="right">0.9957052</td>
+<td align="right">1e+00</td>
+</tr>
+<tr class="odd">
+<td>31</td>
+<td align="left">ATM</td>
+<td align="right">0.0296</td>
+<td align="right">0.996</td>
+<td align="right">0.0714</td>
+<td align="right">0.9957052</td>
+<td align="right">1e+00</td>
+</tr>
+<tr class="even">
+<td>32</td>
+<td align="left">BRCA2</td>
+<td align="right">-581.0000</td>
+<td align="right">0.996</td>
+<td align="right">0.0500</td>
+<td align="right">0.9957052</td>
+<td align="right">4e-07</td>
+</tr>
 </tbody>
-</table></div>
+</table>
 <div class="sourceCode" id="cb27"><html><body><pre class="r"><span class="no">surv.test</span>$<span class="no">p</span></pre></body></html></div>
-<div id="htmlwidget-c5bba630e0d6bda0228a" style="width:768px;height:384px;" class="plotly html-widget"></div>
-<script type="application/json" data-for="htmlwidget-c5bba630e0d6bda0228a">{"x":{"visdat":{"ddbd1fcf69ad":["function () ","plotlyVisDat"]},"cur_data":"ddbd1fcf69ad","attrs":{"ddbd1fcf69ad":{"x":{},"y":{},"text":{},"mode":"markers","color":{},"size":{},"alpha_stroke":1,"sizes":[10,100],"spans":[1,20]}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"title":"Volcano Plot","xaxis":{"domain":[0,1],"automargin":true,"title":"Coefficient"},"yaxis":{"domain":[0,1],"automargin":true,"title":"-log10(Pvalue)"},"hovermode":"closest","showlegend":false,"legend":{"yanchor":"top","y":0.5}},"source":"A","config":{"showSendToCloud":false},"data":[{"x":[0.840169936352045,0.943717480265381,0.721078547408767,0.902052383767825,0.562988613518701,0.400284846902155,0.785224206381538,-1.20905336573811,0.623988815093702,0.482802687090521,-0.972104251400818,0.553207976441449,-0.65024059441998,0.420112774928169,-0.600743544310261,0.406097213140529,0.297496329121659,-0.284010868120827,-0.267512941055254,0.159820290602767,-0.212604719756198,0.21036541569408,0.21036541569408,0.21036541569408,-0.183527767323415,0.115949542186144,-0.118300965626929,-0.0667119678564476,-0.0620558168820538,0.020017283240682,-0.0143308458668488,0.0129360446572344,-18.1637162595652],"y":[2.08547608322997,1.70702315211632,1.45803281218591,1.45757649641832,1.06609671579447,1.05641921943643,1.04036637863823,1.03692399330372,0.830040241736948,0.802548081138468,0.756166619377424,0.710029464828527,0.568042505400961,0.535440951563223,0.510474706109456,0.466708603933581,0.45884147846294,0.235701315082536,0.219621156727298,0.173565916124466,0.167857669153027,0.165524927138777,0.165524927138777,0.165524927138777,0.141903546980609,0.104635870102438,0.0751066002346599,0.0620813475041945,0.0488921661985758,0.0165776028354638,0.009757374775214,0.00974576015617915,0.00186923435593439],"text":["Feature : EGFR <br> Hazard Ratio : 2.317","Feature : MLL <br> Hazard Ratio : 2.57","Feature : RB1 <br> Hazard Ratio : 2.057","Feature : CREBBP <br> Hazard Ratio : 2.465","Feature : MLL2 <br> Hazard Ratio : 1.756","Feature : TP53 <br> Hazard Ratio : 1.492","Feature : MYC.Amp <br> Hazard Ratio : 2.193","Feature : ATRX <br> Hazard Ratio : 0.298","Feature : NF1 <br> Hazard Ratio : 1.866","Feature : KRAS <br> Hazard Ratio : 1.621","Feature : CDH1 <br> Hazard Ratio : 0.378","Feature : CDKN2A.Del <br> Hazard Ratio : 1.739","Feature : APC <br> Hazard Ratio : 0.522","Feature : KEAP1 <br> Hazard Ratio : 1.522","Feature : PTEN <br> Hazard Ratio : 0.548","Feature : CCND1.Amp <br> Hazard Ratio : 1.501","Feature : TERT <br> Hazard Ratio : 1.346","Feature : MCL1.Amp <br> Hazard Ratio : 0.753","Feature : EPHA5 <br> Hazard Ratio : 0.765","Feature : PIK3CA <br> Hazard Ratio : 1.173","Feature : NOTCH1 <br> Hazard Ratio : 0.808","Feature : FGF19.Amp <br> Hazard Ratio : 1.234","Feature : FGF3.Amp <br> Hazard Ratio : 1.234","Feature : FGF4.Amp <br> Hazard Ratio : 1.234","Feature : SMARCA4 <br> Hazard Ratio : 0.832","Feature : ARID1A <br> Hazard Ratio : 1.123","Feature : POLE <br> Hazard Ratio : 0.888","Feature : FAT1 <br> Hazard Ratio : 0.935","Feature : MLL3 <br> Hazard Ratio : 0.94","Feature : STK11 <br> Hazard Ratio : 1.02","Feature : PTPRT <br> Hazard Ratio : 0.986","Feature : ATM <br> Hazard Ratio : 1.013","Feature : BRCA2 <br> Hazard Ratio : 0"],"mode":"markers","type":"scatter","marker":{"colorbar":{"title":"MutationFrequency","ticklen":2},"cmin":0.05,"cmax":0.442857142857143,"colorscale":[["0","rgba(68,1,84,1)"],["0.0416666666666667","rgba(70,19,97,1)"],["0.0833333333333334","rgba(72,32,111,1)"],["0.125","rgba(71,45,122,1)"],["0.166666666666667","rgba(68,58,128,1)"],["0.208333333333333","rgba(64,70,135,1)"],["0.25","rgba(60,82,138,1)"],["0.291666666666667","rgba(56,93,140,1)"],["0.333333333333333","rgba(49,104,142,1)"],["0.375","rgba(46,114,142,1)"],["0.416666666666667","rgba(42,123,142,1)"],["0.458333333333333","rgba(38,133,141,1)"],["0.5","rgba(37,144,140,1)"],["0.541666666666667","rgba(33,154,138,1)"],["0.583333333333333","rgba(39,164,133,1)"],["0.625","rgba(47,174,127,1)"],["0.666666666666667","rgba(53,183,121,1)"],["0.708333333333333","rgba(79,191,110,1)"],["0.75","rgba(98,199,98,1)"],["0.791666666666667","rgba(119,207,85,1)"],["0.833333333333333","rgba(147,214,70,1)"],["0.875","rgba(172,220,52,1)"],["0.916666666666667","rgba(199,225,42,1)"],["0.958333333333333","rgba(226,228,40,1)"],["1","rgba(253,231,37,1)"]],"showscale":false,"color":[0.1,0.0642857142857143,0.0928571428571429,0.0571428571428571,0.1,0.442857142857143,0.0571428571428571,0.0714285714285714,0.0642857142857143,0.128571428571429,0.0571428571428571,0.0571428571428571,0.0714285714285714,0.0785714285714286,0.0571428571428571,0.0642857142857143,0.135714285714286,0.0571428571428571,0.0642857142857143,0.107142857142857,0.0714285714285714,0.05,0.05,0.05,0.0642857142857143,0.0785714285714286,0.05,0.107142857142857,0.0642857142857143,0.0857142857142857,0.05,0.0714285714285714,0.05],"size":[21.4545454545455,13.2727272727273,19.8181818181818,11.6363636363636,21.4545454545455,100,11.6363636363636,14.9090909090909,13.2727272727273,28,11.6363636363636,11.6363636363636,14.9090909090909,16.5454545454545,11.6363636363636,13.2727272727273,29.6363636363636,11.6363636363636,13.2727272727273,23.0909090909091,14.9090909090909,10,10,10,13.2727272727273,16.5454545454545,10,23.0909090909091,13.2727272727273,18.1818181818182,10,14.9090909090909,10],"sizemode":"area","line":{"colorbar":{"title":"","ticklen":2},"cmin":0.05,"cmax":0.442857142857143,"colorscale":[["0","rgba(68,1,84,1)"],["0.0416666666666667","rgba(70,19,97,1)"],["0.0833333333333334","rgba(72,32,111,1)"],["0.125","rgba(71,45,122,1)"],["0.166666666666667","rgba(68,58,128,1)"],["0.208333333333333","rgba(64,70,135,1)"],["0.25","rgba(60,82,138,1)"],["0.291666666666667","rgba(56,93,140,1)"],["0.333333333333333","rgba(49,104,142,1)"],["0.375","rgba(46,114,142,1)"],["0.416666666666667","rgba(42,123,142,1)"],["0.458333333333333","rgba(38,133,141,1)"],["0.5","rgba(37,144,140,1)"],["0.541666666666667","rgba(33,154,138,1)"],["0.583333333333333","rgba(39,164,133,1)"],["0.625","rgba(47,174,127,1)"],["0.666666666666667","rgba(53,183,121,1)"],["0.708333333333333","rgba(79,191,110,1)"],["0.75","rgba(98,199,98,1)"],["0.791666666666667","rgba(119,207,85,1)"],["0.833333333333333","rgba(147,214,70,1)"],["0.875","rgba(172,220,52,1)"],["0.916666666666667","rgba(199,225,42,1)"],["0.958333333333333","rgba(226,228,40,1)"],["1","rgba(253,231,37,1)"]],"showscale":false,"color":[0.1,0.0642857142857143,0.0928571428571429,0.0571428571428571,0.1,0.442857142857143,0.0571428571428571,0.0714285714285714,0.0642857142857143,0.128571428571429,0.0571428571428571,0.0571428571428571,0.0714285714285714,0.0785714285714286,0.0571428571428571,0.0642857142857143,0.135714285714286,0.0571428571428571,0.0642857142857143,0.107142857142857,0.0714285714285714,0.05,0.05,0.05,0.0642857142857143,0.0785714285714286,0.05,0.107142857142857,0.0642857142857143,0.0857142857142857,0.05,0.0714285714285714,0.05]}},"textfont":{"size":[21.4545454545455,13.2727272727273,19.8181818181818,11.6363636363636,21.4545454545455,100,11.6363636363636,14.9090909090909,13.2727272727273,28,11.6363636363636,11.6363636363636,14.9090909090909,16.5454545454545,11.6363636363636,13.2727272727273,29.6363636363636,11.6363636363636,13.2727272727273,23.0909090909091,14.9090909090909,10,10,10,13.2727272727273,16.5454545454545,10,23.0909090909091,13.2727272727273,18.1818181818182,10,14.9090909090909,10]},"error_y":{"width":[]},"error_x":{"width":[]},"xaxis":"x","yaxis":"y","frame":null},{"x":[-18.1637162595652,0.943717480265381],"y":[0.00186923435593439,2.08547608322997],"type":"scatter","mode":"markers","opacity":0,"hoverinfo":"none","showlegend":false,"marker":{"colorbar":{"title":"MutationFrequency","ticklen":2,"len":0.5,"lenmode":"fraction","y":1,"yanchor":"top"},"cmin":0.05,"cmax":0.442857142857143,"colorscale":[["0","rgba(68,1,84,1)"],["0.0416666666666667","rgba(70,19,97,1)"],["0.0833333333333334","rgba(72,32,111,1)"],["0.125","rgba(71,45,122,1)"],["0.166666666666667","rgba(68,58,128,1)"],["0.208333333333333","rgba(64,70,135,1)"],["0.25","rgba(60,82,138,1)"],["0.291666666666667","rgba(56,93,140,1)"],["0.333333333333333","rgba(49,104,142,1)"],["0.375","rgba(46,114,142,1)"],["0.416666666666667","rgba(42,123,142,1)"],["0.458333333333333","rgba(38,133,141,1)"],["0.5","rgba(37,144,140,1)"],["0.541666666666667","rgba(33,154,138,1)"],["0.583333333333333","rgba(39,164,133,1)"],["0.625","rgba(47,174,127,1)"],["0.666666666666667","rgba(53,183,121,1)"],["0.708333333333333","rgba(79,191,110,1)"],["0.75","rgba(98,199,98,1)"],["0.791666666666667","rgba(119,207,85,1)"],["0.833333333333333","rgba(147,214,70,1)"],["0.875","rgba(172,220,52,1)"],["0.916666666666667","rgba(199,225,42,1)"],["0.958333333333333","rgba(226,228,40,1)"],["1","rgba(253,231,37,1)"]],"showscale":true,"color":[0.05,0.442857142857143],"line":{"color":"rgba(255,127,14,1)"}},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.2,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script><div class="sourceCode" id="cb28"><html><body><pre class="r"><span class="no">surv.test</span>$<span class="no">KM</span>
+<div id="htmlwidget-667e65fcb3cfa1dceca2" style="width:768px;height:384px;" class="plotly html-widget"></div>
+<script type="application/json" data-for="htmlwidget-667e65fcb3cfa1dceca2">{"x":{"visdat":{"51623fd595ed":["function () ","plotlyVisDat"]},"cur_data":"51623fd595ed","attrs":{"51623fd595ed":{"x":{},"y":{},"text":{},"mode":"markers","color":{},"size":{},"alpha_stroke":1,"sizes":[10,100],"spans":[1,20]}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"title":"Volcano Plot","xaxis":{"domain":[0,1],"automargin":true,"title":"Coefficient"},"yaxis":{"domain":[0,1],"automargin":true,"title":"-log10(Pvalue)"},"hovermode":"closest","showlegend":false,"legend":{"yanchor":"top","y":0.5}},"source":"A","config":{"showSendToCloud":false},"data":[{"x":[0.896,0.944,0.796,0.931,-28.2,0.667,0.534,-12.9,0.713,0.594,-7.78,-4.16,0.538,-3.2,0.414,0.374,-1.22,0.244,-0.85,-0.653,0.186,-0.379,-0.194,0.129,-0.165,0.079,0.079,0.079,0.0427,-0.0353,0.0296,-581],"y":[0.580044251510242,0.554395796726402,0.554395796726402,0.554395796726402,0.435333935747911,0.435333935747911,0.435333935747911,0.435333935747911,0.297569463554475,0.297569463554475,0.292429823902064,0.151195298948196,0.151195298948196,0.151195298948196,0.129596094720973,0.00174066157630127,0.00174066157630127,0.00174066157630127,0.00174066157630127,0.00174066157630127,0.00174066157630127,0.00174066157630127,0.00174066157630127,0.00174066157630127,0.00174066157630127,0.00174066157630127,0.00174066157630127,0.00174066157630127,0.00174066157630127,0.00174066157630127,0.00174066157630127,0.00174066157630127],"text":["Feature : EGFR <br> Hazard Ratio : 1","Feature : MLL <br> Hazard Ratio : 1","Feature : RB1 <br> Hazard Ratio : 1","Feature : CREBBP <br> Hazard Ratio : 1","Feature : CDKN2A.Del <br> Hazard Ratio : 1","Feature : MLL2 <br> Hazard Ratio : 1","Feature : TP53 <br> Hazard Ratio : 1","Feature : ATRX <br> Hazard Ratio : 1","Feature : NF1 <br> Hazard Ratio : 1","Feature : KRAS <br> Hazard Ratio : 1","Feature : CDH1 <br> Hazard Ratio : 1","Feature : APC <br> Hazard Ratio : 1","Feature : KEAP1 <br> Hazard Ratio : 1","Feature : PTEN <br> Hazard Ratio : 1","Feature : TERT <br> Hazard Ratio : 1","Feature : MCL1.Amp <br> Hazard Ratio : 1","Feature : EPHA5 <br> Hazard Ratio : 1","Feature : PIK3CA <br> Hazard Ratio : 1","Feature : NOTCH1 <br> Hazard Ratio : 1","Feature : SMARCA4 <br> Hazard Ratio : 1","Feature : ARID1A <br> Hazard Ratio : 1","Feature : POLE <br> Hazard Ratio : 1","Feature : FAT1 <br> Hazard Ratio : 1","Feature : CCND1.Amp <br> Hazard Ratio : 1","Feature : MLL3 <br> Hazard Ratio : 1","Feature : FGF19.Amp <br> Hazard Ratio : 1","Feature : FGF3.Amp <br> Hazard Ratio : 1","Feature : FGF4.Amp <br> Hazard Ratio : 1","Feature : STK11 <br> Hazard Ratio : 1","Feature : PTPRT <br> Hazard Ratio : 1","Feature : ATM <br> Hazard Ratio : 1","Feature : BRCA2 <br> Hazard Ratio : 4.14e-07"],"mode":"markers","type":"scatter","marker":{"colorbar":{"title":"MutationFrequency","ticklen":2},"cmin":0.05,"cmax":0.4429,"colorscale":[["0","rgba(68,1,84,1)"],["0.0416666666666667","rgba(70,19,97,1)"],["0.0833333333333333","rgba(72,32,111,1)"],["0.125","rgba(71,45,122,1)"],["0.166666666666667","rgba(68,58,128,1)"],["0.208333333333333","rgba(64,70,135,1)"],["0.25","rgba(60,82,138,1)"],["0.291666666666667","rgba(56,93,140,1)"],["0.333333333333333","rgba(49,104,142,1)"],["0.375","rgba(46,114,142,1)"],["0.416666666666667","rgba(42,123,142,1)"],["0.458333333333333","rgba(38,133,141,1)"],["0.5","rgba(37,144,140,1)"],["0.541666666666667","rgba(33,154,138,1)"],["0.583333333333333","rgba(39,164,133,1)"],["0.625","rgba(47,174,127,1)"],["0.666666666666667","rgba(53,183,121,1)"],["0.708333333333333","rgba(79,191,110,1)"],["0.75","rgba(98,199,98,1)"],["0.791666666666667","rgba(119,207,85,1)"],["0.833333333333333","rgba(147,214,70,1)"],["0.875","rgba(172,220,52,1)"],["0.916666666666667","rgba(199,225,42,1)"],["0.958333333333333","rgba(226,228,40,1)"],["1","rgba(253,231,37,1)"]],"showscale":false,"color":[0.1,0.0643,0.0929,0.0571,0.0643,0.1,0.4429,0.0714,0.0643,0.1286,0.0571,0.0714,0.0786,0.0571,0.1357,0.0643,0.0643,0.1071,0.0714,0.0643,0.0786,0.05,0.1071,0.0786,0.0643,0.0571,0.0571,0.0571,0.0857,0.05,0.0714,0.05],"size":[21.4532960040723,13.2756426571647,19.826927971494,11.6263680325783,13.2756426571647,21.4532960040723,100,14.9020106897429,13.2756426571647,28.0045813184016,11.6263680325783,14.9020106897429,16.5512853143293,11.6263680325783,29.6309493509799,13.2756426571647,13.2756426571647,23.0796640366505,14.9020106897429,13.2756426571647,16.5512853143293,10,23.0796640366505,16.5512853143293,13.2756426571647,11.6263680325783,11.6263680325783,11.6263680325783,18.1776533469076,10,14.9020106897429,10],"sizemode":"area","line":{"colorbar":{"title":"","ticklen":2},"cmin":0.05,"cmax":0.4429,"colorscale":[["0","rgba(68,1,84,1)"],["0.0416666666666667","rgba(70,19,97,1)"],["0.0833333333333333","rgba(72,32,111,1)"],["0.125","rgba(71,45,122,1)"],["0.166666666666667","rgba(68,58,128,1)"],["0.208333333333333","rgba(64,70,135,1)"],["0.25","rgba(60,82,138,1)"],["0.291666666666667","rgba(56,93,140,1)"],["0.333333333333333","rgba(49,104,142,1)"],["0.375","rgba(46,114,142,1)"],["0.416666666666667","rgba(42,123,142,1)"],["0.458333333333333","rgba(38,133,141,1)"],["0.5","rgba(37,144,140,1)"],["0.541666666666667","rgba(33,154,138,1)"],["0.583333333333333","rgba(39,164,133,1)"],["0.625","rgba(47,174,127,1)"],["0.666666666666667","rgba(53,183,121,1)"],["0.708333333333333","rgba(79,191,110,1)"],["0.75","rgba(98,199,98,1)"],["0.791666666666667","rgba(119,207,85,1)"],["0.833333333333333","rgba(147,214,70,1)"],["0.875","rgba(172,220,52,1)"],["0.916666666666667","rgba(199,225,42,1)"],["0.958333333333333","rgba(226,228,40,1)"],["1","rgba(253,231,37,1)"]],"showscale":false,"color":[0.1,0.0643,0.0929,0.0571,0.0643,0.1,0.4429,0.0714,0.0643,0.1286,0.0571,0.0714,0.0786,0.0571,0.1357,0.0643,0.0643,0.1071,0.0714,0.0643,0.0786,0.05,0.1071,0.0786,0.0643,0.0571,0.0571,0.0571,0.0857,0.05,0.0714,0.05]}},"textfont":{"size":[21.4532960040723,13.2756426571647,19.826927971494,11.6263680325783,13.2756426571647,21.4532960040723,100,14.9020106897429,13.2756426571647,28.0045813184016,11.6263680325783,14.9020106897429,16.5512853143293,11.6263680325783,29.6309493509799,13.2756426571647,13.2756426571647,23.0796640366505,14.9020106897429,13.2756426571647,16.5512853143293,10,23.0796640366505,16.5512853143293,13.2756426571647,11.6263680325783,11.6263680325783,11.6263680325783,18.1776533469076,10,14.9020106897429,10]},"error_y":{"width":[]},"error_x":{"width":[]},"xaxis":"x","yaxis":"y","frame":null},{"x":[-581,0.944],"y":[0.00174066157630127,0.580044251510242],"type":"scatter","mode":"markers","opacity":0,"hoverinfo":"none","showlegend":false,"marker":{"colorbar":{"title":"MutationFrequency","ticklen":2,"len":0.5,"lenmode":"fraction","y":1,"yanchor":"top"},"cmin":0.05,"cmax":0.4429,"colorscale":[["0","rgba(68,1,84,1)"],["0.0416666666666667","rgba(70,19,97,1)"],["0.0833333333333333","rgba(72,32,111,1)"],["0.125","rgba(71,45,122,1)"],["0.166666666666667","rgba(68,58,128,1)"],["0.208333333333333","rgba(64,70,135,1)"],["0.25","rgba(60,82,138,1)"],["0.291666666666667","rgba(56,93,140,1)"],["0.333333333333333","rgba(49,104,142,1)"],["0.375","rgba(46,114,142,1)"],["0.416666666666667","rgba(42,123,142,1)"],["0.458333333333333","rgba(38,133,141,1)"],["0.5","rgba(37,144,140,1)"],["0.541666666666667","rgba(33,154,138,1)"],["0.583333333333333","rgba(39,164,133,1)"],["0.625","rgba(47,174,127,1)"],["0.666666666666667","rgba(53,183,121,1)"],["0.708333333333333","rgba(79,191,110,1)"],["0.75","rgba(98,199,98,1)"],["0.791666666666667","rgba(119,207,85,1)"],["0.833333333333333","rgba(147,214,70,1)"],["0.875","rgba(172,220,52,1)"],["0.916666666666667","rgba(199,225,42,1)"],["0.958333333333333","rgba(226,228,40,1)"],["1","rgba(253,231,37,1)"]],"showscale":true,"color":[0.05,0.4429],"line":{"color":"rgba(255,127,14,1)"}},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.2,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script><div class="sourceCode" id="cb28"><html><body><pre class="r"><span class="no">surv.test</span>$<span class="no">KM</span>
 <span class="co">#&gt; [[1]]</span></pre></body></html></div>
 <p><img src="gnomeR-vignette_files/figure-html/unnamed-chunk-14-2.png" width="768"></p>
 <pre><code>#&gt; 

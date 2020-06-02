@@ -101,6 +101,18 @@ a predefined list of patients (rows are patients and columns are genes)" />
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
+      <a href="../articles/API-tutorial.html">API-tutorial</a>
+    </li>
+    <li>
+      <a href="../articles/Analizing-genomic-data.html">Analizing genomic data</a>
+    </li>
+    <li>
+      <a href="../articles/Data-processing.html">Data-processing</a>
+    </li>
+    <li>
+      <a href="../articles/Visualizations.html">Visualizations</a>
+    </li>
+    <li>
       <a href="../articles/gnomeR-vignette.html">gnomeR for IMPACT data</a>
     </li>
   </ul>
@@ -150,6 +162,7 @@ a predefined list of patients (rows are patients and columns are genes)</p>
   <span class='kw'>include.silent</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
   <span class='kw'>fusion</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>cna</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>cna.binary</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
   <span class='kw'>cna.relax</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
   <span class='kw'>spe.plat</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
   <span class='kw'>set.plat</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
@@ -192,9 +205,12 @@ Default is NULL.</p></td>
     <tr>
       <th>cna</th>
       <td><p>An optional CNA files. If inputed the outcome will be added to the matrix with columns ending in ".del" and ".amp".
-Default is NULL. Note that this file must have patients as columns and genes as rows. binmat expects a matrix with
-values between -2 and 2. Please do not use any other format. Other functions in the package are available to deal with more detailed
-CNA data.</p></td>
+Default is NULL.</p></td>
+    </tr>
+    <tr>
+      <th>cna.binary</th>
+      <td><p>A boolean argument specifying if the cna events should be enforced as binary. In which case separate columns for
+amplifications and deletions will be created.</p></td>
     </tr>
     <tr>
       <th>cna.relax</th>
