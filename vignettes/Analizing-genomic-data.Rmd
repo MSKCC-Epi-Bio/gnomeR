@@ -10,7 +10,7 @@ vignette: >
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
 collapse = TRUE,
-comment = "#>"
+comment = "#>", warning = F, message = F
 )
 library(knitr)
 library(dplyr)
@@ -98,7 +98,7 @@ This returns the following:
 - `fits` a summary of the univariate fits that were performed
 
 ```{r}
-tab.out$fits
+kable(tab.out$fits[1:10,])
 ```
 
 - `vPlot` a volcano plot summarising the coefficient and pvalues of the the features included in the test
@@ -133,7 +133,20 @@ surv.dat <- clin.patients %>%
   filter(!is.na(time))
 X <- df[match(surv.dat$DMPID,
                    abbreviate(rownames(df),strict = TRUE, minlength = 9)),]
-uni.cox(X = X, surv.dat = surv.dat, 
+test <- uni.cox(X = X, surv.dat = surv.dat, 
         surv.formula = Surv(time,status)~.,filter = 0.05)
 ```
 
+This returns the following:
+
+- `tab` a summary of the univariate fits that were performed
+
+```{r}
+kable(test$tab[1:10,])
+```
+
+- `KM` a list of Kaplan-Meier plots for the 10 most significant features
+
+```{r}
+test$KM[[1]]
+```
