@@ -11,53 +11,26 @@ status](https://travis-ci.com/AxelitoMartin/gnomeR.svg?branch=development)](http
 coverage](https://codecov.io/gh/AxelitoMartin/gnomeR/branch/development/graph/badge.svg)](https://codecov.io/gh/AxelitoMartin/gnomeR?branch=development)
 <!-- badges: end -->
 
-the {gnomeR} package provides a consistent framework for genetic data
+the `gnomeR` package provides a consistent framework for genetic data
 processing, visualization and analysis. This is primarily targeted to
 IMPACT datasets but can also be applied to any genomic data provided by
 CbioPortal.
 
-  - 
-    
-    <div class="text-blue mb-2">
-    
-    Dowloading and gathering data from CbioPortal
-    
-    </div>
-    
+  - [**Dowloading and gathering data from
+    CbioPortal**](https://axelitomartin.github.io/gnomeR/articles/API-tutorial.html)
     through an integrated API using simply the sample IDs of the samples
     of interests or the name of the study to retrive all samples in that
     study.
-
-  - 
-    
-    <div class="text-blue mb-2">
-    
-    Processing genomic data
-    
-    </div>
-    
+  - [**Processing genomic
+    data**](https://axelitomartin.github.io/gnomeR/articles/Data-processing.html)
     retrieved for mutations (MAF file), fusions (MAF file) and
     copy-number alterations (and when available segmentation files) into
     an analysis ready format.
-
-  - 
-    
-    <div class="text-blue mb-2">
-    
-    Visualization of the processed data
-    
-    </div>
-    
+  - [**Visualization of the processed
+    data**](https://axelitomartin.github.io/gnomeR/articles/Visualizations.html)
     provided through MAF file summaries, OncoPrints and heatmaps.
-
-  - 
-    
-    <div class="text-blue mb-2">
-    
-    Analyzing the processed data
-    
-    </div>
-    
+  - [**Analyzing the processed
+    data**](https://axelitomartin.github.io/gnomeR/articles/Analizing-genomic-data.html)
     for association with binary, continuous and survival outcome.
     Including further visualiztion to improve understanding of the
     results.
@@ -96,9 +69,7 @@ CBIOPORTAL_TOKEN = 'YOUR_TOKEN'
 You can test your connection using:
 
 ``` r
-mycgds = CGDS("https://cbioportal.mskcc.org/",
-              token = YOUR_TOKEN)
-test(mycgds)
+get_cbioportal_token()
 ```
 
 ### Retrieving data
@@ -109,15 +80,9 @@ available options). Following this one can either sepcify the samples or
 study of interest:
 
 ``` r
-get_cbioportal_db("msk_impact")
 ids <- as.character(unique(mut$Tumor_Sample_Barcode)[1:100])
-df <- get_mutations(sample_ids = ids)
-
-## match genes ##
-# This will be included in the future #
-df.genes <- df %>% 
-  mutate(Hugo_Symbol = as.character(info_impact$Hugo_Symbol[match(entrezGeneId,
-                                                                  info_impact$Entrez_Gene_Id)]))
+df <- get_genetics(sample_ids = ids,database = "msk_impact",
+                       mutations = TRUE, fusions = TRUE, cna = TRUE)
 ```
 
 ### Processing the downloaded data
@@ -128,15 +93,13 @@ The `binmat()` function is the feature of the data processing of
 clean binary matrix of n samples by all the events that were found in
 the files.
 
-Still need to deal with stuff for the API here (CNA mostly):
-
 ``` r
-test2 <- df.genes %>% 
-  binmat(maf = ., col.names = c(Tumor_Sample_Barcode = "sampleId", Hugo_Symbol = NULL, Variant_Classification
-                                = "mutationType", Mutation_Status = "mutationStatus", Variant_Type = "variantType"))
+df.clean <- binmat(maf = df$mut, cna = df$cna)
 ```
 
-Example with example data in the package for now:
+We further included example datasets from the raw dowloaded files on
+CbioPortal (`mut`, `fusion`, `cna`) which we will use for the following
+examples.
 
 ``` r
 set.seed(123)
@@ -239,18 +202,18 @@ out <- gen.tab(gen.dat = gen.dat,outcome = outcome,filter = 0.05)
 kable(out$fits[1:10,],row.names = T)
 ```
 
-|            | Overall | 0(N=50) | 1(N=50) | OddsRatio | Pvalue   | Lower | Upper | FDR      |
-| ---------- | :------ | :------ | :------ | :-------- | :------- | :---- | :---- | :------- |
-| MYC.Amp    | 6%      | 12%     | 0%      | 0         | 2.67e-02 | 0     | 0.8   | 1.00e+00 |
-| CDKN2B.Del | 6%      | 2%      | 10%     | 5.37      | 2.04e-01 | 0.57  | 262.3 | 1.00e+00 |
-| MCL1.Amp   | 6%      | 10%     | 2%      | 0.19      | 2.04e-01 | 0     | 1.76  | 1.00e+00 |
-| PIK3CA     | 12%     | 8%      | 16%     | 2.17      | 3.57e-01 | 0.53  | 10.6  | 1.00e+00 |
-| FLT4       | 5%      | 2%      | 8%      | 4.21      | 3.62e-01 | 0.4   | 213.8 | 1.00e+00 |
-| EPHA5      | 5%      | 8%      | 2%      | 0.24      | 3.62e-01 | 0     | 2.52  | 1.00e+00 |
-| DOT1L      | 5%      | 2%      | 8%      | 4.21      | 3.62e-01 | 0.4   | 213.8 | 1.00e+00 |
-| STK11      | 7%      | 10%     | 4%      | 0.38      | 4.36e-01 | 0.03  | 2.46  | 1.00e+00 |
-| APC        | 7%      | 4%      | 10%     | 2.64      | 4.36e-01 | 0.41  | 29.07 | 1.00e+00 |
-| MLL        | 9%      | 12%     | 6%      | 0.47      | 4.87e-01 | 0.07  | 2.37  | 1.00e+00 |
+|           | Feature   | Overall | 0(N=50) | 1(N=50) | OddsRatio | Pvalue   | FDR      | Lower | Upper |
+| --------- | :-------- | :------ | :------ | :------ | :-------- | :------- | :------- | :---- | :---- |
+| MYC.Amp   | MYC.Amp   | 6%      | 10%     | 2%      | 0.19      | 2.04e-01 | 1.00e+00 | 0     | 1.76  |
+| PIK3CA    | PIK3CA    | 12%     | 8%      | 16%     | 2.17      | 3.57e-01 | 1.00e+00 | 0.53  | 10.6  |
+| FLT4      | FLT4      | 5%      | 2%      | 8%      | 4.21      | 3.62e-01 | 1.00e+00 | 0.4   | 213.8 |
+| EPHA5     | EPHA5     | 5%      | 8%      | 2%      | 0.24      | 3.62e-01 | 1.00e+00 | 0     | 2.52  |
+| DOT1L     | DOT1L     | 5%      | 2%      | 8%      | 4.21      | 3.62e-01 | 1.00e+00 | 0.4   | 213.8 |
+| ERBB2.Amp | ERBB2.Amp | 5%      | 2%      | 8%      | 4.21      | 3.62e-01 | 1.00e+00 | 0.4   | 213.8 |
+| STK11     | STK11     | 7%      | 10%     | 4%      | 0.38      | 4.36e-01 | 1.00e+00 | 0.03  | 2.46  |
+| APC       | APC       | 7%      | 4%      | 10%     | 2.64      | 4.36e-01 | 1.00e+00 | 0.41  | 29.07 |
+| MLL       | MLL       | 9%      | 12%     | 6%      | 0.47      | 4.87e-01 | 1.00e+00 | 0.07  | 2.37  |
+| FAT1      | FAT1      | 11%     | 14%     | 8%      | 0.54      | 5.25e-01 | 1.00e+00 | 0.11  | 2.29  |
 
 ``` r
 out$forest.plot
@@ -272,22 +235,22 @@ out$vPlot
 time <- rexp(length(patients))
 status <- outcome
 surv.dat <- as.data.frame(cbind(time,status))
-out <- uni.cox(X = gen.dat, surv.dat = surv.dat, surv.formula = Surv(time,status)~.,filter = 0.05,is.gen = T)
+out <- uni.cox(X = gen.dat, surv.dat = surv.dat, surv.formula = Surv(time,status)~.,filter = 0.05)
 kable(out$tab[1:10,],row.names = T)
 ```
 
-|           | Coefficient |    Pvalue | MutationFrequency | Feature   |       FDR |
-| --------- | ----------: | --------: | ----------------: | :-------- | --------: |
-| MLL       | \-1.4788839 | 0.0154952 |              0.09 | MLL       | 0.6043112 |
-| STK11     | \-1.4567353 | 0.0519131 |              0.07 | STK11     | 0.7580415 |
-| FGFR1.Amp |   1.0035559 | 0.0583109 |              0.06 | FGFR1.Amp | 0.7580415 |
-| KEAP1     | \-1.0174381 | 0.1670264 |              0.05 | KEAP1     | 0.9060327 |
-| NOTCH1    |   0.6087690 | 0.2071206 |              0.08 | NOTCH1    | 0.9060327 |
-| DOT1L     |   0.6591677 | 0.2111284 |              0.05 | DOT1L     | 0.9060327 |
-| TSC1      |   0.7504330 | 0.2131792 |              0.05 | TSC1      | 0.9060327 |
-| CDH1      |   0.6047512 | 0.2520918 |              0.06 | CDH1      | 0.9060327 |
-| EPHA5     | \-1.0797593 | 0.2865891 |              0.05 | EPHA5     | 0.9060327 |
-| PIK3CA    |   0.4096672 | 0.2947373 |              0.12 | PIK3CA    | 0.9060327 |
+|    | Feature   | Coefficient | Pvalue | MutationFrequency |       FDR | HR |
+| -- | :-------- | ----------: | -----: | ----------------: | --------: | -: |
+| 1  | MLL       |    \-57.700 |  0.604 |              0.09 | 0.6043112 |  1 |
+| 2  | STK11     |    \-28.400 |  0.912 |              0.07 | 0.9122695 |  1 |
+| 3  | KEAP1     |     \-7.940 |  0.912 |              0.05 | 0.9122695 |  1 |
+| 4  | NOTCH1    |       0.652 |  0.912 |              0.08 | 0.9122695 |  1 |
+| 5  | DOT1L     |       0.677 |  0.912 |              0.05 | 0.9122695 |  1 |
+| 6  | TSC1      |       0.750 |  0.912 |              0.05 | 0.9122695 |  1 |
+| 7  | MYC.Amp   |    \-15.600 |  0.912 |              0.06 | 0.9122695 |  1 |
+| 8  | CDH1      |       0.652 |  0.912 |              0.06 | 0.9122695 |  1 |
+| 9  | FGFR1.Amp |     \-5.370 |  0.912 |              0.06 | 0.9122695 |  1 |
+| 10 | EPHA5     |    \-10.500 |  0.912 |              0.05 | 0.9122695 |  1 |
 
 ``` r
 # out$p

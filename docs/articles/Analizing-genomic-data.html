@@ -146,8 +146,7 @@
 <span class="no">test</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/gen.tab.html">gen.tab</a></span>(<span class="kw">gen.dat</span> <span class="kw">=</span> <span class="no">df</span>,
                 <span class="kw">outcome</span> <span class="kw">=</span> <span class="no">outcome</span>,
                 <span class="kw">filter</span> <span class="kw">=</span> <span class="fl">0.05</span>,<span class="kw">paired</span> <span class="kw">=</span> <span class="fl">FALSE</span>,
-                <span class="kw">cont</span> <span class="kw">=</span> <span class="fl">FALSE</span>,<span class="kw">rank</span> <span class="kw">=</span> <span class="fl">TRUE</span>)
-<span class="co">#&gt; Warning: geom_hline(): Ignoring `mapping` because `yintercept` was provided.</span></pre></body></html></div>
+                <span class="kw">cont</span> <span class="kw">=</span> <span class="fl">FALSE</span>,<span class="kw">rank</span> <span class="kw">=</span> <span class="fl">TRUE</span>)</pre></body></html></div>
 <p>Using the Fisher’s exact test the <code><a href="../reference/gen.tab.html">gen.tab()</a></code> function returns the following:</p>
 <ul>
 <li>
@@ -318,57 +317,106 @@
 <li>
 <code>fits</code> a summary of the univariate fits that were performed</li>
 </ul>
-<div class="sourceCode" id="cb8"><html><body><pre class="r"><span class="no">tab.out</span>$<span class="no">fits</span>
-<span class="co">#&gt;                Estimate        SD     Pvalue MutationFreq       FDR</span>
-<span class="co">#&gt; EPHA5       0.714460285 0.4078836 0.08296626         0.05 0.9710584</span>
-<span class="co">#&gt; CDKN2B.cna  0.324482038 0.1872198 0.08621248        -0.12 0.9710584</span>
-<span class="co">#&gt; AR          0.695412878 0.4082194 0.09163868         0.05 0.9710584</span>
-<span class="co">#&gt; PTPRT       0.608155042 0.3751380 0.10819869         0.06 0.9710584</span>
-<span class="co">#&gt; RB1        -0.533672204 0.3762929 0.15929401         0.06 0.9710584</span>
-<span class="co">#&gt; TSC1        0.437980448 0.4118499 0.29019281         0.05 0.9710584</span>
-<span class="co">#&gt; TP53        0.189709957 0.1850001 0.30767143         0.38 0.9710584</span>
-<span class="co">#&gt; DOT1L      -0.357335608 0.4126437 0.38862364         0.05 0.9710584</span>
-<span class="co">#&gt; CCND1.cna  -0.174202837 0.2063608 0.40063247         0.10 0.9710584</span>
-<span class="co">#&gt; FGF19.cna  -0.174202837 0.2063608 0.40063247         0.10 0.9710584</span>
-<span class="co">#&gt; STK11       0.283383790 0.3526637 0.42360025         0.07 0.9710584</span>
-<span class="co">#&gt; GATA3       0.308985808 0.4130418 0.45620705         0.05 0.9710584</span>
-<span class="co">#&gt; MCL1.cna    0.140833066 0.1895343 0.45923021         0.12 0.9710584</span>
-<span class="co">#&gt; KRAS       -0.197036431 0.2677003 0.46346839         0.13 0.9710584</span>
-<span class="co">#&gt; KEAP1       0.281567391 0.4132418 0.49724922         0.05 0.9710584</span>
-<span class="co">#&gt; FLT4       -0.278907307 0.4132602 0.50133154         0.05 0.9710584</span>
-<span class="co">#&gt; ALK         0.237443115 0.3793774 0.53285145         0.06 0.9710584</span>
-<span class="co">#&gt; EGFR        0.194028865 0.3148440 0.53914533         0.09 0.9710584</span>
-<span class="co">#&gt; PTPRD       0.204048630 0.3321266 0.54039454         0.08 0.9710584</span>
-<span class="co">#&gt; ATM         0.232040754 0.3794116 0.54223143         0.06 0.9710584</span>
-<span class="co">#&gt; CDKN2A.cna  0.093231663 0.1661160 0.57591221        -0.16 0.9710584</span>
-<span class="co">#&gt; MLL2        0.215439363 0.4136474 0.60366104         0.05 0.9710584</span>
-<span class="co">#&gt; APC        -0.164913708 0.3534312 0.64181625         0.07 0.9710584</span>
-<span class="co">#&gt; PIK3CA     -0.128807980 0.2775035 0.64355754         0.12 0.9710584</span>
-<span class="co">#&gt; BRAF       -0.156859914 0.3798045 0.68050760         0.06 0.9710584</span>
-<span class="co">#&gt; SMARCA4    -0.154795609 0.4139242 0.70923384         0.05 0.9710584</span>
-<span class="co">#&gt; CDK12.cna   0.065023336 0.1899539 0.73284984         0.12 0.9710584</span>
-<span class="co">#&gt; FGFR1.cna  -0.062576497 0.1899623 0.74254480         0.12 0.9710584</span>
-<span class="co">#&gt; CDH1        0.106348431 0.3799831 0.78016195         0.06 0.9710584</span>
-<span class="co">#&gt; FAT1       -0.072425066 0.2884339 0.80226437         0.11 0.9710584</span>
-<span class="co">#&gt; TERT       -0.061647370 0.2527496 0.80781279         0.15 0.9710584</span>
-<span class="co">#&gt; PIK3C2G     0.086514146 0.3800344 0.82039403         0.06 0.9710584</span>
-<span class="co">#&gt; ERBB2.cna  -0.033479160 0.2070821 0.87189784         0.10 0.9710584</span>
-<span class="co">#&gt; CREBBP      0.055372882 0.3537794 0.87594663         0.07 0.9710584</span>
-<span class="co">#&gt; NOTCH1      0.046623869 0.3327322 0.88884938         0.08 0.9710584</span>
-<span class="co">#&gt; MLL3        0.029897750 0.3801229 0.93746913         0.06 0.9710584</span>
-<span class="co">#&gt; NOTCH3     -0.029606439 0.4142087 0.94316371         0.05 0.9710584</span>
-<span class="co">#&gt; MLL        -0.021356876 0.3154461 0.94615943         0.09 0.9710584</span>
-<span class="co">#&gt; MYC.cna     0.001266088 0.1900674 0.99469867         0.12 0.9946987</span></pre></body></html></div>
+<div class="sourceCode" id="cb8"><html><body><pre class="r"><span class="fu">kable</span>(<span class="no">tab.out</span>$<span class="no">fits</span>[<span class="fl">1</span>:<span class="fl">10</span>,])</pre></body></html></div>
+<table class="table">
+<thead><tr class="header">
+<th></th>
+<th align="right">Estimate</th>
+<th align="right">SD</th>
+<th align="right">Pvalue</th>
+<th align="right">MutationFreq</th>
+<th align="right">FDR</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td>EPHA5</td>
+<td align="right">0.7144603</td>
+<td align="right">0.4078836</td>
+<td align="right">0.0829663</td>
+<td align="right">0.05</td>
+<td align="right">0.9710584</td>
+</tr>
+<tr class="even">
+<td>CDKN2B.cna</td>
+<td align="right">0.3244820</td>
+<td align="right">0.1872198</td>
+<td align="right">0.0862125</td>
+<td align="right">-0.12</td>
+<td align="right">0.9710584</td>
+</tr>
+<tr class="odd">
+<td>AR</td>
+<td align="right">0.6954129</td>
+<td align="right">0.4082194</td>
+<td align="right">0.0916387</td>
+<td align="right">0.05</td>
+<td align="right">0.9710584</td>
+</tr>
+<tr class="even">
+<td>PTPRT</td>
+<td align="right">0.6081550</td>
+<td align="right">0.3751380</td>
+<td align="right">0.1081987</td>
+<td align="right">0.06</td>
+<td align="right">0.9710584</td>
+</tr>
+<tr class="odd">
+<td>RB1</td>
+<td align="right">-0.5336722</td>
+<td align="right">0.3762929</td>
+<td align="right">0.1592940</td>
+<td align="right">0.06</td>
+<td align="right">0.9710584</td>
+</tr>
+<tr class="even">
+<td>TSC1</td>
+<td align="right">0.4379804</td>
+<td align="right">0.4118499</td>
+<td align="right">0.2901928</td>
+<td align="right">0.05</td>
+<td align="right">0.9710584</td>
+</tr>
+<tr class="odd">
+<td>TP53</td>
+<td align="right">0.1897100</td>
+<td align="right">0.1850001</td>
+<td align="right">0.3076714</td>
+<td align="right">0.38</td>
+<td align="right">0.9710584</td>
+</tr>
+<tr class="even">
+<td>DOT1L</td>
+<td align="right">-0.3573356</td>
+<td align="right">0.4126437</td>
+<td align="right">0.3886236</td>
+<td align="right">0.05</td>
+<td align="right">0.9710584</td>
+</tr>
+<tr class="odd">
+<td>CCND1.cna</td>
+<td align="right">-0.1742028</td>
+<td align="right">0.2063608</td>
+<td align="right">0.4006325</td>
+<td align="right">0.10</td>
+<td align="right">0.9710584</td>
+</tr>
+<tr class="even">
+<td>FGF19.cna</td>
+<td align="right">-0.1742028</td>
+<td align="right">0.2063608</td>
+<td align="right">0.4006325</td>
+<td align="right">0.10</td>
+<td align="right">0.9710584</td>
+</tr>
+</tbody>
+</table>
 <ul>
 <li>
 <code>vPlot</code> a volcano plot summarising the coefficient and pvalues of the the features included in the test</li>
 </ul>
-<div class="sourceCode" id="cb9"><html><body><pre class="r"><span class="no">tab.out</span>$<span class="no">vPlot</span>
-<span class="co">#&gt; No trace type specified:</span>
-<span class="co">#&gt;   Based on info supplied, a 'scatter' trace seems appropriate.</span>
-<span class="co">#&gt;   Read more about this trace type -&gt; https://plot.ly/r/reference/#scatter</span></pre></body></html></div>
+<div class="sourceCode" id="cb9"><html><body><pre class="r"><span class="no">tab.out</span>$<span class="no">vPlot</span></pre></body></html></div>
 <div id="htmlwidget-7bf94cd961c11210a1ca" style="width:700px;height:432.632880098888px;" class="plotly html-widget"></div>
-<script type="application/json" data-for="htmlwidget-7bf94cd961c11210a1ca">{"x":{"visdat":{"4f9d75193422":["function () ","plotlyVisDat"]},"cur_data":"4f9d75193422","attrs":{"4f9d75193422":{"x":{},"y":{},"text":{},"mode":"markers","alpha_stroke":1,"sizes":[10,100],"spans":[1,20]}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"title":"Volcano Plot","xaxis":{"domain":[0,1],"automargin":true,"title":"Estimate"},"yaxis":{"domain":[0,1],"automargin":true,"title":"-log10(.data$Pvalue)"},"hovermode":"closest","showlegend":false},"source":"A","config":{"showSendToCloud":false},"data":[{"x":[-0.27890730696643,-0.197036430860263,0.189709956729779,0.215439363145589,0.71446028451033,-0.0724250661530108,-0.156859913798305,0.086514145779625,0.283383790173519,-0.3573356076939,-0.154795609056231,0.608155042301431,0.281567391428104,-0.164913708154918,0.237443115293697,-0.0616473704229985,-0.0213568755109466,0.106348431115086,0.20404863034375,0.437980448380099,-0.128807979503838,0.194028864604635,0.0298977502409672,0.0553728818081404,0.308985808092999,-0.0296064387132369,0.0466238690844162,0.6954128779122,-0.533672203538495,0.232040754098736,-0.174202836567776,0.0650233359426356,0.09323166292313,0.324482037763726,-0.0334791599313017,-0.174202836567776,-0.0625764968779619,0.14083306593344,0.00126608815904006],"y":[0.29987497597354,0.333979882570798,0.51191282486021,0.219206855129641,1.0810984813215,0.0956824940817294,0.167167018782131,0.0859775068358139,0.373043788976791,0.410470787164416,0.149210548144601,0.965778004803114,0.303425888169885,0.192589290549936,0.273393847500029,0.0926892743774005,0.0240356776657631,0.107815237027776,0.2672890440616,0.537313358918172,0.191412618611926,0.268294154154151,0.0280430265615312,0.057522352416599,0.340838003094281,0.0254129191264236,0.0511718239605528,1.03792118203731,0.79780056174869,0.265815314305332,0.397253857479438,0.1349850012078,0.239643715759548,1.06442984495927,0.0595343992677133,0.397253857479438,0.129277339773519,0.337969552308364,0.00230846485498919],"text":["Gene : FLT4 <\/br> Estimate : -0.28","Gene : KRAS <\/br> Estimate : -0.2","Gene : TP53 <\/br> Estimate : 0.19","Gene : MLL2 <\/br> Estimate : 0.22","Gene : EPHA5 <\/br> Estimate : 0.71","Gene : FAT1 <\/br> Estimate : -0.07","Gene : BRAF <\/br> Estimate : -0.16","Gene : PIK3C2G <\/br> Estimate : 0.09","Gene : STK11 <\/br> Estimate : 0.28","Gene : DOT1L <\/br> Estimate : -0.36","Gene : SMARCA4 <\/br> Estimate : -0.15","Gene : PTPRT <\/br> Estimate : 0.61","Gene : KEAP1 <\/br> Estimate : 0.28","Gene : APC <\/br> Estimate : -0.16","Gene : ALK <\/br> Estimate : 0.24","Gene : TERT <\/br> Estimate : -0.06","Gene : MLL <\/br> Estimate : -0.02","Gene : CDH1 <\/br> Estimate : 0.11","Gene : PTPRD <\/br> Estimate : 0.2","Gene : TSC1 <\/br> Estimate : 0.44","Gene : PIK3CA <\/br> Estimate : -0.13","Gene : EGFR <\/br> Estimate : 0.19","Gene : MLL3 <\/br> Estimate : 0.03","Gene : CREBBP <\/br> Estimate : 0.06","Gene : GATA3 <\/br> Estimate : 0.31","Gene : NOTCH3 <\/br> Estimate : -0.03","Gene : NOTCH1 <\/br> Estimate : 0.05","Gene : AR <\/br> Estimate : 0.7","Gene : RB1 <\/br> Estimate : -0.53","Gene : ATM <\/br> Estimate : 0.23","Gene : CCND1.cna <\/br> Estimate : -0.17","Gene : CDK12.cna <\/br> Estimate : 0.07","Gene : CDKN2A.cna <\/br> Estimate : 0.09","Gene : CDKN2B.cna <\/br> Estimate : 0.32","Gene : ERBB2.cna <\/br> Estimate : -0.03","Gene : FGF19.cna <\/br> Estimate : -0.17","Gene : FGFR1.cna <\/br> Estimate : -0.06","Gene : MCL1.cna <\/br> Estimate : 0.14","Gene : MYC.cna <\/br> Estimate : 0"],"mode":"markers","type":"scatter","marker":{"color":"rgba(31,119,180,1)","line":{"color":"rgba(31,119,180,1)"}},"error_y":{"color":"rgba(31,119,180,1)"},"error_x":{"color":"rgba(31,119,180,1)"},"line":{"color":"rgba(31,119,180,1)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.2,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+<script type="application/json" data-for="htmlwidget-7bf94cd961c11210a1ca">{"x":{"visdat":{"5674637160fe":["function () ","plotlyVisDat"]},"cur_data":"5674637160fe","attrs":{"5674637160fe":{"x":{},"y":{},"text":{},"mode":"markers","alpha_stroke":1,"sizes":[10,100],"spans":[1,20]}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"title":"Volcano Plot","xaxis":{"domain":[0,1],"automargin":true,"title":"Estimate"},"yaxis":{"domain":[0,1],"automargin":true,"title":"-log10(.data$Pvalue)"},"hovermode":"closest","showlegend":false},"source":"A","config":{"showSendToCloud":false},"data":[{"x":[-0.27890730696643,-0.197036430860263,0.189709956729779,0.215439363145589,0.71446028451033,-0.0724250661530108,-0.156859913798305,0.086514145779625,0.283383790173519,-0.3573356076939,-0.154795609056231,0.608155042301431,0.281567391428104,-0.164913708154918,0.237443115293697,-0.0616473704229985,-0.0213568755109466,0.106348431115086,0.20404863034375,0.437980448380099,-0.128807979503838,0.194028864604635,0.0298977502409672,0.0553728818081404,0.308985808092999,-0.0296064387132369,0.0466238690844162,0.6954128779122,-0.533672203538495,0.232040754098736,-0.174202836567776,0.0650233359426356,0.09323166292313,0.324482037763726,-0.0334791599313017,-0.174202836567776,-0.0625764968779619,0.14083306593344,0.00126608815904006],"y":[0.29987497597354,0.333979882570798,0.51191282486021,0.219206855129641,1.0810984813215,0.0956824940817294,0.167167018782131,0.0859775068358139,0.373043788976791,0.410470787164416,0.149210548144601,0.965778004803114,0.303425888169885,0.192589290549936,0.273393847500029,0.0926892743774005,0.0240356776657631,0.107815237027776,0.2672890440616,0.537313358918172,0.191412618611926,0.268294154154151,0.0280430265615312,0.057522352416599,0.340838003094281,0.0254129191264236,0.0511718239605528,1.03792118203731,0.79780056174869,0.265815314305332,0.397253857479438,0.1349850012078,0.239643715759548,1.06442984495927,0.0595343992677133,0.397253857479438,0.129277339773519,0.337969552308364,0.00230846485498919],"text":["Gene : FLT4 <\/br> Estimate : -0.28","Gene : KRAS <\/br> Estimate : -0.2","Gene : TP53 <\/br> Estimate : 0.19","Gene : MLL2 <\/br> Estimate : 0.22","Gene : EPHA5 <\/br> Estimate : 0.71","Gene : FAT1 <\/br> Estimate : -0.07","Gene : BRAF <\/br> Estimate : -0.16","Gene : PIK3C2G <\/br> Estimate : 0.09","Gene : STK11 <\/br> Estimate : 0.28","Gene : DOT1L <\/br> Estimate : -0.36","Gene : SMARCA4 <\/br> Estimate : -0.15","Gene : PTPRT <\/br> Estimate : 0.61","Gene : KEAP1 <\/br> Estimate : 0.28","Gene : APC <\/br> Estimate : -0.16","Gene : ALK <\/br> Estimate : 0.24","Gene : TERT <\/br> Estimate : -0.06","Gene : MLL <\/br> Estimate : -0.02","Gene : CDH1 <\/br> Estimate : 0.11","Gene : PTPRD <\/br> Estimate : 0.2","Gene : TSC1 <\/br> Estimate : 0.44","Gene : PIK3CA <\/br> Estimate : -0.13","Gene : EGFR <\/br> Estimate : 0.19","Gene : MLL3 <\/br> Estimate : 0.03","Gene : CREBBP <\/br> Estimate : 0.06","Gene : GATA3 <\/br> Estimate : 0.31","Gene : NOTCH3 <\/br> Estimate : -0.03","Gene : NOTCH1 <\/br> Estimate : 0.05","Gene : AR <\/br> Estimate : 0.7","Gene : RB1 <\/br> Estimate : -0.53","Gene : ATM <\/br> Estimate : 0.23","Gene : CCND1.cna <\/br> Estimate : -0.17","Gene : CDK12.cna <\/br> Estimate : 0.07","Gene : CDKN2A.cna <\/br> Estimate : 0.09","Gene : CDKN2B.cna <\/br> Estimate : 0.32","Gene : ERBB2.cna <\/br> Estimate : -0.03","Gene : FGF19.cna <\/br> Estimate : -0.17","Gene : FGFR1.cna <\/br> Estimate : -0.06","Gene : MCL1.cna <\/br> Estimate : 0.14","Gene : MYC.cna <\/br> Estimate : 0"],"mode":"markers","type":"scatter","marker":{"color":"rgba(31,119,180,1)","line":{"color":"rgba(31,119,180,1)"}},"error_y":{"color":"rgba(31,119,180,1)"},"error_x":{"color":"rgba(31,119,180,1)"},"line":{"color":"rgba(31,119,180,1)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.2,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
 </div>
 </div>
 <div id="survival-outcome" class="section level1">
@@ -401,124 +449,112 @@
   <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span>(!<span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span>(<span class="no">time</span>))
 <span class="no">X</span> <span class="kw">&lt;-</span> <span class="no">df</span>[<span class="fu"><a href="https://rdrr.io/r/base/match.html">match</a></span>(<span class="no">surv.dat</span>$<span class="no">DMPID</span>,
                    <span class="fu"><a href="https://rdrr.io/r/base/abbreviate.html">abbreviate</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span>(<span class="no">df</span>),<span class="kw">strict</span> <span class="kw">=</span> <span class="fl">TRUE</span>, <span class="kw">minlength</span> <span class="kw">=</span> <span class="fl">9</span>)),]
-<span class="fu"><a href="../reference/uni.cox.html">uni.cox</a></span>(<span class="kw">X</span> <span class="kw">=</span> <span class="no">X</span>, <span class="kw">surv.dat</span> <span class="kw">=</span> <span class="no">surv.dat</span>,
-        <span class="kw">surv.formula</span> <span class="kw">=</span> <span class="fu">Surv</span>(<span class="no">time</span>,<span class="no">status</span>)~<span class="no">.</span>,<span class="kw">filter</span> <span class="kw">=</span> <span class="fl">0.05</span>)
-<span class="co">#&gt; Warning in fitter(X, Y, istrat, offset, init, control, weights = weights, :</span>
-<span class="co">#&gt; Loglik converged before variable 1 ; coefficient may be infinite.</span>
-
-<span class="co">#&gt; Warning in fitter(X, Y, istrat, offset, init, control, weights = weights, :</span>
-<span class="co">#&gt; Loglik converged before variable 1 ; coefficient may be infinite.</span>
-
-<span class="co">#&gt; Warning in fitter(X, Y, istrat, offset, init, control, weights = weights, :</span>
-<span class="co">#&gt; Loglik converged before variable 1 ; coefficient may be infinite.</span>
-
-<span class="co">#&gt; Warning in fitter(X, Y, istrat, offset, init, control, weights = weights, :</span>
-<span class="co">#&gt; Loglik converged before variable 1 ; coefficient may be infinite.</span>
-<span class="co">#&gt; Warning: Vectorized input to `element_text()` is not officially supported.</span>
-<span class="co">#&gt; Results may be unexpected or may change in future versions of ggplot2.</span>
-<span class="co">#&gt; Warning in .pvalue(fit, data = data, method = method, pval = pval, pval.coord = pval.coord, : There are no survival curves to be compared. </span>
-<span class="co">#&gt;  This is a null model.</span>
-<span class="co">#&gt; Warning: Vectorized input to `element_text()` is not officially supported.</span>
-<span class="co">#&gt; Results may be unexpected or may change in future versions of ggplot2.</span>
-
-<span class="co">#&gt; Warning: Vectorized input to `element_text()` is not officially supported.</span>
-<span class="co">#&gt; Results may be unexpected or may change in future versions of ggplot2.</span>
-
-<span class="co">#&gt; Warning: Vectorized input to `element_text()` is not officially supported.</span>
-<span class="co">#&gt; Results may be unexpected or may change in future versions of ggplot2.</span>
-
-<span class="co">#&gt; Warning: Vectorized input to `element_text()` is not officially supported.</span>
-<span class="co">#&gt; Results may be unexpected or may change in future versions of ggplot2.</span>
-
-<span class="co">#&gt; Warning: Vectorized input to `element_text()` is not officially supported.</span>
-<span class="co">#&gt; Results may be unexpected or may change in future versions of ggplot2.</span>
-<span class="co">#&gt; Warning in .pvalue(fit, data = data, method = method, pval = pval, pval.coord = pval.coord, : There are no survival curves to be compared. </span>
-<span class="co">#&gt;  This is a null model.</span>
-<span class="co">#&gt; Warning: Vectorized input to `element_text()` is not officially supported.</span>
-<span class="co">#&gt; Results may be unexpected or may change in future versions of ggplot2.</span>
-
-<span class="co">#&gt; Warning: Vectorized input to `element_text()` is not officially supported.</span>
-<span class="co">#&gt; Results may be unexpected or may change in future versions of ggplot2.</span>
-<span class="co">#&gt; $tab</span>
-<span class="co">#&gt;       Feature Coefficient Pvalue MutationFrequency       FDR       HR</span>
-<span class="co">#&gt; 1        MLL2       1.000  0.214            0.0548 0.2138902 1.00e+00</span>
-<span class="co">#&gt; 2    MCL1.cna       0.985  0.626            0.1644 0.6255686 1.00e+00</span>
-<span class="co">#&gt; 3        TERT       1.000  0.626            0.1370 0.6255686 1.00e+00</span>
-<span class="co">#&gt; 4      CREBBP       1.000  0.626            0.0685 0.6255686 1.00e+00</span>
-<span class="co">#&gt; 5        TP63       1.000  0.687            0.0548 0.6873988 1.00e+00</span>
-<span class="co">#&gt; 6       PTPRD       1.000  0.687            0.0822 0.6873988 1.00e+00</span>
-<span class="co">#&gt; 7       GATA3       1.000  0.687            0.0548 0.6873988 1.00e+00</span>
-<span class="co">#&gt; 8    RIT1.cna       0.972  0.687            0.1096 0.6873988 1.00e+00</span>
-<span class="co">#&gt; 9     SMARCA4       0.985  0.687            0.0685 0.6873988 1.00e+00</span>
-<span class="co">#&gt; 10      STK11       0.956  0.687            0.0959 0.6873988 1.00e+00</span>
-<span class="co">#&gt; 11        MLL       0.956  0.687            0.1096 0.6873988 1.00e+00</span>
-<span class="co">#&gt; 12    MYC.cna       0.743  0.687            0.1370 0.6873988 1.00e+00</span>
-<span class="co">#&gt; 13       TP53       0.779  0.687            0.3562 0.6873988 1.00e+00</span>
-<span class="co">#&gt; 14  CDK12.cna       0.743  0.687            0.1370 0.6873988 1.00e+00</span>
-<span class="co">#&gt; 15       EGFR       0.882  0.706            0.0959 0.7058180 1.00e+00</span>
-<span class="co">#&gt; 16       MLL3       0.985  0.706            0.0548 0.7058180 1.00e+00</span>
-<span class="co">#&gt; 17      DOT1L       0.956  0.795            0.0685 0.7948840 1.00e+00</span>
-<span class="co">#&gt; 18 CDKN2A.cna       0.759  0.836           -0.1644 0.8356005 1.00e+00</span>
-<span class="co">#&gt; 19     PIK3CA       0.743  0.836            0.1370 0.8356005 1.00e+00</span>
-<span class="co">#&gt; 20  FGFR1.cna      -1.910  0.836            0.1370 0.8356005 1.00e+00</span>
-<span class="co">#&gt; 21        RB1       0.803  0.836            0.0548 0.8356005 1.00e+00</span>
-<span class="co">#&gt; 22      PTPRT      -5.780  0.836            0.0685 0.8356005 1.00e+00</span>
-<span class="co">#&gt; 23         AR       0.779  0.836            0.0685 0.8356005 1.00e+00</span>
-<span class="co">#&gt; 24    PIK3C2G       0.779  0.836            0.0685 0.8356005 1.00e+00</span>
-<span class="co">#&gt; 25       PTEN       0.779  0.836            0.0548 0.8356005 1.00e+00</span>
-<span class="co">#&gt; 26       CDH1      -4.050  0.836            0.0685 0.8356005 1.00e+00</span>
-<span class="co">#&gt; 27       KRAS      -2.470  0.836            0.1370 0.8356005 1.00e+00</span>
-<span class="co">#&gt; 28 CDKN2B.cna       0.711  0.836           -0.1370 0.8356005 1.00e+00</span>
-<span class="co">#&gt; 29      KEAP1       0.743  0.836            0.0685 0.8356005 1.00e+00</span>
-<span class="co">#&gt; 30       BRAF       0.743  0.872            0.0685 0.8720660 1.00e+00</span>
-<span class="co">#&gt; 31  ERBB2.cna       0.429  0.888            0.1096 0.8881241 1.00e+00</span>
-<span class="co">#&gt; 32  CCND1.cna       0.407  0.928            0.1096 0.9282208 1.00e+00</span>
-<span class="co">#&gt; 33  FGF19.cna       0.407  0.928            0.1096 0.9282208 1.00e+00</span>
-<span class="co">#&gt; 34       FAT1       0.407  0.978            0.1370 0.9783122 1.00e+00</span>
-<span class="co">#&gt; 35     NOTCH1      -0.825  0.994            0.0685 0.9940630 1.00e+00</span>
-<span class="co">#&gt; 36     NOTCH3       0.407  0.994            0.0548 0.9940630 1.00e+00</span>
-<span class="co">#&gt; 37       FLT4       0.392  0.994            0.0548 0.9940630 1.00e+00</span>
-<span class="co">#&gt; 38        APC    -350.000  0.998            0.0548 0.9979930 4.06e-07</span>
-<span class="co">#&gt; 39        ATM    -233.000  0.998            0.0548 0.9979930 4.06e-07</span>
-<span class="co">#&gt; 40      EPHA5    -745.000  0.998            0.0548 0.9979930 4.06e-07</span>
-<span class="co">#&gt; 41        ALK    -175.000  0.998            0.0548 0.9979930 4.06e-07</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $p</span>
-<span class="co">#&gt; No trace type specified:</span>
-<span class="co">#&gt;   Based on info supplied, a 'scatter' trace seems appropriate.</span>
-<span class="co">#&gt;   Read more about this trace type -&gt; https://plot.ly/r/reference/#scatter</span>
-<span class="co">#&gt; Warning: `line.width` does not currently support multiple values.</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $KM</span>
-<span class="co">#&gt; $KM[[1]]</span></pre></body></html></div>
-<p><img src="Analizing-genomic-data_files/figure-html/unnamed-chunk-11-1.png" width="700"></p>
-<pre><code>#&gt; 
-#&gt; $KM[[2]]</code></pre>
-<p><img src="Analizing-genomic-data_files/figure-html/unnamed-chunk-11-2.png" width="700"></p>
-<pre><code>#&gt; 
-#&gt; $KM[[3]]</code></pre>
-<p><img src="Analizing-genomic-data_files/figure-html/unnamed-chunk-11-3.png" width="700"></p>
-<pre><code>#&gt; 
-#&gt; $KM[[4]]</code></pre>
-<p><img src="Analizing-genomic-data_files/figure-html/unnamed-chunk-11-4.png" width="700"></p>
-<pre><code>#&gt; 
-#&gt; $KM[[5]]</code></pre>
-<p><img src="Analizing-genomic-data_files/figure-html/unnamed-chunk-11-5.png" width="700"></p>
-<pre><code>#&gt; 
-#&gt; $KM[[6]]</code></pre>
-<p><img src="Analizing-genomic-data_files/figure-html/unnamed-chunk-11-6.png" width="700"></p>
-<pre><code>#&gt; 
-#&gt; $KM[[7]]</code></pre>
-<p><img src="Analizing-genomic-data_files/figure-html/unnamed-chunk-11-7.png" width="700"></p>
-<pre><code>#&gt; 
-#&gt; $KM[[8]]</code></pre>
-<p><img src="Analizing-genomic-data_files/figure-html/unnamed-chunk-11-8.png" width="700"></p>
-<pre><code>#&gt; 
-#&gt; $KM[[9]]</code></pre>
-<p><img src="Analizing-genomic-data_files/figure-html/unnamed-chunk-11-9.png" width="700"></p>
-<pre><code>#&gt; 
-#&gt; $KM[[10]]</code></pre>
-<p><img src="Analizing-genomic-data_files/figure-html/unnamed-chunk-11-10.png" width="700"></p>
+<span class="no">test</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/uni.cox.html">uni.cox</a></span>(<span class="kw">X</span> <span class="kw">=</span> <span class="no">X</span>, <span class="kw">surv.dat</span> <span class="kw">=</span> <span class="no">surv.dat</span>,
+        <span class="kw">surv.formula</span> <span class="kw">=</span> <span class="fu">Surv</span>(<span class="no">time</span>,<span class="no">status</span>)~<span class="no">.</span>,<span class="kw">filter</span> <span class="kw">=</span> <span class="fl">0.05</span>)</pre></body></html></div>
+<p>This returns the following:</p>
+<ul>
+<li>
+<code>tab</code> a summary of the univariate fits that were performed</li>
+</ul>
+<div class="sourceCode" id="cb11"><html><body><pre class="r"><span class="fu">kable</span>(<span class="no">test</span>$<span class="no">tab</span>[<span class="fl">1</span>:<span class="fl">10</span>,])</pre></body></html></div>
+<table class="table">
+<thead><tr class="header">
+<th align="left">Feature</th>
+<th align="right">Coefficient</th>
+<th align="right">Pvalue</th>
+<th align="right">MutationFrequency</th>
+<th align="right">FDR</th>
+<th align="right">HR</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">MLL2</td>
+<td align="right">1.000</td>
+<td align="right">0.214</td>
+<td align="right">0.0548</td>
+<td align="right">0.2138902</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">MCL1.cna</td>
+<td align="right">0.985</td>
+<td align="right">0.626</td>
+<td align="right">0.1644</td>
+<td align="right">0.6255686</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="left">TERT</td>
+<td align="right">1.000</td>
+<td align="right">0.626</td>
+<td align="right">0.1370</td>
+<td align="right">0.6255686</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">CREBBP</td>
+<td align="right">1.000</td>
+<td align="right">0.626</td>
+<td align="right">0.0685</td>
+<td align="right">0.6255686</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="left">TP63</td>
+<td align="right">1.000</td>
+<td align="right">0.687</td>
+<td align="right">0.0548</td>
+<td align="right">0.6873988</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">PTPRD</td>
+<td align="right">1.000</td>
+<td align="right">0.687</td>
+<td align="right">0.0822</td>
+<td align="right">0.6873988</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="left">GATA3</td>
+<td align="right">1.000</td>
+<td align="right">0.687</td>
+<td align="right">0.0548</td>
+<td align="right">0.6873988</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">RIT1.cna</td>
+<td align="right">0.972</td>
+<td align="right">0.687</td>
+<td align="right">0.1096</td>
+<td align="right">0.6873988</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="left">SMARCA4</td>
+<td align="right">0.985</td>
+<td align="right">0.687</td>
+<td align="right">0.0685</td>
+<td align="right">0.6873988</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">STK11</td>
+<td align="right">0.956</td>
+<td align="right">0.687</td>
+<td align="right">0.0959</td>
+<td align="right">0.6873988</td>
+<td align="right">1</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>
+<code>KM</code> a list of Kaplan-Meier plots for the 10 most significant features</li>
+</ul>
+<div class="sourceCode" id="cb12"><html><body><pre class="r"><span class="no">test</span>$<span class="no">KM</span><span class="kw">[[</span><span class="fl">1</span>]]</pre></body></html></div>
+<p><img src="Analizing-genomic-data_files/figure-html/unnamed-chunk-13-1.png" width="700"></p>
 </div>
   </div>
 

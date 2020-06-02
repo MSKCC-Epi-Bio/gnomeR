@@ -157,7 +157,7 @@ out$vPlot
 time <- rexp(length(patients))
 status <- outcome
 surv.dat <- as.data.frame(cbind(time,status))
-out <- uni.cox(X = gen.dat, surv.dat = surv.dat, surv.formula = Surv(time,status)~.,filter = 0.05,is.gen = T)
+out <- uni.cox(X = gen.dat, surv.dat = surv.dat, surv.formula = Surv(time,status)~.,filter = 0.05)
 kable(out$tab[1:10,],row.names = T)
 # out$p
 out$KM[[1]]
