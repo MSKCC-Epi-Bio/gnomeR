@@ -134,7 +134,7 @@ surv.dat <- clin.patients %>%
 X <- df[match(surv.dat$DMPID,
                    abbreviate(rownames(df),strict = TRUE, minlength = 9)),]
 test <- uni.cox(X = X, surv.dat = surv.dat, 
-        surv.formula = Surv(time,status)~.,filter = 0.05)
+        surv.formula = Surv(time,status)~.,filter = 0.1)
 ```
 
 This returns the following:
@@ -143,6 +143,12 @@ This returns the following:
 
 ```{r}
 kable(test$tab[1:10,])
+```
+
+- `p` an interactive volcano plot summarizing the hazard ratio for each ratio as a function of it's p-value
+
+```{r}
+test$p
 ```
 
 - `KM` a list of Kaplan-Meier plots for the 10 most significant features
