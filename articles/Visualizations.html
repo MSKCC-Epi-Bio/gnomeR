@@ -173,8 +173,7 @@
 <div class="sourceCode" id="cb5"><html><body><pre class="r"><span class="no">genes</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"ATM"</span>,<span class="st">"BRAF"</span>,<span class="st">"MLL2"</span>,<span class="st">"APC"</span>,<span class="st">"EGFR"</span>,<span class="st">"MLL3"</span>,<span class="st">"PIK3CA"</span>,<span class="st">"KRAS"</span>,<span class="st">"TP53"</span>)
 <span class="no">dat.gen</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/binmat.html">binmat</a></span>(<span class="kw">maf</span> <span class="kw">=</span> <span class="no">mut</span>, <span class="kw">fusion</span> <span class="kw">=</span> <span class="no">fusion</span>, <span class="kw">cna</span> <span class="kw">=</span> <span class="no">cna</span>)
 <span class="no">dat.gen</span> <span class="kw">&lt;-</span> <span class="no">dat.gen</span> <span class="kw">%&gt;%</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(<span class="fu"><a href="https://dplyr.tidyverse.org/reference/reexports.html">starts_with</a></span>(<span class="no">genes</span>))
-<span class="fu"><a href="../reference/plot_oncoPrint.html">plot_oncoPrint</a></span>(<span class="kw">gen.dat</span> <span class="kw">=</span> <span class="no">dat.gen</span>)
-<span class="co">#&gt; All mutation types: MUT, AMP, FUS, DEL</span></pre></body></html></div>
+<span class="fu"><a href="../reference/plot_oncoPrint.html">plot_oncoPrint</a></span>(<span class="kw">gen.dat</span> <span class="kw">=</span> <span class="no">dat.gen</span>)</pre></body></html></div>
 <p><img src="Visualizations_files/figure-html/unnamed-chunk-4-1.png" width="960"></p>
 </div>
 <div id="adding-clinical-information" class="section level2">
@@ -198,9 +197,7 @@
   <span class="kw pkg">tibble</span><span class="kw ns">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/rownames.html">column_to_rownames</a></span>(<span class="st">'DMPID'</span>)
 <span class="fu"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span>(<span class="no">dat.gen</span>) <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span>(<span class="no">clin.patients.dat</span>)
 <span class="fu"><a href="../reference/plot_oncoPrint.html">plot_oncoPrint</a></span>(<span class="kw">gen.dat</span> <span class="kw">=</span> <span class="no">dat.gen</span>,
-               <span class="kw">clin.dat</span> <span class="kw">=</span> <span class="no">clin.patients.dat</span>)
-<span class="co">#&gt; All mutation types: Sex_Male, Smoker_Never, MUT, Sex_Female,</span>
-<span class="co">#&gt; Smoker_Prev/Curr Smoker, Smoker_Unknown, AMP, FUS, DEL</span></pre></body></html></div>
+               <span class="kw">clin.dat</span> <span class="kw">=</span> <span class="no">clin.patients.dat</span>)</pre></body></html></div>
 <p><img src="Visualizations_files/figure-html/unnamed-chunk-5-1.png" width="960"></p>
 </div>
 </div>

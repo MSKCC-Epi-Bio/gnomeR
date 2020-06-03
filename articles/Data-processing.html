@@ -105,14 +105,6 @@
     
     
 <div class="sourceCode" id="cb1"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">gnomeR</span>)</pre></body></html></div>
-<pre><code>#&gt; 
-#&gt; Attaching package: 'dplyr'
-#&gt; The following objects are masked from 'package:stats':
-#&gt; 
-#&gt;     filter, lag
-#&gt; The following objects are masked from 'package:base':
-#&gt; 
-#&gt;     intersect, setdiff, setequal, union</code></pre>
 <div id="introduction" class="section level1">
 <h1 class="hasAnchor">
 <a href="#introduction" class="anchor"></a>Introduction</h1>
@@ -146,7 +138,7 @@
 <h3 class="hasAnchor">
 <a href="#processing-raw-mutation-data" class="anchor"></a>Processing raw mutation data</h3>
 <p>We included in <code>gnomeR</code> an example of raw downloaded MAF file directly from the website in the <code>mut</code> dataset. We show here an example selecting a random subset of 100 samples in the <code>mut</code> dataset:</p>
-<div class="sourceCode" id="cb3"><html><body><pre class="r"><span class="fu">as_tibble</span>(<span class="no">mut</span>)
+<div class="sourceCode" id="cb2"><html><body><pre class="r"><span class="fu">as_tibble</span>(<span class="no">mut</span>)
 <span class="co">#&gt; # A tibble: 3,179 x 45</span>
 <span class="co">#&gt;    Hugo_Symbol Entrez_Gene_Id Center NCBI_Build Chromosome Start_Position</span>
 <span class="co">#&gt;    &lt;fct&gt;       &lt;lgl&gt;          &lt;lgl&gt;  &lt;fct&gt;      &lt;fct&gt;               &lt;int&gt;</span>
@@ -325,7 +317,7 @@
 </tbody>
 </table>
 <p>Note that by default in the situation above the outputted dataframe is a binary matrix made from all types of mutations and adjusting the features for the platform they were added on. Thus all samples that were sequenced on the original platform have NA’s in the cells of for features that were added on subsequent platforms. In the case where the user plans on using methods that do not accept missing values, the <code>spe.plat</code> argument can be changed to FALSE to replace all the NA’s mentioned above to 0. We show below such an example, we moreover make this example including only SNPs (including silent mutations):</p>
-<div class="sourceCode" id="cb4"><html><body><pre class="r"><span class="no">df</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/binmat.html">binmat</a></span>(<span class="kw">patients</span> <span class="kw">=</span> <span class="no">samples</span> ,<span class="kw">maf</span> <span class="kw">=</span> <span class="no">mut</span>, <span class="kw">SNP.only</span> <span class="kw">=</span> <span class="fl">TRUE</span>, <span class="kw">include.silent</span> <span class="kw">=</span> <span class="fl">TRUE</span>, <span class="kw">spe.plat</span> <span class="kw">=</span> <span class="fl">FALSE</span>)
+<div class="sourceCode" id="cb3"><html><body><pre class="r"><span class="no">df</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/binmat.html">binmat</a></span>(<span class="kw">patients</span> <span class="kw">=</span> <span class="no">samples</span> ,<span class="kw">maf</span> <span class="kw">=</span> <span class="no">mut</span>, <span class="kw">SNP.only</span> <span class="kw">=</span> <span class="fl">TRUE</span>, <span class="kw">include.silent</span> <span class="kw">=</span> <span class="fl">TRUE</span>, <span class="kw">spe.plat</span> <span class="kw">=</span> <span class="fl">FALSE</span>)
 <span class="fu">kable</span>(<span class="no">df</span>[<span class="fl">1</span>:<span class="fl">10</span>, <span class="fl">1</span>:<span class="fl">10</span>])</pre></body></html></div>
 <table class="table">
 <thead><tr class="header">
@@ -479,18 +471,9 @@
 <h3 class="hasAnchor">
 <a href="#processing-mutation-data-from-the-api" class="anchor"></a>Processing mutation data from the API</h3>
 <p>In this section we show the same examples as above but using the data downloaded through the API:</p>
-<div class="sourceCode" id="cb5"><html><body><pre class="r"><span class="no">dat</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/get_genetics.html">get_genetics</a></span>(<span class="kw">sample_ids</span> <span class="kw">=</span> <span class="no">samples</span>, <span class="kw">fusions</span> <span class="kw">=</span> <span class="fl">FALSE</span>, <span class="kw">cna</span> <span class="kw">=</span> <span class="fl">FALSE</span>)
+<div class="sourceCode" id="cb4"><html><body><pre class="r"><span class="no">dat</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/get_genetics.html">get_genetics</a></span>(<span class="kw">sample_ids</span> <span class="kw">=</span> <span class="no">samples</span>, <span class="kw">fusions</span> <span class="kw">=</span> <span class="fl">FALSE</span>, <span class="kw">cna</span> <span class="kw">=</span> <span class="fl">FALSE</span>)
 <span class="co">#&gt; [1] "https://cbioportal.mskcc.org/api/molecular-profiles/mskimpact_mutations/mutations/fetch?"</span>
-<span class="co">#&gt; No encoding supplied: defaulting to UTF-8.</span>
 <span class="no">df</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/binmat.html">binmat</a></span>(<span class="kw">maf</span> <span class="kw">=</span> <span class="no">dat</span>$<span class="no">mut</span>)
-<span class="co">#&gt; Warning in createbin.maf(obj = maf, patients = patients, mut.type = mut.type, :</span>
-<span class="co">#&gt; KMT2D has been recoded to MLL2</span>
-<span class="co">#&gt; Warning in createbin.maf(obj = maf, patients = patients, mut.type = mut.type, :</span>
-<span class="co">#&gt; KMT2C has been recoded to MLL3</span>
-<span class="co">#&gt; Warning in createbin.maf(obj = maf, patients = patients, mut.type = mut.type, :</span>
-<span class="co">#&gt; Some patients did not have any mutations found in the MAF file.P-0012381-</span>
-<span class="co">#&gt; T01-IM5,P-0007149-T01-IM5,P-0001308-T01-IM3,P-0000427-T01-IM3,P-0000955-T01-</span>
-<span class="co">#&gt; IM3,P-0001890-T01-IM3,P-0004491-T01-IM5</span>
 <span class="fu">kable</span>(<span class="no">df</span>[<span class="fl">1</span>:<span class="fl">10</span>, <span class="fl">1</span>:<span class="fl">10</span>])</pre></body></html></div>
 <table class="table">
 <thead><tr class="header">
@@ -640,15 +623,7 @@
 </tbody>
 </table>
 <p>Similarly,</p>
-<div class="sourceCode" id="cb6"><html><body><pre class="r"><span class="no">df</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/binmat.html">binmat</a></span>(<span class="kw">maf</span> <span class="kw">=</span> <span class="no">dat</span>$<span class="no">mut</span>, <span class="kw">SNP.only</span> <span class="kw">=</span> <span class="fl">TRUE</span>, <span class="kw">include.silent</span> <span class="kw">=</span> <span class="fl">TRUE</span>, <span class="kw">spe.plat</span> <span class="kw">=</span> <span class="fl">FALSE</span>)
-<span class="co">#&gt; Warning in createbin.maf(obj = maf, patients = patients, mut.type = mut.type, :</span>
-<span class="co">#&gt; KMT2D has been recoded to MLL2</span>
-<span class="co">#&gt; Warning in createbin.maf(obj = maf, patients = patients, mut.type = mut.type, :</span>
-<span class="co">#&gt; KMT2C has been recoded to MLL3</span>
-<span class="co">#&gt; Warning in createbin.maf(obj = maf, patients = patients, mut.type = mut.type, :</span>
-<span class="co">#&gt; Some patients did not have any mutations found in the MAF file.P-0012381-</span>
-<span class="co">#&gt; T01-IM5,P-0007149-T01-IM5,P-0001308-T01-IM3,P-0000427-T01-IM3,P-0000955-T01-</span>
-<span class="co">#&gt; IM3,P-0001890-T01-IM3,P-0004491-T01-IM5</span>
+<div class="sourceCode" id="cb5"><html><body><pre class="r"><span class="no">df</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/binmat.html">binmat</a></span>(<span class="kw">maf</span> <span class="kw">=</span> <span class="no">dat</span>$<span class="no">mut</span>, <span class="kw">SNP.only</span> <span class="kw">=</span> <span class="fl">TRUE</span>, <span class="kw">include.silent</span> <span class="kw">=</span> <span class="fl">TRUE</span>, <span class="kw">spe.plat</span> <span class="kw">=</span> <span class="fl">FALSE</span>)
 <span class="fu">kable</span>(<span class="no">df</span>[<span class="fl">1</span>:<span class="fl">10</span>, <span class="fl">1</span>:<span class="fl">10</span>])</pre></body></html></div>
 <table class="table">
 <thead><tr class="header">
@@ -807,7 +782,7 @@
 <h3 class="hasAnchor">
 <a href="#processing-raw-fusion-data" class="anchor"></a>Processing raw fusion data</h3>
 <p>We included in <code>gnomeR</code> an example of raw downloaded MAF file directly from the website in the <code>fusion</code> dataset. We show here an example selecting the same random subset of 100 samples as in the previous section:</p>
-<div class="sourceCode" id="cb7"><html><body><pre class="r"><span class="fu">as_tibble</span>(<span class="no">fusion</span>)
+<div class="sourceCode" id="cb6"><html><body><pre class="r"><span class="fu">as_tibble</span>(<span class="no">fusion</span>)
 <span class="co">#&gt; # A tibble: 127 x 10</span>
 <span class="co">#&gt;    Hugo_Symbol Entrez_Gene_Id Center Tumor_Sample_Ba… Fusion DNA_support</span>
 <span class="co">#&gt;    &lt;fct&gt;                &lt;int&gt; &lt;fct&gt;  &lt;fct&gt;            &lt;fct&gt;  &lt;fct&gt;      </span>
@@ -977,20 +952,9 @@
 <h3 class="hasAnchor">
 <a href="#processing-fusions-from-the-api" class="anchor"></a>Processing fusions from the API</h3>
 <p>In the API provided in <code>gnomeR</code> the fusion data comes merged with the mutation data. Note that we included an option to automatically filter them out if the user wishes so.</p>
-<div class="sourceCode" id="cb8"><html><body><pre class="r"><span class="no">dat</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/get_genetics.html">get_genetics</a></span>(<span class="kw">sample_ids</span> <span class="kw">=</span> <span class="no">samples</span>,<span class="kw">mutations</span> <span class="kw">=</span> <span class="fl">FALSE</span>, <span class="kw">fusions</span> <span class="kw">=</span> <span class="fl">TRUE</span>, <span class="kw">cna</span> <span class="kw">=</span> <span class="fl">FALSE</span>)
+<div class="sourceCode" id="cb7"><html><body><pre class="r"><span class="no">dat</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/get_genetics.html">get_genetics</a></span>(<span class="kw">sample_ids</span> <span class="kw">=</span> <span class="no">samples</span>,<span class="kw">mutations</span> <span class="kw">=</span> <span class="fl">FALSE</span>, <span class="kw">fusions</span> <span class="kw">=</span> <span class="fl">TRUE</span>, <span class="kw">cna</span> <span class="kw">=</span> <span class="fl">FALSE</span>)
 <span class="co">#&gt; [1] "https://cbioportal.mskcc.org/api/molecular-profiles/mskimpact_mutations/mutations/fetch?"</span>
-<span class="co">#&gt; No encoding supplied: defaulting to UTF-8.</span>
 <span class="no">df</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/binmat.html">binmat</a></span>(<span class="kw">maf</span> <span class="kw">=</span> <span class="no">dat</span>$<span class="no">mut</span>)
-<span class="co">#&gt; Warning in binmat(maf = dat$mut): Fusions were found in the maf file, they were</span>
-<span class="co">#&gt; removed and a fusion file was created.</span>
-<span class="co">#&gt; Warning in createbin.maf(obj = maf, patients = patients, mut.type = mut.type, :</span>
-<span class="co">#&gt; KMT2D has been recoded to MLL2</span>
-<span class="co">#&gt; Warning in createbin.maf(obj = maf, patients = patients, mut.type = mut.type, :</span>
-<span class="co">#&gt; KMT2C has been recoded to MLL3</span>
-<span class="co">#&gt; Warning in createbin.maf(obj = maf, patients = patients, mut.type = mut.type, :</span>
-<span class="co">#&gt; Some patients did not have any mutations found in the MAF file.P-0012381-</span>
-<span class="co">#&gt; T01-IM5,P-0007149-T01-IM5,P-0001308-T01-IM3,P-0000427-T01-IM3,P-0000955-T01-</span>
-<span class="co">#&gt; IM3,P-0001890-T01-IM3,P-0004491-T01-IM5</span>
 <span class="fu">kable</span>(<span class="no">df</span>[<span class="fl">1</span>:<span class="fl">10</span>, <span class="fl">1</span>:<span class="fl">10</span>])</pre></body></html></div>
 <table class="table">
 <thead><tr class="header">
@@ -1158,7 +1122,7 @@
 <h3 class="hasAnchor">
 <a href="#processing-raw-cna-data" class="anchor"></a>Processing raw CNA data</h3>
 <p>By default amplifications and deletions will be separated and only deep deletions/full amplifications will accounted as shown below.</p>
-<div class="sourceCode" id="cb9"><html><body><pre class="r"><span class="no">df</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/binmat.html">binmat</a></span>(<span class="kw">patients</span> <span class="kw">=</span> <span class="no">samples</span>, <span class="kw">cna</span> <span class="kw">=</span> <span class="no">cna</span>)
+<div class="sourceCode" id="cb8"><html><body><pre class="r"><span class="no">df</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/binmat.html">binmat</a></span>(<span class="kw">patients</span> <span class="kw">=</span> <span class="no">samples</span>, <span class="kw">cna</span> <span class="kw">=</span> <span class="no">cna</span>)
 <span class="fu">kable</span>(<span class="no">df</span>[<span class="fl">1</span>:<span class="fl">10</span>, <span class="fl">1</span>:<span class="fl">10</span>])</pre></body></html></div>
 <table class="table">
 <thead><tr class="header">
@@ -1308,7 +1272,7 @@
 </tbody>
 </table>
 <p>Setting <code>cna.binary</code> argument to FALSE yields the following events coded in a single column with their original levels:</p>
-<div class="sourceCode" id="cb10"><html><body><pre class="r"><span class="no">df</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/binmat.html">binmat</a></span>(<span class="kw">patients</span> <span class="kw">=</span> <span class="no">samples</span>, <span class="kw">cna</span> <span class="kw">=</span> <span class="no">cna</span>, <span class="kw">cna.binary</span> <span class="kw">=</span> <span class="fl">FALSE</span>)
+<div class="sourceCode" id="cb9"><html><body><pre class="r"><span class="no">df</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/binmat.html">binmat</a></span>(<span class="kw">patients</span> <span class="kw">=</span> <span class="no">samples</span>, <span class="kw">cna</span> <span class="kw">=</span> <span class="no">cna</span>, <span class="kw">cna.binary</span> <span class="kw">=</span> <span class="fl">FALSE</span>)
 <span class="fu">kable</span>(<span class="no">df</span>[<span class="fl">1</span>:<span class="fl">10</span>, <span class="fl">1</span>:<span class="fl">10</span>])</pre></body></html></div>
 <table class="table">
 <thead><tr class="header">
@@ -1451,9 +1415,8 @@
 <h3 class="hasAnchor">
 <a href="#processing-cna-data-from-the-api" class="anchor"></a>Processing CNA data from the API</h3>
 <p>Setting the <code>cna</code> argument to TRUE in the <code><a href="../reference/get_genetics.html">get_genetics()</a></code> function will retrieve the CNA data for the specified samples that can then further be processed in a similar fashion to the above:</p>
-<div class="sourceCode" id="cb11"><html><body><pre class="r"><span class="no">dat</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/get_genetics.html">get_genetics</a></span>(<span class="kw">sample_ids</span> <span class="kw">=</span> <span class="no">samples</span>,<span class="kw">mutations</span> <span class="kw">=</span> <span class="fl">FALSE</span>, <span class="kw">fusions</span> <span class="kw">=</span> <span class="fl">FALSE</span>, <span class="kw">cna</span> <span class="kw">=</span> <span class="fl">TRUE</span>)
+<div class="sourceCode" id="cb10"><html><body><pre class="r"><span class="no">dat</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/get_genetics.html">get_genetics</a></span>(<span class="kw">sample_ids</span> <span class="kw">=</span> <span class="no">samples</span>,<span class="kw">mutations</span> <span class="kw">=</span> <span class="fl">FALSE</span>, <span class="kw">fusions</span> <span class="kw">=</span> <span class="fl">FALSE</span>, <span class="kw">cna</span> <span class="kw">=</span> <span class="fl">TRUE</span>)
 <span class="co">#&gt; [1] "https://cbioportal.mskcc.org/api/molecular-profiles/mskimpact_cna/discrete-copy-number/fetch?"</span>
-<span class="co">#&gt; No encoding supplied: defaulting to UTF-8.</span>
 <span class="no">df</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/binmat.html">binmat</a></span>(<span class="kw">patients</span> <span class="kw">=</span> <span class="no">samples</span>, <span class="kw">cna</span> <span class="kw">=</span> <span class="no">dat</span>$<span class="no">cna</span>)
 <span class="fu">kable</span>(<span class="no">df</span>[<span class="fl">1</span>:<span class="fl">10</span>, <span class="fl">1</span>:<span class="fl">10</span>])</pre></body></html></div>
 <table class="table">
@@ -1604,9 +1567,8 @@
 </tbody>
 </table>
 <p>Setting <code>cna.binary</code> argument to FALSE yields the following events coded in a single column with their original levels:</p>
-<div class="sourceCode" id="cb12"><html><body><pre class="r"><span class="no">dat</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/get_genetics.html">get_genetics</a></span>(<span class="kw">sample_ids</span> <span class="kw">=</span> <span class="no">samples</span>,<span class="kw">mutations</span> <span class="kw">=</span> <span class="fl">FALSE</span>, <span class="kw">fusions</span> <span class="kw">=</span> <span class="fl">FALSE</span>, <span class="kw">cna</span> <span class="kw">=</span> <span class="fl">TRUE</span>)
+<div class="sourceCode" id="cb11"><html><body><pre class="r"><span class="no">dat</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/get_genetics.html">get_genetics</a></span>(<span class="kw">sample_ids</span> <span class="kw">=</span> <span class="no">samples</span>,<span class="kw">mutations</span> <span class="kw">=</span> <span class="fl">FALSE</span>, <span class="kw">fusions</span> <span class="kw">=</span> <span class="fl">FALSE</span>, <span class="kw">cna</span> <span class="kw">=</span> <span class="fl">TRUE</span>)
 <span class="co">#&gt; [1] "https://cbioportal.mskcc.org/api/molecular-profiles/mskimpact_cna/discrete-copy-number/fetch?"</span>
-<span class="co">#&gt; No encoding supplied: defaulting to UTF-8.</span>
 <span class="no">df</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/binmat.html">binmat</a></span>(<span class="kw">patients</span> <span class="kw">=</span> <span class="no">samples</span>, <span class="kw">cna</span> <span class="kw">=</span> <span class="no">dat</span>$<span class="no">cna</span>,<span class="kw">cna.binary</span> <span class="kw">=</span> <span class="fl">FALSE</span>)
 <span class="fu">kable</span>(<span class="no">df</span>[<span class="fl">1</span>:<span class="fl">10</span>, <span class="fl">1</span>:<span class="fl">10</span>])</pre></body></html></div>
 <table class="table">
@@ -1755,7 +1717,7 @@
 <h3 class="hasAnchor">
 <a href="#using-raw-data-files" class="anchor"></a>Using raw data files</h3>
 <p>Once again we show how to perform this using the files directly downloaded from cBioPortal, combining the example sets <code>mut</code>, <code>fusion</code> and <code>cna</code>:</p>
-<div class="sourceCode" id="cb13"><html><body><pre class="r"><span class="no">df</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/binmat.html">binmat</a></span>(<span class="kw">patients</span> <span class="kw">=</span> <span class="no">samples</span>,<span class="kw">maf</span> <span class="kw">=</span> <span class="no">mut</span>, <span class="kw">fusion</span> <span class="kw">=</span> <span class="no">fusion</span>, <span class="kw">cna</span> <span class="kw">=</span> <span class="no">cna</span>, <span class="kw">cna.binary</span> <span class="kw">=</span> <span class="fl">FALSE</span>)
+<div class="sourceCode" id="cb12"><html><body><pre class="r"><span class="no">df</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/binmat.html">binmat</a></span>(<span class="kw">patients</span> <span class="kw">=</span> <span class="no">samples</span>,<span class="kw">maf</span> <span class="kw">=</span> <span class="no">mut</span>, <span class="kw">fusion</span> <span class="kw">=</span> <span class="no">fusion</span>, <span class="kw">cna</span> <span class="kw">=</span> <span class="no">cna</span>, <span class="kw">cna.binary</span> <span class="kw">=</span> <span class="fl">FALSE</span>)
 <span class="fu">kable</span>(<span class="no">df</span>[<span class="fl">1</span>:<span class="fl">10</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>:<span class="fl">3</span>,<span class="fl">243</span>,<span class="fl">244</span>,<span class="fl">300</span>:<span class="fl">305</span>)])</pre></body></html></div>
 <table class="table">
 <thead><tr class="header">
@@ -1920,23 +1882,10 @@
 <h3 class="hasAnchor">
 <a href="#from-the-api" class="anchor"></a>From the API</h3>
 <p>Similarly we get retrieve all the genetic events at once through the <code><a href="../reference/get_genetics.html">get_genetics()</a></code> function and proceed to process them.</p>
-<div class="sourceCode" id="cb14"><html><body><pre class="r"><span class="no">dat</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/get_genetics.html">get_genetics</a></span>(<span class="kw">sample_ids</span> <span class="kw">=</span> <span class="no">samples</span>,<span class="kw">mutations</span> <span class="kw">=</span> <span class="fl">TRUE</span>, <span class="kw">fusions</span> <span class="kw">=</span> <span class="fl">TRUE</span>, <span class="kw">cna</span> <span class="kw">=</span> <span class="fl">TRUE</span>)
+<div class="sourceCode" id="cb13"><html><body><pre class="r"><span class="no">dat</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/get_genetics.html">get_genetics</a></span>(<span class="kw">sample_ids</span> <span class="kw">=</span> <span class="no">samples</span>,<span class="kw">mutations</span> <span class="kw">=</span> <span class="fl">TRUE</span>, <span class="kw">fusions</span> <span class="kw">=</span> <span class="fl">TRUE</span>, <span class="kw">cna</span> <span class="kw">=</span> <span class="fl">TRUE</span>)
 <span class="co">#&gt; [1] "https://cbioportal.mskcc.org/api/molecular-profiles/mskimpact_mutations/mutations/fetch?"</span>
-<span class="co">#&gt; No encoding supplied: defaulting to UTF-8.</span>
 <span class="co">#&gt; [1] "https://cbioportal.mskcc.org/api/molecular-profiles/mskimpact_cna/discrete-copy-number/fetch?"</span>
-<span class="co">#&gt; No encoding supplied: defaulting to UTF-8.</span>
 <span class="no">df</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/binmat.html">binmat</a></span>(<span class="kw">patients</span> <span class="kw">=</span> <span class="no">samples</span>,<span class="kw">maf</span> <span class="kw">=</span> <span class="no">dat</span>$<span class="no">mut</span>, <span class="kw">cna</span> <span class="kw">=</span> <span class="no">dat</span>$<span class="no">cna</span>,<span class="kw">cna.binary</span> <span class="kw">=</span> <span class="fl">FALSE</span>)
-<span class="co">#&gt; Warning in binmat(patients = samples, maf = dat$mut, cna = dat$cna, cna.binary =</span>
-<span class="co">#&gt; FALSE): Fusions were found in the maf file, they were removed and a fusion file</span>
-<span class="co">#&gt; was created.</span>
-<span class="co">#&gt; Warning in createbin.maf(obj = maf, patients = patients, mut.type = mut.type, :</span>
-<span class="co">#&gt; KMT2D has been recoded to MLL2</span>
-<span class="co">#&gt; Warning in createbin.maf(obj = maf, patients = patients, mut.type = mut.type, :</span>
-<span class="co">#&gt; KMT2C has been recoded to MLL3</span>
-<span class="co">#&gt; Warning in createbin.maf(obj = maf, patients = patients, mut.type = mut.type, :</span>
-<span class="co">#&gt; Some patients did not have any mutations found in the MAF file.P-0007149-</span>
-<span class="co">#&gt; T01-IM5,P-0001890-T01-IM3,P-0012381-T01-IM5,P-0003064-T01-IM3,P-0004491-T01-</span>
-<span class="co">#&gt; IM5,P-0001308-T01-IM3,P-0000244-T01-IM3,P-0000427-T01-IM3,P-0000955-T01-IM3</span>
 <span class="fu">kable</span>(<span class="no">df</span>[<span class="fl">1</span>:<span class="fl">10</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>:<span class="fl">3</span>,<span class="fl">243</span>,<span class="fl">244</span>,<span class="fl">300</span>:<span class="fl">305</span>)])</pre></body></html></div>
 <table class="table">
 <thead><tr class="header">
@@ -2104,7 +2053,7 @@
 <h1 class="hasAnchor">
 <a href="#facets" class="anchor"></a>FACETs</h1>
 <p>The copy-number alterations data we have covered up to now is a discrete estimation of the alterations that occured. There however exist more nuanced and accurate data for copy-number alterations observed in a tumor. In <code>gnomeR</code> we include an example of segmentation file and relevant functions from the <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5027494/"><code>facets</code></a> package that provides an allele-specific copy number and clonal heterogeneity analysis tool for high-throughput DNA sequencing. We show below an example of a segmentation file included in <code>gnomeR</code> (<code>seg</code> dataset) and how to process it:</p>
-<div class="sourceCode" id="cb15"><html><body><pre class="r"><span class="fu">kable</span>(<span class="no">seg</span>[<span class="fl">1</span>:<span class="fl">10</span>,])</pre></body></html></div>
+<div class="sourceCode" id="cb14"><html><body><pre class="r"><span class="fu">kable</span>(<span class="no">seg</span>[<span class="fl">1</span>:<span class="fl">10</span>,])</pre></body></html></div>
 <table class="table">
 <thead><tr class="header">
 <th align="left">ID</th>
@@ -2214,9 +2163,9 @@
 <li>
 <code>adaptive</code>: CNregions option to create adaptive segments. Default is FALSE.</li>
 </ul>
-<div class="sourceCode" id="cb16"><html><body><pre class="r"><span class="no">facet</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/facets.dat.html">facets.dat</a></span>(<span class="kw">seg</span> <span class="kw">=</span> <span class="no">seg</span>, <span class="kw">patients</span> <span class="kw">=</span> <span class="no">samples</span>, <span class="kw">epsilon</span> <span class="kw">=</span> <span class="fl">0.005</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb15"><html><body><pre class="r"><span class="no">facet</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/facets.dat.html">facets.dat</a></span>(<span class="kw">seg</span> <span class="kw">=</span> <span class="no">seg</span>, <span class="kw">patients</span> <span class="kw">=</span> <span class="no">samples</span>, <span class="kw">epsilon</span> <span class="kw">=</span> <span class="fl">0.005</span>)</pre></body></html></div>
 <p>This function returns a dataframe that is ready for visualization and analysis with samples as rows and processed segments as columns:</p>
-<div class="sourceCode" id="cb17"><html><body><pre class="r"><span class="fu">kable</span>(<span class="no">facet</span>$<span class="no">out.cn</span>[<span class="fl">1</span>:<span class="fl">5</span>,<span class="fl">1</span>:<span class="fl">3</span>])</pre></body></html></div>
+<div class="sourceCode" id="cb16"><html><body><pre class="r"><span class="fu">kable</span>(<span class="no">facet</span>$<span class="no">out.cn</span>[<span class="fl">1</span>:<span class="fl">5</span>,<span class="fl">1</span>:<span class="fl">3</span>])</pre></body></html></div>
 <table class="table">
 <thead><tr class="header">
 <th></th>
