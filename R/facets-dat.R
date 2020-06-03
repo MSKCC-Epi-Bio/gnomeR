@@ -7,8 +7,8 @@
 #' @param path the relative path to the files folder from your current directory
 #' @param patients the names of the patients of the respective filenames. Default simply 1 to number of files.
 #' @param min.purity the minimum purity of the sample required to be kept in the final dataset. Default is 0.3.
-#' @param epsilon level of unions when aggregating segments between
-#' @param adaptive CNregions option to create adaptive segments
+#' @param epsilon level of unions when aggregating segments between. Default is 0.005.
+#' @param adaptive CNregions option to create adaptive segments. Default is FALSE.
 #' @return out.cn : a matrix of the union of all segment files with patients as rows and segments as columns
 #' @return ploidy : a vector of the ploidy values for the patients in out.cn
 #' @return purity : a vector of the purity values for the patients in out.cn

@@ -25,9 +25,9 @@ facets.dat(
 
 \item{min.purity}{the minimum purity of the sample required to be kept in the final dataset. Default is 0.3.}
 
-\item{epsilon}{level of unions when aggregating segments between}
+\item{epsilon}{level of unions when aggregating segments between. Default is 0.005.}
 
-\item{adaptive}{CNregions option to create adaptive segments}
+\item{adaptive}{CNregions option to create adaptive segments. Default is FALSE.}
 }
 \value{
 out.cn : a matrix of the union of all segment files with patients as rows and segments as columns

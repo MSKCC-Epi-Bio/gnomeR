@@ -21,6 +21,7 @@ library(gnomeR)
 ```{r, echo=F}
 library(tibble)
 library(knitr)
+library(dplyr)
 set.seed(123)
 ```
 
@@ -188,3 +189,32 @@ kable(df[1:10, c(1:3,243,244,300:305)])
 ```
 
 Note that here the fusions are embedded in the mutation file.
+
+
+# FACETs
+
+The copy-number alterations data we have covered up to now is a discrete estimation of the alterations that occured. There however exist more nuanced and accurate data for copy-number alterations observed in a tumor. In `gnomeR` we include an example of segmentation file and relevant functions from the [`facets`](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5027494/) package that provides an allele-specific copy number and clonal heterogeneity analysis tool for high-throughput DNA sequencing. We show below an example of a segmentation file included in `gnomeR` (`seg` dataset) and how to process it:
+
+```{r}
+kable(seg[1:10,])
+```
+
+We see that this files include segments of all chromosome for each patient with the number of marks and mean intensity in that segments. We can process this data into a format that can be used for visualization and analysis using the `facets.dat()` function that takes the following arguments:
+
+- `seg`: a segmentation file
+- `filenames`: the names of the segment files to be loaded and processed (Note must end in ".Rdata").
+- `path`: the relative path to the files folder from your current directory
+- `patients`: the names of the patients of the respective filenames. Default is using all samples available.
+- `min.purity`: the minimum purity of the sample required to be kept in the final dataset. Default is 0.3.
+- `epsilon`: level of unions when aggregating segments between. Default is 0.005.
+- `adaptive`: CNregions option to create adaptive segments. Default is FALSE.
+
+```{r, message = F, warning = F}
+facet <- facets.dat(seg = seg, patients = samples, epsilon = 0.005)
+```
+
+This function returns a dataframe that is ready for visualization and analysis with samples as rows and processed segments as columns:
+
+```{r, message = F, warning = F}
+kable(facet$out.cn[1:5,1:3])
+```

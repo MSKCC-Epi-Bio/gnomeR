@@ -102,3 +102,22 @@ rownames(dat.gen) <- rownames(clin.patients.dat)
 plot_oncoPrint(gen.dat = dat.gen,
                clin.dat = clin.patients.dat)
 ```
+
+# Advanced visualiztion 
+
+The copy-number alterations data we have covered up to now is a discrete estimation of the alterations that occured. There however exist more nuanced and accurate data for copy-number alterations observed in a tumor. In `gnomeR` we include an example of segmentation file and relevant functions from the [`facets`](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5027494/) package that provides an allele-specific copy number and clonal heterogeneity analysis tool for high-throughput DNA sequencing. We show in this section how to visualize this data:
+
+```{r, message = F, warning = F}
+set.seed(123)
+samples <- as.character(unique(mut$Tumor_Sample_Barcode))[sample(1:length(unique(mut$Tumor_Sample_Barcode)), 100, replace=FALSE)]
+p.heat <- facets.heatmap(seg = seg, patients = samples, min.purity = 0)
+p.heat$p
+```
+
+In the heatmap above we show the estimate gains and losses over segments in each chromosomes (rows) and in each patient (columns). Now that the purity of the tumor sample is an important factor in order to get reliable data. Moreover we include argument `ordered` and `outcome` that enables the user to sort the heatmap by a specific feature of interest. We show an example below with a simulated feature of outcome:
+
+```{r, message = F, warning = F}
+outcome <- rnorm(length(samples))
+p.heat <- facets.heatmap(seg = seg, patients = samples, min.purity = 0, outcome = outcome, ordered = order(outcome))
+p.heat$p
+```

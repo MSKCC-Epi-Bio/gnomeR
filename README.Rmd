@@ -45,7 +45,7 @@ devtools::install_github("AxelitoMartin/gnomeR")
 
 ### Setting up the API
 
-In order to download the data from CbioPortal, one must first require a token from the website [CbioPortal](https://cbiologin.mskcc.org/) wich will prompt a login page with your MSKCC credentials. Then navigate to "Web API" in the top bar menu, following this simply download a token and copy it after running the following command in R:
+In order to download the data from CbioPortal, one must first require a token from the website [CbioPortal](https://cbioportal.mskcc.org/) wich will prompt a login page with your MSKCC credentials. Then navigate to "Web API" in the top bar menu, following this simply download a token and copy it after running the following command in R:
 
 
 ```{r,eval=F}
@@ -162,11 +162,3 @@ kable(out$tab[1:10,],row.names = T)
 # out$p
 out$KM[[1]]
 ```
-
-##### OncoCast
-
-Axel will integrate this
-
-#### SurvClust
-
-Arshi will integrate this 
