@@ -122,7 +122,7 @@
 <div id="setting-up-the-api" class="section level3">
 <h3 class="hasAnchor">
 <a href="#setting-up-the-api" class="anchor"></a>Setting up the API</h3>
-<p>In order to download the data from CbioPortal, one must first require a token from the website <a href="https://cbiologin.mskcc.org/">CbioPortal</a> wich will prompt a login page with your MSKCC credentials. Then navigate to “Web API” in the top bar menu, following this simply download a token and copy it after running the following command in R:</p>
+<p>In order to download the data from CbioPortal, one must first require a token from the website <a href="https://cbioportal.mskcc.org/">CbioPortal</a> wich will prompt a login page with your MSKCC credentials. Then navigate to “Web API” in the top bar menu, following this simply download a token and copy it after running the following command in R:</p>
 <div class="sourceCode" id="cb2"><pre class="r"><span class="kw pkg">usethis</span><span class="kw ns">::</span><span class="fu"><a href="https://usethis.r-lib.org/reference/edit.html">edit_r_environ</a></span>()</pre></div>
 <p>And pasting the token you were given in the .Renviron file that was created and saving after pasting your token.</p>
 <div class="sourceCode" id="cb3"><pre class="r"><span class="no">CBIOPORTAL_TOKEN</span> <span class="kw">=</span> <span class="st">'YOUR_TOKEN'</span></pre></div>
@@ -510,47 +510,47 @@
 <tr class="odd">
 <td>1</td>
 <td align="left">MLL</td>
-<td align="right">-57.700</td>
+<td align="right">-1.480</td>
 <td align="right">0.604</td>
 <td align="right">0.09</td>
 <td align="right">0.6043112</td>
-<td align="right">1</td>
+<td align="right">0.228</td>
 </tr>
 <tr class="even">
 <td>2</td>
 <td align="left">STK11</td>
-<td align="right">-28.400</td>
+<td align="right">-1.460</td>
 <td align="right">0.912</td>
 <td align="right">0.07</td>
 <td align="right">0.9122695</td>
-<td align="right">1</td>
+<td align="right">0.233</td>
 </tr>
 <tr class="odd">
 <td>3</td>
 <td align="left">KEAP1</td>
-<td align="right">-7.940</td>
+<td align="right">-1.020</td>
 <td align="right">0.912</td>
 <td align="right">0.05</td>
 <td align="right">0.9122695</td>
-<td align="right">1</td>
+<td align="right">0.362</td>
 </tr>
 <tr class="even">
 <td>4</td>
 <td align="left">NOTCH1</td>
-<td align="right">0.652</td>
+<td align="right">0.609</td>
 <td align="right">0.912</td>
 <td align="right">0.08</td>
 <td align="right">0.9122695</td>
-<td align="right">1</td>
+<td align="right">1.840</td>
 </tr>
 <tr class="odd">
 <td>5</td>
 <td align="left">DOT1L</td>
-<td align="right">0.677</td>
+<td align="right">0.659</td>
 <td align="right">0.912</td>
 <td align="right">0.05</td>
 <td align="right">0.9122695</td>
-<td align="right">1</td>
+<td align="right">1.930</td>
 </tr>
 <tr class="even">
 <td>6</td>
@@ -559,43 +559,43 @@
 <td align="right">0.912</td>
 <td align="right">0.05</td>
 <td align="right">0.9122695</td>
-<td align="right">1</td>
+<td align="right">2.120</td>
 </tr>
 <tr class="odd">
 <td>7</td>
 <td align="left">MYC.Amp</td>
-<td align="right">-15.600</td>
+<td align="right">-1.200</td>
 <td align="right">0.912</td>
 <td align="right">0.06</td>
 <td align="right">0.9122695</td>
-<td align="right">1</td>
+<td align="right">0.301</td>
 </tr>
 <tr class="even">
 <td>8</td>
 <td align="left">CDH1</td>
-<td align="right">0.652</td>
+<td align="right">0.605</td>
 <td align="right">0.912</td>
 <td align="right">0.06</td>
 <td align="right">0.9122695</td>
-<td align="right">1</td>
+<td align="right">1.830</td>
 </tr>
 <tr class="odd">
 <td>9</td>
 <td align="left">FGFR1.Amp</td>
-<td align="right">-5.370</td>
+<td align="right">-0.826</td>
 <td align="right">0.912</td>
 <td align="right">0.06</td>
 <td align="right">0.9122695</td>
-<td align="right">1</td>
+<td align="right">0.438</td>
 </tr>
 <tr class="even">
 <td>10</td>
 <td align="left">EPHA5</td>
-<td align="right">-10.500</td>
+<td align="right">-1.080</td>
 <td align="right">0.912</td>
 <td align="right">0.05</td>
 <td align="right">0.9122695</td>
-<td align="right">1</td>
+<td align="right">0.340</td>
 </tr>
 </tbody>
 </table>
@@ -603,16 +603,6 @@
 <span class="no">out</span>$<span class="no">KM</span><span class="kw">[[</span><span class="fl">1</span>]]</pre></div>
 <p><img src="reference/figures/README-unnamed-chunk-12-1.png" width="100%"></p>
 </div>
-<div id="oncocast" class="section level5">
-<h5 class="hasAnchor">
-<a href="#oncocast" class="anchor"></a>OncoCast</h5>
-<p>Axel will integrate this</p>
-</div>
-</div>
-<div id="survclust" class="section level4">
-<h4 class="hasAnchor">
-<a href="#survclust" class="anchor"></a>SurvClust</h4>
-<p>Arshi will integrate this</p>
 </div>
 </div>
 </div>
