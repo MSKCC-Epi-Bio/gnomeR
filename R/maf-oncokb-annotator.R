@@ -2,7 +2,7 @@
 #' OncoKB annotator for MAF files.
 #' @param input A MAF file to be annotated.
 #' @param output Name of the output file
-#' @param lib.path Path to the
+#' @param lib.path Path to the gnomeR library
 #' @return OncoKb annotate MAF.
 #' @export
 #' @examples

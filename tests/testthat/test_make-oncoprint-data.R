@@ -26,7 +26,7 @@ test_that("make data while throwing warnings",{
   gen.dat[,1] <- sample(c("A","B"), size = nrow(gen.dat), replace = TRUE)
   expect_warning(out <- dat.oncoPrint(gen.dat))
   expect_true(is.matrix(out))
-  expect_true(all(dim(out) == c(14,200)))
+  expect_true(all(dim(out) == c(15,200)))
 
 })
 

@@ -19,6 +19,7 @@ binmat(
   spe.plat = TRUE,
   set.plat = NULL,
   rm.empty = TRUE,
+  pathway = FALSE,
   col.names = c(Tumor_Sample_Barcode = NULL, Hugo_Symbol = NULL, Variant_Classification
     = NULL, Mutation_Status = NULL, Variant_Type = NULL)
 )
@@ -55,6 +56,9 @@ of patients that were not sequenced on that plaform. Default is TRUE.}
 Options are "341", "410" and "468". Default is NULL.}
 
 \item{rm.empty}{boolean specifying if columns with no events founds should be removed. Default is TRUE.}
+
+\item{pathway}{boolean specifying if pathway annotation should be applied. If TRUE, the function will return a supplementary binary
+dataframe with columns being each pathway and each row being a sample. Default is FALSE.}
 
 \item{col.names}{character vector of the necessary columns to be used. By default: col.names = c(Tumor_Sample_Barcode = NULL,
 Hugo_Symbol = NULL, Variant_Classification = NULL, Mutation_Status = NULL, Variant_Type = NULL)}

@@ -12,7 +12,7 @@ oncoKB.annotate(input, output, lib.path = NULL)
 
 \item{output}{Name of the output file}
 
-\item{lib.path}{Path to the}
+\item{lib.path}{Path to the gnomeR library}
 }
 \value{
 OncoKb annotate MAF.

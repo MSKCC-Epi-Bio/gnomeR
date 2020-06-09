@@ -41,6 +41,7 @@ The main purpose of `gnomeR` is to streamline the processing of genomic files pr
 - spe.plat: boolean specifying if specific IMPACT platforms should be considered. When TRUE NAs will fill the cells for genes of patients that were not sequenced on that plaform. Default is TRUE.
 - set.plat character argument specifying which IMPACT platform the data should be reduced to if spe.plat is set to TRUE. Options are "341" and "410". Default is NULL.
 - rm.empty: boolean specifying if columns with no events founds should be removed. Default is TRUE.
+- pathway boolean specifying if pathway annotation should be applied. If TRUE, the function will return a supplementary binary dataframe with columns being each pathway and each row being a sample. Default is FALSE.
 - col.names character vector of the necessary columns to be used. By default: col.names = c(Tumor_Sample_Barcode = NULL, Hugo_Symbol = NULL, Variant_Classification = NULL, Mutation_Status = NULL, Variant_Type = NULL)
 
 This function returns a matrix containing all the genetic information with rows as samples and columns as features.
@@ -190,6 +191,19 @@ kable(df[1:10, c(1:3,243,244,300:305)])
 
 Note that here the fusions are embedded in the mutation file.
 
+
+# Pathway level alterations
+
+Pathway level alteration analysis is commonly encountered in genomic studies. We therefore implemented in `binmat()` the `pathway` argument that enables the user to generate a second binary matrix with pathways as new features (columns) for each of the samples (rows). These pathways were created following Dr. Schultz's group in their paper [Oncogenic Signaling Pathways in The Cancer
+Genome Atlas](https://www.cell.com/cell/pdf/S0092-8674(18)30359-3.pdf). It consist of 10 well defined pathways that have biological impacts in cancer patients.
+We show below an example of this matrix. 
+
+```{r}
+df <- binmat(patients = samples,maf = dat$mut, cna = dat$cna,cna.binary = FALSE,pathway = T)
+kable(df$pathway_dat[1:5,])
+```
+
+Note that this is returned as an additional element of `binmat()` and the original binary matrix for all genes is still returned.
 
 # FACETs
 

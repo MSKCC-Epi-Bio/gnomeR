@@ -142,7 +142,7 @@ This returns the following:
 - `tab` a summary of the univariate fits that were performed
 
 ```{r}
-kable(test$tab[1:10,])
+kable(test$tab[1:5,])
 ```
 
 - `p` an interactive volcano plot summarizing the hazard ratio for each ratio as a function of it's p-value

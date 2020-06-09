@@ -11,7 +11,7 @@
 #' @return reducedM : A matrix ready for plotting.
 #' @export
 #' @examples library(gnomeR)
-#' CNregions.mod(seg)
+#' CNregions.mod(seg[1:50])
 CNregions.mod <- function (seg, epsilon = 0.005, adaptive = FALSE, rmCNV = FALSE,
                            cnv = NULL, frac.overlap = 0.5, rmSmallseg = TRUE, nProbes = 15)
 {

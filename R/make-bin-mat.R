@@ -21,6 +21,8 @@
 #' @param set.plat character argument specifying which IMPACT platform the data should be reduced to if spe.plat is set to TRUE.
 #'  Options are "341", "410" and "468". Default is NULL.
 #' @param rm.empty boolean specifying if columns with no events founds should be removed. Default is TRUE.
+#' @param pathway boolean specifying if pathway annotation should be applied. If TRUE, the function will return a supplementary binary
+#' dataframe with columns being each pathway and each row being a sample. Default is FALSE.
 #' @param col.names character vector of the necessary columns to be used. By default: col.names = c(Tumor_Sample_Barcode = NULL,
 #'  Hugo_Symbol = NULL, Variant_Classification = NULL, Mutation_Status = NULL, Variant_Type = NULL)
 #' @return mut : a binary matrix of mutation data
@@ -46,7 +48,8 @@
 ###############################################
 
 binmat <- function(patients=NULL, maf = NULL, mut.type = "SOMATIC",SNP.only = FALSE,include.silent = FALSE,
-                   fusion = NULL,cna = NULL,cna.binary = TRUE,cna.relax = FALSE, spe.plat = TRUE, set.plat = NULL,rm.empty = TRUE,
+                   fusion = NULL,cna = NULL,cna.binary = TRUE,cna.relax = FALSE, spe.plat = TRUE,
+                   set.plat = NULL,rm.empty = TRUE, pathway = FALSE,
                    col.names = c(Tumor_Sample_Barcode = NULL, Hugo_Symbol = NULL,
                                  Variant_Classification = NULL, Mutation_Status = NULL, Variant_Type = NULL)){
 
@@ -184,6 +187,20 @@ binmat <- function(patients=NULL, maf = NULL, mut.type = "SOMATIC",SNP.only = FA
   # if(rm.empty && length(which(apply(mut,2,function(x){sum(x,na.rm=TRUE)})>0))) mut <- mut[,which(apply(mut,2,function(x){sum(x,na.rm=TRUE)})>0)]
   if(rm.empty && length(which(apply(mut,2,function(x){length(unique(x[!is.na(x)]))})>1)))
     mut <- mut[,which(apply(mut,2,function(x){length(unique(x[!is.na(x)]))})>1)]
+
+  # create pathway levels alterations table #
+  if(pathway){
+    pathway_dat <- as.data.frame(do.call('cbind',lapply(unique(impact_gene_info$pathway[!is.na(impact_gene_info$pathway)]),function(x){
+      genes <- as.character(unlist(impact_gene_info %>%
+        filter(.data$pathway == x) %>% select(.data$hugo_symbol)))
+      as.numeric(apply(mut %>% select(starts_with(genes)),1,function(y){
+        ifelse(sum(abs(as.numeric(as.character(y))),na.rm = T)>0, 1,0)
+      }))
+    })))
+    colnames(pathway_dat) <- unique(impact_gene_info$pathway[!is.na(impact_gene_info$pathway)])
+    rownames(pathway_dat) <- rownames(mut)
+    return(list(mut = mut, pathway_dat = pathway_dat))
+  }
 
   return(mut)
 }

@@ -103,7 +103,20 @@ plot_oncoPrint(gen.dat = dat.gen,
                clin.dat = clin.patients.dat)
 ```
 
-# Advanced visualiztion 
+
+## Missing information
+
+A critical point of `gnomeR` is its ability to correct for the different platforms that have existed at MSKCC. We reflect this is in the OncoPrints by including black entries in the missing cells as shown below.
+
+```{r,fig.width=10, fig.height=7}
+genes <- c("ATM","BRAF","MLL2","APC","EGFR","MLL3","PIK3CA","KRAS","TP53","EPHA7")
+dat.gen <- binmat(maf = mut, fusion = fusion, cna = cna)
+dat.gen <- dat.gen %>% select(starts_with(genes))
+plot_oncoPrint(gen.dat = dat.gen)
+```
+
+
+# Advanced visualization 
 
 The copy-number alterations data we have covered up to now is a discrete estimation of the alterations that occured. There however exist more nuanced and accurate data for copy-number alterations observed in a tumor. In `gnomeR` we include an example of segmentation file and relevant functions from the [`facets`](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5027494/) package that provides an allele-specific copy number and clonal heterogeneity analysis tool for high-throughput DNA sequencing. We show in this section how to visualize this data:
 

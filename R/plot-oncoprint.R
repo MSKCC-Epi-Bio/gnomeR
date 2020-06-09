@@ -45,10 +45,10 @@ plot_oncoPrint <- function(gen.dat,clin.dat=NULL,ordered=NULL){
   if(!is.null(clin.dat)){
     # get all values #
     clin.factors <- unique(unlist(apply(mat,2,unique)))
-    clin.factors <- clin.factors[-stats::na.omit(match(c("MUT;","AMP;","DEL;","FUS;","CLIN;","  ",
+    clin.factors <- clin.factors[-stats::na.omit(match(c("MUT;","AMP;","DEL;","FUS;","  ","MIS;",
                                                   "MUT;FUS;","MUT;DEL;","MUT;AMP;"),clin.factors))]
     if(length(clin.factors) == 0){
-      col = c("MUT" = "#008000", "AMP" = "red", "DEL" = "blue", "FUS" = "orange", "CLIN" = "purple")
+      col = c("MUT" = "#008000", "AMP" = "red", "DEL" = "blue", "FUS" = "orange","MIS" = "black")
       alter_fun = list(
         background = function(x, y, w, h) {
           grid::grid.rect(x, y, w-unit(0.5, "mm"), h-unit(0.5, "mm"), gp = grid::gpar(fill = "#CCCCCC", col = NA))
@@ -65,8 +65,8 @@ plot_oncoPrint <- function(gen.dat,clin.dat=NULL,ordered=NULL){
         FUS = function(x, y, w, h) {
           grid::grid.rect(x, y, w-unit(0.5, "mm"), h*0.33, gp = grid::gpar(fill = "orange", col = NA))
         },
-        CLIN = function(x, y, w, h) {
-          grid::grid.rect(x, y, w-unit(0.5, "mm"), h*0.33, gp = grid::gpar(fill = "purple", col = NA))
+        MIS = function(x, y, w, h) {
+          grid::grid.rect(x, y, w-unit(0.5, "mm"), h*0.33, gp = grid::gpar(fill = "black", col = NA))
         }
       )
 
@@ -82,7 +82,7 @@ plot_oncoPrint <- function(gen.dat,clin.dat=NULL,ordered=NULL){
 
       for(k in 1:length(sum.factors)){
         if(as.numeric(sum.factors[k]) == 2){
-          added <- c(added, c("black", "#CCCCCC"))
+          added <- c(added, c("purple", "#CCCCCC"))
           names.toadd <- c(names.toadd,
                            levels(as.factor(clin.factors[grep(names(sum.factors)[k],clin.factors)])))
         }
@@ -94,7 +94,7 @@ plot_oncoPrint <- function(gen.dat,clin.dat=NULL,ordered=NULL){
         }
       }
       names(added) <- names.toadd
-      col = c("MUT" = "#008000", "AMP" = "red", "DEL" = "blue", "FUS" = "orange", "CLIN" = "purple",added)
+      col = c("MUT" = "#008000", "AMP" = "red", "DEL" = "blue", "FUS" = "orange","MIS" = "black",added)
       alter_fun = list(
         background = function(x, y, w, h) {
           grid::grid.rect(x, y, w-unit(0.5, "mm"), h-unit(0.5, "mm"), gp = grid::gpar(fill = "#CCCCCC", col = NA))
@@ -111,8 +111,8 @@ plot_oncoPrint <- function(gen.dat,clin.dat=NULL,ordered=NULL){
         FUS = function(x, y, w, h) {
           grid::grid.rect(x, y, w-unit(0.5, "mm"), h*0.33, gp = grid::gpar(fill = "orange", col = NA))
         },
-        CLIN = function(x, y, w, h) {
-          grid::grid.rect(x, y, w-unit(0.5, "mm"), h*0.33, gp = grid::gpar(fill = "purple", col = NA))
+        MIS = function(x, y, w, h) {
+          grid::grid.rect(x, y, w-unit(0.5, "mm"), h*0.33, gp = grid::gpar(fill = "black", col = NA))
         }
       )
 
@@ -130,25 +130,25 @@ plot_oncoPrint <- function(gen.dat,clin.dat=NULL,ordered=NULL){
 
       p <- oncoPrint(sorted.mat, get_type = function(x) strsplit(x, ";")[[1]],
                      alter_fun = alter_fun, col = col, column_order = 1:ncol(sorted.mat),row_order = 1:nrow(sorted.mat),
-                     heatmap_legend_param = list(title = "Alterations", at = c("MUT","DEL","AMP","FUS",names(added)),
-                                                 labels = c("Mutation","Deletion","Amplification","Fusion",names(added))),
+                     heatmap_legend_param = list(title = "Alterations", at = c("MUT","DEL","AMP","FUS","MIS",names(added)),
+                                                 labels = c("Mutation","Deletion","Amplification","Fusion","Missing",names(added))),
                      top_annotation = HeatmapAnnotation(
-                       column_barplot = anno_oncoprint_barplot(c("MUT","DEL","AMP"))))
+                       column_barplot = anno_oncoprint_barplot(c("MUT","DEL","AMP","FUS"))))
     }
     else{
       sorted.mat <- mat
       p <- oncoPrint(sorted.mat, get_type = function(x) strsplit(x, ";")[[1]],
                      alter_fun = alter_fun, col = col, column_order = NULL,row_order = NULL,
-                     heatmap_legend_param = list(title = "Alterations", at = c("MUT","DEL","AMP","FUS",names(added)),
-                                                 labels = c("Mutation","Deletion","Amplification","Fusion",names(added))),
+                     heatmap_legend_param = list(title = "Alterations", at = c("MUT","DEL","AMP","FUS","MIS",names(added)),
+                                                 labels = c("Mutation","Deletion","Amplification","Fusion","Missing",names(added))),
                      top_annotation = HeatmapAnnotation(
-                       column_barplot = anno_oncoprint_barplot(c("MUT","DEL","AMP"))))
+                       column_barplot = anno_oncoprint_barplot(c("MUT","DEL","AMP","FUS"))))
     }
   }
 
 
   if(is.null(clin.dat)){
-    col = c("MUT" = "#008000", "AMP" = "red", "DEL" = "blue", "FUS" = "orange", "CLIN" = "black")
+    col = c("MUT" = "#008000", "AMP" = "red", "DEL" = "blue", "FUS" = "orange", "MIS" = "black")
     alter_fun = list(
       background = function(x, y, w, h) {
         grid::grid.rect(x, y, w-unit(0.5, "mm"), h-unit(0.5, "mm"), gp = grid::gpar(fill = "#CCCCCC", col = NA))
@@ -164,6 +164,9 @@ plot_oncoPrint <- function(gen.dat,clin.dat=NULL,ordered=NULL){
       },
       FUS = function(x, y, w, h) {
         grid::grid.rect(x, y, w-unit(0.5, "mm"), h*0.33, gp = grid::gpar(fill = "orange", col = NA))
+      },
+      MIS = function(x, y, w, h) {
+        grid::grid.rect(x, y, w-unit(0.5, "mm"), h*0.33, gp = grid::gpar(fill = "black", col = NA))
       }
     )
 
@@ -172,19 +175,19 @@ plot_oncoPrint <- function(gen.dat,clin.dat=NULL,ordered=NULL){
 
       p <- oncoPrint(sorted.mat, get_type = function(x) strsplit(x, ";")[[1]],
                      alter_fun = alter_fun, col = col, column_order = 1:ncol(sorted.mat),row_order = 1:nrow(sorted.mat),
-                     heatmap_legend_param = list(title = "Alterations", at = c("MUT","DEL","AMP","FUS"),
-                                                 labels = c("Mutation","Deletion","Amplification","Fusion")),
+                     heatmap_legend_param = list(title = "Alterations", at = c("MUT","DEL","AMP","FUS","MIS"),
+                                                 labels = c("Mutation","Deletion","Amplification","Fusion","Missing")),
                      top_annotation = HeatmapAnnotation(
-                       column_barplot = anno_oncoprint_barplot(c("MUT","DEL","AMP"))))
+                       column_barplot = anno_oncoprint_barplot(c("MUT","DEL","AMP","FUS"))))
     }
     else{
       sorted.mat <- mat
       p <- oncoPrint(sorted.mat, get_type = function(x) strsplit(x, ";")[[1]],
                      alter_fun = alter_fun, col = col, column_order = NULL,row_order = NULL,
-                     heatmap_legend_param = list(title = "Alterations", at = c("MUT","DEL","AMP","FUS"),
-                                                 labels = c("Mutation","Deletion","Amplification","Fusion")),
+                     heatmap_legend_param = list(title = "Alterations", at = c("MUT","DEL","AMP","FUS","MIS"),
+                                                 labels = c("Mutation","Deletion","Amplification","Fusion","Missing")),
                      top_annotation = HeatmapAnnotation(
-                       column_barplot = anno_oncoprint_barplot(c("MUT","DEL","AMP"))))
+                       column_barplot = anno_oncoprint_barplot(c("MUT","DEL","AMP","FUS"))))
     }
   }
 

@@ -50,7 +50,7 @@ devtools::install_github("AxelitoMartin/gnomeR")
 ### Setting up the API
 
 In order to download the data from CbioPortal, one must first require a
-token from the website [CbioPortal](https://cbiologin.mskcc.org/) wich
+token from the website [CbioPortal](https://cbioportal.mskcc.org/) wich
 will prompt a login page with your MSKCC credentials. Then navigate to
 “Web API” in the top bar menu, following this simply download a token
 and copy it after running the following command in R:
@@ -239,18 +239,18 @@ out <- uni.cox(X = gen.dat, surv.dat = surv.dat, surv.formula = Surv(time,status
 kable(out$tab[1:10,],row.names = T)
 ```
 
-|    | Feature   | Coefficient | Pvalue | MutationFrequency |       FDR | HR |
-| -- | :-------- | ----------: | -----: | ----------------: | --------: | -: |
-| 1  | MLL       |    \-57.700 |  0.604 |              0.09 | 0.6043112 |  1 |
-| 2  | STK11     |    \-28.400 |  0.912 |              0.07 | 0.9122695 |  1 |
-| 3  | KEAP1     |     \-7.940 |  0.912 |              0.05 | 0.9122695 |  1 |
-| 4  | NOTCH1    |       0.652 |  0.912 |              0.08 | 0.9122695 |  1 |
-| 5  | DOT1L     |       0.677 |  0.912 |              0.05 | 0.9122695 |  1 |
-| 6  | TSC1      |       0.750 |  0.912 |              0.05 | 0.9122695 |  1 |
-| 7  | MYC.Amp   |    \-15.600 |  0.912 |              0.06 | 0.9122695 |  1 |
-| 8  | CDH1      |       0.652 |  0.912 |              0.06 | 0.9122695 |  1 |
-| 9  | FGFR1.Amp |     \-5.370 |  0.912 |              0.06 | 0.9122695 |  1 |
-| 10 | EPHA5     |    \-10.500 |  0.912 |              0.05 | 0.9122695 |  1 |
+|    | Feature   | Coefficient | Pvalue | MutationFrequency |       FDR |    HR |
+| -- | :-------- | ----------: | -----: | ----------------: | --------: | ----: |
+| 1  | MLL       |     \-1.480 |  0.604 |              0.09 | 0.6043112 | 0.228 |
+| 2  | STK11     |     \-1.460 |  0.912 |              0.07 | 0.9122695 | 0.233 |
+| 3  | KEAP1     |     \-1.020 |  0.912 |              0.05 | 0.9122695 | 0.362 |
+| 4  | NOTCH1    |       0.609 |  0.912 |              0.08 | 0.9122695 | 1.840 |
+| 5  | DOT1L     |       0.659 |  0.912 |              0.05 | 0.9122695 | 1.930 |
+| 6  | TSC1      |       0.750 |  0.912 |              0.05 | 0.9122695 | 2.120 |
+| 7  | MYC.Amp   |     \-1.200 |  0.912 |              0.06 | 0.9122695 | 0.301 |
+| 8  | CDH1      |       0.605 |  0.912 |              0.06 | 0.9122695 | 1.830 |
+| 9  | FGFR1.Amp |     \-0.826 |  0.912 |              0.06 | 0.9122695 | 0.438 |
+| 10 | EPHA5     |     \-1.080 |  0.912 |              0.05 | 0.9122695 | 0.340 |
 
 ``` r
 # out$p
@@ -258,11 +258,3 @@ out$KM[[1]]
 ```
 
 <img src="man/figures/README-unnamed-chunk-12-1.png" width="100%" />
-
-##### OncoCast
-
-Axel will integrate this
-
-#### SurvClust
-
-Arshi will integrate this
