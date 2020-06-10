@@ -11,7 +11,11 @@
 #' @return reducedM : A matrix ready for plotting.
 #' @export
 #' @examples library(gnomeR)
-#' CNregions.mod(seg[1:50])
+#' library(dplyr)
+#' samples <-
+#' as.character(unique(mut$Tumor_Sample_Barcode))[
+#' sample(1:length(unique(mut$Tumor_Sample_Barcode)), 100, replace=FALSE)]
+#' CNregions.mod(seg %>% filter(ID %in% samples))
 CNregions.mod <- function (seg, epsilon = 0.005, adaptive = FALSE, rmCNV = FALSE,
                            cnv = NULL, frac.overlap = 0.5, rmSmallseg = TRUE, nProbes = 15)
 {

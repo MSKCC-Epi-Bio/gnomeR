@@ -176,11 +176,21 @@
 <span class="fu"><a href="../reference/plot_oncoPrint.html">plot_oncoPrint</a></span>(<span class="kw">gen.dat</span> <span class="kw">=</span> <span class="no">dat.gen</span>)</pre></body></html></div>
 <p><img src="Visualizations_files/figure-html/unnamed-chunk-4-1.png" width="960"></p>
 </div>
+<div id="missing-information" class="section level2">
+<h2 class="hasAnchor">
+<a href="#missing-information" class="anchor"></a>Missing information</h2>
+<p>A critical point of <code>gnomeR</code> is its ability to correct for the different platforms that have existed at MSKCC. We reflect this is in the OncoPrints by including black entries in the missing cells as shown below.</p>
+<div class="sourceCode" id="cb6"><html><body><pre class="r"><span class="no">genes</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"ATM"</span>,<span class="st">"BRAF"</span>,<span class="st">"MLL2"</span>,<span class="st">"APC"</span>,<span class="st">"EGFR"</span>,<span class="st">"MLL3"</span>,<span class="st">"PIK3CA"</span>,<span class="st">"KRAS"</span>,<span class="st">"TP53"</span>,<span class="st">"EPHA7"</span>)
+<span class="no">dat.gen</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/binmat.html">binmat</a></span>(<span class="kw">maf</span> <span class="kw">=</span> <span class="no">mut</span>, <span class="kw">fusion</span> <span class="kw">=</span> <span class="no">fusion</span>, <span class="kw">cna</span> <span class="kw">=</span> <span class="no">cna</span>)
+<span class="no">dat.gen</span> <span class="kw">&lt;-</span> <span class="no">dat.gen</span> <span class="kw">%&gt;%</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(<span class="fu"><a href="https://dplyr.tidyverse.org/reference/reexports.html">starts_with</a></span>(<span class="no">genes</span>))
+<span class="fu"><a href="../reference/plot_oncoPrint.html">plot_oncoPrint</a></span>(<span class="kw">gen.dat</span> <span class="kw">=</span> <span class="no">dat.gen</span>)</pre></body></html></div>
+<p><img src="Visualizations_files/figure-html/unnamed-chunk-5-1.png" width="960"></p>
+</div>
 <div id="adding-clinical-information" class="section level2">
 <h2 class="hasAnchor">
 <a href="#adding-clinical-information" class="anchor"></a>Adding clinical information</h2>
 <p>In this section we will show how the user can further add clinical information to this plot.</p>
-<div class="sourceCode" id="cb6"><html><body><pre class="r"><span class="no">genes</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"ATM"</span>,<span class="st">"BRAF"</span>,<span class="st">"MLL2"</span>,<span class="st">"APC"</span>,<span class="st">"EGFR"</span>,<span class="st">"MLL3"</span>,<span class="st">"PIK3CA"</span>,<span class="st">"KRAS"</span>,<span class="st">"TP53"</span>)
+<div class="sourceCode" id="cb7"><html><body><pre class="r"><span class="no">genes</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"ATM"</span>,<span class="st">"BRAF"</span>,<span class="st">"MLL2"</span>,<span class="st">"APC"</span>,<span class="st">"EGFR"</span>,<span class="st">"MLL3"</span>,<span class="st">"PIK3CA"</span>,<span class="st">"KRAS"</span>,<span class="st">"TP53"</span>,<span class="st">"EPHA7"</span>)
 <span class="no">dat.gen</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/binmat.html">binmat</a></span>(<span class="kw">maf</span> <span class="kw">=</span> <span class="no">mut</span>, <span class="kw">fusion</span> <span class="kw">=</span> <span class="no">fusion</span>, <span class="kw">cna</span> <span class="kw">=</span> <span class="no">cna</span>)
 <span class="no">dat.gen</span> <span class="kw">&lt;-</span> <span class="no">dat.gen</span> <span class="kw">%&gt;%</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(<span class="fu"><a href="https://dplyr.tidyverse.org/reference/reexports.html">starts_with</a></span>(<span class="no">genes</span>))
 <span class="no">clin.patients.dat</span> <span class="kw">&lt;-</span> <span class="no">clin.patients</span>[<span class="fu"><a href="https://rdrr.io/r/base/match.html">match</a></span>(
@@ -198,22 +208,12 @@
 <span class="fu"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span>(<span class="no">dat.gen</span>) <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span>(<span class="no">clin.patients.dat</span>)
 <span class="fu"><a href="../reference/plot_oncoPrint.html">plot_oncoPrint</a></span>(<span class="kw">gen.dat</span> <span class="kw">=</span> <span class="no">dat.gen</span>,
                <span class="kw">clin.dat</span> <span class="kw">=</span> <span class="no">clin.patients.dat</span>)</pre></body></html></div>
-<p><img src="Visualizations_files/figure-html/unnamed-chunk-5-1.png" width="960"></p>
-</div>
-<div id="missing-information" class="section level2">
-<h2 class="hasAnchor">
-<a href="#missing-information" class="anchor"></a>Missing information</h2>
-<p>A critical point of <code>gnomeR</code> is its ability to correct for the different platforms that have existed at MSKCC. We reflect this is in the OncoPrints by including black entries in the missing cells as shown below.</p>
-<div class="sourceCode" id="cb7"><html><body><pre class="r"><span class="no">genes</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"ATM"</span>,<span class="st">"BRAF"</span>,<span class="st">"MLL2"</span>,<span class="st">"APC"</span>,<span class="st">"EGFR"</span>,<span class="st">"MLL3"</span>,<span class="st">"PIK3CA"</span>,<span class="st">"KRAS"</span>,<span class="st">"TP53"</span>,<span class="st">"EPHA7"</span>)
-<span class="no">dat.gen</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/binmat.html">binmat</a></span>(<span class="kw">maf</span> <span class="kw">=</span> <span class="no">mut</span>, <span class="kw">fusion</span> <span class="kw">=</span> <span class="no">fusion</span>, <span class="kw">cna</span> <span class="kw">=</span> <span class="no">cna</span>)
-<span class="no">dat.gen</span> <span class="kw">&lt;-</span> <span class="no">dat.gen</span> <span class="kw">%&gt;%</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(<span class="fu"><a href="https://dplyr.tidyverse.org/reference/reexports.html">starts_with</a></span>(<span class="no">genes</span>))
-<span class="fu"><a href="../reference/plot_oncoPrint.html">plot_oncoPrint</a></span>(<span class="kw">gen.dat</span> <span class="kw">=</span> <span class="no">dat.gen</span>)</pre></body></html></div>
 <p><img src="Visualizations_files/figure-html/unnamed-chunk-6-1.png" width="960"></p>
 </div>
 </div>
-<div id="advanced-visualiztion" class="section level1">
+<div id="advanced-visualization" class="section level1">
 <h1 class="hasAnchor">
-<a href="#advanced-visualiztion" class="anchor"></a>Advanced visualiztion</h1>
+<a href="#advanced-visualization" class="anchor"></a>Advanced visualization</h1>
 <p>The copy-number alterations data we have covered up to now is a discrete estimation of the alterations that occured. There however exist more nuanced and accurate data for copy-number alterations observed in a tumor. In <code>gnomeR</code> we include an example of segmentation file and relevant functions from the <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5027494/"><code>facets</code></a> package that provides an allele-specific copy number and clonal heterogeneity analysis tool for high-throughput DNA sequencing. We show in this section how to visualize this data:</p>
 <div class="sourceCode" id="cb8"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span>(<span class="fl">123</span>)
 <span class="no">samples</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html">as.character</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span>(<span class="no">mut</span>$<span class="no">Tumor_Sample_Barcode</span>))[<span class="fu"><a href="https://dplyr.tidyverse.org/reference/sample.html">sample</a></span>(<span class="fl">1</span>:<span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span>(<span class="no">mut</span>$<span class="no">Tumor_Sample_Barcode</span>)), <span class="fl">100</span>, <span class="kw">replace</span><span class="kw">=</span><span class="fl">FALSE</span>)]

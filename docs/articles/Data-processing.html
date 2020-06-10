@@ -2138,7 +2138,11 @@
 </tr>
 </tbody>
 </table>
-<p>Note that this is returned as an additional element of <code><a href="../reference/binmat.html">binmat()</a></code> and the original binary matrix for all genes is still returned. # FACETs</p>
+<p>Note that this is returned as an additional element of <code><a href="../reference/binmat.html">binmat()</a></code> and the original binary matrix for all genes is still returned.</p>
+</div>
+<div id="facets" class="section level1">
+<h1 class="hasAnchor">
+<a href="#facets" class="anchor"></a>FACETs</h1>
 <p>The copy-number alterations data we have covered up to now is a discrete estimation of the alterations that occured. There however exist more nuanced and accurate data for copy-number alterations observed in a tumor. In <code>gnomeR</code> we include an example of segmentation file and relevant functions from the <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5027494/"><code>facets</code></a> package that provides an allele-specific copy number and clonal heterogeneity analysis tool for high-throughput DNA sequencing. We show below an example of a segmentation file included in <code>gnomeR</code> (<code>seg</code> dataset) and how to process it:</p>
 <div class="sourceCode" id="cb15"><html><body><pre class="r"><span class="fu">kable</span>(<span class="no">seg</span>[<span class="fl">1</span>:<span class="fl">10</span>,])</pre></body></html></div>
 <table class="table">

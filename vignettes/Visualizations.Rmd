@@ -78,12 +78,25 @@ dat.gen <- dat.gen %>% select(starts_with(genes))
 plot_oncoPrint(gen.dat = dat.gen)
 ```
 
+
+## Missing information
+
+A critical point of `gnomeR` is its ability to correct for the different platforms that have existed at MSKCC. We reflect this is in the OncoPrints by including black entries in the missing cells as shown below.
+
+```{r,fig.width=10, fig.height=7}
+genes <- c("ATM","BRAF","MLL2","APC","EGFR","MLL3","PIK3CA","KRAS","TP53","EPHA7")
+dat.gen <- binmat(maf = mut, fusion = fusion, cna = cna)
+dat.gen <- dat.gen %>% select(starts_with(genes))
+plot_oncoPrint(gen.dat = dat.gen)
+```
+
+
 ## Adding clinical information 
 
 In this section we will show how the user can further add clinical information to this plot.
 
 ```{r,fig.width=10, fig.height=7}
-genes <- c("ATM","BRAF","MLL2","APC","EGFR","MLL3","PIK3CA","KRAS","TP53")
+genes <- c("ATM","BRAF","MLL2","APC","EGFR","MLL3","PIK3CA","KRAS","TP53","EPHA7")
 dat.gen <- binmat(maf = mut, fusion = fusion, cna = cna)
 dat.gen <- dat.gen %>% select(starts_with(genes))
 clin.patients.dat <- clin.patients[match(
@@ -101,18 +114,6 @@ clin.patients.dat <- clin.patients.dat %>%
 rownames(dat.gen) <- rownames(clin.patients.dat)
 plot_oncoPrint(gen.dat = dat.gen,
                clin.dat = clin.patients.dat)
-```
-
-
-## Missing information
-
-A critical point of `gnomeR` is its ability to correct for the different platforms that have existed at MSKCC. We reflect this is in the OncoPrints by including black entries in the missing cells as shown below.
-
-```{r,fig.width=10, fig.height=7}
-genes <- c("ATM","BRAF","MLL2","APC","EGFR","MLL3","PIK3CA","KRAS","TP53","EPHA7")
-dat.gen <- binmat(maf = mut, fusion = fusion, cna = cna)
-dat.gen <- dat.gen %>% select(starts_with(genes))
-plot_oncoPrint(gen.dat = dat.gen)
 ```
 
 

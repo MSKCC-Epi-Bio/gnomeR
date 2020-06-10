@@ -39,6 +39,22 @@
 
 plot_oncoPrint <- function(gen.dat,clin.dat=NULL,ordered=NULL){
 
+
+  oncoprint_column_order = function(count_matrix = NULL) {
+    scoreCol = function(x) {
+      score = 0
+      for (i in 1:length(x)) {
+        if (x[i]) {
+          score = score + 2^(length(x) - i * 1/x[i])
+        }
+      }
+      return(score)
+    }
+    scores = apply(count_matrix[row_order, , drop = FALSE],
+                   2, scoreCol)
+    order(scores, decreasing = TRUE)
+  }
+
   # make data #
   mat <- dat.oncoPrint(gen.dat,clin.dat)
   #############
@@ -136,9 +152,32 @@ plot_oncoPrint <- function(gen.dat,clin.dat=NULL,ordered=NULL){
                        column_barplot = anno_oncoprint_barplot(c("MUT","DEL","AMP","FUS"))))
     }
     else{
-      sorted.mat <- mat
+      row_order <- order(apply(mat, 1, function(x){sum(gsub("MIS;","  ",x) != "  ")}),decreasing = T)
+
+      get_type2 = function(x) gsub("^\\s+|\\s+$", "", ComplexHeatmap::default_get_type(x))
+      all_type = unique(unlist(lapply(mat, get_type2)))
+      all_type = all_type[!is.na(all_type)]
+      all_type = all_type[grepl("\\S", all_type)]
+      mat_list = lapply(all_type, function(type) {
+        m = sapply(mat, function(x) type %in% get_type2(x))
+        dim(m) = dim(mat)
+        dimnames(m) = dimnames(mat)
+        m
+      })
+      names(mat_list) = all_type[grep("MUT|DEL|AMP|FUS",all_type)]
+
+      arr = array(FALSE, dim = c(dim(mat_list[[1]]), length(all_type)),
+                  dimnames = c(dimnames(mat_list[[1]]), list(all_type)))
+      for (i in seq_along(all_type)) {
+        arr[, , i] = mat_list[[i]]
+      }
+      count_matrix = apply(arr, c(1, 2), sum)
+
+      column_order = oncoprint_column_order(count_matrix = count_matrix)
+
+      sorted.mat <- mat[row_order,column_order]
       p <- oncoPrint(sorted.mat, get_type = function(x) strsplit(x, ";")[[1]],
-                     alter_fun = alter_fun, col = col, column_order = NULL,row_order = NULL,
+                     alter_fun = alter_fun, col = col, column_order = 1:ncol(sorted.mat),row_order = 1:nrow(sorted.mat),
                      heatmap_legend_param = list(title = "Alterations", at = c("MUT","DEL","AMP","FUS","MIS",names(added)),
                                                  labels = c("Mutation","Deletion","Amplification","Fusion","Missing",names(added))),
                      top_annotation = HeatmapAnnotation(
@@ -181,9 +220,33 @@ plot_oncoPrint <- function(gen.dat,clin.dat=NULL,ordered=NULL){
                        column_barplot = anno_oncoprint_barplot(c("MUT","DEL","AMP","FUS"))))
     }
     else{
-      sorted.mat <- mat
+      row_order <- order(apply(mat, 1, function(x){sum(gsub("MIS;","  ",x) != "  ")}),decreasing = T)
+
+      get_type2 = function(x) gsub("^\\s+|\\s+$", "", ComplexHeatmap::default_get_type(x))
+      all_type = unique(unlist(lapply(mat, get_type2)))
+      all_type = all_type[!is.na(all_type)]
+      all_type = all_type[grepl("\\S", all_type)]
+      mat_list = lapply(all_type, function(type) {
+        m = sapply(mat, function(x) type %in% get_type2(x))
+        dim(m) = dim(mat)
+        dimnames(m) = dimnames(mat)
+        m
+      })
+      names(mat_list) = all_type[-match("MIS",all_type)]
+
+      arr = array(FALSE, dim = c(dim(mat_list[[1]]), length(all_type)),
+                  dimnames = c(dimnames(mat_list[[1]]), list(all_type)))
+      for (i in seq_along(all_type)) {
+        arr[, , i] = mat_list[[i]]
+      }
+      count_matrix = apply(arr, c(1, 2), sum)
+
+      column_order = oncoprint_column_order(count_matrix = count_matrix)
+
+
+      sorted.mat <- mat[row_order,column_order]
       p <- oncoPrint(sorted.mat, get_type = function(x) strsplit(x, ";")[[1]],
-                     alter_fun = alter_fun, col = col, column_order = NULL,row_order = NULL,
+                     alter_fun = alter_fun, col = col, column_order = 1:ncol(sorted.mat),row_order = 1:nrow(sorted.mat),
                      heatmap_legend_param = list(title = "Alterations", at = c("MUT","DEL","AMP","FUS","MIS"),
                                                  labels = c("Mutation","Deletion","Amplification","Fusion","Missing")),
                      top_annotation = HeatmapAnnotation(
