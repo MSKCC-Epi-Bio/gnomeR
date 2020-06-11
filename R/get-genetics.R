@@ -14,8 +14,13 @@
 #'
 #' @examples
 #' \dontrun{
+#' # IMPACT #
 #' get_genetics(sample_ids = c("P-0000004-T01-IM3", "P-0000012-T02-IM3"),
 #' genes = 207)
+#'
+#' # TCGA #
+#' get_genetics(sample_ids =  c("TCGA-17-Z023-01","TCGA-02-0003-01","TCGA-02-0055-01"),
+#'  database = "tcga")
 #' }
 #' @import
 #' cbioportalr
@@ -32,21 +37,51 @@ get_genetics <- function(
   cna.dat <- NULL
   get_cbioportal_db(database)
 
-  if(mutations || fusions){
-    mut.dat <- get_mutations(sample_ids,
-                             sample_list_id,
-                             genes) %>%
-      rename(Tumor_Sample_Barcode = "sampleId", Hugo_Symbol = NULL,
-             Variant_Classification = "mutationType", Mutation_Status = "mutationStatus",
-             Variant_Type = "variantType")
-    if(!fusions)
-      mut.dat <- mut.dat %>%
-        filter(.data$Variant_Classification != "Fusion")
+  if(database == "msk_impact"){
+    if(mutations || fusions){
+      mut.dat <- get_mutations(sample_ids,
+                               sample_list_id,
+                               genes) %>%
+        rename(Tumor_Sample_Barcode = "sampleId", Hugo_Symbol = NULL,
+               Variant_Classification = "mutationType", Mutation_Status = "mutationStatus",
+               Variant_Type = "variantType")
+      if(!fusions)
+        mut.dat <- mut.dat %>%
+          filter(.data$Variant_Classification != "Fusion")
+    }
+
+    if(cna)
+      cna.dat <- get_cna(sample_ids,
+                         sample_list_id,
+                         genes)
+    return(list("mut"= mut.dat, "cna" = cna.dat))
   }
 
-  if(cna)
-    cna.dat <- get_cna(sample_ids,
-                       sample_list_id,
-                       genes)
-  return(list("mut"= mut.dat, "cna" = cna.dat))
+  if(database == "tcga"){
+    if(mutations || fusions){
+      mut.dat <- get_mutations_tcga(sample_ids,
+                                    sample_list_id,
+                                    genes) %>%
+        rename(Tumor_Sample_Barcode = "sampleId", Hugo_Symbol = NULL,
+               Variant_Classification = "mutationType", Mutation_Status = "mutationStatus",
+               Variant_Type = "variantType")
+      if(!fusions)
+        mut.dat <- mut.dat %>%
+          filter(.data$Variant_Classification != "Fusion")
+    }
+    if(cna)
+      cna.dat <- get_cna_tcga(sample_ids,
+                              sample_list_id,
+                              genes)
+
+    return(list("mut" = mut.dat, "cna" = cna.dat))
+  }
 }
+
+# get_genetics(sample_ids = c("TCGA-17-Z023-01","TCGA-02-0003-01"),
+#              database = "tcga")
+
+# et_mutations_tcga(
+#' sample_ids =  c("TCGA-17-Z023-01","TCGA-02-0003-01"),
+#' sample_list_id = NULL,
+#' genes = "all_impact")

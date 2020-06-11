@@ -38,7 +38,12 @@ Get all genetic data for a study or list of IDs
 }
 \examples{
 \dontrun{
+# IMPACT #
 get_genetics(sample_ids = c("P-0000004-T01-IM3", "P-0000012-T02-IM3"),
 genes = 207)
+
+# TCGA #
+get_genetics(sample_ids =  c("TCGA-17-Z023-01","TCGA-02-0003-01","TCGA-02-0055-01"),
+ database = "tcga")
 }
 }

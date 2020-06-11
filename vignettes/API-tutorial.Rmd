@@ -16,6 +16,7 @@ knitr::opts_chunk$set(
 
 ```{r, message = F, warning = F}
 library(gnomeR)
+library(dplyr)
 ```
 
 # Setting up the API
@@ -108,5 +109,34 @@ Not working yet.
 
 ## TCGA database
 
-Not working yet.
+Even though cBioPortal mainly focuses on IMPACT data, other genomic studies are also available on it. Particurlarly the [The Cancer Genome Atlas](https://www.cancer.gov/about-nci/organization/ccg/research/structural-genomics/tcga) (TCGA) database, which whole-exome sequenced large cohorts of 33 different cancer sites. Additionally to having access to mutational and copy number alteration data, cBioPortal also grants us access to other data types such as RNA-seq or RPPMs. In this section we will show how the user can use the API to retrieve this data. Note that the list of samples, cancer sites and genes available in `tcga_samples` and `tcga_genes` respectively.
 
+### Mutations
+
+Similarly to the examples shown above for IMPACT, to retrieve the TCGA mutational data the user should set the arguments `mutations` to TRUE and `database` to "tcga":
+
+```{r}
+df <- get_genetics(sample_ids =  c("TCGA-17-Z023-01","TCGA-02-0003-01","TCGA-02-0055-01"),
+             mutations = TRUE,fusions = FALSE, cna = FALSE,
+             database = "tcga")
+df$mut
+```
+
+### Fusions
+
+```{r}
+df <- get_genetics(sample_ids = as.character(tcga_samples$patient_id[!is.na(tcga_samples$Cancer_Code)]),
+                   mutations = TRUE,fusions = TRUE, cna = FALSE,
+                   database = "tcga")
+df$mut %>% 
+  filter(Variant_Classification == "Fusion")
+```
+
+### CNA
+
+```{r}
+df <- get_genetics(sample_ids =  c("TCGA-17-Z023-01","TCGA-02-0003-01","TCGA-02-0055-01"),
+             mutations = FALSE,fusions = FALSE, cna = TRUE,
+             database = "tcga")
+df$cna
+```
