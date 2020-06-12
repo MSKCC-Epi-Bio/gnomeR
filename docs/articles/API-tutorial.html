@@ -324,7 +324,7 @@
 <div id="fusions" class="section level3">
 <h3 class="hasAnchor">
 <a href="#fusions" class="anchor"></a>Fusions</h3>
-<div class="sourceCode" id="cb11"><html><body><pre class="r"><span class="no">df</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/get_genetics.html">get_genetics</a></span>(<span class="kw">sample_ids</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html">as.character</a></span>(<span class="no">tcga_samples</span>$<span class="no">patient_id</span>[!<span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span>(<span class="no">tcga_samples</span>$<span class="no">Cancer_Code</span>)]),
+<div class="sourceCode" id="cb11"><html><body><pre class="r"><span class="no">df</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/get_genetics.html">get_genetics</a></span>(<span class="kw">sample_ids</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html">as.character</a></span>(<span class="no">tcga_samples</span>$<span class="no">patient_id</span>[!<span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span>(<span class="no">tcga_samples</span>$<span class="no">Cancer_Code</span>)][<span class="fl">1</span>:<span class="fl">100</span>]),
                    <span class="kw">mutations</span> <span class="kw">=</span> <span class="fl">TRUE</span>,<span class="kw">fusions</span> <span class="kw">=</span> <span class="fl">TRUE</span>, <span class="kw">cna</span> <span class="kw">=</span> <span class="fl">FALSE</span>,
                    <span class="kw">database</span> <span class="kw">=</span> <span class="st">"tcga"</span>)
 <span class="co">#&gt; [1] "https://www.cbioportal.org/api/molecular-profiles/gbm_tcga_pan_can_atlas_2018_mutations/mutations/fetch?"</span>
@@ -333,80 +333,22 @@
 <span class="co">#&gt; No encoding supplied: defaulting to UTF-8.</span>
 <span class="co">#&gt; [1] "https://www.cbioportal.org/api/molecular-profiles/luad_tcga_pan_can_atlas_2018_mutations/mutations/fetch?"</span>
 <span class="co">#&gt; No encoding supplied: defaulting to UTF-8.</span>
-<span class="co">#&gt; [1] "https://www.cbioportal.org/api/molecular-profiles/lusc_tcga_pan_can_atlas_2018_mutations/mutations/fetch?"</span>
-<span class="co">#&gt; No encoding supplied: defaulting to UTF-8.</span>
-<span class="co">#&gt; [1] "https://www.cbioportal.org/api/molecular-profiles/prad_tcga_pan_can_atlas_2018_mutations/mutations/fetch?"</span>
-<span class="co">#&gt; No encoding supplied: defaulting to UTF-8.</span>
-<span class="co">#&gt; [1] "https://www.cbioportal.org/api/molecular-profiles/ucec_tcga_pan_can_atlas_2018_mutations/mutations/fetch?"</span>
-<span class="co">#&gt; No encoding supplied: defaulting to UTF-8.</span>
-<span class="co">#&gt; [1] "https://www.cbioportal.org/api/molecular-profiles/blca_tcga_pan_can_atlas_2018_mutations/mutations/fetch?"</span>
-<span class="co">#&gt; No encoding supplied: defaulting to UTF-8.</span>
-<span class="co">#&gt; [1] "https://www.cbioportal.org/api/molecular-profiles/tgct_tcga_pan_can_atlas_2018_mutations/mutations/fetch?"</span>
-<span class="co">#&gt; No encoding supplied: defaulting to UTF-8.</span>
-<span class="co">#&gt; [1] "https://www.cbioportal.org/api/molecular-profiles/esca_tcga_pan_can_atlas_2018_mutations/mutations/fetch?"</span>
-<span class="co">#&gt; No encoding supplied: defaulting to UTF-8.</span>
-<span class="co">#&gt; [1] "https://www.cbioportal.org/api/molecular-profiles/paad_tcga_pan_can_atlas_2018_mutations/mutations/fetch?"</span>
-<span class="co">#&gt; No encoding supplied: defaulting to UTF-8.</span>
-<span class="co">#&gt; [1] "https://www.cbioportal.org/api/molecular-profiles/kirp_tcga_pan_can_atlas_2018_mutations/mutations/fetch?"</span>
-<span class="co">#&gt; No encoding supplied: defaulting to UTF-8.</span>
-<span class="co">#&gt; [1] "https://www.cbioportal.org/api/molecular-profiles/lihc_tcga_pan_can_atlas_2018_mutations/mutations/fetch?"</span>
-<span class="co">#&gt; No encoding supplied: defaulting to UTF-8.</span>
-<span class="co">#&gt; [1] "https://www.cbioportal.org/api/molecular-profiles/cesc_tcga_pan_can_atlas_2018_mutations/mutations/fetch?"</span>
-<span class="co">#&gt; No encoding supplied: defaulting to UTF-8.</span>
-<span class="co">#&gt; [1] "https://www.cbioportal.org/api/molecular-profiles/sarc_tcga_pan_can_atlas_2018_mutations/mutations/fetch?"</span>
-<span class="co">#&gt; No encoding supplied: defaulting to UTF-8.</span>
-<span class="co">#&gt; [1] "https://www.cbioportal.org/api/molecular-profiles/brca_tcga_pan_can_atlas_2018_mutations/mutations/fetch?"</span>
-<span class="co">#&gt; No encoding supplied: defaulting to UTF-8.</span>
-<span class="co">#&gt; [1] "https://www.cbioportal.org/api/molecular-profiles/thym_tcga_pan_can_atlas_2018_mutations/mutations/fetch?"</span>
-<span class="co">#&gt; No encoding supplied: defaulting to UTF-8.</span>
-<span class="co">#&gt; [1] "https://www.cbioportal.org/api/molecular-profiles/meso_tcga_pan_can_atlas_2018_mutations/mutations/fetch?"</span>
-<span class="co">#&gt; No encoding supplied: defaulting to UTF-8.</span>
-<span class="co">#&gt; [1] "https://www.cbioportal.org/api/molecular-profiles/coadread_tcga_pan_can_atlas_2018_mutations/mutations/fetch?"</span>
-<span class="co">#&gt; No encoding supplied: defaulting to UTF-8.</span>
-<span class="co">#&gt; [1] "https://www.cbioportal.org/api/molecular-profiles/stad_tcga_pan_can_atlas_2018_mutations/mutations/fetch?"</span>
-<span class="co">#&gt; No encoding supplied: defaulting to UTF-8.</span>
-<span class="co">#&gt; [1] "https://www.cbioportal.org/api/molecular-profiles/skcm_tcga_pan_can_atlas_2018_mutations/mutations/fetch?"</span>
-<span class="co">#&gt; No encoding supplied: defaulting to UTF-8.</span>
-<span class="co">#&gt; [1] "https://www.cbioportal.org/api/molecular-profiles/chol_tcga_pan_can_atlas_2018_mutations/mutations/fetch?"</span>
-<span class="co">#&gt; No encoding supplied: defaulting to UTF-8.</span>
-<span class="co">#&gt; [1] "https://www.cbioportal.org/api/molecular-profiles/kirc_tcga_pan_can_atlas_2018_mutations/mutations/fetch?"</span>
-<span class="co">#&gt; No encoding supplied: defaulting to UTF-8.</span>
-<span class="co">#&gt; [1] "https://www.cbioportal.org/api/molecular-profiles/thca_tcga_pan_can_atlas_2018_mutations/mutations/fetch?"</span>
-<span class="co">#&gt; No encoding supplied: defaulting to UTF-8.</span>
-<span class="co">#&gt; [1] "https://www.cbioportal.org/api/molecular-profiles/hnsc_tcga_pan_can_atlas_2018_mutations/mutations/fetch?"</span>
-<span class="co">#&gt; No encoding supplied: defaulting to UTF-8.</span>
-<span class="co">#&gt; [1] "https://www.cbioportal.org/api/molecular-profiles/laml_tcga_pan_can_atlas_2018_mutations/mutations/fetch?"</span>
-<span class="co">#&gt; No encoding supplied: defaulting to UTF-8.</span>
-<span class="co">#&gt; [1] "https://www.cbioportal.org/api/molecular-profiles/lgg_tcga_pan_can_atlas_2018_mutations/mutations/fetch?"</span>
-<span class="co">#&gt; No encoding supplied: defaulting to UTF-8.</span>
-<span class="co">#&gt; [1] "https://www.cbioportal.org/api/molecular-profiles/dlbc_tcga_pan_can_atlas_2018_mutations/mutations/fetch?"</span>
-<span class="co">#&gt; No encoding supplied: defaulting to UTF-8.</span>
-<span class="co">#&gt; [1] "https://www.cbioportal.org/api/molecular-profiles/kich_tcga_pan_can_atlas_2018_mutations/mutations/fetch?"</span>
-<span class="co">#&gt; No encoding supplied: defaulting to UTF-8.</span>
-<span class="co">#&gt; [1] "https://www.cbioportal.org/api/molecular-profiles/ucs_tcga_pan_can_atlas_2018_mutations/mutations/fetch?"</span>
-<span class="co">#&gt; No encoding supplied: defaulting to UTF-8.</span>
-<span class="co">#&gt; [1] "https://www.cbioportal.org/api/molecular-profiles/acc_tcga_pan_can_atlas_2018_mutations/mutations/fetch?"</span>
-<span class="co">#&gt; No encoding supplied: defaulting to UTF-8.</span>
-<span class="co">#&gt; [1] "https://www.cbioportal.org/api/molecular-profiles/pcpg_tcga_pan_can_atlas_2018_mutations/mutations/fetch?"</span>
-<span class="co">#&gt; No encoding supplied: defaulting to UTF-8.</span>
-<span class="co">#&gt; [1] "https://www.cbioportal.org/api/molecular-profiles/uvm_tcga_pan_can_atlas_2018_mutations/mutations/fetch?"</span>
-<span class="co">#&gt; No encoding supplied: defaulting to UTF-8.</span>
 <span class="no">df</span>$<span class="no">mut</span> <span class="kw">%&gt;%</span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(<span class="no">Variant_Classification</span> <span class="kw">==</span> <span class="st">"Fusion"</span>)
-<span class="co">#&gt; # A tibble: 3,628 x 37</span>
+<span class="co">#&gt; # A tibble: 26 x 37</span>
 <span class="co">#&gt;    uniqueSampleKey uniquePatientKey molecularProfil… Tumor_Sample_Ba… patientId</span>
 <span class="co">#&gt;    &lt;chr&gt;           &lt;chr&gt;            &lt;chr&gt;            &lt;chr&gt;            &lt;chr&gt;    </span>
-<span class="co">#&gt;  1 VENHQS0xOS1BNk… VENHQS0xOS1BNko… gbm_tcga_pan_ca… TCGA-19-A6J5-01  TCGA-19-…</span>
-<span class="co">#&gt;  2 VENHQS0xOS1BNk… VENHQS0xOS1BNko… gbm_tcga_pan_ca… TCGA-19-A6J5-01  TCGA-19-…</span>
-<span class="co">#&gt;  3 VENHQS0xOS1BNk… VENHQS0xOS1BNko… gbm_tcga_pan_ca… TCGA-19-A6J4-01  TCGA-19-…</span>
-<span class="co">#&gt;  4 VENHQS0wNi01OD… VENHQS0wNi01ODU… gbm_tcga_pan_ca… TCGA-06-5856-01  TCGA-06-…</span>
-<span class="co">#&gt;  5 VENHQS03Ni00OT… VENHQS03Ni00OTI… gbm_tcga_pan_ca… TCGA-76-4926-01  TCGA-76-…</span>
-<span class="co">#&gt;  6 VENHQS0yOC01Mj… VENHQS0yOC01MjE… gbm_tcga_pan_ca… TCGA-28-5218-01  TCGA-28-…</span>
-<span class="co">#&gt;  7 VENHQS0wNi0wMj… VENHQS0wNi0wMjI… gbm_tcga_pan_ca… TCGA-06-0221-02  TCGA-06-…</span>
-<span class="co">#&gt;  8 VENHQS0wNi01OD… VENHQS0wNi01ODU… gbm_tcga_pan_ca… TCGA-06-5856-01  TCGA-06-…</span>
-<span class="co">#&gt;  9 VENHQS0wNi1BNl… VENHQS0wNi1BNlM… gbm_tcga_pan_ca… TCGA-06-A6S1-01  TCGA-06-…</span>
-<span class="co">#&gt; 10 VENHQS0wNi0wMT… VENHQS0wNi0wMTk… gbm_tcga_pan_ca… TCGA-06-0190-01  TCGA-06-…</span>
-<span class="co">#&gt; # … with 3,618 more rows, and 32 more variables: entrezGeneId &lt;int&gt;,</span>
+<span class="co">#&gt;  1 VENHQS0wMi0yND… VENHQS0wMi0yNDg… gbm_tcga_pan_ca… TCGA-02-2485-01  TCGA-02-…</span>
+<span class="co">#&gt;  2 VENHQS0wNi0wMT… VENHQS0wNi0wMTQ… gbm_tcga_pan_ca… TCGA-06-0141-01  TCGA-06-…</span>
+<span class="co">#&gt;  3 VENHQS0wNi0wMT… VENHQS0wNi0wMTI… gbm_tcga_pan_ca… TCGA-06-0125-01  TCGA-06-…</span>
+<span class="co">#&gt;  4 VENHQS0wNi0wMT… VENHQS0wNi0wMTM… gbm_tcga_pan_ca… TCGA-06-0130-01  TCGA-06-…</span>
+<span class="co">#&gt;  5 VENHQS0wNC0xMz… VENHQS0wNC0xMzU… ov_tcga_pan_can… TCGA-04-1356-01  TCGA-04-…</span>
+<span class="co">#&gt;  6 VENHQS0wNC0xMz… VENHQS0wNC0xMzU… ov_tcga_pan_can… TCGA-04-1357-01  TCGA-04-…</span>
+<span class="co">#&gt;  7 VENHQS0wNC0xMz… VENHQS0wNC0xMzY… ov_tcga_pan_can… TCGA-04-1362-01  TCGA-04-…</span>
+<span class="co">#&gt;  8 VENHQS0wNC0xMz… VENHQS0wNC0xMzY… ov_tcga_pan_can… TCGA-04-1362-01  TCGA-04-…</span>
+<span class="co">#&gt;  9 VENHQS0wNC0xMz… VENHQS0wNC0xMzQ… ov_tcga_pan_can… TCGA-04-1348-01  TCGA-04-…</span>
+<span class="co">#&gt; 10 VENHQS0wNC0xMz… VENHQS0wNC0xMzQ… ov_tcga_pan_can… TCGA-04-1341-01  TCGA-04-…</span>
+<span class="co">#&gt; # … with 16 more rows, and 32 more variables: entrezGeneId &lt;int&gt;,</span>
 <span class="co">#&gt; #   studyId &lt;chr&gt;, center &lt;chr&gt;, Mutation_Status &lt;chr&gt;, validationStatus &lt;chr&gt;,</span>
 <span class="co">#&gt; #   tumorAltCount &lt;int&gt;, tumorRefCount &lt;int&gt;, normalAltCount &lt;int&gt;,</span>
 <span class="co">#&gt; #   normalRefCount &lt;int&gt;, startPosition &lt;int&gt;, endPosition &lt;int&gt;,</span>

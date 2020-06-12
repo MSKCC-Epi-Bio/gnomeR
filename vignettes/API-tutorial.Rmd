@@ -125,7 +125,7 @@ df$mut
 ### Fusions
 
 ```{r}
-df <- get_genetics(sample_ids = as.character(tcga_samples$patient_id[!is.na(tcga_samples$Cancer_Code)]),
+df <- get_genetics(sample_ids = as.character(tcga_samples$patient_id[!is.na(tcga_samples$Cancer_Code)][1:100]),
                    mutations = TRUE,fusions = TRUE, cna = FALSE,
                    database = "tcga")
 df$mut %>% 

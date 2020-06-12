@@ -225,7 +225,7 @@ createbin.default <- function(obj) {
 ##############################################
 
 createbin.maf <- function(obj, patients, mut.type, cna.binary, SNP.only, include.silent, cna.relax, spe.plat){
-  maf <- obj
+  maf <- as_tibble(obj)
   maf$Hugo_Symbol <- as.character(maf$Hugo_Symbol)
   # recode gene names that have been changed between panel versions to make sure they are consistent and counted as the same gene
   if (sum(grepl("KMT2D", maf$Hugo_Symbol)) > 1) {
@@ -268,7 +268,7 @@ createbin.maf <- function(obj, patients, mut.type, cna.binary, SNP.only, include
   if(tolower(mut.type) == "all") Mut.filt = unique(maf$Mutation_Status)
   else Mut.filt = mut.type
 
-  maf <- maf %>% filter(.data$Variant_Classification != Variant.filt,
+  maf <- as_tibble(maf) %>% filter(.data$Variant_Classification != Variant.filt,
                         .data$Variant_Type %in% SNP.filt,
                         tolower(.data$Mutation_Status) %in% tolower(Mut.filt))
 
@@ -296,7 +296,7 @@ createbin.maf <- function(obj, patients, mut.type, cna.binary, SNP.only, include
 ###########################################
 
 createbin.fusion <- function(obj, patients, mut.type,cna.binary, SNP.only,include.silent, cna.relax, spe.plat){
-  fusion <- obj
+  fusion <- as_tibble(obj)
   # quick data checks #
   if(length(match("Tumor_Sample_Barcode",colnames(fusion))) == 0)
     stop("The fusion file inputted is missing a patient name column. (Tumor_Sample_Barcode)")
@@ -304,7 +304,7 @@ createbin.fusion <- function(obj, patients, mut.type,cna.binary, SNP.only,includ
     stop("The fusion file inputted is missing a gene name column. (Hugo_Symbol)")
 
 
-  fusion <- fusion %>%
+  fusion <- as_tibble(fusion) %>%
     filter(.data$Tumor_Sample_Barcode %in% patients)
 
   #### out frame
@@ -382,7 +382,7 @@ createbin.cna <- function(obj, patients, mut.type,cna.binary, SNP.only,include.s
 
 ### cna from API ###
 createbin.api <- function(obj, patients, mut.type,cna.binary, SNP.only,include.silent, cna.relax, spe.plat){
-  cna <- obj
+  cna <- as.data.frame(obj)
 
   # recreate orginal format #
   temp <- as.data.frame(matrix(0L,ncol = length(patients)+1, nrow = length(unique(cna$Hugo_Symbol))))

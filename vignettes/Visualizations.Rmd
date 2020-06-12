@@ -110,7 +110,8 @@ dat.gen <- dat.gen[match(clin.patients.dat$DMPID,
                          abbreviate(rownames(dat.gen),strict = TRUE,
                                     minlength = 9)),]
 clin.patients.dat <- clin.patients.dat %>%
-  tibble::column_to_rownames('DMPID')
+    mutate(DMPID = as.character(DMPID)) %>% 
+    tibble::column_to_rownames('DMPID')
 rownames(dat.gen) <- rownames(clin.patients.dat)
 plot_oncoPrint(gen.dat = dat.gen,
                clin.dat = clin.patients.dat)
