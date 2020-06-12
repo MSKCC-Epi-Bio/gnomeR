@@ -2084,7 +2084,7 @@ columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see 
 <span class='no'>clin.patients</span>[<span class='fu'><a href='https://rdrr.io/r/base/match.html'>match</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/abbreviate.html'>abbreviate</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>rownames</a></span>(<span class='no'>gen.dat</span>),
 <span class='kw'>strict</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>minlength</span> <span class='kw'>=</span> <span class='fl'>9</span>),
 <span class='no'>clin.patients</span>$<span class='no'>X.Patient.Identifier</span>),] <span class='kw'>%&gt;%</span>
-<span class='kw pkg'>dplyr</span><span class='kw ns'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>rename</a></span>(<span class='kw'>DMPID</span> <span class='kw'>=</span> <span class='no'>X.Patient.Identifier</span>,
+<span class='kw pkg'>dplyr</span><span class='kw ns'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/rename.html'>rename</a></span>(<span class='kw'>DMPID</span> <span class='kw'>=</span> <span class='no'>X.Patient.Identifier</span>,
  <span class='kw'>Smoker</span> <span class='kw'>=</span> <span class='no'>Smoking.History</span>) <span class='kw'>%&gt;%</span>
   <span class='kw pkg'>dplyr</span><span class='kw ns'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span>(<span class='no'>DMPID</span>, <span class='no'>Sex</span>,<span class='no'>Smoker</span>) <span class='kw'>%&gt;%</span>
   <span class='kw pkg'>dplyr</span><span class='kw ns'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span>(!<span class='fu'><a href='https://rdrr.io/r/base/NA.html'>is.na</a></span>(<span class='no'>DMPID</span>)) <span class='kw'>%&gt;%</span>
@@ -2092,9 +2092,9 @@ columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see 
 <span class='no'>gen.dat</span> <span class='kw'>&lt;-</span> <span class='no'>gen.dat</span>[<span class='fu'><a href='https://rdrr.io/r/base/match.html'>match</a></span>(<span class='no'>clin.patients.dat</span>$<span class='no'>DMPID</span>,
 <span class='fu'><a href='https://rdrr.io/r/base/abbreviate.html'>abbreviate</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>rownames</a></span>(<span class='no'>gen.dat</span>),<span class='kw'>strict</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>minlength</span> <span class='kw'>=</span> <span class='fl'>9</span>)),]
 <span class='no'>clin.patients.dat</span> <span class='kw'>&lt;-</span> <span class='no'>clin.patients.dat</span> <span class='kw'>%&gt;%</span>
-  <span class='kw pkg'>tibble</span><span class='kw ns'>::</span><span class='fu'><a href='https://tibble.tidyverse.org/reference/rownames.html'>column_to_rownames</a></span>(<span class='st'>'DMPID'</span>)
-<span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>rownames</a></span>(<span class='no'>gen.dat</span>) <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>rownames</a></span>(<span class='no'>clin.patients.dat</span>)
-<span class='fu'>dat.oncoPrint</span>(<span class='kw'>gen.dat</span> <span class='kw'>=</span> <span class='no'>gen.dat</span>,<span class='kw'>clin.dat</span> <span class='kw'>=</span> <span class='no'>clin.patients.dat</span>)</div><div class='output co'>#&gt;        P-0000062       P-0000065                  P-0000113                 
+  <span class='kw pkg'>tibble</span><span class='kw ns'>::</span><span class='fu'><a href='https://tibble.tidyverse.org/reference/rownames.html'>column_to_rownames</a></span>(<span class='st'>'DMPID'</span>)</div><div class='output co'>#&gt; <span class='error'>Error: `.data` must be a data frame without row names.</span></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>rownames</a></span>(<span class='no'>gen.dat</span>) <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>rownames</a></span>(<span class='no'>clin.patients.dat</span>)
+<span class='fu'>dat.oncoPrint</span>(<span class='kw'>gen.dat</span> <span class='kw'>=</span> <span class='no'>gen.dat</span>,<span class='kw'>clin.dat</span> <span class='kw'>=</span> <span class='no'>clin.patients.dat</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: NAs introduced by coercion</span></div><div class='output co'>#&gt;        1               2                          6                         
+#&gt; DMPID  "  "            "  "                       "  "                      
 #&gt; Sex    "Sex_Male;"     "Sex_Female;"              "Sex_Female;"             
 #&gt; Smoker "Smoker_Never;" "Smoker_Prev/Curr Smoker;" "Smoker_Prev/Curr Smoker;"
 #&gt; TP53   "MUT;"          "  "                       "MUT;"                    
@@ -2112,7 +2112,8 @@ columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see 
 #&gt; ATM    "  "            "  "                       "  "                      
 #&gt; CDKN2A "  "            "  "                       "  "                      
 #&gt; RB1    "  "            "  "                       "MUT;"                    
-#&gt;        P-0000140       P-0000145       P-0000157                 
+#&gt;        7               8               9                         
+#&gt; DMPID  "  "            "  "            "  "                      
 #&gt; Sex    "Sex_Male;"     "Sex_Female;"   "Sex_Female;"             
 #&gt; Smoker "Smoker_Never;" "Smoker_Never;" "Smoker_Prev/Curr Smoker;"
 #&gt; TP53   "  "            "MUT;"          "  "                      
@@ -2130,7 +2131,8 @@ columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see 
 #&gt; ATM    "  "            "  "            "  "                      
 #&gt; CDKN2A "  "            "  "            "  "                      
 #&gt; RB1    "  "            "  "            "  "                      
-#&gt;        P-0000185                  P-0000088       P-0000193      
+#&gt;        10                         4               11             
+#&gt; DMPID  "  "                       "  "            "  "           
 #&gt; Sex    "Sex_Female;"              "Sex_Male;"     "Sex_Female;"  
 #&gt; Smoker "Smoker_Prev/Curr Smoker;" "Smoker_Never;" "Smoker_Never;"
 #&gt; TP53   "MUT;"                     "MUT;"          "  "           
@@ -2148,7 +2150,8 @@ columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see 
 #&gt; ATM    "  "                       "  "            "  "           
 #&gt; CDKN2A "  "                       "  "            "  "           
 #&gt; RB1    "  "                       "  "            "  "           
-#&gt;        P-0000230       P-0000231       P-0000242                 
+#&gt;        13              14              15                        
+#&gt; DMPID  "  "            "  "            "  "                      
 #&gt; Sex    "Sex_Female;"   "Sex_Female;"   "Sex_Female;"             
 #&gt; Smoker "Smoker_Never;" "Smoker_Never;" "Smoker_Prev/Curr Smoker;"
 #&gt; TP53   "MUT;"          "MUT;"          "MUT;"                    
@@ -2166,7 +2169,8 @@ columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see 
 #&gt; ATM    "  "            "  "            "  "                      
 #&gt; CDKN2A "  "            "  "            "  "                      
 #&gt; RB1    "  "            "  "            "  "                      
-#&gt;        P-0000244       P-0000270         P-0000281       P-0000300        
+#&gt;        16              17                18              19               
+#&gt; DMPID  "  "            "  "              "  "            "  "             
 #&gt; Sex    "Sex_Female;"   "Sex_Female;"     "Sex_Male;"     "Sex_Female;"    
 #&gt; Smoker "Smoker_Never;" "Smoker_Unknown;" "Smoker_Never;" "Smoker_Unknown;"
 #&gt; TP53   "MUT;"          "MUT;"            "  "            "  "             
@@ -2184,7 +2188,8 @@ columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see 
 #&gt; ATM    "  "            "  "              "  "            "  "             
 #&gt; CDKN2A "  "            "MUT;"            "  "            "  "             
 #&gt; RB1    "  "            "  "              "  "            "  "             
-#&gt;        P-0000329                  P-0000336                  P-0000340      
+#&gt;        20                         21                         22             
+#&gt; DMPID  "  "                       "  "                       "  "           
 #&gt; Sex    "Sex_Female;"              "Sex_Male;"                "Sex_Male;"    
 #&gt; Smoker "Smoker_Prev/Curr Smoker;" "Smoker_Prev/Curr Smoker;" "Smoker_Never;"
 #&gt; TP53   "MUT;"                     "MUT;"                     "  "           
@@ -2202,7 +2207,8 @@ columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see 
 #&gt; ATM    "MUT;"                     "  "                       "  "           
 #&gt; CDKN2A "  "                       "  "                       "  "           
 #&gt; RB1    "  "                       "MUT;"                     "  "           
-#&gt;        P-0000363       P-0000370                  P-0000372        
+#&gt;        24              25                         26               
+#&gt; DMPID  "  "            "  "                       "  "             
 #&gt; Sex    "Sex_Male;"     "Sex_Female;"              "Sex_Male;"      
 #&gt; Smoker "Smoker_Never;" "Smoker_Prev/Curr Smoker;" "Smoker_Unknown;"
 #&gt; TP53   "MUT;"          "MUT;"                     "  "             
@@ -2220,7 +2226,8 @@ columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see 
 #&gt; ATM    "  "            "  "                       "  "             
 #&gt; CDKN2A "  "            "  "                       "  "             
 #&gt; RB1    "  "            "  "                       "  "             
-#&gt;        P-0000407       P-0000426                  P-0000427                 
+#&gt;        28              29                         30                        
+#&gt; DMPID  "  "            "  "                       "  "                      
 #&gt; Sex    "Sex_Female;"   "Sex_Female;"              "Sex_Female;"             
 #&gt; Smoker "Smoker_Never;" "Smoker_Prev/Curr Smoker;" "Smoker_Prev/Curr Smoker;"
 #&gt; TP53   "MUT;"          "  "                       "  "                      
@@ -2238,7 +2245,8 @@ columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see 
 #&gt; ATM    "  "            "  "                       "  "                      
 #&gt; CDKN2A "  "            "  "                       "  "                      
 #&gt; RB1    "  "            "  "                       "  "                      
-#&gt;        P-0000447       P-0000497       P-0000510                 
+#&gt;        31              32              33                        
+#&gt; DMPID  "  "            "  "            "  "                      
 #&gt; Sex    "Sex_Female;"   "Sex_Male;"     "Sex_Male;"               
 #&gt; Smoker "Smoker_Never;" "Smoker_Never;" "Smoker_Prev/Curr Smoker;"
 #&gt; TP53   "MUT;"          "  "            "  "                      
@@ -2256,7 +2264,8 @@ columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see 
 #&gt; ATM    "  "            "  "            "  "                      
 #&gt; CDKN2A "  "            "  "            "  "                      
 #&gt; RB1    "  "            "  "            "  "                      
-#&gt;        P-0000530       P-0000538                  P-0000546      
+#&gt;        34              35                         36             
+#&gt; DMPID  "  "            "  "                       "  "           
 #&gt; Sex    "Sex_Female;"   "Sex_Male;"                "Sex_Male;"    
 #&gt; Smoker "Smoker_Never;" "Smoker_Prev/Curr Smoker;" "Smoker_Never;"
 #&gt; TP53   "  "            "MUT;"                     "  "           
@@ -2274,7 +2283,8 @@ columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see 
 #&gt; ATM    "  "            "  "                       "  "           
 #&gt; CDKN2A "  "            "  "                       "  "           
 #&gt; RB1    "  "            "  "                       "  "           
-#&gt;        P-0000569         P-0000573                  P-0000625      
+#&gt;        37                38                         40             
+#&gt; DMPID  "  "              "  "                       "  "           
 #&gt; Sex    "Sex_Female;"     "Sex_Male;"                "Sex_Female;"  
 #&gt; Smoker "Smoker_Unknown;" "Smoker_Prev/Curr Smoker;" "Smoker_Never;"
 #&gt; TP53   "  "              "MUT;"                     "MUT;"         
@@ -2292,7 +2302,8 @@ columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see 
 #&gt; ATM    "  "              "  "                       "  "           
 #&gt; CDKN2A "  "              "MUT;"                     "  "           
 #&gt; RB1    "  "              "  "                       "  "           
-#&gt;        P-0000678                  P-0000684         P-0000708      
+#&gt;        41                         43                44             
+#&gt; DMPID  "  "                       "  "              "  "           
 #&gt; Sex    "Sex_Male;"                "Sex_Female;"     "Sex_Male;"    
 #&gt; Smoker "Smoker_Prev/Curr Smoker;" "Smoker_Unknown;" "Smoker_Never;"
 #&gt; TP53   "MUT;"                     "MUT;"            "  "           
@@ -2310,7 +2321,8 @@ columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see 
 #&gt; ATM    "  "                       "  "              "  "           
 #&gt; CDKN2A "  "                       "  "              "  "           
 #&gt; RB1    "  "                       "  "              "  "           
-#&gt;        P-0000726                  P-0000745       P-0000761      
+#&gt;        46                         47              48             
+#&gt; DMPID  "  "                       "  "            "  "           
 #&gt; Sex    "Sex_Female;"              "Sex_Female;"   "Sex_Female;"  
 #&gt; Smoker "Smoker_Prev/Curr Smoker;" "Smoker_Never;" "Smoker_Never;"
 #&gt; TP53   "MUT;"                     "MUT;"          "MUT;"         
@@ -2328,7 +2340,8 @@ columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see 
 #&gt; ATM    "  "                       "  "            "  "           
 #&gt; CDKN2A "  "                       "  "            "  "           
 #&gt; RB1    "  "                       "  "            "  "           
-#&gt;        P-0000770         P-0000777       P-0000789                 
+#&gt;        49                50              52                        
+#&gt; DMPID  "  "              "  "            "  "                      
 #&gt; Sex    "Sex_Female;"     "Sex_Female;"   "Sex_Female;"             
 #&gt; Smoker "Smoker_Unknown;" "Smoker_Never;" "Smoker_Prev/Curr Smoker;"
 #&gt; TP53   "MUT;"            "MUT;"          "MUT;"                    
@@ -2346,7 +2359,8 @@ columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see 
 #&gt; ATM    "  "              "  "            "  "                      
 #&gt; CDKN2A "  "              "  "            "  "                      
 #&gt; RB1    "  "              "  "            "  "                      
-#&gt;        P-0000791       P-0000788       P-0000795                 
+#&gt;        53              51              54                        
+#&gt; DMPID  "  "            "  "            "  "                      
 #&gt; Sex    "Sex_Male;"     "Sex_Female;"   "Sex_Female;"             
 #&gt; Smoker "Smoker_Never;" "Smoker_Never;" "Smoker_Prev/Curr Smoker;"
 #&gt; TP53   "  "            "  "            "  "                      
@@ -2364,7 +2378,8 @@ columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see 
 #&gt; ATM    "  "            "  "            "  "                      
 #&gt; CDKN2A "  "            "  "            "  "                      
 #&gt; RB1    "  "            "  "            "  "                      
-#&gt;        P-0000805       P-0000809         P-0000838         P-0000842      
+#&gt;        55              56                58                59             
+#&gt; DMPID  "  "            "  "              "  "              "  "           
 #&gt; Sex    "Sex_Female;"   "Sex_Female;"     "Sex_Female;"     "Sex_Male;"    
 #&gt; Smoker "Smoker_Never;" "Smoker_Unknown;" "Smoker_Unknown;" "Smoker_Never;"
 #&gt; TP53   "  "            "  "              "  "              "  "           
@@ -2382,7 +2397,8 @@ columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see 
 #&gt; ATM    "  "            "  "              "  "              "  "           
 #&gt; CDKN2A "  "            "  "              "  "              "  "           
 #&gt; RB1    "  "            "  "              "  "              "  "           
-#&gt;        P-0000847                  P-0000855                 
+#&gt;        60                         61                        
+#&gt; DMPID  "  "                       "  "                      
 #&gt; Sex    "Sex_Male;"                "Sex_Male;"               
 #&gt; Smoker "Smoker_Prev/Curr Smoker;" "Smoker_Prev/Curr Smoker;"
 #&gt; TP53   "  "                       "MUT;"                    
@@ -2400,7 +2416,8 @@ columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see 
 #&gt; ATM    "  "                       "  "                      
 #&gt; CDKN2A "  "                       "  "                      
 #&gt; RB1    "  "                       "  "                      
-#&gt;        P-0000861                  P-0000820                 
+#&gt;        62                         57                        
+#&gt; DMPID  "  "                       "  "                      
 #&gt; Sex    "Sex_Female;"              "Sex_Female;"             
 #&gt; Smoker "Smoker_Prev/Curr Smoker;" "Smoker_Prev/Curr Smoker;"
 #&gt; TP53   "  "                       "  "                      
@@ -2418,7 +2435,8 @@ columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see 
 #&gt; ATM    "  "                       "  "                      
 #&gt; CDKN2A "  "                       "  "                      
 #&gt; RB1    "  "                       "  "                      
-#&gt;        P-0000878                  P-0000879       P-0000904                 
+#&gt;        63                         64              65                        
+#&gt; DMPID  "  "                       "  "            "  "                      
 #&gt; Sex    "Sex_Female;"              "Sex_Female;"   "Sex_Male;"               
 #&gt; Smoker "Smoker_Prev/Curr Smoker;" "Smoker_Never;" "Smoker_Prev/Curr Smoker;"
 #&gt; TP53   "MUT;"                     "  "            "  "                      
@@ -2436,7 +2454,8 @@ columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see 
 #&gt; ATM    "MUT;"                     "  "            "  "                      
 #&gt; CDKN2A "  "                       "  "            "  "                      
 #&gt; RB1    "  "                       "  "            "  "                      
-#&gt;        P-0000912                  P-0000914         P-0000929                 
+#&gt;        66                         67                68                        
+#&gt; DMPID  "  "                       "  "              "  "                      
 #&gt; Sex    "Sex_Male;"                "Sex_Male;"       "Sex_Male;"               
 #&gt; Smoker "Smoker_Prev/Curr Smoker;" "Smoker_Unknown;" "Smoker_Prev/Curr Smoker;"
 #&gt; TP53   "  "                       "  "              "MUT;"                    
@@ -2454,7 +2473,8 @@ columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see 
 #&gt; ATM    "  "                       "  "              "  "                      
 #&gt; CDKN2A "  "                       "  "              "  "                      
 #&gt; RB1    "  "                       "  "              "MUT;"                    
-#&gt;        P-0000954                  P-0001001                 
+#&gt;        70                         76                        
+#&gt; DMPID  "  "                       "  "                      
 #&gt; Sex    "Sex_Male;"                "Sex_Male;"               
 #&gt; Smoker "Smoker_Prev/Curr Smoker;" "Smoker_Prev/Curr Smoker;"
 #&gt; TP53   "MUT;"                     "  "                      
@@ -2472,7 +2492,8 @@ columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see 
 #&gt; ATM    "  "                       "MUT;"                    
 #&gt; CDKN2A "  "                       "  "                      
 #&gt; RB1    "MUT;"                     "  "                      
-#&gt;        P-0001004                  P-0001027                  P-0001046      
+#&gt;        77                         78                         80             
+#&gt; DMPID  "  "                       "  "                       "  "           
 #&gt; Sex    "Sex_Male;"                "Sex_Male;"                "Sex_Female;"  
 #&gt; Smoker "Smoker_Prev/Curr Smoker;" "Smoker_Prev/Curr Smoker;" "Smoker_Never;"
 #&gt; TP53   "  "                       "  "                       "MUT;"         
@@ -2490,7 +2511,8 @@ columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see 
 #&gt; ATM    "  "                       "  "                       "  "           
 #&gt; CDKN2A "  "                       "  "                       "  "           
 #&gt; RB1    "  "                       "  "                       "  "           
-#&gt;        P-0001038       P-0000955                  P-0001096                 
+#&gt;        79              71                         81                        
+#&gt; DMPID  "  "            "  "                       "  "                      
 #&gt; Sex    "Sex_Female;"   "Sex_Female;"              "Sex_Male;"               
 #&gt; Smoker "Smoker_Never;" "Smoker_Prev/Curr Smoker;" "Smoker_Prev/Curr Smoker;"
 #&gt; TP53   "MUT;"          "  "                       "  "                      
@@ -2508,7 +2530,8 @@ columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see 
 #&gt; ATM    "MUT;"          "  "                       "  "                      
 #&gt; CDKN2A "  "            "  "                       "  "                      
 #&gt; RB1    "  "            "  "                       "  "                      
-#&gt;        P-0001103       P-0000963       P-0001107       P-0001158        
+#&gt;        82              72              83              87               
+#&gt; DMPID  "  "            "  "            "  "            "  "             
 #&gt; Sex    "Sex_Male;"     "Sex_Female;"   "Sex_Female;"   "Sex_Male;"      
 #&gt; Smoker "Smoker_Never;" "Smoker_Never;" "Smoker_Never;" "Smoker_Unknown;"
 #&gt; TP53   "  "            "MUT;"          "MUT;"          "MUT;"           
@@ -2526,7 +2549,8 @@ columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see 
 #&gt; ATM    "  "            "  "            "  "            "  "             
 #&gt; CDKN2A "  "            "  "            "  "            "  "             
 #&gt; RB1    "  "            "  "            "MUT;"          "  "             
-#&gt;        P-0001177       P-0001181         P-0001197                 
+#&gt;        88              89                90                        
+#&gt; DMPID  "  "            "  "              "  "                      
 #&gt; Sex    "Sex_Female;"   "Sex_Male;"       "Sex_Female;"             
 #&gt; Smoker "Smoker_Never;" "Smoker_Unknown;" "Smoker_Prev/Curr Smoker;"
 #&gt; TP53   "  "            "  "              "MUT;"                    
@@ -2544,7 +2568,8 @@ columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see 
 #&gt; ATM    "  "            "  "              "  "                      
 #&gt; CDKN2A "  "            "  "              "  "                      
 #&gt; RB1    "  "            "  "              "  "                      
-#&gt;        P-0001208                  P-0001218       P-0001239                 
+#&gt;        91                         92              94                        
+#&gt; DMPID  "  "                       "  "            "  "                      
 #&gt; Sex    "Sex_Male;"                "Sex_Female;"   "Sex_Male;"               
 #&gt; Smoker "Smoker_Prev/Curr Smoker;" "Smoker_Never;" "Smoker_Prev/Curr Smoker;"
 #&gt; TP53   "  "                       "  "            "  "                      
@@ -2562,7 +2587,8 @@ columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see 
 #&gt; ATM    "  "                       "  "            "  "                      
 #&gt; CDKN2A "  "                       "  "            "  "                      
 #&gt; RB1    "  "                       "  "            "  "                      
-#&gt;        P-0001255       P-0001286                  P-0001296                 
+#&gt;        95              96                         98                        
+#&gt; DMPID  "  "            "  "                       "  "                      
 #&gt; Sex    "Sex_Female;"   "Sex_Female;"              "Sex_Female;"             
 #&gt; Smoker "Smoker_Never;" "Smoker_Prev/Curr Smoker;" "Smoker_Prev/Curr Smoker;"
 #&gt; TP53   "MUT;"          "  "                       "MUT;"                    
@@ -2580,7 +2606,8 @@ columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see 
 #&gt; ATM    "  "            "  "                       "  "                      
 #&gt; CDKN2A "MUT;"          "  "                       "  "                      
 #&gt; RB1    "  "            "  "                       "  "                      
-#&gt;        P-0001303       P-0001293                  P-0001320      
+#&gt;        99              97                         101            
+#&gt; DMPID  "  "            "  "                       "  "           
 #&gt; Sex    "Sex_Female;"   "Sex_Male;"                "Sex_Male;"    
 #&gt; Smoker "Smoker_Never;" "Smoker_Prev/Curr Smoker;" "Smoker_Never;"
 #&gt; TP53   "MUT;"          "MUT;"                     "MUT;"         
@@ -2598,7 +2625,8 @@ columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see 
 #&gt; ATM    "  "            "  "                       "  "           
 #&gt; CDKN2A "  "            "  "                       "  "           
 #&gt; RB1    "  "            "  "                       "  "           
-#&gt;        P-0001337                  P-0001350       P-0001345      
+#&gt;        103                        105             104            
+#&gt; DMPID  "  "                       "  "            "  "           
 #&gt; Sex    "Sex_Male;"                "Sex_Female;"   "Sex_Female;"  
 #&gt; Smoker "Smoker_Prev/Curr Smoker;" "Smoker_Never;" "Smoker_Never;"
 #&gt; TP53   "  "                       "  "            "  "           
@@ -2616,7 +2644,8 @@ columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see 
 #&gt; ATM    "  "                       "  "            "  "           
 #&gt; CDKN2A "  "                       "  "            "  "           
 #&gt; RB1    "  "                       "  "            "  "           
-#&gt;        P-0000964       P-0001385                  P-0001397                 
+#&gt;        73              107                        109                       
+#&gt; DMPID  "  "            "  "                       "  "                      
 #&gt; Sex    "Sex_Male;"     "Sex_Female;"              "Sex_Female;"             
 #&gt; Smoker "Smoker_Never;" "Smoker_Prev/Curr Smoker;" "Smoker_Prev/Curr Smoker;"
 #&gt; TP53   "  "            "MUT;"                     "  "                      
@@ -2634,7 +2663,8 @@ columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see 
 #&gt; ATM    "  "            "  "                       "  "                      
 #&gt; CDKN2A "  "            "  "                       "  "                      
 #&gt; RB1    "  "            "  "                       "  "                      
-#&gt;        P-0001388       P-0001427       P-0001460      
+#&gt;        108             110             112            
+#&gt; DMPID  "  "            "  "            "  "           
 #&gt; Sex    "Sex_Male;"     "Sex_Female;"   "Sex_Female;"  
 #&gt; Smoker "Smoker_Never;" "Smoker_Never;" "Smoker_Never;"
 #&gt; TP53   "  "            "MUT;"          "MUT;"         
@@ -2652,7 +2682,8 @@ columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see 
 #&gt; ATM    "  "            "  "            "  "           
 #&gt; CDKN2A "  "            "  "            "  "           
 #&gt; RB1    "  "            "  "            "  "           
-#&gt;        P-0001485                  P-0000216                  P-0001493      
+#&gt;        113                        12                         114            
+#&gt; DMPID  "  "                       "  "                       "  "           
 #&gt; Sex    "Sex_Male;"                "Sex_Female;"              "Sex_Male;"    
 #&gt; Smoker "Smoker_Prev/Curr Smoker;" "Smoker_Prev/Curr Smoker;" "Smoker_Never;"
 #&gt; TP53   "  "                       "  "                       "  "           
@@ -2670,7 +2701,8 @@ columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see 
 #&gt; ATM    "  "                       "  "                       "  "           
 #&gt; CDKN2A "MUT;"                     "  "                       "  "           
 #&gt; RB1    "  "                       "  "                       "  "           
-#&gt;        P-0001507                  P-0001512       P-0001538                 
+#&gt;        115                        116             118                       
+#&gt; DMPID  "  "                       "  "            "  "                      
 #&gt; Sex    "Sex_Female;"              "Sex_Female;"   "Sex_Male;"               
 #&gt; Smoker "Smoker_Prev/Curr Smoker;" "Smoker_Never;" "Smoker_Prev/Curr Smoker;"
 #&gt; TP53   "  "                       "  "            "  "                      
@@ -2688,7 +2720,8 @@ columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see 
 #&gt; ATM    "  "                       "  "            "  "                      
 #&gt; CDKN2A "  "                       "  "            "  "                      
 #&gt; RB1    "  "                       "  "            "  "                      
-#&gt;        P-0001540       P-0001555                  P-0001551      
+#&gt;        119             121                        120            
+#&gt; DMPID  "  "            "  "                       "  "           
 #&gt; Sex    "Sex_Female;"   "Sex_Female;"              "Sex_Female;"  
 #&gt; Smoker "Smoker_Never;" "Smoker_Prev/Curr Smoker;" "Smoker_Never;"
 #&gt; TP53   "  "            "MUT;"                     "MUT;"         
@@ -2706,7 +2739,8 @@ columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see 
 #&gt; ATM    "  "            "  "                       "  "           
 #&gt; CDKN2A "  "            "  "                       "  "           
 #&gt; RB1    "  "            "MUT;"                     "  "           
-#&gt;        P-0001564       P-0001583                  P-0001596        
+#&gt;        122             123                        125              
+#&gt; DMPID  "  "            "  "                       "  "             
 #&gt; Sex    "Sex_Female;"   "Sex_Male;"                "Sex_Female;"    
 #&gt; Smoker "Smoker_Never;" "Smoker_Prev/Curr Smoker;" "Smoker_Unknown;"
 #&gt; TP53   "MUT;"          "MUT;"                     "  "             
@@ -2724,7 +2758,8 @@ columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see 
 #&gt; ATM    "  "            "  "                       "  "             
 #&gt; CDKN2A "  "            "  "                       "  "             
 #&gt; RB1    "  "            "  "                       "  "             
-#&gt;        P-0001585                  P-0001603       P-0001611      
+#&gt;        124                        126             128            
+#&gt; DMPID  "  "                       "  "            "  "           
 #&gt; Sex    "Sex_Female;"              "Sex_Male;"     "Sex_Female;"  
 #&gt; Smoker "Smoker_Prev/Curr Smoker;" "Smoker_Never;" "Smoker_Never;"
 #&gt; TP53   "  "                       "MUT;"          "MUT;"         
@@ -2742,7 +2777,8 @@ columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see 
 #&gt; ATM    "  "                       "MUT;"          "  "           
 #&gt; CDKN2A "  "                       "MUT;"          "  "           
 #&gt; RB1    "  "                       "  "            "  "           
-#&gt;        P-0001616       P-0001358                  P-0001669                 
+#&gt;        129             106                        131                       
+#&gt; DMPID  "  "            "  "                       "  "                      
 #&gt; Sex    "Sex_Female;"   "Sex_Male;"                "Sex_Male;"               
 #&gt; Smoker "Smoker_Never;" "Smoker_Prev/Curr Smoker;" "Smoker_Prev/Curr Smoker;"
 #&gt; TP53   "MUT;"          "  "                       "  "                      
@@ -2760,7 +2796,8 @@ columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see 
 #&gt; ATM    "  "            "  "                       "  "                      
 #&gt; CDKN2A "  "            "  "                       "  "                      
 #&gt; RB1    "  "            "  "                       "  "                      
-#&gt;        P-0001687       P-0001680                  P-0001701      
+#&gt;        134             132                        135            
+#&gt; DMPID  "  "            "  "                       "  "           
 #&gt; Sex    "Sex_Male;"     "Sex_Female;"              "Sex_Female;"  
 #&gt; Smoker "Smoker_Never;" "Smoker_Prev/Curr Smoker;" "Smoker_Never;"
 #&gt; TP53   "  "            "  "                       "MUT;"         
@@ -2778,7 +2815,8 @@ columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see 
 #&gt; ATM    "  "            "  "                       "  "           
 #&gt; CDKN2A "  "            "MUT;"                     "  "           
 #&gt; RB1    "  "            "  "                       "  "           
-#&gt;        P-0001711       P-0001724                  P-0001730      
+#&gt;        137             138                        139            
+#&gt; DMPID  "  "            "  "                       "  "           
 #&gt; Sex    "Sex_Male;"     "Sex_Male;"                "Sex_Female;"  
 #&gt; Smoker "Smoker_Never;" "Smoker_Prev/Curr Smoker;" "Smoker_Never;"
 #&gt; TP53   "  "            "  "                       "  "           
@@ -2796,7 +2834,8 @@ columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see 
 #&gt; ATM    "  "            "  "                       "  "           
 #&gt; CDKN2A "  "            "  "                       "  "           
 #&gt; RB1    "  "            "  "                       "  "           
-#&gt;        P-0001741                  P-0001752       P-0001781      
+#&gt;        140                        141             142            
+#&gt; DMPID  "  "                       "  "            "  "           
 #&gt; Sex    "Sex_Female;"              "Sex_Female;"   "Sex_Female;"  
 #&gt; Smoker "Smoker_Prev/Curr Smoker;" "Smoker_Never;" "Smoker_Never;"
 #&gt; TP53   "MUT;"                     "MUT;"          "  "           
@@ -2814,7 +2853,8 @@ columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see 
 #&gt; ATM    "  "                       "  "            "  "           
 #&gt; CDKN2A "  "                       "  "            "  "           
 #&gt; RB1    "  "                       "  "            "  "           
-#&gt;        P-0001787                  P-0001822                 
+#&gt;        143                        144                       
+#&gt; DMPID  "  "                       "  "                      
 #&gt; Sex    "Sex_Female;"              "Sex_Male;"               
 #&gt; Smoker "Smoker_Prev/Curr Smoker;" "Smoker_Prev/Curr Smoker;"
 #&gt; TP53   "MUT;"                     "  "                      
@@ -2832,7 +2872,8 @@ columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see 
 #&gt; ATM    "  "                       "  "                      
 #&gt; CDKN2A "  "                       "  "                      
 #&gt; RB1    "  "                       "  "                      
-#&gt;        P-0001823                  P-0001830                 
+#&gt;        145                        146                       
+#&gt; DMPID  "  "                       "  "                      
 #&gt; Sex    "Sex_Female;"              "Sex_Female;"             
 #&gt; Smoker "Smoker_Prev/Curr Smoker;" "Smoker_Prev/Curr Smoker;"
 #&gt; TP53   "MUT;"                     "MUT;"                    
@@ -2850,7 +2891,8 @@ columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see 
 #&gt; ATM    "  "                       "  "                      
 #&gt; CDKN2A "  "                       "  "                      
 #&gt; RB1    "  "                       "  "                      
-#&gt;        P-0001861                  P-0001884       P-0001919        
+#&gt;        148                        149             151              
+#&gt; DMPID  "  "                       "  "            "  "             
 #&gt; Sex    "Sex_Male;"                "Sex_Male;"     "Sex_Female;"    
 #&gt; Smoker "Smoker_Prev/Curr Smoker;" "Smoker_Never;" "Smoker_Unknown;"
 #&gt; TP53   "MUT;"                     "  "            "  "             
@@ -2868,7 +2910,8 @@ columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see 
 #&gt; ATM    "  "                       "  "            "  "             
 #&gt; CDKN2A "  "                       "  "            "  "             
 #&gt; RB1    "  "                       "  "            "  "             
-#&gt;        P-0001930         P-0001991       P-0002021         P-0001684      
+#&gt;        152               154             155               133            
+#&gt; DMPID  "  "              "  "            "  "              "  "           
 #&gt; Sex    "Sex_Female;"     "Sex_Female;"   "Sex_Female;"     "Sex_Male;"    
 #&gt; Smoker "Smoker_Unknown;" "Smoker_Never;" "Smoker_Unknown;" "Smoker_Never;"
 #&gt; TP53   "  "              "  "            "MUT;"            "  "           
@@ -2886,7 +2929,8 @@ columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see 
 #&gt; ATM    "  "              "  "            "  "              "  "           
 #&gt; CDKN2A "  "              "  "            "MUT;"            "  "           
 #&gt; RB1    "  "              "  "            "  "              "  "           
-#&gt;        P-0002060                  P-0002063       P-0002069                 
+#&gt;        156                        157             158                       
+#&gt; DMPID  "  "                       "  "            "  "                      
 #&gt; Sex    "Sex_Male;"                "Sex_Female;"   "Sex_Male;"               
 #&gt; Smoker "Smoker_Prev/Curr Smoker;" "Smoker_Never;" "Smoker_Prev/Curr Smoker;"
 #&gt; TP53   "MUT;"                     "  "            "  "                      
@@ -2904,7 +2948,8 @@ columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see 
 #&gt; ATM    "  "                       "  "            "  "                      
 #&gt; CDKN2A "  "                       "  "            "  "                      
 #&gt; RB1    "  "                       "  "            "  "                      
-#&gt;        P-0000715       P-0002091                  P-0002096      
+#&gt;        45              160                        161            
+#&gt; DMPID  "  "            "  "                       "  "           
 #&gt; Sex    "Sex_Female;"   "Sex_Female;"              "Sex_Female;"  
 #&gt; Smoker "Smoker_Never;" "Smoker_Prev/Curr Smoker;" "Smoker_Never;"
 #&gt; TP53   "  "            "MUT;"                     "  "           
@@ -2922,7 +2967,8 @@ columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see 
 #&gt; ATM    "  "            "  "                       "  "           
 #&gt; CDKN2A "  "            "  "                       "  "           
 #&gt; RB1    "  "            "MUT;"                     "  "           
-#&gt;        P-0001135       P-0002127       P-0002135                 
+#&gt;        86              163             164                       
+#&gt; DMPID  "  "            "  "            "  "                      
 #&gt; Sex    "Sex_Male;"     "Sex_Male;"     "Sex_Female;"             
 #&gt; Smoker "Smoker_Never;" "Smoker_Never;" "Smoker_Prev/Curr Smoker;"
 #&gt; TP53   "MUT;"          "  "            "  "                      
@@ -2940,7 +2986,8 @@ columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see 
 #&gt; ATM    "  "            "  "            "MUT;"                    
 #&gt; CDKN2A "  "            "  "            "  "                      
 #&gt; RB1    "MUT;"          "  "            "  "                      
-#&gt;        P-0002144         P-0002141                  P-0002160                 
+#&gt;        166               165                        167                       
+#&gt; DMPID  "  "              "  "                       "  "                      
 #&gt; Sex    "Sex_Female;"     "Sex_Male;"                "Sex_Male;"               
 #&gt; Smoker "Smoker_Unknown;" "Smoker_Prev/Curr Smoker;" "Smoker_Prev/Curr Smoker;"
 #&gt; TP53   "  "              "  "                       "MUT;"                    
@@ -2958,7 +3005,8 @@ columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see 
 #&gt; ATM    "  "              "  "                       "  "                      
 #&gt; CDKN2A "  "              "  "                       "  "                      
 #&gt; RB1    "  "              "  "                       "MUT;"                    
-#&gt;        P-0002164                  P-0002207                 
+#&gt;        168                        169                       
+#&gt; DMPID  "  "                       "  "                      
 #&gt; Sex    "Sex_Male;"                "Sex_Male;"               
 #&gt; Smoker "Smoker_Prev/Curr Smoker;" "Smoker_Prev/Curr Smoker;"
 #&gt; TP53   "MUT;"                     "MUT;"                    
@@ -2976,7 +3024,8 @@ columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see 
 #&gt; ATM    "  "                       "  "                      
 #&gt; CDKN2A "  "                       "  "                      
 #&gt; RB1    "  "                       "  "                      
-#&gt;        P-0000377                  P-0002240       P-0002257                 
+#&gt;        27                         171             172                       
+#&gt; DMPID  "  "                       "  "            "  "                      
 #&gt; Sex    "Sex_Male;"                "Sex_Male;"     "Sex_Female;"             
 #&gt; Smoker "Smoker_Prev/Curr Smoker;" "Smoker_Never;" "Smoker_Prev/Curr Smoker;"
 #&gt; TP53   "MUT;"                     "MUT;"          "MUT;"                    
@@ -2994,7 +3043,8 @@ columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see 
 #&gt; ATM    "  "                       "  "            "  "                      
 #&gt; CDKN2A "  "                       "  "            "  "                      
 #&gt; RB1    "  "                       "  "            "  "                      
-#&gt;        P-0002291       P-0002292                  P-0002296                 
+#&gt;        175             176                        177                       
+#&gt; DMPID  "  "            "  "                       "  "                      
 #&gt; Sex    "Sex_Female;"   "Sex_Male;"                "Sex_Male;"               
 #&gt; Smoker "Smoker_Never;" "Smoker_Prev/Curr Smoker;" "Smoker_Prev/Curr Smoker;"
 #&gt; TP53   "MUT;"          "MUT;"                     "  "                      
@@ -3012,7 +3062,8 @@ columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see 
 #&gt; ATM    "  "            "  "                       "  "                      
 #&gt; CDKN2A "  "            "  "                       "  "                      
 #&gt; RB1    "  "            "MUT;"                     "MUT;"                    
-#&gt;        P-0002313       P-0002327                  P-0002343      
+#&gt;        178             180                        182            
+#&gt; DMPID  "  "            "  "                       "  "           
 #&gt; Sex    "Sex_Female;"   "Sex_Female;"              "Sex_Female;"  
 #&gt; Smoker "Smoker_Never;" "Smoker_Prev/Curr Smoker;" "Smoker_Never;"
 #&gt; TP53   "MUT;"          "MUT;"                     "MUT;"         
@@ -3030,7 +3081,8 @@ columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see 
 #&gt; ATM    "  "            "  "                       "  "           
 #&gt; CDKN2A "  "            "  "                       "  "           
 #&gt; RB1    "  "            "  "                       "  "           
-#&gt;        P-0002344                  P-0002273                 
+#&gt;        183                        173                       
+#&gt; DMPID  "  "                       "  "                      
 #&gt; Sex    "Sex_Female;"              "Sex_Male;"               
 #&gt; Smoker "Smoker_Prev/Curr Smoker;" "Smoker_Prev/Curr Smoker;"
 #&gt; TP53   "MUT;"                     "  "                      
@@ -3048,7 +3100,8 @@ columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see 
 #&gt; ATM    "  "                       "MUT;"                    
 #&gt; CDKN2A "  "                       "  "                      
 #&gt; RB1    "  "                       "  "                      
-#&gt;        P-0002367                  P-0002374         P-0002396                 
+#&gt;        186                        187               188                       
+#&gt; DMPID  "  "                       "  "              "  "                      
 #&gt; Sex    "Sex_Male;"                "Sex_Female;"     "Sex_Female;"             
 #&gt; Smoker "Smoker_Prev/Curr Smoker;" "Smoker_Unknown;" "Smoker_Prev/Curr Smoker;"
 #&gt; TP53   "MUT;"                     "MUT;"            "  "                      
@@ -3066,7 +3119,8 @@ columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see 
 #&gt; ATM    "  "                       "  "              "  "                      
 #&gt; CDKN2A "MUT;"                     "  "              "  "                      
 #&gt; RB1    "  "                       "  "              "MUT;"                    
-#&gt;        P-0002405         P-0002407         P-0002421                 
+#&gt;        190               191               192                       
+#&gt; DMPID  "  "              "  "              "  "                      
 #&gt; Sex    "Sex_Male;"       "Sex_Female;"     "Sex_Female;"             
 #&gt; Smoker "Smoker_Unknown;" "Smoker_Unknown;" "Smoker_Prev/Curr Smoker;"
 #&gt; TP53   "MUT;"            "MUT;"            "MUT;"                    
@@ -3084,7 +3138,8 @@ columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see 
 #&gt; ATM    "  "              "  "              "MUT;"                    
 #&gt; CDKN2A "  "              "  "              "  "                      
 #&gt; RB1    "  "              "  "              "  "                      
-#&gt;        P-0002434         P-0002442                  P-0002456      
+#&gt;        193               194                        195            
+#&gt; DMPID  "  "              "  "                       "  "           
 #&gt; Sex    "Sex_Female;"     "Sex_Male;"                "Sex_Female;"  
 #&gt; Smoker "Smoker_Unknown;" "Smoker_Prev/Curr Smoker;" "Smoker_Never;"
 #&gt; TP53   "  "              "MUT;"                     "  "           
@@ -3102,7 +3157,8 @@ columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see 
 #&gt; ATM    "  "              "  "                       "  "           
 #&gt; CDKN2A "  "              "  "                       "  "           
 #&gt; RB1    "  "              "  "                       "  "           
-#&gt;        P-0002463                  P-0002500                 
+#&gt;        196                        197                       
+#&gt; DMPID  "  "                       "  "                      
 #&gt; Sex    "Sex_Female;"              "Sex_Male;"               
 #&gt; Smoker "Smoker_Prev/Curr Smoker;" "Smoker_Prev/Curr Smoker;"
 #&gt; TP53   "  "                       "  "                      
@@ -3120,7 +3176,8 @@ columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see 
 #&gt; ATM    "  "                       "  "                      
 #&gt; CDKN2A "  "                       "  "                      
 #&gt; RB1    "  "                       "  "                      
-#&gt;        P-0002510                  P-0002536         P-0002533        
+#&gt;        198                        202               201              
+#&gt; DMPID  "  "                       "  "              "  "             
 #&gt; Sex    "Sex_Female;"              "Sex_Female;"     "Sex_Male;"      
 #&gt; Smoker "Smoker_Prev/Curr Smoker;" "Smoker_Unknown;" "Smoker_Unknown;"
 #&gt; TP53   "  "                       "MUT;"            "  "             
@@ -3138,7 +3195,8 @@ columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see 
 #&gt; ATM    "  "                       "  "              "  "             
 #&gt; CDKN2A "  "                       "  "              "  "             
 #&gt; RB1    "  "                       "  "              "  "             
-#&gt;        P-0002580       P-0002591       P-0002605                 
+#&gt;        203             204             206                       
+#&gt; DMPID  "  "            "  "            "  "                      
 #&gt; Sex    "Sex_Male;"     "Sex_Female;"   "Sex_Female;"             
 #&gt; Smoker "Smoker_Never;" "Smoker_Never;" "Smoker_Prev/Curr Smoker;"
 #&gt; TP53   "  "            "MUT;"          "MUT;"                    
@@ -3156,7 +3214,8 @@ columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see 
 #&gt; ATM    "  "            "  "            "  "                      
 #&gt; CDKN2A "  "            "  "            "  "                      
 #&gt; RB1    "  "            "  "            "  "                      
-#&gt;        P-0002614                  P-0002608                 
+#&gt;        208                        207                       
+#&gt; DMPID  "  "                       "  "                      
 #&gt; Sex    "Sex_Male;"                "Sex_Male;"               
 #&gt; Smoker "Smoker_Prev/Curr Smoker;" "Smoker_Prev/Curr Smoker;"
 #&gt; TP53   "  "                       "  "                      
@@ -3174,7 +3233,8 @@ columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see 
 #&gt; ATM    "  "                       "  "                      
 #&gt; CDKN2A "  "                       "  "                      
 #&gt; RB1    "  "                       "  "                      
-#&gt;        P-0002616                  P-0002624       P-0002629                 
+#&gt;        209                        210             211                       
+#&gt; DMPID  "  "                       "  "            "  "                      
 #&gt; Sex    "Sex_Male;"                "Sex_Male;"     "Sex_Male;"               
 #&gt; Smoker "Smoker_Prev/Curr Smoker;" "Smoker_Never;" "Smoker_Prev/Curr Smoker;"
 #&gt; TP53   "  "                       "  "            "MUT;"                    
@@ -3192,7 +3252,8 @@ columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see 
 #&gt; ATM    "  "                       "  "            "  "                      
 #&gt; CDKN2A "  "                       "  "            "  "                      
 #&gt; RB1    "  "                       "  "            "  "                      
-#&gt;        P-0002651                  P-0002656         P-0002658                 
+#&gt;        213                        214               215                       
+#&gt; DMPID  "  "                       "  "              "  "                      
 #&gt; Sex    "Sex_Male;"                "Sex_Female;"     "Sex_Male;"               
 #&gt; Smoker "Smoker_Prev/Curr Smoker;" "Smoker_Unknown;" "Smoker_Prev/Curr Smoker;"
 #&gt; TP53   "MUT;"                     "  "              "MUT;"                    
@@ -3210,7 +3271,8 @@ columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see 
 #&gt; ATM    "  "                       "  "              "MUT;"                    
 #&gt; CDKN2A "  "                       "  "              "  "                      
 #&gt; RB1    "  "                       "  "              "MUT;"                    
-#&gt;        P-0002673       P-0001942       P-0002640                 
+#&gt;        216             153             212                       
+#&gt; DMPID  "  "            "  "            "  "                      
 #&gt; Sex    "Sex_Male;"     "Sex_Female;"   "Sex_Female;"             
 #&gt; Smoker "Smoker_Never;" "Smoker_Never;" "Smoker_Prev/Curr Smoker;"
 #&gt; TP53   "MUT;"          "MUT;"          "  "                      
@@ -3228,7 +3290,8 @@ columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see 
 #&gt; ATM    "  "            "  "            "  "                      
 #&gt; CDKN2A "  "            "MUT;"          "  "                      
 #&gt; RB1    "  "            "  "            "  "                      
-#&gt;        P-0002706                  P-0002729       P-0002770      
+#&gt;        217                        219             221            
+#&gt; DMPID  "  "                       "  "            "  "           
 #&gt; Sex    "Sex_Female;"              "Sex_Female;"   "Sex_Male;"    
 #&gt; Smoker "Smoker_Prev/Curr Smoker;" "Smoker_Never;" "Smoker_Never;"
 #&gt; TP53   "  "                       "MUT;"          "MUT;"         
@@ -3246,7 +3309,8 @@ columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see 
 #&gt; ATM    "  "                       "  "            "  "           
 #&gt; CDKN2A "  "                       "  "            "  "           
 #&gt; RB1    "  "                       "  "            "  "           
-#&gt;        P-0002777                  P-0002783       P-0002794                 
+#&gt;        222                        223             225                       
+#&gt; DMPID  "  "                       "  "            "  "                      
 #&gt; Sex    "Sex_Male;"                "Sex_Male;"     "Sex_Female;"             
 #&gt; Smoker "Smoker_Prev/Curr Smoker;" "Smoker_Never;" "Smoker_Prev/Curr Smoker;"
 #&gt; TP53   "MUT;"                     "MUT;"          "  "                      
@@ -3264,7 +3328,8 @@ columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see 
 #&gt; ATM    "  "                       "  "            "  "                      
 #&gt; CDKN2A "  "                       "  "            "  "                      
 #&gt; RB1    "MUT;"                     "  "            "  "                      
-#&gt;        P-0002828                  P-0002830         P-0002844      
+#&gt;        227                        228               229            
+#&gt; DMPID  "  "                       "  "              "  "           
 #&gt; Sex    "Sex_Female;"              "Sex_Male;"       "Sex_Female;"  
 #&gt; Smoker "Smoker_Prev/Curr Smoker;" "Smoker_Unknown;" "Smoker_Never;"
 #&gt; TP53   "  "                       "  "              "  "           
@@ -3282,7 +3347,8 @@ columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see 
 #&gt; ATM    "  "                       "  "              "  "           
 #&gt; CDKN2A "  "                       "MUT;"            "MUT;"         
 #&gt; RB1    "  "                       "  "              "  "           
-#&gt;        P-0002881                  P-0002915       P-0002921                 
+#&gt;        230                        232             235                       
+#&gt; DMPID  "  "                       "  "            "  "                      
 #&gt; Sex    "Sex_Male;"                "Sex_Female;"   "Sex_Female;"             
 #&gt; Smoker "Smoker_Prev/Curr Smoker;" "Smoker_Never;" "Smoker_Prev/Curr Smoker;"
 #&gt; TP53   "  "                       "  "            "  "                      
@@ -3300,7 +3366,8 @@ columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see 
 #&gt; ATM    "  "                       "  "            "  "                      
 #&gt; CDKN2A "  "                       "  "            "  "                      
 #&gt; RB1    "  "                       "  "            "  "                      
-#&gt;        P-0002940       P-0002955                  P-0002750        
+#&gt;        236             237                        220              
+#&gt; DMPID  "  "            "  "                       "  "             
 #&gt; Sex    "Sex_Male;"     "Sex_Female;"              "Sex_Male;"      
 #&gt; Smoker "Smoker_Never;" "Smoker_Prev/Curr Smoker;" "Smoker_Unknown;"
 #&gt; TP53   "  "            "  "                       "  "             
@@ -3318,7 +3385,8 @@ columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see 
 #&gt; ATM    "  "            "MUT;"                     "  "             
 #&gt; CDKN2A "  "            "  "                       "  "             
 #&gt; RB1    "  "            "  "                       "  "             
-#&gt;        P-0002960       P-0002963       P-0002985       P-0002975      
+#&gt;        238             239             241             240            
+#&gt; DMPID  "  "            "  "            "  "            "  "           
 #&gt; Sex    "Sex_Male;"     "Sex_Male;"     "Sex_Female;"   "Sex_Female;"  
 #&gt; Smoker "Smoker_Never;" "Smoker_Never;" "Smoker_Never;" "Smoker_Never;"
 #&gt; TP53   "MUT;"          "MUT;"          "MUT;"          "  "           
@@ -3336,7 +3404,8 @@ columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see 
 #&gt; ATM    "  "            "  "            "  "            "  "           
 #&gt; CDKN2A "  "            "  "            "  "            "  "           
 #&gt; RB1    "  "            "  "            "  "            "  "           
-#&gt;        P-0002996                  P-0002793         P-0003020      
+#&gt;        242                        224               243            
+#&gt; DMPID  "  "                       "  "              "  "           
 #&gt; Sex    "Sex_Male;"                "Sex_Female;"     "Sex_Female;"  
 #&gt; Smoker "Smoker_Prev/Curr Smoker;" "Smoker_Unknown;" "Smoker_Never;"
 #&gt; TP53   "MUT;"                     "  "              "MUT;"         
@@ -3354,7 +3423,8 @@ columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see 
 #&gt; ATM    "  "                       "  "              "  "           
 #&gt; CDKN2A "  "                       "  "              "MUT;"         
 #&gt; RB1    "  "                       "  "              "  "           
-#&gt;        P-0003028                  P-0003064       P-0003181      
+#&gt;        244                        245             246            
+#&gt; DMPID  "  "                       "  "            "  "           
 #&gt; Sex    "Sex_Male;"                "Sex_Male;"     "Sex_Male;"    
 #&gt; Smoker "Smoker_Prev/Curr Smoker;" "Smoker_Never;" "Smoker_Never;"
 #&gt; TP53   "  "                       "  "            "  "           
@@ -3372,7 +3442,8 @@ columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see 
 #&gt; ATM    "  "                       "  "            "  "           
 #&gt; CDKN2A "  "                       "  "            "  "           
 #&gt; RB1    "  "                       "  "            "  "           
-#&gt;        P-0003226                  P-0003243                  P-0003319        
+#&gt;        247                        248                        249              
+#&gt; DMPID  "  "                       "  "                       "  "             
 #&gt; Sex    "Sex_Male;"                "Sex_Female;"              "Sex_Male;"      
 #&gt; Smoker "Smoker_Prev/Curr Smoker;" "Smoker_Prev/Curr Smoker;" "Smoker_Unknown;"
 #&gt; TP53   "  "                       "MUT;"                     "  "             
@@ -3390,7 +3461,8 @@ columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see 
 #&gt; ATM    "  "                       "  "                       "  "             
 #&gt; CDKN2A "  "                       "  "                       "  "             
 #&gt; RB1    "  "                       "  "                       "  "             
-#&gt;        P-0003345       P-0003351         P-0003360        
+#&gt;        250             251               252              
+#&gt; DMPID  "  "            "  "              "  "             
 #&gt; Sex    "Sex_Female;"   "Sex_Female;"     "Sex_Male;"      
 #&gt; Smoker "Smoker_Never;" "Smoker_Unknown;" "Smoker_Unknown;"
 #&gt; TP53   "  "            "  "              "  "             
@@ -3408,7 +3480,8 @@ columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see 
 #&gt; ATM    "  "            "  "              "  "             
 #&gt; CDKN2A "  "            "  "              "  "             
 #&gt; RB1    "  "            "  "              "  "             
-#&gt;        P-0003375                  P-0003394                  P-0003576      
+#&gt;        253                        254                        255            
+#&gt; DMPID  "  "                       "  "                       "  "           
 #&gt; Sex    "Sex_Female;"              "Sex_Female;"              "Sex_Male;"    
 #&gt; Smoker "Smoker_Prev/Curr Smoker;" "Smoker_Prev/Curr Smoker;" "Smoker_Never;"
 #&gt; TP53   "  "                       "  "                       "  "           
@@ -3426,7 +3499,8 @@ columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see 
 #&gt; ATM    "  "                       "  "                       "  "           
 #&gt; CDKN2A "  "                       "  "                       "  "           
 #&gt; RB1    "  "                       "  "                       "  "           
-#&gt;        P-0003602                  P-0003624       P-0003664                 
+#&gt;        256                        257             258                       
+#&gt; DMPID  "  "                       "  "            "  "                      
 #&gt; Sex    "Sex_Male;"                "Sex_Female;"   "Sex_Male;"               
 #&gt; Smoker "Smoker_Prev/Curr Smoker;" "Smoker_Never;" "Smoker_Prev/Curr Smoker;"
 #&gt; TP53   "MUT;"                     "MUT;"          "MUT;"                    
@@ -3444,7 +3518,8 @@ columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see 
 #&gt; ATM    "  "                       "  "            "  "                      
 #&gt; CDKN2A "  "                       "  "            "  "                      
 #&gt; RB1    "  "                       "  "            "  "                      
-#&gt;        P-0003673                  P-0003693                  P-0003708        
+#&gt;        259                        260                        261              
+#&gt; DMPID  "  "                       "  "                       "  "             
 #&gt; Sex    "Sex_Male;"                "Sex_Male;"                "Sex_Female;"    
 #&gt; Smoker "Smoker_Prev/Curr Smoker;" "Smoker_Prev/Curr Smoker;" "Smoker_Unknown;"
 #&gt; TP53   "  "                       "  "                       "  "             
@@ -3462,7 +3537,8 @@ columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see 
 #&gt; ATM    "  "                       "  "                       "  "             
 #&gt; CDKN2A "  "                       "  "                       "  "             
 #&gt; RB1    "  "                       "  "                       "  "             
-#&gt;        P-0003751                  P-0003755       P-0003844      
+#&gt;        262                        263             265            
+#&gt; DMPID  "  "                       "  "            "  "           
 #&gt; Sex    "Sex_Female;"              "Sex_Male;"     "Sex_Female;"  
 #&gt; Smoker "Smoker_Prev/Curr Smoker;" "Smoker_Never;" "Smoker_Never;"
 #&gt; TP53   "  "                       "  "            "MUT;"         
@@ -3480,7 +3556,8 @@ columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see 
 #&gt; ATM    "  "                       "  "            "  "           
 #&gt; CDKN2A "  "                       "  "            "  "           
 #&gt; RB1    "  "                       "  "            "MUT;"         
-#&gt;        P-0003842       P-0003882                  P-0003881                 
+#&gt;        264             267                        266                       
+#&gt; DMPID  "  "            "  "                       "  "                      
 #&gt; Sex    "Sex_Female;"   "Sex_Female;"              "Sex_Male;"               
 #&gt; Smoker "Smoker_Never;" "Smoker_Prev/Curr Smoker;" "Smoker_Prev/Curr Smoker;"
 #&gt; TP53   "  "            "  "                       "  "                      
@@ -3498,7 +3575,8 @@ columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see 
 #&gt; ATM    "  "            "  "                       "  "                      
 #&gt; CDKN2A "  "            "  "                       "  "                      
 #&gt; RB1    "  "            "  "                       "  "                      
-#&gt;        P-0003888         P-0003891         P-0003926                 
+#&gt;        268               269               270                       
+#&gt; DMPID  "  "              "  "              "  "                      
 #&gt; Sex    "Sex_Female;"     "Sex_Male;"       "Sex_Male;"               
 #&gt; Smoker "Smoker_Unknown;" "Smoker_Unknown;" "Smoker_Prev/Curr Smoker;"
 #&gt; TP53   "  "              "MUT;"            "  "                      
@@ -3516,7 +3594,8 @@ columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see 
 #&gt; ATM    "  "              "  "              "  "                      
 #&gt; CDKN2A "  "              "MUT;"            "  "                      
 #&gt; RB1    "MUT;"            "  "              "  "                      
-#&gt;        P-0003950       P-0004073       P-0002328                 
+#&gt;        273             281             181                       
+#&gt; DMPID  "  "            "  "            "  "                      
 #&gt; Sex    "Sex_Female;"   "Sex_Male;"     "Sex_Male;"               
 #&gt; Smoker "Smoker_Never;" "Smoker_Never;" "Smoker_Prev/Curr Smoker;"
 #&gt; TP53   "MUT;"          "MUT;"          "  "                      
@@ -3534,7 +3613,8 @@ columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see 
 #&gt; ATM    "  "            "  "            "  "                      
 #&gt; CDKN2A "  "            "  "            "  "                      
 #&gt; RB1    "  "            "  "            "  "                      
-#&gt;        P-0004153       P-0004127         P-0004122         P-0004130        
+#&gt;        285             283               282               284              
+#&gt; DMPID  "  "            "  "              "  "              "  "             
 #&gt; Sex    "Sex_Female;"   "Sex_Female;"     "Sex_Female;"     "Sex_Female;"    
 #&gt; Smoker "Smoker_Never;" "Smoker_Unknown;" "Smoker_Unknown;" "Smoker_Unknown;"
 #&gt; TP53   "MUT;"          "  "              "MUT;"            "MUT;"           
@@ -3552,7 +3632,8 @@ columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see 
 #&gt; ATM    "  "            "MUT;"            "  "              "  "             
 #&gt; CDKN2A "  "            "  "              "  "              "  "             
 #&gt; RB1    "  "            "  "              "  "              "  "             
-#&gt;        P-0004181         P-0004200       P-0002597      
+#&gt;        286               287             205            
+#&gt; DMPID  "  "              "  "            "  "           
 #&gt; Sex    "Sex_Female;"     "Sex_Male;"     "Sex_Male;"    
 #&gt; Smoker "Smoker_Unknown;" "Smoker_Never;" "Smoker_Never;"
 #&gt; TP53   "MUT;"            "  "            "  "           
@@ -3570,7 +3651,8 @@ columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see 
 #&gt; ATM    "  "              "  "            "  "           
 #&gt; CDKN2A "  "              "  "            "  "           
 #&gt; RB1    "  "              "  "            "  "           
-#&gt;        P-0004260                  P-0004292         P-0004307                 
+#&gt;        288                        289               290                       
+#&gt; DMPID  "  "                       "  "              "  "                      
 #&gt; Sex    "Sex_Male;"                "Sex_Female;"     "Sex_Female;"             
 #&gt; Smoker "Smoker_Prev/Curr Smoker;" "Smoker_Unknown;" "Smoker_Prev/Curr Smoker;"
 #&gt; TP53   "  "                       "MUT;"            "  "                      
@@ -3588,7 +3670,8 @@ columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see 
 #&gt; ATM    "MUT;"                     "  "              "  "                      
 #&gt; CDKN2A "  "                       "  "              "  "                      
 #&gt; RB1    "  "                       "  "              "  "                      
-#&gt;        P-0004362                  P-0004396       P-0004477                 
+#&gt;        291                        292             293                       
+#&gt; DMPID  "  "                       "  "            "  "                      
 #&gt; Sex    "Sex_Male;"                "Sex_Male;"     "Sex_Female;"             
 #&gt; Smoker "Smoker_Prev/Curr Smoker;" "Smoker_Never;" "Smoker_Prev/Curr Smoker;"
 #&gt; TP53   "  "                       "MUT;"          "  "                      
@@ -3606,7 +3689,8 @@ columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see 
 #&gt; ATM    "  "                       "  "            "  "                      
 #&gt; CDKN2A "  "                       "  "            "  "                      
 #&gt; RB1    "  "                       "  "            "  "                      
-#&gt;        P-0004515                  P-0004531         P-0004522      
+#&gt;        295                        297               296            
+#&gt; DMPID  "  "                       "  "              "  "           
 #&gt; Sex    "Sex_Male;"                "Sex_Female;"     "Sex_Male;"    
 #&gt; Smoker "Smoker_Prev/Curr Smoker;" "Smoker_Unknown;" "Smoker_Never;"
 #&gt; TP53   "MUT;"                     "  "              "  "           
@@ -3624,7 +3708,8 @@ columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see 
 #&gt; ATM    "  "                       "  "              "  "           
 #&gt; CDKN2A "  "                       "  "              "  "           
 #&gt; RB1    "  "                       "  "              "  "           
-#&gt;        P-0004540       P-0004556       P-0004559                 
+#&gt;        298             299             300                       
+#&gt; DMPID  "  "            "  "            "  "                      
 #&gt; Sex    "Sex_Female;"   "Sex_Male;"     "Sex_Male;"               
 #&gt; Smoker "Smoker_Never;" "Smoker_Never;" "Smoker_Prev/Curr Smoker;"
 #&gt; TP53   "  "            "MUT;"          "  "                      
@@ -3642,7 +3727,8 @@ columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see 
 #&gt; ATM    "MUT;"          "  "            "  "                      
 #&gt; CDKN2A "  "            "  "            "  "                      
 #&gt; RB1    "  "            "  "            "  "                      
-#&gt;        P-0004609                  P-0004637         P-0004709        
+#&gt;        301                        302               303              
+#&gt; DMPID  "  "                       "  "              "  "             
 #&gt; Sex    "Sex_Male;"                "Sex_Female;"     "Sex_Female;"    
 #&gt; Smoker "Smoker_Prev/Curr Smoker;" "Smoker_Unknown;" "Smoker_Unknown;"
 #&gt; TP53   "MUT;"                     "MUT;"            "MUT;"           
@@ -3660,7 +3746,8 @@ columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see 
 #&gt; ATM    "  "                       "  "              "  "             
 #&gt; CDKN2A "  "                       "  "              "  "             
 #&gt; RB1    "  "                       "  "              "  "             
-#&gt;        P-0004765         P-0004780                  P-0004830        
+#&gt;        304               305                        306              
+#&gt; DMPID  "  "              "  "                       "  "             
 #&gt; Sex    "Sex_Female;"     "Sex_Male;"                "Sex_Male;"      
 #&gt; Smoker "Smoker_Unknown;" "Smoker_Prev/Curr Smoker;" "Smoker_Unknown;"
 #&gt; TP53   "  "              "  "                       "MUT;"           
@@ -3678,7 +3765,8 @@ columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see 
 #&gt; ATM    "  "              "  "                       "MUT;"           
 #&gt; CDKN2A "MUT;"            "  "                       "  "             
 #&gt; RB1    "  "              "  "                       "  "             
-#&gt;        P-0004841       P-0004849                  P-0004896      
+#&gt;        307             309                        310            
+#&gt; DMPID  "  "            "  "                       "  "           
 #&gt; Sex    "Sex_Female;"   "Sex_Male;"                "Sex_Female;"  
 #&gt; Smoker "Smoker_Never;" "Smoker_Prev/Curr Smoker;" "Smoker_Never;"
 #&gt; TP53   "MUT;"          "MUT;"                     "  "           
@@ -3696,7 +3784,8 @@ columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see 
 #&gt; ATM    "  "            "  "                       "  "           
 #&gt; CDKN2A "  "            "  "                       "  "           
 #&gt; RB1    "  "            "MUT;"                     "  "           
-#&gt;        P-0004927       P-0005065                  P-0005093      
+#&gt;        312             314                        316            
+#&gt; DMPID  "  "            "  "                       "  "           
 #&gt; Sex    "Sex_Female;"   "Sex_Male;"                "Sex_Male;"    
 #&gt; Smoker "Smoker_Never;" "Smoker_Prev/Curr Smoker;" "Smoker_Never;"
 #&gt; TP53   "  "            "MUT;"                     "  "           
@@ -3714,7 +3803,8 @@ columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see 
 #&gt; ATM    "  "            "  "                       "  "           
 #&gt; CDKN2A "  "            "  "                       "  "           
 #&gt; RB1    "  "            "  "                       "  "           
-#&gt;        P-0005102       P-0002916       P-0005222       P-0005226      
+#&gt;        317             233             319             320            
+#&gt; DMPID  "  "            "  "            "  "            "  "           
 #&gt; Sex    "Sex_Male;"     "Sex_Female;"   "Sex_Male;"     "Sex_Male;"    
 #&gt; Smoker "Smoker_Never;" "Smoker_Never;" "Smoker_Never;" "Smoker_Never;"
 #&gt; TP53   "MUT;"          "  "            "  "            "  "           
@@ -3732,7 +3822,8 @@ columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see 
 #&gt; ATM    "  "            "  "            "  "            "  "           
 #&gt; CDKN2A "  "            "  "            "  "            "  "           
 #&gt; RB1    "  "            "  "            "  "            "  "           
-#&gt;        P-0005260         P-0005303       P-0005352                 
+#&gt;        321               322             324                       
+#&gt; DMPID  "  "              "  "            "  "                      
 #&gt; Sex    "Sex_Female;"     "Sex_Male;"     "Sex_Female;"             
 #&gt; Smoker "Smoker_Unknown;" "Smoker_Never;" "Smoker_Prev/Curr Smoker;"
 #&gt; TP53   "  "              "  "            "  "                      
@@ -3750,7 +3841,8 @@ columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see 
 #&gt; ATM    "  "              "  "            "  "                      
 #&gt; CDKN2A "MUT;"            "  "            "MUT;"                    
 #&gt; RB1    "  "              "  "            "  "                      
-#&gt;        P-0005426       P-0005541                  P-0005607                 
+#&gt;        326             328                        330                       
+#&gt; DMPID  "  "            "  "                       "  "                      
 #&gt; Sex    "Sex_Female;"   "Sex_Male;"                "Sex_Male;"               
 #&gt; Smoker "Smoker_Never;" "Smoker_Prev/Curr Smoker;" "Smoker_Prev/Curr Smoker;"
 #&gt; TP53   "  "            "  "                       "  "                      
@@ -3768,7 +3860,8 @@ columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see 
 #&gt; ATM    "  "            "  "                       "  "                      
 #&gt; CDKN2A "  "            "  "                       "  "                      
 #&gt; RB1    "  "            "  "                       "  "                      
-#&gt;        P-0005620         P-0005729       P-0005781       P-0005826        
+#&gt;        331               334             336             337              
+#&gt; DMPID  "  "              "  "            "  "            "  "             
 #&gt; Sex    "Sex_Female;"     "Sex_Male;"     "Sex_Female;"   "Sex_Male;"      
 #&gt; Smoker "Smoker_Unknown;" "Smoker_Never;" "Smoker_Never;" "Smoker_Unknown;"
 #&gt; TP53   "MUT;"            "  "            "  "            "  "             
@@ -3786,7 +3879,8 @@ columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see 
 #&gt; ATM    "  "              "  "            "  "            "  "             
 #&gt; CDKN2A "  "              "  "            "  "            "  "             
 #&gt; RB1    "  "              "  "            "  "            "  "             
-#&gt;        P-0005837                  P-0005871       P-0005889      
+#&gt;        338                        339             342            
+#&gt; DMPID  "  "                       "  "            "  "           
 #&gt; Sex    "Sex_Female;"              "Sex_Male;"     "Sex_Male;"    
 #&gt; Smoker "Smoker_Prev/Curr Smoker;" "Smoker_Never;" "Smoker_Never;"
 #&gt; TP53   "  "                       "  "            "  "           
@@ -3804,7 +3898,8 @@ columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see 
 #&gt; ATM    "  "                       "  "            "  "           
 #&gt; CDKN2A "  "                       "  "            "  "           
 #&gt; RB1    "  "                       "  "            "  "           
-#&gt;        P-0005898       P-0005893                  P-0005771                 
+#&gt;        344             343                        335                       
+#&gt; DMPID  "  "            "  "                       "  "                      
 #&gt; Sex    "Sex_Female;"   "Sex_Male;"                "Sex_Male;"               
 #&gt; Smoker "Smoker_Never;" "Smoker_Prev/Curr Smoker;" "Smoker_Prev/Curr Smoker;"
 #&gt; TP53   "  "            "  "                       "  "                      
@@ -3822,7 +3917,8 @@ columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see 
 #&gt; ATM    "  "            "  "                       "  "                      
 #&gt; CDKN2A "  "            "  "                       "  "                      
 #&gt; RB1    "  "            "  "                       "  "                      
-#&gt;        P-0005999                  P-0006002       P-0006080                 
+#&gt;        346                        347             348                       
+#&gt; DMPID  "  "                       "  "            "  "                      
 #&gt; Sex    "Sex_Male;"                "Sex_Female;"   "Sex_Male;"               
 #&gt; Smoker "Smoker_Prev/Curr Smoker;" "Smoker_Never;" "Smoker_Prev/Curr Smoker;"
 #&gt; TP53   "MUT;"                     "MUT;"          "  "                      
@@ -3840,7 +3936,8 @@ columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see 
 #&gt; ATM    "  "                       "  "            "  "                      
 #&gt; CDKN2A "  "                       "  "            "  "                      
 #&gt; RB1    "  "                       "  "            "  "                      
-#&gt;        P-0005881                  P-0006084       P-0005887                 
+#&gt;        340                        349             341                       
+#&gt; DMPID  "  "                       "  "            "  "                      
 #&gt; Sex    "Sex_Female;"              "Sex_Male;"     "Sex_Male;"               
 #&gt; Smoker "Smoker_Prev/Curr Smoker;" "Smoker_Never;" "Smoker_Prev/Curr Smoker;"
 #&gt; TP53   "MUT;"                     "  "            "MUT;"                    
@@ -3858,7 +3955,8 @@ columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see 
 #&gt; ATM    "  "                       "  "            "  "                      
 #&gt; CDKN2A "  "                       "  "            "  "                      
 #&gt; RB1    "  "                       "  "            "  "                      
-#&gt;        P-0006157                  P-0003929       P-0003959      
+#&gt;        350                        271             275            
+#&gt; DMPID  "  "                       "  "            "  "           
 #&gt; Sex    "Sex_Female;"              "Sex_Male;"     "Sex_Female;"  
 #&gt; Smoker "Smoker_Prev/Curr Smoker;" "Smoker_Never;" "Smoker_Never;"
 #&gt; TP53   "  "                       "  "            "  "           
@@ -3876,7 +3974,8 @@ columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see 
 #&gt; ATM    "  "                       "  "            "  "           
 #&gt; CDKN2A "  "                       "  "            "  "           
 #&gt; RB1    "  "                       "  "            "  "           
-#&gt;        P-0003955                  P-0003964                 
+#&gt;        274                        276                       
+#&gt; DMPID  "  "                       "  "                      
 #&gt; Sex    "Sex_Male;"                "Sex_Male;"               
 #&gt; Smoker "Smoker_Prev/Curr Smoker;" "Smoker_Prev/Curr Smoker;"
 #&gt; TP53   "  "                       "  "                      
@@ -3894,7 +3993,8 @@ columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see 
 #&gt; ATM    "  "                       "  "                      
 #&gt; CDKN2A "  "                       "  "                      
 #&gt; RB1    "  "                       "  "                      
-#&gt;        P-0003942                  P-0004043                 
+#&gt;        272                        280                       
+#&gt; DMPID  "  "                       "  "                      
 #&gt; Sex    "Sex_Male;"                "Sex_Male;"               
 #&gt; Smoker "Smoker_Prev/Curr Smoker;" "Smoker_Prev/Curr Smoker;"
 #&gt; TP53   "MUT;"                     "MUT;"                    
@@ -3912,7 +4012,8 @@ columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see 
 #&gt; ATM    "  "                       "  "                      
 #&gt; CDKN2A "  "                       "  "                      
 #&gt; RB1    "  "                       "  "                      
-#&gt;        P-0003983                  P-0006272                  P-0004008        
+#&gt;        277                        351                        279              
+#&gt; DMPID  "  "                       "  "                       "  "             
 #&gt; Sex    "Sex_Male;"                "Sex_Male;"                "Sex_Male;"      
 #&gt; Smoker "Smoker_Prev/Curr Smoker;" "Smoker_Prev/Curr Smoker;" "Smoker_Unknown;"
 #&gt; TP53   "MUT;"                     "  "                       "  "             
@@ -3930,7 +4031,8 @@ columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see 
 #&gt; ATM    "  "                       "  "                       "MUT;"           
 #&gt; CDKN2A "  "                       "  "                       "  "             
 #&gt; RB1    "  "                       "  "                       "  "             
-#&gt;        P-0006342                  P-0000080       P-0000096                 
+#&gt;        354                        3               5                         
+#&gt; DMPID  "  "                       "  "            "  "                      
 #&gt; Sex    "Sex_Female;"              "Sex_Female;"   "Sex_Male;"               
 #&gt; Smoker "Smoker_Prev/Curr Smoker;" "Smoker_Never;" "Smoker_Prev/Curr Smoker;"
 #&gt; TP53   "  "                       "MUT;"          "  "                      
@@ -3948,7 +4050,8 @@ columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see 
 #&gt; ATM    "  "                       "  "            "  "                      
 #&gt; CDKN2A "  "                       "  "            "  "                      
 #&gt; RB1    "  "                       "MUT;"          "  "                      
-#&gt;        P-0006437                  P-0005131       P-0006562                 
+#&gt;        355                        318             356                       
+#&gt; DMPID  "  "                       "  "            "  "                      
 #&gt; Sex    "Sex_Male;"                "Sex_Female;"   "Sex_Female;"             
 #&gt; Smoker "Smoker_Prev/Curr Smoker;" "Smoker_Never;" "Smoker_Prev/Curr Smoker;"
 #&gt; TP53   "MUT;"                     "MUT;"          "  "                      
@@ -3966,7 +4069,8 @@ columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see 
 #&gt; ATM    "MUT;"                     "  "            "  "                      
 #&gt; CDKN2A "  "                       "  "            "MUT;"                    
 #&gt; RB1    "MUT;"                     "  "            "  "                      
-#&gt;        P-0006580                  P-0006603                 
+#&gt;        358                        359                       
+#&gt; DMPID  "  "                       "  "                      
 #&gt; Sex    "Sex_Male;"                "Sex_Male;"               
 #&gt; Smoker "Smoker_Prev/Curr Smoker;" "Smoker_Prev/Curr Smoker;"
 #&gt; TP53   "MUT;"                     "MUT;"                    
@@ -3984,7 +4088,8 @@ columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see 
 #&gt; ATM    "  "                       "  "                      
 #&gt; CDKN2A "MUT;"                     "  "                      
 #&gt; RB1    "  "                       "  "                      
-#&gt;        P-0006653                  P-0006664                 
+#&gt;        360                        361                       
+#&gt; DMPID  "  "                       "  "                      
 #&gt; Sex    "Sex_Female;"              "Sex_Male;"               
 #&gt; Smoker "Smoker_Prev/Curr Smoker;" "Smoker_Prev/Curr Smoker;"
 #&gt; TP53   "  "                       "  "                      
@@ -4002,7 +4107,8 @@ columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see 
 #&gt; ATM    "  "                       "  "                      
 #&gt; CDKN2A "  "                       "  "                      
 #&gt; RB1    "  "                       "  "                      
-#&gt;        P-0006713                  P-0006717       P-0006755      
+#&gt;        362                        363             365            
+#&gt; DMPID  "  "                       "  "            "  "           
 #&gt; Sex    "Sex_Female;"              "Sex_Female;"   "Sex_Female;"  
 #&gt; Smoker "Smoker_Prev/Curr Smoker;" "Smoker_Never;" "Smoker_Never;"
 #&gt; TP53   "MUT;"                     "  "            "  "           
@@ -4020,7 +4126,8 @@ columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see 
 #&gt; ATM    "  "                       "  "            "  "           
 #&gt; CDKN2A "  "                       "  "            "  "           
 #&gt; RB1    "  "                       "  "            "  "           
-#&gt;        P-0006752                  P-0006829       P-0006853      
+#&gt;        364                        366             367            
+#&gt; DMPID  "  "                       "  "            "  "           
 #&gt; Sex    "Sex_Male;"                "Sex_Female;"   "Sex_Female;"  
 #&gt; Smoker "Smoker_Prev/Curr Smoker;" "Smoker_Never;" "Smoker_Never;"
 #&gt; TP53   "  "                       "  "            "MUT;"         
@@ -4038,7 +4145,8 @@ columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see 
 #&gt; ATM    "  "                       "  "            "  "           
 #&gt; CDKN2A "  "                       "  "            "  "           
 #&gt; RB1    "  "                       "  "            "  "           
-#&gt;        P-0006937       P-0006979                  P-0005600                 
+#&gt;        368             369                        329                       
+#&gt; DMPID  "  "            "  "                       "  "                      
 #&gt; Sex    "Sex_Female;"   "Sex_Male;"                "Sex_Male;"               
 #&gt; Smoker "Smoker_Never;" "Smoker_Prev/Curr Smoker;" "Smoker_Prev/Curr Smoker;"
 #&gt; TP53   "  "            "MUT;"                     "MUT;"                    
@@ -4056,7 +4164,8 @@ columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see 
 #&gt; ATM    "  "            "  "                       "  "                      
 #&gt; CDKN2A "  "            "  "                       "  "                      
 #&gt; RB1    "  "            "  "                       "  "                      
-#&gt;        P-0006993                  P-0006282       P-0007002                 
+#&gt;        370                        352             371                       
+#&gt; DMPID  "  "                       "  "            "  "                      
 #&gt; Sex    "Sex_Male;"                "Sex_Male;"     "Sex_Male;"               
 #&gt; Smoker "Smoker_Prev/Curr Smoker;" "Smoker_Never;" "Smoker_Prev/Curr Smoker;"
 #&gt; TP53   "  "                       "  "            "  "                      
@@ -4074,7 +4183,8 @@ columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see 
 #&gt; ATM    "  "                       "  "            "  "                      
 #&gt; CDKN2A "  "                       "  "            "  "                      
 #&gt; RB1    "  "                       "  "            "  "                      
-#&gt;        P-0007009       P-0007142         P-0007144                 
+#&gt;        372             373               374                       
+#&gt; DMPID  "  "            "  "              "  "                      
 #&gt; Sex    "Sex_Female;"   "Sex_Male;"       "Sex_Male;"               
 #&gt; Smoker "Smoker_Never;" "Smoker_Unknown;" "Smoker_Prev/Curr Smoker;"
 #&gt; TP53   "  "            "  "              "MUT;"                    
@@ -4092,7 +4202,8 @@ columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see 
 #&gt; ATM    "  "            "MUT;"            "  "                      
 #&gt; CDKN2A "  "            "  "              "  "                      
 #&gt; RB1    "  "            "  "              "  "                      
-#&gt;        P-0007151                  P-0007213         P-0007233        
+#&gt;        376                        377               378              
+#&gt; DMPID  "  "                       "  "              "  "             
 #&gt; Sex    "Sex_Male;"                "Sex_Female;"     "Sex_Male;"      
 #&gt; Smoker "Smoker_Prev/Curr Smoker;" "Smoker_Unknown;" "Smoker_Unknown;"
 #&gt; TP53   "  "                       "  "              "MUT;"           
@@ -4110,7 +4221,8 @@ columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see 
 #&gt; ATM    "  "                       "MUT;"            "MUT;"           
 #&gt; CDKN2A "  "                       "  "              "  "             
 #&gt; RB1    "  "                       "  "              "  "             
-#&gt;        P-0007285                  P-0007348                 
+#&gt;        379                        382                       
+#&gt; DMPID  "  "                       "  "                      
 #&gt; Sex    "Sex_Female;"              "Sex_Male;"               
 #&gt; Smoker "Smoker_Prev/Curr Smoker;" "Smoker_Prev/Curr Smoker;"
 #&gt; TP53   "  "                       "MUT;"                    
@@ -4128,7 +4240,8 @@ columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see 
 #&gt; ATM    "  "                       "  "                      
 #&gt; CDKN2A "  "                       "  "                      
 #&gt; RB1    "  "                       "  "                      
-#&gt;        P-0007366                  P-0007414                  P-0007426        
+#&gt;        384                        386                        387              
+#&gt; DMPID  "  "                       "  "                       "  "             
 #&gt; Sex    "Sex_Male;"                "Sex_Female;"              "Sex_Male;"      
 #&gt; Smoker "Smoker_Prev/Curr Smoker;" "Smoker_Prev/Curr Smoker;" "Smoker_Unknown;"
 #&gt; TP53   "  "                       "MUT;"                     "MUT;"           
@@ -4146,7 +4259,8 @@ columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see 
 #&gt; ATM    "  "                       "  "                       "MUT;"           
 #&gt; CDKN2A "  "                       "  "                       "  "             
 #&gt; RB1    "  "                       "  "                       "  "             
-#&gt;        P-0007498       P-0007485                  P-0007549                 
+#&gt;        389             388                        390                       
+#&gt; DMPID  "  "            "  "                       "  "                      
 #&gt; Sex    "Sex_Male;"     "Sex_Female;"              "Sex_Male;"               
 #&gt; Smoker "Smoker_Never;" "Smoker_Prev/Curr Smoker;" "Smoker_Prev/Curr Smoker;"
 #&gt; TP53   "  "            "  "                       "MUT;"                    
@@ -4164,7 +4278,8 @@ columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see 
 #&gt; ATM    "  "            "  "                       "  "                      
 #&gt; CDKN2A "  "            "  "                       "  "                      
 #&gt; RB1    "  "            "  "                       "  "                      
-#&gt;        P-0007653                  P-0007677         P-0007807      
+#&gt;        391                        392               393            
+#&gt; DMPID  "  "                       "  "              "  "           
 #&gt; Sex    "Sex_Male;"                "Sex_Male;"       "Sex_Male;"    
 #&gt; Smoker "Smoker_Prev/Curr Smoker;" "Smoker_Unknown;" "Smoker_Never;"
 #&gt; TP53   "MUT;"                     "  "              "  "           
@@ -4182,7 +4297,8 @@ columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see 
 #&gt; ATM    "  "                       "  "              "  "           
 #&gt; CDKN2A "  "                       "  "              "  "           
 #&gt; RB1    "  "                       "  "              "  "           
-#&gt;        P-0007838                  P-0007868                 
+#&gt;        394                        395                       
+#&gt; DMPID  "  "                       "  "                      
 #&gt; Sex    "Sex_Male;"                "Sex_Male;"               
 #&gt; Smoker "Smoker_Prev/Curr Smoker;" "Smoker_Prev/Curr Smoker;"
 #&gt; TP53   "MUT;"                     "MUT;"                    
@@ -4200,7 +4316,8 @@ columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see 
 #&gt; ATM    "  "                       "MUT;"                    
 #&gt; CDKN2A "  "                       "  "                      
 #&gt; RB1    "  "                       "  "                      
-#&gt;        P-0007891                  P-0005322       P-0007901                 
+#&gt;        396                        323             397                       
+#&gt; DMPID  "  "                       "  "            "  "                      
 #&gt; Sex    "Sex_Female;"              "Sex_Male;"     "Sex_Male;"               
 #&gt; Smoker "Smoker_Prev/Curr Smoker;" "Smoker_Never;" "Smoker_Prev/Curr Smoker;"
 #&gt; TP53   "MUT;"                     "  "            "MUT;"                    
@@ -4218,7 +4335,8 @@ columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see 
 #&gt; ATM    "  "                       "  "            "  "                      
 #&gt; CDKN2A "  "                       "  "            "  "                      
 #&gt; RB1    "  "                       "  "            "  "                      
-#&gt;        P-0007972                  P-0007965       P-0007983        
+#&gt;        399                        398             400              
+#&gt; DMPID  "  "                       "  "            "  "             
 #&gt; Sex    "Sex_Female;"              "Sex_Male;"     "Sex_Male;"      
 #&gt; Smoker "Smoker_Prev/Curr Smoker;" "Smoker_Never;" "Smoker_Unknown;"
 #&gt; TP53   "  "                       "MUT;"          "  "             
@@ -4236,7 +4354,8 @@ columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see 
 #&gt; ATM    "  "                       "  "            "  "             
 #&gt; CDKN2A "  "                       "  "            "MUT;"           
 #&gt; RB1    "  "                       "  "            "  "             
-#&gt;        P-0008025                  P-0008048       P-0008053      
+#&gt;        402                        403             404            
+#&gt; DMPID  "  "                       "  "            "  "           
 #&gt; Sex    "Sex_Male;"                "Sex_Male;"     "Sex_Male;"    
 #&gt; Smoker "Smoker_Prev/Curr Smoker;" "Smoker_Never;" "Smoker_Never;"
 #&gt; TP53   "MUT;"                     "MUT;"          "  "           
@@ -4254,7 +4373,8 @@ columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see 
 #&gt; ATM    "  "                       "  "            "  "           
 #&gt; CDKN2A "  "                       "  "            "  "           
 #&gt; RB1    "  "                       "  "            "  "           
-#&gt;        P-0008098       P-0008188       P-0008214                 
+#&gt;        406             409             410                       
+#&gt; DMPID  "  "            "  "            "  "                      
 #&gt; Sex    "Sex_Male;"     "Sex_Female;"   "Sex_Female;"             
 #&gt; Smoker "Smoker_Never;" "Smoker_Never;" "Smoker_Prev/Curr Smoker;"
 #&gt; TP53   "  "            "  "            "MUT;"                    
@@ -4272,7 +4392,8 @@ columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see 
 #&gt; ATM    "  "            "MUT;"          "  "                      
 #&gt; CDKN2A "  "            "  "            "MUT;"                    
 #&gt; RB1    "  "            "MUT;"          "  "                      
-#&gt;        P-0008236       P-0008241                  P-0008331      
+#&gt;        411             412                        413            
+#&gt; DMPID  "  "            "  "                       "  "           
 #&gt; Sex    "Sex_Female;"   "Sex_Male;"                "Sex_Male;"    
 #&gt; Smoker "Smoker_Never;" "Smoker_Prev/Curr Smoker;" "Smoker_Never;"
 #&gt; TP53   "  "            "MUT;"                     "  "           
@@ -4290,7 +4411,8 @@ columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see 
 #&gt; ATM    "  "            "  "                       "  "           
 #&gt; CDKN2A "  "            "  "                       "  "           
 #&gt; RB1    "  "            "  "                       "  "           
-#&gt;        P-0008420       P-0008456                  P-0008525                 
+#&gt;        415             416                        417                       
+#&gt; DMPID  "  "            "  "                       "  "                      
 #&gt; Sex    "Sex_Female;"   "Sex_Female;"              "Sex_Male;"               
 #&gt; Smoker "Smoker_Never;" "Smoker_Prev/Curr Smoker;" "Smoker_Prev/Curr Smoker;"
 #&gt; TP53   "  "            "MUT;"                     "MUT;"                    
@@ -4308,7 +4430,8 @@ columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see 
 #&gt; ATM    "  "            "  "                       "  "                      
 #&gt; CDKN2A "  "            "  "                       "  "                      
 #&gt; RB1    "  "            "  "                       "  "                      
-#&gt;        P-0008564                  P-0002920                 
+#&gt;        418                        234                       
+#&gt; DMPID  "  "                       "  "                      
 #&gt; Sex    "Sex_Male;"                "Sex_Female;"             
 #&gt; Smoker "Smoker_Prev/Curr Smoker;" "Smoker_Prev/Curr Smoker;"
 #&gt; TP53   "  "                       "MUT;"                    
@@ -4326,7 +4449,8 @@ columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see 
 #&gt; ATM    "  "                       "  "                      
 #&gt; CDKN2A "  "                       "  "                      
 #&gt; RB1    "  "                       "  "                      
-#&gt;        P-0008648                  P-0008661         P-0008777      
+#&gt;        419                        420               422            
+#&gt; DMPID  "  "                       "  "              "  "           
 #&gt; Sex    "Sex_Male;"                "Sex_Male;"       "Sex_Male;"    
 #&gt; Smoker "Smoker_Prev/Curr Smoker;" "Smoker_Unknown;" "Smoker_Never;"
 #&gt; TP53   "  "                       "  "              "  "           
@@ -4344,7 +4468,8 @@ columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see 
 #&gt; ATM    "  "                       "  "              "  "           
 #&gt; CDKN2A "  "                       "  "              "  "           
 #&gt; RB1    "  "                       "  "              "  "           
-#&gt;        P-0004909       P-0008903                  P-0005088      
+#&gt;        311             423                        315            
+#&gt; DMPID  "  "            "  "                       "  "           
 #&gt; Sex    "Sex_Female;"   "Sex_Male;"                "Sex_Female;"  
 #&gt; Smoker "Smoker_Never;" "Smoker_Prev/Curr Smoker;" "Smoker_Never;"
 #&gt; TP53   "MUT;"          "  "                       "  "           
@@ -4362,7 +4487,8 @@ columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see 
 #&gt; ATM    "  "            "  "                       "  "           
 #&gt; CDKN2A "  "            "  "                       "  "           
 #&gt; RB1    "  "            "  "                       "  "           
-#&gt;        P-0008945       P-0008947                  P-0008971      
+#&gt;        424             425                        426            
+#&gt; DMPID  "  "            "  "                       "  "           
 #&gt; Sex    "Sex_Female;"   "Sex_Female;"              "Sex_Female;"  
 #&gt; Smoker "Smoker_Never;" "Smoker_Prev/Curr Smoker;" "Smoker_Never;"
 #&gt; TP53   "MUT;"          "  "                       "MUT;"         
@@ -4380,7 +4506,8 @@ columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see 
 #&gt; ATM    "  "            "MUT;"                     "  "           
 #&gt; CDKN2A "  "            "  "                       "  "           
 #&gt; RB1    "  "            "  "                       "  "           
-#&gt;        P-0009055       P-0009076       P-0009091                 
+#&gt;        427             428             429                       
+#&gt; DMPID  "  "            "  "            "  "                      
 #&gt; Sex    "Sex_Male;"     "Sex_Female;"   "Sex_Male;"               
 #&gt; Smoker "Smoker_Never;" "Smoker_Never;" "Smoker_Prev/Curr Smoker;"
 #&gt; TP53   "MUT;"          "  "            "MUT;"                    
@@ -4398,7 +4525,8 @@ columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see 
 #&gt; ATM    "  "            "  "            "  "                      
 #&gt; CDKN2A "  "            "  "            "  "                      
 #&gt; RB1    "  "            "  "            "  "                      
-#&gt;        P-0009138       P-0009160       P-0009183                 
+#&gt;        430             431             432                       
+#&gt; DMPID  "  "            "  "            "  "                      
 #&gt; Sex    "Sex_Male;"     "Sex_Female;"   "Sex_Female;"             
 #&gt; Smoker "Smoker_Never;" "Smoker_Never;" "Smoker_Prev/Curr Smoker;"
 #&gt; TP53   "MUT;"          "  "            "MUT;"                    
@@ -4416,7 +4544,8 @@ columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see 
 #&gt; ATM    "  "            "  "            "  "                      
 #&gt; CDKN2A "  "            "  "            "  "                      
 #&gt; RB1    "  "            "  "            "  "                      
-#&gt;        P-0009251         P-0009239                  P-0009255      
+#&gt;        434               433                        435            
+#&gt; DMPID  "  "              "  "                       "  "           
 #&gt; Sex    "Sex_Male;"       "Sex_Male;"                "Sex_Female;"  
 #&gt; Smoker "Smoker_Unknown;" "Smoker_Prev/Curr Smoker;" "Smoker_Never;"
 #&gt; TP53   "  "              "MUT;"                     "  "           
@@ -4434,7 +4563,8 @@ columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see 
 #&gt; ATM    "  "              "  "                       "  "           
 #&gt; CDKN2A "  "              "MUT;"                     "  "           
 #&gt; RB1    "  "              "  "                       "  "           
-#&gt;        P-0007299       P-0009396                  P-0009410                 
+#&gt;        380             436                        437                       
+#&gt; DMPID  "  "            "  "                       "  "                      
 #&gt; Sex    "Sex_Female;"   "Sex_Male;"                "Sex_Male;"               
 #&gt; Smoker "Smoker_Never;" "Smoker_Prev/Curr Smoker;" "Smoker_Prev/Curr Smoker;"
 #&gt; TP53   "  "            "  "                       "  "                      
@@ -4452,7 +4582,8 @@ columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see 
 #&gt; ATM    "  "            "  "                       "  "                      
 #&gt; CDKN2A "  "            "  "                       "  "                      
 #&gt; RB1    "  "            "  "                       "  "                      
-#&gt;        P-0004996       P-0009431                  P-0009439        
+#&gt;        313             438                        439              
+#&gt; DMPID  "  "            "  "                       "  "             
 #&gt; Sex    "Sex_Male;"     "Sex_Female;"              "Sex_Female;"    
 #&gt; Smoker "Smoker_Never;" "Smoker_Prev/Curr Smoker;" "Smoker_Unknown;"
 #&gt; TP53   "  "            "MUT;"                     "  "             
@@ -4470,7 +4601,8 @@ columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see 
 #&gt; ATM    "  "            "  "                       "  "             
 #&gt; CDKN2A "  "            "  "                       "  "             
 #&gt; RB1    "  "            "  "                       "  "             
-#&gt;        P-0009456                  P-0009619       P-0009698      
+#&gt;        440                        441             442            
+#&gt; DMPID  "  "                       "  "            "  "           
 #&gt; Sex    "Sex_Male;"                "Sex_Female;"   "Sex_Male;"    
 #&gt; Smoker "Smoker_Prev/Curr Smoker;" "Smoker_Never;" "Smoker_Never;"
 #&gt; TP53   "  "                       "MUT;"          "  "           
@@ -4488,7 +4620,8 @@ columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see 
 #&gt; ATM    "  "                       "  "            "  "           
 #&gt; CDKN2A "  "                       "  "            "  "           
 #&gt; RB1    "  "                       "  "            "MUT;"         
-#&gt;        P-0009752         P-0009817                  P-0009868        
+#&gt;        443               444                        445              
+#&gt; DMPID  "  "              "  "                       "  "             
 #&gt; Sex    "Sex_Male;"       "Sex_Male;"                "Sex_Male;"      
 #&gt; Smoker "Smoker_Unknown;" "Smoker_Prev/Curr Smoker;" "Smoker_Unknown;"
 #&gt; TP53   "MUT;"            "  "                       "MUT;"           
@@ -4506,7 +4639,8 @@ columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see 
 #&gt; ATM    "  "              "  "                       "MUT;"           
 #&gt; CDKN2A "MUT;"            "MUT;"                     "  "             
 #&gt; RB1    "  "              "  "                       "  "             
-#&gt;        P-0009946       P-0010006         P-0010005         P-0010011      
+#&gt;        446             448               447               449            
+#&gt; DMPID  "  "            "  "              "  "              "  "           
 #&gt; Sex    "Sex_Female;"   "Sex_Male;"       "Sex_Male;"       "Sex_Female;"  
 #&gt; Smoker "Smoker_Never;" "Smoker_Unknown;" "Smoker_Unknown;" "Smoker_Never;"
 #&gt; TP53   "MUT;"          "  "              "  "              "MUT;"         
@@ -4524,7 +4658,8 @@ columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see 
 #&gt; ATM    "  "            "  "              "  "              "  "           
 #&gt; CDKN2A "  "            "  "              "  "              "  "           
 #&gt; RB1    "  "            "  "              "  "              "  "           
-#&gt;        P-0010023       P-0010085         P-0005937                 
+#&gt;        450             452               345                       
+#&gt; DMPID  "  "            "  "              "  "                      
 #&gt; Sex    "Sex_Male;"     "Sex_Male;"       "Sex_Female;"             
 #&gt; Smoker "Smoker_Never;" "Smoker_Unknown;" "Smoker_Prev/Curr Smoker;"
 #&gt; TP53   "  "            "  "              "  "                      
@@ -4542,7 +4677,8 @@ columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see 
 #&gt; ATM    "  "            "  "              "  "                      
 #&gt; CDKN2A "  "            "  "              "  "                      
 #&gt; RB1    "  "            "  "              "  "                      
-#&gt;        P-0010048       P-0010113         P-0010177      
+#&gt;        451             453               454            
+#&gt; DMPID  "  "            "  "              "  "           
 #&gt; Sex    "Sex_Female;"   "Sex_Male;"       "Sex_Female;"  
 #&gt; Smoker "Smoker_Never;" "Smoker_Unknown;" "Smoker_Never;"
 #&gt; TP53   "  "            "MUT;"            "  "           
@@ -4560,7 +4696,8 @@ columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see 
 #&gt; ATM    "  "            "  "              "  "           
 #&gt; CDKN2A "  "            "  "              "  "           
 #&gt; RB1    "  "            "  "              "  "           
-#&gt;        P-0010202                  P-0010216       P-0010229        
+#&gt;        455                        456             457              
+#&gt; DMPID  "  "                       "  "            "  "             
 #&gt; Sex    "Sex_Female;"              "Sex_Female;"   "Sex_Male;"      
 #&gt; Smoker "Smoker_Prev/Curr Smoker;" "Smoker_Never;" "Smoker_Unknown;"
 #&gt; TP53   "MUT;"                     "  "            "  "             
@@ -4578,7 +4715,8 @@ columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see 
 #&gt; ATM    "  "                       "  "            "  "             
 #&gt; CDKN2A "  "                       "  "            "  "             
 #&gt; RB1    "  "                       "  "            "  "             
-#&gt;        P-0010253         P-0010309                  P-0010329        
+#&gt;        458               459                        460              
+#&gt; DMPID  "  "              "  "                       "  "             
 #&gt; Sex    "Sex_Female;"     "Sex_Male;"                "Sex_Female;"    
 #&gt; Smoker "Smoker_Unknown;" "Smoker_Prev/Curr Smoker;" "Smoker_Unknown;"
 #&gt; TP53   "  "              "MUT;"                     "MUT;"           
@@ -4596,7 +4734,8 @@ columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see 
 #&gt; ATM    "  "              "  "                       "  "             
 #&gt; CDKN2A "  "              "  "                       "  "             
 #&gt; RB1    "  "              "  "                       "  "             
-#&gt;        P-0010386       P-0010398         P-0010604         P-0010679        
+#&gt;        461             462               464               465              
+#&gt; DMPID  "  "            "  "              "  "              "  "             
 #&gt; Sex    "Sex_Male;"     "Sex_Female;"     "Sex_Female;"     "Sex_Male;"      
 #&gt; Smoker "Smoker_Never;" "Smoker_Unknown;" "Smoker_Unknown;" "Smoker_Unknown;"
 #&gt; TP53   "  "            "  "              "MUT;"            "  "             
@@ -4614,7 +4753,8 @@ columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see 
 #&gt; ATM    "  "            "  "              "  "              "  "             
 #&gt; CDKN2A "  "            "  "              "  "              "  "             
 #&gt; RB1    "  "            "  "              "  "              "  "             
-#&gt;        P-0010750                  P-0010794       P-0010791                 
+#&gt;        467                        469             468                       
+#&gt; DMPID  "  "                       "  "            "  "                      
 #&gt; Sex    "Sex_Female;"              "Sex_Male;"     "Sex_Male;"               
 #&gt; Smoker "Smoker_Prev/Curr Smoker;" "Smoker_Never;" "Smoker_Prev/Curr Smoker;"
 #&gt; TP53   "MUT;"                     "  "            "MUT;"                    
@@ -4632,7 +4772,8 @@ columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see 
 #&gt; ATM    "  "                       "  "            "  "                      
 #&gt; CDKN2A "  "                       "  "            "  "                      
 #&gt; RB1    "  "                       "  "            "  "                      
-#&gt;        P-0010802         P-0010838                  P-0010865        
+#&gt;        470               471                        472              
+#&gt; DMPID  "  "              "  "                       "  "             
 #&gt; Sex    "Sex_Male;"       "Sex_Female;"              "Sex_Male;"      
 #&gt; Smoker "Smoker_Unknown;" "Smoker_Prev/Curr Smoker;" "Smoker_Unknown;"
 #&gt; TP53   "  "              "  "                       "  "             
@@ -4650,7 +4791,8 @@ columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see 
 #&gt; ATM    "  "              "  "                       "  "             
 #&gt; CDKN2A "  "              "  "                       "  "             
 #&gt; RB1    "  "              "  "                       "  "             
-#&gt;        P-0010868         P-0010977       P-0011081      
+#&gt;        473               475             477            
+#&gt; DMPID  "  "              "  "            "  "           
 #&gt; Sex    "Sex_Male;"       "Sex_Female;"   "Sex_Female;"  
 #&gt; Smoker "Smoker_Unknown;" "Smoker_Never;" "Smoker_Never;"
 #&gt; TP53   "  "              "  "            "MUT;"         
@@ -4668,7 +4810,8 @@ columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see 
 #&gt; ATM    "  "              "  "            "  "           
 #&gt; CDKN2A "  "              "  "            "  "           
 #&gt; RB1    "  "              "  "            "MUT;"         
-#&gt;        P-0011099                  P-0011103         P-0011207        
+#&gt;        478                        479               481              
+#&gt; DMPID  "  "                       "  "              "  "             
 #&gt; Sex    "Sex_Male;"                "Sex_Male;"       "Sex_Male;"      
 #&gt; Smoker "Smoker_Prev/Curr Smoker;" "Smoker_Unknown;" "Smoker_Unknown;"
 #&gt; TP53   "  "                       "MUT;"            "  "             
@@ -4686,7 +4829,8 @@ columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see 
 #&gt; ATM    "  "                       "  "              "  "             
 #&gt; CDKN2A "  "                       "  "              "  "             
 #&gt; RB1    "  "                       "  "              "  "             
-#&gt;        P-0011218                  P-0011223         P-0011250        
+#&gt;        482                        483               484              
+#&gt; DMPID  "  "                       "  "              "  "             
 #&gt; Sex    "Sex_Male;"                "Sex_Female;"     "Sex_Female;"    
 #&gt; Smoker "Smoker_Prev/Curr Smoker;" "Smoker_Unknown;" "Smoker_Unknown;"
 #&gt; TP53   "  "                       "MUT;"            "  "             
@@ -4704,7 +4848,8 @@ columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see 
 #&gt; ATM    "  "                       "  "              "  "             
 #&gt; CDKN2A "  "                       "  "              "  "             
 #&gt; RB1    "  "                       "  "              "  "             
-#&gt;        P-0011320         P-0011338         P-0008008      
+#&gt;        485               486               401            
+#&gt; DMPID  "  "              "  "              "  "           
 #&gt; Sex    "Sex_Male;"       "Sex_Female;"     "Sex_Female;"  
 #&gt; Smoker "Smoker_Unknown;" "Smoker_Unknown;" "Smoker_Never;"
 #&gt; TP53   "  "              "MUT;"            "  "           
@@ -4722,7 +4867,8 @@ columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see 
 #&gt; ATM    "  "              "MUT;"            "  "           
 #&gt; CDKN2A "  "              "  "              "  "           
 #&gt; RB1    "  "              "  "              "  "           
-#&gt;        P-0008160                  P-0011403         P-0011451        
+#&gt;        408                        487               488              
+#&gt; DMPID  "  "                       "  "              "  "             
 #&gt; Sex    "Sex_Male;"                "Sex_Male;"       "Sex_Female;"    
 #&gt; Smoker "Smoker_Prev/Curr Smoker;" "Smoker_Unknown;" "Smoker_Unknown;"
 #&gt; TP53   "MUT;"                     "MUT;"            "MUT;"           
@@ -4740,7 +4886,8 @@ columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see 
 #&gt; ATM    "  "                       "  "              "  "             
 #&gt; CDKN2A "  "                       "  "              "  "             
 #&gt; RB1    "  "                       "MUT;"            "  "             
-#&gt;        P-0011452         P-0011521       P-0011535         P-0011539      
+#&gt;        489               490             491               492            
+#&gt; DMPID  "  "              "  "            "  "              "  "           
 #&gt; Sex    "Sex_Male;"       "Sex_Male;"     "Sex_Female;"     "Sex_Male;"    
 #&gt; Smoker "Smoker_Unknown;" "Smoker_Never;" "Smoker_Unknown;" "Smoker_Never;"
 #&gt; TP53   "MUT;"            "  "            "MUT;"            "MUT;"         
@@ -4758,7 +4905,8 @@ columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see 
 #&gt; ATM    "  "              "  "            "  "              "  "           
 #&gt; CDKN2A "  "              "  "            "  "              "  "           
 #&gt; RB1    "  "              "  "            "  "              "  "           
-#&gt;        P-0012031                  P-0012040                  P-0012142        
+#&gt;        493                        494                        495              
+#&gt; DMPID  "  "                       "  "                       "  "             
 #&gt; Sex    "Sex_Male;"                "Sex_Male;"                "Sex_Female;"    
 #&gt; Smoker "Smoker_Prev/Curr Smoker;" "Smoker_Prev/Curr Smoker;" "Smoker_Unknown;"
 #&gt; TP53   "  "                       "  "                       "MUT;"           
@@ -4776,7 +4924,8 @@ columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see 
 #&gt; ATM    "  "                       "  "                       "  "             
 #&gt; CDKN2A "  "                       "  "                       "  "             
 #&gt; RB1    "  "                       "  "                       "  "             
-#&gt;        P-0001125                  P-0004491       P-0004848      
+#&gt;        85                         294             308            
+#&gt; DMPID  "  "                       "  "            "  "           
 #&gt; Sex    "Sex_Female;"              "Sex_Female;"   "Sex_Male;"    
 #&gt; Smoker "Smoker_Prev/Curr Smoker;" "Smoker_Never;" "Smoker_Never;"
 #&gt; TP53   "  "                       "  "            "  "           
@@ -4794,7 +4943,8 @@ columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see 
 #&gt; ATM    "  "                       "  "            "  "           
 #&gt; CDKN2A "MUT;"                     "  "            "  "           
 #&gt; RB1    "  "                       "  "            "  "           
-#&gt;        P-0007306         P-0010898         P-0010710       P-0001308        
+#&gt;        381               474               466             100              
+#&gt; DMPID  "  "              "  "              "  "            "  "             
 #&gt; Sex    "Sex_Male;"       "Sex_Male;"       "Sex_Male;"     "Sex_Female;"    
 #&gt; Smoker "Smoker_Unknown;" "Smoker_Unknown;" "Smoker_Never;" "Smoker_Unknown;"
 #&gt; TP53   "MUT;"            "MUT;"            "MUT;"          "  "             
@@ -4812,7 +4962,8 @@ columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see 
 #&gt; ATM    "  "              "  "              "  "            "  "             
 #&gt; CDKN2A "  "              "  "              "  "            "  "             
 #&gt; RB1    "  "              "  "              "  "            "  "             
-#&gt;        P-0001890         P-0002120       P-0007149                 
+#&gt;        150               162             375                       
+#&gt; DMPID  "  "              "  "            "  "                      
 #&gt; Sex    "Sex_Male;"       "Sex_Male;"     "Sex_Female;"             
 #&gt; Smoker "Smoker_Unknown;" "Smoker_Never;" "Smoker_Prev/Curr Smoker;"
 #&gt; TP53   "  "              "  "            "  "                      
@@ -4830,7 +4981,8 @@ columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see 
 #&gt; ATM    "  "              "  "            "  "                      
 #&gt; CDKN2A "  "              "  "            "  "                      
 #&gt; RB1    "  "              "  "            "  "                      
-#&gt;        P-0008071       P-0012381      
+#&gt;        405             497            
+#&gt; DMPID  "  "            "  "           
 #&gt; Sex    "Sex_Female;"   "Sex_Male;"    
 #&gt; Smoker "Smoker_Never;" "Smoker_Never;"
 #&gt; TP53   "MUT;"          "  "           
