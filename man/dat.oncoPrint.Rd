@@ -27,7 +27,7 @@ bin.mut <- binmat(patients = patients,maf = mut,mut.type = "SOMATIC",
 SNP.only = FALSE,include.silent = FALSE, spe.plat = FALSE)
 gen.dat <- bin.mut[1:500,
 names(sort(apply(bin.mut,2, sum),decreasing = TRUE))[1:15]]
-dat.oncoPrint(gen.dat)
+dat <- dat.oncoPrint(gen.dat)
 ## adding clinical ##
 clin.patients.dat <-
 clin.patients[match(abbreviate(rownames(gen.dat),
@@ -41,7 +41,8 @@ dplyr::rename(DMPID = X.Patient.Identifier,
 gen.dat <- gen.dat[match(clin.patients.dat$DMPID,
 abbreviate(rownames(gen.dat),strict = TRUE, minlength = 9)),]
 clin.patients.dat <- clin.patients.dat \%>\%
+dplyr::mutate(DMPID = as.character(DMPID)) \%>\%
   tibble::column_to_rownames('DMPID')
 rownames(gen.dat) <- rownames(clin.patients.dat)
-dat.oncoPrint(gen.dat = gen.dat,clin.dat = clin.patients.dat)
+dat <- dat.oncoPrint(gen.dat = gen.dat,clin.dat = clin.patients.dat)
 }

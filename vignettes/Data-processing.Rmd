@@ -10,7 +10,7 @@ vignette: >
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>"
+  comment = "#>", warning = F, message = F
 )
 ```
 
@@ -21,6 +21,7 @@ library(gnomeR)
 ```{r, echo=F}
 library(tibble)
 library(knitr)
+library(dplyr)
 set.seed(123)
 ```
 
@@ -40,6 +41,7 @@ The main purpose of `gnomeR` is to streamline the processing of genomic files pr
 - spe.plat: boolean specifying if specific IMPACT platforms should be considered. When TRUE NAs will fill the cells for genes of patients that were not sequenced on that plaform. Default is TRUE.
 - set.plat character argument specifying which IMPACT platform the data should be reduced to if spe.plat is set to TRUE. Options are "341" and "410". Default is NULL.
 - rm.empty: boolean specifying if columns with no events founds should be removed. Default is TRUE.
+- pathway boolean specifying if pathway annotation should be applied. If TRUE, the function will return a supplementary binary dataframe with columns being each pathway and each row being a sample. Default is FALSE.
 - col.names character vector of the necessary columns to be used. By default: col.names = c(Tumor_Sample_Barcode = NULL, Hugo_Symbol = NULL, Variant_Classification = NULL, Mutation_Status = NULL, Variant_Type = NULL)
 
 This function returns a matrix containing all the genetic information with rows as samples and columns as features.
@@ -73,22 +75,22 @@ df <- binmat(patients = samples ,maf = mut, SNP.only = TRUE, include.silent = TR
 kable(df[1:10, 1:10])
 ```
 
-### Processing mutation data from the API
+<!-- ### Processing mutation data from the API -->
 
-In this section we show the same examples as above but using the data downloaded through the API:
+<!-- In this section we show the same examples as above but using the data downloaded through the API: -->
 
-```{r}
-dat <- get_genetics(sample_ids = samples, fusions = FALSE, cna = FALSE)
-df <- binmat(maf = dat$mut)
-kable(df[1:10, 1:10])
-```
+<!-- ```{r} -->
+<!-- dat <- get_genetics(sample_ids = samples, fusions = FALSE, cna = FALSE) -->
+<!-- df <- binmat(maf = dat$mut) -->
+<!-- kable(df[1:10, 1:10]) -->
+<!-- ``` -->
 
-Similarly, 
+<!-- Similarly,  -->
 
-```{r}
-df <- binmat(maf = dat$mut, SNP.only = TRUE, include.silent = TRUE, spe.plat = FALSE)
-kable(df[1:10, 1:10])
-```
+<!-- ```{r} -->
+<!-- df <- binmat(maf = dat$mut, SNP.only = TRUE, include.silent = TRUE, spe.plat = FALSE) -->
+<!-- kable(df[1:10, 1:10]) -->
+<!-- ``` -->
 
 ## Fusions
 
@@ -104,17 +106,17 @@ df <- binmat(patients = samples ,fusion = fusion)
 kable(df[1:10, 1:10])
 ```
 
-### Processing fusions from the API
+<!-- ### Processing fusions from the API -->
 
-In the API provided in `gnomeR` the fusion data comes merged with the mutation data. Note that we included an option to automatically filter them out if the user wishes so. 
+<!-- In the API provided in `gnomeR` the fusion data comes merged with the mutation data. Note that we included an option to automatically filter them out if the user wishes so.  -->
 
-```{r}
-dat <- get_genetics(sample_ids = samples,mutations = FALSE, fusions = TRUE, cna = FALSE)
-df <- binmat(maf = dat$mut)
-kable(df[1:10, 1:10])
-```
+<!-- ```{r} -->
+<!-- dat <- get_genetics(sample_ids = samples,mutations = FALSE, fusions = TRUE, cna = FALSE) -->
+<!-- df <- binmat(maf = dat$mut) -->
+<!-- kable(df[1:10, 1:10]) -->
+<!-- ``` -->
 
-Similarly to the mutation data the fusions are affected by the `spe.plat` and `set.plat` arguments as well. 
+<!-- Similarly to the mutation data the fusions are affected by the `spe.plat` and `set.plat` arguments as well.  -->
 
 
 ## Copy-number alterations (CNA)
@@ -145,23 +147,23 @@ kable(df[1:10, 1:10])
 ```
 
 
-### Processing CNA data from the API
+<!-- ### Processing CNA data from the API -->
 
-Setting the `cna` argument to TRUE in the `get_genetics()` function will retrieve the CNA data for the specified samples that can then further be processed in a similar fashion to the above:
+<!-- Setting the `cna` argument to TRUE in the `get_genetics()` function will retrieve the CNA data for the specified samples that can then further be processed in a similar fashion to the above: -->
 
-```{r}
-dat <- get_genetics(sample_ids = samples,mutations = FALSE, fusions = FALSE, cna = TRUE)
-df <- binmat(patients = samples, cna = dat$cna)
-kable(df[1:10, 1:10])
-```
+<!-- ```{r} -->
+<!-- dat <- get_genetics(sample_ids = samples,mutations = FALSE, fusions = FALSE, cna = TRUE) -->
+<!-- df <- binmat(patients = samples, cna = dat$cna) -->
+<!-- kable(df[1:10, 1:10]) -->
+<!-- ``` -->
 
-Setting `cna.binary` argument to FALSE yields the following events coded in a single column with their original levels:
+<!-- Setting `cna.binary` argument to FALSE yields the following events coded in a single column with their original levels: -->
 
-```{r}
-dat <- get_genetics(sample_ids = samples,mutations = FALSE, fusions = FALSE, cna = TRUE)
-df <- binmat(patients = samples, cna = dat$cna,cna.binary = FALSE)
-kable(df[1:10, 1:10])
-```
+<!-- ```{r} -->
+<!-- dat <- get_genetics(sample_ids = samples,mutations = FALSE, fusions = FALSE, cna = TRUE) -->
+<!-- df <- binmat(patients = samples, cna = dat$cna,cna.binary = FALSE) -->
+<!-- kable(df[1:10, 1:10]) -->
+<!-- ``` -->
 
 ## Processing full genetic profiles for samples
 
@@ -177,14 +179,56 @@ kable(df[1:10, c(1:3,243,244,300:305)])
 ```
 
 
-### From the API
+<!-- ### From the API -->
 
-Similarly we get retrieve all the genetic events at once through the `get_genetics()` function and proceed to process them. 
+<!-- Similarly we get retrieve all the genetic events at once through the `get_genetics()` function and proceed to process them.  -->
+
+<!-- ```{r} -->
+<!-- dat <- get_genetics(sample_ids = samples,mutations = TRUE, fusions = TRUE, cna = TRUE) -->
+<!-- df <- binmat(patients = samples,maf = dat$mut, cna = dat$cna,cna.binary = FALSE) -->
+<!-- kable(df[1:10, c(1:3,243,244,300:305)]) -->
+<!-- ``` -->
+
+<!-- Note that here the fusions are embedded in the mutation file. -->
+
+
+# Pathway level alterations
+
+Pathway level alteration analysis is commonly encountered in genomic studies. We therefore implemented in `binmat()` the `pathway` argument that enables the user to generate a second binary matrix with pathways as new features (columns) for each of the samples (rows). These pathways were created following Dr. Schultz's group in their paper [Oncogenic Signaling Pathways in The Cancer
+Genome Atlas](https://www.cell.com/cell/pdf/S0092-8674(18)30359-3.pdf). It consist of 10 well defined pathways that have biological impacts in cancer patients.
+We show below an example of this matrix. 
 
 ```{r}
-dat <- get_genetics(sample_ids = samples,mutations = TRUE, fusions = TRUE, cna = TRUE)
-df <- binmat(patients = samples,maf = dat$mut, cna = dat$cna,cna.binary = FALSE)
-kable(df[1:10, c(1:3,243,244,300:305)])
+df <- binmat(patients = samples,maf = mut, cna = cna,cna.binary = FALSE,pathway = T)
+kable(df$pathway_dat[1:5,])
 ```
 
-Note that here the fusions are embedded in the mutation file.
+Note that this is returned as an additional element of `binmat()` and the original binary matrix for all genes is still returned.
+
+# FACETs
+
+The copy-number alterations data we have covered up to now is a discrete estimation of the alterations that occured. There however exist more nuanced and accurate data for copy-number alterations observed in a tumor. In `gnomeR` we include an example of segmentation file and relevant functions from the [`facets`](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5027494/) package that provides an allele-specific copy number and clonal heterogeneity analysis tool for high-throughput DNA sequencing. We show below an example of a segmentation file included in `gnomeR` (`seg` dataset) and how to process it:
+
+```{r}
+kable(seg[1:10,])
+```
+
+We see that this files include segments of all chromosome for each patient with the number of marks and mean intensity in that segments. We can process this data into a format that can be used for visualization and analysis using the `facets.dat()` function that takes the following arguments:
+
+- `seg`: a segmentation file
+- `filenames`: the names of the segment files to be loaded and processed (Note must end in ".Rdata").
+- `path`: the relative path to the files folder from your current directory
+- `patients`: the names of the patients of the respective filenames. Default is using all samples available.
+- `min.purity`: the minimum purity of the sample required to be kept in the final dataset. Default is 0.3.
+- `epsilon`: level of unions when aggregating segments between. Default is 0.005.
+- `adaptive`: CNregions option to create adaptive segments. Default is FALSE.
+
+```{r, message = F, warning = F}
+facet <- facets.dat(seg = seg, patients = samples, epsilon = 0.005)
+```
+
+This function returns a dataframe that is ready for visualization and analysis with samples as rows and processed segments as columns:
+
+```{r, message = F, warning = F}
+kable(facet$out.cn[1:5,1:3])
+```

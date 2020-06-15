@@ -167,6 +167,7 @@ a predefined list of patients (rows are patients and columns are genes)</p>
   <span class='kw'>spe.plat</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
   <span class='kw'>set.plat</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>rm.empty</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='kw'>pathway</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
   <span class='kw'>col.names</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='kw'>Tumor_Sample_Barcode</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>Hugo_Symbol</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>Variant_Classification</span>
     <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>Mutation_Status</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>Variant_Type</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)
 )</pre>
@@ -229,6 +230,11 @@ Options are "341", "410" and "468". Default is NULL.</p></td>
     <tr>
       <th>rm.empty</th>
       <td><p>boolean specifying if columns with no events founds should be removed. Default is TRUE.</p></td>
+    </tr>
+    <tr>
+      <th>pathway</th>
+      <td><p>boolean specifying if pathway annotation should be applied. If TRUE, the function will return a supplementary binary
+dataframe with columns being each pathway and each row being a sample. Default is FALSE.</p></td>
     </tr>
     <tr>
       <th>col.names</th>

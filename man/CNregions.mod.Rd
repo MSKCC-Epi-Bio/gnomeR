@@ -42,5 +42,9 @@ Modified CNregions function from the facets package to handle small sample sizes
 }
 \examples{
 library(gnomeR)
-CNregions.mod(seg)
+library(dplyr)
+samples <-
+as.character(unique(mut$Tumor_Sample_Barcode))[
+sample(1:length(unique(mut$Tumor_Sample_Barcode)), 100, replace=FALSE)]
+CNregions.mod(seg \%>\% filter(ID \%in\% samples))
 }

@@ -155,10 +155,8 @@ uni.cox <- function(X,surv.dat,surv.formula,filter = 0,genes = NULL){
       Pvalue = as.numeric(formatC(stats::p.adjust(as.numeric(as.character(.data$Pvalue)),
                                        method = "fdr"), format = "e", digits = 2)),
       HR = as.numeric(exp(as.numeric(as.character(.data$Coefficient)))),
-      Coefficient = as.numeric(formatC(stats::p.adjust(as.numeric(as.character(.data$Coefficient)),
-                                            method = "fdr"), format = "e", digits = 2)),
-      HR = as.numeric(formatC(stats::p.adjust(as.numeric(as.character(.data$HR)),
-                                            method = "fdr"), format = "e", digits = 2)),
+      Coefficient = as.numeric(formatC(as.numeric(as.character(.data$Coefficient)), format = "e", digits = 2)),
+      HR = as.numeric(formatC(as.numeric(as.character(.data$HR)), format = "e", digits = 2)),
       MutationFrequency = as.numeric(round(as.numeric(as.character(.data$MutationFrequency)), digits = 4))
     )
   uniVolcano <- plot_ly(data = uni, x = ~Coefficient, y = ~-log10(Pvalue),

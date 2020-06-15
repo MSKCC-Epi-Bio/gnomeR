@@ -98,32 +98,16 @@
 <a href="#gnomer" class="anchor"></a>gnomeR</h1></div>
 <!-- badges: start -->
 
-<p>the {gnomeR} package provides a consistent framework for genetic data processing, visualization and analysis. This is primarily targeted to IMPACT datasets but can also be applied to any genomic data provided by CbioPortal.</p>
+<p>the <code>gnomeR</code> package provides a consistent framework for genetic data processing, visualization and analysis. This is primarily targeted to IMPACT datasets but can also be applied to any genomic data provided by CbioPortal.</p>
 <ul>
 <li>
-<div class="text-blue mb-2">
-<p>Dowloading and gathering data from CbioPortal</p>
-</div>
-<p>through an integrated API using simply the sample IDs of the samples of interests or the name of the study to retrive all samples in that study.</p>
-</li>
+<a href="https://axelitomartin.github.io/gnomeR/articles/API-tutorial.html"><strong>Dowloading and gathering data from CbioPortal</strong></a> through an integrated API using simply the sample IDs of the samples of interests or the name of the study to retrive all samples in that study.</li>
 <li>
-<div class="text-blue mb-2">
-<p>Processing genomic data</p>
-</div>
-<p>retrieved for mutations (MAF file), fusions (MAF file) and copy-number alterations (and when available segmentation files) into an analysis ready format.</p>
-</li>
+<a href="https://axelitomartin.github.io/gnomeR/articles/Data-processing.html"><strong>Processing genomic data</strong></a> retrieved for mutations (MAF file), fusions (MAF file) and copy-number alterations (and when available segmentation files) into an analysis ready format.</li>
 <li>
-<div class="text-blue mb-2">
-<p>Visualization of the processed data</p>
-</div>
-<p>provided through MAF file summaries, OncoPrints and heatmaps.</p>
-</li>
+<a href="https://axelitomartin.github.io/gnomeR/articles/Visualizations.html"><strong>Visualization of the processed data</strong></a> provided through MAF file summaries, OncoPrints and heatmaps.</li>
 <li>
-<div class="text-blue mb-2">
-<p>Analyzing the processed data</p>
-</div>
-<p>for association with binary, continuous and survival outcome. Including further visualiztion to improve understanding of the results.</p>
-</li>
+<a href="https://axelitomartin.github.io/gnomeR/articles/Analizing-genomic-data.html"><strong>Analyzing the processed data</strong></a> for association with binary, continuous and survival outcome. Including further visualiztion to improve understanding of the results.</li>
 </ul>
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
@@ -138,38 +122,27 @@
 <div id="setting-up-the-api" class="section level3">
 <h3 class="hasAnchor">
 <a href="#setting-up-the-api" class="anchor"></a>Setting up the API</h3>
-<p>In order to download the data from CbioPortal, one must first require a token from the website <a href="https://cbiologin.mskcc.org/">CbioPortal</a> wich will prompt a login page with your MSKCC credentials. Then navigate to “Web API” in the top bar menu, following this simply download a token and copy it after running the following command in R:</p>
+<p>In order to download the data from CbioPortal, one must first require a token from the website <a href="https://cbioportal.mskcc.org/">CbioPortal</a> wich will prompt a login page with your MSKCC credentials. Then navigate to “Web API” in the top bar menu, following this simply download a token and copy it after running the following command in R:</p>
 <div class="sourceCode" id="cb2"><pre class="r"><span class="kw pkg">usethis</span><span class="kw ns">::</span><span class="fu"><a href="https://usethis.r-lib.org/reference/edit.html">edit_r_environ</a></span>()</pre></div>
 <p>And pasting the token you were given in the .Renviron file that was created and saving after pasting your token.</p>
 <div class="sourceCode" id="cb3"><pre class="r"><span class="no">CBIOPORTAL_TOKEN</span> <span class="kw">=</span> <span class="st">'YOUR_TOKEN'</span></pre></div>
 <p>You can test your connection using:</p>
-<div class="sourceCode" id="cb4"><pre class="r"><span class="no">mycgds</span> <span class="kw">=</span> <span class="fu">CGDS</span>(<span class="st">"https://cbioportal.mskcc.org/"</span>,
-              <span class="kw">token</span> <span class="kw">=</span> <span class="no">YOUR_TOKEN</span>)
-<span class="fu">test</span>(<span class="no">mycgds</span>)</pre></div>
+<div class="sourceCode" id="cb4"><pre class="r"><span class="fu">get_cbioportal_token</span>()</pre></div>
 </div>
 <div id="retrieving-data" class="section level3">
 <h3 class="hasAnchor">
 <a href="#retrieving-data" class="anchor"></a>Retrieving data</h3>
 <p>Now that the Cbioportal API is set up in your environment, you must first specify the database of interest (IMPACT or TCGA are the two available options). Following this one can either sepcify the samples or study of interest:</p>
-<div class="sourceCode" id="cb5"><pre class="r"><span class="fu">get_cbioportal_db</span>(<span class="st">"msk_impact"</span>)
-<span class="no">ids</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html">as.character</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span>(<span class="no">mut</span>$<span class="no">Tumor_Sample_Barcode</span>)[<span class="fl">1</span>:<span class="fl">100</span>])
-<span class="no">df</span> <span class="kw">&lt;-</span> <span class="fu">get_mutations</span>(<span class="kw">sample_ids</span> <span class="kw">=</span> <span class="no">ids</span>)
-
-<span class="co">## match genes ##</span>
-<span class="co"># This will be included in the future #</span>
-<span class="no">df.genes</span> <span class="kw">&lt;-</span> <span class="no">df</span> <span class="kw">%&gt;%</span>
-  <span class="fu">mutate</span>(<span class="kw">Hugo_Symbol</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html">as.character</a></span>(<span class="no">info_impact</span>$<span class="no">Hugo_Symbol</span>[<span class="fu"><a href="https://rdrr.io/r/base/match.html">match</a></span>(<span class="no">entrezGeneId</span>,
-                                                                  <span class="no">info_impact</span>$<span class="no">Entrez_Gene_Id</span>)]))</pre></div>
+<div class="sourceCode" id="cb5"><pre class="r"><span class="no">ids</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html">as.character</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span>(<span class="no">mut</span>$<span class="no">Tumor_Sample_Barcode</span>)[<span class="fl">1</span>:<span class="fl">100</span>])
+<span class="no">df</span> <span class="kw">&lt;-</span> <span class="fu"><a href="reference/get_genetics.html">get_genetics</a></span>(<span class="kw">sample_ids</span> <span class="kw">=</span> <span class="no">ids</span>,<span class="kw">database</span> <span class="kw">=</span> <span class="st">"msk_impact"</span>,
+                       <span class="kw">mutations</span> <span class="kw">=</span> <span class="fl">TRUE</span>, <span class="kw">fusions</span> <span class="kw">=</span> <span class="fl">TRUE</span>, <span class="kw">cna</span> <span class="kw">=</span> <span class="fl">TRUE</span>)</pre></div>
 </div>
 <div id="processing-the-downloaded-data" class="section level3">
 <h3 class="hasAnchor">
 <a href="#processing-the-downloaded-data" class="anchor"></a>Processing the downloaded data</h3>
 <p>The <code><a href="reference/binmat.html">binmat()</a></code> function is the feature of the data processing of <code>gnomeR</code>. It takes genomic inputs from various sources of CbioPortal (mutation files, fusion files and copy number raw counts) to give out a clean binary matrix of n samples by all the events that were found in the files.</p>
-<p>Still need to deal with stuff for the API here (CNA mostly):</p>
-<div class="sourceCode" id="cb6"><pre class="r"><span class="no">test2</span> <span class="kw">&lt;-</span> <span class="no">df.genes</span> <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="reference/binmat.html">binmat</a></span>(<span class="kw">maf</span> <span class="kw">=</span> <span class="no">.</span>, <span class="kw">col.names</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="kw">Tumor_Sample_Barcode</span> <span class="kw">=</span> <span class="st">"sampleId"</span>, <span class="kw">Hugo_Symbol</span> <span class="kw">=</span> <span class="kw">NULL</span>, <span class="kw">Variant_Classification</span>
-                                <span class="kw">=</span> <span class="st">"mutationType"</span>, <span class="kw">Mutation_Status</span> <span class="kw">=</span> <span class="st">"mutationStatus"</span>, <span class="kw">Variant_Type</span> <span class="kw">=</span> <span class="st">"variantType"</span>))</pre></div>
-<p>Example with example data in the package for now:</p>
+<div class="sourceCode" id="cb6"><pre class="r"><span class="no">df.clean</span> <span class="kw">&lt;-</span> <span class="fu"><a href="reference/binmat.html">binmat</a></span>(<span class="kw">maf</span> <span class="kw">=</span> <span class="no">df</span>$<span class="no">mut</span>, <span class="kw">cna</span> <span class="kw">=</span> <span class="no">df</span>$<span class="no">cna</span>)</pre></div>
+<p>We further included example datasets from the raw dowloaded files on CbioPortal (<code>mut</code>, <code>fusion</code>, <code>cna</code>) which we will use for the following examples.</p>
 <div class="sourceCode" id="cb7"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span>(<span class="fl">123</span>)
 <span class="no">patients</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html">as.character</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span>(<span class="no">mut</span>$<span class="no">Tumor_Sample_Barcode</span>))[<span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample</a></span>(<span class="fl">1</span>:<span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span>(<span class="no">mut</span>$<span class="no">Tumor_Sample_Barcode</span>)), <span class="fl">100</span>, <span class="kw">replace</span><span class="kw">=</span><span class="fl">FALSE</span>)]
 
@@ -374,125 +347,136 @@
 <table class="table">
 <thead><tr class="header">
 <th></th>
+<th align="left">Feature</th>
 <th align="left">Overall</th>
 <th align="left">0(N=50)</th>
 <th align="left">1(N=50)</th>
 <th align="left">OddsRatio</th>
 <th align="left">Pvalue</th>
+<th align="left">FDR</th>
 <th align="left">Lower</th>
 <th align="left">Upper</th>
-<th align="left">FDR</th>
 </tr></thead>
 <tbody>
 <tr class="odd">
 <td>MYC.Amp</td>
-<td align="left">6%</td>
-<td align="left">12%</td>
-<td align="left">0%</td>
-<td align="left">0</td>
-<td align="left">2.67e-02</td>
-<td align="left">0</td>
-<td align="left">0.8</td>
-<td align="left">1.00e+00</td>
-</tr>
-<tr class="even">
-<td>CDKN2B.Del</td>
-<td align="left">6%</td>
-<td align="left">2%</td>
-<td align="left">10%</td>
-<td align="left">5.37</td>
-<td align="left">2.04e-01</td>
-<td align="left">0.57</td>
-<td align="left">262.3</td>
-<td align="left">1.00e+00</td>
-</tr>
-<tr class="odd">
-<td>MCL1.Amp</td>
+<td align="left">MYC.Amp</td>
 <td align="left">6%</td>
 <td align="left">10%</td>
 <td align="left">2%</td>
 <td align="left">0.19</td>
 <td align="left">2.04e-01</td>
+<td align="left">1.00e+00</td>
 <td align="left">0</td>
 <td align="left">1.76</td>
-<td align="left">1.00e+00</td>
 </tr>
 <tr class="even">
 <td>PIK3CA</td>
+<td align="left">PIK3CA</td>
 <td align="left">12%</td>
 <td align="left">8%</td>
 <td align="left">16%</td>
 <td align="left">2.17</td>
 <td align="left">3.57e-01</td>
+<td align="left">1.00e+00</td>
 <td align="left">0.53</td>
 <td align="left">10.6</td>
-<td align="left">1.00e+00</td>
 </tr>
 <tr class="odd">
 <td>FLT4</td>
+<td align="left">FLT4</td>
 <td align="left">5%</td>
 <td align="left">2%</td>
 <td align="left">8%</td>
 <td align="left">4.21</td>
 <td align="left">3.62e-01</td>
+<td align="left">1.00e+00</td>
 <td align="left">0.4</td>
 <td align="left">213.8</td>
-<td align="left">1.00e+00</td>
 </tr>
 <tr class="even">
 <td>EPHA5</td>
+<td align="left">EPHA5</td>
 <td align="left">5%</td>
 <td align="left">8%</td>
 <td align="left">2%</td>
 <td align="left">0.24</td>
 <td align="left">3.62e-01</td>
+<td align="left">1.00e+00</td>
 <td align="left">0</td>
 <td align="left">2.52</td>
-<td align="left">1.00e+00</td>
 </tr>
 <tr class="odd">
 <td>DOT1L</td>
+<td align="left">DOT1L</td>
 <td align="left">5%</td>
 <td align="left">2%</td>
 <td align="left">8%</td>
 <td align="left">4.21</td>
 <td align="left">3.62e-01</td>
+<td align="left">1.00e+00</td>
 <td align="left">0.4</td>
 <td align="left">213.8</td>
-<td align="left">1.00e+00</td>
 </tr>
 <tr class="even">
+<td>ERBB2.Amp</td>
+<td align="left">ERBB2.Amp</td>
+<td align="left">5%</td>
+<td align="left">2%</td>
+<td align="left">8%</td>
+<td align="left">4.21</td>
+<td align="left">3.62e-01</td>
+<td align="left">1.00e+00</td>
+<td align="left">0.4</td>
+<td align="left">213.8</td>
+</tr>
+<tr class="odd">
 <td>STK11</td>
+<td align="left">STK11</td>
 <td align="left">7%</td>
 <td align="left">10%</td>
 <td align="left">4%</td>
 <td align="left">0.38</td>
 <td align="left">4.36e-01</td>
+<td align="left">1.00e+00</td>
 <td align="left">0.03</td>
 <td align="left">2.46</td>
-<td align="left">1.00e+00</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td>APC</td>
+<td align="left">APC</td>
 <td align="left">7%</td>
 <td align="left">4%</td>
 <td align="left">10%</td>
 <td align="left">2.64</td>
 <td align="left">4.36e-01</td>
+<td align="left">1.00e+00</td>
 <td align="left">0.41</td>
 <td align="left">29.07</td>
-<td align="left">1.00e+00</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td>MLL</td>
+<td align="left">MLL</td>
 <td align="left">9%</td>
 <td align="left">12%</td>
 <td align="left">6%</td>
 <td align="left">0.47</td>
 <td align="left">4.87e-01</td>
+<td align="left">1.00e+00</td>
 <td align="left">0.07</td>
 <td align="left">2.37</td>
+</tr>
+<tr class="even">
+<td>FAT1</td>
+<td align="left">FAT1</td>
+<td align="left">11%</td>
+<td align="left">14%</td>
+<td align="left">8%</td>
+<td align="left">0.54</td>
+<td align="left">5.25e-01</td>
 <td align="left">1.00e+00</td>
+<td align="left">0.11</td>
+<td align="left">2.29</td>
 </tr>
 </tbody>
 </table>
@@ -510,97 +494,108 @@
 <div class="sourceCode" id="cb16"><pre class="r"><span class="no">time</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Exponential.html">rexp</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span>(<span class="no">patients</span>))
 <span class="no">status</span> <span class="kw">&lt;-</span> <span class="no">outcome</span>
 <span class="no">surv.dat</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/cbind.html">cbind</a></span>(<span class="no">time</span>,<span class="no">status</span>))
-<span class="no">out</span> <span class="kw">&lt;-</span> <span class="fu"><a href="reference/uni.cox.html">uni.cox</a></span>(<span class="kw">X</span> <span class="kw">=</span> <span class="no">gen.dat</span>, <span class="kw">surv.dat</span> <span class="kw">=</span> <span class="no">surv.dat</span>, <span class="kw">surv.formula</span> <span class="kw">=</span> <span class="fu">Surv</span>(<span class="no">time</span>,<span class="no">status</span>)~<span class="no">.</span>,<span class="kw">filter</span> <span class="kw">=</span> <span class="fl">0.05</span>,<span class="kw">is.gen</span> <span class="kw">=</span> <span class="no">T</span>)
+<span class="no">out</span> <span class="kw">&lt;-</span> <span class="fu"><a href="reference/uni.cox.html">uni.cox</a></span>(<span class="kw">X</span> <span class="kw">=</span> <span class="no">gen.dat</span>, <span class="kw">surv.dat</span> <span class="kw">=</span> <span class="no">surv.dat</span>, <span class="kw">surv.formula</span> <span class="kw">=</span> <span class="fu">Surv</span>(<span class="no">time</span>,<span class="no">status</span>)~<span class="no">.</span>,<span class="kw">filter</span> <span class="kw">=</span> <span class="fl">0.05</span>)
 <span class="fu">kable</span>(<span class="no">out</span>$<span class="no">tab</span>[<span class="fl">1</span>:<span class="fl">10</span>,],<span class="kw">row.names</span> <span class="kw">=</span> <span class="no">T</span>)</pre></div>
 <table class="table">
 <thead><tr class="header">
 <th></th>
+<th align="left">Feature</th>
 <th align="right">Coefficient</th>
 <th align="right">Pvalue</th>
 <th align="right">MutationFrequency</th>
-<th align="left">Feature</th>
 <th align="right">FDR</th>
+<th align="right">HR</th>
 </tr></thead>
 <tbody>
 <tr class="odd">
-<td>MLL</td>
-<td align="right">-1.4788839</td>
-<td align="right">0.0154952</td>
-<td align="right">0.09</td>
+<td>1</td>
 <td align="left">MLL</td>
+<td align="right">-1.480</td>
+<td align="right">0.604</td>
+<td align="right">0.09</td>
 <td align="right">0.6043112</td>
+<td align="right">0.228</td>
 </tr>
 <tr class="even">
-<td>STK11</td>
-<td align="right">-1.4567353</td>
-<td align="right">0.0519131</td>
-<td align="right">0.07</td>
+<td>2</td>
 <td align="left">STK11</td>
-<td align="right">0.7580415</td>
+<td align="right">-1.460</td>
+<td align="right">0.912</td>
+<td align="right">0.07</td>
+<td align="right">0.9122695</td>
+<td align="right">0.233</td>
 </tr>
 <tr class="odd">
-<td>FGFR1.Amp</td>
-<td align="right">1.0035559</td>
-<td align="right">0.0583109</td>
-<td align="right">0.06</td>
-<td align="left">FGFR1.Amp</td>
-<td align="right">0.7580415</td>
-</tr>
-<tr class="even">
-<td>KEAP1</td>
-<td align="right">-1.0174381</td>
-<td align="right">0.1670264</td>
-<td align="right">0.05</td>
+<td>3</td>
 <td align="left">KEAP1</td>
-<td align="right">0.9060327</td>
+<td align="right">-1.020</td>
+<td align="right">0.912</td>
+<td align="right">0.05</td>
+<td align="right">0.9122695</td>
+<td align="right">0.362</td>
 </tr>
-<tr class="odd">
-<td>NOTCH1</td>
-<td align="right">0.6087690</td>
-<td align="right">0.2071206</td>
-<td align="right">0.08</td>
+<tr class="even">
+<td>4</td>
 <td align="left">NOTCH1</td>
-<td align="right">0.9060327</td>
+<td align="right">0.609</td>
+<td align="right">0.912</td>
+<td align="right">0.08</td>
+<td align="right">0.9122695</td>
+<td align="right">1.840</td>
 </tr>
-<tr class="even">
-<td>DOT1L</td>
-<td align="right">0.6591677</td>
-<td align="right">0.2111284</td>
-<td align="right">0.05</td>
+<tr class="odd">
+<td>5</td>
 <td align="left">DOT1L</td>
-<td align="right">0.9060327</td>
-</tr>
-<tr class="odd">
-<td>TSC1</td>
-<td align="right">0.7504330</td>
-<td align="right">0.2131792</td>
+<td align="right">0.659</td>
+<td align="right">0.912</td>
 <td align="right">0.05</td>
+<td align="right">0.9122695</td>
+<td align="right">1.930</td>
+</tr>
+<tr class="even">
+<td>6</td>
 <td align="left">TSC1</td>
-<td align="right">0.9060327</td>
-</tr>
-<tr class="even">
-<td>CDH1</td>
-<td align="right">0.6047512</td>
-<td align="right">0.2520918</td>
-<td align="right">0.06</td>
-<td align="left">CDH1</td>
-<td align="right">0.9060327</td>
+<td align="right">0.750</td>
+<td align="right">0.912</td>
+<td align="right">0.05</td>
+<td align="right">0.9122695</td>
+<td align="right">2.120</td>
 </tr>
 <tr class="odd">
-<td>EPHA5</td>
-<td align="right">-1.0797593</td>
-<td align="right">0.2865891</td>
-<td align="right">0.05</td>
-<td align="left">EPHA5</td>
-<td align="right">0.9060327</td>
+<td>7</td>
+<td align="left">MYC.Amp</td>
+<td align="right">-1.200</td>
+<td align="right">0.912</td>
+<td align="right">0.06</td>
+<td align="right">0.9122695</td>
+<td align="right">0.301</td>
 </tr>
 <tr class="even">
-<td>PIK3CA</td>
-<td align="right">0.4096672</td>
-<td align="right">0.2947373</td>
-<td align="right">0.12</td>
-<td align="left">PIK3CA</td>
-<td align="right">0.9060327</td>
+<td>8</td>
+<td align="left">CDH1</td>
+<td align="right">0.605</td>
+<td align="right">0.912</td>
+<td align="right">0.06</td>
+<td align="right">0.9122695</td>
+<td align="right">1.830</td>
+</tr>
+<tr class="odd">
+<td>9</td>
+<td align="left">FGFR1.Amp</td>
+<td align="right">-0.826</td>
+<td align="right">0.912</td>
+<td align="right">0.06</td>
+<td align="right">0.9122695</td>
+<td align="right">0.438</td>
+</tr>
+<tr class="even">
+<td>10</td>
+<td align="left">EPHA5</td>
+<td align="right">-1.080</td>
+<td align="right">0.912</td>
+<td align="right">0.05</td>
+<td align="right">0.9122695</td>
+<td align="right">0.340</td>
 </tr>
 </tbody>
 </table>
@@ -608,16 +603,6 @@
 <span class="no">out</span>$<span class="no">KM</span><span class="kw">[[</span><span class="fl">1</span>]]</pre></div>
 <p><img src="reference/figures/README-unnamed-chunk-12-1.png" width="100%"></p>
 </div>
-<div id="oncocast" class="section level5">
-<h5 class="hasAnchor">
-<a href="#oncocast" class="anchor"></a>OncoCast</h5>
-<p>Axel will integrate this</p>
-</div>
-</div>
-<div id="survclust" class="section level4">
-<h4 class="hasAnchor">
-<a href="#survclust" class="anchor"></a>SurvClust</h4>
-<p>Arshi will integrate this</p>
 </div>
 </div>
 </div>

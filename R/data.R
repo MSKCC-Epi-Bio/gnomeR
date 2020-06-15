@@ -16,6 +16,8 @@
 #'   IMPACT platform 410. Options are `included` and `not included`}
 #'   \item{platform_468}{Character, indicates whether each gene was included in
 #'   IMPACT platform 468. Options are `included` and `not included`}
+#'   \item{pathway}{Character, indicates whether each gene belongs to one of the pathways
+#'   defined in Oncogenic Signaling Pathways in The Cancer Genome Atlas`}
 #' }
 #' @source \url{https://cbioportal.mskcc.org/}
 "impact_gene_info"
@@ -168,3 +170,24 @@
 #'  \item{hugo_symbol}{Gene name}
 #' }
 "impact_genes"
+
+#' A vector of 19441 hugo symbols in TCGA
+#'
+#'A vector of 19441 hugo symbols in TCGA
+#'
+#' @format A data frame with 19441 genes
+#' \describe{
+#'     }
+"tcga_genes"
+
+
+#' Data frame of all TCGA sample ids and their corresponding cancer type
+#'
+#' Data frame of all TCGA sample ids and their corresponding cancer type
+#'
+#' @format A data frame with 10275 samples
+#' \describe{
+#'     \item{patient_id}{Sample ID}
+#'     \item{Cancer_Code}{Cancer site following TCGA abbreviations}
+#'     }
+"tcga_samples"
