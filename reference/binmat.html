@@ -154,22 +154,22 @@ Enables creation of a binary matrix from a maf file with
 a predefined list of patients (rows are patients and columns are genes)</p>
     </div>
 
-    <pre class="usage"><span class='fu'>binmat</span>(
-  <span class='kw'>patients</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>maf</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>mut.type</span> <span class='kw'>=</span> <span class='st'>"SOMATIC"</span>,
-  <span class='kw'>SNP.only</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>include.silent</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>fusion</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>cna</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>cna.binary</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>cna.relax</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>spe.plat</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>set.plat</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>rm.empty</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>pathway</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>col.names</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='kw'>Tumor_Sample_Barcode</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>Hugo_Symbol</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>Variant_Classification</span>
-    <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>Mutation_Status</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>Variant_Type</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)
+    <pre class="usage"><span class='fu'><a href='https://rdrr.io/pkg/gnomeR/man/binmat.html'>binmat</a></span>(
+  patients = <span class='kw'>NULL</span>,
+  maf = <span class='kw'>NULL</span>,
+  mut.type = <span class='st'>"SOMATIC"</span>,
+  SNP.only = <span class='fl'>FALSE</span>,
+  include.silent = <span class='fl'>FALSE</span>,
+  fusion = <span class='kw'>NULL</span>,
+  cna = <span class='kw'>NULL</span>,
+  cna.binary = <span class='fl'>TRUE</span>,
+  cna.relax = <span class='fl'>FALSE</span>,
+  spe.plat = <span class='fl'>TRUE</span>,
+  set.plat = <span class='kw'>NULL</span>,
+  rm.empty = <span class='fl'>TRUE</span>,
+  pathway = <span class='fl'>FALSE</span>,
+  col.names = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(Tumor_Sample_Barcode = <span class='kw'>NULL</span>, Hugo_Symbol = <span class='kw'>NULL</span>, Variant_Classification
+    = <span class='kw'>NULL</span>, Mutation_Status = <span class='kw'>NULL</span>, Variant_Type = <span class='kw'>NULL</span>)
 )</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -248,17 +248,17 @@ Hugo_Symbol = NULL, Variant_Classification = NULL, Mutation_Status = NULL, Varia
     <p>mut : a binary matrix of mutation data</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>gnomeR</span>)
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='kw'><a href='https://github.com/AxelitoMartin/gnomeR'>gnomeR</a></span>)
 <span class='co'># mut.only &lt;- binmat(maf = mut)</span>
-<span class='no'>patients</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>as.character</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/unique.html'>unique</a></span>(<span class='no'>mut</span>$<span class='no'>Tumor_Sample_Barcode</span>))[<span class='fl'>1</span>:<span class='fl'>200</span>]
-<span class='no'>bin.mut</span> <span class='kw'>&lt;-</span> <span class='fu'>binmat</span>(<span class='kw'>patients</span> <span class='kw'>=</span> <span class='no'>patients</span>,<span class='kw'>maf</span> <span class='kw'>=</span> <span class='no'>mut</span>,
-<span class='kw'>mut.type</span> <span class='kw'>=</span> <span class='st'>"SOMATIC"</span>,<span class='kw'>SNP.only</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-<span class='kw'>include.silent</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>spe.plat</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
-<span class='no'>bin.mut</span> <span class='kw'>&lt;-</span> <span class='fu'>binmat</span>(<span class='kw'>patients</span> <span class='kw'>=</span> <span class='no'>patients</span>,<span class='kw'>maf</span> <span class='kw'>=</span> <span class='no'>mut</span>,
-<span class='kw'>mut.type</span> <span class='kw'>=</span> <span class='st'>"SOMATIC"</span>,<span class='kw'>SNP.only</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-<span class='kw'>include.silent</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-<span class='kw'>cna.relax</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>spe.plat</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
- <span class='kw'>set.plat</span> <span class='kw'>=</span> <span class='st'>"410"</span>, <span class='kw'>rm.empty</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div></pre>
+<span class='kw'>patients</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>as.character</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/unique.html'>unique</a></span>(<span class='kw'>mut</span><span class='op'>$</span><span class='kw'>Tumor_Sample_Barcode</span>))[<span class='fl'>1</span><span class='op'>:</span><span class='fl'>200</span>]
+<span class='kw'>bin.mut</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/gnomeR/man/binmat.html'>binmat</a></span>(patients = <span class='kw'>patients</span>,maf = <span class='kw'>mut</span>,
+mut.type = <span class='st'>"SOMATIC"</span>,SNP.only = <span class='fl'>FALSE</span>,
+include.silent = <span class='fl'>FALSE</span>, spe.plat = <span class='fl'>FALSE</span>)
+<span class='kw'>bin.mut</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/gnomeR/man/binmat.html'>binmat</a></span>(patients = <span class='kw'>patients</span>,maf = <span class='kw'>mut</span>,
+mut.type = <span class='st'>"SOMATIC"</span>,SNP.only = <span class='fl'>FALSE</span>,
+include.silent = <span class='fl'>FALSE</span>,
+cna.relax = <span class='fl'>TRUE</span>, spe.plat = <span class='fl'>FALSE</span>,
+ set.plat = <span class='st'>"410"</span>, rm.empty = <span class='fl'>FALSE</span>)</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -274,7 +274,7 @@ Hugo_Symbol = NULL, Variant_Classification = NULL, Mutation_Status = NULL, Varia
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
 </div>
 
       </footer>

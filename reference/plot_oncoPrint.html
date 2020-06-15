@@ -149,7 +149,7 @@ Creates the OncoPrint corresponding to the inputted genetic data</h1>
 Creates the OncoPrint corresponding to the inputted genetic data</p>
     </div>
 
-    <pre class="usage"><span class='fu'>plot_oncoPrint</span>(<span class='no'>gen.dat</span>, <span class='kw'>clin.dat</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>ordered</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
+    <pre class="usage"><span class='fu'><a href='https://rdrr.io/pkg/gnomeR/man/plot_oncoPrint.html'>plot_oncoPrint</a></span>(<span class='kw'>gen.dat</span>, clin.dat = <span class='kw'>NULL</span>, ordered = <span class='kw'>NULL</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -175,31 +175,31 @@ to be plotted.</p></td>
     <p>p : an oncoprint object</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>gnomeR</span>)
-<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>dplyr</span>)
-<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>dtplyr</span>)
-<span class='no'>patients</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>as.character</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/unique.html'>unique</a></span>(<span class='no'>mut</span>$<span class='no'>Tumor_Sample_Barcode</span>))[<span class='fl'>1</span>:<span class='fl'>200</span>]
-<span class='no'>bin.mut</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='binmat.html'>binmat</a></span>(<span class='kw'>patients</span> <span class='kw'>=</span> <span class='no'>patients</span>,<span class='kw'>maf</span> <span class='kw'>=</span> <span class='no'>mut</span>,
-<span class='kw'>fusion</span> <span class='kw'>=</span> <span class='no'>fusion</span>, <span class='kw'>cna</span> <span class='kw'>=</span> <span class='no'>cna</span>,<span class='kw'>mut.type</span> <span class='kw'>=</span> <span class='st'>"SOMATIC"</span>,
-<span class='kw'>SNP.only</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,<span class='kw'>include.silent</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>spe.plat</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
-<span class='no'>gen.dat</span> <span class='kw'>&lt;-</span> <span class='no'>bin.mut</span>[,
-<span class='fu'><a href='https://rdrr.io/r/base/names.html'>names</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/sort.html'>sort</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/apply.html'>apply</a></span>(<span class='no'>bin.mut</span>,<span class='fl'>2</span>, <span class='no'>sum</span>),<span class='kw'>decreasing</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>))[<span class='fl'>1</span>:<span class='fl'>15</span>]]
-<span class='fu'>plot_oncoPrint</span>(<span class='no'>gen.dat</span>)</div><div class='output co'>#&gt; <span class='message'>All mutation types: MUT, AMP</span></div><div class='img'><img src='plot_oncoPrint-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'>## adding clinical ##</span>
-<span class='no'>clin.patients.dat</span> <span class='kw'>&lt;-</span> <span class='no'>clin.patients</span>[<span class='fu'><a href='https://rdrr.io/r/base/match.html'>match</a></span>(
-<span class='fu'><a href='https://rdrr.io/r/base/abbreviate.html'>abbreviate</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>rownames</a></span>(<span class='no'>gen.dat</span>),<span class='kw'>strict</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>minlength</span> <span class='kw'>=</span> <span class='fl'>9</span>),
-<span class='no'>clin.patients</span>$<span class='no'>X.Patient.Identifier</span>),] <span class='kw'>%&gt;%</span>
-<span class='fu'><a href='https://dplyr.tidyverse.org/reference/rename.html'>rename</a></span>(<span class='kw'>DMPID</span> <span class='kw'>=</span> <span class='no'>X.Patient.Identifier</span>, <span class='kw'>Smoker</span> <span class='kw'>=</span> <span class='no'>Smoking.History</span>) <span class='kw'>%&gt;%</span>
-  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span>(<span class='no'>DMPID</span>, <span class='no'>Sex</span>,<span class='no'>Smoker</span>) <span class='kw'>%&gt;%</span>
-  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span>(!<span class='fu'><a href='https://rdrr.io/r/base/NA.html'>is.na</a></span>(<span class='no'>DMPID</span>)) <span class='kw'>%&gt;%</span>
-  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/distinct.html'>distinct</a></span>(<span class='no'>DMPID</span>,<span class='kw'>.keep_all</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
-<span class='no'>gen.dat</span> <span class='kw'>&lt;-</span> <span class='no'>gen.dat</span>[<span class='fu'><a href='https://rdrr.io/r/base/match.html'>match</a></span>(<span class='no'>clin.patients.dat</span>$<span class='no'>DMPID</span>,
-<span class='fu'><a href='https://rdrr.io/r/base/abbreviate.html'>abbreviate</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>rownames</a></span>(<span class='no'>gen.dat</span>),<span class='kw'>strict</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
- <span class='kw'>minlength</span> <span class='kw'>=</span> <span class='fl'>9</span>)),]
-<span class='no'>clin.patients.dat</span> <span class='kw'>&lt;-</span> <span class='no'>clin.patients.dat</span> <span class='kw'>%&gt;%</span>
-  <span class='kw pkg'>tibble</span><span class='kw ns'>::</span><span class='fu'><a href='https://tibble.tidyverse.org/reference/rownames.html'>column_to_rownames</a></span>(<span class='st'>'DMPID'</span>)
-<span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>rownames</a></span>(<span class='no'>gen.dat</span>) <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>rownames</a></span>(<span class='no'>clin.patients.dat</span>)
-<span class='fu'>plot_oncoPrint</span>(<span class='kw'>gen.dat</span> <span class='kw'>=</span> <span class='no'>gen.dat</span>,
-<span class='kw'>clin.dat</span> <span class='kw'>=</span> <span class='no'>clin.patients.dat</span>)</div><div class='output co'>#&gt; <span class='message'>All mutation types: Sex_Male, Smoker_Prev/Curr Smoker, MUT, Sex_Female,</span>
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='kw'><a href='https://github.com/AxelitoMartin/gnomeR'>gnomeR</a></span>)
+<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='kw'><a href='https://dplyr.tidyverse.org'>dplyr</a></span>)
+<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='kw'><a href='https://github.com/tidyverse/dtplyr'>dtplyr</a></span>)
+<span class='kw'>patients</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>as.character</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/unique.html'>unique</a></span>(<span class='kw'>mut</span><span class='op'>$</span><span class='kw'>Tumor_Sample_Barcode</span>))[<span class='fl'>1</span><span class='op'>:</span><span class='fl'>200</span>]
+<span class='kw'>bin.mut</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/gnomeR/man/binmat.html'>binmat</a></span>(patients = <span class='kw'>patients</span>,maf = <span class='kw'>mut</span>,
+fusion = <span class='kw'>fusion</span>, cna = <span class='kw'>cna</span>,mut.type = <span class='st'>"SOMATIC"</span>,
+SNP.only = <span class='fl'>FALSE</span>,include.silent = <span class='fl'>FALSE</span>, spe.plat = <span class='fl'>FALSE</span>)
+<span class='kw'>gen.dat</span> <span class='op'>&lt;-</span> <span class='kw'>bin.mut</span>[,
+<span class='fu'><a href='https://rdrr.io/r/base/names.html'>names</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/sort.html'>sort</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/apply.html'>apply</a></span>(<span class='kw'>bin.mut</span>,<span class='fl'>2</span>, <span class='kw'>sum</span>),decreasing = <span class='fl'>TRUE</span>))[<span class='fl'>1</span><span class='op'>:</span><span class='fl'>15</span>]]
+<span class='fu'><a href='https://rdrr.io/pkg/gnomeR/man/plot_oncoPrint.html'>plot_oncoPrint</a></span>(<span class='kw'>gen.dat</span>)</div><div class='output co'>#&gt; <span class='message'>All mutation types: MUT, AMP</span></div><div class='img'><img src='plot_oncoPrint-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'>## adding clinical ##</span>
+<span class='kw'>clin.patients.dat</span> <span class='op'>&lt;-</span> <span class='kw'>clin.patients</span>[<span class='fu'><a href='https://rdrr.io/r/base/match.html'>match</a></span>(
+<span class='fu'><a href='https://rdrr.io/r/base/abbreviate.html'>abbreviate</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>rownames</a></span>(<span class='kw'>gen.dat</span>),strict = <span class='fl'>TRUE</span>, minlength = <span class='fl'>9</span>),
+<span class='kw'>clin.patients</span><span class='op'>$</span><span class='kw'>X.Patient.Identifier</span>),] <span class='op'>%&gt;%</span>
+<span class='fu'><a href='https://dplyr.tidyverse.org/reference/rename.html'>rename</a></span>(DMPID = <span class='kw'>X.Patient.Identifier</span>, Smoker = <span class='kw'>Smoking.History</span>) <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span>(<span class='kw'>DMPID</span>, <span class='kw'>Sex</span>,<span class='kw'>Smoker</span>) <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span>(<span class='op'>!</span><span class='fu'><a href='https://rdrr.io/r/base/NA.html'>is.na</a></span>(<span class='kw'>DMPID</span>)) <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/distinct.html'>distinct</a></span>(<span class='kw'>DMPID</span>,.keep_all = <span class='fl'>TRUE</span>)
+<span class='kw'>gen.dat</span> <span class='op'>&lt;-</span> <span class='kw'>gen.dat</span>[<span class='fu'><a href='https://rdrr.io/r/base/match.html'>match</a></span>(<span class='kw'>clin.patients.dat</span><span class='op'>$</span><span class='kw'>DMPID</span>,
+<span class='fu'><a href='https://rdrr.io/r/base/abbreviate.html'>abbreviate</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>rownames</a></span>(<span class='kw'>gen.dat</span>),strict = <span class='fl'>TRUE</span>,
+ minlength = <span class='fl'>9</span>)),]
+<span class='kw'>clin.patients.dat</span> <span class='op'>&lt;-</span> <span class='kw'>clin.patients.dat</span> <span class='op'>%&gt;%</span>
+  <span class='kw'>tibble</span>::<span class='fu'><a href='https://tibble.tidyverse.org/reference/rownames.html'>column_to_rownames</a></span>(<span class='st'>'DMPID'</span>)
+<span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>rownames</a></span>(<span class='kw'>gen.dat</span>) <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>rownames</a></span>(<span class='kw'>clin.patients.dat</span>)
+<span class='fu'><a href='https://rdrr.io/pkg/gnomeR/man/plot_oncoPrint.html'>plot_oncoPrint</a></span>(gen.dat = <span class='kw'>gen.dat</span>,
+clin.dat = <span class='kw'>clin.patients.dat</span>)</div><div class='output co'>#&gt; <span class='message'>All mutation types: Sex_Male, Smoker_Prev/Curr Smoker, MUT, Sex_Female,</span>
 #&gt; <span class='message'>Smoker_Never, AMP, Smoker_Unknown</span></div><div class='img'><img src='plot_oncoPrint-2.png' alt='' width='700' height='433' /></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -216,7 +216,7 @@ to be plotted.</p></td>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
 </div>
 
       </footer>

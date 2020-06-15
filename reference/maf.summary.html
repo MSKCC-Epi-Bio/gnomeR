@@ -149,7 +149,7 @@ Creates a set of plot summarising a maf file.</h1>
 Creates a set of plot summarising a maf file.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>maf.summary</span>(<span class='no'>maf</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'><a href='https://rdrr.io/pkg/gnomeR/man/maf.summary.html'>maf.summary</a></span>(<span class='kw'>maf</span>, <span class='kw'>...</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -178,16 +178,16 @@ Creates a set of plot summarising a maf file.</p>
 <p>p.comut Heatmap of the comutation of the top 10 genes</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>gnomeR</span>)
-<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>dplyr</span>)
-<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>dtplyr</span>)
-<span class='no'>patients</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>as.character</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/unique.html'>unique</a></span>(<span class='no'>mut</span>$<span class='no'>Tumor_Sample_Barcode</span>))[<span class='fl'>1</span>:<span class='fl'>200</span>]
-<span class='no'>all.plots</span> <span class='kw'>&lt;-</span> <span class='fu'>maf.summary</span>(<span class='kw'>maf</span><span class='kw'>=</span><span class='no'>mut</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span>(<span class='no'>Tumor_Sample_Barcode</span> <span class='kw'>%in%</span> <span class='no'>patients</span>) )</div><div class='output co'>#&gt; <span class='warning'>Warning: `tbl_df()` is deprecated as of dplyr 1.0.0.</span>
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='kw'><a href='https://github.com/AxelitoMartin/gnomeR'>gnomeR</a></span>)
+<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='kw'><a href='https://dplyr.tidyverse.org'>dplyr</a></span>)
+<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='kw'><a href='https://github.com/tidyverse/dtplyr'>dtplyr</a></span>)
+<span class='kw'>patients</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>as.character</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/unique.html'>unique</a></span>(<span class='kw'>mut</span><span class='op'>$</span><span class='kw'>Tumor_Sample_Barcode</span>))[<span class='fl'>1</span><span class='op'>:</span><span class='fl'>200</span>]
+<span class='kw'>all.plots</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/gnomeR/man/maf.summary.html'>maf.summary</a></span>(maf=<span class='kw'>mut</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span>(<span class='kw'>Tumor_Sample_Barcode</span> <span class='op'>%in%</span> <span class='kw'>patients</span>) )</div><div class='output co'>#&gt; <span class='warning'>Warning: `tbl_df()` is deprecated as of dplyr 1.0.0.</span>
 #&gt; <span class='warning'>Please use `tibble::as_tibble()` instead.</span>
 #&gt; <span class='warning'><span style='color: #555555;'>This warning is displayed once every 8 hours.</span><span></span>
 #&gt; <span class='warning'></span><span style='color: #555555;'>Call `lifecycle::last_warnings()` to see where this warning was generated.</span><span></span></div><div class='output co'>#&gt; <span class='warning'>Warning: All samples were sequenced on the same platform.</span>
-#&gt; <span class='warning'>              The spe.plat argument has been overwritten to FALSE.</span></div><div class='input'><span class='no'>all.plots</span> <span class='kw'>&lt;-</span> <span class='fu'>maf.summary</span>(<span class='kw'>maf</span><span class='kw'>=</span><span class='no'>mut</span> <span class='kw'>%&gt;%</span>
-<span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span>(<span class='no'>Tumor_Sample_Barcode</span> <span class='kw'>%in%</span> <span class='no'>patients</span>),<span class='kw'>spe.plat</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: All samples were sequenced on the same platform.</span>
+#&gt; <span class='warning'>              The spe.plat argument has been overwritten to FALSE.</span></div><div class='input'><span class='kw'>all.plots</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/gnomeR/man/maf.summary.html'>maf.summary</a></span>(maf=<span class='kw'>mut</span> <span class='op'>%&gt;%</span>
+<span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span>(<span class='kw'>Tumor_Sample_Barcode</span> <span class='op'>%in%</span> <span class='kw'>patients</span>),spe.plat = <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: All samples were sequenced on the same platform.</span>
 #&gt; <span class='warning'>              The spe.plat argument has been overwritten to FALSE.</span></div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -204,7 +204,7 @@ Creates a set of plot summarising a maf file.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
 </div>
 
       </footer>
