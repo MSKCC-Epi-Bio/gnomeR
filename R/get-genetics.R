@@ -26,60 +26,60 @@
 #' @import
 #' cbioportalr
 
-# get_genetics <- function(
-#   sample_ids = NULL,
-#   sample_list_id = NULL,
-#   genes = "all_impact",
-#   database = "msk_impact",
-#   mutations = TRUE, fusions = TRUE,
-#   cna = TRUE, seg = FALSE) {
-#
-#   if(all(c(!mutations, !fusions, !cna)))
-#     stop("At least one of the following arguments must be TRUE: mutations, fusions, cna.")
-#   mut.dat <- NULL
-#   cna.dat <- NULL
-#   seg.dat <- NULL
-#   get_cbioportal_db(database)
-#
-#   if(database == "msk_impact"){
-#     if(mutations || fusions){
-#       mut.dat <- get_mutations(sample_ids,
-#                                sample_list_id,
-#                                genes) %>%
-#         rename(Tumor_Sample_Barcode = "sampleId", Hugo_Symbol = NULL,
-#                Variant_Classification = "mutationType", Mutation_Status = "mutationStatus",
-#                Variant_Type = "variantType")
-#       if(!fusions)
-#         mut.dat <- mut.dat %>%
-#           filter(.data$Variant_Classification != "Fusion")
-#     }
-#
-#     if(cna)
-#       cna.dat <- get_cna(sample_ids,
-#                          sample_list_id,
-#                          genes)
-#     return(list("mut"= mut.dat, "cna" = cna.dat))
-#   }
-#
-#   if(database == "tcga"){
-#     if(mutations || fusions){
-#       mut.dat <- get_mutations_tcga(sample_ids,
-#                                     sample_list_id,
-#                                     genes) %>%
-#         rename(Tumor_Sample_Barcode = "sampleId", Hugo_Symbol = NULL,
-#                Variant_Classification = "mutationType", Mutation_Status = "mutationStatus",
-#                Variant_Type = "variantType")
-#       if(!fusions)
-#         mut.dat <- mut.dat %>%
-#           filter(.data$Variant_Classification != "Fusion")
-#     }
-#     if(cna)
-#       cna.dat <- get_cna_tcga(sample_ids,
-#                               sample_list_id,
-#                               genes)
-#     if(seg)
-#       seg.dat <- get_seg_tcga(sample_ids = sample_ids)
-#
-#     return(list("mut" = mut.dat, "cna" = cna.dat,"seg" = seg.dat))
-#   }
-# }
+get_genetics <- function(
+  sample_ids = NULL,
+  sample_list_id = NULL,
+  genes = "all_impact",
+  database = "msk_impact",
+  mutations = TRUE, fusions = TRUE,
+  cna = TRUE, seg = FALSE) {
+
+  if(all(c(!mutations, !fusions, !cna)))
+    stop("At least one of the following arguments must be TRUE: mutations, fusions, cna.")
+  mut.dat <- NULL
+  cna.dat <- NULL
+  seg.dat <- NULL
+  get_cbioportal_db(database)
+
+  if(database == "msk_impact"){
+    if(mutations || fusions){
+      mut.dat <- get_mutations(sample_ids,
+                               sample_list_id,
+                               genes) %>%
+        rename(Tumor_Sample_Barcode = "sampleId", Hugo_Symbol = NULL,
+               Variant_Classification = "mutationType", Mutation_Status = "mutationStatus",
+               Variant_Type = "variantType")
+      if(!fusions)
+        mut.dat <- mut.dat %>%
+          filter(.data$Variant_Classification != "Fusion")
+    }
+
+    if(cna)
+      cna.dat <- get_cna(sample_ids,
+                         sample_list_id,
+                         genes)
+    return(list("mut"= mut.dat, "cna" = cna.dat))
+  }
+
+  if(database == "tcga"){
+    if(mutations || fusions){
+      mut.dat <- get_mutations_tcga(sample_ids,
+                                    sample_list_id,
+                                    genes) %>%
+        rename(Tumor_Sample_Barcode = "sampleId", Hugo_Symbol = NULL,
+               Variant_Classification = "mutationType", Mutation_Status = "mutationStatus",
+               Variant_Type = "variantType")
+      if(!fusions)
+        mut.dat <- mut.dat %>%
+          filter(.data$Variant_Classification != "Fusion")
+    }
+    if(cna)
+      cna.dat <- get_cna_tcga(sample_ids,
+                              sample_list_id,
+                              genes)
+    if(seg)
+      seg.dat <- get_seg_tcga(sample_ids = sample_ids)
+
+    return(list("mut" = mut.dat, "cna" = cna.dat,"seg" = seg.dat))
+  }
+}

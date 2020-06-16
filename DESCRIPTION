@@ -5,7 +5,7 @@ Authors@R:
     c(person(given = "Axel",
            family = "Martin",
            role = c("aut", "cre"),
-           email = "first.last@example.com",
+           email = "axel.steph.martin@gmail.com",
            comment = c(ORCID = "YOUR-ORCID-ID")),
       person(given = "Arshi",
              family = "Arora",
@@ -54,7 +54,8 @@ Imports:
     stringr,
     survival,
     plotly,
-    rlang
+    rlang,
+    cbioportalr
 Suggests: 
     knitr,
     rmarkdown,

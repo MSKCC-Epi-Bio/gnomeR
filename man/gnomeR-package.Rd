@@ -17,7 +17,7 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Axel Martin \email{first.last@example.com} (\href{https://orcid.org/YOUR-ORCID-ID}{ORCID})
+\strong{Maintainer}: Axel Martin \email{axel.steph.martin@gmail.com} (\href{https://orcid.org/YOUR-ORCID-ID}{ORCID})
 
 Authors:
 \itemize{

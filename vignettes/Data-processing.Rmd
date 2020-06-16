@@ -75,22 +75,22 @@ df <- binmat(patients = samples ,maf = mut, SNP.only = TRUE, include.silent = TR
 kable(df[1:10, 1:10])
 ```
 
-<!-- ### Processing mutation data from the API -->
+### Processing mutation data from the API
 
-<!-- In this section we show the same examples as above but using the data downloaded through the API: -->
+In this section we show the same examples as above but using the data downloaded through the API:
 
-<!-- ```{r} -->
-<!-- dat <- get_genetics(sample_ids = samples, fusions = FALSE, cna = FALSE) -->
-<!-- df <- binmat(maf = dat$mut) -->
-<!-- kable(df[1:10, 1:10]) -->
-<!-- ``` -->
+```{r}
+dat <- get_genetics(sample_ids = samples, fusions = FALSE, cna = FALSE)
+df <- binmat(maf = dat$mut)
+kable(df[1:10, 1:10])
+```
 
-<!-- Similarly,  -->
+Similarly,
 
-<!-- ```{r} -->
-<!-- df <- binmat(maf = dat$mut, SNP.only = TRUE, include.silent = TRUE, spe.plat = FALSE) -->
-<!-- kable(df[1:10, 1:10]) -->
-<!-- ``` -->
+```{r}
+df <- binmat(maf = dat$mut, SNP.only = TRUE, include.silent = TRUE, spe.plat = FALSE)
+kable(df[1:10, 1:10])
+```
 
 ## Fusions
 
@@ -106,17 +106,17 @@ df <- binmat(patients = samples ,fusion = fusion)
 kable(df[1:10, 1:10])
 ```
 
-<!-- ### Processing fusions from the API -->
+### Processing fusions from the API
 
-<!-- In the API provided in `gnomeR` the fusion data comes merged with the mutation data. Note that we included an option to automatically filter them out if the user wishes so.  -->
+In the API provided in `gnomeR` the fusion data comes merged with the mutation data. Note that we included an option to automatically filter them out if the user wishes so.
 
-<!-- ```{r} -->
-<!-- dat <- get_genetics(sample_ids = samples,mutations = FALSE, fusions = TRUE, cna = FALSE) -->
-<!-- df <- binmat(maf = dat$mut) -->
-<!-- kable(df[1:10, 1:10]) -->
-<!-- ``` -->
+```{r}
+dat <- get_genetics(sample_ids = samples,mutations = FALSE, fusions = TRUE, cna = FALSE)
+df <- binmat(maf = dat$mut)
+kable(df[1:10, 1:10])
+```
 
-<!-- Similarly to the mutation data the fusions are affected by the `spe.plat` and `set.plat` arguments as well.  -->
+Similarly to the mutation data the fusions are affected by the `spe.plat` and `set.plat` arguments as well.
 
 
 ## Copy-number alterations (CNA)
@@ -147,23 +147,23 @@ kable(df[1:10, 1:10])
 ```
 
 
-<!-- ### Processing CNA data from the API -->
+### Processing CNA data from the API
 
-<!-- Setting the `cna` argument to TRUE in the `get_genetics()` function will retrieve the CNA data for the specified samples that can then further be processed in a similar fashion to the above: -->
+Setting the `cna` argument to TRUE in the `get_genetics()` function will retrieve the CNA data for the specified samples that can then further be processed in a similar fashion to the above:
 
-<!-- ```{r} -->
-<!-- dat <- get_genetics(sample_ids = samples,mutations = FALSE, fusions = FALSE, cna = TRUE) -->
-<!-- df <- binmat(patients = samples, cna = dat$cna) -->
-<!-- kable(df[1:10, 1:10]) -->
-<!-- ``` -->
+```{r}
+dat <- get_genetics(sample_ids = samples,mutations = FALSE, fusions = FALSE, cna = TRUE)
+df <- binmat(patients = samples, cna = dat$cna)
+kable(df[1:10, 1:10])
+```
 
-<!-- Setting `cna.binary` argument to FALSE yields the following events coded in a single column with their original levels: -->
+Setting `cna.binary` argument to FALSE yields the following events coded in a single column with their original levels:
 
-<!-- ```{r} -->
-<!-- dat <- get_genetics(sample_ids = samples,mutations = FALSE, fusions = FALSE, cna = TRUE) -->
-<!-- df <- binmat(patients = samples, cna = dat$cna,cna.binary = FALSE) -->
-<!-- kable(df[1:10, 1:10]) -->
-<!-- ``` -->
+```{r}
+dat <- get_genetics(sample_ids = samples,mutations = FALSE, fusions = FALSE, cna = TRUE)
+df <- binmat(patients = samples, cna = dat$cna,cna.binary = FALSE)
+kable(df[1:10, 1:10])
+```
 
 ## Processing full genetic profiles for samples
 
@@ -179,17 +179,17 @@ kable(df[1:10, c(1:3,243,244,300:305)])
 ```
 
 
-<!-- ### From the API -->
+### From the API
 
-<!-- Similarly we get retrieve all the genetic events at once through the `get_genetics()` function and proceed to process them.  -->
+Similarly we get retrieve all the genetic events at once through the `get_genetics()` function and proceed to process them.
 
-<!-- ```{r} -->
-<!-- dat <- get_genetics(sample_ids = samples,mutations = TRUE, fusions = TRUE, cna = TRUE) -->
-<!-- df <- binmat(patients = samples,maf = dat$mut, cna = dat$cna,cna.binary = FALSE) -->
-<!-- kable(df[1:10, c(1:3,243,244,300:305)]) -->
-<!-- ``` -->
+```{r}
+dat <- get_genetics(sample_ids = samples,mutations = TRUE, fusions = TRUE, cna = TRUE)
+df <- binmat(patients = samples,maf = dat$mut, cna = dat$cna,cna.binary = FALSE)
+kable(df[1:10, c(1:3,243,244,300:305)])
+```
 
-<!-- Note that here the fusions are embedded in the mutation file. -->
+Note that here the fusions are embedded in the mutation file.
 
 
 # Pathway level alterations
