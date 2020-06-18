@@ -31,6 +31,8 @@ biocViews:
     iClusterPlus,
     GenomicRanges,
     IRanges
+Remotes: 
+    taylor-lab/annotateMaf
 Imports: 
     magrittr,
     dplyr,
@@ -55,7 +57,8 @@ Imports:
     survival,
     plotly,
     rlang,
-    cbioportalr
+    cbioportalr,
+    annotateMaf
 Suggests: 
     knitr,
     rmarkdown,

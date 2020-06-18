@@ -1,19 +1,21 @@
-#' oncoKB.annotate
+#' oncoKB_annotate
 #' OncoKB annotator for MAF files.
-#' @param input A MAF file to be annotated.
-#' @param output Name of the output file
-#' @param lib.path Path to the gnomeR library
+#' @param maf A MAF file to be annotated.
+#' @param cancer_types Data frame with samples mapped to cancer type for accurate levels of actionability. Default is NULL.
+#' @param parallelize Should this be done in parallel. Default is TRUE
 #' @return OncoKb annotate MAF.
 #' @export
 #' @examples
-#' # Needs to be run on LINUX with python
-#' # oncoKB.annotate(input = "ExampleMaf", out = "ExampleOut")
+#' library(gnomeR)
+#' maf <- mut[1:10,]
+#' onco_maf <- oncoKB_annotate(maf)
+#' @import
+#' annotateMaf
 
-oncoKB.annotate <- function(input,output,lib.path = NULL){
+oncoKB_annotate <- function(maf, cancer_types, parallelize = T){
 
-  if(is.null(lib.path)) lib.path <- .libPaths()
-
-  system(paste0("python ",lib.path,"/gnomeR/MafAnnotator.py -i ",input," -o ",output ))
-
+  maf = maf %>%
+    dplyr::mutate_if(is.factor,as.character)
+  return(annotateMaf::oncokb_annotate_maf(maf, cancer_types = NULL, parallelize = TRUE))
 }
 

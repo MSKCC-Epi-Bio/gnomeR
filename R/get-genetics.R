@@ -34,7 +34,7 @@ get_genetics <- function(
   mutations = TRUE, fusions = TRUE,
   cna = TRUE, seg = FALSE) {
 
-  if(all(c(!mutations, !fusions, !cna)))
+  if(all(c(!mutations, !fusions, !cna, !seg)))
     stop("At least one of the following arguments must be TRUE: mutations, fusions, cna.")
   mut.dat <- NULL
   cna.dat <- NULL

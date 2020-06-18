@@ -56,6 +56,7 @@ The `get_genetics()` function let's the user download the mutation, fusion and c
 - mutations: Boolean specifying if mutation data should be fected. Default is TRUE.
 - fusions: Boolean specifying if fusion data should be fected. Default is TRUE.
 - cna: Boolean specifying if cna data should be fected. Default is TRUE.
+- seg: Boolean specifying if the segmentatio data should be fetched. Default is FALSE.
 
 This function returns either a MAF file or a copy-number alterations summary file, or both (`mut` and/or `cna`).
 
@@ -139,4 +140,16 @@ df <- get_genetics(sample_ids =  c("TCGA-17-Z023-01","TCGA-02-0003-01","TCGA-02-
              mutations = FALSE,fusions = FALSE, cna = TRUE,
              database = "tcga")
 df$cna
+```
+
+
+### Segmentation file
+
+The copy-number alterations data we have covered up to now is a discrete estimation of the alterations that occured. There however exist more nuanced and accurate data for copy-number alterations observed in a tumor. In `gnomeR` we include an example of segmentation file and relevant functions from the [`facets`](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5027494/) package that provides an allele-specific copy number and clonal heterogeneity analysis tool for high-throughput DNA sequencing. We show below how to download it from the API in gnomeR.
+
+```{r}
+df <- get_genetics(sample_ids =  c("TCGA-17-Z023-01","TCGA-02-0003-01","TCGA-02-0055-01"),
+             mutations = FALSE,fusions = FALSE, cna = FALSE, seg = TRUE,
+             database = "tcga")
+df$seg
 ```
