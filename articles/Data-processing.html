@@ -104,9 +104,7 @@
 
     
     
-<div class="sourceCode" id="cb1"><pre class="downlit">
-<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="kw"><a href="https://github.com/AxelitoMartin/gnomeR">gnomeR</a></span>)
-</pre></div>
+<div class="sourceCode" id="cb1"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">gnomeR</span>)</pre></body></html></div>
 <div id="introduction" class="section level1">
 <h1 class="hasAnchor">
 <a href="#introduction" class="anchor"></a>Introduction</h1>
@@ -126,6 +124,7 @@
 <li>rm.empty: boolean specifying if columns with no events founds should be removed. Default is TRUE.</li>
 <li>pathway boolean specifying if pathway annotation should be applied. If TRUE, the function will return a supplementary binary dataframe with columns being each pathway and each row being a sample. Default is FALSE.</li>
 <li>col.names character vector of the necessary columns to be used. By default: col.names = c(Tumor_Sample_Barcode = NULL, Hugo_Symbol = NULL, Variant_Classification = NULL, Mutation_Status = NULL, Variant_Type = NULL)</li>
+<li>oncokb boolean specfiying if maf file should be oncokb annotated. Variants found to be ‘Oncogenic’ and ‘Likely Oncogenic’ will be kept. Default is FALSE.</li>
 </ul>
 <p>This function returns a matrix containing all the genetic information with rows as samples and columns as features. A warning will be thrown if some samples were found to have no mutations in the MAF file.</p>
 <p>In the follwing sections we will present examples to process each of the datatypes in cbioportal.</p>
@@ -141,8 +140,7 @@
 <h3 class="hasAnchor">
 <a href="#processing-raw-mutation-data" class="anchor"></a>Processing raw mutation data</h3>
 <p>We included in <code>gnomeR</code> an example of raw downloaded MAF file directly from the website in the <code>mut</code> dataset. We show here an example selecting a random subset of 100 samples in the <code>mut</code> dataset:</p>
-<div class="sourceCode" id="cb2"><pre class="downlit">
-<span class="fu"><a href="https://tibble.tidyverse.org/reference/as_tibble.html">as_tibble</a></span>(<span class="kw">mut</span>)
+<div class="sourceCode" id="cb2"><html><body><pre class="r"><span class="fu">as_tibble</span>(<span class="no">mut</span>)
 <span class="co">#&gt; # A tibble: 3,179 x 45</span>
 <span class="co">#&gt;    Hugo_Symbol Entrez_Gene_Id Center NCBI_Build Chromosome Start_Position</span>
 <span class="co">#&gt;    &lt;fct&gt;       &lt;lgl&gt;          &lt;lgl&gt;  &lt;fct&gt;      &lt;fct&gt;               &lt;int&gt;</span>
@@ -170,10 +168,9 @@
 <span class="co">#&gt; #   t_alt_count &lt;int&gt;, n_ref_count &lt;lgl&gt;, n_alt_count &lt;lgl&gt;, HGVSc &lt;fct&gt;,</span>
 <span class="co">#&gt; #   HGVSp &lt;fct&gt;, HGVSp_Short &lt;fct&gt;, Transcript_ID &lt;fct&gt;, RefSeq &lt;fct&gt;,</span>
 <span class="co">#&gt; #   Protein_position &lt;int&gt;, Codons &lt;fct&gt;, Hotspot &lt;int&gt;</span>
-<span class="kw">samples</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html">as.character</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span>(<span class="kw">mut</span><span class="op">$</span><span class="kw">Tumor_Sample_Barcode</span>))[<span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample</a></span>(<span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span>(<span class="kw">mut</span><span class="op">$</span><span class="kw">Tumor_Sample_Barcode</span>)), <span class="fl">100</span>, replace=<span class="fl">FALSE</span>)]
-<span class="kw">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/binmat.html">binmat</a></span>(patients = <span class="kw">samples</span> ,maf = <span class="kw">mut</span>)
-<span class="fu">kable</span>(<span class="kw">df</span>[<span class="fl">1</span><span class="op">:</span><span class="fl">10</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">10</span>])
-</pre></div>
+<span class="no">samples</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html">as.character</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span>(<span class="no">mut</span>$<span class="no">Tumor_Sample_Barcode</span>))[<span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample</a></span>(<span class="fl">1</span>:<span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span>(<span class="no">mut</span>$<span class="no">Tumor_Sample_Barcode</span>)), <span class="fl">100</span>, <span class="kw">replace</span><span class="kw">=</span><span class="fl">FALSE</span>)]
+<span class="no">df</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/binmat.html">binmat</a></span>(<span class="kw">patients</span> <span class="kw">=</span> <span class="no">samples</span> ,<span class="kw">maf</span> <span class="kw">=</span> <span class="no">mut</span>)
+<span class="fu">kable</span>(<span class="no">df</span>[<span class="fl">1</span>:<span class="fl">10</span>, <span class="fl">1</span>:<span class="fl">10</span>])</pre></body></html></div>
 <table class="table">
 <thead><tr class="header">
 <th></th>
@@ -322,10 +319,8 @@
 </tbody>
 </table>
 <p>Note that by default in the situation above the outputted dataframe is a binary matrix made from all types of mutations and adjusting the features for the platform they were added on. Thus all samples that were sequenced on the original platform have NA’s in the cells of for features that were added on subsequent platforms. In the case where the user plans on using methods that do not accept missing values, the <code>spe.plat</code> argument can be changed to FALSE to replace all the NA’s mentioned above to 0. We show below such an example, we moreover make this example including only SNPs (including silent mutations):</p>
-<div class="sourceCode" id="cb3"><pre class="downlit">
-<span class="kw">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/binmat.html">binmat</a></span>(patients = <span class="kw">samples</span> ,maf = <span class="kw">mut</span>, SNP.only = <span class="fl">TRUE</span>, include.silent = <span class="fl">TRUE</span>, spe.plat = <span class="fl">FALSE</span>)
-<span class="fu">kable</span>(<span class="kw">df</span>[<span class="fl">1</span><span class="op">:</span><span class="fl">10</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">10</span>])
-</pre></div>
+<div class="sourceCode" id="cb3"><html><body><pre class="r"><span class="no">df</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/binmat.html">binmat</a></span>(<span class="kw">patients</span> <span class="kw">=</span> <span class="no">samples</span> ,<span class="kw">maf</span> <span class="kw">=</span> <span class="no">mut</span>, <span class="kw">SNP.only</span> <span class="kw">=</span> <span class="fl">TRUE</span>, <span class="kw">include.silent</span> <span class="kw">=</span> <span class="fl">TRUE</span>, <span class="kw">spe.plat</span> <span class="kw">=</span> <span class="fl">FALSE</span>)
+<span class="fu">kable</span>(<span class="no">df</span>[<span class="fl">1</span>:<span class="fl">10</span>, <span class="fl">1</span>:<span class="fl">10</span>])</pre></body></html></div>
 <table class="table">
 <thead><tr class="header">
 <th></th>
@@ -473,7 +468,312 @@
 </tr>
 </tbody>
 </table>
-<!-- ### Processing mutation data from the API --><!-- In this section we show the same examples as above but using the data downloaded through the API: --><!-- ```{r} --><!-- dat <- get_genetics(sample_ids = samples, fusions = FALSE, cna = FALSE) --><!-- df <- binmat(maf = dat$mut) --><!-- kable(df[1:10, 1:10]) --><!-- ``` --><!-- Similarly,  --><!-- ```{r} --><!-- df <- binmat(maf = dat$mut, SNP.only = TRUE, include.silent = TRUE, spe.plat = FALSE) --><!-- kable(df[1:10, 1:10]) --><!-- ``` -->
+</div>
+<div id="processing-mutation-data-from-the-api" class="section level3">
+<h3 class="hasAnchor">
+<a href="#processing-mutation-data-from-the-api" class="anchor"></a>Processing mutation data from the API</h3>
+<p>In this section we show the same examples as above but using the data downloaded through the API:</p>
+<div class="sourceCode" id="cb4"><html><body><pre class="r"><span class="no">dat</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/get_genetics.html">get_genetics</a></span>(<span class="kw">sample_ids</span> <span class="kw">=</span> <span class="no">samples</span>, <span class="kw">fusions</span> <span class="kw">=</span> <span class="fl">FALSE</span>, <span class="kw">cna</span> <span class="kw">=</span> <span class="fl">FALSE</span>)
+<span class="co">#&gt; [1] "https://cbioportal.mskcc.org/api/molecular-profiles/mskimpact_mutations/mutations/fetch?"</span>
+<span class="no">df</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/binmat.html">binmat</a></span>(<span class="kw">maf</span> <span class="kw">=</span> <span class="no">dat</span>$<span class="no">mut</span>)
+<span class="fu">kable</span>(<span class="no">df</span>[<span class="fl">1</span>:<span class="fl">10</span>, <span class="fl">1</span>:<span class="fl">10</span>])</pre></body></html></div>
+<table class="table">
+<thead><tr class="header">
+<th></th>
+<th align="right">ABL1</th>
+<th align="right">PARP1</th>
+<th align="right">AKT1</th>
+<th align="right">AKT2</th>
+<th align="right">ALK</th>
+<th align="right">APC</th>
+<th align="right">BIRC3</th>
+<th align="right">XIAP</th>
+<th align="right">AR</th>
+<th align="right">ARAF</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td>P-0004559-T01-IM5</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td>P-0006717-T01-IM5</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td>P-0006437-T01-IM5</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td>P-0007151-T01-IM5</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td>P-0010309-T01-IM5</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td>P-0001485-T01-IM3</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">NA</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td>P-0003950-T01-IM5</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td>P-0005322-T02-IM5</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td>P-0002463-T01-IM3</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">NA</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td>P-0000625-T01-IM3</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">NA</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+</tbody>
+</table>
+<p>Similarly,</p>
+<div class="sourceCode" id="cb5"><html><body><pre class="r"><span class="no">df</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/binmat.html">binmat</a></span>(<span class="kw">maf</span> <span class="kw">=</span> <span class="no">dat</span>$<span class="no">mut</span>, <span class="kw">SNP.only</span> <span class="kw">=</span> <span class="fl">TRUE</span>, <span class="kw">include.silent</span> <span class="kw">=</span> <span class="fl">TRUE</span>, <span class="kw">spe.plat</span> <span class="kw">=</span> <span class="fl">FALSE</span>)
+<span class="fu">kable</span>(<span class="no">df</span>[<span class="fl">1</span>:<span class="fl">10</span>, <span class="fl">1</span>:<span class="fl">10</span>])</pre></body></html></div>
+<table class="table">
+<thead><tr class="header">
+<th></th>
+<th align="right">ABL1</th>
+<th align="right">PARP1</th>
+<th align="right">AKT1</th>
+<th align="right">AKT2</th>
+<th align="right">ALK</th>
+<th align="right">APC</th>
+<th align="right">BIRC3</th>
+<th align="right">XIAP</th>
+<th align="right">AR</th>
+<th align="right">ARAF</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td>P-0004559-T01-IM5</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td>P-0006717-T01-IM5</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td>P-0006437-T01-IM5</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td>P-0007151-T01-IM5</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td>P-0010309-T01-IM5</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td>P-0001485-T01-IM3</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td>P-0003950-T01-IM5</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td>P-0005322-T02-IM5</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td>P-0002463-T01-IM3</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td>P-0000625-T01-IM3</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
 <div id="fusions" class="section level2">
@@ -484,8 +784,7 @@
 <h3 class="hasAnchor">
 <a href="#processing-raw-fusion-data" class="anchor"></a>Processing raw fusion data</h3>
 <p>We included in <code>gnomeR</code> an example of raw downloaded MAF file directly from the website in the <code>fusion</code> dataset. We show here an example selecting the same random subset of 100 samples as in the previous section:</p>
-<div class="sourceCode" id="cb4"><pre class="downlit">
-<span class="fu"><a href="https://tibble.tidyverse.org/reference/as_tibble.html">as_tibble</a></span>(<span class="kw">fusion</span>)
+<div class="sourceCode" id="cb6"><html><body><pre class="r"><span class="fu">as_tibble</span>(<span class="no">fusion</span>)
 <span class="co">#&gt; # A tibble: 127 x 10</span>
 <span class="co">#&gt;    Hugo_Symbol Entrez_Gene_Id Center Tumor_Sample_Ba… Fusion DNA_support</span>
 <span class="co">#&gt;    &lt;fct&gt;                &lt;int&gt; &lt;fct&gt;  &lt;fct&gt;            &lt;fct&gt;  &lt;fct&gt;      </span>
@@ -501,9 +800,8 @@
 <span class="co">#&gt; 10 TMPRSS2                 NA MSKCC… P-0010794-T01-I… TMPRS… yes        </span>
 <span class="co">#&gt; # … with 117 more rows, and 4 more variables: RNA_support &lt;fct&gt;, Method &lt;lgl&gt;,</span>
 <span class="co">#&gt; #   Frame &lt;fct&gt;, Comments &lt;fct&gt;</span>
-<span class="kw">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/binmat.html">binmat</a></span>(patients = <span class="kw">samples</span> ,fusion = <span class="kw">fusion</span>)
-<span class="fu">kable</span>(<span class="kw">df</span>[<span class="fl">1</span><span class="op">:</span><span class="fl">10</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">10</span>])
-</pre></div>
+<span class="no">df</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/binmat.html">binmat</a></span>(<span class="kw">patients</span> <span class="kw">=</span> <span class="no">samples</span> ,<span class="kw">fusion</span> <span class="kw">=</span> <span class="no">fusion</span>)
+<span class="fu">kable</span>(<span class="no">df</span>[<span class="fl">1</span>:<span class="fl">10</span>, <span class="fl">1</span>:<span class="fl">10</span>])</pre></body></html></div>
 <table class="table">
 <thead><tr class="header">
 <th></th>
@@ -651,7 +949,163 @@
 </tr>
 </tbody>
 </table>
-<!-- ### Processing fusions from the API --><!-- In the API provided in `gnomeR` the fusion data comes merged with the mutation data. Note that we included an option to automatically filter them out if the user wishes so.  --><!-- ```{r} --><!-- dat <- get_genetics(sample_ids = samples,mutations = FALSE, fusions = TRUE, cna = FALSE) --><!-- df <- binmat(maf = dat$mut) --><!-- kable(df[1:10, 1:10]) --><!-- ``` --><!-- Similarly to the mutation data the fusions are affected by the `spe.plat` and `set.plat` arguments as well.  -->
+</div>
+<div id="processing-fusions-from-the-api" class="section level3">
+<h3 class="hasAnchor">
+<a href="#processing-fusions-from-the-api" class="anchor"></a>Processing fusions from the API</h3>
+<p>In the API provided in <code>gnomeR</code> the fusion data comes merged with the mutation data. Note that we included an option to automatically filter them out if the user wishes so.</p>
+<div class="sourceCode" id="cb7"><html><body><pre class="r"><span class="no">dat</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/get_genetics.html">get_genetics</a></span>(<span class="kw">sample_ids</span> <span class="kw">=</span> <span class="no">samples</span>,<span class="kw">mutations</span> <span class="kw">=</span> <span class="fl">FALSE</span>, <span class="kw">fusions</span> <span class="kw">=</span> <span class="fl">TRUE</span>, <span class="kw">cna</span> <span class="kw">=</span> <span class="fl">FALSE</span>)
+<span class="co">#&gt; [1] "https://cbioportal.mskcc.org/api/molecular-profiles/mskimpact_mutations/mutations/fetch?"</span>
+<span class="no">df</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/binmat.html">binmat</a></span>(<span class="kw">maf</span> <span class="kw">=</span> <span class="no">dat</span>$<span class="no">mut</span>)
+<span class="fu">kable</span>(<span class="no">df</span>[<span class="fl">1</span>:<span class="fl">10</span>, <span class="fl">1</span>:<span class="fl">10</span>])</pre></body></html></div>
+<table class="table">
+<thead><tr class="header">
+<th></th>
+<th align="right">ABL1</th>
+<th align="right">PARP1</th>
+<th align="right">AKT1</th>
+<th align="right">AKT2</th>
+<th align="right">ALK</th>
+<th align="right">APC</th>
+<th align="right">BIRC3</th>
+<th align="right">XIAP</th>
+<th align="right">AR</th>
+<th align="right">ARAF</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td>P-0004559-T01-IM5</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td>P-0006717-T01-IM5</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td>P-0006437-T01-IM5</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td>P-0007151-T01-IM5</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td>P-0010309-T01-IM5</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td>P-0001485-T01-IM3</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">NA</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td>P-0003950-T01-IM5</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td>P-0005322-T02-IM5</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td>P-0002463-T01-IM3</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">NA</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td>P-0000625-T01-IM3</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">NA</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+</tbody>
+</table>
+<p>Similarly to the mutation data the fusions are affected by the <code>spe.plat</code> and <code>set.plat</code> arguments as well.</p>
 </div>
 </div>
 <div id="copy-number-alterations-cna" class="section level2">
@@ -670,10 +1124,8 @@
 <h3 class="hasAnchor">
 <a href="#processing-raw-cna-data" class="anchor"></a>Processing raw CNA data</h3>
 <p>By default amplifications and deletions will be separated and only deep deletions/full amplifications will accounted as shown below.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit">
-<span class="kw">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/binmat.html">binmat</a></span>(patients = <span class="kw">samples</span>, cna = <span class="kw">cna</span>)
-<span class="fu">kable</span>(<span class="kw">df</span>[<span class="fl">1</span><span class="op">:</span><span class="fl">10</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">10</span>])
-</pre></div>
+<div class="sourceCode" id="cb8"><html><body><pre class="r"><span class="no">df</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/binmat.html">binmat</a></span>(<span class="kw">patients</span> <span class="kw">=</span> <span class="no">samples</span>, <span class="kw">cna</span> <span class="kw">=</span> <span class="no">cna</span>)
+<span class="fu">kable</span>(<span class="no">df</span>[<span class="fl">1</span>:<span class="fl">10</span>, <span class="fl">1</span>:<span class="fl">10</span>])</pre></body></html></div>
 <table class="table">
 <thead><tr class="header">
 <th></th>
@@ -822,10 +1274,8 @@
 </tbody>
 </table>
 <p>Setting <code>cna.binary</code> argument to FALSE yields the following events coded in a single column with their original levels:</p>
-<div class="sourceCode" id="cb6"><pre class="downlit">
-<span class="kw">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/binmat.html">binmat</a></span>(patients = <span class="kw">samples</span>, cna = <span class="kw">cna</span>, cna.binary = <span class="fl">FALSE</span>)
-<span class="fu">kable</span>(<span class="kw">df</span>[<span class="fl">1</span><span class="op">:</span><span class="fl">10</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">10</span>])
-</pre></div>
+<div class="sourceCode" id="cb9"><html><body><pre class="r"><span class="no">df</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/binmat.html">binmat</a></span>(<span class="kw">patients</span> <span class="kw">=</span> <span class="no">samples</span>, <span class="kw">cna</span> <span class="kw">=</span> <span class="no">cna</span>, <span class="kw">cna.binary</span> <span class="kw">=</span> <span class="fl">FALSE</span>)
+<span class="fu">kable</span>(<span class="no">df</span>[<span class="fl">1</span>:<span class="fl">10</span>, <span class="fl">1</span>:<span class="fl">10</span>])</pre></body></html></div>
 <table class="table">
 <thead><tr class="header">
 <th align="left">AKT2.cna</th>
@@ -962,7 +1412,303 @@
 </tr>
 </tbody>
 </table>
-<!-- ### Processing CNA data from the API --><!-- Setting the `cna` argument to TRUE in the `get_genetics()` function will retrieve the CNA data for the specified samples that can then further be processed in a similar fashion to the above: --><!-- ```{r} --><!-- dat <- get_genetics(sample_ids = samples,mutations = FALSE, fusions = FALSE, cna = TRUE) --><!-- df <- binmat(patients = samples, cna = dat$cna) --><!-- kable(df[1:10, 1:10]) --><!-- ``` --><!-- Setting `cna.binary` argument to FALSE yields the following events coded in a single column with their original levels: --><!-- ```{r} --><!-- dat <- get_genetics(sample_ids = samples,mutations = FALSE, fusions = FALSE, cna = TRUE) --><!-- df <- binmat(patients = samples, cna = dat$cna,cna.binary = FALSE) --><!-- kable(df[1:10, 1:10]) --><!-- ``` -->
+</div>
+<div id="processing-cna-data-from-the-api" class="section level3">
+<h3 class="hasAnchor">
+<a href="#processing-cna-data-from-the-api" class="anchor"></a>Processing CNA data from the API</h3>
+<p>Setting the <code>cna</code> argument to TRUE in the <code><a href="../reference/get_genetics.html">get_genetics()</a></code> function will retrieve the CNA data for the specified samples that can then further be processed in a similar fashion to the above:</p>
+<div class="sourceCode" id="cb10"><html><body><pre class="r"><span class="no">dat</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/get_genetics.html">get_genetics</a></span>(<span class="kw">sample_ids</span> <span class="kw">=</span> <span class="no">samples</span>,<span class="kw">mutations</span> <span class="kw">=</span> <span class="fl">FALSE</span>, <span class="kw">fusions</span> <span class="kw">=</span> <span class="fl">FALSE</span>, <span class="kw">cna</span> <span class="kw">=</span> <span class="fl">TRUE</span>)
+<span class="co">#&gt; [1] "https://cbioportal.mskcc.org/api/molecular-profiles/mskimpact_cna/discrete-copy-number/fetch?"</span>
+<span class="no">df</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/binmat.html">binmat</a></span>(<span class="kw">patients</span> <span class="kw">=</span> <span class="no">samples</span>, <span class="kw">cna</span> <span class="kw">=</span> <span class="no">dat</span>$<span class="no">cna</span>)
+<span class="fu">kable</span>(<span class="no">df</span>[<span class="fl">1</span>:<span class="fl">10</span>, <span class="fl">1</span>:<span class="fl">10</span>])</pre></body></html></div>
+<table class="table">
+<thead><tr class="header">
+<th></th>
+<th align="right">AKT2.Amp</th>
+<th align="right">AR.Amp</th>
+<th align="right">CCND1.Amp</th>
+<th align="right">PRDM1.Del</th>
+<th align="right">BRCA2.Del</th>
+<th align="right">CCND3.Amp</th>
+<th align="right">CCNE1.Amp</th>
+<th align="right">CD79B.Amp</th>
+<th align="right">CDK4.Amp</th>
+<th align="right">CDK6.Amp</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td>P-0010604-T01-IM5</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td>P-0002651-T01-IM3</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td>P-0000270-T01-IM3</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td>P-0002915-T01-IM3</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td>P-0011099-T01-IM5</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td>P-0000080-T01-IM3</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td>P-0001741-T01-IM3</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td>P-0003964-T01-IM3</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td>P-0003842-T01-IM5</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td>P-0002597-T02-IM5</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+</tbody>
+</table>
+<p>Setting <code>cna.binary</code> argument to FALSE yields the following events coded in a single column with their original levels:</p>
+<div class="sourceCode" id="cb11"><html><body><pre class="r"><span class="no">dat</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/get_genetics.html">get_genetics</a></span>(<span class="kw">sample_ids</span> <span class="kw">=</span> <span class="no">samples</span>,<span class="kw">mutations</span> <span class="kw">=</span> <span class="fl">FALSE</span>, <span class="kw">fusions</span> <span class="kw">=</span> <span class="fl">FALSE</span>, <span class="kw">cna</span> <span class="kw">=</span> <span class="fl">TRUE</span>)
+<span class="co">#&gt; [1] "https://cbioportal.mskcc.org/api/molecular-profiles/mskimpact_cna/discrete-copy-number/fetch?"</span>
+<span class="no">df</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/binmat.html">binmat</a></span>(<span class="kw">patients</span> <span class="kw">=</span> <span class="no">samples</span>, <span class="kw">cna</span> <span class="kw">=</span> <span class="no">dat</span>$<span class="no">cna</span>,<span class="kw">cna.binary</span> <span class="kw">=</span> <span class="fl">FALSE</span>)
+<span class="fu">kable</span>(<span class="no">df</span>[<span class="fl">1</span>:<span class="fl">10</span>, <span class="fl">1</span>:<span class="fl">10</span>])</pre></body></html></div>
+<table class="table">
+<thead><tr class="header">
+<th align="left">AKT2.cna</th>
+<th align="left">AR.cna</th>
+<th align="left">CCND1.cna</th>
+<th align="left">PRDM1.cna</th>
+<th align="left">BRCA2.cna</th>
+<th align="left">CCND3.cna</th>
+<th align="left">CCNE1.cna</th>
+<th align="left">CD79B.cna</th>
+<th align="left">CDK4.cna</th>
+<th align="left">CDK6.cna</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+</tr>
+<tr class="even">
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">2</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+</tr>
+<tr class="odd">
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+</tr>
+<tr class="even">
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+</tr>
+<tr class="odd">
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+</tr>
+<tr class="even">
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+</tr>
+<tr class="odd">
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+</tr>
+<tr class="even">
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+</tr>
+<tr class="odd">
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+</tr>
+<tr class="even">
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
 <div id="processing-full-genetic-profiles-for-samples" class="section level2">
@@ -973,10 +1719,8 @@
 <h3 class="hasAnchor">
 <a href="#using-raw-data-files" class="anchor"></a>Using raw data files</h3>
 <p>Once again we show how to perform this using the files directly downloaded from cBioPortal, combining the example sets <code>mut</code>, <code>fusion</code> and <code>cna</code>:</p>
-<div class="sourceCode" id="cb7"><pre class="downlit">
-<span class="kw">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/binmat.html">binmat</a></span>(patients = <span class="kw">samples</span>,maf = <span class="kw">mut</span>, fusion = <span class="kw">fusion</span>, cna = <span class="kw">cna</span>, cna.binary = <span class="fl">FALSE</span>)
-<span class="fu">kable</span>(<span class="kw">df</span>[<span class="fl">1</span><span class="op">:</span><span class="fl">10</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span><span class="op">:</span><span class="fl">3</span>,<span class="fl">243</span>,<span class="fl">244</span>,<span class="fl">300</span><span class="op">:</span><span class="fl">305</span>)])
-</pre></div>
+<div class="sourceCode" id="cb12"><html><body><pre class="r"><span class="no">df</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/binmat.html">binmat</a></span>(<span class="kw">patients</span> <span class="kw">=</span> <span class="no">samples</span>,<span class="kw">maf</span> <span class="kw">=</span> <span class="no">mut</span>, <span class="kw">fusion</span> <span class="kw">=</span> <span class="no">fusion</span>, <span class="kw">cna</span> <span class="kw">=</span> <span class="no">cna</span>, <span class="kw">cna.binary</span> <span class="kw">=</span> <span class="fl">FALSE</span>)
+<span class="fu">kable</span>(<span class="no">df</span>[<span class="fl">1</span>:<span class="fl">10</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>:<span class="fl">3</span>,<span class="fl">243</span>,<span class="fl">244</span>,<span class="fl">300</span>:<span class="fl">305</span>)])</pre></body></html></div>
 <table class="table">
 <thead><tr class="header">
 <th></th>
@@ -1135,7 +1879,175 @@
 </tr>
 </tbody>
 </table>
-<!-- ### From the API --><!-- Similarly we get retrieve all the genetic events at once through the `get_genetics()` function and proceed to process them.  --><!-- ```{r} --><!-- dat <- get_genetics(sample_ids = samples,mutations = TRUE, fusions = TRUE, cna = TRUE) --><!-- df <- binmat(patients = samples,maf = dat$mut, cna = dat$cna,cna.binary = FALSE) --><!-- kable(df[1:10, c(1:3,243,244,300:305)]) --><!-- ``` --><!-- Note that here the fusions are embedded in the mutation file. -->
+</div>
+<div id="from-the-api" class="section level3">
+<h3 class="hasAnchor">
+<a href="#from-the-api" class="anchor"></a>From the API</h3>
+<p>Similarly we get retrieve all the genetic events at once through the <code><a href="../reference/get_genetics.html">get_genetics()</a></code> function and proceed to process them.</p>
+<div class="sourceCode" id="cb13"><html><body><pre class="r"><span class="no">dat</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/get_genetics.html">get_genetics</a></span>(<span class="kw">sample_ids</span> <span class="kw">=</span> <span class="no">samples</span>,<span class="kw">mutations</span> <span class="kw">=</span> <span class="fl">TRUE</span>, <span class="kw">fusions</span> <span class="kw">=</span> <span class="fl">TRUE</span>, <span class="kw">cna</span> <span class="kw">=</span> <span class="fl">TRUE</span>)
+<span class="co">#&gt; [1] "https://cbioportal.mskcc.org/api/molecular-profiles/mskimpact_mutations/mutations/fetch?"</span>
+<span class="co">#&gt; [1] "https://cbioportal.mskcc.org/api/molecular-profiles/mskimpact_cna/discrete-copy-number/fetch?"</span>
+<span class="no">df</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/binmat.html">binmat</a></span>(<span class="kw">patients</span> <span class="kw">=</span> <span class="no">samples</span>,<span class="kw">maf</span> <span class="kw">=</span> <span class="no">dat</span>$<span class="no">mut</span>, <span class="kw">cna</span> <span class="kw">=</span> <span class="no">dat</span>$<span class="no">cna</span>,<span class="kw">cna.binary</span> <span class="kw">=</span> <span class="fl">FALSE</span>)
+<span class="fu">kable</span>(<span class="no">df</span>[<span class="fl">1</span>:<span class="fl">10</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>:<span class="fl">3</span>,<span class="fl">243</span>,<span class="fl">244</span>,<span class="fl">300</span>:<span class="fl">305</span>)])</pre></body></html></div>
+<table class="table">
+<thead><tr class="header">
+<th></th>
+<th align="right">ABL1</th>
+<th align="right">PARP1</th>
+<th align="right">AKT1</th>
+<th align="right">PTEN.fus</th>
+<th align="right">ROS1.fus</th>
+<th align="left">MYCN.cna</th>
+<th align="left">NBN.cna</th>
+<th align="left">NF1.cna</th>
+<th align="left">NFKBIA.cna</th>
+<th align="left">NOTCH1.cna</th>
+<th align="left">NTRK3.cna</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td>P-0010604-T01-IM5</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+</tr>
+<tr class="even">
+<td>P-0002651-T01-IM3</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+</tr>
+<tr class="odd">
+<td>P-0000270-T01-IM3</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+</tr>
+<tr class="even">
+<td>P-0002915-T01-IM3</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+</tr>
+<tr class="odd">
+<td>P-0011099-T01-IM5</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+</tr>
+<tr class="even">
+<td>P-0000080-T01-IM3</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+</tr>
+<tr class="odd">
+<td>P-0001741-T01-IM3</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+</tr>
+<tr class="even">
+<td>P-0003964-T01-IM3</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+</tr>
+<tr class="odd">
+<td>P-0003842-T01-IM5</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+</tr>
+<tr class="even">
+<td>P-0002597-T02-IM5</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+</tr>
+</tbody>
+</table>
+<p>Note that here the fusions are embedded in the mutation file.</p>
 </div>
 </div>
 </div>
@@ -1143,10 +2055,8 @@
 <h1 class="hasAnchor">
 <a href="#pathway-level-alterations" class="anchor"></a>Pathway level alterations</h1>
 <p>Pathway level alteration analysis is commonly encountered in genomic studies. We therefore implemented in <code><a href="../reference/binmat.html">binmat()</a></code> the <code>pathway</code> argument that enables the user to generate a second binary matrix with pathways as new features (columns) for each of the samples (rows). These pathways were created following Dr. Schultz’s group in their paper <a href="https://www.cell.com/cell/pdf/S0092-8674(18)30359-3.pdf">Oncogenic Signaling Pathways in The Cancer Genome Atlas</a>. It consist of 10 well defined pathways that have biological impacts in cancer patients. We show below an example of this matrix.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit">
-<span class="kw">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/binmat.html">binmat</a></span>(patients = <span class="kw">samples</span>,maf = <span class="kw">mut</span>, cna = <span class="kw">cna</span>,cna.binary = <span class="fl">FALSE</span>,pathway = <span class="kw">T</span>)
-<span class="fu">kable</span>(<span class="kw">df</span><span class="op">$</span><span class="kw">pathway_dat</span>[<span class="fl">1</span><span class="op">:</span><span class="fl">5</span>,])
-</pre></div>
+<div class="sourceCode" id="cb14"><html><body><pre class="r"><span class="no">df</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/binmat.html">binmat</a></span>(<span class="kw">patients</span> <span class="kw">=</span> <span class="no">samples</span>,<span class="kw">maf</span> <span class="kw">=</span> <span class="no">mut</span>, <span class="kw">cna</span> <span class="kw">=</span> <span class="no">cna</span>,<span class="kw">cna.binary</span> <span class="kw">=</span> <span class="fl">FALSE</span>,<span class="kw">pathway</span> <span class="kw">=</span> <span class="no">T</span>)
+<span class="fu">kable</span>(<span class="no">df</span>$<span class="no">pathway_dat</span>[<span class="fl">1</span>:<span class="fl">5</span>,])</pre></body></html></div>
 <table class="table">
 <thead><tr class="header">
 <th></th>
@@ -1230,14 +2140,165 @@
 </tbody>
 </table>
 <p>Note that this is returned as an additional element of <code><a href="../reference/binmat.html">binmat()</a></code> and the original binary matrix for all genes is still returned.</p>
+<div id="custom-pathways" class="section level2">
+<h2 class="hasAnchor">
+<a href="#custom-pathways" class="anchor"></a>Custom pathways</h2>
+<p>In particular problems it may be of interest of creating pathways customized to the study conducted. To enable the user to use these specfic pathways we created the <code><a href="../reference/custom_pathway.html">custom_pathway()</a></code> function, this function takes as argument a binary output from <code><a href="../reference/binmat.html">binmat()</a></code> with a dataframe containing the name of the genes and their corresponding pathways:</p>
+<div class="sourceCode" id="cb15"><html><body><pre class="r"><span class="no">pathway</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/cbind.html">cbind</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"PIK3CA"</span>,<span class="st">"KRAS"</span>,<span class="st">"TERT"</span>,<span class="st">"TP53"</span>),
+                               <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"path1"</span>,<span class="st">"path1"</span>,<span class="st">"path2"</span>,<span class="st">"path3"</span>)))
+<span class="no">pathway_dat</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/custom_pathway.html">custom_pathway</a></span>(<span class="kw">mat</span> <span class="kw">=</span> <span class="no">df</span>$<span class="no">mut</span>, <span class="kw">pathway</span> <span class="kw">=</span> <span class="no">pathway</span>)
+<span class="fu">kable</span>(<span class="no">pathway_dat</span>[<span class="fl">1</span>:<span class="fl">5</span>,])</pre></body></html></div>
+<table class="table">
+<thead><tr class="header">
+<th></th>
+<th align="right">path1</th>
+<th align="right">path2</th>
+<th align="right">path3</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td>P-0010604-T01-IM5</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td>P-0002651-T01-IM3</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td>P-0000270-T01-IM3</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td>P-0002915-T01-IM3</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td>P-0011099-T01-IM5</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="oncokb-annotation" class="section level1">
+<h1 class="hasAnchor">
+<a href="#oncokb-annotation" class="anchor"></a>OncoKB annotation</h1>
+<p>OncoKB annotates the biological and oncogenic effect and the prognostic and predictive significance of somatic molecular alterations. Potential treatment implications are stratified by the level of evidence that a specific molecular alteration is predictive of drug response based on US Food and Drug Administration (FDA) labeling, National Comprehensive Cancer Network (NCCN) guidelines, disease-focused expert group recommendations and the scientific literature. For more information see the manuscript <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5586540/">OncoKB: A Precision Oncology Knowledge Base</a> or the <a href="https://www.oncokb.org/">oncoKB</a> website. In <code>gnomeR</code> we include a simple wrapper of the <code>[annotateMaf](https://github.com/taylor-lab/annotateMaf)</code> package’s functions to allow users to annotate their MAF files. If the <code>oncokb</code> argument is set to TRUE the MAF will be subsetted to oncogenic and likely oncogenic variants. Note this can be performed externally using the <code><a href="../reference/oncoKB_annotate.html">oncoKB_annotate()</a></code> function as shown below:</p>
+<div class="sourceCode" id="cb16"><html><body><pre class="r"><span class="no">maf</span> <span class="kw">&lt;-</span> <span class="no">mut</span>[<span class="fl">1</span>:<span class="fl">10</span>,]
+<span class="no">onco_maf</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/oncoKB_annotate.html">oncoKB_annotate</a></span>(<span class="no">maf</span>)
+<span class="no">onco_maf</span> <span class="kw">%&gt;%</span> <span class="fu">select</span>(<span class="no">Hugo_Symbol</span>, <span class="no">Chromosome</span>, <span class="no">Variant_Classification</span>, <span class="no">oncogenic</span>, <span class="no">oncokb_level</span> )
+<span class="co">#&gt;    Hugo_Symbol Chromosome Variant_Classification        oncogenic oncokb_level</span>
+<span class="co">#&gt; 1         TP53         17      Missense_Mutation Likely Oncogenic             </span>
+<span class="co">#&gt; 2         EZH2          7      Missense_Mutation                              </span>
+<span class="co">#&gt; 3         MDM2         12      Missense_Mutation                              </span>
+<span class="co">#&gt; 4        IGF1R         15      Missense_Mutation                              </span>
+<span class="co">#&gt; 5        KEAP1         19      Missense_Mutation                              </span>
+<span class="co">#&gt; 6        KDM5C          X      Missense_Mutation                              </span>
+<span class="co">#&gt; 7         KRAS         12      Missense_Mutation        Oncogenic      LEVEL_4</span>
+<span class="co">#&gt; 8         TERT          5                5'Flank                              </span>
+<span class="co">#&gt; 9       MAP2K1         15      Missense_Mutation Likely Oncogenic     LEVEL_3B</span>
+<span class="co">#&gt; 10       NCOR1         17      Nonsense_Mutation Likely Oncogenic</span></pre></body></html></div>
+<p>Annotating MAF in <code><a href="../reference/binmat.html">binmat()</a></code>:</p>
+<div class="sourceCode" id="cb17"><html><body><pre class="r"><span class="no">df</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/binmat.html">binmat</a></span>(<span class="kw">patients</span> <span class="kw">=</span> <span class="no">samples</span>[<span class="fl">1</span>:<span class="fl">5</span>] ,<span class="kw">maf</span> <span class="kw">=</span> <span class="no">mut</span>, <span class="kw">oncokb</span> <span class="kw">=</span> <span class="fl">TRUE</span>)
+<span class="fu">kable</span>(<span class="no">df</span>[<span class="fl">1</span>:<span class="fl">5</span>, <span class="fl">1</span>:<span class="fl">10</span>])</pre></body></html></div>
+<table class="table">
+<thead><tr class="header">
+<th></th>
+<th align="right">ARID1A</th>
+<th align="right">TP53</th>
+<th align="right">PIK3CA</th>
+<th align="right">MLL3</th>
+<th align="right">MAP3K1</th>
+<th align="right">GATA3</th>
+<th align="right">BRCA1</th>
+<th align="right">SPEN</th>
+<th align="right">NOTCH1</th>
+<th align="right">CDKN2A</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td>P-0010604-T01-IM5</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td>P-0002651-T01-IM3</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td>P-0000270-T01-IM3</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td>P-0002915-T01-IM3</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td>P-0011099-T01-IM5</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+</tbody>
+</table>
 </div>
 <div id="facets" class="section level1">
 <h1 class="hasAnchor">
 <a href="#facets" class="anchor"></a>FACETs</h1>
 <p>The copy-number alterations data we have covered up to now is a discrete estimation of the alterations that occured. There however exist more nuanced and accurate data for copy-number alterations observed in a tumor. In <code>gnomeR</code> we include an example of segmentation file and relevant functions from the <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5027494/"><code>facets</code></a> package that provides an allele-specific copy number and clonal heterogeneity analysis tool for high-throughput DNA sequencing. We show below an example of a segmentation file included in <code>gnomeR</code> (<code>seg</code> dataset) and how to process it:</p>
-<div class="sourceCode" id="cb9"><pre class="downlit">
-<span class="fu">kable</span>(<span class="kw">seg</span>[<span class="fl">1</span><span class="op">:</span><span class="fl">10</span>,])
-</pre></div>
+<div class="sourceCode" id="cb18"><html><body><pre class="r"><span class="fu">kable</span>(<span class="no">seg</span>[<span class="fl">1</span>:<span class="fl">10</span>,])</pre></body></html></div>
 <table class="table">
 <thead><tr class="header">
 <th align="left">ID</th>
@@ -1347,13 +2408,9 @@
 <li>
 <code>adaptive</code>: CNregions option to create adaptive segments. Default is FALSE.</li>
 </ul>
-<div class="sourceCode" id="cb10"><pre class="downlit">
-<span class="kw">facet</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/facets.dat.html">facets.dat</a></span>(seg = <span class="kw">seg</span>, patients = <span class="kw">samples</span>, epsilon = <span class="fl">0.005</span>)
-</pre></div>
+<div class="sourceCode" id="cb19"><html><body><pre class="r"><span class="no">facet</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/facets.dat.html">facets.dat</a></span>(<span class="kw">seg</span> <span class="kw">=</span> <span class="no">seg</span>, <span class="kw">patients</span> <span class="kw">=</span> <span class="no">samples</span>, <span class="kw">epsilon</span> <span class="kw">=</span> <span class="fl">0.005</span>)</pre></body></html></div>
 <p>This function returns a dataframe that is ready for visualization and analysis with samples as rows and processed segments as columns:</p>
-<div class="sourceCode" id="cb11"><pre class="downlit">
-<span class="fu">kable</span>(<span class="kw">facet</span><span class="op">$</span><span class="kw">out.cn</span>[<span class="fl">1</span><span class="op">:</span><span class="fl">5</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">3</span>])
-</pre></div>
+<div class="sourceCode" id="cb20"><html><body><pre class="r"><span class="fu">kable</span>(<span class="no">facet</span>$<span class="no">out.cn</span>[<span class="fl">1</span>:<span class="fl">5</span>,<span class="fl">1</span>:<span class="fl">3</span>])</pre></body></html></div>
 <table class="table">
 <thead><tr class="header">
 <th></th>
@@ -1412,7 +2469,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
 </div>
 
       </footer>

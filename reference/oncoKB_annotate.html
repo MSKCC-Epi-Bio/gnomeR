@@ -6,7 +6,8 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Function to extract colors from <code>gnomer_colors</code> as hex codes — gnomer_cols • gnomeR</title>
+<title>oncoKB_annotate
+OncoKB annotator for MAF files. — oncoKB_annotate • gnomeR</title>
 
 
 <!-- jquery -->
@@ -39,8 +40,10 @@
 
 
 
-<meta property="og:title" content="Function to extract colors from <code>gnomer_colors</code> as hex codes — gnomer_cols" />
-<meta property="og:description" content="Function to extract colors from gnomer_colors as hex codes" />
+<meta property="og:title" content="oncoKB_annotate
+OncoKB annotator for MAF files. — oncoKB_annotate" />
+<meta property="og:description" content="oncoKB_annotate
+OncoKB annotator for MAF files." />
 
 
 
@@ -135,27 +138,44 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Function to extract colors from <code>gnomer_colors</code> as hex codes</h1>
-    <small class="dont-index">Source: <a href='https://github.com/AxelitoMartin/gnomeR/blob/master/R/gnomer_color_palette.R'><code>R/gnomer_color_palette.R</code></a></small>
-    <div class="hidden name"><code>gnomer_cols.Rd</code></div>
+    <h1>oncoKB_annotate
+OncoKB annotator for MAF files.</h1>
+    <small class="dont-index">Source: <a href='https://github.com/AxelitoMartin/gnomeR/blob/master/R/maf-oncokb-annotator.R'><code>R/maf-oncokb-annotator.R</code></a></small>
+    <div class="hidden name"><code>oncoKB_annotate.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Function to extract colors from <code>gnomer_colors</code> as hex codes</p>
+    <p>oncoKB_annotate
+OncoKB annotator for MAF files.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>gnomer_cols</span>(<span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>oncoKB_annotate</span>(<span class='no'>maf</span>, <span class='no'>cancer_types</span>, <span class='kw'>parallelize</span> <span class='kw'>=</span> <span class='no'>T</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>...</th>
-      <td><p>Character names of gnomer_colors</p></td>
+      <th>maf</th>
+      <td><p>A MAF file to be annotated.</p></td>
+    </tr>
+    <tr>
+      <th>cancer_types</th>
+      <td><p>Data frame with samples mapped to cancer type for accurate levels of actionability. Default is NULL.</p></td>
+    </tr>
+    <tr>
+      <th>parallelize</th>
+      <td><p>Should this be done in parallel. Default is TRUE</p></td>
     </tr>
     </table>
 
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
+    <p>OncoKb annotate MAF.</p>
+
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>gnomeR</span>)
+<span class='no'>maf</span> <span class='kw'>&lt;-</span> <span class='no'>mut</span>[<span class='fl'>1</span>:<span class='fl'>10</span>,]
+<span class='no'>onco_maf</span> <span class='kw'>&lt;-</span> <span class='fu'>oncoKB_annotate</span>(<span class='no'>maf</span>)</div><div class='output co'>#&gt; <span class='message'>No cancer types(s) specified, defaults to CANCER</span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

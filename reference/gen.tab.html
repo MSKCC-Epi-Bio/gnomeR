@@ -148,7 +148,7 @@ is tested using Fisher's exact test and further adjusted for multiple comparison
 are dichotomized at their median.</p>
     </div>
 
-    <pre class="usage"><span class='fu'><a href='https://rdrr.io/pkg/gnomeR/man/gen.tab.html'>gen.tab</a></span>(<span class='kw'>gen.dat</span>, <span class='kw'>outcome</span>, filter = <span class='fl'>0</span>, paired = <span class='kw'>F</span>, cont = <span class='kw'>F</span>, rank = <span class='kw'>T</span>)</pre>
+    <pre class="usage"><span class='fu'>gen.tab</span>(<span class='no'>gen.dat</span>, <span class='no'>outcome</span>, <span class='kw'>filter</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>paired</span> <span class='kw'>=</span> <span class='no'>F</span>, <span class='kw'>cont</span> <span class='kw'>=</span> <span class='no'>F</span>, <span class='kw'>rank</span> <span class='kw'>=</span> <span class='no'>T</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -187,15 +187,15 @@ Default is 0 (all features included).</p></td>
 <p>forest.plot : A forest plot of the top 10 hits.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='kw'><a href='https://github.com/AxelitoMartin/gnomeR'>gnomeR</a></span>)
-<span class='kw'>patients</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>as.character</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/unique.html'>unique</a></span>(<span class='kw'>mut</span><span class='op'>$</span><span class='kw'>Tumor_Sample_Barcode</span>))
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>gnomeR</span>)
+<span class='no'>patients</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>as.character</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/unique.html'>unique</a></span>(<span class='no'>mut</span>$<span class='no'>Tumor_Sample_Barcode</span>))
 <span class='co'>## binary outcome ##</span>
-<span class='kw'>outcome</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>as.character</a></span>(<span class='kw'>clin.sample</span><span class='op'>$</span><span class='kw'>Sample.Type</span>[<span class='fu'><a href='https://rdrr.io/r/base/match.html'>match</a></span>(<span class='kw'>patients</span>,<span class='kw'>clin.sample</span><span class='op'>$</span><span class='kw'>Sample.Identifier</span>)])
-<span class='kw'>gen.dat</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/gnomeR/man/binmat.html'>binmat</a></span>(patients = <span class='kw'>patients</span>,maf = <span class='kw'>mut</span>)
-<span class='fu'><a href='https://rdrr.io/pkg/gnomeR/man/gen.tab.html'>gen.tab</a></span>(gen.dat = <span class='kw'>gen.dat</span>,
-        outcome = <span class='kw'>outcome</span>,
-        filter = <span class='fl'>0.05</span>,paired = <span class='fl'>FALSE</span>,
-        cont = <span class='fl'>FALSE</span>,rank = <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: geom_hline(): Ignoring `mapping` because `yintercept` was provided.</span></div><div class='output co'>#&gt; $fits
+<span class='no'>outcome</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>as.character</a></span>(<span class='no'>clin.sample</span>$<span class='no'>Sample.Type</span>[<span class='fu'><a href='https://rdrr.io/r/base/match.html'>match</a></span>(<span class='no'>patients</span>,<span class='no'>clin.sample</span>$<span class='no'>Sample.Identifier</span>)])
+<span class='no'>gen.dat</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='binmat.html'>binmat</a></span>(<span class='kw'>patients</span> <span class='kw'>=</span> <span class='no'>patients</span>,<span class='kw'>maf</span> <span class='kw'>=</span> <span class='no'>mut</span>)
+<span class='fu'>gen.tab</span>(<span class='kw'>gen.dat</span> <span class='kw'>=</span> <span class='no'>gen.dat</span>,
+        <span class='kw'>outcome</span> <span class='kw'>=</span> <span class='no'>outcome</span>,
+        <span class='kw'>filter</span> <span class='kw'>=</span> <span class='fl'>0.05</span>,<span class='kw'>paired</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+        <span class='kw'>cont</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,<span class='kw'>rank</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: geom_hline(): Ignoring `mapping` because `yintercept` was provided.</span></div><div class='output co'>#&gt; $fits
 #&gt;        Feature Overall Metastasis(N=200) Primary(N=257) OddsRatio   Pvalue
 #&gt; FAT1      FAT1   6.13%                9%          3.89%      0.41 2.99e-02
 #&gt; ATRX      ATRX   5.69%              3.5%          7.39%       2.2 1.02e-01
@@ -236,12 +236,12 @@ Default is 0 (all features included).</p></td>
 #&gt; $forest.plot</div><div class='img'><img src='gen.tab-1.png' alt='' width='700' height='433' /></div><div class='output co'>#&gt; 
 #&gt; $vPlot</div><div class='img'><img src='gen.tab-2.png' alt='' width='700' height='433' /></div><div class='output co'>#&gt; </div><div class='input'><span class='co'>## Continuous outcome ##</span>
 <span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span>(<span class='fl'>1</span>)
-<span class='kw'>outcome</span> <span class='op'>&lt;-</span>  <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span>(n = <span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span>(<span class='kw'>gen.dat</span>))
-<span class='kw'>tab.out</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/gnomeR/man/gen.tab.html'>gen.tab</a></span>(gen.dat = <span class='kw'>gen.dat</span>,
-                   outcome = <span class='kw'>outcome</span>,
-                   filter = <span class='fl'>0.05</span>,paired = <span class='fl'>FALSE</span>,
-                   cont = <span class='fl'>TRUE</span>,rank = <span class='fl'>TRUE</span>)
-<span class='kw'>tab.out</span><span class='op'>$</span><span class='kw'>fits</span></div><div class='output co'>#&gt;           Estimate         SD     Pvalue MutationFreq       FDR
+<span class='no'>outcome</span> <span class='kw'>&lt;-</span>  <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span>(<span class='kw'>n</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span>(<span class='no'>gen.dat</span>))
+<span class='no'>tab.out</span> <span class='kw'>&lt;-</span> <span class='fu'>gen.tab</span>(<span class='kw'>gen.dat</span> <span class='kw'>=</span> <span class='no'>gen.dat</span>,
+                   <span class='kw'>outcome</span> <span class='kw'>=</span> <span class='no'>outcome</span>,
+                   <span class='kw'>filter</span> <span class='kw'>=</span> <span class='fl'>0.05</span>,<span class='kw'>paired</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+                   <span class='kw'>cont</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,<span class='kw'>rank</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+<span class='no'>tab.out</span>$<span class='no'>fits</span></div><div class='output co'>#&gt;           Estimate         SD     Pvalue MutationFreq       FDR
 #&gt; TERT    0.25771092 0.12896408 0.04627708   0.14879650 0.6687127
 #&gt; BRAF    0.29107349 0.21041434 0.16724057   0.05032823 0.6687127
 #&gt; PIK3CA -0.19670254 0.14870787 0.18658472   0.10722101 0.6687127
@@ -258,7 +258,7 @@ Default is 0 (all features included).</p></td>
 #&gt; ARID1A -0.10214478 0.17105393 0.55070456   0.07877462 0.6687127
 #&gt; ATRX   -0.09403244 0.19895900 0.63670938   0.05689278 0.7216040
 #&gt; FAT1    0.05765920 0.19219623 0.76431286   0.06126915 0.8120824
-#&gt; NOTCH1  0.03600625 0.20270690 0.85909483   0.05470460 0.8590948</div><div class='input'><span class='kw'>tab.out</span><span class='op'>$</span><span class='kw'>vPlot</span></div><div class='output co'>#&gt; <span class='message'>No trace type specified:</span>
+#&gt; NOTCH1  0.03600625 0.20270690 0.85909483   0.05470460 0.8590948</div><div class='input'><span class='no'>tab.out</span>$<span class='no'>vPlot</span></div><div class='output co'>#&gt; <span class='message'>No trace type specified:</span>
 #&gt; <span class='message'>  Based on info supplied, a 'scatter' trace seems appropriate.</span>
 #&gt; <span class='message'>  Read more about this trace type -&gt; https://plot.ly/r/reference/#scatter</span></div><div class='output co'>#&gt; <span class='warning'>Warning: `arrange_()` is deprecated as of dplyr 0.7.0.</span>
 #&gt; <span class='warning'>Please use `arrange()` instead.</span>
@@ -280,7 +280,7 @@ Default is 0 (all features included).</p></td>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
 </div>
 
       </footer>
