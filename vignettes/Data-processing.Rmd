@@ -43,6 +43,7 @@ The main purpose of `gnomeR` is to streamline the processing of genomic files pr
 - rm.empty: boolean specifying if columns with no events founds should be removed. Default is TRUE.
 - pathway boolean specifying if pathway annotation should be applied. If TRUE, the function will return a supplementary binary dataframe with columns being each pathway and each row being a sample. Default is FALSE.
 - col.names character vector of the necessary columns to be used. By default: col.names = c(Tumor_Sample_Barcode = NULL, Hugo_Symbol = NULL, Variant_Classification = NULL, Mutation_Status = NULL, Variant_Type = NULL)
+- oncokb boolean specfiying if maf file should be oncokb annotated. Variants found to be 'Oncogenic' and 'Likely Oncogenic' will be kept. Default is FALSE.
 
 This function returns a matrix containing all the genetic information with rows as samples and columns as features.
 A warning will be thrown if some samples were found to have no mutations in the MAF file.
@@ -204,6 +205,36 @@ kable(df$pathway_dat[1:5,])
 ```
 
 Note that this is returned as an additional element of `binmat()` and the original binary matrix for all genes is still returned.
+
+## Custom pathways
+
+In particular problems it may be of interest of creating pathways customized to the study conducted. To enable the user to use these specfic pathways we created the `custom_pathway()` function, this function takes as argument a binary output from `binmat()` with a dataframe containing the name of the genes and their corresponding pathways:
+
+```{r}
+pathway <- as.data.frame(cbind(c("PIK3CA","KRAS","TERT","TP53"),
+                               c("path1","path1","path2","path3")))
+pathway_dat <- custom_pathway(mat = df$mut, pathway = pathway)
+kable(pathway_dat[1:5,])
+```
+
+# OncoKB annotation 
+
+OncoKB annotates the biological and oncogenic effect and the prognostic and predictive significance of somatic molecular alterations. Potential treatment implications are stratified by the level of evidence that a specific molecular alteration is predictive of drug response based on US Food and Drug Administration (FDA) labeling, National Comprehensive Cancer Network (NCCN) guidelines, disease-focused expert group recommendations and the scientific literature. For more information see the manuscript [OncoKB: A Precision Oncology Knowledge Base](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5586540/) or the [oncoKB](https://www.oncokb.org/) website. In `gnomeR` we include a simple wrapper of the `[annotateMaf](https://github.com/taylor-lab/annotateMaf)` package's functions to allow users to annotate their MAF files. If the `oncokb` argument is set to TRUE the MAF will be subsetted to oncogenic and likely oncogenic variants. 
+Note this can be performed externally using the `oncoKB_annotate()` function as shown below:
+
+```{r}
+maf <- mut[1:10,]
+onco_maf <- oncoKB_annotate(maf)
+onco_maf %>% select(Hugo_Symbol, Chromosome, Variant_Classification, oncogenic, oncokb_level )
+```
+
+Annotating MAF in `binmat()`:
+
+```{r}
+df <- binmat(patients = samples[1:5] ,maf = mut, oncokb = TRUE)
+kable(df[1:5, 1:10])
+```
+
 
 # FACETs
 
