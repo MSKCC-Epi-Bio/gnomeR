@@ -133,6 +133,7 @@
 <li>mutations: Boolean specifying if mutation data should be fected. Default is TRUE.</li>
 <li>fusions: Boolean specifying if fusion data should be fected. Default is TRUE.</li>
 <li>cna: Boolean specifying if cna data should be fected. Default is TRUE.</li>
+<li>seg: Boolean specifying if the segmentatio data should be fetched. Default is FALSE.</li>
 </ul>
 <p>This function returns either a MAF file or a copy-number alterations summary file, or both (<code>mut</code> and/or <code>cna</code>).</p>
 <div id="impact-database" class="section level2">
@@ -381,6 +382,36 @@
 <span class="co">#&gt; 5 VENHQS0wMi0wMD… VENHQS0wMi0wMDU… gbm_tcga_pan_ca… TCGA-02… TCGA-02-…</span>
 <span class="co">#&gt; # … with 4 more variables: entrezGeneId &lt;int&gt;, studyId &lt;chr&gt;, alteration &lt;int&gt;,</span>
 <span class="co">#&gt; #   Hugo_Symbol &lt;chr&gt;</span></pre></body></html></div>
+</div>
+<div id="segmentation-file" class="section level3">
+<h3 class="hasAnchor">
+<a href="#segmentation-file" class="anchor"></a>Segmentation file</h3>
+<p>The copy-number alterations data we have covered up to now is a discrete estimation of the alterations that occured. There however exist more nuanced and accurate data for copy-number alterations observed in a tumor. In <code>gnomeR</code> we include an example of segmentation file and relevant functions from the <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5027494/"><code>facets</code></a> package that provides an allele-specific copy number and clonal heterogeneity analysis tool for high-throughput DNA sequencing. We show below how to download it from the API in gnomeR.</p>
+<div class="sourceCode" id="cb13"><html><body><pre class="r"><span class="no">df</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/get_genetics.html">get_genetics</a></span>(<span class="kw">sample_ids</span> <span class="kw">=</span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"TCGA-17-Z023-01"</span>,<span class="st">"TCGA-02-0003-01"</span>,<span class="st">"TCGA-02-0055-01"</span>),
+             <span class="kw">mutations</span> <span class="kw">=</span> <span class="fl">FALSE</span>,<span class="kw">fusions</span> <span class="kw">=</span> <span class="fl">FALSE</span>, <span class="kw">cna</span> <span class="kw">=</span> <span class="fl">FALSE</span>, <span class="kw">seg</span> <span class="kw">=</span> <span class="fl">TRUE</span>,
+             <span class="kw">database</span> <span class="kw">=</span> <span class="st">"tcga"</span>)
+<span class="co">#&gt; No encoding supplied: defaulting to UTF-8.</span>
+<span class="co">#&gt; Warning: The `x` argument of `as_tibble.matrix()` must have column names if `.name_repair` is omitted as of tibble 2.0.0.</span>
+<span class="co">#&gt; Using compatibility `.name_repair`.</span>
+<span class="co">#&gt; This warning is displayed once every 8 hours.</span>
+<span class="co">#&gt; Call `lifecycle::last_warnings()` to see where this warning was generated.</span>
+<span class="co">#&gt; No encoding supplied: defaulting to UTF-8.</span>
+<span class="co">#&gt; No encoding supplied: defaulting to UTF-8.</span>
+<span class="no">df</span>$<span class="no">seg</span>
+<span class="co">#&gt; # A tibble: 162 x 6</span>
+<span class="co">#&gt;    ID           chrom loc.start loc.end   num.mark seg.mean</span>
+<span class="co">#&gt;    &lt;chr&gt;        &lt;chr&gt; &lt;chr&gt;     &lt;chr&gt;     &lt;chr&gt;    &lt;chr&gt;   </span>
+<span class="co">#&gt;  1 TCGA-02-0003 1     3218610   16137774  7010     0.063   </span>
+<span class="co">#&gt;  2 TCGA-02-0003 1     16138059  16138095  2        -1.5788 </span>
+<span class="co">#&gt;  3 TCGA-02-0003 1     16142960  180271108 79398    0.0669  </span>
+<span class="co">#&gt;  4 TCGA-02-0003 1     180275654 180493841 113      0.5817  </span>
+<span class="co">#&gt;  5 TCGA-02-0003 1     180493944 180494500 3        1.562   </span>
+<span class="co">#&gt;  6 TCGA-02-0003 1     180495670 180908017 247      0.5965  </span>
+<span class="co">#&gt;  7 TCGA-02-0003 1     180912006 247813706 42278    0.0627  </span>
+<span class="co">#&gt;  8 TCGA-02-0003 2     484222    236771407 127916   0.0517  </span>
+<span class="co">#&gt;  9 TCGA-02-0003 2     236772143 237408806 348      0.576   </span>
+<span class="co">#&gt; 10 TCGA-02-0003 2     237410658 242476062 2961     0.0454  </span>
+<span class="co">#&gt; # … with 152 more rows</span></pre></body></html></div>
 </div>
 </div>
 </div>

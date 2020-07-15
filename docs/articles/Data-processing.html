@@ -124,6 +124,7 @@
 <li>rm.empty: boolean specifying if columns with no events founds should be removed. Default is TRUE.</li>
 <li>pathway boolean specifying if pathway annotation should be applied. If TRUE, the function will return a supplementary binary dataframe with columns being each pathway and each row being a sample. Default is FALSE.</li>
 <li>col.names character vector of the necessary columns to be used. By default: col.names = c(Tumor_Sample_Barcode = NULL, Hugo_Symbol = NULL, Variant_Classification = NULL, Mutation_Status = NULL, Variant_Type = NULL)</li>
+<li>oncokb boolean specfiying if maf file should be oncokb annotated. Variants found to be ‘Oncogenic’ and ‘Likely Oncogenic’ will be kept. Default is FALSE.</li>
 </ul>
 <p>This function returns a matrix containing all the genetic information with rows as samples and columns as features. A warning will be thrown if some samples were found to have no mutations in the MAF file.</p>
 <p>In the follwing sections we will present examples to process each of the datatypes in cbioportal.</p>
@@ -2054,7 +2055,7 @@
 <h1 class="hasAnchor">
 <a href="#pathway-level-alterations" class="anchor"></a>Pathway level alterations</h1>
 <p>Pathway level alteration analysis is commonly encountered in genomic studies. We therefore implemented in <code><a href="../reference/binmat.html">binmat()</a></code> the <code>pathway</code> argument that enables the user to generate a second binary matrix with pathways as new features (columns) for each of the samples (rows). These pathways were created following Dr. Schultz’s group in their paper <a href="https://www.cell.com/cell/pdf/S0092-8674(18)30359-3.pdf">Oncogenic Signaling Pathways in The Cancer Genome Atlas</a>. It consist of 10 well defined pathways that have biological impacts in cancer patients. We show below an example of this matrix.</p>
-<div class="sourceCode" id="cb14"><html><body><pre class="r"><span class="no">df</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/binmat.html">binmat</a></span>(<span class="kw">patients</span> <span class="kw">=</span> <span class="no">samples</span>,<span class="kw">maf</span> <span class="kw">=</span> <span class="no">dat</span>$<span class="no">mut</span>, <span class="kw">cna</span> <span class="kw">=</span> <span class="no">dat</span>$<span class="no">cna</span>,<span class="kw">cna.binary</span> <span class="kw">=</span> <span class="fl">FALSE</span>,<span class="kw">pathway</span> <span class="kw">=</span> <span class="no">T</span>)
+<div class="sourceCode" id="cb14"><html><body><pre class="r"><span class="no">df</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/binmat.html">binmat</a></span>(<span class="kw">patients</span> <span class="kw">=</span> <span class="no">samples</span>,<span class="kw">maf</span> <span class="kw">=</span> <span class="no">mut</span>, <span class="kw">cna</span> <span class="kw">=</span> <span class="no">cna</span>,<span class="kw">cna.binary</span> <span class="kw">=</span> <span class="fl">FALSE</span>,<span class="kw">pathway</span> <span class="kw">=</span> <span class="no">T</span>)
 <span class="fu">kable</span>(<span class="no">df</span>$<span class="no">pathway_dat</span>[<span class="fl">1</span>:<span class="fl">5</span>,])</pre></body></html></div>
 <table class="table">
 <thead><tr class="header">
@@ -2088,11 +2089,11 @@
 <td>P-0002651-T01-IM3</td>
 <td align="right">1</td>
 <td align="right">0</td>
-<td align="right">1</td>
 <td align="right">0</td>
 <td align="right">0</td>
+<td align="right">0</td>
 <td align="right">1</td>
-<td align="right">1</td>
+<td align="right">0</td>
 <td align="right">1</td>
 <td align="right">0</td>
 <td align="right">0</td>
@@ -2100,8 +2101,8 @@
 <tr class="odd">
 <td>P-0000270-T01-IM3</td>
 <td align="right">1</td>
-<td align="right">1</td>
 <td align="right">0</td>
+<td align="right">1</td>
 <td align="right">0</td>
 <td align="right">0</td>
 <td align="right">0</td>
@@ -2128,7 +2129,7 @@
 <td align="right">0</td>
 <td align="right">0</td>
 <td align="right">0</td>
-<td align="right">0</td>
+<td align="right">1</td>
 <td align="right">0</td>
 <td align="right">0</td>
 <td align="right">0</td>
@@ -2139,12 +2140,165 @@
 </tbody>
 </table>
 <p>Note that this is returned as an additional element of <code><a href="../reference/binmat.html">binmat()</a></code> and the original binary matrix for all genes is still returned.</p>
+<div id="custom-pathways" class="section level2">
+<h2 class="hasAnchor">
+<a href="#custom-pathways" class="anchor"></a>Custom pathways</h2>
+<p>In particular problems it may be of interest of creating pathways customized to the study conducted. To enable the user to use these specfic pathways we created the <code><a href="../reference/custom_pathway.html">custom_pathway()</a></code> function, this function takes as argument a binary output from <code><a href="../reference/binmat.html">binmat()</a></code> with a dataframe containing the name of the genes and their corresponding pathways:</p>
+<div class="sourceCode" id="cb15"><html><body><pre class="r"><span class="no">pathway</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/cbind.html">cbind</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"PIK3CA"</span>,<span class="st">"KRAS"</span>,<span class="st">"TERT"</span>,<span class="st">"TP53"</span>),
+                               <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"path1"</span>,<span class="st">"path1"</span>,<span class="st">"path2"</span>,<span class="st">"path3"</span>)))
+<span class="no">pathway_dat</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/custom_pathway.html">custom_pathway</a></span>(<span class="kw">mat</span> <span class="kw">=</span> <span class="no">df</span>$<span class="no">mut</span>, <span class="kw">pathway</span> <span class="kw">=</span> <span class="no">pathway</span>)
+<span class="fu">kable</span>(<span class="no">pathway_dat</span>[<span class="fl">1</span>:<span class="fl">5</span>,])</pre></body></html></div>
+<table class="table">
+<thead><tr class="header">
+<th></th>
+<th align="right">path1</th>
+<th align="right">path2</th>
+<th align="right">path3</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td>P-0010604-T01-IM5</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td>P-0002651-T01-IM3</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td>P-0000270-T01-IM3</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td>P-0002915-T01-IM3</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td>P-0011099-T01-IM5</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="oncokb-annotation" class="section level1">
+<h1 class="hasAnchor">
+<a href="#oncokb-annotation" class="anchor"></a>OncoKB annotation</h1>
+<p>OncoKB annotates the biological and oncogenic effect and the prognostic and predictive significance of somatic molecular alterations. Potential treatment implications are stratified by the level of evidence that a specific molecular alteration is predictive of drug response based on US Food and Drug Administration (FDA) labeling, National Comprehensive Cancer Network (NCCN) guidelines, disease-focused expert group recommendations and the scientific literature. For more information see the manuscript <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5586540/">OncoKB: A Precision Oncology Knowledge Base</a> or the <a href="https://www.oncokb.org/">oncoKB</a> website. In <code>gnomeR</code> we include a simple wrapper of the <code>[annotateMaf](https://github.com/taylor-lab/annotateMaf)</code> package’s functions to allow users to annotate their MAF files. If the <code>oncokb</code> argument is set to TRUE the MAF will be subsetted to oncogenic and likely oncogenic variants. Note this can be performed externally using the <code><a href="../reference/oncoKB_annotate.html">oncoKB_annotate()</a></code> function as shown below:</p>
+<div class="sourceCode" id="cb16"><html><body><pre class="r"><span class="no">maf</span> <span class="kw">&lt;-</span> <span class="no">mut</span>[<span class="fl">1</span>:<span class="fl">10</span>,]
+<span class="no">onco_maf</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/oncoKB_annotate.html">oncoKB_annotate</a></span>(<span class="no">maf</span>)
+<span class="no">onco_maf</span> <span class="kw">%&gt;%</span> <span class="fu">select</span>(<span class="no">Hugo_Symbol</span>, <span class="no">Chromosome</span>, <span class="no">Variant_Classification</span>, <span class="no">oncogenic</span>, <span class="no">oncokb_level</span> )
+<span class="co">#&gt;    Hugo_Symbol Chromosome Variant_Classification        oncogenic oncokb_level</span>
+<span class="co">#&gt; 1         TP53         17      Missense_Mutation Likely Oncogenic             </span>
+<span class="co">#&gt; 2         EZH2          7      Missense_Mutation                              </span>
+<span class="co">#&gt; 3         MDM2         12      Missense_Mutation                              </span>
+<span class="co">#&gt; 4        IGF1R         15      Missense_Mutation                              </span>
+<span class="co">#&gt; 5        KEAP1         19      Missense_Mutation                              </span>
+<span class="co">#&gt; 6        KDM5C          X      Missense_Mutation                              </span>
+<span class="co">#&gt; 7         KRAS         12      Missense_Mutation        Oncogenic      LEVEL_4</span>
+<span class="co">#&gt; 8         TERT          5                5'Flank                              </span>
+<span class="co">#&gt; 9       MAP2K1         15      Missense_Mutation Likely Oncogenic     LEVEL_3B</span>
+<span class="co">#&gt; 10       NCOR1         17      Nonsense_Mutation Likely Oncogenic</span></pre></body></html></div>
+<p>Annotating MAF in <code><a href="../reference/binmat.html">binmat()</a></code>:</p>
+<div class="sourceCode" id="cb17"><html><body><pre class="r"><span class="no">df</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/binmat.html">binmat</a></span>(<span class="kw">patients</span> <span class="kw">=</span> <span class="no">samples</span>[<span class="fl">1</span>:<span class="fl">5</span>] ,<span class="kw">maf</span> <span class="kw">=</span> <span class="no">mut</span>, <span class="kw">oncokb</span> <span class="kw">=</span> <span class="fl">TRUE</span>)
+<span class="fu">kable</span>(<span class="no">df</span>[<span class="fl">1</span>:<span class="fl">5</span>, <span class="fl">1</span>:<span class="fl">10</span>])</pre></body></html></div>
+<table class="table">
+<thead><tr class="header">
+<th></th>
+<th align="right">ARID1A</th>
+<th align="right">TP53</th>
+<th align="right">PIK3CA</th>
+<th align="right">MLL3</th>
+<th align="right">MAP3K1</th>
+<th align="right">GATA3</th>
+<th align="right">BRCA1</th>
+<th align="right">SPEN</th>
+<th align="right">NOTCH1</th>
+<th align="right">CDKN2A</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td>P-0010604-T01-IM5</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td>P-0002651-T01-IM3</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td>P-0000270-T01-IM3</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td>P-0002915-T01-IM3</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td>P-0011099-T01-IM5</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+</tbody>
+</table>
 </div>
 <div id="facets" class="section level1">
 <h1 class="hasAnchor">
 <a href="#facets" class="anchor"></a>FACETs</h1>
 <p>The copy-number alterations data we have covered up to now is a discrete estimation of the alterations that occured. There however exist more nuanced and accurate data for copy-number alterations observed in a tumor. In <code>gnomeR</code> we include an example of segmentation file and relevant functions from the <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5027494/"><code>facets</code></a> package that provides an allele-specific copy number and clonal heterogeneity analysis tool for high-throughput DNA sequencing. We show below an example of a segmentation file included in <code>gnomeR</code> (<code>seg</code> dataset) and how to process it:</p>
-<div class="sourceCode" id="cb15"><html><body><pre class="r"><span class="fu">kable</span>(<span class="no">seg</span>[<span class="fl">1</span>:<span class="fl">10</span>,])</pre></body></html></div>
+<div class="sourceCode" id="cb18"><html><body><pre class="r"><span class="fu">kable</span>(<span class="no">seg</span>[<span class="fl">1</span>:<span class="fl">10</span>,])</pre></body></html></div>
 <table class="table">
 <thead><tr class="header">
 <th align="left">ID</th>
@@ -2254,9 +2408,9 @@
 <li>
 <code>adaptive</code>: CNregions option to create adaptive segments. Default is FALSE.</li>
 </ul>
-<div class="sourceCode" id="cb16"><html><body><pre class="r"><span class="no">facet</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/facets.dat.html">facets.dat</a></span>(<span class="kw">seg</span> <span class="kw">=</span> <span class="no">seg</span>, <span class="kw">patients</span> <span class="kw">=</span> <span class="no">samples</span>, <span class="kw">epsilon</span> <span class="kw">=</span> <span class="fl">0.005</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb19"><html><body><pre class="r"><span class="no">facet</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/facets.dat.html">facets.dat</a></span>(<span class="kw">seg</span> <span class="kw">=</span> <span class="no">seg</span>, <span class="kw">patients</span> <span class="kw">=</span> <span class="no">samples</span>, <span class="kw">epsilon</span> <span class="kw">=</span> <span class="fl">0.005</span>)</pre></body></html></div>
 <p>This function returns a dataframe that is ready for visualization and analysis with samples as rows and processed segments as columns:</p>
-<div class="sourceCode" id="cb17"><html><body><pre class="r"><span class="fu">kable</span>(<span class="no">facet</span>$<span class="no">out.cn</span>[<span class="fl">1</span>:<span class="fl">5</span>,<span class="fl">1</span>:<span class="fl">3</span>])</pre></body></html></div>
+<div class="sourceCode" id="cb20"><html><body><pre class="r"><span class="fu">kable</span>(<span class="no">facet</span>$<span class="no">out.cn</span>[<span class="fl">1</span>:<span class="fl">5</span>,<span class="fl">1</span>:<span class="fl">3</span>])</pre></body></html></div>
 <table class="table">
 <thead><tr class="header">
 <th></th>

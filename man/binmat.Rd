@@ -21,7 +21,9 @@ binmat(
   rm.empty = TRUE,
   pathway = FALSE,
   col.names = c(Tumor_Sample_Barcode = NULL, Hugo_Symbol = NULL, Variant_Classification
-    = NULL, Mutation_Status = NULL, Variant_Type = NULL)
+    = NULL, Mutation_Status = NULL, Variant_Type = NULL),
+  oncokb = FALSE,
+  ...
 )
 }
 \arguments{
@@ -62,6 +64,11 @@ dataframe with columns being each pathway and each row being a sample. Default i
 
 \item{col.names}{character vector of the necessary columns to be used. By default: col.names = c(Tumor_Sample_Barcode = NULL,
 Hugo_Symbol = NULL, Variant_Classification = NULL, Mutation_Status = NULL, Variant_Type = NULL)}
+
+\item{oncokb}{boolean specfiying if maf file should be oncokb annotated. Variants found to be 'Oncogenic'
+and 'Likely Oncogenic' will be kept. Default is FALSE.}
+
+\item{...}{Further arguments passed to the oncoKB_annotate() function}
 }
 \value{
 mut : a binary matrix of mutation data
