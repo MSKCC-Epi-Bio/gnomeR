@@ -43,24 +43,26 @@ get_genetics <- function(
 
   if(database == "msk_impact"){
 
-  get_cbioportal_db(database)
+    get_cbioportal_db(database)
 
     if(mutations || fusions){
       mut.dat <- get_mutations(sample_ids,
-                              study_id = "mskimpact",
+                               study_id = "mskimpact",
                                genes) %>%
         dplyr::rename(Tumor_Sample_Barcode = "sampleId", Hugo_Symbol = NULL,
-               Variant_Classification = "mutationType", Mutation_Status = "mutationStatus",
-               Variant_Type = "variantType")
+                      Variant_Classification = "mutationType", Mutation_Status = "mutationStatus",
+                      Variant_Type = "variantType")
       if(!fusions)
         mut.dat <- mut.dat %>%
           filter(.data$Variant_Classification != "Fusion")
     }
 
-    if(cna)
+    if(cna){
       cna.dat <- get_cna(sample_ids,
                          study_id = "mskimpact",
                          genes)
+      class(cna.dat) <- c("tbl_df", "tbl", "data.frame","api")
+    }
     return(list("mut"= mut.dat, "cna" = cna.dat))
   }
 
@@ -70,19 +72,19 @@ get_genetics <- function(
 
     if(mutations || fusions){
       mut.dat <- get_mutations(sample_ids,
-                                    study_id = "all_tcga_studies",
-                                    genes) %>%
+                               study_id = "all_tcga_studies",
+                               genes) %>%
         dplyr::rename(Tumor_Sample_Barcode = "sampleId", Hugo_Symbol = NULL,
-               Variant_Classification = "mutationType", Mutation_Status = "mutationStatus",
-               Variant_Type = "variantType")
+                      Variant_Classification = "mutationType", Mutation_Status = "mutationStatus",
+                      Variant_Type = "variantType")
       if(!fusions)
         mut.dat <- mut.dat %>%
           filter(.data$Variant_Classification != "Fusion")
     }
     if(cna)
       cna.dat <- get_cna(sample_ids,
-                              study_id = "all_tcga_studies",
-                              genes)
+                         study_id = "all_tcga_studies",
+                         genes)
     if(seg)
       seg.dat <- get_segments(sample_ids = sample_ids, study_id = "all_tcga_studies")
 
