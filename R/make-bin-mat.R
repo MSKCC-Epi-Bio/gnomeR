@@ -65,16 +65,20 @@ binmat <- function(patients=NULL, maf = NULL, mut.type = "SOMATIC",SNP.only = FA
       rename(col.names)
 
   ## if data from API need to split mutations and fusions ##
-  if(!is.null(maf) && is.null(fusion) &&
-     nrow(maf %>%
-          filter(.data$Variant_Classification == "Fusion")) > 0){
-    fusion <- maf %>%
-      filter(.data$Variant_Classification == "Fusion")
-    maf <- maf %>%
-      filter(.data$Variant_Classification != "Fusion")
-    warning("Fusions were found in the maf file, they were removed and a fusion file was created.")
-  }
+  if(!is.null(maf)){
+    if(is.na(match("Variant_Classification",colnames(maf))))
+      stop("The MAF file inputted is missing a variant classification column. (Variant_Classification)")
 
+    if(!is.null(maf) && is.null(fusion) &&
+       nrow(maf %>%
+            filter(.data$Variant_Classification == "Fusion")) > 0){
+      fusion <- maf %>%
+        filter(.data$Variant_Classification == "Fusion")
+      maf <- maf %>%
+        filter(.data$Variant_Classification != "Fusion")
+      warning("Fusions were found in the maf file, they were removed and a fusion file was created.")
+    }
+  }
 
   mut <- NULL
 
@@ -103,7 +107,7 @@ binmat <- function(patients=NULL, maf = NULL, mut.type = "SOMATIC",SNP.only = FA
     else patients <- as.character(unique(maf$Tumor_Sample_Barcode))
     if(oncokb)
       maf <- oncoKB_annotate(maf,...) %>%
-      dplyr::filter(oncogenic %in% c("Oncogenic","Likely Oncogenic"))
+        dplyr::filter(oncogenic %in% c("Oncogenic","Likely Oncogenic"))
     # set maf to maf class #
     maf <- structure(maf,class = c("data.frame","maf"))
     # getting mutation binary matrix #
@@ -116,6 +120,9 @@ binmat <- function(patients=NULL, maf = NULL, mut.type = "SOMATIC",SNP.only = FA
   if(!is.null(fusion)){
 
     fusion <- as.data.frame(fusion)
+    if(oncokb)
+      fusion <- fusion %>%
+        filter(Frame == "in frame")
     fusion <- structure(fusion,class = c("data.frame","fusion"))
     # filter/define patients #
     if(is.null(patients)) patients <- as.character(unique(fusion$Tumor_Sample_Barcode))
@@ -137,6 +144,8 @@ binmat <- function(patients=NULL, maf = NULL, mut.type = "SOMATIC",SNP.only = FA
 
     else{
       cna <- as.data.frame(cna)
+      if(oncokb)
+        cna[cna == "-1.5" | cna == "-1" | cna == "1"] <- 0
       cna <- structure(cna,class = c("data.frame","cna"))
       if(is.null(patients)) patients <- gsub("\\.","-",as.character(colnames(cna)))[-1]
       cna <- createbin(obj = cna, patients = patients, mut.type = mut.type, cna.binary = cna.binary,cna.relax = cna.relax,
