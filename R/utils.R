@@ -63,7 +63,7 @@ calc_variant_prop <- function(maf) {
 }
 
   # function to extract SNV class from character string cols
-  substrRight <- function(x, n) {
+substrRight <- function(x, n) {
     x <- as.character(x)
     substr(x, nchar(x) - n + 1, nchar(x))
   }

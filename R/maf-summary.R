@@ -30,94 +30,17 @@
 #' GGally
 
 
-maf.summary <- function(maf,...){
+maf_viz <- function(maf,...){
 
-  maf <- check_maf_input(maf)
+  all_plots <- list(
+    varclass = ggvarclass,
+       vartype = ggvartype,
+       nvclass = ggsnvclass,
+      samplevar = ggsamplevar,
+      topgenes = ggtopgenes) %>%
+  invoke_map(, maf)
 
-  # same but in boxplot format # --> simpler to read
-  p.variant.bp <- maf %>%
-    group_by(.data$Tumor_Sample_Barcode,.data$Variant_Classification) %>%
-    summarise(N = n()) %>%
-    ggplot(aes(x = .data$Variant_Classification, y = .data$N,color = .data$Variant_Classification)) +
-    ggtitle("Variant classification distribution") + xlab("Variant Classification") +
-    geom_boxplot() + theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
-    scale_fill_manual(values = grDevices::colorRampPalette(brewer.pal(8, "Accent"))(nb.cols) )
-
-
-  # most mutated genes and class distrib #
-  top.genes <- as.character(unlist(maf %>%
-                                     group_by(.data$Hugo_Symbol) %>%
-                                     summarise(N = n()) %>%
-                                     arrange(-.data$N) %>%
-                                     select(.data$Hugo_Symbol)))
-  maf$Hugo_Symbol <- factor(as.character(maf$Hugo_Symbol),levels = top.genes)
-
-  p.genes <-  maf %>%
-    filter(.data$Hugo_Symbol %in% top.genes[1:10]) %>%
-    ggplot(aes(x = .data$Hugo_Symbol)) + geom_bar(aes(fill = .data$Variant_Classification)) +
-    coord_flip() +
-    ggtitle("Top genes variants classification") + xlab("Gene Name")+
-    scale_fill_manual(values = grDevices::colorRampPalette(brewer.pal(8, "Accent"))(nb.cols) )
-
-
-  # distrib of variants per patient #
-  varprop.maf <- maf %>% tbl_df() %>%
-    group_by(.data$Tumor_Sample_Barcode) %>%
-    mutate(totalMut = n()) %>%
-    ungroup() %>%
-    group_by(.data$Tumor_Sample_Barcode,.data$Variant_Classification) %>%
-    summarise(N=n(),
-              varProp = .data$N/unique(.data$totalMut))
-
-  p.variant.dist <- varprop.maf %>%
-    ggplot(aes(x = .data$Variant_Classification,y = .data$varProp)) + geom_boxplot(aes(fill = .data$Variant_Classification))+
-    scale_fill_manual(values = grDevices::colorRampPalette(brewer.pal(8, "Accent"))(nb.cols) ) +
-    theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
-    theme(legend.position="none") + ylab("% Variant")
-
-  p.variant.dist.bar <- varprop.maf %>%
-    ggplot(aes(x = .data$Tumor_Sample_Barcode, y=.data$varProp)) +
-    geom_bar(aes(fill = .data$Variant_Classification),stat = "identity") +
-    theme(axis.title.x=element_blank(),
-          axis.text.x=element_blank(),
-          axis.ticks.x=element_blank()) +
-    scale_fill_manual(values = grDevices::colorRampPalette(brewer.pal(8, "Accent"))(nb.cols) ) +
-    ylab("% Variants")
-
-
-  # distrib of mutations per patient #
-  p.SNV.dist <- maf %>% tbl_df() %>%
-    group_by(.data$Tumor_Sample_Barcode) %>%
-    mutate(totalMut = n()) %>%
-    ungroup() %>%
-    group_by(.data$Tumor_Sample_Barcode,.data$SNV_Class) %>%
-    summarise(N=n(),
-              varProp = .data$N/unique(.data$totalMut)) %>%
-    ggplot(aes(x = .data$SNV_Class,y = .data$varProp)) + geom_boxplot(aes(fill = .data$SNV_Class))+
-    scale_fill_manual(values = grDevices::colorRampPalette(brewer.pal(8, "Accent"))(nb.cols) ) +
-    theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
-    theme(legend.position="none") + ylab("% SNV")
-
-
-  # comutation patterns #
-  bin.maf <- binmat(maf = maf,...)
-  bin.maf <- bin.maf
-  keep <- names(sort(apply(bin.maf,2,function(x){sum(x)}),decreasing = T))[1:10]
-  bin.maf <- bin.maf[,keep]
-  p.corr <- ggcorr(bin.maf,limits = NULL)
-
-
-  co.mut <- apply(bin.maf,2,function(x){
-    apply(bin.maf,2,function(y){
-      sum(y == 1 & x == 1,na.rm = T)/length(x)
-    })
-  })
-  p.comut <- ggcorr(co.mut,limits = NULL)
-
-  return(list("p.class"=p.class,"p.type"=p.type,"p.SNV" = p.SNV,
-              "p.patient.variant"=p.patient.variant,"p.variant.bp" = p.variant.bp,"p.genes" = p.genes,
-              "p.variant.dist"=p.variant.dist,"p.variant.dist.bar"=p.variant.dist.bar,"p.SNV.dist"=p.SNV.dist,
-              "p.corr"=p.corr,"p.comut"=p.comut))
+  return(all_plots)
 }
 
 ggvarclass <- function(maf) {
@@ -167,8 +90,9 @@ ggvartype <- function(maf) {
 }
 
 
-ggsnv <- function(maf) {
+ggsnvclass <- function(maf) {
 
+  # filter only SNPs
   maf <- maf %>%
     filter(
       .data$Variant_Type == "SNP",
@@ -196,43 +120,28 @@ ggsnv <- function(maf) {
 
 ggsamplevar <- function(maf) {
 
-  nb.cols <- 20
+  maf2 <- maf %>%
+   group_by(Tumor_Sample_Barcode) %>%
+    mutate(n_alts = n()) %>%
+    ungroup() %>%
+    mutate(Tumor_Sample_Barcode = .data$Tumor_Sample_Barcode %>%
+        forcats::fct_infreq())
 
   # distribution of variant per sample
-  p.patient.variant <- maf %>%
-    group_by(.data$Tumor_Sample_Barcode,.data$Variant_Classification) %>%
-    ggplot(aes(x = .data$Tumor_Sample_Barcode)) + geom_bar(aes(fill = .data$Variant_Classification)) +
-    ggtitle("Variants per sample") + ylab("Variant Count") +
+  p.patient.variant <- maf2 %>%
+    ggplot(aes(x = .data$Tumor_Sample_Barcode, fill = .data$Variant_Classification)) +
+    geom_bar(position = "stack") +
+    ggtitle("Variants per sample") +
+    ylab("Variant Count") +
     theme(axis.title.x=element_blank(),
           axis.text.x=element_blank(),
-          axis.ticks.x=element_blank()) +
-    scale_fill_manual(values =
-                        grDevices::colorRampPalette(RColorBrewer::brewer.pal(8, "Accent"))(nb.cols))
+          axis.ticks.x=element_blank())
 
   p.patient.variant
 }
 
 
-ggsamplevar2 <- function(maf) {
-
-  nb.cols <- 20
-
-  # same but in boxplot format # --> simpler to read
-  p.variant.bp <- maf %>%
-    group_by(.data$Tumor_Sample_Barcode,.data$Variant_Classification) %>%
-    summarise(N = n()) %>%
-    ggplot(aes(x = .data$Variant_Classification, y = .data$N,color = .data$Variant_Classification)) +
-    ggtitle("Variant classification distribution") + xlab("Variant Classification") +
-    geom_boxplot() + theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
-    scale_fill_manual(values = grDevices::colorRampPalette(RColorBrewer::brewer.pal(8, "Accent"))(nb.cols) )
-
-  p.variant.bp
-
-}
-
 ggtopgenes <- function(maf, n_genes = 10) {
-
-  nb.cols <- 20
 
   top_genes <- maf %>%
     group_by(.data$Hugo_Symbol) %>%
@@ -244,17 +153,19 @@ ggtopgenes <- function(maf, n_genes = 10) {
   top_genes <- top_genes[1:n_genes] %>%
     as.character()
 
-    maf <- maf %>%
+    maf2 <- maf %>%
       filter(.data$Hugo_Symbol %in% top_genes) %>%
+      ungroup() %>%
       mutate(Hugo_Symbol = .data$Hugo_Symbol %>%
-        forcats::fct_infreq() %>%
-        forcats::fct_rev())
+        forcats::fct_drop() %>%
+        forcats::fct_infreq() %>% fct_rev())
 
-  p.genes <-  maf %>%
-    ggplot(aes(x = .data$Hugo_Symbol)) + geom_bar(aes(fill = .data$Variant_Classification)) +
+  p.genes <-  maf2 %>%
+    ggplot(aes(x = .data$Hugo_Symbol,
+               fill = .data$Variant_Classification)) +
+    geom_bar(position = "stack") +
     coord_flip() +
-    ggtitle("Top genes variants classification") + xlab("Gene Name") +
-    scale_fill_manual(values = grDevices::colorRampPalette(RColorBrewer::brewer.pal(8, "Accent"))(nb.cols) )
+    ggtitle("Top genes variants classification") + xlab("Gene Name")
 
   p.genes
 }
@@ -331,15 +242,30 @@ ggsnvclass <- function(mut) {
 
 gggenecor <- function(mut, ...) {
 
-  bin.maf <- binmat(maf,...)
-  bin.maf <- bin.maf
+  bin.maf <- binmat(maf = maf,...)
 
   keep <- names(sort(apply(bin.maf,2,function(x){sum(x)}),decreasing = T))[1:10]
   bin.maf <- bin.maf[,keep]
-  p.corr <- ggcorr(bin.maf,limits = NULL)
+
+  p.corr <- GGally::ggcorr(bin.maf,limits = NULL)
+
+  p.corr
 
 }
 
+ggcomut <- function(mut, ...) {
+
+  bin.maf <- binmat(maf = maf,...)
+  co.mut <- apply(bin.maf,2,function(x){
+    apply(bin.maf,2,function(y){
+      sum(y == 1 & x == 1,na.rm = T)/length(x)
+    })
+  })
+
+  p.comut <- GGally::ggcorr(co.mut,limits = NULL)
+
+  p.comut
+}
 
 
 
