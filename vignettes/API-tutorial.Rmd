@@ -60,85 +60,48 @@ The `get_genetics()` function let's the user download the mutation, fusion and c
 
 This function returns either a MAF file or a copy-number alterations summary file, or both (`mut` and/or `cna`).
 
-## IMPACT database
-
-In this section we show how to retrieve IMPACT genomic data for a single IMPACT sample, this can be easily extended to multiple patients or a complete study.
-
-### Mutations
-
-```{r,message=F}
-df.mut <- get_genetics("P-0000062-T01-IM3",database = "msk_impact",
-                       mutations = TRUE, fusions = FALSE, cna = FALSE)
-df.mut
-```
-
-### Adding Fusions
-
-```{r,message=F}
-df.fus <- get_genetics("P-0000062-T01-IM3",database = "msk_impact",
-                       mutations = TRUE, fusions = FALSE, cna = FALSE)
-df.fus
-```
-
-### Copy-number alterations
-
-```{r,message=F}
-df.cna <- get_genetics("P-0000062-T01-IM3",database = "msk_impact",
-                       mutations = FALSE, fusions = FALSE, cna = TRUE)
-df.cna
-```
-
-### All together
-
-In gnomeR we provide a wrapper function that enables the
-
-```{r,message=F}
-df.gen <- get_genetics("P-0000062-T01-IM3",database = "msk_impact",
-                       mutations = TRUE, fusions = TRUE, cna = TRUE)
-df.gen
-```
-
-### By study
-
-We show here an example to retrieve all the samples in a study. A complete list of these studies can be found on the CbioPortal website.
-Not working yet.
-```{r}
-# df.gen <- get_genetics(sample_list_id = "mskimpact_Colorectal_Cancer",database = "msk_impact",
-#                        mutations = TRUE, fusions = TRUE, cna = TRUE)
-```
-
-
 ## TCGA database
 
-Even though cBioPortal mainly focuses on IMPACT data, other genomic studies are also available on it. Particurlarly the [The Cancer Genome Atlas](https://www.cancer.gov/about-nci/organization/ccg/research/structural-genomics/tcga) (TCGA) database, which whole-exome sequenced large cohorts of 33 different cancer sites. Additionally to having access to mutational and copy number alteration data, cBioPortal also grants us access to other data types such as RNA-seq or RPPMs. In this section we will show how the user can use the API to retrieve this data. Note that the list of samples, cancer sites and genes available in `tcga_samples` and `tcga_genes` respectively.
+Even though cBioPortal mainly focuses on IMPACT data, other genomic studies are also available on it. Particurlarly the [The Cancer Genome Atlas](https://www.cancer.gov/about-nci/organization/ccg/research/structural-genomics/tcga) (TCGA) database, which whole-exome sequenced large cohorts of 33 different cancer sites. 
+This dataset is a public ressource and does not require a token to be accessed through the `gnomeR` API, we will thus use it as an example for the functionalities of the API.
+Additionally to having access to mutational and copy number alteration data, cBioPortal also grants us access to other data types such as RNA-seq or RPPMs. In this section we will show how the user can use the API to retrieve this data. Note that the list of samples, cancer sites and genes available in `tcga_samples` and `tcga_genes` respectively.
 
 ### Mutations
 
-Similarly to the examples shown above for IMPACT, to retrieve the TCGA mutational data the user should set the arguments `mutations` to TRUE and `database` to "tcga":
+To retrieve the TCGA mutational data the user should set the arguments `mutations` to TRUE and `database` to "tcga":
 
-```{r}
+```{r,message=F, results="hide"}
 df <- get_genetics(sample_ids =  c("TCGA-17-Z023-01","TCGA-02-0003-01","TCGA-02-0055-01"),
              mutations = TRUE,fusions = FALSE, cna = FALSE,
              database = "tcga")
+```
+
+```{r}
 df$mut
 ```
 
 ### Fusions
 
-```{r}
+```{r,message=F, results="hide"}
 df <- get_genetics(sample_ids = as.character(tcga_samples$patient_id[!is.na(tcga_samples$Cancer_Code)][1:100]),
                    mutations = TRUE,fusions = TRUE, cna = FALSE,
                    database = "tcga")
+```
+
+```{r}
 df$mut %>%
   filter(Variant_Classification == "Fusion")
 ```
 
 ### CNA
 
-```{r}
+```{r,message=F, results="hide"}
 df <- get_genetics(sample_ids =  c("TCGA-17-Z023-01","TCGA-02-0003-01","TCGA-02-0055-01"),
              mutations = FALSE,fusions = FALSE, cna = TRUE,
              database = "tcga")
+```
+
+```{r}
 df$cna
 ```
 
@@ -147,9 +110,61 @@ df$cna
 
 The copy-number alterations data we have covered up to now is a discrete estimation of the alterations that occured. There however exist more nuanced and accurate data for copy-number alterations observed in a tumor. In `gnomeR` we include an example of segmentation file and relevant functions from the [`facets`](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5027494/) package that provides an allele-specific copy number and clonal heterogeneity analysis tool for high-throughput DNA sequencing. We show below how to download it from the API in gnomeR.
 
-```{r}
+```{r,message=F, results="hide"}
 df <- get_genetics(sample_ids =  c("TCGA-17-Z023-01","TCGA-02-0003-01","TCGA-02-0055-01"),
              mutations = FALSE,fusions = FALSE, cna = FALSE, seg = TRUE,
              database = "tcga")
+```
+
+```{r}
 df$seg
+```
+
+
+
+## IMPACT database
+
+As mentioned previously IMPACT genomic data is protected and requires a token to be accessed. The `ger_genetics()` functions in the same way to the examples shown above for TCGA datasets.
+
+### Mutations
+
+```{r,message=F,eval=F}
+df.mut <- get_genetics("P-0000062-T01-IM3",database = "msk_impact",
+                       mutations = TRUE, fusions = FALSE, cna = FALSE)
+df.mut
+```
+
+### Adding Fusions
+
+```{r,message=F,eval=F}
+df.fus <- get_genetics("P-0000062-T01-IM3",database = "msk_impact",
+                       mutations = TRUE, fusions = FALSE, cna = FALSE)
+df.fus
+```
+
+### Copy-number alterations
+
+```{r,message=F,eval=F}
+df.cna <- get_genetics("P-0000062-T01-IM3",database = "msk_impact",
+                       mutations = FALSE, fusions = FALSE, cna = TRUE)
+df.cna
+```
+
+### All together
+
+
+```{r,message=F,eval=F}
+df.gen <- get_genetics("P-0000062-T01-IM3",database = "msk_impact",
+                       mutations = TRUE, fusions = TRUE, cna = TRUE)
+df.gen
+```
+
+
+### By study
+
+We show here an example to retrieve all the samples in a study. A complete list of these studies can be found on the CbioPortal website.
+Not working yet.
+```{r}
+# df.gen <- get_genetics(sample_list_id = "mskimpact_Colorectal_Cancer",database = "msk_impact",
+#                        mutations = TRUE, fusions = TRUE, cna = TRUE)
 ```

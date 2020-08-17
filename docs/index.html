@@ -302,8 +302,8 @@
 <div id="maf" class="section level4">
 <h4 class="hasAnchor">
 <a href="#maf" class="anchor"></a>MAF</h4>
-<p>Before we move on to more complex visualizations, we integrate the <code><a href="reference/maf.summary.html">maf.summary()</a></code> function to give an overview of the distribution of the different mutations across the cohort of interest:</p>
-<div class="sourceCode" id="cb8"><pre class="r"><span class="no">sum.plots</span> <span class="kw">&lt;-</span> <span class="fu"><a href="reference/maf.summary.html">maf.summary</a></span>(<span class="kw">maf</span> <span class="kw">=</span> <span class="no">mut</span> <span class="kw">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span>(<span class="no">Tumor_Sample_Barcode</span> <span class="kw">%in%</span> <span class="no">patients</span>))
+<p>Before we move on to more complex visualizations, we integrate the <code>maf.summary()</code> function to give an overview of the distribution of the different mutations across the cohort of interest:</p>
+<div class="sourceCode" id="cb8"><pre class="r"><span class="no">sum.plots</span> <span class="kw">&lt;-</span> <span class="fu">maf.summary</span>(<span class="kw">maf</span> <span class="kw">=</span> <span class="no">mut</span> <span class="kw">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span>(<span class="no">Tumor_Sample_Barcode</span> <span class="kw">%in%</span> <span class="no">patients</span>))
 <span class="no">sum.plots</span>$<span class="no">p.genes</span></pre></div>
 <p><img src="reference/figures/README-unnamed-chunk-8-1.png" width="100%"></p>
 <div class="sourceCode" id="cb9"><pre class="r"><span class="no">sum.plots</span>$<span class="no">p.comut</span></pre></div>
