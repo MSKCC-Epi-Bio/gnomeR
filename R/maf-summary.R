@@ -1,5 +1,5 @@
 #' maf_viz
-#' Creates a set of plot summarising a maf file.
+#' Creates a set of plots summarising a maf file.
 #' @param maf Raw maf dataframe containing alteration data
 #' @param ... any argument belonging to the binmat method
 #' @return Returns a list of the following plots:
