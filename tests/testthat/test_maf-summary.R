@@ -26,93 +26,93 @@ test_that("missing column error",{
 
 })
 
-# test_that("read in 1000 patients with spe.plat", {
-#    mat <- mut %>%
-#     filter(Tumor_Sample_Barcode %in% patients)
-#   plots <- maf.summary(maf = mat)
-#   expect_true(is.ggplot(plots$p.class))
-#   expect_true(is.ggplot(plots$p.type))
-#   expect_true(is.ggplot(plots$p.SNV))
-#   expect_true(is.ggplot(plots$p.patient.variant))
-#   expect_true(is.ggplot(plots$p.variant.bp))
-#   expect_true(is.ggplot(plots$p.genes))
-#   expect_true(is.ggplot(plots$p.variant.dist))
-#   expect_true(is.ggplot(plots$p.variant.dist.bar))
-#   expect_true(is.ggplot(plots$p.SNV.dist))
-#   expect_true(is.ggplot(plots$p.corr))
-#   expect_true(is.ggplot(plots$p.comut))
-#
-#   # expect_is(p$layers[[1]], "proto")
-#   # expect_identical(p$layers[[1]]$geom$objname, "bar")
-#   # expect_identical(p$layers[[1]]$stat$objname, "identity")
-#
-# })
+test_that("read in 1000 patients with spe.plat", {
+   mat <- mut %>%
+    filter(Tumor_Sample_Barcode %in% patients)
+  plots <- maf.summary(maf = mat)
+  expect_true(is.ggplot(plots$p.class))
+  expect_true(is.ggplot(plots$p.type))
+  expect_true(is.ggplot(plots$p.SNV))
+  expect_true(is.ggplot(plots$p.patient.variant))
+  expect_true(is.ggplot(plots$p.variant.bp))
+  expect_true(is.ggplot(plots$p.genes))
+  expect_true(is.ggplot(plots$p.variant.dist))
+  expect_true(is.ggplot(plots$p.variant.dist.bar))
+  expect_true(is.ggplot(plots$p.SNV.dist))
+  expect_true(is.ggplot(plots$p.corr))
+  expect_true(is.ggplot(plots$p.comut))
+
+  # expect_is(p$layers[[1]], "proto")
+  # expect_identical(p$layers[[1]]$geom$objname, "bar")
+  # expect_identical(p$layers[[1]]$stat$objname, "identity")
+
+})
 
 
 
-# test_that("missing column warning but still run",{
-#
-#    mat <- mut %>%
-#     filter(Tumor_Sample_Barcode %in% patients) %>%
-#     select(-one_of("Mutation_Status"))
-#   expect_warning(plots <- maf.summary(maf = mat))
-#   expect_true(is.ggplot(plots$p.class))
-#   expect_true(is.ggplot(plots$p.type))
-#   expect_true(is.ggplot(plots$p.SNV))
-#   expect_true(is.ggplot(plots$p.patient.variant))
-#   expect_true(is.ggplot(plots$p.variant.bp))
-#   expect_true(is.ggplot(plots$p.genes))
-#   expect_true(is.ggplot(plots$p.variant.dist))
-#   expect_true(is.ggplot(plots$p.variant.dist.bar))
-#   expect_true(is.ggplot(plots$p.SNV.dist))
-#   expect_true(is.ggplot(plots$p.corr))
-#   expect_true(is.ggplot(plots$p.comut))
-#
-# })
+test_that("missing column warning but still run",{
+
+   mat <- mut %>%
+    filter(Tumor_Sample_Barcode %in% patients) %>%
+    select(-one_of("Mutation_Status"))
+  expect_warning(plots <- maf.summary(maf = mat))
+  expect_true(is.ggplot(plots$p.class))
+  expect_true(is.ggplot(plots$p.type))
+  expect_true(is.ggplot(plots$p.SNV))
+  expect_true(is.ggplot(plots$p.patient.variant))
+  expect_true(is.ggplot(plots$p.variant.bp))
+  expect_true(is.ggplot(plots$p.genes))
+  expect_true(is.ggplot(plots$p.variant.dist))
+  expect_true(is.ggplot(plots$p.variant.dist.bar))
+  expect_true(is.ggplot(plots$p.SNV.dist))
+  expect_true(is.ggplot(plots$p.corr))
+  expect_true(is.ggplot(plots$p.comut))
+
+})
 
 
-# test_that("Renaming genes",{
-#
-#   mat <- mut %>%
-#     filter(Tumor_Sample_Barcode %in% patients) %>%
-#     mutate(
-#       Hugo_Symbol = as.character(Hugo_Symbol),
-#       Hugo_Symbol = case_when(
-#       Hugo_Symbol == "MLL2" ~ "KMT2D",
-#       Hugo_Symbol == "MLL3" ~ "KMT2C",
-#       TRUE ~ Hugo_Symbol
-#     ))
-#   plots <- maf.summary(maf = mat)
-#   expect_true(is.ggplot(plots$p.class))
-#   expect_true(is.ggplot(plots$p.type))
-#   expect_true(is.ggplot(plots$p.SNV))
-#   expect_true(is.ggplot(plots$p.patient.variant))
-#   expect_true(is.ggplot(plots$p.variant.bp))
-#   expect_true(is.ggplot(plots$p.genes))
-#   expect_true(is.ggplot(plots$p.variant.dist))
-#   expect_true(is.ggplot(plots$p.variant.dist.bar))
-#   expect_true(is.ggplot(plots$p.SNV.dist))
-#   expect_true(is.ggplot(plots$p.corr))
-#   expect_true(is.ggplot(plots$p.comut))
-#
-# })
+test_that("Renaming genes",{
+
+  mat <- mut %>%
+    filter(Tumor_Sample_Barcode %in% patients) %>%
+    mutate(
+      Hugo_Symbol = as.character(Hugo_Symbol),
+      Hugo_Symbol = case_when(
+      Hugo_Symbol == "MLL2" ~ "KMT2D",
+      Hugo_Symbol == "MLL3" ~ "KMT2C",
+      TRUE ~ Hugo_Symbol
+    ))
+  plots <- maf.summary(maf = mat)
+  expect_true(is.ggplot(plots$p.class))
+  expect_true(is.ggplot(plots$p.type))
+  expect_true(is.ggplot(plots$p.SNV))
+  expect_true(is.ggplot(plots$p.patient.variant))
+  expect_true(is.ggplot(plots$p.variant.bp))
+  expect_true(is.ggplot(plots$p.genes))
+  expect_true(is.ggplot(plots$p.variant.dist))
+  expect_true(is.ggplot(plots$p.variant.dist.bar))
+  expect_true(is.ggplot(plots$p.SNV.dist))
+  expect_true(is.ggplot(plots$p.corr))
+  expect_true(is.ggplot(plots$p.comut))
+
+})
 
 
-# test_that("Using all mutation statuses",{
-#
-#   mat <- mut %>%
-#     filter(Tumor_Sample_Barcode %in% patients)
-#   plots <- maf.summary(maf = mat,mut.type = "ALL")
-#   expect_true(is.ggplot(plots$p.class))
-#   expect_true(is.ggplot(plots$p.type))
-#   expect_true(is.ggplot(plots$p.SNV))
-#   expect_true(is.ggplot(plots$p.patient.variant))
-#   expect_true(is.ggplot(plots$p.variant.bp))
-#   expect_true(is.ggplot(plots$p.genes))
-#   expect_true(is.ggplot(plots$p.variant.dist))
-#   expect_true(is.ggplot(plots$p.variant.dist.bar))
-#   expect_true(is.ggplot(plots$p.SNV.dist))
-#   expect_true(is.ggplot(plots$p.corr))
-#   expect_true(is.ggplot(plots$p.comut))
-#
-# })
+test_that("Using all mutation statuses",{
+
+  mat <- mut %>%
+    filter(Tumor_Sample_Barcode %in% patients)
+  plots <- maf.summary(maf = mat,mut.type = "ALL")
+  expect_true(is.ggplot(plots$p.class))
+  expect_true(is.ggplot(plots$p.type))
+  expect_true(is.ggplot(plots$p.SNV))
+  expect_true(is.ggplot(plots$p.patient.variant))
+  expect_true(is.ggplot(plots$p.variant.bp))
+  expect_true(is.ggplot(plots$p.genes))
+  expect_true(is.ggplot(plots$p.variant.dist))
+  expect_true(is.ggplot(plots$p.variant.dist.bar))
+  expect_true(is.ggplot(plots$p.SNV.dist))
+  expect_true(is.ggplot(plots$p.corr))
+  expect_true(is.ggplot(plots$p.comut))
+
+})
