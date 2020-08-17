@@ -1,23 +1,26 @@
 #' Checks MAF input to ensure column names are correct and renamed genes are corrected
 #'
-#' @param maf
+#' @param maf Raw maf dataframe containing alteration data
 #'
 #' @return a corrected maf file or an error if problems with maf
 #' @export
 #'
 #' @examples
 #'
-#'check_maf_input(mut)
+#' check_maf_input(mut)
 #'
 check_maf_input <- function(maf)  {
 
   # data checks for maf files
   if(is.na(match("Tumor_Sample_Barcode",colnames(maf))))
     stop("The MAF file inputted is missing a patient name column. (Tumor_Sample_Barcode)")
+
   if(is.na(match("Hugo_Symbol",colnames(maf))))
     stop("The MAF file inputted is missing a gene name column. (Hugo_Symbol)")
+
   if(is.na(match("Variant_Classification",colnames(maf))))
     stop("The MAF file inputted is missing a variant classification column. (Variant_Classification)")
+
   if(is.na(match("Mutation_Status",colnames(maf)))){
     warning("The MAF file inputted is missing a mutation status column (Mutation_Status). It will be assumed that
             all variants are of the same type (SOMATIC/GERMLINE).")
@@ -51,18 +54,36 @@ check_maf_input <- function(maf)  {
 }
 
 
-calc_variant_prop <- function(maf) {
-    maf %>%
-    group_by(.data$Tumor_Sample_Barcode) %>%
-    mutate(totalMut = n()) %>%
-    ungroup() %>%
-    group_by(.data$Tumor_Sample_Barcode,.data$Variant_Classification) %>%
-    summarise(N=n(),
-              varProp = .data$N/unique(.data$totalMut))
+#' Check Columns of MAF
+#'
+#' @param maf Raw maf dataframe containing alteration data
+#' @param col_to_check Which column to check
+#'
+#' @return
+#' @export
+#'
+#' @examples
+#' check_maf_column(mut, "Variant_Classification")
+#'
+check_maf_column <- function(maf, col_to_check) {
+    if(!(col_to_check %in% colnames(maf))) {
+      stop(paste("The MAF file inputted is missing the following column:", col_to_check))
+    }
+  }
 
-}
 
-  # function to extract SNV class from character string cols
+
+#' Utility Function to Extract SNV
+#'
+#' @param x string
+#' @param n number of characters from right
+#'
+#' @return string
+#' @export
+#'
+#' @examples
+#' substrRight("Hello", 2)
+#'
 substrRight <- function(x, n) {
     x <- as.character(x)
     substr(x, nchar(x) - n + 1, nchar(x))
