@@ -2,9 +2,9 @@
 % Please edit documentation in R/maf-viz.R
 \name{ggcomut}
 \alias{ggcomut}
-\title{Correlation Heatmap of the Top Altered Genes}
+\title{Co-mutation Heatmap of the Top Altered Genes}
 \usage{
-ggcomut(mut, ...)
+ggcomut(maf, n_genes = 10, ...)
 }
 \arguments{
 \item{maf}{Raw maf dataframe containing alteration data}
@@ -12,12 +12,12 @@ ggcomut(mut, ...)
 \item{n_genes}{Number of top genes to display in plot}
 }
 \value{
-Correlation heatmap of the top genes
+Comutation heatmap of the top genes
 }
 \description{
-Correlation Heatmap of the Top Altered Genes
+Co-mutation Heatmap of the Top Altered Genes
 }
 \examples{
-gggenecor(mut)
+ggcomut(mut)
 
 }

@@ -237,42 +237,47 @@ ggtopgenes <- function(maf, n_genes = 10) {
 #' @examples
 #' gggenecor(mut)
 #'
-gggenecor <- function(mut, n_genes = 10, ...) {
+gggenecor <- function(maf, n_genes = 10, ...) {
 
-  bin.maf <- binmat(maf = mut,...)
+  bin.maf <- binmat(maf = maf,...)
 
   keep <- names(sort(apply(bin.maf,2,
                            function(x){sum(x)}),
                      decreasing = T))[1:n_genes]
   bin.maf <- bin.maf[,keep]
 
-  p.corr <- GGally::ggcorr(bin.maf,limits = NULL)
+  p.corr <- GGally::ggcorr(dat = bin.maf, cor_matrix = cor(bin.maf),limits = NULL)
 
   p.corr
 
 }
 
-#' Correlation Heatmap of the Top Altered Genes
+#' Co-mutation Heatmap of the Top Altered Genes
 #'
 #' @param maf Raw maf dataframe containing alteration data
 #' @param n_genes Number of top genes to display in plot
 #'
-#' @return Correlation heatmap of the top genes
+#' @return Comutation heatmap of the top genes
 #' @export
 #'
 #' @examples
-#' gggenecor(mut)
+#' ggcomut(mut)
 #'
-ggcomut <- function(mut, ...) {
+ggcomut <- function(maf, n_genes = 10, ...) {
 
-  bin.maf <- binmat(maf = mut,...)
+  bin.maf <- binmat(maf = maf,...)
+  keep <- names(sort(apply(bin.maf,2,
+                           function(x){sum(x)}),
+                     decreasing = T))[1:n_genes]
+  bin.maf <- bin.maf[,keep]
+
   co.mut <- apply(bin.maf,2,function(x){
     apply(bin.maf,2,function(y){
       sum(y == 1 & x == 1,na.rm = T)/length(x)
     })
   })
 
-  p.comut <- GGally::ggcorr(co.mut, limits = NULL)
+  p.comut <- GGally::ggcorr(dat = bin.maf, cor_matrix = co.mut, limits = NULL)
 
   p.comut
 }
