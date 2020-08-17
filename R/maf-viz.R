@@ -1,4 +1,4 @@
-#' maf_viz
+
 #' Creates a set of plot summarising a maf file.
 #' @param maf Raw maf dataframe containing alteration data
 #' @param ... any argument belonging to the binmat method
@@ -24,7 +24,6 @@
 #' ggplot2
 #' GGally
 
-
 maf_viz <- function(maf, ...) {
   all_plots <- list(
     varclass = ggvarclass,
@@ -33,11 +32,21 @@ maf_viz <- function(maf, ...) {
     samplevar = ggsamplevar,
     topgenes = ggtopgenes,
     genecor = gggenecor) %>%
-    invoke_map(, maf)
+    purrr::invoke_map(, maf)
 
   return(all_plots)
 }
 
+#' Barplot of Variant Classification Counts
+#'
+#' @param maf Raw maf dataframe containing alteration data
+#'
+#' @return Barplot of counts of each variant classification
+#' @export
+#'
+#' @examples
+#' ggvarclass(mut)
+#'
 ggvarclass <- function(maf) {
 
   check_maf_column(maf = maf, "Variant_Classification")
@@ -62,7 +71,16 @@ ggvarclass <- function(maf) {
   p.class
 }
 
-
+#' Barplot of Variant Type Counts
+#'
+#' @param maf Raw maf dataframe containing alteration data
+#'
+#' @return Barplot of counts of each variant type
+#' @export
+#'
+#' @examples
+#' ggvartype(mut)
+#'
 ggvartype <- function(maf) {
 
   check_maf_column(maf = maf, "Variant_Type")
@@ -88,7 +106,16 @@ ggvartype <- function(maf) {
 
 }
 
-
+#' Histogram of SNV class Counts
+#'
+#' @param maf Raw maf dataframe containing alteration data
+#'
+#' @return Histogram of counts of each SNV class
+#' @export
+#'
+#' @examples
+#' ggsnvclass(mut)
+#'
 ggsnvclass <- function(maf) {
 
   # NOTE: should make function accept multiple args
@@ -120,7 +147,16 @@ ggsnvclass <- function(maf) {
     p.SNV
 }
 
-
+#' Histogram of Variants Per Sample Colored By Variant Classification
+#'
+#' @param maf Raw maf dataframe containing alteration data
+#'
+#' @return Histogram of counts of variants per tumor sample
+#' @export
+#'
+#' @examples
+#' ggsamplevar(mut)
+#'
 ggsamplevar <- function(maf) {
 
   check_maf_column(maf = maf, "Variant_Classification")
@@ -148,6 +184,16 @@ ggsamplevar <- function(maf) {
 }
 
 
+#' Barplot of Most Frequently Altered Genes
+#'
+#' @param maf Raw maf dataframe containing alteration data
+#'
+#' @return Barplot of counts of top variant genes
+#' @export
+#'
+#' @examples
+#' ggtopgenes(mut)
+#'
 ggtopgenes <- function(maf, n_genes = 10) {
 
   check_maf_column(maf = maf, "Hugo_Symbol")
@@ -167,7 +213,8 @@ ggtopgenes <- function(maf, n_genes = 10) {
       ungroup() %>%
       mutate(Hugo_Symbol = .data$Hugo_Symbol %>%
         forcats::fct_drop() %>%
-        forcats::fct_infreq() %>% fct_rev())
+        forcats::fct_infreq() %>%
+          forcats::fct_rev())
 
   p.genes <-  maf2 %>%
     ggplot(aes(x = .data$Hugo_Symbol,
@@ -179,10 +226,20 @@ ggtopgenes <- function(maf, n_genes = 10) {
   p.genes
 }
 
-
+#' Correlation Heatmap of the Top Altered Genes
+#'
+#' @param maf Raw maf dataframe containing alteration data
+#' @param n_genes Number of top genes to display in plot
+#'
+#' @return Correlation heatmap of the top altered genes
+#' @export
+#'
+#' @examples
+#' gggenecor(mut)
+#'
 gggenecor <- function(mut, n_genes = 10, ...) {
 
-  bin.maf <- binmat(maf = maf,...)
+  bin.maf <- binmat(maf = mut,...)
 
   keep <- names(sort(apply(bin.maf,2,
                            function(x){sum(x)}),
@@ -195,9 +252,20 @@ gggenecor <- function(mut, n_genes = 10, ...) {
 
 }
 
+#' Correlation Heatmap of the Top Altered Genes
+#'
+#' @param maf Raw maf dataframe containing alteration data
+#' @param n_genes Number of top genes to display in plot
+#'
+#' @return Correlation heatmap of the top genes
+#' @export
+#'
+#' @examples
+#' gggenecor(mut)
+#'
 ggcomut <- function(mut, ...) {
 
-  bin.maf <- binmat(maf = maf,...)
+  bin.maf <- binmat(maf = mut,...)
   co.mut <- apply(bin.maf,2,function(x){
     apply(bin.maf,2,function(y){
       sum(y == 1 & x == 1,na.rm = T)/length(x)
