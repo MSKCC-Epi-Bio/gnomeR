@@ -10,6 +10,8 @@ ggcomut(maf, n_genes = 10, ...)
 \item{maf}{Raw maf dataframe containing alteration data}
 
 \item{n_genes}{Number of top genes to display in plot}
+
+\item{...}{Further binmat() arguments}
 }
 \value{
 Comutation heatmap of the top genes

@@ -58,8 +58,9 @@ Imports:
     plotly,
     rlang,
     cbioportalr,
-    annotateMaf, 
-    forcats
+    annotateMaf,
+    forcats,
+    purrr
 Suggests: 
     knitr,
     rmarkdown,

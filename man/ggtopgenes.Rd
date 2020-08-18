@@ -8,6 +8,8 @@ ggtopgenes(maf, n_genes = 10)
 }
 \arguments{
 \item{maf}{Raw maf dataframe containing alteration data}
+
+\item{n_genes}{Number of top genes to display in plot}
 }
 \value{
 Barplot of counts of top variant genes

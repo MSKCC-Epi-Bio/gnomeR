@@ -187,7 +187,7 @@ ggsamplevar <- function(maf) {
 #' Barplot of Most Frequently Altered Genes
 #'
 #' @param maf Raw maf dataframe containing alteration data
-#'
+#' @param n_genes Number of top genes to display in plot
 #' @return Barplot of counts of top variant genes
 #' @export
 #'
@@ -230,7 +230,7 @@ ggtopgenes <- function(maf, n_genes = 10) {
 #'
 #' @param maf Raw maf dataframe containing alteration data
 #' @param n_genes Number of top genes to display in plot
-#'
+#' @param ... Further binmat() arguments
 #' @return Correlation heatmap of the top altered genes
 #' @export
 #'
@@ -256,7 +256,7 @@ gggenecor <- function(maf, n_genes = 10, ...) {
 #'
 #' @param maf Raw maf dataframe containing alteration data
 #' @param n_genes Number of top genes to display in plot
-#'
+#' @param ... Further binmat() arguments
 #' @return Comutation heatmap of the top genes
 #' @export
 #'
