@@ -168,7 +168,7 @@ maf.summary <- function(maf,...){
 
   p.variant.dist <- varprop.maf %>%
     ggplot(aes(x = .data$Variant_Classification,y = .data$varProp)) + geom_boxplot(aes(fill = .data$Variant_Classification))+
-    scale_fill_manual(values = grDevices::colorRampPalette(brewer.pal(8, "Accent"))(nb.cols) ) +
+   scale_fill_manual(values = grDevices::colorRampPalette(brewer.pal(8, "Accent"))(nb.cols) ) +
     theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
     theme(legend.position="none") + ylab("% Variant")
 
@@ -209,6 +209,7 @@ maf.summary <- function(maf,...){
       sum(y == 1 & x == 1,na.rm = T)/length(x)
     })
   })
+  #maybe have a heatmap instead?
   p.comut <- ggcorr(co.mut,limits = NULL)
 
   return(list("p.class"=p.class,"p.type"=p.type,"p.SNV" = p.SNV,
