@@ -23,38 +23,36 @@ library(dplyr)
 
 In this article we will explore the different automatized plotting functions included in `gnomeR`. There are two main functions in `gnomeR` to visualize genomic data: 
 
-- `maf.summary()` provides an extensive summary of the mutations found in the MAF file provided
+- `maf_viz()` provides an extensive summary of the mutations found in the MAF file provided
 - `plot_oncoPrint()` provides an OncoPrint that let's the user explore the comutation (or any genetic event and clinical factors) patterns in the cohort of interest
 
 
 # Summarizing a MAF file
 
-The `maf.summary()` function takes the following inputs:
+The `maf_viz()` function takes the following inputs:
 
 - `maf` a MAF file
 - `...` any arguments that belong to the `binmat` method
 
-`maf.summary()` will return a list of plots:
+`maf_viz()` will return a list of plots:
 
-- `p.class` summarise the variant classification counts across the MAF 
-- `p.type` summarise the variant type counts across the MAF 
-- `p.SNV` summarise the SNV class counts across the MAF 
-- `p.patient.variant` summarise the variants per sample counts across the MAF 
-- `p.variant.bp` summarise the variants classification distribution 
-- `p.genes` summarise the most frequently mutated genes counts
-- `p.variant.dist` summarise the variants classification distribution as a percent of total variants
-- `p.variant.dist.bar` summarise the variants classification distribution as a percent of total variants in a single sample
-- `p.SNV.dist` summarise the SNV distribution as a percent of total SNV
-- `p.corr` summarise the correlation of genes that are most frequently mutated in a heatmap
-- `p.comut` summarise the comutation of genes that are most frequently mutated in a heatmap
+- `varclass` summarise the variant classification counts across the MAF 
+- `vartype` summarise the variant type counts across the MAF 
+- `snvclass` summarise the SNV class counts across the MAF 
+- `samplevar` summarise the variants per sample counts across the MAF 
+- `topgenes` summarise the most frequently mutated genes counts
+- `genecor` summarise the correlation of genes that are most frequently mutated in a heatmap
 
 An example of a subset of these plots is shown below.
 
 ```{r}
-plots_summary <- maf.summary(maf = mut)
-plots_summary$p.genes
-plots_summary$p.variant.dist
-plots_summary$p.comut
+plots_summary <- maf_viz(maf = mut)
+plots_summary$varclass
+plots_summary$vartype
+plots_summary$snvclass
+plots_summary$samplevar
+plots_summary$topgenes
+plots_summary$genecor
 ```
 
 

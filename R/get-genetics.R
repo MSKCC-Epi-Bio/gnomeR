@@ -81,10 +81,12 @@ get_genetics <- function(
         mut.dat <- mut.dat %>%
           filter(.data$Variant_Classification != "Fusion")
     }
-    if(cna)
+    if(cna){
       cna.dat <- get_cna(sample_ids,
                          study_id = "all_tcga_studies",
                          genes)
+      class(cna.dat) <- c("tbl_df", "tbl", "data.frame","api")
+    }
     if(seg)
       seg.dat <- get_segments(sample_ids = sample_ids, study_id = "all_tcga_studies")
 
