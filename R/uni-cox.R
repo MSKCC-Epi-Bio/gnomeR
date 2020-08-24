@@ -152,8 +152,7 @@ uni.cox <- function(X,surv.dat,surv.formula,filter = 0,genes = NULL){
   uni$FDR <- stats::p.adjust(as.numeric(as.character(uni$Pvalue)), method = "fdr")
   uni <- uni %>%
     mutate(
-      Pvalue = as.numeric(formatC(stats::p.adjust(as.numeric(as.character(.data$Pvalue)),
-                                       method = "fdr"), format = "e", digits = 2)),
+      Pvalue = as.numeric(formatC(as.numeric(as.character(.data$Pvalue)), format = "e", digits = 2)),
       HR = as.numeric(exp(as.numeric(as.character(.data$Coefficient)))),
       Coefficient = as.numeric(formatC(as.numeric(as.character(.data$Coefficient)), format = "e", digits = 2)),
       HR = as.numeric(formatC(as.numeric(as.character(.data$HR)), format = "e", digits = 2)),
@@ -221,6 +220,9 @@ uni.cox <- function(X,surv.dat,surv.formula,filter = 0,genes = NULL){
         ggtheme = theme_bw()
       ) + labs(title = x),silent = TRUE)
   })
+
+  uni <- uni %>%
+    dplyr::select(Feature, Coefficient, HR,	Pvalue, FDR, MutationFrequency)
 
   return(list("tab" = uni,"p"=uniVolcano,"KM"=KM.plots))
 }
