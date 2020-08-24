@@ -302,18 +302,18 @@
 <div id="maf" class="section level4">
 <h4 class="hasAnchor">
 <a href="#maf" class="anchor"></a>MAF</h4>
-<p>Before we move on to more complex visualizations, we integrate the <code>maf.summary()</code> function to give an overview of the distribution of the different mutations across the cohort of interest:</p>
-<div class="sourceCode" id="cb8"><pre class="r"><span class="no">sum.plots</span> <span class="kw">&lt;-</span> <span class="fu">maf.summary</span>(<span class="kw">maf</span> <span class="kw">=</span> <span class="no">mut</span> <span class="kw">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span>(<span class="no">Tumor_Sample_Barcode</span> <span class="kw">%in%</span> <span class="no">patients</span>))
-<span class="no">sum.plots</span>$<span class="no">p.genes</span></pre></div>
-<p><img src="reference/figures/README-unnamed-chunk-8-1.png" width="100%"></p>
-<div class="sourceCode" id="cb9"><pre class="r"><span class="no">sum.plots</span>$<span class="no">p.comut</span></pre></div>
-<p><img src="reference/figures/README-unnamed-chunk-8-2.png" width="100%"></p>
+<p>Before we move on to more complex visualizations, we integrate the <code><a href="reference/maf_viz.html">maf_viz()</a></code> function to give an overview of the distribution of the different mutations across the cohort of interest:</p>
+<div class="sourceCode" id="cb8"><pre class="r"><span class="no">sum.plots</span> <span class="kw">&lt;-</span> <span class="fu"><a href="reference/maf_viz.html">maf_viz</a></span>(<span class="kw">maf</span> <span class="kw">=</span> <span class="no">mut</span> <span class="kw">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span>(<span class="no">Tumor_Sample_Barcode</span> <span class="kw">%in%</span> <span class="no">patients</span>))
+<span class="no">sum.plots</span>$<span class="no">p.genes</span>
+<span class="co">#&gt; NULL</span>
+<span class="no">sum.plots</span>$<span class="no">p.comut</span>
+<span class="co">#&gt; NULL</span></pre></div>
 </div>
 <div id="oncoprints" class="section level4">
 <h4 class="hasAnchor">
 <a href="#oncoprints" class="anchor"></a>OncoPrints</h4>
 <p>OncoPrints are a convenient way to display the overall genomic profiles of samples in the cohort of interest. This is best used for a subset of genes that are under consideration.</p>
-<div class="sourceCode" id="cb10"><pre class="r"><span class="no">genes</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"TP53"</span>,<span class="st">"PIK3CA"</span>,<span class="st">"KRAS"</span>,<span class="st">"TERT"</span>,<span class="st">"EGFR"</span>,<span class="st">"FAT"</span>,<span class="st">"ALK"</span>,<span class="st">"CDKN2A"</span>,<span class="st">"CDKN2B"</span>)
+<div class="sourceCode" id="cb9"><pre class="r"><span class="no">genes</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"TP53"</span>,<span class="st">"PIK3CA"</span>,<span class="st">"KRAS"</span>,<span class="st">"TERT"</span>,<span class="st">"EGFR"</span>,<span class="st">"FAT"</span>,<span class="st">"ALK"</span>,<span class="st">"CDKN2A"</span>,<span class="st">"CDKN2B"</span>)
 <span class="fu"><a href="reference/plot_oncoPrint.html">plot_oncoPrint</a></span>(<span class="kw">gen.dat</span> <span class="kw">=</span> <span class="no">gen.dat</span> <span class="kw">%&gt;%</span> <span class="fu">select</span>(<span class="fu">starts_with</span>(<span class="no">genes</span>)))</pre></div>
 <p><img src="reference/figures/README-unnamed-chunk-9-1.png" width="100%"></p>
 </div>
@@ -321,12 +321,9 @@
 <h4 class="hasAnchor">
 <a href="#facets" class="anchor"></a>FACETs</h4>
 <p><a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5027494/">FACETs</a> is an ASCN tool and open-source software with a broad application to whole genome, whole-exome, as well as targeted panel sequencing platforms. It is a fully integrated stand-alone pipeline that includes sequencing BAM file post-processing, joint segmentation of total- and allele-specific read counts, and integer copy number calls corrected for tumor purity, ploidy and clonal heterogeneity, with comprehensive output.</p>
-<div class="sourceCode" id="cb11"><pre class="r"><span class="co"># need to find how to get facets from API #</span>
-<span class="co"># also makes me think we need to get the clinical data too in that for purity #</span>
-<span class="no">p.heat</span> <span class="kw">&lt;-</span> <span class="fu"><a href="reference/facets.heatmap.html">facets.heatmap</a></span>(<span class="kw">seg</span> <span class="kw">=</span> <span class="no">seg</span>, <span class="kw">patients</span> <span class="kw">=</span> <span class="no">patients</span>, <span class="kw">min.purity</span> <span class="kw">=</span> <span class="fl">0</span>)
+<div class="sourceCode" id="cb10"><pre class="r"><span class="no">p.heat</span> <span class="kw">&lt;-</span> <span class="fu"><a href="reference/facets.heatmap.html">facets.heatmap</a></span>(<span class="kw">seg</span> <span class="kw">=</span> <span class="no">seg</span>, <span class="kw">patients</span> <span class="kw">=</span> <span class="no">patients</span>, <span class="kw">min.purity</span> <span class="kw">=</span> <span class="fl">0</span>)
 <span class="no">p.heat</span>$<span class="no">p</span></pre></div>
 <p><img src="reference/figures/README-unnamed-chunk-10-1.png" width="100%"></p>
-<div class="sourceCode" id="cb12"><pre class="r"># Also need a better example lol#</pre></div>
 </div>
 </div>
 <div id="analysis" class="section level3">
@@ -341,7 +338,7 @@
 <li>binary (unpaired test using Fisher’s exact test and paired test using McNemmar’s exact test)</li>
 <li>continuous (using simple linear regression)</li>
 </ul>
-<!-- end list --><div class="sourceCode" id="cb13"><pre class="r"><span class="no">outcome</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span>(<span class="fu"><a href="https://rdrr.io/r/stats/Binomial.html">rbinom</a></span>(<span class="kw">n</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span>(<span class="no">patients</span>),<span class="kw">size</span> <span class="kw">=</span> <span class="fl">1</span>,<span class="kw">prob</span> <span class="kw">=</span> <span class="fl">1</span>/<span class="fl">2</span>),<span class="kw">levels</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"0"</span>,<span class="st">"1"</span>))
+<!-- end list --><div class="sourceCode" id="cb11"><pre class="r"><span class="no">outcome</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span>(<span class="fu"><a href="https://rdrr.io/r/stats/Binomial.html">rbinom</a></span>(<span class="kw">n</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span>(<span class="no">patients</span>),<span class="kw">size</span> <span class="kw">=</span> <span class="fl">1</span>,<span class="kw">prob</span> <span class="kw">=</span> <span class="fl">1</span>/<span class="fl">2</span>),<span class="kw">levels</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"0"</span>,<span class="st">"1"</span>))
 <span class="no">out</span> <span class="kw">&lt;-</span> <span class="fu"><a href="reference/gen.tab.html">gen.tab</a></span>(<span class="kw">gen.dat</span> <span class="kw">=</span> <span class="no">gen.dat</span>,<span class="kw">outcome</span> <span class="kw">=</span> <span class="no">outcome</span>,<span class="kw">filter</span> <span class="kw">=</span> <span class="fl">0.05</span>)
 <span class="fu">kable</span>(<span class="no">out</span>$<span class="no">fits</span>[<span class="fl">1</span>:<span class="fl">10</span>,],<span class="kw">row.names</span> <span class="kw">=</span> <span class="no">T</span>)</pre></div>
 <table class="table">
@@ -480,9 +477,9 @@
 </tr>
 </tbody>
 </table>
-<div class="sourceCode" id="cb14"><pre class="r"><span class="no">out</span>$<span class="no">forest.plot</span></pre></div>
+<div class="sourceCode" id="cb12"><pre class="r"><span class="no">out</span>$<span class="no">forest.plot</span></pre></div>
 <p><img src="reference/figures/README-unnamed-chunk-11-1.png" width="100%"></p>
-<div class="sourceCode" id="cb15"><pre class="r"><span class="no">out</span>$<span class="no">vPlot</span></pre></div>
+<div class="sourceCode" id="cb13"><pre class="r"><span class="no">out</span>$<span class="no">vPlot</span></pre></div>
 <p><img src="reference/figures/README-unnamed-chunk-11-2.png" width="100%"></p>
 </div>
 <div id="survival-analysis" class="section level4">
@@ -491,7 +488,7 @@
 <div id="univariate" class="section level5">
 <h5 class="hasAnchor">
 <a href="#univariate" class="anchor"></a>Univariate</h5>
-<div class="sourceCode" id="cb16"><pre class="r"><span class="no">time</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Exponential.html">rexp</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span>(<span class="no">patients</span>))
+<div class="sourceCode" id="cb14"><pre class="r"><span class="no">time</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Exponential.html">rexp</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span>(<span class="no">patients</span>))
 <span class="no">status</span> <span class="kw">&lt;-</span> <span class="no">outcome</span>
 <span class="no">surv.dat</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/cbind.html">cbind</a></span>(<span class="no">time</span>,<span class="no">status</span>))
 <span class="no">out</span> <span class="kw">&lt;-</span> <span class="fu"><a href="reference/uni.cox.html">uni.cox</a></span>(<span class="kw">X</span> <span class="kw">=</span> <span class="no">gen.dat</span>, <span class="kw">surv.dat</span> <span class="kw">=</span> <span class="no">surv.dat</span>, <span class="kw">surv.formula</span> <span class="kw">=</span> <span class="fu">Surv</span>(<span class="no">time</span>,<span class="no">status</span>)~<span class="no">.</span>,<span class="kw">filter</span> <span class="kw">=</span> <span class="fl">0.05</span>)
@@ -501,105 +498,105 @@
 <th></th>
 <th align="left">Feature</th>
 <th align="right">Coefficient</th>
-<th align="right">Pvalue</th>
-<th align="right">MutationFrequency</th>
-<th align="right">FDR</th>
 <th align="right">HR</th>
+<th align="right">Pvalue</th>
+<th align="right">FDR</th>
+<th align="right">MutationFrequency</th>
 </tr></thead>
 <tbody>
 <tr class="odd">
 <td>1</td>
 <td align="left">MLL</td>
 <td align="right">-1.480</td>
-<td align="right">0.604</td>
-<td align="right">0.09</td>
-<td align="right">0.6043112</td>
 <td align="right">0.228</td>
+<td align="right">0.0155</td>
+<td align="right">0.6043112</td>
+<td align="right">0.09</td>
 </tr>
 <tr class="even">
 <td>2</td>
 <td align="left">STK11</td>
 <td align="right">-1.460</td>
-<td align="right">0.912</td>
-<td align="right">0.07</td>
-<td align="right">0.9122695</td>
 <td align="right">0.233</td>
+<td align="right">0.0519</td>
+<td align="right">0.9122695</td>
+<td align="right">0.07</td>
 </tr>
 <tr class="odd">
 <td>3</td>
 <td align="left">KEAP1</td>
 <td align="right">-1.020</td>
-<td align="right">0.912</td>
-<td align="right">0.05</td>
-<td align="right">0.9122695</td>
 <td align="right">0.362</td>
+<td align="right">0.1670</td>
+<td align="right">0.9122695</td>
+<td align="right">0.05</td>
 </tr>
 <tr class="even">
 <td>4</td>
 <td align="left">NOTCH1</td>
 <td align="right">0.609</td>
-<td align="right">0.912</td>
-<td align="right">0.08</td>
-<td align="right">0.9122695</td>
 <td align="right">1.840</td>
+<td align="right">0.2070</td>
+<td align="right">0.9122695</td>
+<td align="right">0.08</td>
 </tr>
 <tr class="odd">
 <td>5</td>
 <td align="left">DOT1L</td>
 <td align="right">0.659</td>
-<td align="right">0.912</td>
-<td align="right">0.05</td>
-<td align="right">0.9122695</td>
 <td align="right">1.930</td>
+<td align="right">0.2110</td>
+<td align="right">0.9122695</td>
+<td align="right">0.05</td>
 </tr>
 <tr class="even">
 <td>6</td>
 <td align="left">TSC1</td>
 <td align="right">0.750</td>
-<td align="right">0.912</td>
-<td align="right">0.05</td>
-<td align="right">0.9122695</td>
 <td align="right">2.120</td>
+<td align="right">0.2130</td>
+<td align="right">0.9122695</td>
+<td align="right">0.05</td>
 </tr>
 <tr class="odd">
 <td>7</td>
 <td align="left">MYC.Amp</td>
 <td align="right">-1.200</td>
-<td align="right">0.912</td>
-<td align="right">0.06</td>
-<td align="right">0.9122695</td>
 <td align="right">0.301</td>
+<td align="right">0.2350</td>
+<td align="right">0.9122695</td>
+<td align="right">0.06</td>
 </tr>
 <tr class="even">
 <td>8</td>
 <td align="left">CDH1</td>
 <td align="right">0.605</td>
-<td align="right">0.912</td>
-<td align="right">0.06</td>
-<td align="right">0.9122695</td>
 <td align="right">1.830</td>
+<td align="right">0.2520</td>
+<td align="right">0.9122695</td>
+<td align="right">0.06</td>
 </tr>
 <tr class="odd">
 <td>9</td>
 <td align="left">FGFR1.Amp</td>
 <td align="right">-0.826</td>
-<td align="right">0.912</td>
-<td align="right">0.06</td>
-<td align="right">0.9122695</td>
 <td align="right">0.438</td>
+<td align="right">0.2550</td>
+<td align="right">0.9122695</td>
+<td align="right">0.06</td>
 </tr>
 <tr class="even">
 <td>10</td>
 <td align="left">EPHA5</td>
 <td align="right">-1.080</td>
-<td align="right">0.912</td>
-<td align="right">0.05</td>
-<td align="right">0.9122695</td>
 <td align="right">0.340</td>
+<td align="right">0.2870</td>
+<td align="right">0.9122695</td>
+<td align="right">0.05</td>
 </tr>
 </tbody>
 </table>
-<div class="sourceCode" id="cb17"><pre class="r"><span class="co"># out$p</span>
+<div class="sourceCode" id="cb15"><pre class="r"><span class="co"># out$p</span>
 <span class="no">out</span>$<span class="no">KM</span><span class="kw">[[</span><span class="fl">1</span>]]</pre></div>
 <p><img src="reference/figures/README-unnamed-chunk-12-1.png" width="100%"></p>
 </div>
