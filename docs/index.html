@@ -134,7 +134,7 @@
 <a href="#retrieving-data" class="anchor"></a>Retrieving data</h3>
 <p>Now that the Cbioportal API is set up in your environment, you must first specify the database of interest (IMPACT or TCGA are the two available options). Following this one can either sepcify the samples or study of interest:</p>
 <div class="sourceCode" id="cb5"><pre class="r"><span class="no">ids</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html">as.character</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span>(<span class="no">mut</span>$<span class="no">Tumor_Sample_Barcode</span>)[<span class="fl">1</span>:<span class="fl">100</span>])
-<span class="no">df</span> <span class="kw">&lt;-</span> <span class="fu"><a href="reference/get_genetics.html">get_genetics</a></span>(<span class="kw">sample_ids</span> <span class="kw">=</span> <span class="no">ids</span>,<span class="kw">database</span> <span class="kw">=</span> <span class="st">"msk_impact"</span>,
+<span class="no">df</span> <span class="kw">&lt;-</span> <span class="fu">get_genetics</span>(<span class="kw">sample_ids</span> <span class="kw">=</span> <span class="no">ids</span>,<span class="kw">database</span> <span class="kw">=</span> <span class="st">"msk_impact"</span>,
                        <span class="kw">mutations</span> <span class="kw">=</span> <span class="fl">TRUE</span>, <span class="kw">fusions</span> <span class="kw">=</span> <span class="fl">TRUE</span>, <span class="kw">cna</span> <span class="kw">=</span> <span class="fl">TRUE</span>)</pre></div>
 </div>
 <div id="processing-the-downloaded-data" class="section level3">

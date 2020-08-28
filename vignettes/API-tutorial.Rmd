@@ -71,38 +71,38 @@ Additionally to having access to mutational and copy number alteration data, cBi
 To retrieve the TCGA mutational data the user should set the arguments `mutations` to TRUE and `database` to "tcga":
 
 ```{r,message=F, results="hide"}
-df <- get_genetics(sample_ids =  c("TCGA-17-Z023-01","TCGA-02-0003-01","TCGA-02-0055-01"),
-             mutations = TRUE,fusions = FALSE, cna = FALSE,
-             database = "tcga")
+# df <- get_genetics(sample_ids =  c("TCGA-17-Z023-01","TCGA-02-0003-01","TCGA-02-0055-01"),
+#              mutations = TRUE,fusions = FALSE, cna = FALSE,
+#              database = "tcga")
 ```
 
 ```{r}
-df$mut
+# df$mut
 ```
 
 ### Fusions
 
 ```{r,message=F, results="hide"}
-df <- get_genetics(sample_ids = as.character(tcga_samples$patient_id[!is.na(tcga_samples$Cancer_Code)][1:100]),
-                   mutations = TRUE,fusions = TRUE, cna = FALSE,
-                   database = "tcga")
+# df <- get_genetics(sample_ids = as.character(tcga_samples$patient_id[!is.na(tcga_samples$Cancer_Code)][1:100]),
+#                    mutations = TRUE,fusions = TRUE, cna = FALSE,
+#                    database = "tcga")
 ```
 
 ```{r}
-df$mut %>%
-  filter(Variant_Classification == "Fusion")
+# df$mut %>%
+#   filter(Variant_Classification == "Fusion")
 ```
 
 ### CNA
 
 ```{r,message=F, results="hide"}
-df <- get_genetics(sample_ids =  c("TCGA-17-Z023-01","TCGA-02-0003-01","TCGA-02-0055-01"),
-             mutations = FALSE,fusions = FALSE, cna = TRUE,
-             database = "tcga")
+# df <- get_genetics(sample_ids =  c("TCGA-17-Z023-01","TCGA-02-0003-01","TCGA-02-0055-01"),
+#              mutations = FALSE,fusions = FALSE, cna = TRUE,
+#              database = "tcga")
 ```
 
 ```{r}
-df$cna
+# df$cna
 ```
 
 
@@ -111,13 +111,13 @@ df$cna
 The copy-number alterations data we have covered up to now is a discrete estimation of the alterations that occured. There however exist more nuanced and accurate data for copy-number alterations observed in a tumor. In `gnomeR` we include an example of segmentation file and relevant functions from the [`facets`](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5027494/) package that provides an allele-specific copy number and clonal heterogeneity analysis tool for high-throughput DNA sequencing. We show below how to download it from the API in gnomeR.
 
 ```{r,message=F, results="hide"}
-df <- get_genetics(sample_ids =  c("TCGA-17-Z023-01","TCGA-02-0003-01","TCGA-02-0055-01"),
-             mutations = FALSE,fusions = FALSE, cna = FALSE, seg = TRUE,
-             database = "tcga")
+# df <- get_genetics(sample_ids =  c("TCGA-17-Z023-01","TCGA-02-0003-01","TCGA-02-0055-01"),
+#              mutations = FALSE,fusions = FALSE, cna = FALSE, seg = TRUE,
+#              database = "tcga")
 ```
 
 ```{r}
-df$seg
+# df$seg
 ```
 
 
@@ -129,34 +129,34 @@ As mentioned previously IMPACT genomic data is protected and requires a token to
 ### Mutations
 
 ```{r,message=F,eval=F}
-df.mut <- get_genetics("P-0000062-T01-IM3",database = "msk_impact",
-                       mutations = TRUE, fusions = FALSE, cna = FALSE)
-df.mut
+# df.mut <- get_genetics("P-0000062-T01-IM3",database = "msk_impact",
+#                        mutations = TRUE, fusions = FALSE, cna = FALSE)
+# df.mut
 ```
 
 ### Adding Fusions
 
 ```{r,message=F,eval=F}
-df.fus <- get_genetics("P-0000062-T01-IM3",database = "msk_impact",
-                       mutations = TRUE, fusions = FALSE, cna = FALSE)
-df.fus
+# df.fus <- get_genetics("P-0000062-T01-IM3",database = "msk_impact",
+#                        mutations = TRUE, fusions = FALSE, cna = FALSE)
+# df.fus
 ```
 
 ### Copy-number alterations
 
 ```{r,message=F,eval=F}
-df.cna <- get_genetics("P-0000062-T01-IM3",database = "msk_impact",
-                       mutations = FALSE, fusions = FALSE, cna = TRUE)
-df.cna
+# df.cna <- get_genetics("P-0000062-T01-IM3",database = "msk_impact",
+#                        mutations = FALSE, fusions = FALSE, cna = TRUE)
+# df.cna
 ```
 
 ### All together
 
 
 ```{r,message=F,eval=F}
-df.gen <- get_genetics("P-0000062-T01-IM3",database = "msk_impact",
-                       mutations = TRUE, fusions = TRUE, cna = TRUE)
-df.gen
+# df.gen <- get_genetics("P-0000062-T01-IM3",database = "msk_impact",
+#                        mutations = TRUE, fusions = TRUE, cna = TRUE)
+# df.gen
 ```
 
 
