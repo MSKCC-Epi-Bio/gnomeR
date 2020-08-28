@@ -114,7 +114,7 @@
 <a href="#installation" class="anchor"></a>Installation</h2>
 <p>You can install the development version from <a href="https://github.com/">GitHub</a> with:</p>
 <div class="sourceCode" id="cb1"><pre class="r"><span class="co"># install.packages("devtools")</span>
-<span class="kw pkg">devtools</span><span class="kw ns">::</span><span class="fu"><a href="https://devtools.r-lib.org//reference/remote-reexports.html">install_github</a></span>(<span class="st">"AxelitoMartin/gnomeR"</span>)</pre></div>
+<span class="kw pkg">devtools</span><span class="kw ns">::</span><span class="fu">install_github</span>(<span class="st">"AxelitoMartin/gnomeR"</span>)</pre></div>
 </div>
 <div id="examples" class="section level2">
 <h2 class="hasAnchor">
@@ -123,7 +123,7 @@
 <h3 class="hasAnchor">
 <a href="#setting-up-the-api" class="anchor"></a>Setting up the API</h3>
 <p>In order to download the data from CbioPortal, one must first require a token from the website <a href="https://cbioportal.mskcc.org/">CbioPortal</a> wich will prompt a login page with your MSKCC credentials. Then navigate to “Web API” in the top bar menu, following this simply download a token and copy it after running the following command in R:</p>
-<div class="sourceCode" id="cb2"><pre class="r"><span class="kw pkg">usethis</span><span class="kw ns">::</span><span class="fu"><a href="https://usethis.r-lib.org/reference/edit.html">edit_r_environ</a></span>()</pre></div>
+<div class="sourceCode" id="cb2"><pre class="r"><span class="kw pkg">usethis</span><span class="kw ns">::</span><span class="fu">edit_r_environ</span>()</pre></div>
 <p>And pasting the token you were given in the .Renviron file that was created and saving after pasting your token.</p>
 <div class="sourceCode" id="cb3"><pre class="r"><span class="no">CBIOPORTAL_TOKEN</span> <span class="kw">=</span> <span class="st">'YOUR_TOKEN'</span></pre></div>
 <p>You can test your connection using:</p>
@@ -134,7 +134,7 @@
 <a href="#retrieving-data" class="anchor"></a>Retrieving data</h3>
 <p>Now that the Cbioportal API is set up in your environment, you must first specify the database of interest (IMPACT or TCGA are the two available options). Following this one can either sepcify the samples or study of interest:</p>
 <div class="sourceCode" id="cb5"><pre class="r"><span class="no">ids</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html">as.character</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span>(<span class="no">mut</span>$<span class="no">Tumor_Sample_Barcode</span>)[<span class="fl">1</span>:<span class="fl">100</span>])
-<span class="no">df</span> <span class="kw">&lt;-</span> <span class="fu"><a href="reference/get_genetics.html">get_genetics</a></span>(<span class="kw">sample_ids</span> <span class="kw">=</span> <span class="no">ids</span>,<span class="kw">database</span> <span class="kw">=</span> <span class="st">"msk_impact"</span>,
+<span class="no">df</span> <span class="kw">&lt;-</span> <span class="fu">get_genetics</span>(<span class="kw">sample_ids</span> <span class="kw">=</span> <span class="no">ids</span>,<span class="kw">database</span> <span class="kw">=</span> <span class="st">"msk_impact"</span>,
                        <span class="kw">mutations</span> <span class="kw">=</span> <span class="fl">TRUE</span>, <span class="kw">fusions</span> <span class="kw">=</span> <span class="fl">TRUE</span>, <span class="kw">cna</span> <span class="kw">=</span> <span class="fl">TRUE</span>)</pre></div>
 </div>
 <div id="processing-the-downloaded-data" class="section level3">
