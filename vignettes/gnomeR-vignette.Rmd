@@ -119,7 +119,7 @@ as.tbl(bin.mut)
 We include a function to visualize summaries of the mutations in a given cohort:
 
 ```{r}
-maf.summary(maf = mut %>% filter(Tumor_Sample_Barcode %in% patients),
+maf_viz(maf = mut %>% filter(Tumor_Sample_Barcode %in% patients),
             mut.type = "SOMATIC")
 ```
 

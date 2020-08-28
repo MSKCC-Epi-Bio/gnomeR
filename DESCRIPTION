@@ -5,7 +5,7 @@ Authors@R:
     c(person(given = "Axel",
            family = "Martin",
            role = c("aut", "cre"),
-           email = "first.last@example.com",
+           email = "axel.steph.martin@gmail.com",
            comment = c(ORCID = "YOUR-ORCID-ID")),
       person(given = "Arshi",
              family = "Arora",
@@ -24,13 +24,15 @@ Encoding: UTF-8
 LazyData: true
 URL: https://github.com/AxelitoMartin/gnomeR
 BugReports: https://github.com/AxelitoMartin/gnomeR/issues
-RoxygenNote: 7.1.0
+RoxygenNote: 7.1.1
 Depends: R (>= 3.6)
 biocViews: 
     ComplexHeatmap,
     iClusterPlus,
     GenomicRanges,
     IRanges
+Remotes: 
+    taylor-lab/annotateMaf
 Imports: 
     magrittr,
     dplyr,
@@ -54,7 +56,10 @@ Imports:
     stringr,
     survival,
     plotly,
-    rlang
+    rlang,
+    annotateMaf,
+    forcats,
+    purrr
 Suggests: 
     knitr,
     rmarkdown,

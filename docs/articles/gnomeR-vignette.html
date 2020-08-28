@@ -91,7 +91,7 @@
 
       
 
-      </header><script src="gnomeR-vignette_files/htmlwidgets-1.5.1/htmlwidgets.js"></script><script src="gnomeR-vignette_files/plotly-binding-4.9.2.1/plotly.js"></script><script src="gnomeR-vignette_files/typedarray-0.1/typedarray.min.js"></script><script src="gnomeR-vignette_files/jquery-1.11.3/jquery.min.js"></script><link href="gnomeR-vignette_files/crosstalk-1.1.0.1/css/crosstalk.css" rel="stylesheet">
+      </header><script src="gnomeR-vignette_files/accessible-code-block-0.0.1/empty-anchor.js"></script><script src="gnomeR-vignette_files/htmlwidgets-1.5.1/htmlwidgets.js"></script><script src="gnomeR-vignette_files/plotly-binding-4.9.2.1/plotly.js"></script><script src="gnomeR-vignette_files/typedarray-0.1/typedarray.min.js"></script><script src="gnomeR-vignette_files/jquery-1.11.3/jquery.min.js"></script><link href="gnomeR-vignette_files/crosstalk-1.1.0.1/css/crosstalk.css" rel="stylesheet">
 <script src="gnomeR-vignette_files/crosstalk-1.1.0.1/js/crosstalk.min.js"></script><link href="gnomeR-vignette_files/plotly-htmlwidgets-css-1.52.2/plotly-htmlwidgets.css" rel="stylesheet">
 <script src="gnomeR-vignette_files/plotly-main-1.52.2/plotly-latest.min.js"></script><div class="row">
   <div class="col-md-9 contents">
@@ -310,40 +310,25 @@
 <h2 class="hasAnchor">
 <a href="#visualizing-genetics" class="anchor"></a>Visualizing genetics</h2>
 <p>We include a function to visualize summaries of the mutations in a given cohort:</p>
-<div class="sourceCode" id="cb10"><html><body><pre class="r"><span class="fu"><a href="../reference/maf.summary.html">maf.summary</a></span>(<span class="kw">maf</span> <span class="kw">=</span> <span class="no">mut</span> <span class="kw">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span>(<span class="no">Tumor_Sample_Barcode</span> <span class="kw">%in%</span> <span class="no">patients</span>),
+<div class="sourceCode" id="cb10"><html><body><pre class="r"><span class="fu"><a href="../reference/maf_viz.html">maf_viz</a></span>(<span class="kw">maf</span> <span class="kw">=</span> <span class="no">mut</span> <span class="kw">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span>(<span class="no">Tumor_Sample_Barcode</span> <span class="kw">%in%</span> <span class="no">patients</span>),
             <span class="kw">mut.type</span> <span class="kw">=</span> <span class="st">"SOMATIC"</span>)
-<span class="co">#&gt; $p.class</span></pre></body></html></div>
+<span class="co">#&gt; $varclass</span></pre></body></html></div>
 <p><img src="gnomeR-vignette_files/figure-html/unnamed-chunk-11-1.png" width="768"></p>
 <pre><code>#&gt; 
-#&gt; $p.type</code></pre>
+#&gt; $vartype</code></pre>
 <p><img src="gnomeR-vignette_files/figure-html/unnamed-chunk-11-2.png" width="768"></p>
 <pre><code>#&gt; 
-#&gt; $p.SNV</code></pre>
+#&gt; $snvclass</code></pre>
 <p><img src="gnomeR-vignette_files/figure-html/unnamed-chunk-11-3.png" width="768"></p>
 <pre><code>#&gt; 
-#&gt; $p.patient.variant</code></pre>
+#&gt; $samplevar</code></pre>
 <p><img src="gnomeR-vignette_files/figure-html/unnamed-chunk-11-4.png" width="768"></p>
 <pre><code>#&gt; 
-#&gt; $p.variant.bp</code></pre>
+#&gt; $topgenes</code></pre>
 <p><img src="gnomeR-vignette_files/figure-html/unnamed-chunk-11-5.png" width="768"></p>
 <pre><code>#&gt; 
-#&gt; $p.genes</code></pre>
+#&gt; $genecor</code></pre>
 <p><img src="gnomeR-vignette_files/figure-html/unnamed-chunk-11-6.png" width="768"></p>
-<pre><code>#&gt; 
-#&gt; $p.variant.dist</code></pre>
-<p><img src="gnomeR-vignette_files/figure-html/unnamed-chunk-11-7.png" width="768"></p>
-<pre><code>#&gt; 
-#&gt; $p.variant.dist.bar</code></pre>
-<p><img src="gnomeR-vignette_files/figure-html/unnamed-chunk-11-8.png" width="768"></p>
-<pre><code>#&gt; 
-#&gt; $p.SNV.dist</code></pre>
-<p><img src="gnomeR-vignette_files/figure-html/unnamed-chunk-11-9.png" width="768"></p>
-<pre><code>#&gt; 
-#&gt; $p.corr</code></pre>
-<p><img src="gnomeR-vignette_files/figure-html/unnamed-chunk-11-10.png" width="768"></p>
-<pre><code>#&gt; 
-#&gt; $p.comut</code></pre>
-<p><img src="gnomeR-vignette_files/figure-html/unnamed-chunk-11-11.png" width="768"></p>
 </div>
 </div>
 <div id="correlating-genetics-with-outcome" class="section level1">
@@ -361,7 +346,7 @@
 <li>cont : boolean specifying if the outcome is continuous. Default is false (see following section for an example)</li>
 <li>rank : boolean specifying if the output table should be ranked by pvalue</li>
 </ul>
-<div class="sourceCode" id="cb21"><html><body><pre class="r"><span class="no">outcome</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html">as.character</a></span>(<span class="no">clin.sample</span>$<span class="no">Sample.Type</span>[<span class="fu"><a href="https://rdrr.io/r/base/match.html">match</a></span>(<span class="no">patients</span>,<span class="no">clin.sample</span>$<span class="no">Sample.Identifier</span>)])
+<div class="sourceCode" id="cb16"><html><body><pre class="r"><span class="no">outcome</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html">as.character</a></span>(<span class="no">clin.sample</span>$<span class="no">Sample.Type</span>[<span class="fu"><a href="https://rdrr.io/r/base/match.html">match</a></span>(<span class="no">patients</span>,<span class="no">clin.sample</span>$<span class="no">Sample.Identifier</span>)])
 <span class="no">gen.dat</span> <span class="kw">&lt;-</span> <span class="no">bin.mut</span>
 <span class="no">bin.test</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/gen.tab.html">gen.tab</a></span>(<span class="kw">gen.dat</span> <span class="kw">=</span> <span class="no">gen.dat</span>,
         <span class="kw">outcome</span> <span class="kw">=</span> <span class="no">outcome</span>,
@@ -369,7 +354,7 @@
 <span class="fu">kable</span>(<span class="no">bin.test</span>$<span class="no">fits</span>,<span class="kw">row.names</span> <span class="kw">=</span> <span class="no">T</span>)</pre></body></html></div>
 <table class="table">
 <thead><tr class="header">
-<th></th>
+<th align="left"></th>
 <th align="left">Feature</th>
 <th align="left">Overall</th>
 <th align="left">Metastasis(N=94)</th>
@@ -382,7 +367,7 @@
 </tr></thead>
 <tbody>
 <tr class="odd">
-<td>CREBBP</td>
+<td align="left">CREBBP</td>
 <td align="left">CREBBP</td>
 <td align="left">5%</td>
 <td align="left">8.51%</td>
@@ -394,7 +379,7 @@
 <td align="left">1.08</td>
 </tr>
 <tr class="even">
-<td>FAT1</td>
+<td align="left">FAT1</td>
 <td align="left">FAT1</td>
 <td align="left">8%</td>
 <td align="left">11.7%</td>
@@ -406,7 +391,7 @@
 <td align="left">1.23</td>
 </tr>
 <tr class="odd">
-<td>CDKN2A.Del</td>
+<td align="left">CDKN2A.Del</td>
 <td align="left">CDKN2A.Del</td>
 <td align="left">5.5%</td>
 <td align="left">8.51%</td>
@@ -418,7 +403,7 @@
 <td align="left">1.36</td>
 </tr>
 <tr class="even">
-<td>EGFR</td>
+<td align="left">EGFR</td>
 <td align="left">EGFR</td>
 <td align="left">8.5%</td>
 <td align="left">11.7%</td>
@@ -430,7 +415,7 @@
 <td align="left">1.41</td>
 </tr>
 <tr class="odd">
-<td>BRAF</td>
+<td align="left">BRAF</td>
 <td align="left">BRAF</td>
 <td align="left">5%</td>
 <td align="left">7.45%</td>
@@ -442,7 +427,7 @@
 <td align="left">1.65</td>
 </tr>
 <tr class="even">
-<td>CCND1.Amp</td>
+<td align="left">CCND1.Amp</td>
 <td align="left">CCND1.Amp</td>
 <td align="left">5.5%</td>
 <td align="left">3.19%</td>
@@ -454,7 +439,7 @@
 <td align="left">14.87</td>
 </tr>
 <tr class="odd">
-<td>ARID1A</td>
+<td align="left">ARID1A</td>
 <td align="left">ARID1A</td>
 <td align="left">7%</td>
 <td align="left">9.57%</td>
@@ -466,7 +451,7 @@
 <td align="left">1.63</td>
 </tr>
 <tr class="even">
-<td>ATRX</td>
+<td align="left">ATRX</td>
 <td align="left">ATRX</td>
 <td align="left">7.5%</td>
 <td align="left">5.32%</td>
@@ -478,7 +463,7 @@
 <td align="left">7.17</td>
 </tr>
 <tr class="odd">
-<td>PTEN</td>
+<td align="left">PTEN</td>
 <td align="left">PTEN</td>
 <td align="left">5%</td>
 <td align="left">3.19%</td>
@@ -490,7 +475,7 @@
 <td align="left">13.19</td>
 </tr>
 <tr class="even">
-<td>CDKN2A</td>
+<td align="left">CDKN2A</td>
 <td align="left">CDKN2A</td>
 <td align="left">5.5%</td>
 <td align="left">7.45%</td>
@@ -502,7 +487,7 @@
 <td align="left">2</td>
 </tr>
 <tr class="odd">
-<td>MCL1.Amp</td>
+<td align="left">MCL1.Amp</td>
 <td align="left">MCL1.Amp</td>
 <td align="left">6.5%</td>
 <td align="left">8.51%</td>
@@ -514,7 +499,7 @@
 <td align="left">1.93</td>
 </tr>
 <tr class="even">
-<td>SMARCA4</td>
+<td align="left">SMARCA4</td>
 <td align="left">SMARCA4</td>
 <td align="left">5%</td>
 <td align="left">6.38%</td>
@@ -526,7 +511,7 @@
 <td align="left">2.52</td>
 </tr>
 <tr class="odd">
-<td>MLL2</td>
+<td align="left">MLL2</td>
 <td align="left">MLL2</td>
 <td align="left">7%</td>
 <td align="left">8.51%</td>
@@ -538,7 +523,7 @@
 <td align="left">2.22</td>
 </tr>
 <tr class="even">
-<td>TP53</td>
+<td align="left">TP53</td>
 <td align="left">TP53</td>
 <td align="left">47%</td>
 <td align="left">48.94%</td>
@@ -550,7 +535,7 @@
 <td align="left">1.56</td>
 </tr>
 <tr class="odd">
-<td>TERT</td>
+<td align="left">TERT</td>
 <td align="left">TERT</td>
 <td align="left">13.5%</td>
 <td align="left">14.89%</td>
@@ -562,7 +547,7 @@
 <td align="left">1.96</td>
 </tr>
 <tr class="even">
-<td>ATM</td>
+<td align="left">ATM</td>
 <td align="left">ATM</td>
 <td align="left">5%</td>
 <td align="left">4.26%</td>
@@ -574,7 +559,7 @@
 <td align="left">6.71</td>
 </tr>
 <tr class="odd">
-<td>MYC.Amp</td>
+<td align="left">MYC.Amp</td>
 <td align="left">MYC.Amp</td>
 <td align="left">5%</td>
 <td align="left">4.26%</td>
@@ -586,7 +571,7 @@
 <td align="left">6.71</td>
 </tr>
 <tr class="even">
-<td>MLL3</td>
+<td align="left">MLL3</td>
 <td align="left">MLL3</td>
 <td align="left">6.5%</td>
 <td align="left">7.45%</td>
@@ -598,7 +583,7 @@
 <td align="left">2.71</td>
 </tr>
 <tr class="odd">
-<td>APC</td>
+<td align="left">APC</td>
 <td align="left">APC</td>
 <td align="left">8.5%</td>
 <td align="left">7.45%</td>
@@ -610,7 +595,7 @@
 <td align="left">4.19</td>
 </tr>
 <tr class="even">
-<td>KRAS</td>
+<td align="left">KRAS</td>
 <td align="left">KRAS</td>
 <td align="left">13.5%</td>
 <td align="left">12.77%</td>
@@ -622,7 +607,7 @@
 <td align="left">2.8</td>
 </tr>
 <tr class="odd">
-<td>KEAP1</td>
+<td align="left">KEAP1</td>
 <td align="left">KEAP1</td>
 <td align="left">6%</td>
 <td align="left">6.38%</td>
@@ -634,7 +619,7 @@
 <td align="left">3.42</td>
 </tr>
 <tr class="even">
-<td>RB1</td>
+<td align="left">RB1</td>
 <td align="left">RB1</td>
 <td align="left">7%</td>
 <td align="left">7.45%</td>
@@ -646,7 +631,7 @@
 <td align="left">3.07</td>
 </tr>
 <tr class="odd">
-<td>PIK3CA</td>
+<td align="left">PIK3CA</td>
 <td align="left">PIK3CA</td>
 <td align="left">11.5%</td>
 <td align="left">11.7%</td>
@@ -658,7 +643,7 @@
 <td align="left">2.55</td>
 </tr>
 <tr class="even">
-<td>NOTCH1</td>
+<td align="left">NOTCH1</td>
 <td align="left">NOTCH1</td>
 <td align="left">6.5%</td>
 <td align="left">6.38%</td>
@@ -670,7 +655,7 @@
 <td align="left">3.89</td>
 </tr>
 <tr class="odd">
-<td>NF1</td>
+<td align="left">NF1</td>
 <td align="left">NF1</td>
 <td align="left">7%</td>
 <td align="left">7.45%</td>
@@ -682,7 +667,7 @@
 <td align="left">3.07</td>
 </tr>
 <tr class="even">
-<td>STK11</td>
+<td align="left">STK11</td>
 <td align="left">STK11</td>
 <td align="left">6%</td>
 <td align="left">6.38%</td>
@@ -695,16 +680,16 @@
 </tr>
 </tbody>
 </table>
-<div class="sourceCode" id="cb22"><html><body><pre class="r"><span class="no">bin.test</span>$<span class="no">forest.plot</span></pre></body></html></div>
+<div class="sourceCode" id="cb17"><html><body><pre class="r"><span class="no">bin.test</span>$<span class="no">forest.plot</span></pre></body></html></div>
 <p><img src="gnomeR-vignette_files/figure-html/unnamed-chunk-12-1.png" width="768"></p>
-<div class="sourceCode" id="cb23"><html><body><pre class="r"><span class="no">bin.test</span>$<span class="no">vPlot</span></pre></body></html></div>
+<div class="sourceCode" id="cb18"><html><body><pre class="r"><span class="no">bin.test</span>$<span class="no">vPlot</span></pre></body></html></div>
 <p><img src="gnomeR-vignette_files/figure-html/unnamed-chunk-12-2.png" width="768"></p>
 </div>
 <div id="continuous-outcome" class="section level2">
 <h2 class="hasAnchor">
 <a href="#continuous-outcome" class="anchor"></a>Continuous outcome</h2>
 <p>Similarly we show here an example with a simulated continuous outcome:</p>
-<div class="sourceCode" id="cb24"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span>(<span class="fl">1</span>)
+<div class="sourceCode" id="cb19"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span>(<span class="fl">1</span>)
 <span class="no">outcome</span> <span class="kw">&lt;-</span>  <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span>(<span class="kw">n</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span>(<span class="no">gen.dat</span>))
 <span class="no">tab.out</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/gen.tab.html">gen.tab</a></span>(<span class="kw">gen.dat</span> <span class="kw">=</span> <span class="no">gen.dat</span>,
         <span class="kw">outcome</span> <span class="kw">=</span> <span class="no">outcome</span>,
@@ -712,7 +697,7 @@
 <span class="fu">kable</span>(<span class="no">tab.out</span>$<span class="no">fits</span>,<span class="kw">row.names</span> <span class="kw">=</span> <span class="no">T</span>)</pre></body></html></div>
 <table class="table">
 <thead><tr class="header">
-<th></th>
+<th align="left"></th>
 <th align="right">Estimate</th>
 <th align="right">SD</th>
 <th align="right">Pvalue</th>
@@ -721,7 +706,7 @@
 </tr></thead>
 <tbody>
 <tr class="odd">
-<td>CREBBP</td>
+<td align="left">CREBBP</td>
 <td align="right">0.7064531</td>
 <td align="right">0.2979996</td>
 <td align="right">0.0187170</td>
@@ -729,7 +714,7 @@
 <td align="right">0.4866429</td>
 </tr>
 <tr class="even">
-<td>RB1</td>
+<td align="left">RB1</td>
 <td align="right">-0.5045771</td>
 <td align="right">0.2556339</td>
 <td align="right">0.0497921</td>
@@ -737,7 +722,7 @@
 <td align="right">0.6190481</td>
 </tr>
 <tr class="odd">
-<td>BRAF</td>
+<td align="left">BRAF</td>
 <td align="right">0.5432385</td>
 <td align="right">0.2997231</td>
 <td align="right">0.0714286</td>
@@ -745,7 +730,7 @@
 <td align="right">0.6190481</td>
 </tr>
 <tr class="even">
-<td>CDKN2A.Del</td>
+<td align="left">CDKN2A.Del</td>
 <td align="right">0.4242775</td>
 <td align="right">0.2873191</td>
 <td align="right">0.1413509</td>
@@ -753,7 +738,7 @@
 <td align="right">0.7109775</td>
 </tr>
 <tr class="odd">
-<td>STK11</td>
+<td align="left">STK11</td>
 <td align="right">-0.3927698</td>
 <td align="right">0.2759241</td>
 <td align="right">0.1561737</td>
@@ -761,7 +746,7 @@
 <td align="right">0.7109775</td>
 </tr>
 <tr class="even">
-<td>KEAP1</td>
+<td align="left">KEAP1</td>
 <td align="right">-0.3790557</td>
 <td align="right">0.2760210</td>
 <td align="right">0.1712166</td>
@@ -769,7 +754,7 @@
 <td align="right">0.7109775</td>
 </tr>
 <tr class="odd">
-<td>TERT</td>
+<td align="left">TERT</td>
 <td align="right">0.2515656</td>
 <td align="right">0.1919061</td>
 <td align="right">0.1914170</td>
@@ -777,7 +762,7 @@
 <td align="right">0.7109775</td>
 </tr>
 <tr class="even">
-<td>MCL1.Amp</td>
+<td align="left">MCL1.Amp</td>
 <td align="right">-0.2984314</td>
 <td align="right">0.2663207</td>
 <td align="right">0.2638276</td>
@@ -785,7 +770,7 @@
 <td align="right">0.8574396</td>
 </tr>
 <tr class="odd">
-<td>MYC.Amp</td>
+<td align="left">MYC.Amp</td>
 <td align="right">-0.2701692</td>
 <td align="right">0.3015887</td>
 <td align="right">0.3714367</td>
@@ -793,7 +778,7 @@
 <td align="right">0.8688979</td>
 </tr>
 <tr class="even">
-<td>FAT1</td>
+<td align="left">FAT1</td>
 <td align="right">0.2075736</td>
 <td align="right">0.2423249</td>
 <td align="right">0.3927058</td>
@@ -801,7 +786,7 @@
 <td align="right">0.8688979</td>
 </tr>
 <tr class="odd">
-<td>SMARCA4</td>
+<td align="left">SMARCA4</td>
 <td align="right">-0.2392014</td>
 <td align="right">0.3017207</td>
 <td align="right">0.4288487</td>
@@ -809,7 +794,7 @@
 <td align="right">0.8688979</td>
 </tr>
 <tr class="even">
-<td>CCND1.Amp</td>
+<td align="left">CCND1.Amp</td>
 <td align="right">-0.2058845</td>
 <td align="right">0.2885261</td>
 <td align="right">0.4763313</td>
@@ -817,7 +802,7 @@
 <td align="right">0.8688979</td>
 </tr>
 <tr class="odd">
-<td>APC</td>
+<td align="left">APC</td>
 <td align="right">0.1556627</td>
 <td align="right">0.2359083</td>
 <td align="right">0.5101207</td>
@@ -825,7 +810,7 @@
 <td align="right">0.8688979</td>
 </tr>
 <tr class="even">
-<td>NF1</td>
+<td align="left">NF1</td>
 <td align="right">0.1608545</td>
 <td align="right">0.2578834</td>
 <td align="right">0.5335103</td>
@@ -833,7 +818,7 @@
 <td align="right">0.8688979</td>
 </tr>
 <tr class="odd">
-<td>EGFR</td>
+<td align="left">EGFR</td>
 <td align="right">-0.1443205</td>
 <td align="right">0.2359447</td>
 <td align="right">0.5414573</td>
@@ -841,7 +826,7 @@
 <td align="right">0.8688979</td>
 </tr>
 <tr class="even">
-<td>ATM</td>
+<td align="left">ATM</td>
 <td align="right">-0.1779169</td>
 <td align="right">0.3019346</td>
 <td align="right">0.5563610</td>
@@ -849,7 +834,7 @@
 <td align="right">0.8688979</td>
 </tr>
 <tr class="odd">
-<td>MLL3</td>
+<td align="left">MLL3</td>
 <td align="right">-0.1526306</td>
 <td align="right">0.2669435</td>
 <td align="right">0.5681255</td>
@@ -857,7 +842,7 @@
 <td align="right">0.8688979</td>
 </tr>
 <tr class="even">
-<td>ATRX</td>
+<td align="left">ATRX</td>
 <td align="right">-0.1119015</td>
 <td align="right">0.2499303</td>
 <td align="right">0.6548370</td>
@@ -865,7 +850,7 @@
 <td align="right">0.8740134</td>
 </tr>
 <tr class="odd">
-<td>PTEN</td>
+<td align="left">PTEN</td>
 <td align="right">-0.1295196</td>
 <td align="right">0.3020590</td>
 <td align="right">0.6685429</td>
@@ -873,7 +858,7 @@
 <td align="right">0.8740134</td>
 </tr>
 <tr class="even">
-<td>CDKN2A</td>
+<td align="left">CDKN2A</td>
 <td align="right">0.1223210</td>
 <td align="right">0.2887661</td>
 <td align="right">0.6723180</td>
@@ -881,7 +866,7 @@
 <td align="right">0.8740134</td>
 </tr>
 <tr class="odd">
-<td>KRAS</td>
+<td align="left">KRAS</td>
 <td align="right">-0.0673823</td>
 <td align="right">0.1926775</td>
 <td align="right">0.7269239</td>
@@ -889,7 +874,7 @@
 <td align="right">0.9000010</td>
 </tr>
 <tr class="even">
-<td>PIK3CA</td>
+<td align="left">PIK3CA</td>
 <td align="right">-0.0534127</td>
 <td align="right">0.2064173</td>
 <td align="right">0.7960887</td>
@@ -897,7 +882,7 @@
 <td align="right">0.9408321</td>
 </tr>
 <tr class="odd">
-<td>TP53</td>
+<td align="left">TP53</td>
 <td align="right">-0.0153880</td>
 <td align="right">0.1319588</td>
 <td align="right">0.9072853</td>
@@ -905,7 +890,7 @@
 <td align="right">0.9818790</td>
 </tr>
 <tr class="even">
-<td>ARID1A</td>
+<td align="left">ARID1A</td>
 <td align="right">-0.0161115</td>
 <td align="right">0.2581341</td>
 <td align="right">0.9502951</td>
@@ -913,7 +898,7 @@
 <td align="right">0.9818790</td>
 </tr>
 <tr class="odd">
-<td>NOTCH1</td>
+<td align="left">NOTCH1</td>
 <td align="right">0.0135684</td>
 <td align="right">0.2671621</td>
 <td align="right">0.9595462</td>
@@ -921,7 +906,7 @@
 <td align="right">0.9818790</td>
 </tr>
 <tr class="even">
-<td>MLL2</td>
+<td align="left">MLL2</td>
 <td align="right">-0.0058705</td>
 <td align="right">0.2581363</td>
 <td align="right">0.9818790</td>
@@ -930,9 +915,9 @@
 </tr>
 </tbody>
 </table>
-<div class="sourceCode" id="cb25"><html><body><pre class="r"><span class="no">tab.out</span>$<span class="no">vPlot</span></pre></body></html></div>
+<div class="sourceCode" id="cb20"><html><body><pre class="r"><span class="no">tab.out</span>$<span class="no">vPlot</span></pre></body></html></div>
 <div id="htmlwidget-ac6052d99643cff0dab8" style="width:768px;height:384px;" class="plotly html-widget"></div>
-<script type="application/json" data-for="htmlwidget-ac6052d99643cff0dab8">{"x":{"visdat":{"dcc171564a4e":["function () ","plotlyVisDat"]},"cur_data":"dcc171564a4e","attrs":{"dcc171564a4e":{"x":{},"y":{},"text":{},"mode":"markers","color":{},"size":{},"alpha_stroke":1,"sizes":[10,100],"spans":[1,20]}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"title":"Volcano Plot","xaxis":{"domain":[0,1],"automargin":true,"title":"Estimate"},"yaxis":{"domain":[0,1],"automargin":true,"title":"-log10(.data$Pvalue)"},"hovermode":"closest","showlegend":false,"legend":{"yanchor":"top","y":0.5}},"source":"A","config":{"showSendToCloud":false},"data":[{"x":[-0.0153880467741214,-0.379055668968149,-0.0673823257351641,0.251565632107747,-0.15263061287434,-0.50457713454332,-0.0534126905560237,0.207573597577214,0.0135684272587205,-0.00587051946324435,0.160854523234948,-0.0161115008789996,-0.144320469821988,0.70645308671508,0.543238492686134,-0.177916873955994,-0.111901481824652,-0.392769821251894,-0.239201361026593,0.155662676437213,-0.129519583576588,0.122321044462183,-0.205884540646321,0.424277488625844,-0.298431388020534,-0.270169169649623],"y":[0.0422561176565427,0.766454138614024,0.138511052412042,0.71801942166836,0.24555568401527,1.30283939249894,0.0990385465271865,0.405932669877314,0.0179340880729368,0.00794201721997372,0.272857181496432,0.0221415007428096,0.266435816093429,1.72776294332861,1.14612766381849,0.254643297769975,0.18386680482417,0.806392216137775,0.367695896497227,0.292327079654482,0.174870718604305,0.172425247297193,0.32209084603453,0.849701285303992,0.578679821877339,0.430115235890923],"text":["Gene : TP53 <\/br> Estimate : -0.02","Gene : KEAP1 <\/br> Estimate : -0.38","Gene : KRAS <\/br> Estimate : -0.07","Gene : TERT <\/br> Estimate : 0.25","Gene : MLL3 <\/br> Estimate : -0.15","Gene : RB1 <\/br> Estimate : -0.5","Gene : PIK3CA <\/br> Estimate : -0.05","Gene : FAT1 <\/br> Estimate : 0.21","Gene : NOTCH1 <\/br> Estimate : 0.01","Gene : MLL2 <\/br> Estimate : -0.01","Gene : NF1 <\/br> Estimate : 0.16","Gene : ARID1A <\/br> Estimate : -0.02","Gene : EGFR <\/br> Estimate : -0.14","Gene : CREBBP <\/br> Estimate : 0.71","Gene : BRAF <\/br> Estimate : 0.54","Gene : ATM <\/br> Estimate : -0.18","Gene : ATRX <\/br> Estimate : -0.11","Gene : STK11 <\/br> Estimate : -0.39","Gene : SMARCA4 <\/br> Estimate : -0.24","Gene : APC <\/br> Estimate : 0.16","Gene : PTEN <\/br> Estimate : -0.13","Gene : CDKN2A <\/br> Estimate : 0.12","Gene : CCND1.Amp <\/br> Estimate : -0.21","Gene : CDKN2A.Del <\/br> Estimate : 0.42","Gene : MCL1.Amp <\/br> Estimate : -0.3","Gene : MYC.Amp <\/br> Estimate : -0.27"],"mode":"markers","type":"scatter","marker":{"colorbar":{"title":"Estimate","ticklen":2},"cmin":-0.50457713454332,"cmax":0.70645308671508,"colorscale":[["0","rgba(68,1,84,1)"],["0.0416666666666667","rgba(70,19,97,1)"],["0.0833333333333333","rgba(72,32,111,1)"],["0.125","rgba(71,45,122,1)"],["0.166666666666667","rgba(68,58,128,1)"],["0.208333333333333","rgba(64,70,135,1)"],["0.25","rgba(60,82,138,1)"],["0.291666666666667","rgba(56,93,140,1)"],["0.333333333333333","rgba(49,104,142,1)"],["0.375","rgba(46,114,142,1)"],["0.416666666666667","rgba(42,123,142,1)"],["0.458333333333333","rgba(38,133,141,1)"],["0.5","rgba(37,144,140,1)"],["0.541666666666667","rgba(33,154,138,1)"],["0.583333333333333","rgba(39,164,133,1)"],["0.625","rgba(47,174,127,1)"],["0.666666666666667","rgba(53,183,121,1)"],["0.708333333333333","rgba(79,191,110,1)"],["0.75","rgba(98,199,98,1)"],["0.791666666666667","rgba(119,207,85,1)"],["0.833333333333333","rgba(147,214,70,1)"],["0.875","rgba(172,220,52,1)"],["0.916666666666667","rgba(199,225,42,1)"],["0.958333333333333","rgba(226,228,40,1)"],["1","rgba(253,231,37,1)"]],"showscale":false,"color":[-0.0153880467741214,-0.379055668968149,-0.0673823257351641,0.251565632107747,-0.15263061287434,-0.50457713454332,-0.0534126905560237,0.207573597577214,0.0135684272587205,-0.00587051946324435,0.160854523234948,-0.0161115008789996,-0.144320469821988,0.70645308671508,0.543238492686134,-0.177916873955994,-0.111901481824652,-0.392769821251894,-0.239201361026593,0.155662676437213,-0.129519583576588,0.122321044462183,-0.205884540646321,0.424277488625844,-0.298431388020534,-0.270169169649623],"size":[100,12.1428571428571,28.2142857142857,28.2142857142857,13.2142857142857,14.2857142857143,23.9285714285714,16.4285714285714,13.2142857142857,14.2857142857143,14.2857142857143,14.2857142857143,17.5,10,10,10,15.3571428571429,12.1428571428571,10,17.5,10,11.0714285714286,11.0714285714286,11.0714285714286,13.2142857142857,10],"sizemode":"area","line":{"colorbar":{"title":"","ticklen":2},"cmin":-0.50457713454332,"cmax":0.70645308671508,"colorscale":[["0","rgba(68,1,84,1)"],["0.0416666666666667","rgba(70,19,97,1)"],["0.0833333333333333","rgba(72,32,111,1)"],["0.125","rgba(71,45,122,1)"],["0.166666666666667","rgba(68,58,128,1)"],["0.208333333333333","rgba(64,70,135,1)"],["0.25","rgba(60,82,138,1)"],["0.291666666666667","rgba(56,93,140,1)"],["0.333333333333333","rgba(49,104,142,1)"],["0.375","rgba(46,114,142,1)"],["0.416666666666667","rgba(42,123,142,1)"],["0.458333333333333","rgba(38,133,141,1)"],["0.5","rgba(37,144,140,1)"],["0.541666666666667","rgba(33,154,138,1)"],["0.583333333333333","rgba(39,164,133,1)"],["0.625","rgba(47,174,127,1)"],["0.666666666666667","rgba(53,183,121,1)"],["0.708333333333333","rgba(79,191,110,1)"],["0.75","rgba(98,199,98,1)"],["0.791666666666667","rgba(119,207,85,1)"],["0.833333333333333","rgba(147,214,70,1)"],["0.875","rgba(172,220,52,1)"],["0.916666666666667","rgba(199,225,42,1)"],["0.958333333333333","rgba(226,228,40,1)"],["1","rgba(253,231,37,1)"]],"showscale":false,"color":[-0.0153880467741214,-0.379055668968149,-0.0673823257351641,0.251565632107747,-0.15263061287434,-0.50457713454332,-0.0534126905560237,0.207573597577214,0.0135684272587205,-0.00587051946324435,0.160854523234948,-0.0161115008789996,-0.144320469821988,0.70645308671508,0.543238492686134,-0.177916873955994,-0.111901481824652,-0.392769821251894,-0.239201361026593,0.155662676437213,-0.129519583576588,0.122321044462183,-0.205884540646321,0.424277488625844,-0.298431388020534,-0.270169169649623]}},"textfont":{"size":[100,12.1428571428571,28.2142857142857,28.2142857142857,13.2142857142857,14.2857142857143,23.9285714285714,16.4285714285714,13.2142857142857,14.2857142857143,14.2857142857143,14.2857142857143,17.5,10,10,10,15.3571428571429,12.1428571428571,10,17.5,10,11.0714285714286,11.0714285714286,11.0714285714286,13.2142857142857,10]},"error_y":{"width":[]},"error_x":{"width":[]},"xaxis":"x","yaxis":"y","frame":null},{"x":[-0.50457713454332,0.70645308671508],"y":[0.00794201721997372,1.72776294332861],"type":"scatter","mode":"markers","opacity":0,"hoverinfo":"none","showlegend":false,"marker":{"colorbar":{"title":"Estimate","ticklen":2,"len":0.5,"lenmode":"fraction","y":1,"yanchor":"top"},"cmin":-0.50457713454332,"cmax":0.70645308671508,"colorscale":[["0","rgba(68,1,84,1)"],["0.0416666666666667","rgba(70,19,97,1)"],["0.0833333333333333","rgba(72,32,111,1)"],["0.125","rgba(71,45,122,1)"],["0.166666666666667","rgba(68,58,128,1)"],["0.208333333333333","rgba(64,70,135,1)"],["0.25","rgba(60,82,138,1)"],["0.291666666666667","rgba(56,93,140,1)"],["0.333333333333333","rgba(49,104,142,1)"],["0.375","rgba(46,114,142,1)"],["0.416666666666667","rgba(42,123,142,1)"],["0.458333333333333","rgba(38,133,141,1)"],["0.5","rgba(37,144,140,1)"],["0.541666666666667","rgba(33,154,138,1)"],["0.583333333333333","rgba(39,164,133,1)"],["0.625","rgba(47,174,127,1)"],["0.666666666666667","rgba(53,183,121,1)"],["0.708333333333333","rgba(79,191,110,1)"],["0.75","rgba(98,199,98,1)"],["0.791666666666667","rgba(119,207,85,1)"],["0.833333333333333","rgba(147,214,70,1)"],["0.875","rgba(172,220,52,1)"],["0.916666666666667","rgba(199,225,42,1)"],["0.958333333333333","rgba(226,228,40,1)"],["1","rgba(253,231,37,1)"]],"showscale":true,"color":[-0.50457713454332,0.70645308671508],"line":{"color":"rgba(255,127,14,1)"}},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.2,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+<script type="application/json" data-for="htmlwidget-ac6052d99643cff0dab8">{"x":{"visdat":{"3d9fdec4916":["function () ","plotlyVisDat"]},"cur_data":"3d9fdec4916","attrs":{"3d9fdec4916":{"x":{},"y":{},"text":{},"mode":"markers","color":{},"size":{},"alpha_stroke":1,"sizes":[10,100],"spans":[1,20]}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"title":"Volcano Plot","xaxis":{"domain":[0,1],"automargin":true,"title":"Estimate"},"yaxis":{"domain":[0,1],"automargin":true,"title":"-log10(.data$Pvalue)"},"hovermode":"closest","showlegend":false,"legend":{"yanchor":"top","y":0.5}},"source":"A","config":{"showSendToCloud":false},"data":[{"x":[-0.0153880467741214,-0.379055668968149,-0.0673823257351641,0.251565632107747,-0.15263061287434,-0.50457713454332,-0.0534126905560237,0.207573597577214,0.0135684272587205,-0.00587051946324435,0.160854523234948,-0.0161115008789996,-0.144320469821988,0.70645308671508,0.543238492686134,-0.177916873955994,-0.111901481824652,-0.392769821251894,-0.239201361026593,0.155662676437213,-0.129519583576588,0.122321044462183,-0.205884540646321,0.424277488625844,-0.298431388020534,-0.270169169649623],"y":[0.0422561176565427,0.766454138614024,0.138511052412042,0.71801942166836,0.24555568401527,1.30283939249894,0.0990385465271865,0.405932669877314,0.0179340880729368,0.00794201721997372,0.272857181496432,0.0221415007428096,0.266435816093429,1.72776294332861,1.14612766381849,0.254643297769975,0.18386680482417,0.806392216137775,0.367695896497227,0.292327079654482,0.174870718604305,0.172425247297193,0.32209084603453,0.849701285303992,0.578679821877339,0.430115235890923],"text":["Gene : TP53 <\/br> Estimate : -0.02","Gene : KEAP1 <\/br> Estimate : -0.38","Gene : KRAS <\/br> Estimate : -0.07","Gene : TERT <\/br> Estimate : 0.25","Gene : MLL3 <\/br> Estimate : -0.15","Gene : RB1 <\/br> Estimate : -0.5","Gene : PIK3CA <\/br> Estimate : -0.05","Gene : FAT1 <\/br> Estimate : 0.21","Gene : NOTCH1 <\/br> Estimate : 0.01","Gene : MLL2 <\/br> Estimate : -0.01","Gene : NF1 <\/br> Estimate : 0.16","Gene : ARID1A <\/br> Estimate : -0.02","Gene : EGFR <\/br> Estimate : -0.14","Gene : CREBBP <\/br> Estimate : 0.71","Gene : BRAF <\/br> Estimate : 0.54","Gene : ATM <\/br> Estimate : -0.18","Gene : ATRX <\/br> Estimate : -0.11","Gene : STK11 <\/br> Estimate : -0.39","Gene : SMARCA4 <\/br> Estimate : -0.24","Gene : APC <\/br> Estimate : 0.16","Gene : PTEN <\/br> Estimate : -0.13","Gene : CDKN2A <\/br> Estimate : 0.12","Gene : CCND1.Amp <\/br> Estimate : -0.21","Gene : CDKN2A.Del <\/br> Estimate : 0.42","Gene : MCL1.Amp <\/br> Estimate : -0.3","Gene : MYC.Amp <\/br> Estimate : -0.27"],"mode":"markers","type":"scatter","marker":{"colorbar":{"title":"Estimate","ticklen":2},"cmin":-0.50457713454332,"cmax":0.70645308671508,"colorscale":[["0","rgba(68,1,84,1)"],["0.0416666666666667","rgba(70,19,97,1)"],["0.0833333333333333","rgba(72,32,111,1)"],["0.125","rgba(71,45,122,1)"],["0.166666666666667","rgba(68,58,128,1)"],["0.208333333333333","rgba(64,70,135,1)"],["0.25","rgba(60,82,138,1)"],["0.291666666666667","rgba(56,93,140,1)"],["0.333333333333333","rgba(49,104,142,1)"],["0.375","rgba(46,114,142,1)"],["0.416666666666667","rgba(42,123,142,1)"],["0.458333333333333","rgba(38,133,141,1)"],["0.5","rgba(37,144,140,1)"],["0.541666666666667","rgba(33,154,138,1)"],["0.583333333333333","rgba(39,164,133,1)"],["0.625","rgba(47,174,127,1)"],["0.666666666666667","rgba(53,183,121,1)"],["0.708333333333333","rgba(79,191,110,1)"],["0.75","rgba(98,199,98,1)"],["0.791666666666667","rgba(119,207,85,1)"],["0.833333333333333","rgba(147,214,70,1)"],["0.875","rgba(172,220,52,1)"],["0.916666666666667","rgba(199,225,42,1)"],["0.958333333333333","rgba(226,228,40,1)"],["1","rgba(253,231,37,1)"]],"showscale":false,"color":[-0.0153880467741214,-0.379055668968149,-0.0673823257351641,0.251565632107747,-0.15263061287434,-0.50457713454332,-0.0534126905560237,0.207573597577214,0.0135684272587205,-0.00587051946324435,0.160854523234948,-0.0161115008789996,-0.144320469821988,0.70645308671508,0.543238492686134,-0.177916873955994,-0.111901481824652,-0.392769821251894,-0.239201361026593,0.155662676437213,-0.129519583576588,0.122321044462183,-0.205884540646321,0.424277488625844,-0.298431388020534,-0.270169169649623],"size":[100,12.1428571428571,28.2142857142857,28.2142857142857,13.2142857142857,14.2857142857143,23.9285714285714,16.4285714285714,13.2142857142857,14.2857142857143,14.2857142857143,14.2857142857143,17.5,10,10,10,15.3571428571429,12.1428571428571,10,17.5,10,11.0714285714286,11.0714285714286,11.0714285714286,13.2142857142857,10],"sizemode":"area","line":{"colorbar":{"title":"","ticklen":2},"cmin":-0.50457713454332,"cmax":0.70645308671508,"colorscale":[["0","rgba(68,1,84,1)"],["0.0416666666666667","rgba(70,19,97,1)"],["0.0833333333333333","rgba(72,32,111,1)"],["0.125","rgba(71,45,122,1)"],["0.166666666666667","rgba(68,58,128,1)"],["0.208333333333333","rgba(64,70,135,1)"],["0.25","rgba(60,82,138,1)"],["0.291666666666667","rgba(56,93,140,1)"],["0.333333333333333","rgba(49,104,142,1)"],["0.375","rgba(46,114,142,1)"],["0.416666666666667","rgba(42,123,142,1)"],["0.458333333333333","rgba(38,133,141,1)"],["0.5","rgba(37,144,140,1)"],["0.541666666666667","rgba(33,154,138,1)"],["0.583333333333333","rgba(39,164,133,1)"],["0.625","rgba(47,174,127,1)"],["0.666666666666667","rgba(53,183,121,1)"],["0.708333333333333","rgba(79,191,110,1)"],["0.75","rgba(98,199,98,1)"],["0.791666666666667","rgba(119,207,85,1)"],["0.833333333333333","rgba(147,214,70,1)"],["0.875","rgba(172,220,52,1)"],["0.916666666666667","rgba(199,225,42,1)"],["0.958333333333333","rgba(226,228,40,1)"],["1","rgba(253,231,37,1)"]],"showscale":false,"color":[-0.0153880467741214,-0.379055668968149,-0.0673823257351641,0.251565632107747,-0.15263061287434,-0.50457713454332,-0.0534126905560237,0.207573597577214,0.0135684272587205,-0.00587051946324435,0.160854523234948,-0.0161115008789996,-0.144320469821988,0.70645308671508,0.543238492686134,-0.177916873955994,-0.111901481824652,-0.392769821251894,-0.239201361026593,0.155662676437213,-0.129519583576588,0.122321044462183,-0.205884540646321,0.424277488625844,-0.298431388020534,-0.270169169649623]}},"textfont":{"size":[100,12.1428571428571,28.2142857142857,28.2142857142857,13.2142857142857,14.2857142857143,23.9285714285714,16.4285714285714,13.2142857142857,14.2857142857143,14.2857142857143,14.2857142857143,17.5,10,10,10,15.3571428571429,12.1428571428571,10,17.5,10,11.0714285714286,11.0714285714286,11.0714285714286,13.2142857142857,10]},"error_y":{"width":[]},"error_x":{"width":[]},"xaxis":"x","yaxis":"y","frame":null},{"x":[-0.50457713454332,0.70645308671508],"y":[0.00794201721997372,1.72776294332861],"type":"scatter","mode":"markers","opacity":0,"hoverinfo":"none","showlegend":false,"marker":{"colorbar":{"title":"Estimate","ticklen":2,"len":0.5,"lenmode":"fraction","y":1,"yanchor":"top"},"cmin":-0.50457713454332,"cmax":0.70645308671508,"colorscale":[["0","rgba(68,1,84,1)"],["0.0416666666666667","rgba(70,19,97,1)"],["0.0833333333333333","rgba(72,32,111,1)"],["0.125","rgba(71,45,122,1)"],["0.166666666666667","rgba(68,58,128,1)"],["0.208333333333333","rgba(64,70,135,1)"],["0.25","rgba(60,82,138,1)"],["0.291666666666667","rgba(56,93,140,1)"],["0.333333333333333","rgba(49,104,142,1)"],["0.375","rgba(46,114,142,1)"],["0.416666666666667","rgba(42,123,142,1)"],["0.458333333333333","rgba(38,133,141,1)"],["0.5","rgba(37,144,140,1)"],["0.541666666666667","rgba(33,154,138,1)"],["0.583333333333333","rgba(39,164,133,1)"],["0.625","rgba(47,174,127,1)"],["0.666666666666667","rgba(53,183,121,1)"],["0.708333333333333","rgba(79,191,110,1)"],["0.75","rgba(98,199,98,1)"],["0.791666666666667","rgba(119,207,85,1)"],["0.833333333333333","rgba(147,214,70,1)"],["0.875","rgba(172,220,52,1)"],["0.916666666666667","rgba(199,225,42,1)"],["0.958333333333333","rgba(226,228,40,1)"],["1","rgba(253,231,37,1)"]],"showscale":true,"color":[-0.50457713454332,0.70645308671508],"line":{"color":"rgba(255,127,14,1)"}},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.2,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
 </div>
 <div id="time-to-event-outcome" class="section level2">
 <h2 class="hasAnchor">
@@ -945,7 +930,7 @@
 </li>
 <li>filter : a value in [0,1) that will remove all genes that have a frequency below that threshold. Default is 0, including all</li>
 </ul>
-<div class="sourceCode" id="cb26"><html><body><pre class="r"><span class="no">surv.dat</span> <span class="kw">&lt;-</span> <span class="no">clin.patients</span> <span class="kw">%&gt;%</span>
+<div class="sourceCode" id="cb21"><html><body><pre class="r"><span class="no">surv.dat</span> <span class="kw">&lt;-</span> <span class="no">clin.patients</span> <span class="kw">%&gt;%</span>
   <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span>(<span class="no">X.Patient.Identifier</span> <span class="kw">%in%</span> <span class="fu"><a href="https://rdrr.io/r/base/abbreviate.html">abbreviate</a></span>(<span class="no">patients</span>,<span class="kw">strict</span> <span class="kw">=</span> <span class="no">T</span>, <span class="kw">minlength</span> <span class="kw">=</span> <span class="fl">9</span>)) <span class="kw">%&gt;%</span>
   <span class="fu">select</span>(<span class="no">X.Patient.Identifier</span>,<span class="no">Overall.Survival..Months.</span>, <span class="no">Overall.Survival.Status</span>) <span class="kw">%&gt;%</span>
   <span class="fu">rename</span>(<span class="kw">DMPID</span> <span class="kw">=</span> <span class="no">X.Patient.Identifier</span>, <span class="kw">time</span> <span class="kw">=</span> <span class="no">Overall.Survival..Months.</span>,<span class="kw">status</span> <span class="kw">=</span> <span class="no">Overall.Survival.Status</span>) <span class="kw">%&gt;%</span>
@@ -957,308 +942,308 @@
 <span class="fu">kable</span>(<span class="no">surv.test</span>$<span class="no">tab</span>,<span class="kw">row.names</span> <span class="kw">=</span> <span class="no">T</span>)</pre></body></html></div>
 <table class="table">
 <thead><tr class="header">
-<th></th>
+<th align="left"></th>
 <th align="left">Feature</th>
 <th align="right">Coefficient</th>
-<th align="right">Pvalue</th>
-<th align="right">MutationFrequency</th>
-<th align="right">FDR</th>
 <th align="right">HR</th>
+<th align="right">Pvalue</th>
+<th align="right">FDR</th>
+<th align="right">MutationFrequency</th>
 </tr></thead>
 <tbody>
 <tr class="odd">
-<td>1</td>
+<td align="left">1</td>
 <td align="left">EGFR</td>
 <td align="right">0.8400</td>
-<td align="right">0.263</td>
-<td align="right">0.1000</td>
-<td align="right">0.2628294</td>
 <td align="right">2.320</td>
+<td align="right">0.00821</td>
+<td align="right">0.2628294</td>
+<td align="right">0.1000</td>
 </tr>
 <tr class="even">
-<td>2</td>
+<td align="left">2</td>
 <td align="left">MLL</td>
 <td align="right">0.9440</td>
-<td align="right">0.279</td>
-<td align="right">0.0643</td>
-<td align="right">0.2789417</td>
 <td align="right">2.570</td>
+<td align="right">0.01960</td>
+<td align="right">0.2789417</td>
+<td align="right">0.0643</td>
 </tr>
 <tr class="odd">
-<td>3</td>
+<td align="left">3</td>
 <td align="left">RB1</td>
 <td align="right">0.7210</td>
-<td align="right">0.279</td>
-<td align="right">0.0929</td>
-<td align="right">0.2789417</td>
 <td align="right">2.060</td>
+<td align="right">0.03480</td>
+<td align="right">0.2789417</td>
+<td align="right">0.0929</td>
 </tr>
 <tr class="even">
-<td>4</td>
+<td align="left">4</td>
 <td align="left">CREBBP</td>
 <td align="right">0.9020</td>
-<td align="right">0.279</td>
-<td align="right">0.0571</td>
-<td align="right">0.2789417</td>
 <td align="right">2.460</td>
+<td align="right">0.03490</td>
+<td align="right">0.2789417</td>
+<td align="right">0.0571</td>
 </tr>
 <tr class="odd">
-<td>5</td>
+<td align="left">5</td>
 <td align="left">CDKN2A.Del</td>
 <td align="right">-1.7600</td>
-<td align="right">0.367</td>
-<td align="right">0.0643</td>
-<td align="right">0.3673973</td>
 <td align="right">0.171</td>
+<td align="right">0.07990</td>
+<td align="right">0.3673973</td>
+<td align="right">0.0643</td>
 </tr>
 <tr class="even">
-<td>6</td>
+<td align="left">6</td>
 <td align="left">MLL2</td>
 <td align="right">0.5630</td>
-<td align="right">0.367</td>
-<td align="right">0.1000</td>
-<td align="right">0.3673973</td>
 <td align="right">1.760</td>
+<td align="right">0.08590</td>
+<td align="right">0.3673973</td>
+<td align="right">0.1000</td>
 </tr>
 <tr class="odd">
-<td>7</td>
+<td align="left">7</td>
 <td align="left">TP53</td>
 <td align="right">0.4000</td>
-<td align="right">0.367</td>
-<td align="right">0.4429</td>
-<td align="right">0.3673973</td>
 <td align="right">1.490</td>
+<td align="right">0.08780</td>
+<td align="right">0.3673973</td>
+<td align="right">0.4429</td>
 </tr>
 <tr class="even">
-<td>8</td>
+<td align="left">8</td>
 <td align="left">ATRX</td>
 <td align="right">-1.2100</td>
-<td align="right">0.367</td>
-<td align="right">0.0714</td>
-<td align="right">0.3673973</td>
 <td align="right">0.298</td>
+<td align="right">0.09180</td>
+<td align="right">0.3673973</td>
+<td align="right">0.0714</td>
 </tr>
 <tr class="odd">
-<td>9</td>
+<td align="left">9</td>
 <td align="left">NF1</td>
 <td align="right">0.6240</td>
-<td align="right">0.504</td>
-<td align="right">0.0643</td>
-<td align="right">0.5041989</td>
 <td align="right">1.870</td>
+<td align="right">0.14800</td>
+<td align="right">0.5041989</td>
+<td align="right">0.0643</td>
 </tr>
 <tr class="even">
-<td>10</td>
+<td align="left">10</td>
 <td align="left">KRAS</td>
 <td align="right">0.4830</td>
-<td align="right">0.504</td>
-<td align="right">0.1286</td>
-<td align="right">0.5041989</td>
 <td align="right">1.620</td>
+<td align="right">0.15800</td>
+<td align="right">0.5041989</td>
+<td align="right">0.1286</td>
 </tr>
 <tr class="odd">
-<td>11</td>
+<td align="left">11</td>
 <td align="left">CDH1</td>
 <td align="right">-0.9720</td>
-<td align="right">0.510</td>
-<td align="right">0.0571</td>
-<td align="right">0.5100241</td>
 <td align="right">0.378</td>
+<td align="right">0.17500</td>
+<td align="right">0.5100241</td>
+<td align="right">0.0571</td>
 </tr>
 <tr class="even">
-<td>12</td>
+<td align="left">12</td>
 <td align="left">APC</td>
 <td align="right">-0.6500</td>
-<td align="right">0.706</td>
-<td align="right">0.0714</td>
-<td align="right">0.7055816</td>
 <td align="right">0.522</td>
+<td align="right">0.27000</td>
+<td align="right">0.7055816</td>
+<td align="right">0.0714</td>
 </tr>
 <tr class="odd">
-<td>13</td>
+<td align="left">13</td>
 <td align="left">KEAP1</td>
 <td align="right">0.4200</td>
-<td align="right">0.706</td>
-<td align="right">0.0786</td>
-<td align="right">0.7055816</td>
 <td align="right">1.520</td>
+<td align="right">0.29100</td>
+<td align="right">0.7055816</td>
+<td align="right">0.0786</td>
 </tr>
 <tr class="even">
-<td>14</td>
+<td align="left">14</td>
 <td align="left">PTEN</td>
 <td align="right">-0.6010</td>
-<td align="right">0.706</td>
-<td align="right">0.0571</td>
-<td align="right">0.7055816</td>
 <td align="right">0.548</td>
+<td align="right">0.30900</td>
+<td align="right">0.7055816</td>
+<td align="right">0.0571</td>
 </tr>
 <tr class="odd">
-<td>15</td>
+<td align="left">15</td>
 <td align="left">TERT</td>
 <td align="right">0.2970</td>
-<td align="right">0.742</td>
-<td align="right">0.1357</td>
-<td align="right">0.7416811</td>
 <td align="right">1.350</td>
+<td align="right">0.34800</td>
+<td align="right">0.7416811</td>
+<td align="right">0.1357</td>
 </tr>
 <tr class="even">
-<td>16</td>
+<td align="left">16</td>
 <td align="left">MCL1.Amp</td>
 <td align="right">0.2570</td>
-<td align="right">0.996</td>
-<td align="right">0.0643</td>
-<td align="right">0.9957052</td>
 <td align="right">1.290</td>
+<td align="right">0.57900</td>
+<td align="right">0.9957052</td>
+<td align="right">0.0643</td>
 </tr>
 <tr class="odd">
-<td>17</td>
+<td align="left">17</td>
 <td align="left">EPHA5</td>
 <td align="right">-0.2680</td>
-<td align="right">0.996</td>
-<td align="right">0.0643</td>
-<td align="right">0.9957052</td>
 <td align="right">0.765</td>
+<td align="right">0.60300</td>
+<td align="right">0.9957052</td>
+<td align="right">0.0643</td>
 </tr>
 <tr class="even">
-<td>18</td>
+<td align="left">18</td>
 <td align="left">PIK3CA</td>
 <td align="right">0.1600</td>
-<td align="right">0.996</td>
-<td align="right">0.1071</td>
-<td align="right">0.9957052</td>
 <td align="right">1.170</td>
+<td align="right">0.67100</td>
+<td align="right">0.9957052</td>
+<td align="right">0.1071</td>
 </tr>
 <tr class="odd">
-<td>19</td>
+<td align="left">19</td>
 <td align="left">NOTCH1</td>
 <td align="right">-0.2130</td>
-<td align="right">0.996</td>
-<td align="right">0.0714</td>
-<td align="right">0.9957052</td>
 <td align="right">0.808</td>
+<td align="right">0.67900</td>
+<td align="right">0.9957052</td>
+<td align="right">0.0714</td>
 </tr>
 <tr class="even">
-<td>20</td>
+<td align="left">20</td>
 <td align="left">SMARCA4</td>
 <td align="right">-0.1840</td>
-<td align="right">0.996</td>
-<td align="right">0.0643</td>
-<td align="right">0.9957052</td>
 <td align="right">0.832</td>
+<td align="right">0.72100</td>
+<td align="right">0.9957052</td>
+<td align="right">0.0643</td>
 </tr>
 <tr class="odd">
-<td>21</td>
+<td align="left">21</td>
 <td align="left">ARID1A</td>
 <td align="right">0.1160</td>
-<td align="right">0.996</td>
-<td align="right">0.0786</td>
-<td align="right">0.9957052</td>
 <td align="right">1.120</td>
+<td align="right">0.78600</td>
+<td align="right">0.9957052</td>
+<td align="right">0.0786</td>
 </tr>
 <tr class="even">
-<td>22</td>
+<td align="left">22</td>
 <td align="left">POLE</td>
 <td align="right">-0.1180</td>
-<td align="right">0.996</td>
-<td align="right">0.0500</td>
-<td align="right">0.9957052</td>
 <td align="right">0.888</td>
+<td align="right">0.84100</td>
+<td align="right">0.9957052</td>
+<td align="right">0.0500</td>
 </tr>
 <tr class="odd">
-<td>23</td>
+<td align="left">23</td>
 <td align="left">FAT1</td>
 <td align="right">-0.0667</td>
-<td align="right">0.996</td>
-<td align="right">0.1071</td>
-<td align="right">0.9957052</td>
 <td align="right">0.935</td>
+<td align="right">0.86700</td>
+<td align="right">0.9957052</td>
+<td align="right">0.1071</td>
 </tr>
 <tr class="even">
-<td>24</td>
+<td align="left">24</td>
 <td align="left">CCND1.Amp</td>
 <td align="right">0.0766</td>
-<td align="right">0.996</td>
-<td align="right">0.0786</td>
-<td align="right">0.9957052</td>
 <td align="right">1.080</td>
+<td align="right">0.86900</td>
+<td align="right">0.9957052</td>
+<td align="right">0.0786</td>
 </tr>
 <tr class="odd">
-<td>25</td>
+<td align="left">25</td>
 <td align="left">MLL3</td>
 <td align="right">-0.0621</td>
-<td align="right">0.996</td>
-<td align="right">0.0643</td>
-<td align="right">0.9957052</td>
 <td align="right">0.940</td>
+<td align="right">0.89400</td>
+<td align="right">0.9957052</td>
+<td align="right">0.0643</td>
 </tr>
 <tr class="even">
-<td>26</td>
+<td align="left">26</td>
 <td align="left">FGF19.Amp</td>
 <td align="right">0.0444</td>
-<td align="right">0.996</td>
-<td align="right">0.0571</td>
-<td align="right">0.9957052</td>
 <td align="right">1.050</td>
+<td align="right">0.93100</td>
+<td align="right">0.9957052</td>
+<td align="right">0.0571</td>
 </tr>
 <tr class="odd">
-<td>27</td>
+<td align="left">27</td>
 <td align="left">FGF3.Amp</td>
 <td align="right">0.0444</td>
-<td align="right">0.996</td>
-<td align="right">0.0571</td>
-<td align="right">0.9957052</td>
 <td align="right">1.050</td>
+<td align="right">0.93100</td>
+<td align="right">0.9957052</td>
+<td align="right">0.0571</td>
 </tr>
 <tr class="even">
-<td>28</td>
+<td align="left">28</td>
 <td align="left">FGF4.Amp</td>
 <td align="right">0.0444</td>
-<td align="right">0.996</td>
-<td align="right">0.0571</td>
-<td align="right">0.9957052</td>
 <td align="right">1.050</td>
+<td align="right">0.93100</td>
+<td align="right">0.9957052</td>
+<td align="right">0.0571</td>
 </tr>
 <tr class="odd">
-<td>29</td>
+<td align="left">29</td>
 <td align="left">STK11</td>
 <td align="right">0.0200</td>
-<td align="right">0.996</td>
-<td align="right">0.0857</td>
-<td align="right">0.9957052</td>
 <td align="right">1.020</td>
+<td align="right">0.96300</td>
+<td align="right">0.9957052</td>
+<td align="right">0.0857</td>
 </tr>
 <tr class="even">
-<td>30</td>
+<td align="left">30</td>
 <td align="left">PTPRT</td>
 <td align="right">-0.0143</td>
-<td align="right">0.996</td>
-<td align="right">0.0500</td>
-<td align="right">0.9957052</td>
 <td align="right">0.986</td>
+<td align="right">0.97800</td>
+<td align="right">0.9957052</td>
+<td align="right">0.0500</td>
 </tr>
 <tr class="odd">
-<td>31</td>
+<td align="left">31</td>
 <td align="left">ATM</td>
 <td align="right">0.0129</td>
-<td align="right">0.996</td>
-<td align="right">0.0714</td>
-<td align="right">0.9957052</td>
 <td align="right">1.010</td>
+<td align="right">0.97800</td>
+<td align="right">0.9957052</td>
+<td align="right">0.0714</td>
 </tr>
 <tr class="even">
-<td>32</td>
+<td align="left">32</td>
 <td align="left">BRCA2</td>
 <td align="right">-18.2000</td>
-<td align="right">0.996</td>
-<td align="right">0.0500</td>
-<td align="right">0.9957052</td>
 <td align="right">0.000</td>
+<td align="right">0.99600</td>
+<td align="right">0.9957052</td>
+<td align="right">0.0500</td>
 </tr>
 </tbody>
 </table>
-<div class="sourceCode" id="cb27"><html><body><pre class="r"><span class="no">surv.test</span>$<span class="no">p</span></pre></body></html></div>
+<div class="sourceCode" id="cb22"><html><body><pre class="r"><span class="no">surv.test</span>$<span class="no">p</span></pre></body></html></div>
 <div id="htmlwidget-667e65fcb3cfa1dceca2" style="width:768px;height:384px;" class="plotly html-widget"></div>
-<script type="application/json" data-for="htmlwidget-667e65fcb3cfa1dceca2">{"x":{"visdat":{"dcc14b2e192c":["function () ","plotlyVisDat"]},"cur_data":"dcc14b2e192c","attrs":{"dcc14b2e192c":{"x":{},"y":{},"text":{},"mode":"markers","color":{},"size":{},"alpha_stroke":1,"sizes":[10,100],"spans":[1,20]}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"title":"Volcano Plot","xaxis":{"domain":[0,1],"automargin":true,"title":"Coefficient"},"yaxis":{"domain":[0,1],"automargin":true,"title":"-log10(Pvalue)"},"hovermode":"closest","showlegend":false,"legend":{"yanchor":"top","y":0.5}},"source":"A","config":{"showSendToCloud":false},"data":[{"x":[0.84,0.944,0.721,0.902,-1.76,0.563,0.4,-1.21,0.624,0.483,-0.972,-0.65,0.42,-0.601,0.297,0.257,-0.268,0.16,-0.213,-0.184,0.116,-0.118,-0.0667,0.0766,-0.0621,0.0444,0.0444,0.0444,0.02,-0.0143,0.0129,-18.2],"y":[0.580044251510242,0.554395796726402,0.554395796726402,0.554395796726402,0.435333935747911,0.435333935747911,0.435333935747911,0.435333935747911,0.297569463554475,0.297569463554475,0.292429823902064,0.151195298948196,0.151195298948196,0.151195298948196,0.129596094720973,0.00174066157630127,0.00174066157630127,0.00174066157630127,0.00174066157630127,0.00174066157630127,0.00174066157630127,0.00174066157630127,0.00174066157630127,0.00174066157630127,0.00174066157630127,0.00174066157630127,0.00174066157630127,0.00174066157630127,0.00174066157630127,0.00174066157630127,0.00174066157630127,0.00174066157630127],"text":["Feature : EGFR <br> Hazard Ratio : 2.32","Feature : MLL <br> Hazard Ratio : 2.57","Feature : RB1 <br> Hazard Ratio : 2.06","Feature : CREBBP <br> Hazard Ratio : 2.46","Feature : CDKN2A.Del <br> Hazard Ratio : 0.171","Feature : MLL2 <br> Hazard Ratio : 1.76","Feature : TP53 <br> Hazard Ratio : 1.49","Feature : ATRX <br> Hazard Ratio : 0.298","Feature : NF1 <br> Hazard Ratio : 1.87","Feature : KRAS <br> Hazard Ratio : 1.62","Feature : CDH1 <br> Hazard Ratio : 0.378","Feature : APC <br> Hazard Ratio : 0.522","Feature : KEAP1 <br> Hazard Ratio : 1.52","Feature : PTEN <br> Hazard Ratio : 0.548","Feature : TERT <br> Hazard Ratio : 1.35","Feature : MCL1.Amp <br> Hazard Ratio : 1.29","Feature : EPHA5 <br> Hazard Ratio : 0.765","Feature : PIK3CA <br> Hazard Ratio : 1.17","Feature : NOTCH1 <br> Hazard Ratio : 0.808","Feature : SMARCA4 <br> Hazard Ratio : 0.832","Feature : ARID1A <br> Hazard Ratio : 1.12","Feature : POLE <br> Hazard Ratio : 0.888","Feature : FAT1 <br> Hazard Ratio : 0.935","Feature : CCND1.Amp <br> Hazard Ratio : 1.08","Feature : MLL3 <br> Hazard Ratio : 0.94","Feature : FGF19.Amp <br> Hazard Ratio : 1.05","Feature : FGF3.Amp <br> Hazard Ratio : 1.05","Feature : FGF4.Amp <br> Hazard Ratio : 1.05","Feature : STK11 <br> Hazard Ratio : 1.02","Feature : PTPRT <br> Hazard Ratio : 0.986","Feature : ATM <br> Hazard Ratio : 1.01","Feature : BRCA2 <br> Hazard Ratio : 1.29e-08"],"mode":"markers","type":"scatter","marker":{"colorbar":{"title":"MutationFrequency","ticklen":2},"cmin":0.05,"cmax":0.4429,"colorscale":[["0","rgba(68,1,84,1)"],["0.0416666666666667","rgba(70,19,97,1)"],["0.0833333333333333","rgba(72,32,111,1)"],["0.125","rgba(71,45,122,1)"],["0.166666666666667","rgba(68,58,128,1)"],["0.208333333333333","rgba(64,70,135,1)"],["0.25","rgba(60,82,138,1)"],["0.291666666666667","rgba(56,93,140,1)"],["0.333333333333333","rgba(49,104,142,1)"],["0.375","rgba(46,114,142,1)"],["0.416666666666667","rgba(42,123,142,1)"],["0.458333333333333","rgba(38,133,141,1)"],["0.5","rgba(37,144,140,1)"],["0.541666666666667","rgba(33,154,138,1)"],["0.583333333333333","rgba(39,164,133,1)"],["0.625","rgba(47,174,127,1)"],["0.666666666666667","rgba(53,183,121,1)"],["0.708333333333333","rgba(79,191,110,1)"],["0.75","rgba(98,199,98,1)"],["0.791666666666667","rgba(119,207,85,1)"],["0.833333333333333","rgba(147,214,70,1)"],["0.875","rgba(172,220,52,1)"],["0.916666666666667","rgba(199,225,42,1)"],["0.958333333333333","rgba(226,228,40,1)"],["1","rgba(253,231,37,1)"]],"showscale":false,"color":[0.1,0.0643,0.0929,0.0571,0.0643,0.1,0.4429,0.0714,0.0643,0.1286,0.0571,0.0714,0.0786,0.0571,0.1357,0.0643,0.0643,0.1071,0.0714,0.0643,0.0786,0.05,0.1071,0.0786,0.0643,0.0571,0.0571,0.0571,0.0857,0.05,0.0714,0.05],"size":[21.4532960040723,13.2756426571647,19.826927971494,11.6263680325783,13.2756426571647,21.4532960040723,100,14.9020106897429,13.2756426571647,28.0045813184016,11.6263680325783,14.9020106897429,16.5512853143293,11.6263680325783,29.6309493509799,13.2756426571647,13.2756426571647,23.0796640366505,14.9020106897429,13.2756426571647,16.5512853143293,10,23.0796640366505,16.5512853143293,13.2756426571647,11.6263680325783,11.6263680325783,11.6263680325783,18.1776533469076,10,14.9020106897429,10],"sizemode":"area","line":{"colorbar":{"title":"","ticklen":2},"cmin":0.05,"cmax":0.4429,"colorscale":[["0","rgba(68,1,84,1)"],["0.0416666666666667","rgba(70,19,97,1)"],["0.0833333333333333","rgba(72,32,111,1)"],["0.125","rgba(71,45,122,1)"],["0.166666666666667","rgba(68,58,128,1)"],["0.208333333333333","rgba(64,70,135,1)"],["0.25","rgba(60,82,138,1)"],["0.291666666666667","rgba(56,93,140,1)"],["0.333333333333333","rgba(49,104,142,1)"],["0.375","rgba(46,114,142,1)"],["0.416666666666667","rgba(42,123,142,1)"],["0.458333333333333","rgba(38,133,141,1)"],["0.5","rgba(37,144,140,1)"],["0.541666666666667","rgba(33,154,138,1)"],["0.583333333333333","rgba(39,164,133,1)"],["0.625","rgba(47,174,127,1)"],["0.666666666666667","rgba(53,183,121,1)"],["0.708333333333333","rgba(79,191,110,1)"],["0.75","rgba(98,199,98,1)"],["0.791666666666667","rgba(119,207,85,1)"],["0.833333333333333","rgba(147,214,70,1)"],["0.875","rgba(172,220,52,1)"],["0.916666666666667","rgba(199,225,42,1)"],["0.958333333333333","rgba(226,228,40,1)"],["1","rgba(253,231,37,1)"]],"showscale":false,"color":[0.1,0.0643,0.0929,0.0571,0.0643,0.1,0.4429,0.0714,0.0643,0.1286,0.0571,0.0714,0.0786,0.0571,0.1357,0.0643,0.0643,0.1071,0.0714,0.0643,0.0786,0.05,0.1071,0.0786,0.0643,0.0571,0.0571,0.0571,0.0857,0.05,0.0714,0.05]}},"textfont":{"size":[21.4532960040723,13.2756426571647,19.826927971494,11.6263680325783,13.2756426571647,21.4532960040723,100,14.9020106897429,13.2756426571647,28.0045813184016,11.6263680325783,14.9020106897429,16.5512853143293,11.6263680325783,29.6309493509799,13.2756426571647,13.2756426571647,23.0796640366505,14.9020106897429,13.2756426571647,16.5512853143293,10,23.0796640366505,16.5512853143293,13.2756426571647,11.6263680325783,11.6263680325783,11.6263680325783,18.1776533469076,10,14.9020106897429,10]},"error_y":{"width":[]},"error_x":{"width":[]},"xaxis":"x","yaxis":"y","frame":null},{"x":[-18.2,0.944],"y":[0.00174066157630127,0.580044251510242],"type":"scatter","mode":"markers","opacity":0,"hoverinfo":"none","showlegend":false,"marker":{"colorbar":{"title":"MutationFrequency","ticklen":2,"len":0.5,"lenmode":"fraction","y":1,"yanchor":"top"},"cmin":0.05,"cmax":0.4429,"colorscale":[["0","rgba(68,1,84,1)"],["0.0416666666666667","rgba(70,19,97,1)"],["0.0833333333333333","rgba(72,32,111,1)"],["0.125","rgba(71,45,122,1)"],["0.166666666666667","rgba(68,58,128,1)"],["0.208333333333333","rgba(64,70,135,1)"],["0.25","rgba(60,82,138,1)"],["0.291666666666667","rgba(56,93,140,1)"],["0.333333333333333","rgba(49,104,142,1)"],["0.375","rgba(46,114,142,1)"],["0.416666666666667","rgba(42,123,142,1)"],["0.458333333333333","rgba(38,133,141,1)"],["0.5","rgba(37,144,140,1)"],["0.541666666666667","rgba(33,154,138,1)"],["0.583333333333333","rgba(39,164,133,1)"],["0.625","rgba(47,174,127,1)"],["0.666666666666667","rgba(53,183,121,1)"],["0.708333333333333","rgba(79,191,110,1)"],["0.75","rgba(98,199,98,1)"],["0.791666666666667","rgba(119,207,85,1)"],["0.833333333333333","rgba(147,214,70,1)"],["0.875","rgba(172,220,52,1)"],["0.916666666666667","rgba(199,225,42,1)"],["0.958333333333333","rgba(226,228,40,1)"],["1","rgba(253,231,37,1)"]],"showscale":true,"color":[0.05,0.4429],"line":{"color":"rgba(255,127,14,1)"}},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.2,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script><div class="sourceCode" id="cb28"><html><body><pre class="r"><span class="no">surv.test</span>$<span class="no">KM</span>
+<script type="application/json" data-for="htmlwidget-667e65fcb3cfa1dceca2">{"x":{"visdat":{"3d9f1e38a04c":["function () ","plotlyVisDat"]},"cur_data":"3d9f1e38a04c","attrs":{"3d9f1e38a04c":{"x":{},"y":{},"text":{},"mode":"markers","color":{},"size":{},"alpha_stroke":1,"sizes":[10,100],"spans":[1,20]}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"title":"Volcano Plot","xaxis":{"domain":[0,1],"automargin":true,"title":"Coefficient"},"yaxis":{"domain":[0,1],"automargin":true,"title":"-log10(Pvalue)"},"hovermode":"closest","showlegend":false,"legend":{"yanchor":"top","y":0.5}},"source":"A","config":{"showSendToCloud":false},"data":[{"x":[0.84,0.944,0.721,0.902,-1.76,0.563,0.4,-1.21,0.624,0.483,-0.972,-0.65,0.42,-0.601,0.297,0.257,-0.268,0.16,-0.213,-0.184,0.116,-0.118,-0.0667,0.0766,-0.0621,0.0444,0.0444,0.0444,0.02,-0.0143,0.0129,-18.2],"y":[2.08565684288056,1.70774392864352,1.45842075605342,1.45717457304082,1.09745322068601,1.06600683616876,1.0565054840939,1.03715731879876,0.829738284605043,0.801342913045577,0.756961951313706,0.568636235841013,0.536107011014093,0.510041520575165,0.458420756053419,0.237321436272564,0.219682687859849,0.173277479831008,0.168130225719498,0.142064735280571,0.104577453960592,0.0752040042020878,0.0619809025237897,0.0609802235513335,0.0486624812040823,0.0310503190186574,0.0310503190186574,0.0310503190186574,0.0163737128754655,0.00966114521239857,0.00966114521239857,0.00174066157630127],"text":["Feature : EGFR <br> Hazard Ratio : 2.32","Feature : MLL <br> Hazard Ratio : 2.57","Feature : RB1 <br> Hazard Ratio : 2.06","Feature : CREBBP <br> Hazard Ratio : 2.46","Feature : CDKN2A.Del <br> Hazard Ratio : 0.171","Feature : MLL2 <br> Hazard Ratio : 1.76","Feature : TP53 <br> Hazard Ratio : 1.49","Feature : ATRX <br> Hazard Ratio : 0.298","Feature : NF1 <br> Hazard Ratio : 1.87","Feature : KRAS <br> Hazard Ratio : 1.62","Feature : CDH1 <br> Hazard Ratio : 0.378","Feature : APC <br> Hazard Ratio : 0.522","Feature : KEAP1 <br> Hazard Ratio : 1.52","Feature : PTEN <br> Hazard Ratio : 0.548","Feature : TERT <br> Hazard Ratio : 1.35","Feature : MCL1.Amp <br> Hazard Ratio : 1.29","Feature : EPHA5 <br> Hazard Ratio : 0.765","Feature : PIK3CA <br> Hazard Ratio : 1.17","Feature : NOTCH1 <br> Hazard Ratio : 0.808","Feature : SMARCA4 <br> Hazard Ratio : 0.832","Feature : ARID1A <br> Hazard Ratio : 1.12","Feature : POLE <br> Hazard Ratio : 0.888","Feature : FAT1 <br> Hazard Ratio : 0.935","Feature : CCND1.Amp <br> Hazard Ratio : 1.08","Feature : MLL3 <br> Hazard Ratio : 0.94","Feature : FGF19.Amp <br> Hazard Ratio : 1.05","Feature : FGF3.Amp <br> Hazard Ratio : 1.05","Feature : FGF4.Amp <br> Hazard Ratio : 1.05","Feature : STK11 <br> Hazard Ratio : 1.02","Feature : PTPRT <br> Hazard Ratio : 0.986","Feature : ATM <br> Hazard Ratio : 1.01","Feature : BRCA2 <br> Hazard Ratio : 1.29e-08"],"mode":"markers","type":"scatter","marker":{"colorbar":{"title":"MutationFrequency","ticklen":2},"cmin":0.05,"cmax":0.4429,"colorscale":[["0","rgba(68,1,84,1)"],["0.0416666666666667","rgba(70,19,97,1)"],["0.0833333333333333","rgba(72,32,111,1)"],["0.125","rgba(71,45,122,1)"],["0.166666666666667","rgba(68,58,128,1)"],["0.208333333333333","rgba(64,70,135,1)"],["0.25","rgba(60,82,138,1)"],["0.291666666666667","rgba(56,93,140,1)"],["0.333333333333333","rgba(49,104,142,1)"],["0.375","rgba(46,114,142,1)"],["0.416666666666667","rgba(42,123,142,1)"],["0.458333333333333","rgba(38,133,141,1)"],["0.5","rgba(37,144,140,1)"],["0.541666666666667","rgba(33,154,138,1)"],["0.583333333333333","rgba(39,164,133,1)"],["0.625","rgba(47,174,127,1)"],["0.666666666666667","rgba(53,183,121,1)"],["0.708333333333333","rgba(79,191,110,1)"],["0.75","rgba(98,199,98,1)"],["0.791666666666667","rgba(119,207,85,1)"],["0.833333333333333","rgba(147,214,70,1)"],["0.875","rgba(172,220,52,1)"],["0.916666666666667","rgba(199,225,42,1)"],["0.958333333333333","rgba(226,228,40,1)"],["1","rgba(253,231,37,1)"]],"showscale":false,"color":[0.1,0.0643,0.0929,0.0571,0.0643,0.1,0.4429,0.0714,0.0643,0.1286,0.0571,0.0714,0.0786,0.0571,0.1357,0.0643,0.0643,0.1071,0.0714,0.0643,0.0786,0.05,0.1071,0.0786,0.0643,0.0571,0.0571,0.0571,0.0857,0.05,0.0714,0.05],"size":[21.4532960040723,13.2756426571647,19.826927971494,11.6263680325783,13.2756426571647,21.4532960040723,100,14.9020106897429,13.2756426571647,28.0045813184016,11.6263680325783,14.9020106897429,16.5512853143293,11.6263680325783,29.6309493509799,13.2756426571647,13.2756426571647,23.0796640366505,14.9020106897429,13.2756426571647,16.5512853143293,10,23.0796640366505,16.5512853143293,13.2756426571647,11.6263680325783,11.6263680325783,11.6263680325783,18.1776533469076,10,14.9020106897429,10],"sizemode":"area","line":{"colorbar":{"title":"","ticklen":2},"cmin":0.05,"cmax":0.4429,"colorscale":[["0","rgba(68,1,84,1)"],["0.0416666666666667","rgba(70,19,97,1)"],["0.0833333333333333","rgba(72,32,111,1)"],["0.125","rgba(71,45,122,1)"],["0.166666666666667","rgba(68,58,128,1)"],["0.208333333333333","rgba(64,70,135,1)"],["0.25","rgba(60,82,138,1)"],["0.291666666666667","rgba(56,93,140,1)"],["0.333333333333333","rgba(49,104,142,1)"],["0.375","rgba(46,114,142,1)"],["0.416666666666667","rgba(42,123,142,1)"],["0.458333333333333","rgba(38,133,141,1)"],["0.5","rgba(37,144,140,1)"],["0.541666666666667","rgba(33,154,138,1)"],["0.583333333333333","rgba(39,164,133,1)"],["0.625","rgba(47,174,127,1)"],["0.666666666666667","rgba(53,183,121,1)"],["0.708333333333333","rgba(79,191,110,1)"],["0.75","rgba(98,199,98,1)"],["0.791666666666667","rgba(119,207,85,1)"],["0.833333333333333","rgba(147,214,70,1)"],["0.875","rgba(172,220,52,1)"],["0.916666666666667","rgba(199,225,42,1)"],["0.958333333333333","rgba(226,228,40,1)"],["1","rgba(253,231,37,1)"]],"showscale":false,"color":[0.1,0.0643,0.0929,0.0571,0.0643,0.1,0.4429,0.0714,0.0643,0.1286,0.0571,0.0714,0.0786,0.0571,0.1357,0.0643,0.0643,0.1071,0.0714,0.0643,0.0786,0.05,0.1071,0.0786,0.0643,0.0571,0.0571,0.0571,0.0857,0.05,0.0714,0.05]}},"textfont":{"size":[21.4532960040723,13.2756426571647,19.826927971494,11.6263680325783,13.2756426571647,21.4532960040723,100,14.9020106897429,13.2756426571647,28.0045813184016,11.6263680325783,14.9020106897429,16.5512853143293,11.6263680325783,29.6309493509799,13.2756426571647,13.2756426571647,23.0796640366505,14.9020106897429,13.2756426571647,16.5512853143293,10,23.0796640366505,16.5512853143293,13.2756426571647,11.6263680325783,11.6263680325783,11.6263680325783,18.1776533469076,10,14.9020106897429,10]},"error_y":{"width":[]},"error_x":{"width":[]},"xaxis":"x","yaxis":"y","frame":null},{"x":[-18.2,0.944],"y":[0.00174066157630127,2.08565684288056],"type":"scatter","mode":"markers","opacity":0,"hoverinfo":"none","showlegend":false,"marker":{"colorbar":{"title":"MutationFrequency","ticklen":2,"len":0.5,"lenmode":"fraction","y":1,"yanchor":"top"},"cmin":0.05,"cmax":0.4429,"colorscale":[["0","rgba(68,1,84,1)"],["0.0416666666666667","rgba(70,19,97,1)"],["0.0833333333333333","rgba(72,32,111,1)"],["0.125","rgba(71,45,122,1)"],["0.166666666666667","rgba(68,58,128,1)"],["0.208333333333333","rgba(64,70,135,1)"],["0.25","rgba(60,82,138,1)"],["0.291666666666667","rgba(56,93,140,1)"],["0.333333333333333","rgba(49,104,142,1)"],["0.375","rgba(46,114,142,1)"],["0.416666666666667","rgba(42,123,142,1)"],["0.458333333333333","rgba(38,133,141,1)"],["0.5","rgba(37,144,140,1)"],["0.541666666666667","rgba(33,154,138,1)"],["0.583333333333333","rgba(39,164,133,1)"],["0.625","rgba(47,174,127,1)"],["0.666666666666667","rgba(53,183,121,1)"],["0.708333333333333","rgba(79,191,110,1)"],["0.75","rgba(98,199,98,1)"],["0.791666666666667","rgba(119,207,85,1)"],["0.833333333333333","rgba(147,214,70,1)"],["0.875","rgba(172,220,52,1)"],["0.916666666666667","rgba(199,225,42,1)"],["0.958333333333333","rgba(226,228,40,1)"],["1","rgba(253,231,37,1)"]],"showscale":true,"color":[0.05,0.4429],"line":{"color":"rgba(255,127,14,1)"}},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.2,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script><div class="sourceCode" id="cb23"><html><body><pre class="r"><span class="no">surv.test</span>$<span class="no">KM</span>
 <span class="co">#&gt; [[1]]</span></pre></body></html></div>
 <p><img src="gnomeR-vignette_files/figure-html/unnamed-chunk-14-2.png" width="768"></p>
 <pre><code>#&gt; 
@@ -1303,11 +1288,11 @@
 <li>ordered : order in which patients should be printed in the OncoPrint</li>
 </ul>
 <p>We show here an example with the most common genes.</p>
-<div class="sourceCode" id="cb38"><html><body><pre class="r"><span class="no">gen.dat</span> <span class="kw">&lt;-</span> <span class="no">bin.mut</span>[,<span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/sort.html">sort</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/apply.html">apply</a></span>(<span class="no">bin.mut</span>,<span class="fl">2</span>, <span class="no">sum</span>),<span class="kw">decreasing</span> <span class="kw">=</span> <span class="no">T</span>))[<span class="fl">1</span>:<span class="fl">15</span>]]
+<div class="sourceCode" id="cb33"><html><body><pre class="r"><span class="no">gen.dat</span> <span class="kw">&lt;-</span> <span class="no">bin.mut</span>[,<span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/sort.html">sort</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/apply.html">apply</a></span>(<span class="no">bin.mut</span>,<span class="fl">2</span>, <span class="no">sum</span>),<span class="kw">decreasing</span> <span class="kw">=</span> <span class="no">T</span>))[<span class="fl">1</span>:<span class="fl">15</span>]]
 <span class="fu"><a href="../reference/plot_oncoPrint.html">plot_oncoPrint</a></span>(<span class="no">gen.dat</span>)</pre></body></html></div>
 <p><img src="gnomeR-vignette_files/figure-html/unnamed-chunk-15-1.png" width="768"></p>
 <p>Similarly we include here an example adding patients’ clinical variables:</p>
-<div class="sourceCode" id="cb39"><html><body><pre class="r"><span class="no">clin.patients.dat</span> <span class="kw">&lt;-</span> <span class="no">clin.patients</span>[<span class="fu"><a href="https://rdrr.io/r/base/match.html">match</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/abbreviate.html">abbreviate</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span>(<span class="no">gen.dat</span>),<span class="kw">strict</span> <span class="kw">=</span> <span class="fl">TRUE</span>, <span class="kw">minlength</span> <span class="kw">=</span> <span class="fl">9</span>),<span class="no">clin.patients</span>$<span class="no">X.Patient.Identifier</span>),] <span class="kw">%&gt;%</span>
+<div class="sourceCode" id="cb34"><html><body><pre class="r"><span class="no">clin.patients.dat</span> <span class="kw">&lt;-</span> <span class="no">clin.patients</span>[<span class="fu"><a href="https://rdrr.io/r/base/match.html">match</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/abbreviate.html">abbreviate</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span>(<span class="no">gen.dat</span>),<span class="kw">strict</span> <span class="kw">=</span> <span class="fl">TRUE</span>, <span class="kw">minlength</span> <span class="kw">=</span> <span class="fl">9</span>),<span class="no">clin.patients</span>$<span class="no">X.Patient.Identifier</span>),] <span class="kw">%&gt;%</span>
   <span class="fu">rename</span>(<span class="kw">DMPID</span> <span class="kw">=</span> <span class="no">X.Patient.Identifier</span>, <span class="kw">Smoker</span> <span class="kw">=</span> <span class="no">Smoking.History</span>) <span class="kw">%&gt;%</span>
   <span class="fu">select</span>(<span class="no">DMPID</span>, <span class="no">Sex</span>,<span class="no">Smoker</span>) <span class="kw">%&gt;%</span>
   <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span>(!<span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span>(<span class="no">DMPID</span>)) <span class="kw">%&gt;%</span>
@@ -1334,11 +1319,11 @@
 <li>outcome : potential outcome of interest to be plotted along the X-axis</li>
 </ul>
 <p>This function returns the a heatmap and the merged segmentation dataset used to created:</p>
-<div class="sourceCode" id="cb40"><html><body><pre class="r"><span class="no">patients.seg</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html">as.character</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/unlist.html">unlist</a></span>(<span class="no">clin.sample</span> <span class="kw">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span>(<span class="no">Sample.Identifier</span> <span class="kw">%in%</span> <span class="no">patients</span>, <span class="fu"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/character.html">as.character</a></span>(<span class="no">Tumor.Purity</span>)) <span class="kw">&gt;</span> <span class="fl">30</span>) <span class="kw">%&gt;%</span> <span class="fu">select</span>(<span class="no">Sample.Identifier</span>)))
+<div class="sourceCode" id="cb35"><html><body><pre class="r"><span class="no">patients.seg</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html">as.character</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/unlist.html">unlist</a></span>(<span class="no">clin.sample</span> <span class="kw">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span>(<span class="no">Sample.Identifier</span> <span class="kw">%in%</span> <span class="no">patients</span>, <span class="fu"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/character.html">as.character</a></span>(<span class="no">Tumor.Purity</span>)) <span class="kw">&gt;</span> <span class="fl">30</span>) <span class="kw">%&gt;%</span> <span class="fu">select</span>(<span class="no">Sample.Identifier</span>)))
 <span class="no">facet</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/facets.heatmap.html">facets.heatmap</a></span>(<span class="kw">seg</span> <span class="kw">=</span> <span class="no">seg</span>, <span class="kw">patients</span><span class="kw">=</span><span class="no">patients.seg</span>[<span class="fl">0</span>:<span class="fl">100</span>])
 <span class="no">facet</span>$<span class="no">p</span></pre></body></html></div>
 <p><img src="gnomeR-vignette_files/figure-html/unnamed-chunk-17-1.png" width="768"></p>
-<div class="sourceCode" id="cb41"><html><body><pre class="r"><span class="fu">as.tbl</span>(<span class="no">facet</span>$<span class="no">out.cn</span>)
+<div class="sourceCode" id="cb36"><html><body><pre class="r"><span class="fu">as.tbl</span>(<span class="no">facet</span>$<span class="no">out.cn</span>)
 <span class="co">#&gt; # A tibble: 100 x 610</span>
 <span class="co">#&gt;    `chr1.2488138-1… `chr1.11167550-… `chr1.14192672-… `chr1.15296019-…</span>
 <span class="co">#&gt;               &lt;dbl&gt;            &lt;dbl&gt;            &lt;dbl&gt;            &lt;dbl&gt;</span>

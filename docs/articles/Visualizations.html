@@ -91,7 +91,7 @@
 
       
 
-      </header><div class="row">
+      </header><script src="Visualizations_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Visualizations</h1>
@@ -112,7 +112,7 @@
 <p>In this article we will explore the different automatized plotting functions included in <code>gnomeR</code>. There are two main functions in <code>gnomeR</code> to visualize genomic data:</p>
 <ul>
 <li>
-<code><a href="../reference/maf.summary.html">maf.summary()</a></code> provides an extensive summary of the mutations found in the MAF file provided</li>
+<code><a href="../reference/maf_viz.html">maf_viz()</a></code> provides an extensive summary of the mutations found in the MAF file provided</li>
 <li>
 <code><a href="../reference/plot_oncoPrint.html">plot_oncoPrint()</a></code> provides an OncoPrint that let’s the user explore the comutation (or any genetic event and clinical factors) patterns in the cohort of interest</li>
 </ul>
@@ -120,46 +120,42 @@
 <div id="summarizing-a-maf-file" class="section level1">
 <h1 class="hasAnchor">
 <a href="#summarizing-a-maf-file" class="anchor"></a>Summarizing a MAF file</h1>
-<p>The <code><a href="../reference/maf.summary.html">maf.summary()</a></code> function takes the following inputs:</p>
+<p>The <code><a href="../reference/maf_viz.html">maf_viz()</a></code> function takes the following inputs:</p>
 <ul>
 <li>
 <code>maf</code> a MAF file</li>
 <li>
 <code>...</code> any arguments that belong to the <code>binmat</code> method</li>
 </ul>
-<p><code><a href="../reference/maf.summary.html">maf.summary()</a></code> will return a list of plots:</p>
+<p><code><a href="../reference/maf_viz.html">maf_viz()</a></code> will return a list of plots:</p>
 <ul>
 <li>
-<code>p.class</code> summarise the variant classification counts across the MAF</li>
+<code>varclass</code> summarise the variant classification counts across the MAF</li>
 <li>
-<code>p.type</code> summarise the variant type counts across the MAF</li>
+<code>vartype</code> summarise the variant type counts across the MAF</li>
 <li>
-<code>p.SNV</code> summarise the SNV class counts across the MAF</li>
+<code>snvclass</code> summarise the SNV class counts across the MAF</li>
 <li>
-<code>p.patient.variant</code> summarise the variants per sample counts across the MAF</li>
+<code>samplevar</code> summarise the variants per sample counts across the MAF</li>
 <li>
-<code>p.variant.bp</code> summarise the variants classification distribution</li>
+<code>topgenes</code> summarise the most frequently mutated genes counts</li>
 <li>
-<code>p.genes</code> summarise the most frequently mutated genes counts</li>
-<li>
-<code>p.variant.dist</code> summarise the variants classification distribution as a percent of total variants</li>
-<li>
-<code>p.variant.dist.bar</code> summarise the variants classification distribution as a percent of total variants in a single sample</li>
-<li>
-<code>p.SNV.dist</code> summarise the SNV distribution as a percent of total SNV</li>
-<li>
-<code>p.corr</code> summarise the correlation of genes that are most frequently mutated in a heatmap</li>
-<li>
-<code>p.comut</code> summarise the comutation of genes that are most frequently mutated in a heatmap</li>
+<code>genecor</code> summarise the correlation of genes that are most frequently mutated in a heatmap</li>
 </ul>
 <p>An example of a subset of these plots is shown below.</p>
-<div class="sourceCode" id="cb2"><html><body><pre class="r"><span class="no">plots_summary</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/maf.summary.html">maf.summary</a></span>(<span class="kw">maf</span> <span class="kw">=</span> <span class="no">mut</span>)
-<span class="no">plots_summary</span>$<span class="no">p.genes</span></pre></body></html></div>
+<div class="sourceCode" id="cb2"><html><body><pre class="r"><span class="no">plots_summary</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/maf_viz.html">maf_viz</a></span>(<span class="kw">maf</span> <span class="kw">=</span> <span class="no">mut</span>)
+<span class="no">plots_summary</span>$<span class="no">varclass</span></pre></body></html></div>
 <p><img src="Visualizations_files/figure-html/unnamed-chunk-3-1.png" width="700"></p>
-<div class="sourceCode" id="cb3"><html><body><pre class="r"><span class="no">plots_summary</span>$<span class="no">p.variant.dist</span></pre></body></html></div>
+<div class="sourceCode" id="cb3"><html><body><pre class="r"><span class="no">plots_summary</span>$<span class="no">vartype</span></pre></body></html></div>
 <p><img src="Visualizations_files/figure-html/unnamed-chunk-3-2.png" width="700"></p>
-<div class="sourceCode" id="cb4"><html><body><pre class="r"><span class="no">plots_summary</span>$<span class="no">p.comut</span></pre></body></html></div>
+<div class="sourceCode" id="cb4"><html><body><pre class="r"><span class="no">plots_summary</span>$<span class="no">snvclass</span></pre></body></html></div>
 <p><img src="Visualizations_files/figure-html/unnamed-chunk-3-3.png" width="700"></p>
+<div class="sourceCode" id="cb5"><html><body><pre class="r"><span class="no">plots_summary</span>$<span class="no">samplevar</span></pre></body></html></div>
+<p><img src="Visualizations_files/figure-html/unnamed-chunk-3-4.png" width="700"></p>
+<div class="sourceCode" id="cb6"><html><body><pre class="r"><span class="no">plots_summary</span>$<span class="no">topgenes</span></pre></body></html></div>
+<p><img src="Visualizations_files/figure-html/unnamed-chunk-3-5.png" width="700"></p>
+<div class="sourceCode" id="cb7"><html><body><pre class="r"><span class="no">plots_summary</span>$<span class="no">genecor</span></pre></body></html></div>
+<p><img src="Visualizations_files/figure-html/unnamed-chunk-3-6.png" width="700"></p>
 </div>
 <div id="oncoprints" class="section level1">
 <h1 class="hasAnchor">
@@ -170,7 +166,7 @@
 <h2 class="hasAnchor">
 <a href="#genetics-only" class="anchor"></a>Genetics only</h2>
 <p>In the first section we show how to use the output of the <code><a href="../reference/binmat.html">binmat()</a></code> output to create an OncoPrint for a selected subset of genes. For consistency we will use the 10 genes used in the comutation plot above.</p>
-<div class="sourceCode" id="cb5"><html><body><pre class="r"><span class="no">genes</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"ATM"</span>,<span class="st">"BRAF"</span>,<span class="st">"MLL2"</span>,<span class="st">"APC"</span>,<span class="st">"EGFR"</span>,<span class="st">"MLL3"</span>,<span class="st">"PIK3CA"</span>,<span class="st">"KRAS"</span>,<span class="st">"TP53"</span>)
+<div class="sourceCode" id="cb8"><html><body><pre class="r"><span class="no">genes</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"ATM"</span>,<span class="st">"BRAF"</span>,<span class="st">"MLL2"</span>,<span class="st">"APC"</span>,<span class="st">"EGFR"</span>,<span class="st">"MLL3"</span>,<span class="st">"PIK3CA"</span>,<span class="st">"KRAS"</span>,<span class="st">"TP53"</span>)
 <span class="no">dat.gen</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/binmat.html">binmat</a></span>(<span class="kw">maf</span> <span class="kw">=</span> <span class="no">mut</span>, <span class="kw">fusion</span> <span class="kw">=</span> <span class="no">fusion</span>, <span class="kw">cna</span> <span class="kw">=</span> <span class="no">cna</span>)
 <span class="no">dat.gen</span> <span class="kw">&lt;-</span> <span class="no">dat.gen</span> <span class="kw">%&gt;%</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(<span class="fu"><a href="https://dplyr.tidyverse.org/reference/reexports.html">starts_with</a></span>(<span class="no">genes</span>))
 <span class="fu"><a href="../reference/plot_oncoPrint.html">plot_oncoPrint</a></span>(<span class="kw">gen.dat</span> <span class="kw">=</span> <span class="no">dat.gen</span>)</pre></body></html></div>
@@ -180,7 +176,7 @@
 <h2 class="hasAnchor">
 <a href="#missing-information" class="anchor"></a>Missing information</h2>
 <p>A critical point of <code>gnomeR</code> is its ability to correct for the different platforms that have existed at MSKCC. We reflect this is in the OncoPrints by including black entries in the missing cells as shown below.</p>
-<div class="sourceCode" id="cb6"><html><body><pre class="r"><span class="no">genes</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"ATM"</span>,<span class="st">"BRAF"</span>,<span class="st">"MLL2"</span>,<span class="st">"APC"</span>,<span class="st">"EGFR"</span>,<span class="st">"MLL3"</span>,<span class="st">"PIK3CA"</span>,<span class="st">"KRAS"</span>,<span class="st">"TP53"</span>,<span class="st">"EPHA7"</span>)
+<div class="sourceCode" id="cb9"><html><body><pre class="r"><span class="no">genes</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"ATM"</span>,<span class="st">"BRAF"</span>,<span class="st">"MLL2"</span>,<span class="st">"APC"</span>,<span class="st">"EGFR"</span>,<span class="st">"MLL3"</span>,<span class="st">"PIK3CA"</span>,<span class="st">"KRAS"</span>,<span class="st">"TP53"</span>,<span class="st">"EPHA7"</span>)
 <span class="no">dat.gen</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/binmat.html">binmat</a></span>(<span class="kw">maf</span> <span class="kw">=</span> <span class="no">mut</span>, <span class="kw">fusion</span> <span class="kw">=</span> <span class="no">fusion</span>, <span class="kw">cna</span> <span class="kw">=</span> <span class="no">cna</span>)
 <span class="no">dat.gen</span> <span class="kw">&lt;-</span> <span class="no">dat.gen</span> <span class="kw">%&gt;%</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(<span class="fu"><a href="https://dplyr.tidyverse.org/reference/reexports.html">starts_with</a></span>(<span class="no">genes</span>))
 <span class="fu"><a href="../reference/plot_oncoPrint.html">plot_oncoPrint</a></span>(<span class="kw">gen.dat</span> <span class="kw">=</span> <span class="no">dat.gen</span>)</pre></body></html></div>
@@ -190,7 +186,7 @@
 <h2 class="hasAnchor">
 <a href="#adding-clinical-information" class="anchor"></a>Adding clinical information</h2>
 <p>In this section we will show how the user can further add clinical information to this plot.</p>
-<div class="sourceCode" id="cb7"><html><body><pre class="r"><span class="no">genes</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"ATM"</span>,<span class="st">"BRAF"</span>,<span class="st">"MLL2"</span>,<span class="st">"APC"</span>,<span class="st">"EGFR"</span>,<span class="st">"MLL3"</span>,<span class="st">"PIK3CA"</span>,<span class="st">"KRAS"</span>,<span class="st">"TP53"</span>,<span class="st">"EPHA7"</span>)
+<div class="sourceCode" id="cb10"><html><body><pre class="r"><span class="no">genes</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"ATM"</span>,<span class="st">"BRAF"</span>,<span class="st">"MLL2"</span>,<span class="st">"APC"</span>,<span class="st">"EGFR"</span>,<span class="st">"MLL3"</span>,<span class="st">"PIK3CA"</span>,<span class="st">"KRAS"</span>,<span class="st">"TP53"</span>,<span class="st">"EPHA7"</span>)
 <span class="no">dat.gen</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/binmat.html">binmat</a></span>(<span class="kw">maf</span> <span class="kw">=</span> <span class="no">mut</span>, <span class="kw">fusion</span> <span class="kw">=</span> <span class="no">fusion</span>, <span class="kw">cna</span> <span class="kw">=</span> <span class="no">cna</span>)
 <span class="no">dat.gen</span> <span class="kw">&lt;-</span> <span class="no">dat.gen</span> <span class="kw">%&gt;%</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(<span class="fu"><a href="https://dplyr.tidyverse.org/reference/reexports.html">starts_with</a></span>(<span class="no">genes</span>))
 <span class="no">clin.patients.dat</span> <span class="kw">&lt;-</span> <span class="no">clin.patients</span>[<span class="fu"><a href="https://rdrr.io/r/base/match.html">match</a></span>(
@@ -216,13 +212,13 @@
 <h1 class="hasAnchor">
 <a href="#advanced-visualization" class="anchor"></a>Advanced visualization</h1>
 <p>The copy-number alterations data we have covered up to now is a discrete estimation of the alterations that occured. There however exist more nuanced and accurate data for copy-number alterations observed in a tumor. In <code>gnomeR</code> we include an example of segmentation file and relevant functions from the <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5027494/"><code>facets</code></a> package that provides an allele-specific copy number and clonal heterogeneity analysis tool for high-throughput DNA sequencing. We show in this section how to visualize this data:</p>
-<div class="sourceCode" id="cb8"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span>(<span class="fl">123</span>)
+<div class="sourceCode" id="cb11"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span>(<span class="fl">123</span>)
 <span class="no">samples</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html">as.character</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span>(<span class="no">mut</span>$<span class="no">Tumor_Sample_Barcode</span>))[<span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample</a></span>(<span class="fl">1</span>:<span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span>(<span class="no">mut</span>$<span class="no">Tumor_Sample_Barcode</span>)), <span class="fl">100</span>, <span class="kw">replace</span><span class="kw">=</span><span class="fl">FALSE</span>)]
 <span class="no">p.heat</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/facets.heatmap.html">facets.heatmap</a></span>(<span class="kw">seg</span> <span class="kw">=</span> <span class="no">seg</span>, <span class="kw">patients</span> <span class="kw">=</span> <span class="no">samples</span>, <span class="kw">min.purity</span> <span class="kw">=</span> <span class="fl">0</span>)
 <span class="no">p.heat</span>$<span class="no">p</span></pre></body></html></div>
 <p><img src="Visualizations_files/figure-html/unnamed-chunk-7-1.png" width="700"></p>
 <p>In the heatmap above we show the estimate gains and losses over segments in each chromosomes (rows) and in each patient (columns). Now that the purity of the tumor sample is an important factor in order to get reliable data. Moreover we include argument <code>ordered</code> and <code>outcome</code> that enables the user to sort the heatmap by a specific feature of interest. We show an example below with a simulated feature of outcome:</p>
-<div class="sourceCode" id="cb9"><html><body><pre class="r"><span class="no">outcome</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span>(<span class="no">samples</span>))
+<div class="sourceCode" id="cb12"><html><body><pre class="r"><span class="no">outcome</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span>(<span class="no">samples</span>))
 <span class="no">p.heat</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/facets.heatmap.html">facets.heatmap</a></span>(<span class="kw">seg</span> <span class="kw">=</span> <span class="no">seg</span>, <span class="kw">patients</span> <span class="kw">=</span> <span class="no">samples</span>, <span class="kw">min.purity</span> <span class="kw">=</span> <span class="fl">0</span>, <span class="kw">outcome</span> <span class="kw">=</span> <span class="no">outcome</span>, <span class="kw">ordered</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/order.html">order</a></span>(<span class="no">outcome</span>))
 <span class="no">p.heat</span>$<span class="no">p</span></pre></body></html></div>
 <p><img src="Visualizations_files/figure-html/unnamed-chunk-8-1.png" width="700"></p>

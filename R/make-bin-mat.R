@@ -25,6 +25,9 @@
 #' dataframe with columns being each pathway and each row being a sample. Default is FALSE.
 #' @param col.names character vector of the necessary columns to be used. By default: col.names = c(Tumor_Sample_Barcode = NULL,
 #'  Hugo_Symbol = NULL, Variant_Classification = NULL, Mutation_Status = NULL, Variant_Type = NULL)
+#' @param oncokb boolean specfiying if maf file should be oncokb annotated. Variants found to be 'Oncogenic'
+#'  and 'Likely Oncogenic' will be kept. Default is FALSE.
+#' @param ... Further arguments passed to the oncoKB_annotate() function
 #' @return mut : a binary matrix of mutation data
 #' @export
 #' @examples library(gnomeR)
@@ -51,7 +54,8 @@ binmat <- function(patients=NULL, maf = NULL, mut.type = "SOMATIC",SNP.only = FA
                    fusion = NULL,cna = NULL,cna.binary = TRUE,cna.relax = FALSE, spe.plat = TRUE,
                    set.plat = NULL,rm.empty = TRUE, pathway = FALSE,
                    col.names = c(Tumor_Sample_Barcode = NULL, Hugo_Symbol = NULL,
-                                 Variant_Classification = NULL, Mutation_Status = NULL, Variant_Type = NULL)){
+                                 Variant_Classification = NULL, Mutation_Status = NULL, Variant_Type = NULL),
+                   oncokb = FALSE,...){
 
   if(is.null(maf) && is.null(fusion) && is.null(cna)) stop("You must provided one of the three following files: MAF, fusion or CNA.")
   # reformat columns #
@@ -61,16 +65,20 @@ binmat <- function(patients=NULL, maf = NULL, mut.type = "SOMATIC",SNP.only = FA
       rename(col.names)
 
   ## if data from API need to split mutations and fusions ##
-  if(!is.null(maf) && is.null(fusion) &&
-     nrow(maf %>%
-          filter(.data$Variant_Classification == "Fusion")) > 0){
-    fusion <- maf %>%
-      filter(.data$Variant_Classification == "Fusion")
-    maf <- maf %>%
-      filter(.data$Variant_Classification != "Fusion")
-    warning("Fusions were found in the maf file, they were removed and a fusion file was created.")
-  }
+  if(!is.null(maf)){
+    if(is.na(match("Variant_Classification",colnames(maf))))
+      stop("The MAF file inputted is missing a variant classification column. (Variant_Classification)")
 
+    if(!is.null(maf) && is.null(fusion) &&
+       nrow(maf %>%
+            filter(.data$Variant_Classification == "Fusion")) > 0){
+      fusion <- maf %>%
+        filter(.data$Variant_Classification == "Fusion")
+      maf <- maf %>%
+        filter(.data$Variant_Classification != "Fusion")
+      warning("Fusions were found in the maf file, they were removed and a fusion file was created.")
+    }
+  }
 
   mut <- NULL
 
@@ -94,11 +102,14 @@ binmat <- function(patients=NULL, maf = NULL, mut.type = "SOMATIC",SNP.only = FA
       maf$Variant_Type <- rep("SNPs",nrow(maf))
     }
 
-    # set maf to maf class #
-    maf <- structure(maf,class = c("data.frame","maf"))
     # filter/define patients #
     if(!is.null(patients)) maf <- maf[maf$Tumor_Sample_Barcode %in% patients,]
     else patients <- as.character(unique(maf$Tumor_Sample_Barcode))
+    if(oncokb)
+      maf <- oncoKB_annotate(maf,...) %>%
+        dplyr::filter(oncogenic %in% c("Oncogenic","Likely Oncogenic"))
+    # set maf to maf class #
+    maf <- structure(maf,class = c("data.frame","maf"))
     # getting mutation binary matrix #
     mut <- createbin(obj = maf, patients = patients, mut.type = mut.type, cna.binary = cna.binary,cna.relax = cna.relax,
                      SNP.only = SNP.only, include.silent = include.silent, spe.plat = spe.plat)
@@ -109,6 +120,9 @@ binmat <- function(patients=NULL, maf = NULL, mut.type = "SOMATIC",SNP.only = FA
   if(!is.null(fusion)){
 
     fusion <- as.data.frame(fusion)
+    if(oncokb)
+      fusion <- fusion %>%
+        filter(Frame == "in frame")
     fusion <- structure(fusion,class = c("data.frame","fusion"))
     # filter/define patients #
     if(is.null(patients)) patients <- as.character(unique(fusion$Tumor_Sample_Barcode))
@@ -130,6 +144,8 @@ binmat <- function(patients=NULL, maf = NULL, mut.type = "SOMATIC",SNP.only = FA
 
     else{
       cna <- as.data.frame(cna)
+      if(oncokb)
+        cna[cna == "-1.5" | cna == "-1" | cna == "1"] <- 0
       cna <- structure(cna,class = c("data.frame","cna"))
       if(is.null(patients)) patients <- gsub("\\.","-",as.character(colnames(cna)))[-1]
       cna <- createbin(obj = cna, patients = patients, mut.type = mut.type, cna.binary = cna.binary,cna.relax = cna.relax,
@@ -192,7 +208,7 @@ binmat <- function(patients=NULL, maf = NULL, mut.type = "SOMATIC",SNP.only = FA
   if(pathway){
     pathway_dat <- as.data.frame(do.call('cbind',lapply(unique(impact_gene_info$pathway[!is.na(impact_gene_info$pathway)]),function(x){
       genes <- as.character(unlist(impact_gene_info %>%
-        filter(.data$pathway == x) %>% select(.data$hugo_symbol)))
+                                     filter(.data$pathway == x) %>% select(.data$hugo_symbol)))
       as.numeric(apply(mut %>% select(starts_with(genes)),1,function(y){
         ifelse(sum(abs(as.numeric(as.character(y))),na.rm = T)>0, 1,0)
       }))
@@ -269,8 +285,8 @@ createbin.maf <- function(obj, patients, mut.type, cna.binary, SNP.only, include
   else Mut.filt = mut.type
 
   maf <- as_tibble(maf) %>% filter(.data$Variant_Classification != Variant.filt,
-                        .data$Variant_Type %in% SNP.filt,
-                        tolower(.data$Mutation_Status) %in% tolower(Mut.filt))
+                                   .data$Variant_Type %in% SNP.filt,
+                                   tolower(.data$Mutation_Status) %in% tolower(Mut.filt))
 
 
   #### out frame
@@ -390,7 +406,7 @@ createbin.api <- function(obj, patients, mut.type,cna.binary, SNP.only,include.s
   temp[,1] <- unique(cna$Hugo_Symbol)
   for(i in patients){
     temp[match(as.character(unlist(cna %>% filter(.data$sampleId %in% i) %>% select(.data$Hugo_Symbol))),temp[,1]),
-               match(i, colnames(temp))] <- as.numeric(unlist(cna %>% filter(.data$sampleId %in% i) %>% select(.data$alteration)))
+         match(i, colnames(temp))] <- as.numeric(unlist(cna %>% filter(.data$sampleId %in% i) %>% select(.data$alteration)))
   }
 
   cna <- temp

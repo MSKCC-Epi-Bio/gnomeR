@@ -91,7 +91,7 @@
 
       
 
-      </header><div class="row">
+      </header><script src="API-tutorial_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>API-tutorial</h1>
@@ -124,7 +124,7 @@
 <li>IMPACT (integrated mutation profiling of actionable cancer targets) dataset, which consist of multiple targeted panels on which all new MSKCC patients are sequencing.</li>
 <li>TCGA (the cancer genomic atlas) dataset, which consist of a completed pan-cancer study of full exon sequencing.</li>
 </ul>
-<p>The <code><a href="../reference/get_genetics.html">get_genetics()</a></code> function let’s the user download the mutation, fusion and copy-number alterations data in a Mutation Annotation Format (MAF) file for either the sample DMPID provided or a specific study. It takes the following arguments:</p>
+<p>The <code>get_genetics()</code> function let’s the user download the mutation, fusion and copy-number alterations data in a Mutation Annotation Format (MAF) file for either the sample DMPID provided or a specific study. It takes the following arguments:</p>
 <ul>
 <li>sample_ids: A character vector of sample ids from either IMPACT or TCGA</li>
 <li>sample_list_id: A character vector naming a pre-specified list of samples (e.g. <code>"mskimpact_Colorectal_Cancer"</code>)</li>
@@ -133,254 +133,87 @@
 <li>mutations: Boolean specifying if mutation data should be fected. Default is TRUE.</li>
 <li>fusions: Boolean specifying if fusion data should be fected. Default is TRUE.</li>
 <li>cna: Boolean specifying if cna data should be fected. Default is TRUE.</li>
+<li>seg: Boolean specifying if the segmentatio data should be fetched. Default is FALSE.</li>
 </ul>
 <p>This function returns either a MAF file or a copy-number alterations summary file, or both (<code>mut</code> and/or <code>cna</code>).</p>
-<div id="impact-database" class="section level2">
+<div id="tcga-database" class="section level2">
 <h2 class="hasAnchor">
-<a href="#impact-database" class="anchor"></a>IMPACT database</h2>
-<p>In this section we show how to retrieve IMPACT genomic data for a single IMPACT sample, this can be easily extended to multiple patients or a complete study.</p>
+<a href="#tcga-database" class="anchor"></a>TCGA database</h2>
+<p>Even though cBioPortal mainly focuses on IMPACT data, other genomic studies are also available on it. Particurlarly the <a href="https://www.cancer.gov/about-nci/organization/ccg/research/structural-genomics/tcga">The Cancer Genome Atlas</a> (TCGA) database, which whole-exome sequenced large cohorts of 33 different cancer sites. This dataset is a public ressource and does not require a token to be accessed through the <code>gnomeR</code> API, we will thus use it as an example for the functionalities of the API. Additionally to having access to mutational and copy number alteration data, cBioPortal also grants us access to other data types such as RNA-seq or RPPMs. In this section we will show how the user can use the API to retrieve this data. Note that the list of samples, cancer sites and genes available in <code>tcga_samples</code> and <code>tcga_genes</code> respectively.</p>
 <div id="mutations" class="section level3">
 <h3 class="hasAnchor">
 <a href="#mutations" class="anchor"></a>Mutations</h3>
-<div class="sourceCode" id="cb5"><html><body><pre class="r"><span class="no">df.mut</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/get_genetics.html">get_genetics</a></span>(<span class="st">"P-0000062-T01-IM3"</span>,<span class="kw">database</span> <span class="kw">=</span> <span class="st">"msk_impact"</span>,
-                       <span class="kw">mutations</span> <span class="kw">=</span> <span class="fl">TRUE</span>, <span class="kw">fusions</span> <span class="kw">=</span> <span class="fl">FALSE</span>, <span class="kw">cna</span> <span class="kw">=</span> <span class="fl">FALSE</span>)
-<span class="co">#&gt; [1] "https://cbioportal.mskcc.org/api/molecular-profiles/mskimpact_mutations/mutations/fetch?"</span>
-<span class="no">df.mut</span>
-<span class="co">#&gt; $mut</span>
-<span class="co">#&gt; # A tibble: 6 x 37</span>
-<span class="co">#&gt;   uniqueSampleKey uniquePatientKey molecularProfil… Tumor_Sample_Ba… patientId</span>
-<span class="co">#&gt;   &lt;chr&gt;           &lt;chr&gt;            &lt;chr&gt;            &lt;chr&gt;            &lt;chr&gt;    </span>
-<span class="co">#&gt; 1 UC0wMDAwMDYyLV… UC0wMDAwMDYyOm1… mskimpact_mutat… P-0000062-T01-I… P-0000062</span>
-<span class="co">#&gt; 2 UC0wMDAwMDYyLV… UC0wMDAwMDYyOm1… mskimpact_mutat… P-0000062-T01-I… P-0000062</span>
-<span class="co">#&gt; 3 UC0wMDAwMDYyLV… UC0wMDAwMDYyOm1… mskimpact_mutat… P-0000062-T01-I… P-0000062</span>
-<span class="co">#&gt; 4 UC0wMDAwMDYyLV… UC0wMDAwMDYyOm1… mskimpact_mutat… P-0000062-T01-I… P-0000062</span>
-<span class="co">#&gt; 5 UC0wMDAwMDYyLV… UC0wMDAwMDYyOm1… mskimpact_mutat… P-0000062-T01-I… P-0000062</span>
-<span class="co">#&gt; 6 UC0wMDAwMDYyLV… UC0wMDAwMDYyOm1… mskimpact_mutat… P-0000062-T01-I… P-0000062</span>
-<span class="co">#&gt; # … with 32 more variables: entrezGeneId &lt;int&gt;, studyId &lt;chr&gt;, center &lt;chr&gt;,</span>
-<span class="co">#&gt; #   Mutation_Status &lt;chr&gt;, validationStatus &lt;chr&gt;, tumorAltCount &lt;int&gt;,</span>
-<span class="co">#&gt; #   tumorRefCount &lt;int&gt;, normalAltCount &lt;int&gt;, normalRefCount &lt;int&gt;,</span>
-<span class="co">#&gt; #   startPosition &lt;int&gt;, endPosition &lt;int&gt;, referenceAllele &lt;chr&gt;,</span>
-<span class="co">#&gt; #   proteinChange &lt;chr&gt;, Variant_Classification &lt;chr&gt;,</span>
-<span class="co">#&gt; #   functionalImpactScore &lt;chr&gt;, fisValue &lt;dbl&gt;, linkXvar &lt;chr&gt;, linkPdb &lt;chr&gt;,</span>
-<span class="co">#&gt; #   linkMsa &lt;chr&gt;, ncbiBuild &lt;chr&gt;, Variant_Type &lt;chr&gt;, keyword &lt;chr&gt;,</span>
-<span class="co">#&gt; #   driverFilter &lt;chr&gt;, driverFilterAnnotation &lt;chr&gt;, driverTiersFilter &lt;chr&gt;,</span>
-<span class="co">#&gt; #   driverTiersFilterAnnotation &lt;chr&gt;, chr &lt;chr&gt;, variantAllele &lt;chr&gt;,</span>
-<span class="co">#&gt; #   refseqMrnaId &lt;chr&gt;, proteinPosStart &lt;int&gt;, proteinPosEnd &lt;int&gt;,</span>
-<span class="co">#&gt; #   Hugo_Symbol &lt;chr&gt;</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $cna</span>
-<span class="co">#&gt; NULL</span></pre></body></html></div>
+<p>To retrieve the TCGA mutational data the user should set the arguments <code>mutations</code> to TRUE and <code>database</code> to “tcga”:</p>
+<div class="sourceCode" id="cb5"><html><body><pre class="r"># df &lt;- get_genetics(sample_ids =  c("TCGA-17-Z023-01","TCGA-02-0003-01","TCGA-02-0055-01"),
+#              mutations = TRUE,fusions = FALSE, cna = FALSE,
+#              database = "tcga")</pre></body></html></div>
+<div class="sourceCode" id="cb6"><html><body><pre class="r"># df$mut</pre></body></html></div>
+</div>
+<div id="fusions" class="section level3">
+<h3 class="hasAnchor">
+<a href="#fusions" class="anchor"></a>Fusions</h3>
+<div class="sourceCode" id="cb7"><html><body><pre class="r"># df &lt;- get_genetics(sample_ids = as.character(tcga_samples$patient_id[!is.na(tcga_samples$Cancer_Code)][1:100]),
+#                    mutations = TRUE,fusions = TRUE, cna = FALSE,
+#                    database = "tcga")</pre></body></html></div>
+<div class="sourceCode" id="cb8"><html><body><pre class="r"># df$mut %&gt;%
+#   filter(Variant_Classification == "Fusion")</pre></body></html></div>
+</div>
+<div id="cna" class="section level3">
+<h3 class="hasAnchor">
+<a href="#cna" class="anchor"></a>CNA</h3>
+<div class="sourceCode" id="cb9"><html><body><pre class="r"># df &lt;- get_genetics(sample_ids =  c("TCGA-17-Z023-01","TCGA-02-0003-01","TCGA-02-0055-01"),
+#              mutations = FALSE,fusions = FALSE, cna = TRUE,
+#              database = "tcga")</pre></body></html></div>
+<div class="sourceCode" id="cb10"><html><body><pre class="r"># df$cna</pre></body></html></div>
+</div>
+<div id="segmentation-file" class="section level3">
+<h3 class="hasAnchor">
+<a href="#segmentation-file" class="anchor"></a>Segmentation file</h3>
+<p>The copy-number alterations data we have covered up to now is a discrete estimation of the alterations that occured. There however exist more nuanced and accurate data for copy-number alterations observed in a tumor. In <code>gnomeR</code> we include an example of segmentation file and relevant functions from the <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5027494/"><code>facets</code></a> package that provides an allele-specific copy number and clonal heterogeneity analysis tool for high-throughput DNA sequencing. We show below how to download it from the API in gnomeR.</p>
+<div class="sourceCode" id="cb11"><html><body><pre class="r"># df &lt;- get_genetics(sample_ids =  c("TCGA-17-Z023-01","TCGA-02-0003-01","TCGA-02-0055-01"),
+#              mutations = FALSE,fusions = FALSE, cna = FALSE, seg = TRUE,
+#              database = "tcga")</pre></body></html></div>
+<div class="sourceCode" id="cb12"><html><body><pre class="r"># df$seg</pre></body></html></div>
+</div>
+</div>
+<div id="impact-database" class="section level2">
+<h2 class="hasAnchor">
+<a href="#impact-database" class="anchor"></a>IMPACT database</h2>
+<p>As mentioned previously IMPACT genomic data is protected and requires a token to be accessed. The <code>ger_genetics()</code> functions in the same way to the examples shown above for TCGA datasets.</p>
+<div id="mutations-1" class="section level3">
+<h3 class="hasAnchor">
+<a href="#mutations-1" class="anchor"></a>Mutations</h3>
+<div class="sourceCode" id="cb13"><html><body><pre class="r"># df.mut &lt;- get_genetics("P-0000062-T01-IM3",database = "msk_impact",
+#                        mutations = TRUE, fusions = FALSE, cna = FALSE)
+# df.mut</pre></body></html></div>
 </div>
 <div id="adding-fusions" class="section level3">
 <h3 class="hasAnchor">
 <a href="#adding-fusions" class="anchor"></a>Adding Fusions</h3>
-<div class="sourceCode" id="cb6"><html><body><pre class="r"><span class="no">df.fus</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/get_genetics.html">get_genetics</a></span>(<span class="st">"P-0000062-T01-IM3"</span>,<span class="kw">database</span> <span class="kw">=</span> <span class="st">"msk_impact"</span>,
-                       <span class="kw">mutations</span> <span class="kw">=</span> <span class="fl">TRUE</span>, <span class="kw">fusions</span> <span class="kw">=</span> <span class="fl">FALSE</span>, <span class="kw">cna</span> <span class="kw">=</span> <span class="fl">FALSE</span>)
-<span class="co">#&gt; [1] "https://cbioportal.mskcc.org/api/molecular-profiles/mskimpact_mutations/mutations/fetch?"</span>
-<span class="no">df.fus</span>
-<span class="co">#&gt; $mut</span>
-<span class="co">#&gt; # A tibble: 6 x 37</span>
-<span class="co">#&gt;   uniqueSampleKey uniquePatientKey molecularProfil… Tumor_Sample_Ba… patientId</span>
-<span class="co">#&gt;   &lt;chr&gt;           &lt;chr&gt;            &lt;chr&gt;            &lt;chr&gt;            &lt;chr&gt;    </span>
-<span class="co">#&gt; 1 UC0wMDAwMDYyLV… UC0wMDAwMDYyOm1… mskimpact_mutat… P-0000062-T01-I… P-0000062</span>
-<span class="co">#&gt; 2 UC0wMDAwMDYyLV… UC0wMDAwMDYyOm1… mskimpact_mutat… P-0000062-T01-I… P-0000062</span>
-<span class="co">#&gt; 3 UC0wMDAwMDYyLV… UC0wMDAwMDYyOm1… mskimpact_mutat… P-0000062-T01-I… P-0000062</span>
-<span class="co">#&gt; 4 UC0wMDAwMDYyLV… UC0wMDAwMDYyOm1… mskimpact_mutat… P-0000062-T01-I… P-0000062</span>
-<span class="co">#&gt; 5 UC0wMDAwMDYyLV… UC0wMDAwMDYyOm1… mskimpact_mutat… P-0000062-T01-I… P-0000062</span>
-<span class="co">#&gt; 6 UC0wMDAwMDYyLV… UC0wMDAwMDYyOm1… mskimpact_mutat… P-0000062-T01-I… P-0000062</span>
-<span class="co">#&gt; # … with 32 more variables: entrezGeneId &lt;int&gt;, studyId &lt;chr&gt;, center &lt;chr&gt;,</span>
-<span class="co">#&gt; #   Mutation_Status &lt;chr&gt;, validationStatus &lt;chr&gt;, tumorAltCount &lt;int&gt;,</span>
-<span class="co">#&gt; #   tumorRefCount &lt;int&gt;, normalAltCount &lt;int&gt;, normalRefCount &lt;int&gt;,</span>
-<span class="co">#&gt; #   startPosition &lt;int&gt;, endPosition &lt;int&gt;, referenceAllele &lt;chr&gt;,</span>
-<span class="co">#&gt; #   proteinChange &lt;chr&gt;, Variant_Classification &lt;chr&gt;,</span>
-<span class="co">#&gt; #   functionalImpactScore &lt;chr&gt;, fisValue &lt;dbl&gt;, linkXvar &lt;chr&gt;, linkPdb &lt;chr&gt;,</span>
-<span class="co">#&gt; #   linkMsa &lt;chr&gt;, ncbiBuild &lt;chr&gt;, Variant_Type &lt;chr&gt;, keyword &lt;chr&gt;,</span>
-<span class="co">#&gt; #   driverFilter &lt;chr&gt;, driverFilterAnnotation &lt;chr&gt;, driverTiersFilter &lt;chr&gt;,</span>
-<span class="co">#&gt; #   driverTiersFilterAnnotation &lt;chr&gt;, chr &lt;chr&gt;, variantAllele &lt;chr&gt;,</span>
-<span class="co">#&gt; #   refseqMrnaId &lt;chr&gt;, proteinPosStart &lt;int&gt;, proteinPosEnd &lt;int&gt;,</span>
-<span class="co">#&gt; #   Hugo_Symbol &lt;chr&gt;</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $cna</span>
-<span class="co">#&gt; NULL</span></pre></body></html></div>
+<div class="sourceCode" id="cb14"><html><body><pre class="r"># df.fus &lt;- get_genetics("P-0000062-T01-IM3",database = "msk_impact",
+#                        mutations = TRUE, fusions = FALSE, cna = FALSE)
+# df.fus</pre></body></html></div>
 </div>
 <div id="copy-number-alterations" class="section level3">
 <h3 class="hasAnchor">
 <a href="#copy-number-alterations" class="anchor"></a>Copy-number alterations</h3>
-<div class="sourceCode" id="cb7"><html><body><pre class="r"><span class="no">df.cna</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/get_genetics.html">get_genetics</a></span>(<span class="st">"P-0000062-T01-IM3"</span>,<span class="kw">database</span> <span class="kw">=</span> <span class="st">"msk_impact"</span>,
-                       <span class="kw">mutations</span> <span class="kw">=</span> <span class="fl">FALSE</span>, <span class="kw">fusions</span> <span class="kw">=</span> <span class="fl">FALSE</span>, <span class="kw">cna</span> <span class="kw">=</span> <span class="fl">TRUE</span>)
-<span class="co">#&gt; [1] "https://cbioportal.mskcc.org/api/molecular-profiles/mskimpact_cna/discrete-copy-number/fetch?"</span>
-<span class="no">df.cna</span>
-<span class="co">#&gt; $mut</span>
-<span class="co">#&gt; NULL</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $cna</span>
-<span class="co">#&gt; # A tibble: 7 x 9</span>
-<span class="co">#&gt;   uniqueSampleKey uniquePatientKey molecularProfil… sampleId patientId</span>
-<span class="co">#&gt; * &lt;chr&gt;           &lt;chr&gt;            &lt;chr&gt;            &lt;chr&gt;    &lt;chr&gt;    </span>
-<span class="co">#&gt; 1 UC0wMDAwMDYyLV… UC0wMDAwMDYyOm1… mskimpact_cna    P-00000… P-0000062</span>
-<span class="co">#&gt; 2 UC0wMDAwMDYyLV… UC0wMDAwMDYyOm1… mskimpact_cna    P-00000… P-0000062</span>
-<span class="co">#&gt; 3 UC0wMDAwMDYyLV… UC0wMDAwMDYyOm1… mskimpact_cna    P-00000… P-0000062</span>
-<span class="co">#&gt; 4 UC0wMDAwMDYyLV… UC0wMDAwMDYyOm1… mskimpact_cna    P-00000… P-0000062</span>
-<span class="co">#&gt; 5 UC0wMDAwMDYyLV… UC0wMDAwMDYyOm1… mskimpact_cna    P-00000… P-0000062</span>
-<span class="co">#&gt; 6 UC0wMDAwMDYyLV… UC0wMDAwMDYyOm1… mskimpact_cna    P-00000… P-0000062</span>
-<span class="co">#&gt; 7 UC0wMDAwMDYyLV… UC0wMDAwMDYyOm1… mskimpact_cna    P-00000… P-0000062</span>
-<span class="co">#&gt; # … with 4 more variables: entrezGeneId &lt;int&gt;, studyId &lt;chr&gt;, alteration &lt;int&gt;,</span>
-<span class="co">#&gt; #   Hugo_Symbol &lt;chr&gt;</span></pre></body></html></div>
+<div class="sourceCode" id="cb15"><html><body><pre class="r"># df.cna &lt;- get_genetics("P-0000062-T01-IM3",database = "msk_impact",
+#                        mutations = FALSE, fusions = FALSE, cna = TRUE)
+# df.cna</pre></body></html></div>
 </div>
 <div id="all-together" class="section level3">
 <h3 class="hasAnchor">
 <a href="#all-together" class="anchor"></a>All together</h3>
-<p>In gnomeR we provide a wrapper function that enables the</p>
-<div class="sourceCode" id="cb8"><html><body><pre class="r"><span class="no">df.gen</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/get_genetics.html">get_genetics</a></span>(<span class="st">"P-0000062-T01-IM3"</span>,<span class="kw">database</span> <span class="kw">=</span> <span class="st">"msk_impact"</span>,
-                       <span class="kw">mutations</span> <span class="kw">=</span> <span class="fl">TRUE</span>, <span class="kw">fusions</span> <span class="kw">=</span> <span class="fl">TRUE</span>, <span class="kw">cna</span> <span class="kw">=</span> <span class="fl">TRUE</span>)
-<span class="co">#&gt; [1] "https://cbioportal.mskcc.org/api/molecular-profiles/mskimpact_mutations/mutations/fetch?"</span>
-<span class="co">#&gt; [1] "https://cbioportal.mskcc.org/api/molecular-profiles/mskimpact_cna/discrete-copy-number/fetch?"</span>
-<span class="no">df.gen</span>
-<span class="co">#&gt; $mut</span>
-<span class="co">#&gt; # A tibble: 6 x 37</span>
-<span class="co">#&gt;   uniqueSampleKey uniquePatientKey molecularProfil… Tumor_Sample_Ba… patientId</span>
-<span class="co">#&gt;   &lt;chr&gt;           &lt;chr&gt;            &lt;chr&gt;            &lt;chr&gt;            &lt;chr&gt;    </span>
-<span class="co">#&gt; 1 UC0wMDAwMDYyLV… UC0wMDAwMDYyOm1… mskimpact_mutat… P-0000062-T01-I… P-0000062</span>
-<span class="co">#&gt; 2 UC0wMDAwMDYyLV… UC0wMDAwMDYyOm1… mskimpact_mutat… P-0000062-T01-I… P-0000062</span>
-<span class="co">#&gt; 3 UC0wMDAwMDYyLV… UC0wMDAwMDYyOm1… mskimpact_mutat… P-0000062-T01-I… P-0000062</span>
-<span class="co">#&gt; 4 UC0wMDAwMDYyLV… UC0wMDAwMDYyOm1… mskimpact_mutat… P-0000062-T01-I… P-0000062</span>
-<span class="co">#&gt; 5 UC0wMDAwMDYyLV… UC0wMDAwMDYyOm1… mskimpact_mutat… P-0000062-T01-I… P-0000062</span>
-<span class="co">#&gt; 6 UC0wMDAwMDYyLV… UC0wMDAwMDYyOm1… mskimpact_mutat… P-0000062-T01-I… P-0000062</span>
-<span class="co">#&gt; # … with 32 more variables: entrezGeneId &lt;int&gt;, studyId &lt;chr&gt;, center &lt;chr&gt;,</span>
-<span class="co">#&gt; #   Mutation_Status &lt;chr&gt;, validationStatus &lt;chr&gt;, tumorAltCount &lt;int&gt;,</span>
-<span class="co">#&gt; #   tumorRefCount &lt;int&gt;, normalAltCount &lt;int&gt;, normalRefCount &lt;int&gt;,</span>
-<span class="co">#&gt; #   startPosition &lt;int&gt;, endPosition &lt;int&gt;, referenceAllele &lt;chr&gt;,</span>
-<span class="co">#&gt; #   proteinChange &lt;chr&gt;, Variant_Classification &lt;chr&gt;,</span>
-<span class="co">#&gt; #   functionalImpactScore &lt;chr&gt;, fisValue &lt;dbl&gt;, linkXvar &lt;chr&gt;, linkPdb &lt;chr&gt;,</span>
-<span class="co">#&gt; #   linkMsa &lt;chr&gt;, ncbiBuild &lt;chr&gt;, Variant_Type &lt;chr&gt;, keyword &lt;chr&gt;,</span>
-<span class="co">#&gt; #   driverFilter &lt;chr&gt;, driverFilterAnnotation &lt;chr&gt;, driverTiersFilter &lt;chr&gt;,</span>
-<span class="co">#&gt; #   driverTiersFilterAnnotation &lt;chr&gt;, chr &lt;chr&gt;, variantAllele &lt;chr&gt;,</span>
-<span class="co">#&gt; #   refseqMrnaId &lt;chr&gt;, proteinPosStart &lt;int&gt;, proteinPosEnd &lt;int&gt;,</span>
-<span class="co">#&gt; #   Hugo_Symbol &lt;chr&gt;</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $cna</span>
-<span class="co">#&gt; # A tibble: 7 x 9</span>
-<span class="co">#&gt;   uniqueSampleKey uniquePatientKey molecularProfil… sampleId patientId</span>
-<span class="co">#&gt; * &lt;chr&gt;           &lt;chr&gt;            &lt;chr&gt;            &lt;chr&gt;    &lt;chr&gt;    </span>
-<span class="co">#&gt; 1 UC0wMDAwMDYyLV… UC0wMDAwMDYyOm1… mskimpact_cna    P-00000… P-0000062</span>
-<span class="co">#&gt; 2 UC0wMDAwMDYyLV… UC0wMDAwMDYyOm1… mskimpact_cna    P-00000… P-0000062</span>
-<span class="co">#&gt; 3 UC0wMDAwMDYyLV… UC0wMDAwMDYyOm1… mskimpact_cna    P-00000… P-0000062</span>
-<span class="co">#&gt; 4 UC0wMDAwMDYyLV… UC0wMDAwMDYyOm1… mskimpact_cna    P-00000… P-0000062</span>
-<span class="co">#&gt; 5 UC0wMDAwMDYyLV… UC0wMDAwMDYyOm1… mskimpact_cna    P-00000… P-0000062</span>
-<span class="co">#&gt; 6 UC0wMDAwMDYyLV… UC0wMDAwMDYyOm1… mskimpact_cna    P-00000… P-0000062</span>
-<span class="co">#&gt; 7 UC0wMDAwMDYyLV… UC0wMDAwMDYyOm1… mskimpact_cna    P-00000… P-0000062</span>
-<span class="co">#&gt; # … with 4 more variables: entrezGeneId &lt;int&gt;, studyId &lt;chr&gt;, alteration &lt;int&gt;,</span>
-<span class="co">#&gt; #   Hugo_Symbol &lt;chr&gt;</span></pre></body></html></div>
+<div class="sourceCode" id="cb16"><html><body><pre class="r"># df.gen &lt;- get_genetics("P-0000062-T01-IM3",database = "msk_impact",
+#                        mutations = TRUE, fusions = TRUE, cna = TRUE)
+# df.gen</pre></body></html></div>
 </div>
 <div id="by-study" class="section level3">
 <h3 class="hasAnchor">
 <a href="#by-study" class="anchor"></a>By study</h3>
 <p>We show here an example to retrieve all the samples in a study. A complete list of these studies can be found on the CbioPortal website. Not working yet.</p>
-<div class="sourceCode" id="cb9"><html><body><pre class="r"># df.gen &lt;- get_genetics(sample_list_id = "mskimpact_Colorectal_Cancer",database = "msk_impact",
+<div class="sourceCode" id="cb17"><html><body><pre class="r"># df.gen &lt;- get_genetics(sample_list_id = "mskimpact_Colorectal_Cancer",database = "msk_impact",
 #                        mutations = TRUE, fusions = TRUE, cna = TRUE)</pre></body></html></div>
-</div>
-</div>
-<div id="tcga-database" class="section level2">
-<h2 class="hasAnchor">
-<a href="#tcga-database" class="anchor"></a>TCGA database</h2>
-<p>Even though cBioPortal mainly focuses on IMPACT data, other genomic studies are also available on it. Particurlarly the <a href="https://www.cancer.gov/about-nci/organization/ccg/research/structural-genomics/tcga">The Cancer Genome Atlas</a> (TCGA) database, which whole-exome sequenced large cohorts of 33 different cancer sites. Additionally to having access to mutational and copy number alteration data, cBioPortal also grants us access to other data types such as RNA-seq or RPPMs. In this section we will show how the user can use the API to retrieve this data. Note that the list of samples, cancer sites and genes available in <code>tcga_samples</code> and <code>tcga_genes</code> respectively.</p>
-<div id="mutations-1" class="section level3">
-<h3 class="hasAnchor">
-<a href="#mutations-1" class="anchor"></a>Mutations</h3>
-<p>Similarly to the examples shown above for IMPACT, to retrieve the TCGA mutational data the user should set the arguments <code>mutations</code> to TRUE and <code>database</code> to “tcga”:</p>
-<div class="sourceCode" id="cb10"><html><body><pre class="r"><span class="no">df</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/get_genetics.html">get_genetics</a></span>(<span class="kw">sample_ids</span> <span class="kw">=</span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"TCGA-17-Z023-01"</span>,<span class="st">"TCGA-02-0003-01"</span>,<span class="st">"TCGA-02-0055-01"</span>),
-             <span class="kw">mutations</span> <span class="kw">=</span> <span class="fl">TRUE</span>,<span class="kw">fusions</span> <span class="kw">=</span> <span class="fl">FALSE</span>, <span class="kw">cna</span> <span class="kw">=</span> <span class="fl">FALSE</span>,
-             <span class="kw">database</span> <span class="kw">=</span> <span class="st">"tcga"</span>)
-<span class="co">#&gt; [1] "https://www.cbioportal.org/api/molecular-profiles/gbm_tcga_pan_can_atlas_2018_mutations/mutations/fetch?"</span>
-<span class="co">#&gt; No encoding supplied: defaulting to UTF-8.</span>
-<span class="co">#&gt; [1] "https://www.cbioportal.org/api/molecular-profiles/luad_tcga_pan_can_atlas_2018_mutations/mutations/fetch?"</span>
-<span class="co">#&gt; No encoding supplied: defaulting to UTF-8.</span>
-<span class="no">df</span>$<span class="no">mut</span>
-<span class="co">#&gt; # A tibble: 28 x 37</span>
-<span class="co">#&gt;    uniqueSampleKey uniquePatientKey molecularProfil… Tumor_Sample_Ba… patientId</span>
-<span class="co">#&gt;    &lt;chr&gt;           &lt;chr&gt;            &lt;chr&gt;            &lt;chr&gt;            &lt;chr&gt;    </span>
-<span class="co">#&gt;  1 VENHQS0wMi0wMD… VENHQS0wMi0wMDA… gbm_tcga_pan_ca… TCGA-02-0003-01  TCGA-02-…</span>
-<span class="co">#&gt;  2 VENHQS0wMi0wMD… VENHQS0wMi0wMDA… gbm_tcga_pan_ca… TCGA-02-0003-01  TCGA-02-…</span>
-<span class="co">#&gt;  3 VENHQS0wMi0wMD… VENHQS0wMi0wMDA… gbm_tcga_pan_ca… TCGA-02-0003-01  TCGA-02-…</span>
-<span class="co">#&gt;  4 VENHQS0wMi0wMD… VENHQS0wMi0wMDU… gbm_tcga_pan_ca… TCGA-02-0055-01  TCGA-02-…</span>
-<span class="co">#&gt;  5 VENHQS0wMi0wMD… VENHQS0wMi0wMDA… gbm_tcga_pan_ca… TCGA-02-0003-01  TCGA-02-…</span>
-<span class="co">#&gt;  6 VENHQS0wMi0wMD… VENHQS0wMi0wMDU… gbm_tcga_pan_ca… TCGA-02-0055-01  TCGA-02-…</span>
-<span class="co">#&gt;  7 VENHQS0wMi0wMD… VENHQS0wMi0wMDA… gbm_tcga_pan_ca… TCGA-02-0003-01  TCGA-02-…</span>
-<span class="co">#&gt;  8 VENHQS0wMi0wMD… VENHQS0wMi0wMDA… gbm_tcga_pan_ca… TCGA-02-0003-01  TCGA-02-…</span>
-<span class="co">#&gt;  9 VENHQS0wMi0wMD… VENHQS0wMi0wMDU… gbm_tcga_pan_ca… TCGA-02-0055-01  TCGA-02-…</span>
-<span class="co">#&gt; 10 VENHQS0xNy1aMD… VENHQS0xNy1aMDI… luad_tcga_pan_c… TCGA-17-Z023-01  TCGA-17-…</span>
-<span class="co">#&gt; # … with 18 more rows, and 32 more variables: entrezGeneId &lt;int&gt;,</span>
-<span class="co">#&gt; #   studyId &lt;chr&gt;, center &lt;chr&gt;, Mutation_Status &lt;chr&gt;, validationStatus &lt;chr&gt;,</span>
-<span class="co">#&gt; #   tumorAltCount &lt;int&gt;, tumorRefCount &lt;int&gt;, normalAltCount &lt;int&gt;,</span>
-<span class="co">#&gt; #   normalRefCount &lt;int&gt;, startPosition &lt;int&gt;, endPosition &lt;int&gt;,</span>
-<span class="co">#&gt; #   referenceAllele &lt;chr&gt;, proteinChange &lt;chr&gt;, Variant_Classification &lt;chr&gt;,</span>
-<span class="co">#&gt; #   functionalImpactScore &lt;chr&gt;, fisValue &lt;dbl&gt;, linkXvar &lt;chr&gt;, linkPdb &lt;chr&gt;,</span>
-<span class="co">#&gt; #   linkMsa &lt;chr&gt;, ncbiBuild &lt;chr&gt;, Variant_Type &lt;chr&gt;, keyword &lt;chr&gt;,</span>
-<span class="co">#&gt; #   driverFilter &lt;chr&gt;, driverFilterAnnotation &lt;chr&gt;, driverTiersFilter &lt;chr&gt;,</span>
-<span class="co">#&gt; #   driverTiersFilterAnnotation &lt;chr&gt;, chr &lt;chr&gt;, variantAllele &lt;chr&gt;,</span>
-<span class="co">#&gt; #   refseqMrnaId &lt;chr&gt;, proteinPosStart &lt;int&gt;, proteinPosEnd &lt;int&gt;,</span>
-<span class="co">#&gt; #   Hugo_Symbol &lt;chr&gt;</span></pre></body></html></div>
-</div>
-<div id="fusions" class="section level3">
-<h3 class="hasAnchor">
-<a href="#fusions" class="anchor"></a>Fusions</h3>
-<div class="sourceCode" id="cb11"><html><body><pre class="r"><span class="no">df</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/get_genetics.html">get_genetics</a></span>(<span class="kw">sample_ids</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html">as.character</a></span>(<span class="no">tcga_samples</span>$<span class="no">patient_id</span>[!<span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span>(<span class="no">tcga_samples</span>$<span class="no">Cancer_Code</span>)][<span class="fl">1</span>:<span class="fl">100</span>]),
-                   <span class="kw">mutations</span> <span class="kw">=</span> <span class="fl">TRUE</span>,<span class="kw">fusions</span> <span class="kw">=</span> <span class="fl">TRUE</span>, <span class="kw">cna</span> <span class="kw">=</span> <span class="fl">FALSE</span>,
-                   <span class="kw">database</span> <span class="kw">=</span> <span class="st">"tcga"</span>)
-<span class="co">#&gt; [1] "https://www.cbioportal.org/api/molecular-profiles/gbm_tcga_pan_can_atlas_2018_mutations/mutations/fetch?"</span>
-<span class="co">#&gt; No encoding supplied: defaulting to UTF-8.</span>
-<span class="co">#&gt; [1] "https://www.cbioportal.org/api/molecular-profiles/ov_tcga_pan_can_atlas_2018_mutations/mutations/fetch?"</span>
-<span class="co">#&gt; No encoding supplied: defaulting to UTF-8.</span>
-<span class="co">#&gt; [1] "https://www.cbioportal.org/api/molecular-profiles/luad_tcga_pan_can_atlas_2018_mutations/mutations/fetch?"</span>
-<span class="co">#&gt; No encoding supplied: defaulting to UTF-8.</span>
-<span class="no">df</span>$<span class="no">mut</span> <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(<span class="no">Variant_Classification</span> <span class="kw">==</span> <span class="st">"Fusion"</span>)
-<span class="co">#&gt; # A tibble: 26 x 37</span>
-<span class="co">#&gt;    uniqueSampleKey uniquePatientKey molecularProfil… Tumor_Sample_Ba… patientId</span>
-<span class="co">#&gt;    &lt;chr&gt;           &lt;chr&gt;            &lt;chr&gt;            &lt;chr&gt;            &lt;chr&gt;    </span>
-<span class="co">#&gt;  1 VENHQS0wMi0yND… VENHQS0wMi0yNDg… gbm_tcga_pan_ca… TCGA-02-2485-01  TCGA-02-…</span>
-<span class="co">#&gt;  2 VENHQS0wNi0wMT… VENHQS0wNi0wMTQ… gbm_tcga_pan_ca… TCGA-06-0141-01  TCGA-06-…</span>
-<span class="co">#&gt;  3 VENHQS0wNi0wMT… VENHQS0wNi0wMTI… gbm_tcga_pan_ca… TCGA-06-0125-01  TCGA-06-…</span>
-<span class="co">#&gt;  4 VENHQS0wNi0wMT… VENHQS0wNi0wMTM… gbm_tcga_pan_ca… TCGA-06-0130-01  TCGA-06-…</span>
-<span class="co">#&gt;  5 VENHQS0wNC0xMz… VENHQS0wNC0xMzU… ov_tcga_pan_can… TCGA-04-1356-01  TCGA-04-…</span>
-<span class="co">#&gt;  6 VENHQS0wNC0xMz… VENHQS0wNC0xMzU… ov_tcga_pan_can… TCGA-04-1357-01  TCGA-04-…</span>
-<span class="co">#&gt;  7 VENHQS0wNC0xMz… VENHQS0wNC0xMzY… ov_tcga_pan_can… TCGA-04-1362-01  TCGA-04-…</span>
-<span class="co">#&gt;  8 VENHQS0wNC0xMz… VENHQS0wNC0xMzY… ov_tcga_pan_can… TCGA-04-1362-01  TCGA-04-…</span>
-<span class="co">#&gt;  9 VENHQS0wNC0xMz… VENHQS0wNC0xMzQ… ov_tcga_pan_can… TCGA-04-1348-01  TCGA-04-…</span>
-<span class="co">#&gt; 10 VENHQS0wNC0xMz… VENHQS0wNC0xMzQ… ov_tcga_pan_can… TCGA-04-1341-01  TCGA-04-…</span>
-<span class="co">#&gt; # … with 16 more rows, and 32 more variables: entrezGeneId &lt;int&gt;,</span>
-<span class="co">#&gt; #   studyId &lt;chr&gt;, center &lt;chr&gt;, Mutation_Status &lt;chr&gt;, validationStatus &lt;chr&gt;,</span>
-<span class="co">#&gt; #   tumorAltCount &lt;int&gt;, tumorRefCount &lt;int&gt;, normalAltCount &lt;int&gt;,</span>
-<span class="co">#&gt; #   normalRefCount &lt;int&gt;, startPosition &lt;int&gt;, endPosition &lt;int&gt;,</span>
-<span class="co">#&gt; #   referenceAllele &lt;chr&gt;, proteinChange &lt;chr&gt;, Variant_Classification &lt;chr&gt;,</span>
-<span class="co">#&gt; #   functionalImpactScore &lt;chr&gt;, fisValue &lt;dbl&gt;, linkXvar &lt;chr&gt;, linkPdb &lt;chr&gt;,</span>
-<span class="co">#&gt; #   linkMsa &lt;chr&gt;, ncbiBuild &lt;chr&gt;, Variant_Type &lt;chr&gt;, keyword &lt;chr&gt;,</span>
-<span class="co">#&gt; #   driverFilter &lt;chr&gt;, driverFilterAnnotation &lt;chr&gt;, driverTiersFilter &lt;chr&gt;,</span>
-<span class="co">#&gt; #   driverTiersFilterAnnotation &lt;chr&gt;, chr &lt;chr&gt;, variantAllele &lt;chr&gt;,</span>
-<span class="co">#&gt; #   refseqMrnaId &lt;chr&gt;, proteinPosStart &lt;int&gt;, proteinPosEnd &lt;int&gt;,</span>
-<span class="co">#&gt; #   Hugo_Symbol &lt;chr&gt;</span></pre></body></html></div>
-</div>
-<div id="cna" class="section level3">
-<h3 class="hasAnchor">
-<a href="#cna" class="anchor"></a>CNA</h3>
-<div class="sourceCode" id="cb12"><html><body><pre class="r"><span class="no">df</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/get_genetics.html">get_genetics</a></span>(<span class="kw">sample_ids</span> <span class="kw">=</span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"TCGA-17-Z023-01"</span>,<span class="st">"TCGA-02-0003-01"</span>,<span class="st">"TCGA-02-0055-01"</span>),
-             <span class="kw">mutations</span> <span class="kw">=</span> <span class="fl">FALSE</span>,<span class="kw">fusions</span> <span class="kw">=</span> <span class="fl">FALSE</span>, <span class="kw">cna</span> <span class="kw">=</span> <span class="fl">TRUE</span>,
-             <span class="kw">database</span> <span class="kw">=</span> <span class="st">"tcga"</span>)
-<span class="co">#&gt; [1] "https://www.cbioportal.org/api/molecular-profiles/gbm_tcga_pan_can_atlas_2018_gistic/discrete-copy-number/fetch?"</span>
-<span class="co">#&gt; No encoding supplied: defaulting to UTF-8.</span>
-<span class="co">#&gt; [1] "https://www.cbioportal.org/api/molecular-profiles/luad_tcga_pan_can_atlas_2018_gistic/discrete-copy-number/fetch?"</span>
-<span class="co">#&gt; No encoding supplied: defaulting to UTF-8.</span>
-<span class="no">df</span>$<span class="no">cna</span>
-<span class="co">#&gt; # A tibble: 5 x 9</span>
-<span class="co">#&gt;   uniqueSampleKey uniquePatientKey molecularProfil… sampleId patientId</span>
-<span class="co">#&gt; * &lt;chr&gt;           &lt;chr&gt;            &lt;chr&gt;            &lt;chr&gt;    &lt;chr&gt;    </span>
-<span class="co">#&gt; 1 VENHQS0wMi0wMD… VENHQS0wMi0wMDA… gbm_tcga_pan_ca… TCGA-02… TCGA-02-…</span>
-<span class="co">#&gt; 2 VENHQS0wMi0wMD… VENHQS0wMi0wMDU… gbm_tcga_pan_ca… TCGA-02… TCGA-02-…</span>
-<span class="co">#&gt; 3 VENHQS0wMi0wMD… VENHQS0wMi0wMDA… gbm_tcga_pan_ca… TCGA-02… TCGA-02-…</span>
-<span class="co">#&gt; 4 VENHQS0wMi0wMD… VENHQS0wMi0wMDA… gbm_tcga_pan_ca… TCGA-02… TCGA-02-…</span>
-<span class="co">#&gt; 5 VENHQS0wMi0wMD… VENHQS0wMi0wMDU… gbm_tcga_pan_ca… TCGA-02… TCGA-02-…</span>
-<span class="co">#&gt; # … with 4 more variables: entrezGeneId &lt;int&gt;, studyId &lt;chr&gt;, alteration &lt;int&gt;,</span>
-<span class="co">#&gt; #   Hugo_Symbol &lt;chr&gt;</span></pre></body></html></div>
 </div>
 </div>
 </div>
