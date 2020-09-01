@@ -127,7 +127,7 @@ maf_viz(maf = mut %>% filter(Tumor_Sample_Barcode %in% patients),
 
 ## Binary outcome
 
-The `gen.tab` function allows us to test for potential differences in genetic event frequencies using Fisher's exact test for unpaired data and the McNemar exact test for paired data. This function takes the following arguments:
+The `gen.summary` function allows us to test for potential differences in genetic event frequencies using Fisher's exact test for unpaired data and the McNemar exact test for paired data. This function takes the following arguments:
 
 - gen.dat : a binary matrix of genetic events with patients as rows and columns as genes
 - outcome : a binary vector corresponding to the patients in the gen.dat argument
@@ -139,7 +139,7 @@ The `gen.tab` function allows us to test for potential differences in genetic ev
 ```{r}
 outcome <- as.character(clin.sample$Sample.Type[match(patients,clin.sample$Sample.Identifier)])
 gen.dat <- bin.mut
-bin.test <- gen.tab(gen.dat = gen.dat,
+bin.test <- gen.summary(gen.dat = gen.dat,
         outcome = outcome,
         filter = 0.05,paired = F,cont = F,rank = T)
 kable(bin.test$fits,row.names = T)
@@ -155,7 +155,7 @@ Similarly we show here an example with a simulated continuous outcome:
 ```{r}
 set.seed(1)
 outcome <-  rnorm(n = nrow(gen.dat))
-tab.out <- gen.tab(gen.dat = gen.dat,
+tab.out <- gen.summary(gen.dat = gen.dat,
         outcome = outcome,
         filter = 0.05,paired = F,cont = T,rank = T)
 kable(tab.out$fits,row.names = T)

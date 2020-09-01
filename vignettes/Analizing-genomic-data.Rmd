@@ -24,13 +24,13 @@ library(gnomeR)
 
 In this article we will cover functions integrated in `gnomeR` to analyze the outputed processed data of the `binmat()` function. We include in `gnomeR` the following functions for analysis:
 
-- `gen.tab()` which test for association between either categorical or continous outcomes and the set of genomic features from the `binmat()` output matrix. Returns a table with the distribution of the genomic features along the outcome specified, using adapted tests and adjustements for multiple testing to report significance. We further summarize the results using adequate plots.
+- `gen.summary()` which test for association between either categorical or continous outcomes and the set of genomic features from the `binmat()` output matrix. Returns a table with the distribution of the genomic features along the outcome specified, using adapted tests and adjustements for multiple testing to report significance. We further summarize the results using adequate plots.
 
 - `uni.cox()` which performs univariate assocition analysis between a time-dependent outcome and the set of genomic features from the `binmat()` output matrix. We perform this using Cox's proportional hazard models with multiple test adjustements and summary plots.
 
 # Categorical and continous outcomes
 
-In this first section we focus on the `gen.tab()` function, it takes the following arguments:
+In this first section we focus on the `gen.summary()` function, it takes the following arguments:
 
 - `gen.dat` a genomic dataframe outputed from `binmat()`.
 - `outcome` a leveled vector of length equal to the number of rows in `gen.dat`.
@@ -53,13 +53,13 @@ For this example we will be using the recorded sample type of the samples we ran
 
 ```{r}
 outcome <- as.character(clin.sample$Sample.Type[match(samples,clin.sample$Sample.Identifier)])
-test <- gen.tab(gen.dat = df,
+test <- gen.summary(gen.dat = df,
                 outcome = outcome,
                 filter = 0.05,paired = FALSE,
                 cont = FALSE,rank = TRUE)
 ```
 
-Using the Fisher's exact test the `gen.tab()` function returns the following:
+Using the Fisher's exact test the `gen.summary()` function returns the following:
 
 - `fits` a summary table of the distribution of features across outcomes and the test performed
 
@@ -82,12 +82,12 @@ test$vPlot
 
 ## Continous 
 
-In this section we show to use the `gen.tab()` function with a continuous outcome. Given the lack of continuous variables in the IMPACT clinical set we show an example here with a simulate continuous gaussian outcome. We perform this using linear regression.
+In this section we show to use the `gen.summary()` function with a continuous outcome. Given the lack of continuous variables in the IMPACT clinical set we show an example here with a simulate continuous gaussian outcome. We perform this using linear regression.
 
 ```{r}
 set.seed(1)
 outcome <-  rnorm(n = nrow(df))
-tab.out <- gen.tab(gen.dat = df,
+tab.out <- gen.summary(gen.dat = df,
                    outcome = outcome,
                    filter = 0.05,paired = FALSE,
                    cont = TRUE,rank = TRUE)
