@@ -1,4 +1,4 @@
-#' gen.tab
+#' gen.summary
 #'
 #' Creates a summary table of the distribution of the genetic features by a specific outcome/covariate of interest. The difference
 #' is tested using Fisher's exact test and further adjusted for multiple comparisons. Note that continuous genetic factors
@@ -20,14 +20,14 @@
 #' ## binary outcome ##
 #' outcome <- as.character(clin.sample$Sample.Type[match(patients,clin.sample$Sample.Identifier)])
 #' gen.dat <- binmat(patients = patients,maf = mut)
-#' gen.tab(gen.dat = gen.dat,
+#' gen.summary(gen.dat = gen.dat,
 #'         outcome = outcome,
 #'         filter = 0.05,paired = FALSE,
 #'         cont = FALSE,rank = TRUE)
 #' ## Continuous outcome ##
 #' set.seed(1)
 #' outcome <-  rnorm(n = nrow(gen.dat))
-#' tab.out <- gen.tab(gen.dat = gen.dat,
+#' tab.out <- gen.summary(gen.dat = gen.dat,
 #'                    outcome = outcome,
 #'                    filter = 0.05,paired = FALSE,
 #'                    cont = TRUE,rank = TRUE)
@@ -37,7 +37,7 @@
 #' ggrepel
 #' exact2x2
 
-gen.tab <- function (gen.dat, outcome, filter = 0, paired = F, cont = F,
+gen.summary <- function (gen.dat, outcome, filter = 0, paired = F, cont = F,
                      rank = T)
 {
   if(filter < 0 || filter >= 1)

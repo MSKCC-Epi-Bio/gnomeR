@@ -5,3 +5,8 @@ patients <- as.character(unique(mut$Tumor_Sample_Barcode))[sample(1:length(uniqu
 time <- rexp(300)
 status <- rbinom(n = 300,size = 1,prob = 1/2)
 surv.dat <- as.data.frame(cbind(time,status))
+
+#global variables for gen-sumamry
+patients100 <- patients[1:100]
+outcome <- as.character(clin.sample$Sample.Type[match(patients100,clin.sample$Sample.Identifier)])
+gen.dat <- binmat(patients = patients100,maf = mut)

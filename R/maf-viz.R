@@ -23,6 +23,7 @@
 #' stringr
 #' ggplot2
 #' GGally
+#' ComplexHeatmap
 
 maf_viz <- function(maf, ...) {
   all_plots <- list(
@@ -36,6 +37,13 @@ maf_viz <- function(maf, ...) {
 
   return(all_plots)
 }
+
+
+add.perc<-function(x,...){geom_text(
+       aes(label=paste0(round(stat(prop)*100,2),"%"), group=1),
+       stat="count",
+       hjust=0, nudge_y = -0.25,...)}
+
 
 #' Barplot of Variant Classification Counts
 #'
@@ -282,7 +290,55 @@ ggcomut <- function(maf, n_genes = 10, ...) {
   p.comut
 }
 
+#' Heatmap of all events after binmat
+#'
+#' @param hmat dataframe obtained after binamt
+#' @param ... Further arguments as passed to ComplexHeatmap::Heatmap
+#' @return heatmap of binmat events
+#' @export
+#'
+#' @examples
+#' set.seed(123)
+#' patients<-as.character(unique(mut$Tumor_Sample_Barcode))[sample(1:length(unique(mut$Tumor_Sample_Barcode)), 100, replace=FALSE)]
+#' ggheatmap(binmat(patients=patients, maf=mut, cna=cna, fusion=fusion, set.plat=TRUE), show_row_names=FALSE, show_column_names=FALSE)
+#'
 
+ggheatmap<-function(hmat, ...){
+
+  #check if the matrix is not binary
+  if(sum(hmat==0, na.rm=T) + sum(hmat==1, na.rm=T) + sum(is.na(hmat)) != (nrow(hmat) * ncol(hmat))) {stop("ggheatmap can only be plotted when binmat is binary, set cna.binary=TRUE")}
+
+  idx.amp = grep(".Amp", colnames(hmat))
+  if(length(idx.amp)>0){
+    tt<- hmat[,idx.amp]; tt[ tt==1 ] <- 2
+    hmat[,idx.amp]<-tt
+  }
+
+  idx.del = grep(".Del", colnames(hmat))
+  if(length(idx.del)>0){
+    tt<- hmat[,idx.del]; tt[tt==1] <- 3
+    hmat[,idx.del]<-tt
+  }
+
+
+  idx.fus = c(grep(".fus", colnames(hmat)))
+  if(length(idx.fus)>0){
+    tt<- hmat[,idx.fus]; tt[tt==1] <- 4
+    hmat[,idx.fus]<-tt
+  }
+
+
+  hmat.colors = structure(c("white","black", "coral","cadetblue", "forestgreen"), names=c("0","1","2","3","4"))
+
+  hmap.legend = list(
+    title = "Events",
+    at = c(0,1,2,3,4),
+    labels = c("WT", "Mut", "Amplification","Deletion", "Fusion")
+  )
+
+  ComplexHeatmap::Heatmap(t(hmat),col=hmat.colors , na_col="grey", clustering_distance_rows="binary",clustering_distance_columns="binary", heatmap_legend_param = hmap.legend, ...)
+
+}
 
 
 
