@@ -127,21 +127,16 @@ kable(gen.dat[1:10,1:10],row.names = T)
 #### MAF
 
 Before we move on to more complex visualizations, we integrate the
-`maf.summary()` function to give an overview of the distribution of the
+`maf_viz()` function to give an overview of the distribution of the
 different mutations across the cohort of interest:
 
 ``` r
-sum.plots <- maf.summary(maf = mut %>% filter(Tumor_Sample_Barcode %in% patients))
+sum.plots <- maf_viz(maf = mut %>% filter(Tumor_Sample_Barcode %in% patients))
 sum.plots$p.genes
-```
-
-<img src="man/figures/README-unnamed-chunk-8-1.png" width="100%" />
-
-``` r
+#> NULL
 sum.plots$p.comut
+#> NULL
 ```
-
-<img src="man/figures/README-unnamed-chunk-8-2.png" width="100%" />
 
 #### OncoPrints
 
@@ -167,17 +162,11 @@ read counts, and integer copy number calls corrected for tumor purity,
 ploidy and clonal heterogeneity, with comprehensive output.
 
 ``` r
-# need to find how to get facets from API #
-# also makes me think we need to get the clinical data too in that for purity #
 p.heat <- facets.heatmap(seg = seg, patients = patients, min.purity = 0)
 p.heat$p
 ```
 
 <img src="man/figures/README-unnamed-chunk-10-1.png" width="100%" />
-
-``` r
-# Also need a better example lol#
-```
 
 ### Analysis
 
@@ -239,18 +228,18 @@ out <- uni.cox(X = gen.dat, surv.dat = surv.dat, surv.formula = Surv(time,status
 kable(out$tab[1:10,],row.names = T)
 ```
 
-|    | Feature   | Coefficient | Pvalue | MutationFrequency |       FDR |    HR |
-| -- | :-------- | ----------: | -----: | ----------------: | --------: | ----: |
-| 1  | MLL       |     \-1.480 |  0.604 |              0.09 | 0.6043112 | 0.228 |
-| 2  | STK11     |     \-1.460 |  0.912 |              0.07 | 0.9122695 | 0.233 |
-| 3  | KEAP1     |     \-1.020 |  0.912 |              0.05 | 0.9122695 | 0.362 |
-| 4  | NOTCH1    |       0.609 |  0.912 |              0.08 | 0.9122695 | 1.840 |
-| 5  | DOT1L     |       0.659 |  0.912 |              0.05 | 0.9122695 | 1.930 |
-| 6  | TSC1      |       0.750 |  0.912 |              0.05 | 0.9122695 | 2.120 |
-| 7  | MYC.Amp   |     \-1.200 |  0.912 |              0.06 | 0.9122695 | 0.301 |
-| 8  | CDH1      |       0.605 |  0.912 |              0.06 | 0.9122695 | 1.830 |
-| 9  | FGFR1.Amp |     \-0.826 |  0.912 |              0.06 | 0.9122695 | 0.438 |
-| 10 | EPHA5     |     \-1.080 |  0.912 |              0.05 | 0.9122695 | 0.340 |
+|    | Feature   | Coefficient |    HR | Pvalue |       FDR | MutationFrequency |
+| -- | :-------- | ----------: | ----: | -----: | --------: | ----------------: |
+| 1  | MLL       |     \-1.480 | 0.228 | 0.0155 | 0.6043112 |              0.09 |
+| 2  | STK11     |     \-1.460 | 0.233 | 0.0519 | 0.9122695 |              0.07 |
+| 3  | KEAP1     |     \-1.020 | 0.362 | 0.1670 | 0.9122695 |              0.05 |
+| 4  | NOTCH1    |       0.609 | 1.840 | 0.2070 | 0.9122695 |              0.08 |
+| 5  | DOT1L     |       0.659 | 1.930 | 0.2110 | 0.9122695 |              0.05 |
+| 6  | TSC1      |       0.750 | 2.120 | 0.2130 | 0.9122695 |              0.05 |
+| 7  | MYC.Amp   |     \-1.200 | 0.301 | 0.2350 | 0.9122695 |              0.06 |
+| 8  | CDH1      |       0.605 | 1.830 | 0.2520 | 0.9122695 |              0.06 |
+| 9  | FGFR1.Amp |     \-0.826 | 0.438 | 0.2550 | 0.9122695 |              0.06 |
+| 10 | EPHA5     |     \-1.080 | 0.340 | 0.2870 | 0.9122695 |              0.05 |
 
 ``` r
 # out$p

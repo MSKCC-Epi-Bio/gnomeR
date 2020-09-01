@@ -81,20 +81,20 @@ kable(df[1:10, 1:10])
 In this section we show the same examples as above but using the data downloaded through the API:
 
 ```{r, results="hide"}
-samples.tcga <- tcga_samples$patient_id[1:50]
-dat <- get_genetics(sample_ids = samples.tcga, database = 'tcga', fusions = FALSE, cna = FALSE)
-df <- binmat(maf = dat$mut)
+# samples.tcga <- tcga_samples$patient_id[1:50]
+# dat <- get_genetics(sample_ids = samples.tcga, database = 'tcga', fusions = FALSE, cna = FALSE)
+# df <- binmat(maf = dat$mut)
 ```
 
 ```{r}
-kable(df[1:10, 1:10])
+# kable(df[1:10, 1:10])
 ```
 
 Similarly,
 
 ```{r}
-df <- binmat(maf = dat$mut, SNP.only = TRUE, include.silent = TRUE, spe.plat = FALSE)
-kable(df[1:10, 1:10])
+# df <- binmat(maf = dat$mut, SNP.only = TRUE, include.silent = TRUE, spe.plat = FALSE)
+# kable(df[1:10, 1:10])
 ```
 
 ## Fusions
@@ -116,12 +116,12 @@ kable(df[1:10, 1:10])
 In the API provided in `gnomeR` the fusion data comes merged with the mutation data. Note that we included an option to automatically filter them out if the user wishes so.
 
 ```{r, results="hide"}
-dat <- get_genetics(sample_ids = samples.tcga, database = 'tcga',mutations = FALSE, fusions = TRUE, cna = FALSE)
-df <- binmat(maf = dat$mut)
+# dat <- get_genetics(sample_ids = samples.tcga, database = 'tcga',mutations = FALSE, fusions = TRUE, cna = FALSE)
+# df <- binmat(maf = dat$mut)
 ```
 
 ```{r}
-kable(df[1:10, 1:10])
+# kable(df[1:10, 1:10])
 ```
 
 Similarly to the mutation data the fusions are affected by the `spe.plat` and `set.plat` arguments as well.
@@ -160,19 +160,19 @@ kable(df[1:10, 1:10])
 Setting the `cna` argument to TRUE in the `get_genetics()` function will retrieve the CNA data for the specified samples that can then further be processed in a similar fashion to the above:
 
 ```{r, results="hide"}
-dat <- get_genetics(sample_ids = samples.tcga, database = 'tcga',mutations = FALSE, fusions = FALSE, cna = TRUE)
-df <- binmat(cna = dat$cna)
+# dat <- get_genetics(sample_ids = samples.tcga, database = 'tcga',mutations = FALSE, fusions = FALSE, cna = TRUE)
+# df <- binmat(cna = dat$cna)
 ```
 
 ```{r}
-kable(df[1:10, 1:10])
+# kable(df[1:10, 1:10])
 ```
 
 Setting `cna.binary` argument to FALSE yields the following events coded in a single column with their original levels:
 
 ```{r}
-df <- binmat(patients = samples, cna = dat$cna,cna.binary = FALSE)
-kable(df[1:10, 1:10])
+# df <- binmat(patients = samples, cna = dat$cna,cna.binary = FALSE)
+# kable(df[1:10, 1:10])
 ```
 
 ## Processing full genetic profiles for samples
@@ -194,12 +194,12 @@ kable(df[1:10, c(1:3,243,244,300:305)])
 Similarly we get retrieve all the genetic events at once through the `get_genetics()` function and proceed to process them.
 
 ```{r, results="hide"}
-dat <- get_genetics(sample_ids = samples.tcga, database = 'tcga',mutations = TRUE, fusions = TRUE, cna = TRUE)
-df <- binmat(maf = dat$mut, cna = dat$cna,cna.binary = FALSE)
+# dat <- get_genetics(sample_ids = samples.tcga, database = 'tcga',mutations = TRUE, fusions = TRUE, cna = TRUE)
+# df <- binmat(maf = dat$mut, cna = dat$cna,cna.binary = FALSE)
 ```
 
 ```{r}
-kable(df[1:10, c(1:3,243,244,300:305)])
+# kable(df[1:10, c(1:3,243,244,300:305)])
 ```
 
 Note that here the fusions are embedded in the mutation file.

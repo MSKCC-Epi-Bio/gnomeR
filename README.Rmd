@@ -99,10 +99,10 @@ kable(gen.dat[1:10,1:10],row.names = T)
 
 #### MAF 
 
-Before we move on to more complex visualizations, we integrate the `maf.summary()` function to give an overview of the distribution of the different mutations across the cohort of interest:
+Before we move on to more complex visualizations, we integrate the `maf_viz()` function to give an overview of the distribution of the different mutations across the cohort of interest:
 
 ```{r}
-sum.plots <- maf.summary(maf = mut %>% filter(Tumor_Sample_Barcode %in% patients))
+sum.plots <- maf_viz(maf = mut %>% filter(Tumor_Sample_Barcode %in% patients))
 sum.plots$p.genes
 sum.plots$p.comut
 ```
@@ -122,11 +122,8 @@ plot_oncoPrint(gen.dat = gen.dat %>% select(starts_with(genes)))
 [FACETs](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5027494/) is an ASCN tool and open-source software with a broad application to whole genome, whole-exome, as well as targeted panel sequencing platforms. It is a fully integrated stand-alone pipeline that includes sequencing BAM file post-processing, joint segmentation of total- and allele-specific read counts, and integer copy number calls corrected for tumor purity, ploidy and clonal heterogeneity, with comprehensive output.
 
 ```{r}
-# need to find how to get facets from API #
-# also makes me think we need to get the clinical data too in that for purity #
 p.heat <- facets.heatmap(seg = seg, patients = patients, min.purity = 0)
 p.heat$p
-# Also need a better example lol#
 ```
 
 

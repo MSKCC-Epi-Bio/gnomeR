@@ -11,7 +11,9 @@ check_maf_column(maf, col_to_check)
 
 \item{col_to_check}{Which column to check}
 }
+\value{
 
+}
 \description{
 Check Columns of MAF
 }
