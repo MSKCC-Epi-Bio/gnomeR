@@ -105,9 +105,9 @@ binmat <- function(patients=NULL, maf = NULL, mut.type = "SOMATIC",SNP.only = FA
     # filter/define patients #
     if(!is.null(patients)) maf <- maf[maf$Tumor_Sample_Barcode %in% patients,]
     else patients <- as.character(unique(maf$Tumor_Sample_Barcode))
-    if(oncokb)
-      maf <- oncoKB_annotate(maf,...) %>%
-        dplyr::filter(oncogenic %in% c("Oncogenic","Likely Oncogenic"))
+    # if(oncokb)
+    #   maf <- oncoKB_annotate(maf,...) %>%
+    #     dplyr::filter(oncogenic %in% c("Oncogenic","Likely Oncogenic"))
     # set maf to maf class #
     maf <- structure(maf,class = c("data.frame","maf"))
     # getting mutation binary matrix #

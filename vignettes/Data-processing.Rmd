@@ -235,16 +235,16 @@ OncoKB annotates the biological and oncogenic effect and the prognostic and pred
 Note this can be performed externally using the `oncoKB_annotate()` function as shown below:
 
 ```{r}
-maf <- mut[1:10,]
-onco_maf <- oncoKB_annotate(maf)
-onco_maf %>% select(Hugo_Symbol, Chromosome, Variant_Classification, oncogenic, oncokb_level )
+# maf <- mut[1:10,]
+# onco_maf <- oncoKB_annotate(maf)
+# onco_maf %>% select(Hugo_Symbol, Chromosome, Variant_Classification, oncogenic, oncokb_level )
 ```
 
 Annotating MAF in `binmat()`:
 
 ```{r}
-df <- binmat(patients = samples[1:5] ,maf = mut, oncokb = TRUE)
-kable(df[1:5, 1:10])
+# df <- binmat(patients = samples[1:5] ,maf = mut, oncokb = TRUE)
+# kable(df[1:5, 1:10])
 ```
 
 

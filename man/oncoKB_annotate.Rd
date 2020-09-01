@@ -23,6 +23,4 @@ OncoKB annotator for MAF files.
 }
 \examples{
 library(gnomeR)
-maf <- mut[1:10,]
-onco_maf <- oncoKB_annotate(maf)
 }
