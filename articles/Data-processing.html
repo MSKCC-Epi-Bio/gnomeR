@@ -1358,105 +1358,12 @@
 <h1 class="hasAnchor">
 <a href="#oncokb-annotation" class="anchor"></a>OncoKB annotation</h1>
 <p>OncoKB annotates the biological and oncogenic effect and the prognostic and predictive significance of somatic molecular alterations. Potential treatment implications are stratified by the level of evidence that a specific molecular alteration is predictive of drug response based on US Food and Drug Administration (FDA) labeling, National Comprehensive Cancer Network (NCCN) guidelines, disease-focused expert group recommendations and the scientific literature. For more information see the manuscript <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5586540/">OncoKB: A Precision Oncology Knowledge Base</a> or the <a href="https://www.oncokb.org/">oncoKB</a> website. In <code>gnomeR</code> we include a simple wrapper of the <code>[annotateMaf](https://github.com/taylor-lab/annotateMaf)</code> package’s functions to allow users to annotate their MAF files. If the <code>oncokb</code> argument is set to TRUE the MAF will be subsetted to oncogenic and likely oncogenic variants. Note this can be performed externally using the <code><a href="../reference/oncoKB_annotate.html">oncoKB_annotate()</a></code> function as shown below:</p>
-<div class="sourceCode" id="cb20"><html><body><pre class="r"><span class="no">maf</span> <span class="kw">&lt;-</span> <span class="no">mut</span>[<span class="fl">1</span>:<span class="fl">10</span>,]
-<span class="no">onco_maf</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/oncoKB_annotate.html">oncoKB_annotate</a></span>(<span class="no">maf</span>)
-<span class="no">onco_maf</span> <span class="kw">%&gt;%</span> <span class="fu">select</span>(<span class="no">Hugo_Symbol</span>, <span class="no">Chromosome</span>, <span class="no">Variant_Classification</span>, <span class="no">oncogenic</span>, <span class="no">oncokb_level</span> )
-<span class="co">#&gt;    Hugo_Symbol Chromosome Variant_Classification        oncogenic oncokb_level</span>
-<span class="co">#&gt; 1         TP53         17      Missense_Mutation Likely Oncogenic             </span>
-<span class="co">#&gt; 2         EZH2          7      Missense_Mutation                              </span>
-<span class="co">#&gt; 3         MDM2         12      Missense_Mutation                              </span>
-<span class="co">#&gt; 4        IGF1R         15      Missense_Mutation                              </span>
-<span class="co">#&gt; 5        KEAP1         19      Missense_Mutation                              </span>
-<span class="co">#&gt; 6        KDM5C          X      Missense_Mutation                              </span>
-<span class="co">#&gt; 7         KRAS         12      Missense_Mutation        Oncogenic      LEVEL_4</span>
-<span class="co">#&gt; 8         TERT          5                5'Flank                              </span>
-<span class="co">#&gt; 9       MAP2K1         15      Missense_Mutation Likely Oncogenic     LEVEL_3B</span>
-<span class="co">#&gt; 10       NCOR1         17      Nonsense_Mutation Likely Oncogenic</span></pre></body></html></div>
+<div class="sourceCode" id="cb20"><html><body><pre class="r"># maf &lt;- mut[1:10,]
+# onco_maf &lt;- oncoKB_annotate(maf)
+# onco_maf %&gt;% select(Hugo_Symbol, Chromosome, Variant_Classification, oncogenic, oncokb_level )</pre></body></html></div>
 <p>Annotating MAF in <code><a href="../reference/binmat.html">binmat()</a></code>:</p>
-<div class="sourceCode" id="cb21"><html><body><pre class="r"><span class="no">df</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/binmat.html">binmat</a></span>(<span class="kw">patients</span> <span class="kw">=</span> <span class="no">samples</span>[<span class="fl">1</span>:<span class="fl">5</span>] ,<span class="kw">maf</span> <span class="kw">=</span> <span class="no">mut</span>, <span class="kw">oncokb</span> <span class="kw">=</span> <span class="fl">TRUE</span>)
-<span class="fu">kable</span>(<span class="no">df</span>[<span class="fl">1</span>:<span class="fl">5</span>, <span class="fl">1</span>:<span class="fl">10</span>])</pre></body></html></div>
-<table class="table">
-<thead><tr class="header">
-<th align="left"></th>
-<th align="right">ARID1A</th>
-<th align="right">TP53</th>
-<th align="right">PIK3CA</th>
-<th align="right">MLL3</th>
-<th align="right">MAP3K1</th>
-<th align="right">GATA3</th>
-<th align="right">BRCA1</th>
-<th align="right">SPEN</th>
-<th align="right">NOTCH1</th>
-<th align="right">CDKN2A</th>
-</tr></thead>
-<tbody>
-<tr class="odd">
-<td align="left">P-0010604-T01-IM5</td>
-<td align="right">0</td>
-<td align="right">1</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">1</td>
-<td align="right">1</td>
-<td align="right">0</td>
-</tr>
-<tr class="even">
-<td align="left">P-0002651-T01-IM3</td>
-<td align="right">0</td>
-<td align="right">1</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-</tr>
-<tr class="odd">
-<td align="left">P-0000270-T01-IM3</td>
-<td align="right">1</td>
-<td align="right">1</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">1</td>
-</tr>
-<tr class="even">
-<td align="left">P-0002915-T01-IM3</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">1</td>
-<td align="right">1</td>
-<td align="right">1</td>
-<td align="right">1</td>
-<td align="right">1</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-</tr>
-<tr class="odd">
-<td align="left">P-0011099-T01-IM5</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-</tr>
-</tbody>
-</table>
+<div class="sourceCode" id="cb21"><html><body><pre class="r"># df &lt;- binmat(patients = samples[1:5] ,maf = mut, oncokb = TRUE)
+# kable(df[1:5, 1:10])</pre></body></html></div>
 </div>
 <div id="facets" class="section level1">
 <h1 class="hasAnchor">

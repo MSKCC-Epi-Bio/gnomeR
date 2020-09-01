@@ -110,7 +110,7 @@
 <h1 class="hasAnchor">
 <a href="#setting-up-the-api" class="anchor"></a>Setting up the API</h1>
 <p>In order to download the data from CbioPortal, one must first require a token from the website <a href="https://cbiologin.mskcc.org/">CbioPortal</a> wich will prompt a login page with your MSKCC credentials. Then navigate to “Web API” in the top bar menu, following this simply download a token and copy it after running the following command in R:</p>
-<div class="sourceCode" id="cb2"><html><body><pre class="r"><span class="kw pkg">usethis</span><span class="kw ns">::</span><span class="fu">edit_r_environ</span>()</pre></body></html></div>
+<div class="sourceCode" id="cb2"><html><body><pre class="r"><span class="kw pkg">usethis</span><span class="kw ns">::</span><span class="fu"><a href="https://usethis.r-lib.org/reference/edit.html">edit_r_environ</a></span>()</pre></body></html></div>
 <p>And pasting the token you were given in the .Renviron file that was created and saving after pasting your token.</p>
 <div class="sourceCode" id="cb3"><html><body><pre class="r"><span class="no">CBIOPORTAL_TOKEN</span> <span class="kw">=</span> <span class="st">'YOUR_TOKEN'</span></pre></body></html></div>
 <p>You can test your connection using:</p>
