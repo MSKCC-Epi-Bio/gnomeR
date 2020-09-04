@@ -333,13 +333,13 @@
 <div id="binary-and-continuous-outcomes" class="section level4">
 <h4 class="hasAnchor">
 <a href="#binary-and-continuous-outcomes" class="anchor"></a>Binary and continuous outcomes</h4>
-<p>The <code><a href="reference/gen.tab.html">gen.tab()</a></code> function let’s the user perform a large scale association between the genomic features present in the <code>binat()</code> function output and an outcome of choice:</p>
+<p>The <code>gen.tab()</code> function let’s the user perform a large scale association between the genomic features present in the <code>binat()</code> function output and an outcome of choice:</p>
 <ul>
 <li>binary (unpaired test using Fisher’s exact test and paired test using McNemmar’s exact test)</li>
 <li>continuous (using simple linear regression)</li>
 </ul>
 <!-- end list --><div class="sourceCode" id="cb11"><pre class="r"><span class="no">outcome</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span>(<span class="fu"><a href="https://rdrr.io/r/stats/Binomial.html">rbinom</a></span>(<span class="kw">n</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span>(<span class="no">patients</span>),<span class="kw">size</span> <span class="kw">=</span> <span class="fl">1</span>,<span class="kw">prob</span> <span class="kw">=</span> <span class="fl">1</span>/<span class="fl">2</span>),<span class="kw">levels</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"0"</span>,<span class="st">"1"</span>))
-<span class="no">out</span> <span class="kw">&lt;-</span> <span class="fu"><a href="reference/gen.tab.html">gen.tab</a></span>(<span class="kw">gen.dat</span> <span class="kw">=</span> <span class="no">gen.dat</span>,<span class="kw">outcome</span> <span class="kw">=</span> <span class="no">outcome</span>,<span class="kw">filter</span> <span class="kw">=</span> <span class="fl">0.05</span>)
+<span class="no">out</span> <span class="kw">&lt;-</span> <span class="fu">gen.tab</span>(<span class="kw">gen.dat</span> <span class="kw">=</span> <span class="no">gen.dat</span>,<span class="kw">outcome</span> <span class="kw">=</span> <span class="no">outcome</span>,<span class="kw">filter</span> <span class="kw">=</span> <span class="fl">0.05</span>)
 <span class="fu">kable</span>(<span class="no">out</span>$<span class="no">fits</span>[<span class="fl">1</span>:<span class="fl">10</span>,],<span class="kw">row.names</span> <span class="kw">=</span> <span class="no">T</span>)</pre></div>
 <table class="table">
 <thead><tr class="header">

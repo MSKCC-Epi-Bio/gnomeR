@@ -1,86 +1,80 @@
-#!/usr/bin/python
-
+import argparse
+# from AnnotatorCore import *
 import sys
-import getopt
-from AnnotatorCore import *
+import csv
+import requests
+import os.path
+import logging
+import re
+import matplotlib
+matplotlib.use('Agg')
+import matplotlib.pyplot as plt
+from datetime import date
+import logging
+logging.basicConfig(level=logging.INFO)
+log = logging.getLogger('MafAnnotator')
+
 
 def main(argv):
-
-    inputmaffile = ''
-    inputclinicalfile = ''
-    outputmaffile = ''
-    previousresultfile = ''
-    defaultcancertype = 'cancer'
-    annotatehotspots = False
-
-    try:
-        opts, args = getopt.getopt(argv, "hi:o:p:c:s:t:u:v:a")
-    except getopt.GetoptError:
-        print 'for help: python MafAnnotator.py -h'
+    if argv.help:
+        log.info('\n'
+            'MafAnnotator.py -i <input MAF file> -o <output MAF file> [-p previous results] [-c <input clinical file>] '
+            '[-s sample list filter] [-t <default tumor type>] [-u oncokb-base-url] [-b oncokb_api_bear_token] [-a]\n'
+            'Essential MAF columns (case insensitive):\n'
+            '    HUGO_SYMBOL: Hugo gene symbol\n'
+            '    VARIANT_CLASSIFICATION: Translational effect of variant allele\n'
+            '    TUMOR_SAMPLE_BARCODE: sample ID\n'
+            '    HGVSP_SHORT: protein change in HGVSP format\n'
+            '    PROTEIN_START: protein start\n'
+            '    PROTEIN_END: protein end\n'
+            '    PROTEIN_POSITION: can be used instead of PROTEIN_START and PROTEIN_END (in the output of vcf2map)\n'
+            'Essential clinical columns:\n'
+            '    SAMPLE_ID: sample ID\n'
+            '    ONCOTREE_CODE: tumor type code from oncotree (oncotree.mskcc.org)\n'
+            'Cancer type will be assigned based on the following priority:\n'
+            '    1) ONCOTREE_CODE in clinical data file\n'
+            '    2) ONCOTREE_CODE exist in MAF\n'
+            '    3) default tumor type (-t)\n'
+            'Default OncoKB base url is https://www.oncokb.org.\n'
+            'Use -a to annotate mutational hotspots\n')
+        sys.exit()
+    if argv.input_file == '' or argv.output_file == '' or argv.oncokb_api_bearer_token == '':
+        log.info('For help: python MafAnnotator.py -h')
         sys.exit(2)
 
-    for opt, arg in opts:
-        if opt == '-h':
-            print 'MafAnnotator.py -i <input MAF file> -o <output MAF file> [-p previous results] [-c <input clinical file>] [-s sample list filter] [-t <default tumor type>] [-u oncokb-base-url] [-a]'
-            print '  Essential MAF columns (case insensitive):'
-            print '    HUGO_SYMBOL: Hugo gene symbol'
-            print '    VARIANT_CLASSIFICATION: Translational effect of variant allele'
-            print '    TUMOR_SAMPLE_BARCODE: sample ID'
-            print '    AMINO_ACID_CHANGE: amino acid change'
-            print '    PROTEIN_START: protein start'
-            print '    PROTEIN_END: protein end'
-            print '    PROTEIN_POSITION: can be used instead of PROTEIN_START and PROTEIN_END (in the output of vcf2map)'
-            print '  Essential clinical columns:'
-            print '    SAMPLE_ID: sample ID'
-            print '    ONCOTREE_CODE: tumor type code from oncotree (oncotree.mskcc.org)'
-            print '  Cancer type will be assigned based on the following priority:'
-            print '     1) ONCOTREE_CODE in clinical data file'
-            print '     2) ONCOTREE_CODE exist in MAF'
-            print '     3) default tumor type (-t)'
-            print '  Default OncoKB base url is http://oncokb.org'
-            print '  use -a to annotate mutational hotspots'
-            sys.exit()
-        elif opt in ("-i"):
-            inputmaffile = arg
-        elif opt in ("-o"):
-            outputmaffile = arg
-        elif opt in ("-p"):
-            previousresultfile = arg
-        elif opt in ("-c"):
-            inputclinicalfile = arg
-        elif opt in ("-s"):
-            setsampleidsfileterfile(arg)
-        elif opt in ("-t"):
-            defaultcancertype = arg
-        elif opt in ("-u"):
-            setoncokbbaseurl(arg)
-        elif opt in ("-a"):
-            annotatehotspots = True
-        elif opt in ("-v"):
-            setcancerhotspotsbaseurl(arg)
-
-    if inputmaffile == '' or outputmaffile=='':
-        print 'for help: python MafAnnotator.py -h'
-        sys.exit(2)
+    if argv.sample_ids_filter:
+        setsampleidsfileterfile(argv.sample_ids_filter)
+    if argv.cancer_hotspots_base_url:
+        setcancerhotspotsbaseurl(argv.cancer_hotspots_base_url)
+    if argv.oncokb_api_url:
+        setoncokbbaseurl(argv.oncokb_api_url)
+    setoncokbapitoken(argv.oncokb_api_bearer_token)
+    getcuratedgenes()
 
     cancertypemap = {}
-    if inputclinicalfile != '':
-        readCancerTypes(inputclinicalfile, cancertypemap)
+    if argv.input_clinical_file:
+        readCancerTypes(argv.input_clinical_file, cancertypemap)
 
-    print 'annotating '+inputmaffile+"..."
+    log.info('annotating %s ...' % argv.input_file)
+    processalterationevents(argv.input_file, argv.output_file, argv.previous_result_file, argv.default_cancer_type, cancertypemap, True, argv.annotate_hotspots)
 
-    processalterationevents(inputmaffile, outputmaffile, previousresultfile, defaultcancertype, cancertypemap, False, annotatehotspots)
+    log.info('done!')
 
-    print 'done!'
 
 if __name__ == "__main__":
-    # argv = [
-    #     '-i', 'example_maf.txt',
-    #     '-o', 'example_maf.oncokb.txt',
-    #     '-c', 'example_clinical.txt',
-    #     '-a'
-    # ]
-    # main(argv)
+    parser = argparse.ArgumentParser(add_help=False)
+    parser.add_argument('-h', dest='help', action="store_true", default=False)
+    parser.add_argument('-i', dest='input_file', default='', type=str)
+    parser.add_argument('-o', dest='output_file', default='', type=str)
+    parser.add_argument('-p', dest='previous_result_file', default='', type=str)
+    parser.add_argument('-c', dest='input_clinical_file', default='', type=str)
+    parser.add_argument('-s', dest='sample_ids_filter', default='', type=str)
+    parser.add_argument('-t', dest='default_cancer_type', default='cancer', type=str)
+    parser.add_argument('-u', dest='oncokb_api_url', default='', type=str)
+    parser.add_argument('-a', dest='annotate_hotspots', action="store_true", default=False)
+    parser.add_argument('-v', dest='cancer_hotspots_base_url', default='', type=str)
+    parser.add_argument('-b', dest='oncokb_api_bearer_token', default='', type=str)
+    parser.set_defaults(func=main)
 
-    # print sys.argv[1:]
-    main(sys.argv[1:])
+    args = parser.parse_args()
+    args.func(args)

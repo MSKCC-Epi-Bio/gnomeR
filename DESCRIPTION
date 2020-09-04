@@ -56,7 +56,8 @@ Imports:
     plotly,
     rlang,
     forcats,
-    purrr
+    purrr,
+    reticulate
 Suggests: 
     knitr,
     rmarkdown,

@@ -23,6 +23,7 @@ binmat(
   col.names = c(Tumor_Sample_Barcode = NULL, Hugo_Symbol = NULL, Variant_Classification
     = NULL, Mutation_Status = NULL, Variant_Type = NULL),
   oncokb = FALSE,
+  token = "",
   ...
 )
 }
@@ -68,7 +69,9 @@ Hugo_Symbol = NULL, Variant_Classification = NULL, Mutation_Status = NULL, Varia
 \item{oncokb}{boolean specfiying if maf file should be oncokb annotated. Variants found to be 'Oncogenic'
 and 'Likely Oncogenic' will be kept. Default is FALSE.}
 
-\item{...}{Further arguments passed to the oncoKB_annotate() function}
+\item{token}{the token affiliated to your oncoKB account.}
+
+\item{...}{Further arguments passed to the oncokb() function such a token}
 }
 \value{
 mut : a binary matrix of mutation data
