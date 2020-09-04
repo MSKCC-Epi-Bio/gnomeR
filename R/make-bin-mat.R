@@ -60,8 +60,11 @@ binmat <- function(patients=NULL, maf = NULL, mut.type = "SOMATIC",SNP.only = FA
 
   if(is.null(maf) && is.null(fusion) && is.null(cna)) stop("You must provided one of the three following files: MAF, fusion or CNA.")
   # reformat columns #
-  if(!is.null(maf)) maf <- maf %>%
+  if(!is.null(maf)) {
+    if("api" %in% class(maf)) is.api = TRUE
+    maf <- as_tibble(maf) %>%
       rename(col.names)
+  }
   if(!is.null(fusion)) fusion <- fusion %>%
       rename(col.names)
 
@@ -77,11 +80,15 @@ binmat <- function(patients=NULL, maf = NULL, mut.type = "SOMATIC",SNP.only = FA
       stop("The MAF file inputted is missing a variant classification column. (Variant_Classification)")
 
     if(!is.null(maf) && is.null(fusion) &&
-       nrow(maf %>%
+       nrow(as_tibble(maf) %>%
             filter(.data$Variant_Classification == "Fusion")) > 0){
-      fusion <- maf %>%
+      fusion <- as_tibble(maf) %>%
         filter(.data$Variant_Classification == "Fusion")
-      maf <- maf %>%
+      if(is.api)
+        fusion <- fusion %>%
+          mutate(Fusion = gsub("fusion","",proteinChange))
+
+      maf <- as_tibble(maf) %>%
         filter(.data$Variant_Classification != "Fusion")
       warning("Fusions were found in the maf file, they were removed and a fusion file was created.")
     }
@@ -114,7 +121,7 @@ binmat <- function(patients=NULL, maf = NULL, mut.type = "SOMATIC",SNP.only = FA
     else patients <- as.character(unique(maf$Tumor_Sample_Barcode))
     if(oncokb)
       maf <- oncokb(maf = maf, fusion = NULL, cna = NULL, token = token,...)$maf_oncokb %>%
-        dplyr::filter(oncogenic %in% c("Oncogenic","Likely Oncogenic"))
+        filter(oncogenic %in% c("Oncogenic","Likely Oncogenic"))
     # set maf to maf class #
     maf <- structure(maf,class = c("data.frame","maf"))
     # getting mutation binary matrix #
@@ -129,7 +136,7 @@ binmat <- function(patients=NULL, maf = NULL, mut.type = "SOMATIC",SNP.only = FA
     fusion <- as.data.frame(fusion)
     if(oncokb)
       fusion <- oncokb(maf = NULL, fusion = fusion, cna = NULL, token = token,...)$fusion_oncokb %>%
-        dplyr::filter(oncogenic %in% c("Oncogenic","Likely Oncogenic"))
+        filter(oncogenic %in% c("Oncogenic","Likely Oncogenic"))
     fusion <- structure(fusion,class = c("data.frame","fusion"))
     # filter/define patients #
     if(is.null(patients)) patients <- as.character(unique(fusion$Tumor_Sample_Barcode))
@@ -144,49 +151,75 @@ binmat <- function(patients=NULL, maf = NULL, mut.type = "SOMATIC",SNP.only = FA
   # cna #
   if(!is.null(cna)){
     if("api" %in% class(cna)){
-      if(is.null(patients)) patients <- unique(cna$sampleId)
-      cna <- createbin(obj = cna, patients = patients, mut.type = mut.type, cna.binary = cna.binary,cna.relax = cna.relax,
-                       SNP.only = SNP.only, include.silent = include.silent, spe.plat = spe.plat)
 
       ## oncokb for API ##
-      # if(oncokb){
-      #   cna <- oncokb(maf = NULL, fusion = NULL, cna = cna, token = token,...)$cna_oncokb %>%
-      #     dplyr::filter(oncogenic %in% c("Oncogenic","Likely Oncogenic")) #%>%
-      #   # dplyr::mutate(SAMPLE_ID = gsub("\\.","-",SAMPLE_ID))
-      #
-      #   temp.cna <- as.data.frame(matrix(0L,
-      #                                    nrow = length(unique(cna$HUGO_SYMBOL)),
-      #                                    ncol = length(unique(cna$SAMPLE_ID))+1))
-      #   # rownames(temp.cna) <- unique(cna$SAMPLE_ID)
-      #   temp.cna[,1] <- unique(cna$HUGO_SYMBOL)
-      #   colnames(temp.cna) <- c("Hugo_Symbol",unique(cna$SAMPLE_ID))
-      #
-      #   for(i in colnames(temp.cna)[-1]){
-      #     temp <- cna %>%
-      #       filter(SAMPLE_ID %in% i) %>%
-      #       select(SAMPLE_ID,HUGO_SYMBOL,ALTERATION)
-      #     if(nrow(temp)>0){
-      #       temp.cna[match(temp$HUGO_SYMBOL, temp.cna[,1]),match(i, colnames(temp.cna))] <- temp$ALTERATION
-      #     }
-      #   }
-      #   temp.cna[temp.cna == "Amplification"] <- 2
-      #   temp.cna[temp.cna == "Deletion"] <- -2
-      #
-      #   cna <- temp.cna
-      #   temp.cna <- NULL
-      #
-      #   cna <- structure(cna,class = c("data.frame","cna"))
-      #   if(is.null(patients)) patients <- gsub("\\.","-",as.character(colnames(cna)))[-1]
-      #   cna <- createbin(obj = cna, patients = patients, mut.type = mut.type, cna.binary = cna.binary,cna.relax = cna.relax,
-      #                    SNP.only = SNP.only, include.silent = include.silent, spe.plat = spe.plat)
-      # }
+      if(oncokb){
+
+        temp.cna <- as.data.frame(matrix(0L,
+                                         nrow = length(unique(cna$Hugo_Symbol)),
+                                         ncol = length(unique(cna$sampleId))+1))
+        # rownames(temp.cna) <- unique(cna$SAMPLE_ID)
+        temp.cna[,1] <- unique(cna$Hugo_Symbol)
+        colnames(temp.cna) <- c("Hugo_Symbol",unique(cna$sampleId))
+
+        for(i in colnames(temp.cna)[-1]){
+          temp <- as_tibble(cna) %>%
+            filter(sampleId %in% i) %>%
+            select(sampleId,Hugo_Symbol,alteration)
+          if(nrow(temp)>0){
+            temp.cna[match(temp$Hugo_Symbol, temp.cna[,1]),match(i, colnames(temp.cna))] <- temp$alteration
+          }
+        }
+        temp.cna[temp.cna == "Amplification"] <- 2
+        temp.cna[temp.cna == "Deletion"] <- -2
+
+        cna <- temp.cna
+        temp.cna <- NULL
+
+        cna <- oncokb(maf = NULL, fusion = NULL, cna = cna, token = token,...)$cna_oncokb %>%
+          filter(oncogenic %in% c("Oncogenic","Likely Oncogenic")) #%>%
+        # dplyr::mutate(SAMPLE_ID = gsub("\\.","-",SAMPLE_ID))
+
+        temp.cna <- as.data.frame(matrix(0L,
+                                         nrow = length(unique(cna$HUGO_SYMBOL)),
+                                         ncol = length(unique(cna$SAMPLE_ID))+1))
+        # rownames(temp.cna) <- unique(cna$SAMPLE_ID)
+        temp.cna[,1] <- unique(cna$HUGO_SYMBOL)
+        colnames(temp.cna) <- c("Hugo_Symbol",unique(cna$SAMPLE_ID))
+
+        for(i in colnames(temp.cna)[-1]){
+          temp <- cna %>%
+            filter(SAMPLE_ID %in% i) %>%
+            select(SAMPLE_ID,HUGO_SYMBOL,ALTERATION)
+          if(nrow(temp)>0){
+            temp.cna[match(temp$HUGO_SYMBOL, temp.cna[,1]),match(i, colnames(temp.cna))] <- temp$ALTERATION
+          }
+        }
+        temp.cna[temp.cna == "Amplification"] <- 2
+        temp.cna[temp.cna == "Deletion"] <- -2
+
+        cna <- temp.cna
+        temp.cna <- NULL
+
+        cna <- structure(cna,class = c("data.frame","cna"))
+        if(is.null(patients)) patients <- gsub("\\.","-",as.character(colnames(cna)))[-1]
+        cna <- createbin(obj = cna, patients = patients, mut.type = mut.type, cna.binary = cna.binary,cna.relax = cna.relax,
+                         SNP.only = SNP.only, include.silent = include.silent, spe.plat = spe.plat)
+
+      }
+
+      else{
+        if(is.null(patients)) patients <- unique(cna$sampleId)
+        cna <- createbin(obj = cna, patients = patients, mut.type = mut.type, cna.binary = cna.binary,cna.relax = cna.relax,
+                         SNP.only = SNP.only, include.silent = include.silent, spe.plat = spe.plat)
+      }
     }
 
     else{
       cna <- as.data.frame(cna)
       if(oncokb){
         cna <- oncokb(maf = NULL, fusion = NULL, cna = cna, token = token,...)$cna_oncokb %>%
-          dplyr::filter(oncogenic %in% c("Oncogenic","Likely Oncogenic")) #%>%
+          filter(oncogenic %in% c("Oncogenic","Likely Oncogenic")) #%>%
           # dplyr::mutate(SAMPLE_ID = gsub("\\.","-",SAMPLE_ID))
 
         temp.cna <- as.data.frame(matrix(0L,
@@ -349,7 +382,8 @@ createbin.maf <- function(obj, patients, mut.type, cna.binary, SNP.only, include
   if(tolower(mut.type) == "all") Mut.filt = unique(maf$Mutation_Status)
   else Mut.filt = mut.type
 
-  maf <- as_tibble(maf) %>% filter(.data$Variant_Classification != Variant.filt,
+  maf <- as_tibble(maf) %>%
+    filter(.data$Variant_Classification != Variant.filt,
                                    .data$Variant_Type %in% SNP.filt,
                                    tolower(.data$Mutation_Status) %in% tolower(Mut.filt))
 
