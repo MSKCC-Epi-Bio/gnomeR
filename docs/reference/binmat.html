@@ -171,6 +171,7 @@ a predefined list of patients (rows are patients and columns are genes)</p>
   <span class='kw'>col.names</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='kw'>Tumor_Sample_Barcode</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>Hugo_Symbol</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>Variant_Classification</span>
     <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>Mutation_Status</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>Variant_Type</span> <span class='kw'>=</span> <span class='kw'>NULL</span>),
   <span class='kw'>oncokb</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>token</span> <span class='kw'>=</span> <span class='st'>""</span>,
   <span class='no'>...</span>
 )</pre>
 
@@ -249,8 +250,12 @@ Hugo_Symbol = NULL, Variant_Classification = NULL, Mutation_Status = NULL, Varia
 and 'Likely Oncogenic' will be kept. Default is FALSE.</p></td>
     </tr>
     <tr>
+      <th>token</th>
+      <td><p>the token affiliated to your oncoKB account.</p></td>
+    </tr>
+    <tr>
       <th>...</th>
-      <td><p>Further arguments passed to the oncoKB_annotate() function</p></td>
+      <td><p>Further arguments passed to the oncokb() function such a token</p></td>
     </tr>
     </table>
 

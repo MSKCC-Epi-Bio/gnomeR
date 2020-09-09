@@ -231,20 +231,19 @@ kable(pathway_dat[1:5,])
 
 # OncoKB annotation 
 
-OncoKB annotates the biological and oncogenic effect and the prognostic and predictive significance of somatic molecular alterations. Potential treatment implications are stratified by the level of evidence that a specific molecular alteration is predictive of drug response based on US Food and Drug Administration (FDA) labeling, National Comprehensive Cancer Network (NCCN) guidelines, disease-focused expert group recommendations and the scientific literature. For more information see the manuscript [OncoKB: A Precision Oncology Knowledge Base](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5586540/) or the [oncoKB](https://www.oncokb.org/) website. In `gnomeR` we include a simple wrapper of the `[annotateMaf](https://github.com/taylor-lab/annotateMaf)` package's functions to allow users to annotate their MAF files. If the `oncokb` argument is set to TRUE the MAF will be subsetted to oncogenic and likely oncogenic variants. 
-Note this can be performed externally using the `oncoKB_annotate()` function as shown below:
+OncoKB annotates the biological and oncogenic effect and the prognostic and predictive significance of somatic molecular alterations. Potential treatment implications are stratified by the level of evidence that a specific molecular alteration is predictive of drug response based on US Food and Drug Administration (FDA) labeling, National Comprehensive Cancer Network (NCCN) guidelines, disease-focused expert group recommendations and the scientific literature. For more information see the manuscript [OncoKB: A Precision Oncology Knowledge Base](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5586540/) or the [oncoKB](https://www.oncokb.org/) website. In `gnomeR` we include a simple wrapper of the `[oncokb-annotator](https://github.com/oncokb/oncokb-annotator)` package's functions to allow users to annotate mutations, fusions and copy number events through the `oncokb()` function. Note that one of the required inputs is a token which allows users access to the oncoKB annotator. 
+Users are thus required to request a token on [oncoKB](https://www.oncokb.org/). If you are an MSKCC employee simply request a token for academic use and one will be provided to you automatically.
 
-```{r}
-# maf <- mut[1:10,]
-# onco_maf <- oncoKB_annotate(maf)
-# onco_maf %>% select(Hugo_Symbol, Chromosome, Variant_Classification, oncogenic, oncokb_level )
+Once the user has a token, the annotating function `oncokb()` can be used on standardized MAF, fusion and CNA files:
+
+```{r,eval = F}
+gen_oncokb <- oncokb(maf = mut, fusion = fusion, cna = cna, token = "your_token")
 ```
 
-Annotating MAF in `binmat()`:
+We moreover include an argument in the `binmat()` function to oncoKB annotate files while creating a binary matrix by setting oncokb to TRUE. Note that only 'Oncogenic' and 'Likely Oncogenic' variants will be kept. 
 
-```{r}
-# df <- binmat(patients = samples[1:5] ,maf = mut, oncokb = TRUE)
-# kable(df[1:5, 1:10])
+```{r,eval = F}
+df <- binmat(maf = mut, fusion = fusion, cna = cna, oncokb = TRUE, token = "your_token")
 ```
 
 
