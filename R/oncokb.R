@@ -31,9 +31,15 @@ oncokb <- function(maf = NULL, fusion = NULL, cna = NULL, token = '', clin.file 
   if(is.null(clin.file))
     clin.file = ''
 
-  # check if miniconda is installed #
-  if(!is.character(try(reticulate::install_miniconda(), silent = T)))
-    reticulate::install_miniconda()
+  # check if miniconda is installed + modules #
+  if(!is.character(try(install_miniconda(), silent = T)))
+    install_miniconda()
+  try(py_install("requests"), silent = T)
+  try(py_install("requests"), silent = T)
+  try(py_install("os.path"), silent = T)
+  try(py_install("logging"), silent = T)
+  try(py_install("re"), silent = T)
+  try(py_install("matplotlib"), silent = T)
 
   # load python files #
   path <- find.package("gnomeR")#.libPaths()[1]#("gnomeR")
@@ -87,8 +93,8 @@ oncokb <- function(maf = NULL, fusion = NULL, cna = NULL, token = '', clin.file 
   # annotate cna #
   if(!is.null(cna)){
     cnaAnnotate(in_cna = 'temp_cna.txt', out_cna = 'temp_cna_oncoKB.txt',
-                   clin_file = clin.file,
-                   token = 'c228f079-e544-4027-a5cd-d2fd3534fd5b')
+                clin_file = clin.file,
+                token = 'c228f079-e544-4027-a5cd-d2fd3534fd5b')
     # remove temp files and load oncokb annotated one #
     file.remove("temp_cna.txt")
     cna_oncokb <- read.delim('temp_cna_oncoKB.txt')
