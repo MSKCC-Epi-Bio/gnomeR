@@ -34,15 +34,13 @@ oncokb <- function(maf = NULL, fusion = NULL, cna = NULL, token = '', clin.file 
   # check if miniconda is installed + modules #
   if(!is.character(try(install_miniconda(), silent = T)))
     install_miniconda()
-  try(py_install("requests"), silent = T)
-  try(py_install("requests"), silent = T)
-  try(py_install("os.path"), silent = T)
-  try(py_install("logging"), silent = T)
-  try(py_install("re"), silent = T)
-  try(py_install("matplotlib"), silent = T)
 
   # load python files #
   path <- find.package("gnomeR")#.libPaths()[1]#("gnomeR")
+  if(is.character(try(source_python(paste0(path,'/AnnotatorCore.py')),silent = TRUE))){
+    try(py_install("requests"), silent = T)
+    try(py_install("matplotlib"), silent = T)
+  }
   source_python(paste0(path,'/AnnotatorCore.py'))
   source_python(paste0(path,'/annotate_maf.py'))
   source_python(paste0(path,'/annotate_fusion.py'))
