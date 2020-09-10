@@ -32,7 +32,8 @@ maf_viz <- function(maf, ...) {
     snvclass = ggsnvclass,
     samplevar = ggsamplevar,
     topgenes = ggtopgenes,
-    genecor = gggenecor) %>%
+    genecor = gggenecor,
+    genecomut = ggcomut) %>%
     purrr::invoke_map(, maf)
 
   return(all_plots)

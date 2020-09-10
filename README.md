@@ -110,7 +110,7 @@ kable(gen.dat[1:10,1:10],row.names = T)
 ```
 
 |                   | FLT4 | KRAS | TP53 | NF1 | ARID1A | CARD11 | ARID5B | BCOR | MLL2 | SMAD3 |
-| ----------------- | ---: | ---: | ---: | --: | -----: | -----: | -----: | ---: | ---: | ----: |
+| :---------------- | ---: | ---: | ---: | --: | -----: | -----: | -----: | ---: | ---: | ----: |
 | P-0010604-T01-IM5 |    0 |    0 |    1 |   0 |      0 |      0 |      0 |    0 |    0 |     0 |
 | P-0002651-T01-IM3 |    0 |    0 |    1 |   0 |      0 |      0 |      0 |    0 |    0 |     0 |
 | P-0000270-T01-IM3 |    0 |    0 |    1 |   0 |      1 |      1 |      1 |    0 |    0 |     0 |
@@ -132,11 +132,16 @@ different mutations across the cohort of interest:
 
 ``` r
 sum.plots <- maf_viz(maf = mut %>% filter(Tumor_Sample_Barcode %in% patients))
-sum.plots$p.genes
-#> NULL
-sum.plots$p.comut
-#> NULL
+sum.plots$topgenes
 ```
+
+<img src="man/figures/README-unnamed-chunk-8-1.png" width="100%" />
+
+``` r
+sum.plots$genecomut
+```
+
+<img src="man/figures/README-unnamed-chunk-8-2.png" width="100%" />
 
 #### OncoPrints
 
@@ -175,7 +180,7 @@ gnomeR.
 
 #### Binary and continuous outcomes
 
-The `gen.tab()` function let’s the user perform a large scale
+The `gen.summary()` function let’s the user perform a large scale
 association between the genomic features present in the `binat()`
 function output and an outcome of choice:
 
@@ -187,12 +192,12 @@ function output and an outcome of choice:
 
 ``` r
 outcome <- factor(rbinom(n = length(patients),size = 1,prob = 1/2),levels = c("0","1"))
-out <- gen.tab(gen.dat = gen.dat,outcome = outcome,filter = 0.05)
+out <- gen.summary(gen.dat = gen.dat,outcome = outcome,filter = 0.05)
 kable(out$fits[1:10,],row.names = T)
 ```
 
 |           | Feature   | Overall | 0(N=50) | 1(N=50) | OddsRatio | Pvalue   | FDR      | Lower | Upper |
-| --------- | :-------- | :------ | :------ | :------ | :-------- | :------- | :------- | :---- | :---- |
+| :-------- | :-------- | :------ | :------ | :------ | :-------- | :------- | :------- | :---- | :---- |
 | MYC.Amp   | MYC.Amp   | 6%      | 10%     | 2%      | 0.19      | 2.04e-01 | 1.00e+00 | 0     | 1.76  |
 | PIK3CA    | PIK3CA    | 12%     | 8%      | 16%     | 2.17      | 3.57e-01 | 1.00e+00 | 0.53  | 10.6  |
 | FLT4      | FLT4      | 5%      | 2%      | 8%      | 4.21      | 3.62e-01 | 1.00e+00 | 0.4   | 213.8 |
@@ -229,7 +234,7 @@ kable(out$tab[1:10,],row.names = T)
 ```
 
 |    | Feature   | Coefficient |    HR | Pvalue |       FDR | MutationFrequency |
-| -- | :-------- | ----------: | ----: | -----: | --------: | ----------------: |
+| :- | :-------- | ----------: | ----: | -----: | --------: | ----------------: |
 | 1  | MLL       |     \-1.480 | 0.228 | 0.0155 | 0.6043112 |              0.09 |
 | 2  | STK11     |     \-1.460 | 0.233 | 0.0519 | 0.9122695 |              0.07 |
 | 3  | KEAP1     |     \-1.020 | 0.362 | 0.1670 | 0.9122695 |              0.05 |

@@ -31,12 +31,16 @@ oncokb <- function(maf = NULL, fusion = NULL, cna = NULL, token = '', clin.file 
   if(is.null(clin.file))
     clin.file = ''
 
+  # check if miniconda is installed #
+  if(!is.character(try(reticulate::install_miniconda(), silent = T)))
+    reticulate::install_miniconda()
+
   # load python files #
-  path <- .libPaths()#("gnomeR")
-  source_python(paste0(path,'/gnomeR/AnnotatorCore.py'))
-  source_python(paste0(path,'/gnomeR/annotate_maf.py'))
-  source_python(paste0(path,'/gnomeR/annotate_fusion.py'))
-  source_python(paste0(path,'/gnomeR/annotate_cna.py'))
+  path <- find.package("gnomeR")#.libPaths()[1]#("gnomeR")
+  source_python(paste0(path,'/AnnotatorCore.py'))
+  source_python(paste0(path,'/annotate_maf.py'))
+  source_python(paste0(path,'/annotate_fusion.py'))
+  source_python(paste0(path,'/annotate_cna.py'))
 
   # set up #
   maf_oncokb <- NULL
