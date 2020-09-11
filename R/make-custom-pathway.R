@@ -19,8 +19,8 @@ custom_pathway <- function(mat, pathway){
 
   colnames(pathway) <- c("hugo_symbol","pathway")
   pathway <- pathway %>%
-    mutate(hugo_symbol = as.character(hugo_symbol),
-           pathway = as.character(pathway))
+    mutate(hugo_symbol = as.character(.data$hugo_symbol),
+           pathway = as.character(.data$pathway))
 
   pathway_dat <- as.data.frame(do.call('cbind',lapply(unique(pathway$pathway[!is.na(pathway$pathway)]),function(x){
     genes <- as.character(unlist(pathway %>%
