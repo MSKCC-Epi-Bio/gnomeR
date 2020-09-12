@@ -21,13 +21,19 @@
 #' dplyr
 #' dtplyr
 
-oncokb <- function(maf = NULL, fusion = NULL, cna = NULL, token = '', clin.file = NULL){
+oncokb <- function(maf = NULL, fusion = NULL, cna = NULL,
+                   token = Sys.getenv("ONCOKB_TOKEN"),
+                   clin.file = NULL){
 
   # checks #
   if(is.null(maf) && is.null(fusion) && is.null(cna))
     stop("You must input at least a MAF, fusion or cna file")
-  if(token == '')
-    stop("You must have a valid token for the OncoKB API, see https://www.oncokb.org/.")
+
+  if (identical(token, "")){
+  rlang::warn("You must have a valid OncoKB API token, see https://www.oncokb.org.
+              You can set a default ONCOKB_TOKEN in `.Renviron` using `usethis::edit_r_environ()`")
+    }
+
   if(is.null(clin.file))
     clin.file = ''
 
@@ -52,9 +58,9 @@ oncokb <- function(maf = NULL, fusion = NULL, cna = NULL, token = '', clin.file 
   cna_oncokb <- NULL
 
   if(!is.null(maf))
-    write.table(maf %>%
+    utils::write.table(maf %>%
                   mutate(Protein_position =
-                           ifelse(is.na(Protein_position), "", Protein_position)), #%>%
+                           ifelse(is.na(.data$Protein_position), "", .data$Protein_position)), #%>%
                 # select(Hugo_Symbol, Variant_Classification, Tumor_Sample_Barcode, HGVSp_Short, HGVSp)
                 file = "temp_maf.txt",quote = F, sep = '\t', row.names = FALSE)
   if(!is.null(fusion))
@@ -68,12 +74,12 @@ oncokb <- function(maf = NULL, fusion = NULL, cna = NULL, token = '', clin.file 
 
   # annotate maf #
   if(!is.null(maf)){
-    mafAnnotate(in_maf = 'temp_maf.txt', out_maf = 'temp_maf_oncoKB.txt',
+   mafAnnotate(in_maf = 'temp_maf.txt', out_maf = 'temp_maf_oncoKB.txt',
                 clin_file = clin.file,
                 token = token)
     # remove temp files and load oncokb annotated one #
     file.remove("temp_maf.txt")
-    maf_oncokb <- read.delim('temp_maf_oncoKB.txt')
+    maf_oncokb <- utils::read.delim('temp_maf_oncoKB.txt')
     file.remove("temp_maf_oncoKB.txt")
   }
 

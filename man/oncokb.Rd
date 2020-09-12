@@ -4,7 +4,13 @@
 \alias{oncokb}
 \title{OncoKB annotate}
 \usage{
-oncokb(maf = NULL, fusion = NULL, cna = NULL, token = "", clin.file = NULL)
+oncokb(
+  maf = NULL,
+  fusion = NULL,
+  cna = NULL,
+  token = Sys.getenv("ONCOKB_TOKEN"),
+  clin.file = NULL
+)
 }
 \arguments{
 \item{maf}{A maf file to be annotated}
