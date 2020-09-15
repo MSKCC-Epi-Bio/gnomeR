@@ -38,9 +38,9 @@ oncokb <- function(maf = NULL, fusion = NULL, cna = NULL,
     clin.file = ''
 
   # check if miniconda is installed + modules #
-  if(!is.character(try(install_miniconda(), silent = T)))
-    install_miniconda()
-
+  # if(!is.character(try(install_miniconda(), silent = T)))
+  #   install_miniconda()
+  try(install_miniconda(), silent = T)
   # load python files #
   path <- find.package("gnomeR")#.libPaths()[1]#("gnomeR")
   if(is.character(try(source_python(paste0(path,'/AnnotatorCore.py')),silent = TRUE))){

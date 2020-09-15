@@ -15,7 +15,7 @@ logging.getLogger("urllib3").setLevel(logging.WARNING)
 
 log = logging.getLogger('AnnotatorCore')
 
-csv.field_size_limit(sys.maxsize) # for reading large files
+csv.field_size_limit(2**(31)-1) # for reading large files
 
 oncokbapiurl = "https://www.oncokb.org/api/v1"
 oncokbapibearertoken = ""
