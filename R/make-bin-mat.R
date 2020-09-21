@@ -25,8 +25,10 @@
 #' dataframe with columns being each pathway and each row being a sample. Default is FALSE.
 #' @param col.names character vector of the necessary columns to be used. By default: col.names = c(Tumor_Sample_Barcode = NULL,
 #'  Hugo_Symbol = NULL, Variant_Classification = NULL, Mutation_Status = NULL, Variant_Type = NULL)
-#' @param oncokb boolean specfiying if maf file should be oncokb annotated. Variants found to be 'Oncogenic'
-#'  and 'Likely Oncogenic' will be kept. Default is FALSE.
+#' @param oncokb boolean specfiying if maf file should be oncokb annotated. Default is FALSE.
+#' @param keep_onco A character vector specifying which oncoKB annotated variants to keep. Options are
+#'  'Oncogenic', 'Likely Oncogenic', 'Predicted Oncogenic', 'Likely Neutral' and 'Inconclusive'. By default
+#'  'Oncogenic', 'Likely Oncogenic' and 'Predicted Oncogenic' variants will be kept (recommended).
 #' @param token the token affiliated to your oncoKB account.
 #' @param ... Further arguments passed to the oncokb() function such a token
 #' @return mut : a binary matrix of mutation data
@@ -56,7 +58,7 @@ binmat <- function(patients=NULL, maf = NULL, mut.type = "SOMATIC",SNP.only = FA
                    set.plat = NULL,rm.empty = TRUE, pathway = FALSE,
                    col.names = c(Tumor_Sample_Barcode = NULL, Hugo_Symbol = NULL,
                                  Variant_Classification = NULL, Mutation_Status = NULL, Variant_Type = NULL),
-                   oncokb = FALSE, token = '',...){
+                   oncokb = FALSE, keep_onco = c("Oncogenic","Likely Oncogenic","Predicted Oncogenic"), token = '',...){
 
   impact_gene_info <- gnomeR::impact_gene_info
 
@@ -123,7 +125,7 @@ binmat <- function(patients=NULL, maf = NULL, mut.type = "SOMATIC",SNP.only = FA
     else patients <- as.character(unique(maf$Tumor_Sample_Barcode))
     if(oncokb)
       maf <- oncokb(maf = maf, fusion = NULL, cna = NULL, token = token,...)$maf_oncokb %>%
-        filter(.data$oncogenic %in% c("Oncogenic","Likely Oncogenic"))
+        filter(.data$oncogenic %in% keep_onco)
     # set maf to maf class #
     maf <- structure(maf,class = c("data.frame","maf"))
     # getting mutation binary matrix #
@@ -138,7 +140,7 @@ binmat <- function(patients=NULL, maf = NULL, mut.type = "SOMATIC",SNP.only = FA
     fusion <- as.data.frame(fusion)
     if(oncokb)
       fusion <- oncokb(maf = NULL, fusion = fusion, cna = NULL, token = token,...)$fusion_oncokb %>%
-        filter(.data$oncogenic %in% c("Oncogenic","Likely Oncogenic"))
+        filter(.data$oncogenic %in% keep_onco)
     fusion <- structure(fusion,class = c("data.frame","fusion"))
     # filter/define patients #
     if(is.null(patients)) patients <- as.character(unique(fusion$Tumor_Sample_Barcode))
@@ -179,7 +181,7 @@ binmat <- function(patients=NULL, maf = NULL, mut.type = "SOMATIC",SNP.only = FA
         temp.cna <- NULL
 
         cna <- oncokb(maf = NULL, fusion = NULL, cna = cna, token = token,...)$cna_oncokb %>%
-          filter(.data$oncogenic %in% c("Oncogenic","Likely Oncogenic")) #%>%
+          filter(.data$oncogenic %in% keep_onco) #%>%
         # dplyr::mutate(SAMPLE_ID = gsub("\\.","-",SAMPLE_ID))
 
         temp.cna <- as.data.frame(matrix(0L,
