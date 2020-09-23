@@ -267,12 +267,12 @@ binmat <- function(patients=NULL, maf = NULL, mut.type = "SOMATIC",SNP.only = FA
 
     v=strsplit(patients, "-IM|-IH")
     if(!all(lapply(v, length) == 2)){
-      warning("All patients were not sequenced on the IMPACT platform or some were mispecified. '-IM' or '-IH' requiered in sample ID.
-              The spe.plat argument has been overwritten to FALSE.")
-      spe.plat = F
+      warning("All patients were not sequenced on the IMPACT platform or some were mispecified.
+              Only samples endind in '-IM' or '-IH' will be annotated for specific IMPACT platforms.")
+      # spe.plat = F
     }
     v=unlist(lapply(1:length(v), function(x)v[[x]][2]))
-    if(length(unique(v)) == 1){
+    if(length(unique(v[!is.na(v)])) == 1){
       warning("All samples were sequenced on the same platform.
               The spe.plat argument has been overwritten to FALSE.")
       spe.plat = F
@@ -282,13 +282,13 @@ binmat <- function(patients=NULL, maf = NULL, mut.type = "SOMATIC",SNP.only = FA
       # remove 410 platform patients #
       missing <- setdiff(c(g.impact$g468, paste0(g.impact$g468,".fus"),paste0(g.impact$g468,".Del"),paste0(g.impact$g468,".Amp")),
                          c(g.impact$g410, paste0(g.impact$g410,".fus"),paste0(g.impact$g410,".Del"),paste0(g.impact$g410,".Amp")))
-      if(sum(v == "5") > 0 && sum(missing %in% colnames(mut)) > 0)
+      if(sum(v == "5", na.rm = T) > 0 && sum(missing %in% colnames(mut)) > 0)
         mut[which(v == "5"), stats::na.omit(match(missing, colnames(mut)))] <- NA
 
       # remove 341 platform patients #
       missing <- setdiff(c(g.impact$g468, paste0(g.impact$g468,".fus"),paste0(g.impact$g468,".Del"),paste0(g.impact$g468,".Amp")),
                          c(g.impact$g341, paste0(g.impact$g341,".fus"),paste0(g.impact$g341,".Del"),paste0(g.impact$g341,".Amp")))
-      if(sum(v == "3") > 0 && sum(missing %in% colnames(mut)) > 0)
+      if(sum(v == "3", na.rm = T) > 0 && sum(missing %in% colnames(mut)) > 0)
         mut[which(v == "3"), stats::na.omit(match(missing, colnames(mut)))] <- NA
 
     }
