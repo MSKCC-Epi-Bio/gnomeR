@@ -230,15 +230,15 @@ binmat <- function(patients=NULL, maf = NULL, mut.type = "SOMATIC",SNP.only = FA
                                          nrow = length(unique(cna$HUGO_SYMBOL)),
                                          ncol = length(unique(cna$SAMPLE_ID))+1))
         # rownames(temp.cna) <- unique(cna$SAMPLE_ID)
-        temp.cna[,1] <- unique(cna$HUGO_SYMBOL)
-        colnames(temp.cna) <- c("Hugo_Symbol",unique(cna$SAMPLE_ID))
+        temp.cna[,1] <- unique(as.character(cna$HUGO_SYMBOL))
+        colnames(temp.cna) <- c("Hugo_Symbol",unique(as.character(cna$SAMPLE_ID)))
 
         for(i in colnames(temp.cna)[-1]){
           temp <- cna %>%
             filter(.data$SAMPLE_ID %in% i) %>%
             select(.data$SAMPLE_ID, .data$HUGO_SYMBOL, .data$ALTERATION)
           if(nrow(temp)>0){
-            temp.cna[match(temp$HUGO_SYMBOL, temp.cna[,1]),match(i, colnames(temp.cna))] <- temp$ALTERATION
+            temp.cna[match(temp$HUGO_SYMBOL, temp.cna[,1]),match(i, colnames(temp.cna))] <- as.character(temp$ALTERATION)
           }
         }
         temp.cna[temp.cna == "Amplification"] <- 2
@@ -250,6 +250,9 @@ binmat <- function(patients=NULL, maf = NULL, mut.type = "SOMATIC",SNP.only = FA
 
       cna <- structure(cna,class = c("data.frame","cna"))
       if(is.null(patients)) patients <- gsub("\\.","-",as.character(colnames(cna)))[-1]
+      # else{
+      #   colnames(cna) <- gsub("\\.","-",colnames(cna))
+      # }
       cna <- createbin(obj = cna, patients = patients, mut.type = mut.type, cna.binary = cna.binary,cna.relax = cna.relax,
                        SNP.only = SNP.only, include.silent = include.silent, spe.plat = spe.plat)
     }
