@@ -57,7 +57,7 @@ amplifications and deletions will be created.}
 of patients that were not sequenced on that plaform. Default is TRUE.}
 
 \item{set.plat}{character argument specifying which IMPACT platform the data should be reduced to if spe.plat is set to TRUE.
-Options are "341", "410" and "468". Default is NULL.}
+Options are "341" and "410". Default is NULL.}
 
 \item{rm.empty}{boolean specifying if columns with no events founds should be removed. Default is TRUE.}
 

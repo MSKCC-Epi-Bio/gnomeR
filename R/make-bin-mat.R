@@ -19,7 +19,7 @@
 #' @param spe.plat boolean specifying if specific IMPACT platforms should be considered. When TRUE NAs will fill the cells for genes
 #' of patients that were not sequenced on that plaform. Default is TRUE.
 #' @param set.plat character argument specifying which IMPACT platform the data should be reduced to if spe.plat is set to TRUE.
-#'  Options are "341", "410" and "468". Default is NULL.
+#'  Options are "341" and "410". Default is NULL.
 #' @param rm.empty boolean specifying if columns with no events founds should be removed. Default is TRUE.
 #' @param pathway boolean specifying if pathway annotation should be applied. If TRUE, the function will return a supplementary binary
 #' dataframe with columns being each pathway and each row being a sample. Default is FALSE.
