@@ -171,6 +171,8 @@ a predefined list of patients (rows are patients and columns are genes)</p>
   col.names <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span>Tumor_Sample_Barcode <span class='op'>=</span> <span class='cn'>NULL</span>, Hugo_Symbol <span class='op'>=</span> <span class='cn'>NULL</span>, Variant_Classification
     <span class='op'>=</span> <span class='cn'>NULL</span>, Mutation_Status <span class='op'>=</span> <span class='cn'>NULL</span>, Variant_Type <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span>,
   oncokb <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  keep_onco <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"Oncogenic"</span>, <span class='st'>"Likely Oncogenic"</span>, <span class='st'>"Predicted Oncogenic"</span><span class='op'>)</span>,
+  token <span class='op'>=</span> <span class='st'>""</span>,
   <span class='va'>...</span>
 <span class='op'>)</span></pre>
 
@@ -227,7 +229,7 @@ of patients that were not sequenced on that plaform. Default is TRUE.</p></td>
     <tr>
       <th>set.plat</th>
       <td><p>character argument specifying which IMPACT platform the data should be reduced to if spe.plat is set to TRUE.
-Options are "341", "410" and "468". Default is NULL.</p></td>
+Options are "341" and "410". Default is NULL.</p></td>
     </tr>
     <tr>
       <th>rm.empty</th>
@@ -245,12 +247,21 @@ Hugo_Symbol = NULL, Variant_Classification = NULL, Mutation_Status = NULL, Varia
     </tr>
     <tr>
       <th>oncokb</th>
-      <td><p>boolean specfiying if maf file should be oncokb annotated. Variants found to be 'Oncogenic'
-and 'Likely Oncogenic' will be kept. Default is FALSE.</p></td>
+      <td><p>boolean specfiying if maf file should be oncokb annotated. Default is FALSE.</p></td>
+    </tr>
+    <tr>
+      <th>keep_onco</th>
+      <td><p>A character vector specifying which oncoKB annotated variants to keep. Options are
+'Oncogenic', 'Likely Oncogenic', 'Predicted Oncogenic', 'Likely Neutral' and 'Inconclusive'. By default
+'Oncogenic', 'Likely Oncogenic' and 'Predicted Oncogenic' variants will be kept (recommended).</p></td>
+    </tr>
+    <tr>
+      <th>token</th>
+      <td><p>the token affiliated to your oncoKB account.</p></td>
     </tr>
     <tr>
       <th>...</th>
-      <td><p>Further arguments passed to the oncoKB_annotate() function</p></td>
+      <td><p>Further arguments passed to the oncokb() function such a token</p></td>
     </tr>
     </table>
 
