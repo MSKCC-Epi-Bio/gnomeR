@@ -98,6 +98,16 @@ binmat <- function(patients=NULL, maf = NULL, mut.type = "SOMATIC",SNP.only = FA
     }
   }
 
+  # make patients/samples list #
+  patients <- c()
+  if(!is.null(maf))
+    patients <- unique(c(patients, as.character(unique(maf$Tumor_Sample_Barcode))))
+  if(!is.null(fusion))
+    patients <- unique(c(patients, as.character(unique(fusion$Tumor_Sample_Barcode))))
+  if(!is.null(cna))
+    patients <- c(patients, as.character(unique(fusion$Tumor_Sample_Barcode)))
+
+
   mut <- NULL
 
   if(!is.null(maf)){
