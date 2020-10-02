@@ -23,6 +23,8 @@ binmat(
   col.names = c(Tumor_Sample_Barcode = NULL, Hugo_Symbol = NULL, Variant_Classification
     = NULL, Mutation_Status = NULL, Variant_Type = NULL),
   oncokb = FALSE,
+  keep_onco = c("Oncogenic", "Likely Oncogenic", "Predicted Oncogenic"),
+  token = "",
   ...
 )
 }
@@ -55,7 +57,7 @@ amplifications and deletions will be created.}
 of patients that were not sequenced on that plaform. Default is TRUE.}
 
 \item{set.plat}{character argument specifying which IMPACT platform the data should be reduced to if spe.plat is set to TRUE.
-Options are "341", "410" and "468". Default is NULL.}
+Options are "341" and "410". Default is NULL.}
 
 \item{rm.empty}{boolean specifying if columns with no events founds should be removed. Default is TRUE.}
 
@@ -65,10 +67,15 @@ dataframe with columns being each pathway and each row being a sample. Default i
 \item{col.names}{character vector of the necessary columns to be used. By default: col.names = c(Tumor_Sample_Barcode = NULL,
 Hugo_Symbol = NULL, Variant_Classification = NULL, Mutation_Status = NULL, Variant_Type = NULL)}
 
-\item{oncokb}{boolean specfiying if maf file should be oncokb annotated. Variants found to be 'Oncogenic'
-and 'Likely Oncogenic' will be kept. Default is FALSE.}
+\item{oncokb}{boolean specfiying if maf file should be oncokb annotated. Default is FALSE.}
 
-\item{...}{Further arguments passed to the oncoKB_annotate() function}
+\item{keep_onco}{A character vector specifying which oncoKB annotated variants to keep. Options are
+'Oncogenic', 'Likely Oncogenic', 'Predicted Oncogenic', 'Likely Neutral' and 'Inconclusive'. By default
+'Oncogenic', 'Likely Oncogenic' and 'Predicted Oncogenic' variants will be kept (recommended).}
+
+\item{token}{the token affiliated to your oncoKB account.}
+
+\item{...}{Further arguments passed to the oncokb() function such a token}
 }
 \value{
 mut : a binary matrix of mutation data

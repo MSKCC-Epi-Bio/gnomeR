@@ -1,22 +1,32 @@
-#!/usr/bin/python
-
 import sys
-import getopt
 import csv
-import json
-import urllib
+import requests
 import os.path
+import logging
 import re
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
+from datetime import date
 
-csv.field_size_limit(sys.maxsize) # for reading large files
+logging.basicConfig(level=logging.INFO)
+logging.getLogger("requests").setLevel(logging.WARNING)
+logging.getLogger("urllib3").setLevel(logging.WARNING)
 
-oncokbbaseurl = "http://oncokb.org"
+log = logging.getLogger('AnnotatorCore')
+
+csv.field_size_limit(2**(31)-1) # for reading large files
+
+oncokbapiurl = "https://www.oncokb.org/api/v1"
+oncokbapibearertoken = ""
+
 def setoncokbbaseurl(u):
-    global oncokbbaseurl
-    oncokbbaseurl = u
+    global oncokbapiurl
+    oncokbapiurl = u.rstrip('/') + '/api/v1'
+
+def setoncokbapitoken(t):
+    global oncokbapibearertoken
+    oncokbapibearertoken = t.strip()
 
 cancerhotspotsbaseurl = "http://www.cancerhotspots.org"
 def setcancerhotspotsbaseurl(u):
@@ -33,12 +43,18 @@ def setsampleidsfileterfile(f):
     global sampleidsfilter
     content = [line.rstrip() for line in open(f)]
     sampleidsfilter = set(content)
-    print len(sampleidsfilter)
+    log.info(len(sampleidsfilter))
+
+
+GENE_IN_ONCOKB_HEADER = 'Gene in OncoKB'
+VARIANT_IN_ONCOKB_HEADER = 'Variant in OncoKB'
+
+GENE_IN_ONCOKB_DEFAULT = 'False'
+VARIANT_IN_ONCOKB_DEFAULT = 'False'
 
 levels = [
     'LEVEL_1',
-    'LEVEL_2A',
-    'LEVEL_2B',
+    'LEVEL_2',
     'LEVEL_3A',
     'LEVEL_3B',
     'LEVEL_4',
@@ -82,35 +98,68 @@ def getsampleid(rawsampleid):
     return rawsampleid
 
 
-def getcuratedgenes(genelistfile):
-    genelist = set()
-    with open(genelistfile, 'rU') as infile:
-        reader = csv.reader(infile, delimiter='\t')
-        for row in reader:
-            genelist.add(row[1])
-    return genelist
+def getOncokbInfo():
+    ret = ['Files annotated on ' + date.today().strftime('%m/%d/%Y') + "\nOncoKB API URL: "+oncokbapiurl]
+    try:
+        info = requests.get(oncokbapiurl + "/info").json()
+        ret.append('\nOncoKB data version: ' + info['dataVersion']['version']+', released on ' + info['dataVersion']['date'])
+    except:
+        log.error("error when fetch OncoKB info")
+    return ''.join(ret)
 
 
-
+def generateReadme(outfile):
+    outf = open(outfile, 'w+', 1000)
+    outf.write(getOncokbInfo())
+    outf.close()
 
 def gethotspots(url, type):
-    hotspotsjson = json.load(urllib.urlopen(url))
     hotspots = {}
-    for hs in hotspotsjson:
-        gene = hs['hugoSymbol']
-        start = hs['aminoAcidPosition']['start']
-        end = hs['aminoAcidPosition']['end']
-        if type is None or hs['type'] == type:
-            if gene not in hotspots:
-                hotspots[gene] = set()
-            for i in range(start, end + 1):
-                hotspots[gene].add(i)
+    response = requests.get(url)
+    if response.status_code == 200:
+        hotspotsjson = response.json()
+
+        for hs in hotspotsjson:
+            gene = hs['hugoSymbol']
+            start = hs['aminoAcidPosition']['start']
+            end = hs['aminoAcidPosition']['end']
+            if type is None or hs['type'] == type:
+                if gene not in hotspots:
+                    hotspots[gene] = set()
+                for i in range(start, end + 1):
+                    hotspots[gene].add(i)
+    else:
+        log.error("error when processing %s \n" % url +
+                  "reason: %s" % response.reason)
     return hotspots
+
+
+def makeoncokbrequest(url):
+    headers = {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer %s' % oncokbapibearertoken
+    }
+    return requests.get(url, headers=headers)
+
+
+def getcuratedgenes():
+    global curatedgenes
+    url = oncokbapiurl + "/utils/allCuratedGenes.json"
+    response = makeoncokbrequest(url)
+    if response.status_code == 200:
+        curatedgenesjson = response.json()
+
+        for curatedgene in curatedgenesjson:
+            if curatedgene['hugoSymbol'] is not None:
+                curatedgenes.append(curatedgene['hugoSymbol'])
+    else:
+        log.error("error when processing %s \n" % url +
+                  "reason: %s" % response.reason)
 
 missensesinglehotspots = None
 indelsinglehotspots = None
 _3dhotspots = None
-curatedgenes = getcuratedgenes(os.path.join(os.path.dirname(__file__), 'curated_genes.txt'))
+curatedgenes = []
 
 def inithotspots():
     global missensesinglehotspots
@@ -125,7 +174,8 @@ def inithotspots():
     curatedgenes |= set(_3dhotspots.keys())
 
 
-def processalterationevents(eventfile, outfile, previousoutfile, defaultCancerType, cancerTypeMap, retainonlycuratedgenes, annotatehotspots):
+def processalterationevents(eventfile, outfile, previousoutfile, defaultCancerType, cancerTypeMap,
+                            retainonlycuratedgenes, annotatehotspots):
     if annotatehotspots:
         inithotspots()
     if os.path.isfile(previousoutfile):
@@ -143,6 +193,9 @@ def processalterationevents(eventfile, outfile, previousoutfile, defaultCancerTy
         if annotatehotspots:
             outf.write("\tis-a-hotspot")
             outf.write("\tis-a-3d-hotspot")
+
+        outf.write("\t" + GENE_IN_ONCOKB_HEADER)
+        outf.write("\t" + VARIANT_IN_ONCOKB_HEADER)
 
         outf.write("\tmutation_effect")
         outf.write("\toncogenic")
@@ -171,7 +224,7 @@ def processalterationevents(eventfile, outfile, previousoutfile, defaultCancerTy
         for row in reader:
             i = i + 1
             if i % 100 == 0:
-                print i
+                log.info(i)
 
             row = padrow(row, ncols)
 
@@ -180,8 +233,6 @@ def processalterationevents(eventfile, outfile, previousoutfile, defaultCancerTy
                 continue
 
             hugo = row[ihugo]
-            if retainonlycuratedgenes and hugo not in curatedgenes:
-                continue
 
             consequence = None
             if iconsequence >= 0 and row[iconsequence] != 'NULL':
@@ -201,11 +252,7 @@ def processalterationevents(eventfile, outfile, previousoutfile, defaultCancerTy
             if sample in cancerTypeMap:
                 cancertype = cancerTypeMap[sample]
             if cancertype == "":
-                print "Cancer type for all samples must be defined\n"
-                print "line "
-                print i
-                print ": "
-                print row
+                log.info("Cancer type for all samples must be defined\nline %s: %s" % (i, row))
                 # continue
 
             start = None
@@ -224,7 +271,7 @@ def processalterationevents(eventfile, outfile, previousoutfile, defaultCancerTy
                     if len(poss) == 2:
                         end = int(poss[1])
                 except ValueError:
-                    print "position wrong at line" + str(i) + ": " + row[iproteinpos]
+                    log.info("position wrong at line %s: %s" % (str(i), row[iproteinpos]))
 
             if start is None and consequence == "missense_variant":
                 m = posp.search(hgvs)
@@ -241,15 +288,35 @@ def processalterationevents(eventfile, outfile, previousoutfile, defaultCancerTy
                 _3dhotspot = pull3dhotspots(hugo, hgvs, None, consequence, start, end, cancertype)
                 row.append(_3dhotspot)
 
-            oncokbinfo = pulloncokb(hugo, hgvs, None, consequence, start, end, cancertype)
-            row.append(oncokbinfo)
+
+            if not retainonlycuratedgenes or hugo in curatedgenes:
+                oncokbinfo = pull_mutation_info(hugo, hgvs, consequence, start, end, cancertype)
+                row.append(oncokbinfo)
+            else:
+                # Include Gene in OncoKB and Variant in OncoKB
+                row.append(GENE_IN_ONCOKB_DEFAULT + '\t' + VARIANT_IN_ONCOKB_DEFAULT)
 
             outf.write('\t'.join(row) + "\n")
 
     outf.close()
 
 
-def processsv(svdata, outfile, previousoutfile, defaultCancerType, cancerTypeMap, retainonlycuratedgenes):
+def getgenesfromfusion(fusion, nameregex=None):
+    GENES_REGEX = "([A-Za-z\d]+-[A-Za-z\d]+)" if nameregex is None else nameregex
+    searchresult = re.search(GENES_REGEX, fusion, flags=re.IGNORECASE)
+    gene1=None
+    gene2=None
+    if searchresult:
+        parts = searchresult.group(1).split("-")
+        gene1 = parts[0]
+        gene2 = gene1
+        if len(parts) > 1 and parts[1] != "intragenic":
+            gene2 = parts[1]
+    else:
+        gene1=gene2=fusion
+    return gene1, gene2
+
+def processsv(svdata, outfile, previousoutfile, defaultCancerType, cancerTypeMap, retainonlycuratedgenes, nameregex):
     if os.path.isfile(previousoutfile):
         cacheannotated(previousoutfile, defaultCancerType, cancerTypeMap)
     outf = open(outfile, 'w+')
@@ -261,14 +328,14 @@ def processsv(svdata, outfile, previousoutfile, defaultCancerType, cancerTypeMap
         ncols = headers["length"]
 
         outf.write(headers['^-$'])
+        outf.write("\t" + GENE_IN_ONCOKB_HEADER)
+        outf.write("\t" + VARIANT_IN_ONCOKB_HEADER)
         outf.write("\tmutation_effect")
         outf.write("\toncogenic")
         for l in levels:
             outf.write('\t' + l)
         outf.write("\tHighest_level")
         outf.write("\tcitations\n")
-
-        unknownvaraint = pulloncokb("NOT-A-GENE", "Deletion", None, None, None, None, "")
 
         igene1 = geIndexOfHeader(headers, ['GENE1'])
         igene2 = geIndexOfHeader(headers, ['GENE2'])
@@ -280,7 +347,7 @@ def processsv(svdata, outfile, previousoutfile, defaultCancerType, cancerTypeMap
         for row in reader:
             i = i + 1
             if i % 100 == 0:
-                print i
+                log.info(i)
 
             row = padrow(row, ncols)
 
@@ -291,22 +358,15 @@ def processsv(svdata, outfile, previousoutfile, defaultCancerType, cancerTypeMap
 
             gene1 = None
             gene2 = None
-            if igene1>=0:
+            if igene1 >= 0:
                 gene1 = row[igene1]
-            if igene2>=0:
+            if igene2 >= 0:
                 gene2 = row[igene2]
-            if igene1<0 and igene2<0 and ifusion>=0:
+            if igene1 < 0 and igene2 < 0 and ifusion >= 0:
                 fusion = row[ifusion]
-                if fusion.endswith(" fusion"):
-                    fusion = fusion[0:len(fusion)-len(" fusion")]
-                parts = fusion.split("-")
-                gene1 = parts[0]
-                gene2 = gene1
-                if len(parts)>1 and parts[0]!="intragenic":
-                    gene2 = parts[1]
+                gene1, gene2 = getgenesfromfusion(fusion, nameregex)
 
-            if retainonlycuratedgenes and gene1 not in curatedgenes and gene2 not in curatedgenes:
-                continue
+
 
             cancertype = defaultCancerType
             if icancertype >= 0:
@@ -314,46 +374,38 @@ def processsv(svdata, outfile, previousoutfile, defaultCancerType, cancerTypeMap
             if sample in cancerTypeMap:
                 cancertype = cancerTypeMap[sample]
             if cancertype == "":
-                print "Cancer type for all samples must be defined\n"
-                print "line "
-                print i
-                print ": "
-                print row
-                # continue
+                log.info("Cancer type for all samples must be defined\nline %s: %s" % (i, row))
+                # continueor
 
-            oncokbinfo = None
-            if gene1 == gene2:
-                oncokbinfo = pulloncokb(gene1, "Deletion", None, None, None, None, cancertype)
+            if not retainonlycuratedgenes or gene1 in curatedgenes or gene2 in curatedgenes:
+                oncokbinfo = pullStructuralVariantInfo(gene1, gene2, 'FUSION', cancertype)
+                row.append(oncokbinfo)
             else:
-                oncokbinfo = pulloncokb(gene1+'-'+gene2, '', 'structural_variant', 'fusion', None, None, cancertype)
-
-                # oncokbinfo = pulloncokb(gene1, gene1 + '-' + gene2 + " fusion", None, None, None, None, cancertype)
-                # if oncokbinfo == unknownvaraint:
-                #     oncokbinfo = pulloncokb(gene1, gene2 + '-' + gene1 + " fusion", None, None, None, None,
-                #                               cancertype)
-                # if oncokbinfo == unknownvaraint:
-                #     oncokbinfo = pulloncokb(gene2, gene1 + '-' + gene2 + " fusion", None, None, None, None,
-                #                               cancertype)
-                # if oncokbinfo == unknownvaraint:
-                #     oncokbinfo = pulloncokb(gene2, gene2 + '-' + gene1 + " fusion", None, None, None, None,
-                #                               cancertype)
-            row.append(oncokbinfo)
+                # Include Gene in OncoKB and Variant in OncoKB
+                row.append(GENE_IN_ONCOKB_DEFAULT + '\t' + VARIANT_IN_ONCOKB_DEFAULT)
             outf.write('\t'.join(row) + "\n")
 
     outf.close()
 
 
-cnaEventMap = {
-    "-2": 'Deletion',
-    "-1.5": 'Deletion',
-    "-1": 'Loss',
-    "0": 'Diploid',
-    "1": 'Gain',
-    "2": 'Amplification'
-}
+def processcnagisticdata(cnafile, outfile, previousoutfile, defaultCancerType, cancerTypeMap, retainonlycuratedgenes, annotate_gain_loss=False):
+    CNA_AMPLIFICATION_TXT = 'Amplification'
+    CNA_DELETION_TXT = 'Deletion'
+    CNA_LOSS_TXT = 'Loss'
+    CNA_GAIN_TXT = 'Gain'
 
+    cnaEventMap = {
+        "-2": CNA_DELETION_TXT,
+        "-1.5": CNA_DELETION_TXT,
+        "2": CNA_AMPLIFICATION_TXT
+    }
 
-def processcnagisticdata(cnafile, outfile, previousoutfile, defaultCancerType, cancerTypeMap, retainonlycuratedgenes):
+    if annotate_gain_loss:
+        cnaEventMap.update({
+            "-1": CNA_LOSS_TXT,
+            "1": CNA_GAIN_TXT
+        })
+
     if os.path.isfile(previousoutfile):
         cacheannotated(previousoutfile, defaultCancerType, cancerTypeMap)
     outf = open(outfile, 'w+', 1000)
@@ -361,20 +413,21 @@ def processcnagisticdata(cnafile, outfile, previousoutfile, defaultCancerType, c
         reader = csv.reader(infile, delimiter='\t')
         headers = readheaders(reader)
         startofsamples = getfirstcolumnofsampleingisticdata(headers['^-$'].split('\t'))
+        # Get the header again without upper case the sample id
+        infile.seek(0)
+        headers = readheaders(reader, startofsamples)
         rawsamples = headers['^-$'].split('\t')[startofsamples:]
         samples = []
         for rs in rawsamples:
             samples.append(getsampleid(rs))
 
         if defaultCancerType == '' and not set(cancerTypeMap.keys()).issuperset(set(samples)):
-            print "Cancer type for all samples must be defined\n"
-            print "samples with cancer type:\n"
-            print cancerTypeMap.keys()
-            print "\nsamples in cna file:\n"
-            print samples
+            log.info("Cancer type for all samples must be defined samples with cancer type: %s \nsamples in cna file: %s" % (cancerTypeMap.keys(), samples))
             # quit()
 
         outf.write('SAMPLE_ID\tCANCER_TYPE\tHUGO_SYMBOL\tALTERATION')
+        outf.write("\t"+GENE_IN_ONCOKB_HEADER)
+        outf.write("\t"+VARIANT_IN_ONCOKB_HEADER)
         outf.write("\tmutation_effect")
         outf.write("\toncogenic")
         for l in levels:
@@ -386,19 +439,16 @@ def processcnagisticdata(cnafile, outfile, previousoutfile, defaultCancerType, c
         for row in reader:
             i = i + 1
             if i % 100 == 0:
-                print i
+                log.info(i)
 
             hugo = row[0]
-            if retainonlycuratedgenes and hugo not in curatedgenes:
-                continue
 
             for rawsample in rawsamples:
-                rawsample = rawsample.upper()
                 if rawsample in headers:
                     cna = row[headers[rawsample]]
                     if cna in cnaEventMap:
-                        alteration = cnaEventMap[cna]
-                        if alteration == "Amplification" or alteration == "Deletion":
+                        cna_type = cnaEventMap[cna]
+                        if cna_type is not None:
                             cancertype = defaultCancerType
                             sample = getsampleid(rawsample)
 
@@ -407,20 +457,23 @@ def processcnagisticdata(cnafile, outfile, previousoutfile, defaultCancerType, c
 
                             if sample in cancerTypeMap:
                                 cancertype = cancerTypeMap[sample]
-                            oncokbinfo = pulloncokb(hugo, alteration, None, None, None, None, cancertype)
                             outf.write(sample + "\t")
                             outf.write(cancertype + "\t")
                             outf.write(hugo + "\t")
-                            outf.write(alteration + "\t")
-                            outf.write(oncokbinfo)
+                            outf.write(cna_type + "\t")
+                            if not retainonlycuratedgenes or hugo in curatedgenes:
+                                oncokbinfo = pull_cna_info(hugo, cna_type, cancertype)
+                                outf.write(oncokbinfo)
+                            else:
+                                # Include Gene in OncoKB and Variant in OncoKB
+                                outf.write(GENE_IN_ONCOKB_DEFAULT + '\t' + VARIANT_IN_ONCOKB_DEFAULT)
                             outf.write('\n')
     outf.close()
-
 
 def getfirstcolumnofsampleingisticdata(headers):
     header0 = headers[0].lower()
     if header0 != "hugo_symbol" and header0 != "gene symbol":
-        print "Gistic data should start with Hugo_Symbol"
+        log.info("Gistic data should start with Hugo_Symbol")
         quit()
 
     header1 = headers[1].lower()
@@ -447,7 +500,6 @@ def processclinicaldata(annotatedmutfiles, clinicalfile, outfile):
     sampledrivers = {}
     sampleactionablecount = {}
     for annotatedmutfile in annotatedmutfiles:
-        # print annotatedmutfile
         with open(annotatedmutfile, 'rU') as mutfile:
             reader = csv.reader(mutfile, delimiter='\t')
             headers = readheaders(reader)
@@ -471,7 +523,7 @@ def processclinicaldata(annotatedmutfiles, clinicalfile, outfile):
             ismutorcna = ihugo != -1 & ihgvs != -1
 
             if not isfusion and not ismutorcna:
-                print "missing proper header"
+                log.error("missing proper header")
                 exit()
 
             for row in reader:
@@ -536,7 +588,6 @@ def processclinicaldata(annotatedmutfiles, clinicalfile, outfile):
             if sampleidsfilter and sample not in sampleidsfilter:
                 continue
 
-            # print row
             outf.write('\t'.join(row))
 
             for l in levels:
@@ -631,8 +682,7 @@ def plotclinicalactionability(annotatedclinicalfile, outfile, parameters):
     # level colors
     levelcolors = {
         'LEVEL_1': '#33A02C',
-        'LEVEL_2A': '#1F78B4',
-        'LEVEL_2B': '#80B1D3',
+        'LEVEL_2': '#1F78B4',
         'LEVEL_3A': '#984EA3',
         'LEVEL_3B': '#BE98CE',
         'LEVEL_4': '#a8a8a8',
@@ -647,8 +697,7 @@ def plotclinicalactionability(annotatedclinicalfile, outfile, parameters):
     # level legend
     levellegend = {
         'LEVEL_1': 'Level 1',
-        'LEVEL_2A': 'Level 2A',
-        'LEVEL_2B': 'Level 2B',
+        'LEVEL_2': 'Level 2',
         'LEVEL_3A': 'Level 3A',
         'LEVEL_3B': 'Level 3B',
         'LEVEL_4': 'Level 4',
@@ -698,9 +747,9 @@ def plotclinicalactionability(annotatedclinicalfile, outfile, parameters):
             width = 0.75
             plts = [plt.bar(ind, levelcancerperc, width, color=levelcolors[level], bottom=accumlevelcancerperc)] + plts
             legends = [levellegend[level]] + legends
-            accumlevelcancerperc = map(sum, zip(accumlevelcancerperc,levelcancerperc))
+            accumlevelcancerperc = list(map(sum, zip(accumlevelcancerperc,levelcancerperc)))
 
-        ax = plt.axes()
+        ax = plt.gca()
         ax.set_axisbelow(True)
         ax.set_aspect(0.1)
         # ax.yaxis.grid(linestyle="dotted", color="lightgray") # horizontal lines
@@ -712,7 +761,8 @@ def plotclinicalactionability(annotatedclinicalfile, outfile, parameters):
         plt.subplots_adjust(left=0.2, bottom=0.3)
         # plt.yticks(np.arange(0, 81, 10))
         plt.legend(plts, legends, fontsize=6, bbox_to_anchor=(1.01, 1), loc="upper left")
-        plt.gcf().text(0.90, 0.1, "Generated by OncoKB\n[Chakravarty et al., JCO PO 2017]", fontsize=6, horizontalalignment='right', verticalalignment='bottom')
+        plt.gcf().text(0.90, 0.1, "Generated by OncoKB\n[Chakravarty et al., JCO PO 2017]", fontsize=6,
+                       horizontalalignment='right', verticalalignment='bottom')
 
         # plt.show()
         f.savefig(outfile, bbox_inches='tight')
@@ -733,7 +783,7 @@ def processmutationdata(mutfile, outfile, clinicaldata):
         i = 0
         for row in reader:
             if i % 100 == 0:
-                print i
+                log.info(i)
             i = i + 1
 
             sample = row[isample]
@@ -759,7 +809,7 @@ def processmutationdata(mutfile, outfile, clinicaldata):
 
             if sample in clinicaldata:
                 cancertype = clinicaldata[sample]
-            oncokbevidences = pulloncokb(hugo, hgvs, None, consequence, start, end, cancertype)
+            oncokbevidences = pull_mutation_info(hugo, hgvs, consequence, start, end, cancertype)
             annotatedrow = [hugo, consequence, start, end, hgvs, sample, cancertype, oncokbevidences]
             outf.write('\t'.join(annotatedrow) + "\n")
 
@@ -785,6 +835,8 @@ def cacheannotated(annotatedfile, defaultCancerType, cancerTypeMap):
             imutationeffect = headers['MUTATION_EFFECT']
             icitations = headers['CITATIONS']
             ioncogenic = headers['ONCOGENIC']
+            igeneannotated = headers[GENE_IN_ONCOKB_HEADER]
+            ivariantannotated = headers[VARIANT_IN_ONCOKB_HEADER]
 
             for row in reader:
                 try:
@@ -806,6 +858,8 @@ def cacheannotated(annotatedfile, defaultCancerType, cancerTypeMap):
                     #            oncokb = row[ioncokb]
 
                     oncokbcache[key] = {}
+                    oncokbcache[key][GENE_IN_ONCOKB_HEADER] = row[igeneannotated]
+                    oncokbcache[key][VARIANT_IN_ONCOKB_HEADER] = row[ivariantannotated]
                     oncokbcache[key]['mutation_effect'] = row[imutationeffect]
                     oncokbcache[key]['citations'] = row[icitations]
                     oncokbcache[key]['oncogenic'] = row[ioncogenic]
@@ -838,7 +892,7 @@ def pullsinglehotspots(hugo, proteinchange, alterationtype, consequence, start, 
                 if i in indelsinglehotspots[hugo]:
                     return "Y"
     except TypeError:
-        print hugo + ":" + str(start) + "-" + str(end)
+        log.error("%s: %s-%s" % (hugo, str(start), str(end)))
     return ""
 
 
@@ -849,7 +903,7 @@ def pull3dhotspots(hugo, proteinchange, alterationtype, consequence, start, end,
                 if i in _3dhotspots[hugo]:
                     return "Y"
     except TypeError:
-        print hugo + ":" + str(start) + "-" + str(end)
+        log.error("%s: %s-%s" % (hugo, str(start), str(end)))
     return ""
 
 def appendoncokbcitations(citations, pmids, abstracts):
@@ -869,76 +923,118 @@ def appendoncokbcitations(citations, pmids, abstracts):
 
     return citations
 
-def pulloncokb(hugo, proteinchange, alterationtype, consequence, start, end, cancertype):
-    if hugo not in curatedgenes and alterationtype and alterationtype.lower() != 'fusion' and alterationtype.lower() != 'structural_variant':
-        return ""
 
-    key = '-'.join([hugo, proteinchange, cancertype])
+def pull_mutation_info(hugo, protein_change, consequence, start, end, cancer_type):
+    url = oncokbapiurl + '/annotate/mutations/byProteinChange?'
+    url += 'hugoSymbol=' + hugo
+    url += '&alteration=' + protein_change
+    url += '&tumorType=' + cancer_type
+    if consequence:
+        url += '&consequence=' + consequence
+    if start and start != '\\N' and start != 'NULL' and start != '':
+        url += '&proteinStart=' + str(start)
+    if end and end != '\\N' and end != 'NULL' and end != '':
+        url += '&proteinEnd=' + str(end)
+    key = '-'.join([hugo, protein_change, cancer_type])
+    return pulloncokb(key, url)
+
+
+def pull_cna_info(hugo, copy_name_alteration_type, cancer_type):
+    url = oncokbapiurl + '/annotate/copyNumberAlterations?'
+    url += 'hugoSymbol=' + hugo
+    url += '&copyNameAlterationType=' + copy_name_alteration_type.upper()
+    url += '&tumorType=' + cancer_type
+    key = '-'.join([hugo, copy_name_alteration_type, cancer_type])
+    return pulloncokb(key, url)
+
+
+def pullStructuralVariantInfo(gene1, gene2, structural_variant_type, cancer_type):
+    # Assume all structural variants in the file are functional fusions
+    is_functional_fusion = True
+    if gene1 == gene2:
+        is_functional_fusion = False
+        structural_variant_type = 'DELETION'
+
+    is_functional_fusion_str = 'true' if is_functional_fusion else 'false'
+    url = oncokbapiurl + '/annotate/structuralVariants?'
+    url += 'hugoSymbolA=' + gene1
+    url += '&hugoSymbolB=' + gene2
+    url += '&structuralVariantType=' + structural_variant_type
+    url += '&isFunctionalFusion=' + is_functional_fusion_str
+    url += '&tumorType=' + cancer_type
+    key = '-'.join([gene1, gene2, structural_variant_type, is_functional_fusion_str, cancer_type])
+    return pulloncokb(key, url);
+
+
+def pulloncokb(key, url):
     if key not in oncokbcache:
-        # url = 'http://dashi-dev.cbio.mskcc.org:8080/oncokb/api/indicator.json?source=cbioportal'
-        # url = 'http://localhost:8080/oncokb/api/indicator.json?source=cbioportal'
-        # url = 'http://dashi.cbio.mskcc.org:38080/internal/legacy-api/indicator.json?source=cbioportal'
-        url = oncokbbaseurl+'/legacy-api/indicator.json?source=cbioportal'
-        url += '&hugoSymbol=' + hugo
-        url += '&alteration=' + proteinchange
-        url += '&tumorType=' + cancertype
-        if consequence:
-            url += '&consequence=' + consequence
-        if start and start != '\\N' and start != 'NULL' and start != '':
-            url += '&proteinStart=' + str(start)
-        if end and end != '\\N' and end != 'NULL' and end != '':
-            url += '&proteinEnd=' + str(end)
-        if alterationtype and alterationtype != 'NULL' and alterationtype != '':
-            url += '&alterationType=' + alterationtype
-
         oncokbdata = {}
         for l in levels:
             oncokbdata[l] = []
 
+        oncokbdata[GENE_IN_ONCOKB_HEADER] = GENE_IN_ONCOKB_DEFAULT
+        oncokbdata[VARIANT_IN_ONCOKB_HEADER] = VARIANT_IN_ONCOKB_DEFAULT
         oncokbdata['mutation_effect'] = ""
         oncokbdata['citations'] = []
         oncokbdata['oncogenic'] = ""
 
         try:
-            evidences = json.load(urllib.urlopen(url))
-            # if not evidences['geneExist'] or (not evidences['variantExist'] and not evidences['alleleExist']):
-            #     return ''
+            response = makeoncokbrequest(url)
+            if response.status_code == 200:
+                evidences = response.json()
 
-            # mutation effect
-            if(evidences['mutationEffect'] is not None):
-                oncokbdata['mutation_effect'] = evidences['mutationEffect']['knownEffect']
-                oncokbdata['citations'] = appendoncokbcitations(oncokbdata['citations'], evidences['mutationEffect']['citations']['pmids'] , evidences['mutationEffect']['citations']['abstracts'])
+                # oncogenic
+                oncokbdata[GENE_IN_ONCOKB_HEADER] = GENE_IN_ONCOKB_DEFAULT if evidences['geneExist'] is None else str(evidences['geneExist'])
+                oncokbdata[VARIANT_IN_ONCOKB_HEADER] = VARIANT_IN_ONCOKB_DEFAULT if evidences['variantExist'] is None else str(evidences['variantExist'])
 
-            # oncogenic
-            oncokbdata['oncogenic'] = evidences['oncogenic']
+                # oncogenic
+                oncokbdata['oncogenic'] = evidences['oncogenic']
 
-            # get treatment
-            for treatment in evidences['treatments']:
-                level = treatment['level']
+                # if not evidences['geneExist'] or (not evidences['variantExist'] and not evidences['alleleExist']):
+                #     return ''
 
-                if level not in levels:
-                    print level+" is ignored"
-                    #oncokbdata[level].append('')
-                else:
-                    drugs = treatment['drugs']
+                # mutation effect
+                if (evidences['mutationEffect'] is not None):
+                    oncokbdata['mutation_effect'] = evidences['mutationEffect']['knownEffect']
+                    oncokbdata['citations'] = appendoncokbcitations(oncokbdata['citations'],
+                                                                    evidences['mutationEffect']['citations']['pmids'],
+                                                                    evidences['mutationEffect']['citations']['abstracts'])
 
-                    oncokbdata['citations'] = appendoncokbcitations(oncokbdata['citations'], treatment['pmids'], treatment['abstracts'])
+                # oncogenic
+                oncokbdata['oncogenic'] = evidences['oncogenic']
 
-                    if len(drugs) == 0:
-                        oncokbdata[level].append('[NOT SPECIFIED]')
+                # get treatment
+                for treatment in evidences['treatments']:
+                    level = treatment['level']
+
+                    if level not in levels:
+                        log.info("%s is ignored" % level)
+                        # oncokbdata[level].append('')
                     else:
-                        drugnames = []
-                        for drug in drugs:
-                            drugnames.append(drug['drugName'])
-                        oncokbdata[level].append('+'.join(drugnames))
+                        drugs = treatment['drugs']
+
+                        oncokbdata['citations'] = appendoncokbcitations(oncokbdata['citations'], treatment['pmids'],
+                                                                        treatment['abstracts'])
+
+                        if len(drugs) == 0:
+                            oncokbdata[level].append('[NOT SPECIFIED]')
+                        else:
+                            drugnames = []
+                            for drug in drugs:
+                                drugnames.append(drug['drugName'])
+                            oncokbdata[level].append('+'.join(drugnames))
+            else:
+                log.error("error when processing %s\nreason: %s" % (url, response.reason))
         except:
-            print "error when processing "+url
+            log.error("error when processing %s " % url)
             # sys.exit()
 
         oncokbcache[key] = oncokbdata
 
     oncokbdata = oncokbcache[key]
     ret = []
+    ret.append(oncokbdata[GENE_IN_ONCOKB_HEADER])
+    ret.append(oncokbdata[VARIANT_IN_ONCOKB_HEADER])
     ret.append(oncokbdata['mutation_effect'])
     ret.append(oncokbdata['oncogenic'])
     for l in levels:
@@ -947,7 +1043,7 @@ def pulloncokb(hugo, proteinchange, alterationtype, consequence, start, end, can
     ret.append(';'.join(oncokbdata['citations']))
 
     ret = "\t".join(ret)
-    ret = ret.encode('ascii', 'ignore').decode('ascii') # ignore unicode
+    ret = ret.encode('ascii', 'ignore').decode('ascii')  # ignore unicode
     return ret
 
 def gethighestsensitivitylevel(oncokbdata):
@@ -955,7 +1051,7 @@ def gethighestsensitivitylevel(oncokbdata):
     if "LEVEL_R1" in oncokbdata:
         r1 = set(oncokbdata["LEVEL_R1"])
     for l in levels:
-        if l.startswith("LEVEL_R") or l not in oncokbdata or oncokbdata[l]=='':
+        if l.startswith("LEVEL_R") or l not in oncokbdata or oncokbdata[l] == '':
             continue
         if not r1.issuperset(set(oncokbdata[l])):
             return l
@@ -986,7 +1082,7 @@ def readCancerTypes(clinicalFile, data):
     return data
 
 
-def readheaders(reader):
+def readheaders(reader, caseinsensitiveIndex=None):
     headers = {}
     for row in reader:
         if not row[0].startswith("#"):
@@ -994,18 +1090,19 @@ def readheaders(reader):
             headers["length"] = len(row)
             i = 0
             for h in row:
-                headers[h.upper()] = i
+                header = h if caseinsensitiveIndex is not None and i >= caseinsensitiveIndex else h.upper()
+                headers[header] = i
                 i = i + 1
             break
     return headers
 
 def padrow(row, n):
     nr = len(row)
-    if nr==n:
+    if nr == n:
         return row
 
-    if nr<n:
-        return row + [""]*(n-len(row))
+    if nr < n:
+        return row + [""] * (n - len(row))
 
-    else: #nr<n
+    else:  # nr<n
         return row[0:n]

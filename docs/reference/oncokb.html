@@ -6,8 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>oncoKB_annotate
-OncoKB annotator for MAF files. — oncoKB_annotate • gnomeR</title>
+<title>OncoKB annotate — oncokb • gnomeR</title>
 
 
 <!-- jquery -->
@@ -40,10 +39,9 @@ OncoKB annotator for MAF files. — oncoKB_annotate • gnomeR</title>
 
 
 
-<meta property="og:title" content="oncoKB_annotate
-OncoKB annotator for MAF files. — oncoKB_annotate" />
-<meta property="og:description" content="oncoKB_annotate
-OncoKB annotator for MAF files." />
+<meta property="og:title" content="OncoKB annotate — oncokb" />
+<meta property="og:description" content="Enables oncokb annotation of MAF, fusions and CNA files. This is performed using the OncoKB annotator found at https://github.com/oncokb/oncokb-annotator.
+See details there for file formats." />
 
 
 
@@ -138,42 +136,53 @@ OncoKB annotator for MAF files." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>oncoKB_annotate
-OncoKB annotator for MAF files.</h1>
-    <small class="dont-index">Source: <a href='https://github.com/AxelitoMartin/gnomeR/blob/master/R/maf-oncokb-annotator.R'><code>R/maf-oncokb-annotator.R</code></a></small>
-    <div class="hidden name"><code>oncoKB_annotate.Rd</code></div>
+    <h1>OncoKB annotate</h1>
+    <small class="dont-index">Source: <a href='https://github.com/AxelitoMartin/gnomeR/blob/master/R/oncokb.R'><code>R/oncokb.R</code></a></small>
+    <div class="hidden name"><code>oncokb.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>oncoKB_annotate
-OncoKB annotator for MAF files.</p>
+    <p>Enables oncokb annotation of MAF, fusions and CNA files. This is performed using the OncoKB annotator found at https://github.com/oncokb/oncokb-annotator.
+See details there for file formats.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>oncoKB_annotate</span>(<span class='no'>maf</span>, <span class='no'>cancer_types</span>, <span class='kw'>parallelize</span> <span class='kw'>=</span> <span class='no'>T</span>)</pre>
+    <pre class="usage"><span class='fu'>oncokb</span>(<span class='kw'>maf</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>fusion</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>cna</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>token</span> <span class='kw'>=</span> <span class='st'>""</span>, <span class='kw'>clin.file</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>maf</th>
-      <td><p>A MAF file to be annotated.</p></td>
+      <td><p>A maf file to be annotated</p></td>
     </tr>
     <tr>
-      <th>cancer_types</th>
-      <td><p>Data frame with samples mapped to cancer type for accurate levels of actionability. Default is NULL.</p></td>
+      <th>fusion</th>
+      <td><p>A fusion file to be annotated</p></td>
     </tr>
     <tr>
-      <th>parallelize</th>
-      <td><p>Should this be done in parallel. Default is TRUE</p></td>
+      <th>cna</th>
+      <td><p>A CNA file to be annotated</p></td>
+    </tr>
+    <tr>
+      <th>token</th>
+      <td><p>Required token to access OncoKB API, see https://www.oncokb.org/ for details.</p></td>
+    </tr>
+    <tr>
+      <th>clin.file</th>
+      <td><p>Optional dataframe containing the cancer types of the samples to be annotated.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>OncoKb annotate MAF.</p>
+    <p>OncoKB annotated files</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>gnomeR</span>)</div></pre>
+    <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>gnomeR</span>)
+<span class='no'>test</span> <span class='kw'>&lt;-</span> <span class='fu'>oncokb</span>(<span class='kw'>maf</span> <span class='kw'>=</span> <span class='no'>mut</span>[<span class='fl'>1</span>:<span class='fl'>100</span>,], <span class='kw'>token</span> <span class='kw'>=</span> <span class='st'>'YOUR TOKEN'</span>)
+<span class='no'>test</span>$<span class='no'>maf_oncokb</span>$<span class='no'>oncogenic</span>
+}</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

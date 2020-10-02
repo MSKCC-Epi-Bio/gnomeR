@@ -1,72 +1,68 @@
-#!/usr/bin/python
-
+import argparse
+# from AnnotatorCore import *
 import sys
-import getopt
-from AnnotatorCore import *
+import csv
+import requests
+import os.path
+import logging
+import re
+import matplotlib
+matplotlib.use('Agg')
+import matplotlib.pyplot as plt
+from datetime import date
+import logging
+logging.basicConfig(level=logging.INFO)
+log = logging.getLogger('CnaAnnotator')
+
 
 def main(argv):
-
-    baseurl = 'http://oncokb.org'
-    inputcnafile = ''
-    inputclinicalfile = ''
-    outputcnafile = ''
-    previousresultfile = ''
-    defaultcancertype = 'cancer'
-
-    try:
-        opts, args = getopt.getopt(argv, "hi:o:p:c:s:d:t:u:")
-    except getopt.GetoptError:
-        print 'for help: python CnaAnnotator.py -h'
+    if argv.help:
+        log.info('\n'
+        'CnaAnnotator.py -i <input CNA file> -o <output CNA file> [-p previous results] [-c <input clinical file>] [-s sample list filter] [-t <default tumor type>] [-u oncokb-base-url] [-b oncokb_api_bear_token] [-z annotate_gain_loss]\n'
+        '  Input CNA file should follow the GISTIC output (https://docs.cbioportal.org/5.1-data-loading/data-loading/file-formats#data-file-1)\n'
+        '  Essential clinical columns:\n'
+        '    SAMPLE_ID: sample ID\n'
+        '  Cancer type will be assigned based on the following priority:\n'
+        '     1) ONCOTREE_CODE in clinical data file\n'
+        '     2) ONCOTREE_CODE exist in MAF\n'
+        '     3) default tumor type (-t)\n'
+        '  We do not annotate Gain and Loss by default, add -z to include the analysis. See https://github.com/oncokb/oncokb-annotator/issues/51 for more information.\n'
+        '  Default OncoKB base url is https://www.oncokb.org')
+        sys.exit()
+    if argv.input_file == '' or argv.output_file == '' or argv.oncokb_api_bearer_token == '':
+        log.info('for help: python CnaAnnotator.py -h')
         sys.exit(2)
-
-    for opt, arg in opts:
-        if opt == '-h':
-            print 'CnaAnnotator.py -i <input cNA file> -o <output MAF file> [-p previous results] [-c <input clinical file>] [-s sample list filter] [-t <default tumor type>] [-u base-url]'
-            print '  Input CNA file should follow the GISTIC output (https://cbioportal.readthedocs.io/en/latest/File-Formats.html#discrete-copy-number-data)'
-            print '  Essential clinical columns:'
-            print '    SAMPLE_ID: sample ID'
-            print '  Cancer type will be assigned based on the following priority:'
-            print '     1) ONCOTREE_CODE in clinical data file'
-            print '     2) ONCOTREE_CODE exist in MAF'
-            print '     3) default tumor type (-t)'
-            print '  Default OncoKB base url is http://oncokb.org'
-            sys.exit()
-        elif opt in ("-i"):
-            inputcnafile = arg
-        elif opt in ("-o"):
-            outputcnafile = arg
-        elif opt in ("-p"):
-            previousresultfile = arg
-        elif opt in ("-c"):
-            inputclinicalfile = arg
-        elif opt in ("-s"):
-            setsampleidsfileterfile(arg)
-        elif opt in ("-t"):
-            defaultcancertype = arg
-        elif opt in ("-u"):
-            setoncokbbaseurl(arg)
-
-    if inputcnafile == '' or outputcnafile=='':
-        print 'for help: python MafAnnotator.py -h'
-        sys.exit(2)
+    if argv.sample_ids_filter:
+        setsampleidsfileterfile(argv.sample_ids_filter)
+    if argv.oncokb_api_url:
+        setoncokbbaseurl(argv.oncokb_api_url)
+    setoncokbapitoken(argv.oncokb_api_bearer_token)
+    getcuratedgenes()
 
     cancertypemap = {}
-    if inputclinicalfile != '':
-        readCancerTypes(inputclinicalfile, cancertypemap)
+    if argv.input_clinical_file:
+        readCancerTypes(argv.input_clinical_file, cancertypemap)
 
-    print 'annotating '+inputcnafile+"..."
+    log.info('annotating %s ...' % argv.input_file)
+    processcnagisticdata(argv.input_file, argv.output_file, argv.previous_result_file, argv.default_cancer_type,
+                         cancertypemap, True, argv.annotate_gain_loss)
 
-    processcnagisticdata(inputcnafile, outputcnafile, previousresultfile, defaultcancertype, cancertypemap, False)
+    log.info('done!')
 
-    print 'done!'
 
 if __name__ == "__main__":
-    # argv = [
-    #     '-i', 'example_cna.txt',
-    #     '-o', 'example_cna.oncokb.txt',
-    #     '-c', 'example_clinical.txt',
-    # ]
-    # main(argv)
+    parser = argparse.ArgumentParser(add_help=False)
+    parser.add_argument('-h', dest='help', action="store_true", default=False)
+    parser.add_argument('-i', dest='input_file', default='', type=str)
+    parser.add_argument('-o', dest='output_file', default='', type=str)
+    parser.add_argument('-p', dest='previous_result_file', default='', type=str)
+    parser.add_argument('-c', dest='input_clinical_file', default='', type=str)
+    parser.add_argument('-s', dest='sample_ids_filter', default='', type=str)
+    parser.add_argument('-t', dest='default_cancer_type', default='cancer', type=str)
+    parser.add_argument('-u', dest='oncokb_api_url', default='', type=str)
+    parser.add_argument('-b', dest='oncokb_api_bearer_token', default='', type=str)
+    parser.add_argument('-z', dest='annotate_gain_loss', action="store_true", default=False)
+    parser.set_defaults(func=main)
 
-    # print sys.argv[1:]
-    main(sys.argv[1:])
+    args = parser.parse_args()
+    args.func(args)

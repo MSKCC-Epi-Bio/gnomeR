@@ -19,15 +19,18 @@
 #' @param spe.plat boolean specifying if specific IMPACT platforms should be considered. When TRUE NAs will fill the cells for genes
 #' of patients that were not sequenced on that plaform. Default is TRUE.
 #' @param set.plat character argument specifying which IMPACT platform the data should be reduced to if spe.plat is set to TRUE.
-#'  Options are "341", "410" and "468". Default is NULL.
+#'  Options are "341" and "410". Default is NULL.
 #' @param rm.empty boolean specifying if columns with no events founds should be removed. Default is TRUE.
 #' @param pathway boolean specifying if pathway annotation should be applied. If TRUE, the function will return a supplementary binary
 #' dataframe with columns being each pathway and each row being a sample. Default is FALSE.
 #' @param col.names character vector of the necessary columns to be used. By default: col.names = c(Tumor_Sample_Barcode = NULL,
 #'  Hugo_Symbol = NULL, Variant_Classification = NULL, Mutation_Status = NULL, Variant_Type = NULL)
-#' @param oncokb boolean specfiying if maf file should be oncokb annotated. Variants found to be 'Oncogenic'
-#'  and 'Likely Oncogenic' will be kept. Default is FALSE.
-#' @param ... Further arguments passed to the oncoKB_annotate() function
+#' @param oncokb boolean specfiying if maf file should be oncokb annotated. Default is FALSE.
+#' @param keep_onco A character vector specifying which oncoKB annotated variants to keep. Options are
+#'  'Oncogenic', 'Likely Oncogenic', 'Predicted Oncogenic', 'Likely Neutral' and 'Inconclusive'. By default
+#'  'Oncogenic', 'Likely Oncogenic' and 'Predicted Oncogenic' variants will be kept (recommended).
+#' @param token the token affiliated to your oncoKB account.
+#' @param ... Further arguments passed to the oncokb() function such a token
 #' @return mut : a binary matrix of mutation data
 #' @export
 #' @examples library(gnomeR)
@@ -55,14 +58,25 @@ binmat <- function(patients=NULL, maf = NULL, mut.type = "SOMATIC",SNP.only = FA
                    set.plat = NULL,rm.empty = TRUE, pathway = FALSE,
                    col.names = c(Tumor_Sample_Barcode = NULL, Hugo_Symbol = NULL,
                                  Variant_Classification = NULL, Mutation_Status = NULL, Variant_Type = NULL),
-                   oncokb = FALSE,...){
+                   oncokb = FALSE, keep_onco = c("Oncogenic","Likely Oncogenic","Predicted Oncogenic"), token = '',...){
+
+  impact_gene_info <- gnomeR::impact_gene_info
 
   if(is.null(maf) && is.null(fusion) && is.null(cna)) stop("You must provided one of the three following files: MAF, fusion or CNA.")
   # reformat columns #
-  if(!is.null(maf)) maf <- maf %>%
+  if(!is.null(maf)) {
+    if("api" %in% class(maf)) is.api = TRUE
+    maf <- as_tibble(maf) %>%
       rename(col.names)
+  }
   if(!is.null(fusion)) fusion <- fusion %>%
       rename(col.names)
+
+  # check oncokb API #
+  if(oncokb)
+    if(token == '')
+      stop("If you want to OncoKB annotate your data you are required to have an API token.
+           See https://www.oncokb.org/.")
 
   ## if data from API need to split mutations and fusions ##
   if(!is.null(maf)){
@@ -70,11 +84,15 @@ binmat <- function(patients=NULL, maf = NULL, mut.type = "SOMATIC",SNP.only = FA
       stop("The MAF file inputted is missing a variant classification column. (Variant_Classification)")
 
     if(!is.null(maf) && is.null(fusion) &&
-       nrow(maf %>%
+       nrow(as_tibble(maf) %>%
             filter(.data$Variant_Classification == "Fusion")) > 0){
-      fusion <- maf %>%
+      fusion <- as_tibble(maf) %>%
         filter(.data$Variant_Classification == "Fusion")
-      maf <- maf %>%
+      if(is.api)
+        fusion <- fusion %>%
+          mutate(Fusion = gsub("fusion","",.data$proteinChange))
+
+      maf <- as_tibble(maf) %>%
         filter(.data$Variant_Classification != "Fusion")
       warning("Fusions were found in the maf file, they were removed and a fusion file was created.")
     }
@@ -105,9 +123,9 @@ binmat <- function(patients=NULL, maf = NULL, mut.type = "SOMATIC",SNP.only = FA
     # filter/define patients #
     if(!is.null(patients)) maf <- maf[maf$Tumor_Sample_Barcode %in% patients,]
     else patients <- as.character(unique(maf$Tumor_Sample_Barcode))
-    # if(oncokb)
-    #   maf <- oncoKB_annotate(maf,...) %>%
-    #     dplyr::filter(oncogenic %in% c("Oncogenic","Likely Oncogenic"))
+    if(oncokb)
+      maf <- oncokb(maf = maf, fusion = NULL, cna = NULL, token = token,...)$maf_oncokb %>%
+        filter(.data$oncogenic %in% keep_onco)
     # set maf to maf class #
     maf <- structure(maf,class = c("data.frame","maf"))
     # getting mutation binary matrix #
@@ -121,8 +139,8 @@ binmat <- function(patients=NULL, maf = NULL, mut.type = "SOMATIC",SNP.only = FA
 
     fusion <- as.data.frame(fusion)
     if(oncokb)
-      fusion <- fusion %>%
-        filter(Frame == "in frame")
+      fusion <- oncokb(maf = NULL, fusion = fusion, cna = NULL, token = token,...)$fusion_oncokb %>%
+        filter(.data$oncogenic %in% keep_onco)
     fusion <- structure(fusion,class = c("data.frame","fusion"))
     # filter/define patients #
     if(is.null(patients)) patients <- as.character(unique(fusion$Tumor_Sample_Barcode))
@@ -137,17 +155,104 @@ binmat <- function(patients=NULL, maf = NULL, mut.type = "SOMATIC",SNP.only = FA
   # cna #
   if(!is.null(cna)){
     if("api" %in% class(cna)){
-      if(is.null(patients)) patients <- unique(cna$sampleId)
-      cna <- createbin(obj = cna, patients = patients, mut.type = mut.type, cna.binary = cna.binary,cna.relax = cna.relax,
-                       SNP.only = SNP.only, include.silent = include.silent, spe.plat = spe.plat)
+
+      ## oncokb for API ##
+      if(oncokb){
+
+        temp.cna <- as.data.frame(matrix(0L,
+                                         nrow = length(unique(cna$Hugo_Symbol)),
+                                         ncol = length(unique(cna$sampleId))+1))
+        # rownames(temp.cna) <- unique(cna$SAMPLE_ID)
+        temp.cna[,1] <- unique(cna$Hugo_Symbol)
+        colnames(temp.cna) <- c("Hugo_Symbol",unique(cna$sampleId))
+
+        for(i in colnames(temp.cna)[-1]){
+          temp <- as_tibble(cna) %>%
+            filter(.data$sampleId %in% i) %>%
+            select(.data$sampleId, .data$Hugo_Symbol, .data$alteration)
+          if(nrow(temp)>0){
+            temp.cna[match(temp$Hugo_Symbol, temp.cna[,1]),match(i, colnames(temp.cna))] <- temp$alteration
+          }
+        }
+        temp.cna[temp.cna == "Amplification"] <- 2
+        temp.cna[temp.cna == "Deletion"] <- -2
+
+        cna <- temp.cna
+        temp.cna <- NULL
+
+        cna <- oncokb(maf = NULL, fusion = NULL, cna = cna, token = token,...)$cna_oncokb %>%
+          filter(.data$oncogenic %in% keep_onco) #%>%
+        # dplyr::mutate(SAMPLE_ID = gsub("\\.","-",SAMPLE_ID))
+
+        temp.cna <- as.data.frame(matrix(0L,
+                                         nrow = length(unique(cna$HUGO_SYMBOL)),
+                                         ncol = length(unique(cna$SAMPLE_ID))+1))
+        # rownames(temp.cna) <- unique(cna$SAMPLE_ID)
+        temp.cna[,1] <- unique(cna$HUGO_SYMBOL)
+        colnames(temp.cna) <- c("Hugo_Symbol",unique(cna$SAMPLE_ID))
+
+        for(i in colnames(temp.cna)[-1]){
+          temp <- cna %>%
+            filter(.data$SAMPLE_ID %in% i) %>%
+            select(.data$SAMPLE_ID, .data$HUGO_SYMBOL, .data$ALTERATION)
+          if(nrow(temp)>0){
+            temp.cna[match(temp$HUGO_SYMBOL, temp.cna[,1]),match(i, colnames(temp.cna))] <- temp$ALTERATION
+          }
+        }
+        temp.cna[temp.cna == "Amplification"] <- 2
+        temp.cna[temp.cna == "Deletion"] <- -2
+
+        cna <- temp.cna
+        temp.cna <- NULL
+
+        cna <- structure(cna,class = c("data.frame","cna"))
+        if(is.null(patients)) patients <- gsub("\\.","-",as.character(colnames(cna)))[-1]
+        cna <- createbin(obj = cna, patients = patients, mut.type = mut.type, cna.binary = cna.binary,cna.relax = cna.relax,
+                         SNP.only = SNP.only, include.silent = include.silent, spe.plat = spe.plat)
+
+      }
+
+      else{
+        if(is.null(patients)) patients <- unique(cna$sampleId)
+        cna <- createbin(obj = cna, patients = patients, mut.type = mut.type, cna.binary = cna.binary,cna.relax = cna.relax,
+                         SNP.only = SNP.only, include.silent = include.silent, spe.plat = spe.plat)
+      }
     }
 
     else{
       cna <- as.data.frame(cna)
-      if(oncokb)
-        cna[cna == "-1.5" | cna == "-1" | cna == "1"] <- 0
+      if(oncokb){
+        cna <- oncokb(maf = NULL, fusion = NULL, cna = cna, token = token,...)$cna_oncokb %>%
+          filter(.data$oncogenic %in% c("Oncogenic","Likely Oncogenic")) #%>%
+          # dplyr::mutate(SAMPLE_ID = gsub("\\.","-",SAMPLE_ID))
+
+        temp.cna <- as.data.frame(matrix(0L,
+                                         nrow = length(unique(cna$HUGO_SYMBOL)),
+                                         ncol = length(unique(cna$SAMPLE_ID))+1))
+        # rownames(temp.cna) <- unique(cna$SAMPLE_ID)
+        temp.cna[,1] <- unique(as.character(cna$HUGO_SYMBOL))
+        colnames(temp.cna) <- c("Hugo_Symbol",unique(as.character(cna$SAMPLE_ID)))
+
+        for(i in colnames(temp.cna)[-1]){
+          temp <- cna %>%
+            filter(.data$SAMPLE_ID %in% i) %>%
+            select(.data$SAMPLE_ID, .data$HUGO_SYMBOL, .data$ALTERATION)
+          if(nrow(temp)>0){
+            temp.cna[match(temp$HUGO_SYMBOL, temp.cna[,1]),match(i, colnames(temp.cna))] <- as.character(temp$ALTERATION)
+          }
+        }
+        temp.cna[temp.cna == "Amplification"] <- 2
+        temp.cna[temp.cna == "Deletion"] <- -2
+
+        cna <- temp.cna
+        temp.cna <- NULL
+      }
+
       cna <- structure(cna,class = c("data.frame","cna"))
       if(is.null(patients)) patients <- gsub("\\.","-",as.character(colnames(cna)))[-1]
+      # else{
+      #   colnames(cna) <- gsub("\\.","-",colnames(cna))
+      # }
       cna <- createbin(obj = cna, patients = patients, mut.type = mut.type, cna.binary = cna.binary,cna.relax = cna.relax,
                        SNP.only = SNP.only, include.silent = include.silent, spe.plat = spe.plat)
     }
@@ -162,12 +267,12 @@ binmat <- function(patients=NULL, maf = NULL, mut.type = "SOMATIC",SNP.only = FA
 
     v=strsplit(patients, "-IM|-IH")
     if(!all(lapply(v, length) == 2)){
-      warning("All patients were not sequenced on the IMPACT platform or some were mispecified. '-IM' or '-IH' requiered in sample ID.
-              The spe.plat argument has been overwritten to FALSE.")
-      spe.plat = F
+      warning("All patients were not sequenced on the IMPACT platform or some were mispecified.
+              Only samples endind in '-IM' or '-IH' will be annotated for specific IMPACT platforms.")
+      # spe.plat = F
     }
     v=unlist(lapply(1:length(v), function(x)v[[x]][2]))
-    if(length(unique(v)) == 1){
+    if(length(unique(v[!is.na(v)])) == 1){
       warning("All samples were sequenced on the same platform.
               The spe.plat argument has been overwritten to FALSE.")
       spe.plat = F
@@ -177,13 +282,13 @@ binmat <- function(patients=NULL, maf = NULL, mut.type = "SOMATIC",SNP.only = FA
       # remove 410 platform patients #
       missing <- setdiff(c(g.impact$g468, paste0(g.impact$g468,".fus"),paste0(g.impact$g468,".Del"),paste0(g.impact$g468,".Amp")),
                          c(g.impact$g410, paste0(g.impact$g410,".fus"),paste0(g.impact$g410,".Del"),paste0(g.impact$g410,".Amp")))
-      if(sum(v == "5") > 0 && sum(missing %in% colnames(mut)) > 0)
+      if(sum(v == "5", na.rm = T) > 0 && sum(missing %in% colnames(mut)) > 0)
         mut[which(v == "5"), stats::na.omit(match(missing, colnames(mut)))] <- NA
 
       # remove 341 platform patients #
       missing <- setdiff(c(g.impact$g468, paste0(g.impact$g468,".fus"),paste0(g.impact$g468,".Del"),paste0(g.impact$g468,".Amp")),
                          c(g.impact$g341, paste0(g.impact$g341,".fus"),paste0(g.impact$g341,".Del"),paste0(g.impact$g341,".Amp")))
-      if(sum(v == "3") > 0 && sum(missing %in% colnames(mut)) > 0)
+      if(sum(v == "3", na.rm = T) > 0 && sum(missing %in% colnames(mut)) > 0)
         mut[which(v == "3"), stats::na.omit(match(missing, colnames(mut)))] <- NA
 
     }
@@ -247,8 +352,8 @@ createbin.maf <- function(obj, patients, mut.type, cna.binary, SNP.only, include
   if (sum(grepl("KMT2D", maf$Hugo_Symbol)) > 1) {
     maf <- maf %>%
       mutate(Hugo_Symbol = case_when(
-        Hugo_Symbol == "KMT2D" ~ "MLL2",
-        TRUE ~ Hugo_Symbol
+        .data$Hugo_Symbol == "KMT2D" ~ "MLL2",
+        TRUE ~ .data$Hugo_Symbol
       ))
 
     warning("KMT2D has been recoded to MLL2")
@@ -257,8 +362,8 @@ createbin.maf <- function(obj, patients, mut.type, cna.binary, SNP.only, include
   if (sum(grepl("KMT2C", maf$Hugo_Symbol)) > 1) {
     maf <- maf %>%
       mutate(Hugo_Symbol = case_when(
-        Hugo_Symbol == "KMT2C" ~ "MLL3",
-        TRUE ~ Hugo_Symbol
+        .data$Hugo_Symbol == "KMT2C" ~ "MLL3",
+        TRUE ~ .data$Hugo_Symbol
       ))
 
     warning("KMT2C has been recoded to MLL3")
@@ -267,8 +372,8 @@ createbin.maf <- function(obj, patients, mut.type, cna.binary, SNP.only, include
   if (sum(grepl("MYCL", maf$Hugo_Symbol)) > 1) {
     maf <- maf %>%
       mutate(Hugo_Symbol = case_when(
-        Hugo_Symbol == "MYCL" ~ "MYCL1",
-        TRUE ~ Hugo_Symbol
+        .data$Hugo_Symbol == "MYCL" ~ "MYCL1",
+        TRUE ~ .data$Hugo_Symbol
       ))
 
     warning("MYCL has been recoded to MYCL1")
@@ -284,7 +389,8 @@ createbin.maf <- function(obj, patients, mut.type, cna.binary, SNP.only, include
   if(tolower(mut.type) == "all") Mut.filt = unique(maf$Mutation_Status)
   else Mut.filt = mut.type
 
-  maf <- as_tibble(maf) %>% filter(.data$Variant_Classification != Variant.filt,
+  maf <- as_tibble(maf) %>%
+    filter(.data$Variant_Classification != Variant.filt,
                                    .data$Variant_Type %in% SNP.filt,
                                    tolower(.data$Mutation_Status) %in% tolower(Mut.filt))
 

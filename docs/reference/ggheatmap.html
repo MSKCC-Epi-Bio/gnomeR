@@ -6,8 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>oncoKB_annotate
-OncoKB annotator for MAF files. — oncoKB_annotate • gnomeR</title>
+<title>Heatmap of all events after binmat — ggheatmap • gnomeR</title>
 
 
 <!-- jquery -->
@@ -40,10 +39,8 @@ OncoKB annotator for MAF files. — oncoKB_annotate • gnomeR</title>
 
 
 
-<meta property="og:title" content="oncoKB_annotate
-OncoKB annotator for MAF files. — oncoKB_annotate" />
-<meta property="og:description" content="oncoKB_annotate
-OncoKB annotator for MAF files." />
+<meta property="og:title" content="Heatmap of all events after binmat — ggheatmap" />
+<meta property="og:description" content="Heatmap of all events after binmat" />
 
 
 
@@ -138,42 +135,39 @@ OncoKB annotator for MAF files." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>oncoKB_annotate
-OncoKB annotator for MAF files.</h1>
-    <small class="dont-index">Source: <a href='https://github.com/AxelitoMartin/gnomeR/blob/master/R/maf-oncokb-annotator.R'><code>R/maf-oncokb-annotator.R</code></a></small>
-    <div class="hidden name"><code>oncoKB_annotate.Rd</code></div>
+    <h1>Heatmap of all events after binmat</h1>
+    <small class="dont-index">Source: <a href='https://github.com/AxelitoMartin/gnomeR/blob/master/R/maf-viz.R'><code>R/maf-viz.R</code></a></small>
+    <div class="hidden name"><code>ggheatmap.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>oncoKB_annotate
-OncoKB annotator for MAF files.</p>
+    <p>Heatmap of all events after binmat</p>
     </div>
 
-    <pre class="usage"><span class='fu'>oncoKB_annotate</span>(<span class='no'>maf</span>, <span class='no'>cancer_types</span>, <span class='kw'>parallelize</span> <span class='kw'>=</span> <span class='no'>T</span>)</pre>
+    <pre class="usage"><span class='fu'>ggheatmap</span>(<span class='no'>hmat</span>, <span class='no'>...</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>maf</th>
-      <td><p>A MAF file to be annotated.</p></td>
+      <th>hmat</th>
+      <td><p>dataframe obtained after binamt</p></td>
     </tr>
     <tr>
-      <th>cancer_types</th>
-      <td><p>Data frame with samples mapped to cancer type for accurate levels of actionability. Default is NULL.</p></td>
-    </tr>
-    <tr>
-      <th>parallelize</th>
-      <td><p>Should this be done in parallel. Default is TRUE</p></td>
+      <th>...</th>
+      <td><p>Further arguments as passed to ComplexHeatmap::Heatmap</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>OncoKb annotate MAF.</p>
+    <p>heatmap of binmat events</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>gnomeR</span>)</div></pre>
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span>(<span class='fl'>123</span>)
+<span class='no'>patients</span><span class='kw'>&lt;-</span><span class='fu'><a href='https://rdrr.io/r/base/character.html'>as.character</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/unique.html'>unique</a></span>(<span class='no'>mut</span>$<span class='no'>Tumor_Sample_Barcode</span>))[<span class='fu'><a href='https://rdrr.io/r/base/sample.html'>sample</a></span>(<span class='fl'>1</span>:<span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/unique.html'>unique</a></span>(<span class='no'>mut</span>$<span class='no'>Tumor_Sample_Barcode</span>)), <span class='fl'>100</span>, <span class='kw'>replace</span><span class='kw'>=</span><span class='fl'>FALSE</span>)]
+<span class='fu'>ggheatmap</span>(<span class='fu'><a href='binmat.html'>binmat</a></span>(<span class='kw'>patients</span><span class='kw'>=</span><span class='no'>patients</span>, <span class='kw'>maf</span><span class='kw'>=</span><span class='no'>mut</span>, <span class='kw'>cna</span><span class='kw'>=</span><span class='no'>cna</span>, <span class='kw'>fusion</span><span class='kw'>=</span><span class='no'>fusion</span>, <span class='kw'>set.plat</span><span class='kw'>=</span><span class='fl'>TRUE</span>), <span class='kw'>show_row_names</span><span class='kw'>=</span><span class='fl'>FALSE</span>, <span class='kw'>show_column_names</span><span class='kw'>=</span><span class='fl'>FALSE</span>)</div><div class='img'><img src='ggheatmap-1.png' alt='' width='700' height='433' /></div><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

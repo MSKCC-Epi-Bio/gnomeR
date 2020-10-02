@@ -32,7 +32,8 @@ maf_viz <- function(maf, ...) {
     snvclass = ggsnvclass,
     samplevar = ggsamplevar,
     topgenes = ggtopgenes,
-    genecor = gggenecor) %>%
+    genecor = gggenecor,
+    genecomut = ggcomut) %>%
     purrr::invoke_map(, maf)
 
   return(all_plots)
@@ -40,7 +41,7 @@ maf_viz <- function(maf, ...) {
 
 
 add.perc<-function(x,...){geom_text(
-       aes(label=paste0(round(stat(prop)*100,2),"%"), group=1),
+       aes(label=paste0(round(stat(.data$prop)*100,2),"%"), group=1),
        stat="count",
        hjust=0, nudge_y = -0.25,...)}
 
@@ -171,7 +172,7 @@ ggsamplevar <- function(maf) {
   check_maf_column(maf = maf, "Tumor_Sample_Barcode")
 
   maf2 <- maf %>%
-   group_by(Tumor_Sample_Barcode) %>%
+   group_by(.data$Tumor_Sample_Barcode) %>%
     mutate(n_alts = n()) %>%
     ungroup() %>%
     mutate(Tumor_Sample_Barcode = .data$Tumor_Sample_Barcode %>%
@@ -211,7 +212,7 @@ ggtopgenes <- function(maf, n_genes = 10) {
     summarise(N = n()) %>%
     arrange(-.data$N) %>%
     select(.data$Hugo_Symbol) %>%
-    pull(Hugo_Symbol)
+    pull(.data$Hugo_Symbol)
 
   top_genes <- top_genes[1:n_genes] %>%
     as.character()
@@ -254,7 +255,7 @@ gggenecor <- function(maf, n_genes = 10, ...) {
                      decreasing = T))[1:n_genes]
   bin.maf <- bin.maf[,keep]
 
-  p.corr <- GGally::ggcorr(dat = bin.maf, cor_matrix = cor(bin.maf),limits = NULL)
+  p.corr <- GGally::ggcorr(dat = bin.maf, cor_matrix = stats::cor(bin.maf),limits = NULL)
 
   p.corr
 
@@ -306,7 +307,11 @@ ggcomut <- function(maf, n_genes = 10, ...) {
 ggheatmap<-function(hmat, ...){
 
   #check if the matrix is not binary
-  if(sum(hmat==0, na.rm=T) + sum(hmat==1, na.rm=T) + sum(is.na(hmat)) != (nrow(hmat) * ncol(hmat))) {stop("ggheatmap can only be plotted when binmat is binary, set cna.binary=TRUE")}
+  if(sum(hmat==0, na.rm=T) +
+     sum(hmat==1, na.rm=T) +
+     sum(is.na(hmat)) != (nrow(hmat) * ncol(hmat))) {
+    stop("ggheatmap can only be plotted when binmat is binary, set cna.binary=TRUE")
+    }
 
   idx.amp = grep(".Amp", colnames(hmat))
   if(length(idx.amp)>0){
@@ -328,7 +333,8 @@ ggheatmap<-function(hmat, ...){
   }
 
 
-  hmat.colors = structure(c("white","black", "coral","cadetblue", "forestgreen"), names=c("0","1","2","3","4"))
+  hmat.colors = structure(c("white","black", "coral","cadetblue", "forestgreen"),
+                          names=c("0","1","2","3","4"))
 
   hmap.legend = list(
     title = "Events",
@@ -336,7 +342,8 @@ ggheatmap<-function(hmat, ...){
     labels = c("WT", "Mut", "Amplification","Deletion", "Fusion")
   )
 
-  ComplexHeatmap::Heatmap(t(hmat),col=hmat.colors , na_col="grey", clustering_distance_rows="binary",clustering_distance_columns="binary", heatmap_legend_param = hmap.legend, ...)
+  ComplexHeatmap::Heatmap(t(hmat),col=hmat.colors , na_col="grey",
+                          clustering_distance_rows="binary",clustering_distance_columns="binary", heatmap_legend_param = hmap.legend, ...)
 
 }
 
