@@ -99,14 +99,15 @@ binmat <- function(patients=NULL, maf = NULL, mut.type = "SOMATIC",SNP.only = FA
   }
 
   # make patients/samples list #
-  patients <- c()
-  if(!is.null(maf))
-    patients <- unique(c(patients, as.character(unique(maf$Tumor_Sample_Barcode))))
-  if(!is.null(fusion))
-    patients <- unique(c(patients, as.character(unique(fusion$Tumor_Sample_Barcode))))
-  if(!is.null(cna))
-    patients <- c(patients, as.character(unique(fusion$Tumor_Sample_Barcode)))
-
+  if(is.null(patients)){
+    patients <- c()
+    if(!is.null(maf))
+      patients <- unique(c(patients, as.character(unique(maf$Tumor_Sample_Barcode))))
+    if(!is.null(fusion))
+      patients <- unique(c(patients, as.character(unique(fusion$Tumor_Sample_Barcode))))
+    if(!is.null(cna))
+      patients <- unique(c(patients, as.character(unique(fusion$Tumor_Sample_Barcode))))
+  }
 
   mut <- NULL
 
@@ -131,8 +132,8 @@ binmat <- function(patients=NULL, maf = NULL, mut.type = "SOMATIC",SNP.only = FA
     }
 
     # filter/define patients #
-    if(!is.null(patients)) maf <- maf[maf$Tumor_Sample_Barcode %in% patients,]
-    else patients <- as.character(unique(maf$Tumor_Sample_Barcode))
+    # if(!is.null(patients)) maf <- maf[maf$Tumor_Sample_Barcode %in% patients,]
+    # else patients <- as.character(unique(maf$Tumor_Sample_Barcode))
     if(oncokb)
       maf <- oncokb(maf = maf, fusion = NULL, cna = NULL, token = token,...)$maf_oncokb %>%
         filter(.data$oncogenic %in% keep_onco)
@@ -153,7 +154,7 @@ binmat <- function(patients=NULL, maf = NULL, mut.type = "SOMATIC",SNP.only = FA
         filter(.data$oncogenic %in% keep_onco)
     fusion <- structure(fusion,class = c("data.frame","fusion"))
     # filter/define patients #
-    if(is.null(patients)) patients <- as.character(unique(fusion$Tumor_Sample_Barcode))
+    # if(is.null(patients)) patients <- as.character(unique(fusion$Tumor_Sample_Barcode))
     fusion <- createbin(obj = fusion, patients = patients, mut.type = mut.type, cna.binary = cna.binary,
                         SNP.only = SNP.only, include.silent = include.silent, spe.plat = spe.plat)
     if(!is.null(mut)){
@@ -216,14 +217,14 @@ binmat <- function(patients=NULL, maf = NULL, mut.type = "SOMATIC",SNP.only = FA
         temp.cna <- NULL
 
         cna <- structure(cna,class = c("data.frame","cna"))
-        if(is.null(patients)) patients <- gsub("\\.","-",as.character(colnames(cna)))[-1]
+        # if(is.null(patients)) patients <- gsub("\\.","-",as.character(colnames(cna)))[-1]
         cna <- createbin(obj = cna, patients = patients, mut.type = mut.type, cna.binary = cna.binary,cna.relax = cna.relax,
                          SNP.only = SNP.only, include.silent = include.silent, spe.plat = spe.plat)
 
       }
 
       else{
-        if(is.null(patients)) patients <- unique(cna$sampleId)
+        # if(is.null(patients)) patients <- unique(cna$sampleId)
         cna <- createbin(obj = cna, patients = patients, mut.type = mut.type, cna.binary = cna.binary,cna.relax = cna.relax,
                          SNP.only = SNP.only, include.silent = include.silent, spe.plat = spe.plat)
       }
@@ -234,7 +235,7 @@ binmat <- function(patients=NULL, maf = NULL, mut.type = "SOMATIC",SNP.only = FA
       if(oncokb){
         cna <- oncokb(maf = NULL, fusion = NULL, cna = cna, token = token,...)$cna_oncokb %>%
           filter(.data$oncogenic %in% c("Oncogenic","Likely Oncogenic")) #%>%
-          # dplyr::mutate(SAMPLE_ID = gsub("\\.","-",SAMPLE_ID))
+        # dplyr::mutate(SAMPLE_ID = gsub("\\.","-",SAMPLE_ID))
 
         temp.cna <- as.data.frame(matrix(0L,
                                          nrow = length(unique(cna$HUGO_SYMBOL)),
@@ -259,7 +260,7 @@ binmat <- function(patients=NULL, maf = NULL, mut.type = "SOMATIC",SNP.only = FA
       }
 
       cna <- structure(cna,class = c("data.frame","cna"))
-      if(is.null(patients)) patients <- gsub("\\.","-",as.character(colnames(cna)))[-1]
+      # if(is.null(patients)) patients <- gsub("\\.","-",as.character(colnames(cna)))[-1]
       # else{
       #   colnames(cna) <- gsub("\\.","-",colnames(cna))
       # }
@@ -401,8 +402,8 @@ createbin.maf <- function(obj, patients, mut.type, cna.binary, SNP.only, include
 
   maf <- as_tibble(maf) %>%
     filter(.data$Variant_Classification != Variant.filt,
-                                   .data$Variant_Type %in% SNP.filt,
-                                   tolower(.data$Mutation_Status) %in% tolower(Mut.filt))
+           .data$Variant_Type %in% SNP.filt,
+           tolower(.data$Mutation_Status) %in% tolower(Mut.filt))
 
 
   #### out frame
