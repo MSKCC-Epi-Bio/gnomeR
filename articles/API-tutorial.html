@@ -104,17 +104,21 @@
 
     
     
-<div class="sourceCode" id="cb1"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">gnomeR</span>)
-<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">dplyr</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb1"><pre class="downlit">
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/AxelitoMartin/gnomeR">gnomeR</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span><span class="op">)</span></pre></div>
 <div id="setting-up-the-api" class="section level1">
 <h1 class="hasAnchor">
 <a href="#setting-up-the-api" class="anchor"></a>Setting up the API</h1>
 <p>In order to download the data from CbioPortal, one must first require a token from the website <a href="https://cbiologin.mskcc.org/">CbioPortal</a> wich will prompt a login page with your MSKCC credentials. Then navigate to “Web API” in the top bar menu, following this simply download a token and copy it after running the following command in R:</p>
-<div class="sourceCode" id="cb2"><html><body><pre class="r"><span class="kw pkg">usethis</span><span class="kw ns">::</span><span class="fu"><a href="https://usethis.r-lib.org/reference/edit.html">edit_r_environ</a></span>()</pre></body></html></div>
+<div class="sourceCode" id="cb2"><pre class="downlit">
+<span class="fu">usethis</span><span class="fu">::</span><span class="fu">edit_r_environ</span><span class="op">(</span><span class="op">)</span></pre></div>
 <p>And pasting the token you were given in the .Renviron file that was created and saving after pasting your token.</p>
-<div class="sourceCode" id="cb3"><html><body><pre class="r"><span class="no">CBIOPORTAL_TOKEN</span> <span class="kw">=</span> <span class="st">'YOUR_TOKEN'</span></pre></body></html></div>
+<div class="sourceCode" id="cb3"><pre class="downlit">
+<span class="va">CBIOPORTAL_TOKEN</span> <span class="op">=</span> <span class="st">'YOUR_TOKEN'</span></pre></div>
 <p>You can test your connection using:</p>
-<div class="sourceCode" id="cb4"><html><body><pre class="r"><span class="fu">get_cbioportal_token</span>()</pre></body></html></div>
+<div class="sourceCode" id="cb4"><pre class="downlit">
+<span class="fu">get_cbioportal_token</span><span class="op">(</span><span class="op">)</span></pre></div>
 </div>
 <div id="datasets" class="section level1">
 <h1 class="hasAnchor">
@@ -144,36 +148,44 @@
 <h3 class="hasAnchor">
 <a href="#mutations" class="anchor"></a>Mutations</h3>
 <p>To retrieve the TCGA mutational data the user should set the arguments <code>mutations</code> to TRUE and <code>database</code> to “tcga”:</p>
-<div class="sourceCode" id="cb5"><html><body><pre class="r"># df &lt;- get_genetics(sample_ids =  c("TCGA-17-Z023-01","TCGA-02-0003-01","TCGA-02-0055-01"),
-#              mutations = TRUE,fusions = FALSE, cna = FALSE,
-#              database = "tcga")</pre></body></html></div>
-<div class="sourceCode" id="cb6"><html><body><pre class="r"># df$mut</pre></body></html></div>
+<div class="sourceCode" id="cb5"><pre class="downlit">
+<span class="co"># df &lt;- get_genetics(sample_ids =  c("TCGA-17-Z023-01","TCGA-02-0003-01","TCGA-02-0055-01"),</span>
+<span class="co">#              mutations = TRUE,fusions = FALSE, cna = FALSE,</span>
+<span class="co">#              database = "tcga")</span></pre></div>
+<div class="sourceCode" id="cb6"><pre class="downlit">
+<span class="co"># df$mut</span></pre></div>
 </div>
 <div id="fusions" class="section level3">
 <h3 class="hasAnchor">
 <a href="#fusions" class="anchor"></a>Fusions</h3>
-<div class="sourceCode" id="cb7"><html><body><pre class="r"># df &lt;- get_genetics(sample_ids = as.character(tcga_samples$patient_id[!is.na(tcga_samples$Cancer_Code)][1:100]),
-#                    mutations = TRUE,fusions = TRUE, cna = FALSE,
-#                    database = "tcga")</pre></body></html></div>
-<div class="sourceCode" id="cb8"><html><body><pre class="r"># df$mut %&gt;%
-#   filter(Variant_Classification == "Fusion")</pre></body></html></div>
+<div class="sourceCode" id="cb7"><pre class="downlit">
+<span class="co"># df &lt;- get_genetics(sample_ids = as.character(tcga_samples$patient_id[!is.na(tcga_samples$Cancer_Code)][1:100]),</span>
+<span class="co">#                    mutations = TRUE,fusions = TRUE, cna = FALSE,</span>
+<span class="co">#                    database = "tcga")</span></pre></div>
+<div class="sourceCode" id="cb8"><pre class="downlit">
+<span class="co"># df$mut %&gt;%</span>
+<span class="co">#   filter(Variant_Classification == "Fusion")</span></pre></div>
 </div>
 <div id="cna" class="section level3">
 <h3 class="hasAnchor">
 <a href="#cna" class="anchor"></a>CNA</h3>
-<div class="sourceCode" id="cb9"><html><body><pre class="r"># df &lt;- get_genetics(sample_ids =  c("TCGA-17-Z023-01","TCGA-02-0003-01","TCGA-02-0055-01"),
-#              mutations = FALSE,fusions = FALSE, cna = TRUE,
-#              database = "tcga")</pre></body></html></div>
-<div class="sourceCode" id="cb10"><html><body><pre class="r"># df$cna</pre></body></html></div>
+<div class="sourceCode" id="cb9"><pre class="downlit">
+<span class="co"># df &lt;- get_genetics(sample_ids =  c("TCGA-17-Z023-01","TCGA-02-0003-01","TCGA-02-0055-01"),</span>
+<span class="co">#              mutations = FALSE,fusions = FALSE, cna = TRUE,</span>
+<span class="co">#              database = "tcga")</span></pre></div>
+<div class="sourceCode" id="cb10"><pre class="downlit">
+<span class="co"># df$cna</span></pre></div>
 </div>
 <div id="segmentation-file" class="section level3">
 <h3 class="hasAnchor">
 <a href="#segmentation-file" class="anchor"></a>Segmentation file</h3>
 <p>The copy-number alterations data we have covered up to now is a discrete estimation of the alterations that occured. There however exist more nuanced and accurate data for copy-number alterations observed in a tumor. In <code>gnomeR</code> we include an example of segmentation file and relevant functions from the <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5027494/"><code>facets</code></a> package that provides an allele-specific copy number and clonal heterogeneity analysis tool for high-throughput DNA sequencing. We show below how to download it from the API in gnomeR.</p>
-<div class="sourceCode" id="cb11"><html><body><pre class="r"># df &lt;- get_genetics(sample_ids =  c("TCGA-17-Z023-01","TCGA-02-0003-01","TCGA-02-0055-01"),
-#              mutations = FALSE,fusions = FALSE, cna = FALSE, seg = TRUE,
-#              database = "tcga")</pre></body></html></div>
-<div class="sourceCode" id="cb12"><html><body><pre class="r"># df$seg</pre></body></html></div>
+<div class="sourceCode" id="cb11"><pre class="downlit">
+<span class="co"># df &lt;- get_genetics(sample_ids =  c("TCGA-17-Z023-01","TCGA-02-0003-01","TCGA-02-0055-01"),</span>
+<span class="co">#              mutations = FALSE,fusions = FALSE, cna = FALSE, seg = TRUE,</span>
+<span class="co">#              database = "tcga")</span></pre></div>
+<div class="sourceCode" id="cb12"><pre class="downlit">
+<span class="co"># df$seg</span></pre></div>
 </div>
 </div>
 <div id="impact-database" class="section level2">
@@ -183,37 +195,42 @@
 <div id="mutations-1" class="section level3">
 <h3 class="hasAnchor">
 <a href="#mutations-1" class="anchor"></a>Mutations</h3>
-<div class="sourceCode" id="cb13"><html><body><pre class="r"># df.mut &lt;- get_genetics("P-0000062-T01-IM3",database = "msk_impact",
-#                        mutations = TRUE, fusions = FALSE, cna = FALSE)
-# df.mut</pre></body></html></div>
+<div class="sourceCode" id="cb13"><pre class="downlit">
+<span class="co"># df.mut &lt;- get_genetics("P-0000062-T01-IM3",database = "msk_impact",</span>
+<span class="co">#                        mutations = TRUE, fusions = FALSE, cna = FALSE)</span>
+<span class="co"># df.mut</span></pre></div>
 </div>
 <div id="adding-fusions" class="section level3">
 <h3 class="hasAnchor">
 <a href="#adding-fusions" class="anchor"></a>Adding Fusions</h3>
-<div class="sourceCode" id="cb14"><html><body><pre class="r"># df.fus &lt;- get_genetics("P-0000062-T01-IM3",database = "msk_impact",
-#                        mutations = TRUE, fusions = FALSE, cna = FALSE)
-# df.fus</pre></body></html></div>
+<div class="sourceCode" id="cb14"><pre class="downlit">
+<span class="co"># df.fus &lt;- get_genetics("P-0000062-T01-IM3",database = "msk_impact",</span>
+<span class="co">#                        mutations = TRUE, fusions = FALSE, cna = FALSE)</span>
+<span class="co"># df.fus</span></pre></div>
 </div>
 <div id="copy-number-alterations" class="section level3">
 <h3 class="hasAnchor">
 <a href="#copy-number-alterations" class="anchor"></a>Copy-number alterations</h3>
-<div class="sourceCode" id="cb15"><html><body><pre class="r"># df.cna &lt;- get_genetics("P-0000062-T01-IM3",database = "msk_impact",
-#                        mutations = FALSE, fusions = FALSE, cna = TRUE)
-# df.cna</pre></body></html></div>
+<div class="sourceCode" id="cb15"><pre class="downlit">
+<span class="co"># df.cna &lt;- get_genetics("P-0000062-T01-IM3",database = "msk_impact",</span>
+<span class="co">#                        mutations = FALSE, fusions = FALSE, cna = TRUE)</span>
+<span class="co"># df.cna</span></pre></div>
 </div>
 <div id="all-together" class="section level3">
 <h3 class="hasAnchor">
 <a href="#all-together" class="anchor"></a>All together</h3>
-<div class="sourceCode" id="cb16"><html><body><pre class="r"># df.gen &lt;- get_genetics("P-0000062-T01-IM3",database = "msk_impact",
-#                        mutations = TRUE, fusions = TRUE, cna = TRUE)
-# df.gen</pre></body></html></div>
+<div class="sourceCode" id="cb16"><pre class="downlit">
+<span class="co"># df.gen &lt;- get_genetics("P-0000062-T01-IM3",database = "msk_impact",</span>
+<span class="co">#                        mutations = TRUE, fusions = TRUE, cna = TRUE)</span>
+<span class="co"># df.gen</span></pre></div>
 </div>
 <div id="by-study" class="section level3">
 <h3 class="hasAnchor">
 <a href="#by-study" class="anchor"></a>By study</h3>
 <p>We show here an example to retrieve all the samples in a study. A complete list of these studies can be found on the CbioPortal website. Not working yet.</p>
-<div class="sourceCode" id="cb17"><html><body><pre class="r"># df.gen &lt;- get_genetics(sample_list_id = "mskimpact_Colorectal_Cancer",database = "msk_impact",
-#                        mutations = TRUE, fusions = TRUE, cna = TRUE)</pre></body></html></div>
+<div class="sourceCode" id="cb17"><pre class="downlit">
+<span class="co"># df.gen &lt;- get_genetics(sample_list_id = "mskimpact_Colorectal_Cancer",database = "msk_impact",</span>
+<span class="co">#                        mutations = TRUE, fusions = TRUE, cna = TRUE)</span></pre></div>
 </div>
 </div>
 </div>
@@ -234,7 +251,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>
