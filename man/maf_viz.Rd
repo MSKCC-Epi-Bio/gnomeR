@@ -36,5 +36,5 @@ library(dtplyr)
 patients <- as.character(unique(mut$Tumor_Sample_Barcode))[1:200]
 all.plots <- maf_viz(maf=mut \%>\% filter(Tumor_Sample_Barcode \%in\% patients))
 all.plots <- maf_viz(maf=mut \%>\%
-filter(Tumor_Sample_Barcode \%in\% patients),spe.plat = TRUE)
+filter(Tumor_Sample_Barcode \%in\% patients),specify.plat = TRUE)
 }

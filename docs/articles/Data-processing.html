@@ -119,8 +119,8 @@
 <li>cna: An optional CNA files. If inputed the outcome will be added to the matrix with columns ending in “.cna”, .del" and “.amp” (depending on subsequent arguments).</li>
 <li>cna.binary: A boolean argument specifying if the cna events should be enforced as binary. In which case separate columns for amplifications and deletions will be created. Default is FALSE in which case columns ending in “.cna” will be added to the output.</li>
 <li>cna.relax: If cna.binary is TRUE, cna data only enables to count both gains and shallow deletions as amplifications and deletions respectively.</li>
-<li>spe.plat: boolean specifying if specific IMPACT platforms should be considered. When TRUE NAs will fill the cells for genes of patients that were not sequenced on that plaform. Default is TRUE.</li>
-<li>set.plat character argument specifying which IMPACT platform the data should be reduced to if spe.plat is set to TRUE. Options are “341” and “410”. Default is NULL.</li>
+<li>specify.plat: boolean specifying if specific IMPACT platforms should be considered. When TRUE NAs will fill the cells for genes of patients that were not sequenced on that plaform. Default is TRUE.</li>
+<li>set.plat character argument specifying which IMPACT platform the data should be reduced to if specify.plat is set to TRUE. Options are “341” and “410”. Default is NULL.</li>
 <li>rm.empty: boolean specifying if columns with no events founds should be removed. Default is TRUE.</li>
 <li>pathway boolean specifying if pathway annotation should be applied. If TRUE, the function will return a supplementary binary dataframe with columns being each pathway and each row being a sample. Default is FALSE.</li>
 <li>col.names character vector of the necessary columns to be used. By default: col.names = c(Tumor_Sample_Barcode = NULL, Hugo_Symbol = NULL, Variant_Classification = NULL, Mutation_Status = NULL, Variant_Type = NULL)</li>
@@ -318,8 +318,8 @@
 </tr>
 </tbody>
 </table>
-<p>Note that by default in the situation above the outputted dataframe is a binary matrix made from all types of mutations and adjusting the features for the platform they were added on. Thus all samples that were sequenced on the original platform have NA’s in the cells of for features that were added on subsequent platforms. In the case where the user plans on using methods that do not accept missing values, the <code>spe.plat</code> argument can be changed to FALSE to replace all the NA’s mentioned above to 0. We show below such an example, we moreover make this example including only SNPs (including silent mutations):</p>
-<div class="sourceCode" id="cb3"><html><body><pre class="r"><span class="no">df</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/binmat.html">binmat</a></span>(<span class="kw">patients</span> <span class="kw">=</span> <span class="no">samples</span> ,<span class="kw">maf</span> <span class="kw">=</span> <span class="no">mut</span>, <span class="kw">SNP.only</span> <span class="kw">=</span> <span class="fl">TRUE</span>, <span class="kw">include.silent</span> <span class="kw">=</span> <span class="fl">TRUE</span>, <span class="kw">spe.plat</span> <span class="kw">=</span> <span class="fl">FALSE</span>)
+<p>Note that by default in the situation above the outputted dataframe is a binary matrix made from all types of mutations and adjusting the features for the platform they were added on. Thus all samples that were sequenced on the original platform have NA’s in the cells of for features that were added on subsequent platforms. In the case where the user plans on using methods that do not accept missing values, the <code>specify.plat</code> argument can be changed to FALSE to replace all the NA’s mentioned above to 0. We show below such an example, we moreover make this example including only SNPs (including silent mutations):</p>
+<div class="sourceCode" id="cb3"><html><body><pre class="r"><span class="no">df</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/binmat.html">binmat</a></span>(<span class="kw">patients</span> <span class="kw">=</span> <span class="no">samples</span> ,<span class="kw">maf</span> <span class="kw">=</span> <span class="no">mut</span>, <span class="kw">SNP.only</span> <span class="kw">=</span> <span class="fl">TRUE</span>, <span class="kw">include.silent</span> <span class="kw">=</span> <span class="fl">TRUE</span>, <span class="kw">specify.plat</span> <span class="kw">=</span> <span class="fl">FALSE</span>)
 <span class="fu">kable</span>(<span class="no">df</span>[<span class="fl">1</span>:<span class="fl">10</span>, <span class="fl">1</span>:<span class="fl">10</span>])</pre></body></html></div>
 <table class="table">
 <thead><tr class="header">
@@ -478,7 +478,7 @@
 # df &lt;- binmat(maf = dat$mut)</pre></body></html></div>
 <div class="sourceCode" id="cb5"><html><body><pre class="r"># kable(df[1:10, 1:10])</pre></body></html></div>
 <p>Similarly,</p>
-<div class="sourceCode" id="cb6"><html><body><pre class="r"># df &lt;- binmat(maf = dat$mut, SNP.only = TRUE, include.silent = TRUE, spe.plat = FALSE)
+<div class="sourceCode" id="cb6"><html><body><pre class="r"># df &lt;- binmat(maf = dat$mut, SNP.only = TRUE, include.silent = TRUE, specify.plat = FALSE)
 # kable(df[1:10, 1:10])</pre></body></html></div>
 </div>
 </div>
@@ -676,7 +676,7 @@
 <div class="sourceCode" id="cb8"><html><body><pre class="r"># dat &lt;- get_genetics(sample_ids = samples.tcga, database = 'tcga',mutations = FALSE, fusions = TRUE, cna = FALSE)
 # df &lt;- binmat(maf = dat$mut)</pre></body></html></div>
 <div class="sourceCode" id="cb9"><html><body><pre class="r"># kable(df[1:10, 1:10])</pre></body></html></div>
-<p>Similarly to the mutation data the fusions are affected by the <code>spe.plat</code> and <code>set.plat</code> arguments as well.</p>
+<p>Similarly to the mutation data the fusions are affected by the <code>specify.plat</code> and <code>set.plat</code> arguments as well.</p>
 </div>
 </div>
 <div id="copy-number-alterations-cna" class="section level2">
@@ -690,7 +690,7 @@
 <li>
 <code>cna.relax</code>: a boolean declaring if only deep deletions and full amplifications should be annotated in the case where <code>cna.binary</code> is set to FALSE.</li>
 </ul>
-<p>Note that the <code>spe.plat</code> and <code>set.plat</code> also affect CNA.</p>
+<p>Note that the <code>specify.plat</code> and <code>set.plat</code> also affect CNA.</p>
 <div id="processing-raw-cna-data" class="section level3">
 <h3 class="hasAnchor">
 <a href="#processing-raw-cna-data" class="anchor"></a>Processing raw CNA data</h3>

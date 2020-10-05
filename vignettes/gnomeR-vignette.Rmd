@@ -95,22 +95,22 @@ We can create a binary matrix of genetic events from the files described above. 
 - fusion : optional fusion file to be included. Fusions will be added as their own column with ".fus" suffix
 - cna : optional copy number alteration file to be included. CNAs will be added as their column with ".Amp" suffix for amplifications and ".Del" suffix for deletions
 - cna.relax : boolean specifying if shallow deletions and low level gains should be counted as deletions and amplifications respectively
-- spe.plat : boolean specifying if specific IMPACT platforms should be considered. When TRUE NAs will fill the cells for genes of patients that were not sequenced on that plaform
-- set.plat : character argument specifying which IMPACT platform the data should be reduced to if spe.plat is set to TRUE. Options are "341" and "410". Default is NULL.
+- specify.plat : boolean specifying if specific IMPACT platforms should be considered. When TRUE NAs will fill the cells for genes of patients that were not sequenced on that plaform
+- set.plat : character argument specifying which IMPACT platform the data should be reduced to if specify.plat is set to TRUE. Options are "341" and "410". Default is NULL.
 - rm.empty : boolean specifying if columns with no events founds should be removed. Default is TRUE.
 
 This function will return a binary matrix of genetics events with patients as rows and columns as genes. Along with a list of patients that weren't found to have any events (if any).
 
 ```{r}
 patients <- as.character(unique(mut$Tumor_Sample_Barcode))[1:200]
-bin.mut <- binmat(patients = patients,maf = mut,mut.type = "SOMATIC",SNP.only = FALSE,include.silent = FALSE, spe.plat = TRUE)
+bin.mut <- binmat(patients = patients,maf = mut,mut.type = "SOMATIC",SNP.only = FALSE,include.silent = FALSE, specify.plat = TRUE)
 as.tbl(bin.mut)
 ```
 
 Similarly including fusions and CNAs:
 
 ```{r}
-bin.mut <- binmat(patients = patients,maf = mut,mut.type = "SOMATIC",SNP.only = FALSE,include.silent = FALSE, fusion = fusion, cna = cna, spe.plat = TRUE)
+bin.mut <- binmat(patients = patients,maf = mut,mut.type = "SOMATIC",SNP.only = FALSE,include.silent = FALSE, fusion = fusion, cna = cna, specify.plat = TRUE)
 as.tbl(bin.mut)
 ```
 
