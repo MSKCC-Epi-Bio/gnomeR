@@ -30,7 +30,7 @@ library(dtplyr)
 patients <- as.character(unique(mut$Tumor_Sample_Barcode))[1:200]
 bin.mut <- binmat(patients = patients,maf = mut,
 fusion = fusion, cna = cna,mut.type = "SOMATIC",
-SNP.only = FALSE,include.silent = FALSE, spe.plat = FALSE)
+SNP.only = FALSE,include.silent = FALSE, specify.plat = FALSE)
 gen.dat <- bin.mut[,
 names(sort(apply(bin.mut,2, sum),decreasing = TRUE))[1:15]]
 plot_oncoPrint(gen.dat)

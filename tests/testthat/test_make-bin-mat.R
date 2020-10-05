@@ -38,9 +38,9 @@ test_that("when patients is NULL", {
   expect_equal(nrow(mat), 457)
 })
 
-#spe.plat, also checks patients
-test_that("read in patients with spe.plat", {
-  bin.mut <- binmat(patients = patients,maf = mut,SNP.only = F,include.silent = F, spe.plat = T, rm.empty = FALSE)
+#specify.plat, also checks patients
+test_that("read in patients with specify.plat", {
+  bin.mut <- binmat(patients = patients,maf = mut,SNP.only = F,include.silent = F, specify.plat = T, rm.empty = FALSE)
   expect_equal(names(table(colSums(is.na(bin.mut))))[2], "145")
   expect_equivalent(table(bin.mut[,"TP53"])[2], 124)
 })
@@ -49,7 +49,7 @@ test_that("read in patients with spe.plat", {
 
 test_that("read in patients with SNP.only", {
   #with SNP.only=T, some samples have no mutation. this generates a warning.
-  expect_warning(bin.mut <- binmat(patients = patients,maf = mut,SNP.only = T,include.silent = F, spe.plat = T, rm.empty = FALSE))
+  expect_warning(bin.mut <- binmat(patients = patients,maf = mut,SNP.only = T,include.silent = F, specify.plat = T, rm.empty = FALSE))
 
   #this sample if set.seed is same has no mutations.
   expect_equal(names(table(t(bin.mut["P-0006282-T02-IM5",]))),"0")
@@ -58,7 +58,7 @@ test_that("read in patients with SNP.only", {
 
 test_that("read in 300 patients with rm.empty", {
   #with SNP.only=T, some samples have no mutation. this generates a warning.
-bin.mut = binmat(patients = patients,maf = mut,SNP.only = T,include.silent = F, spe.plat = T, rm.empty = TRUE)
+bin.mut = binmat(patients = patients,maf = mut,SNP.only = T,include.silent = F, specify.plat = T, rm.empty = TRUE)
   #this sample if set.seed is same has no mutations.
   #samples have changed, now there are 457 samples
  expect_equal(ncol(bin.mut),331)
@@ -68,7 +68,7 @@ bin.mut = binmat(patients = patients,maf = mut,SNP.only = T,include.silent = F, 
 test_that("no impact samples",{
   mat = mut
   mat$Tumor_Sample_Barcode = substr(as.character(mat$Tumor_Sample_Barcode),1,12)
-  expect_warning(bin.mut<-binmat(maf=mat, spe.plat = TRUE))
+  expect_warning(bin.mut<-binmat(maf=mat, specify.plat = TRUE))
   expect_equal(ncol(bin.mut),376)
   #some samples are repeat
   expect_equal(nrow(bin.mut),454)

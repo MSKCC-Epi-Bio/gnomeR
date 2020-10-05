@@ -38,8 +38,8 @@ The main purpose of `gnomeR` is to streamline the processing of genomic files pr
 - cna: An optional CNA files. If inputed the outcome will be added to the matrix with columns ending in ".cna", .del" and ".amp" (depending on subsequent arguments).
 - cna.binary: A boolean argument specifying if the cna events should be enforced as binary. In which case separate columns for amplifications and deletions will be created. Default is FALSE in which case columns ending in ".cna" will be added to the output.
 - cna.relax: If cna.binary is TRUE, cna data only enables to count both gains and shallow deletions as amplifications and deletions respectively.
-- spe.plat: boolean specifying if specific IMPACT platforms should be considered. When TRUE NAs will fill the cells for genes of patients that were not sequenced on that plaform. Default is TRUE.
-- set.plat character argument specifying which IMPACT platform the data should be reduced to if spe.plat is set to TRUE. Options are "341" and "410". Default is NULL.
+- specify.plat: boolean specifying if specific IMPACT platforms should be considered. When TRUE NAs will fill the cells for genes of patients that were not sequenced on that plaform. Default is TRUE.
+- set.plat character argument specifying which IMPACT platform the data should be reduced to if specify.plat is set to TRUE. Options are "341" and "410". Default is NULL.
 - rm.empty: boolean specifying if columns with no events founds should be removed. Default is TRUE.
 - pathway boolean specifying if pathway annotation should be applied. If TRUE, the function will return a supplementary binary dataframe with columns being each pathway and each row being a sample. Default is FALSE.
 - col.names character vector of the necessary columns to be used. By default: col.names = c(Tumor_Sample_Barcode = NULL, Hugo_Symbol = NULL, Variant_Classification = NULL, Mutation_Status = NULL, Variant_Type = NULL)
@@ -69,10 +69,10 @@ kable(df[1:10, 1:10])
 ```
 
 Note that by default in the situation above the outputted dataframe is a binary matrix made from all types of mutations and adjusting the features for the platform they were added on. Thus all samples that were sequenced on the original platform have NA's in the cells of for features that were added on subsequent platforms.
-In the case where the user plans on using methods that do not accept missing values, the `spe.plat` argument can be changed to FALSE to replace all the NA's mentioned above to 0. We show below such an example, we moreover make this example including only SNPs (including silent mutations):
+In the case where the user plans on using methods that do not accept missing values, the `specify.plat` argument can be changed to FALSE to replace all the NA's mentioned above to 0. We show below such an example, we moreover make this example including only SNPs (including silent mutations):
 
 ```{r}
-df <- binmat(patients = samples ,maf = mut, SNP.only = TRUE, include.silent = TRUE, spe.plat = FALSE)
+df <- binmat(patients = samples ,maf = mut, SNP.only = TRUE, include.silent = TRUE, specify.plat = FALSE)
 kable(df[1:10, 1:10])
 ```
 
@@ -93,7 +93,7 @@ In this section we show the same examples as above but using the data downloaded
 Similarly,
 
 ```{r}
-# df <- binmat(maf = dat$mut, SNP.only = TRUE, include.silent = TRUE, spe.plat = FALSE)
+# df <- binmat(maf = dat$mut, SNP.only = TRUE, include.silent = TRUE, specify.plat = FALSE)
 # kable(df[1:10, 1:10])
 ```
 
@@ -124,7 +124,7 @@ In the API provided in `gnomeR` the fusion data comes merged with the mutation d
 # kable(df[1:10, 1:10])
 ```
 
-Similarly to the mutation data the fusions are affected by the `spe.plat` and `set.plat` arguments as well.
+Similarly to the mutation data the fusions are affected by the `specify.plat` and `set.plat` arguments as well.
 
 
 ## Copy-number alterations (CNA)
@@ -136,7 +136,7 @@ The processing function for CNA is affected by two additional arguments:
 - `cna.binary`: boolean declaring if the CNA data should be segregated between amplification and deletions or kept as factor variable with its original levels
 - `cna.relax`: a boolean declaring if only deep deletions and full amplifications should be annotated in the case where `cna.binary` is set to FALSE. 
 
-Note that the `spe.plat` and `set.plat` also affect CNA.
+Note that the `specify.plat` and `set.plat` also affect CNA.
 
 ### Processing raw CNA data
 

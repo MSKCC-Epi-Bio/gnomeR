@@ -24,7 +24,7 @@ Enables creation of a matrix used to generate an OncoPrint heatmap.
 library(gnomeR)
 patients <- as.character(unique(mut$Tumor_Sample_Barcode))
 bin.mut <- binmat(patients = patients,maf = mut,mut.type = "SOMATIC",
-SNP.only = FALSE,include.silent = FALSE, spe.plat = FALSE)
+SNP.only = FALSE,include.silent = FALSE, specify.plat = FALSE)
 gen.dat <- bin.mut[1:500,
 names(sort(apply(bin.mut,2, sum),decreasing = TRUE))[1:15]]
 dat <- dat.oncoPrint(gen.dat)
