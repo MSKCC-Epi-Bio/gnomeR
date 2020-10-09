@@ -16,9 +16,9 @@
 #' @param cna.binary A boolean argument specifying if the cna events should be enforced as binary. In which case separate columns for
 #' amplifications and deletions will be created.
 #' @param cna.relax for cna data only enables to count both gains and shallow deletions as amplifications and deletions respectively.
-#' @param spe.plat boolean specifying if specific IMPACT platforms should be considered. When TRUE NAs will fill the cells for genes
+#' @param specify.plat boolean specifying if specific IMPACT platforms should be considered. When TRUE NAs will fill the cells for genes
 #' of patients that were not sequenced on that plaform. Default is TRUE.
-#' @param set.plat character argument specifying which IMPACT platform the data should be reduced to if spe.plat is set to TRUE.
+#' @param set.plat character argument specifying which IMPACT platform the data should be reduced to if specify.plat is set to TRUE.
 #'  Options are "341" and "410". Default is NULL.
 #' @param rm.empty boolean specifying if columns with no events founds should be removed. Default is TRUE.
 #' @param pathway boolean specifying if pathway annotation should be applied. If TRUE, the function will return a supplementary binary
@@ -38,11 +38,11 @@
 #' patients <- as.character(unique(mut$Tumor_Sample_Barcode))[1:200]
 #' bin.mut <- binmat(patients = patients,maf = mut,
 #' mut.type = "SOMATIC",SNP.only = FALSE,
-#' include.silent = FALSE, spe.plat = FALSE)
+#' include.silent = FALSE, specify.plat = FALSE)
 #' bin.mut <- binmat(patients = patients,maf = mut,
 #' mut.type = "SOMATIC",SNP.only = FALSE,
 #' include.silent = FALSE,
-#' cna.relax = TRUE, spe.plat = FALSE,
+#' cna.relax = TRUE, specify.plat = FALSE,
 #'  set.plat = "410", rm.empty = FALSE)
 #' @import dplyr
 #' @import dtplyr
@@ -54,7 +54,7 @@
 ###############################################
 
 binmat <- function(patients=NULL, maf = NULL, mut.type = "SOMATIC",SNP.only = FALSE,include.silent = FALSE,
-                   fusion = NULL,cna = NULL,cna.binary = TRUE,cna.relax = FALSE, spe.plat = TRUE,
+                   fusion = NULL,cna = NULL,cna.binary = TRUE,cna.relax = FALSE, specify.plat = TRUE,
                    set.plat = NULL,rm.empty = TRUE, pathway = FALSE,
                    col.names = c(Tumor_Sample_Barcode = NULL, Hugo_Symbol = NULL,
                                  Variant_Classification = NULL, Mutation_Status = NULL, Variant_Type = NULL),
@@ -98,6 +98,17 @@ binmat <- function(patients=NULL, maf = NULL, mut.type = "SOMATIC",SNP.only = FA
     }
   }
 
+  # make patients/samples list #
+  if(is.null(patients)){
+    patients <- c()
+    if(!is.null(maf))
+      patients <- unique(c(patients, as.character(unique(maf$Tumor_Sample_Barcode))))
+    if(!is.null(fusion))
+      patients <- unique(c(patients, as.character(unique(fusion$Tumor_Sample_Barcode))))
+    if(!is.null(cna))
+      patients <- unique(c(patients, as.character(unique(fusion$Tumor_Sample_Barcode))))
+  }
+
   mut <- NULL
 
   if(!is.null(maf)){
@@ -121,8 +132,8 @@ binmat <- function(patients=NULL, maf = NULL, mut.type = "SOMATIC",SNP.only = FA
     }
 
     # filter/define patients #
-    if(!is.null(patients)) maf <- maf[maf$Tumor_Sample_Barcode %in% patients,]
-    else patients <- as.character(unique(maf$Tumor_Sample_Barcode))
+    # if(!is.null(patients)) maf <- maf[maf$Tumor_Sample_Barcode %in% patients,]
+    # else patients <- as.character(unique(maf$Tumor_Sample_Barcode))
     if(oncokb)
       maf <- oncokb(maf = maf, fusion = NULL, cna = NULL, token = token,...)$maf_oncokb %>%
         filter(.data$oncogenic %in% keep_onco)
@@ -130,7 +141,7 @@ binmat <- function(patients=NULL, maf = NULL, mut.type = "SOMATIC",SNP.only = FA
     maf <- structure(maf,class = c("data.frame","maf"))
     # getting mutation binary matrix #
     mut <- createbin(obj = maf, patients = patients, mut.type = mut.type, cna.binary = cna.binary,cna.relax = cna.relax,
-                     SNP.only = SNP.only, include.silent = include.silent, spe.plat = spe.plat)
+                     SNP.only = SNP.only, include.silent = include.silent, specify.plat = specify.plat)
 
   }
 
@@ -143,9 +154,9 @@ binmat <- function(patients=NULL, maf = NULL, mut.type = "SOMATIC",SNP.only = FA
         filter(.data$oncogenic %in% keep_onco)
     fusion <- structure(fusion,class = c("data.frame","fusion"))
     # filter/define patients #
-    if(is.null(patients)) patients <- as.character(unique(fusion$Tumor_Sample_Barcode))
+    # if(is.null(patients)) patients <- as.character(unique(fusion$Tumor_Sample_Barcode))
     fusion <- createbin(obj = fusion, patients = patients, mut.type = mut.type, cna.binary = cna.binary,
-                        SNP.only = SNP.only, include.silent = include.silent, spe.plat = spe.plat)
+                        SNP.only = SNP.only, include.silent = include.silent, specify.plat = specify.plat)
     if(!is.null(mut)){
       mut <- as.data.frame(cbind(mut,fusion))
       rownames(mut) <- patients}
@@ -206,16 +217,16 @@ binmat <- function(patients=NULL, maf = NULL, mut.type = "SOMATIC",SNP.only = FA
         temp.cna <- NULL
 
         cna <- structure(cna,class = c("data.frame","cna"))
-        if(is.null(patients)) patients <- gsub("\\.","-",as.character(colnames(cna)))[-1]
+        # if(is.null(patients)) patients <- gsub("\\.","-",as.character(colnames(cna)))[-1]
         cna <- createbin(obj = cna, patients = patients, mut.type = mut.type, cna.binary = cna.binary,cna.relax = cna.relax,
-                         SNP.only = SNP.only, include.silent = include.silent, spe.plat = spe.plat)
+                         SNP.only = SNP.only, include.silent = include.silent, specify.plat = specify.plat)
 
       }
 
       else{
-        if(is.null(patients)) patients <- unique(cna$sampleId)
+        # if(is.null(patients)) patients <- unique(cna$sampleId)
         cna <- createbin(obj = cna, patients = patients, mut.type = mut.type, cna.binary = cna.binary,cna.relax = cna.relax,
-                         SNP.only = SNP.only, include.silent = include.silent, spe.plat = spe.plat)
+                         SNP.only = SNP.only, include.silent = include.silent, specify.plat = specify.plat)
       }
     }
 
@@ -224,7 +235,7 @@ binmat <- function(patients=NULL, maf = NULL, mut.type = "SOMATIC",SNP.only = FA
       if(oncokb){
         cna <- oncokb(maf = NULL, fusion = NULL, cna = cna, token = token,...)$cna_oncokb %>%
           filter(.data$oncogenic %in% c("Oncogenic","Likely Oncogenic")) #%>%
-          # dplyr::mutate(SAMPLE_ID = gsub("\\.","-",SAMPLE_ID))
+        # dplyr::mutate(SAMPLE_ID = gsub("\\.","-",SAMPLE_ID))
 
         temp.cna <- as.data.frame(matrix(0L,
                                          nrow = length(unique(cna$HUGO_SYMBOL)),
@@ -249,12 +260,12 @@ binmat <- function(patients=NULL, maf = NULL, mut.type = "SOMATIC",SNP.only = FA
       }
 
       cna <- structure(cna,class = c("data.frame","cna"))
-      if(is.null(patients)) patients <- gsub("\\.","-",as.character(colnames(cna)))[-1]
+      # if(is.null(patients)) patients <- gsub("\\.","-",as.character(colnames(cna)))[-1]
       # else{
       #   colnames(cna) <- gsub("\\.","-",colnames(cna))
       # }
       cna <- createbin(obj = cna, patients = patients, mut.type = mut.type, cna.binary = cna.binary,cna.relax = cna.relax,
-                       SNP.only = SNP.only, include.silent = include.silent, spe.plat = spe.plat)
+                       SNP.only = SNP.only, include.silent = include.silent, specify.plat = specify.plat)
     }
     if(!is.null(mut)){
       mut <- as.data.frame(cbind(mut,cna))
@@ -263,21 +274,21 @@ binmat <- function(patients=NULL, maf = NULL, mut.type = "SOMATIC",SNP.only = FA
   }
 
   # specific platform for IMPACT #
-  if(spe.plat){
+  if(specify.plat){
 
     v=strsplit(patients, "-IM|-IH")
     if(!all(lapply(v, length) == 2)){
       warning("All patients were not sequenced on the IMPACT platform or some were mispecified.
               Only samples endind in '-IM' or '-IH' will be annotated for specific IMPACT platforms.")
-      # spe.plat = F
+      # specify.plat = F
     }
     v=unlist(lapply(1:length(v), function(x)v[[x]][2]))
     if(length(unique(v[!is.na(v)])) == 1){
       warning("All samples were sequenced on the same platform.
-              The spe.plat argument has been overwritten to FALSE.")
-      spe.plat = F
+              The specify.plat argument has been overwritten to FALSE.")
+      specify.plat = F
     }
-    if(spe.plat){
+    if(specify.plat){
       g.impact <- g.impact
       # remove 410 platform patients #
       missing <- setdiff(c(g.impact$g468, paste0(g.impact$g468,".fus"),paste0(g.impact$g468,".Del"),paste0(g.impact$g468,".Amp")),
@@ -332,7 +343,7 @@ binmat <- function(patients=NULL, maf = NULL, mut.type = "SOMATIC",SNP.only = FA
 ##############################################
 
 
-createbin <- function(obj, patients, mut.type, cna.binary, SNP.only,include.silent, cna.relax, spe.plat){
+createbin <- function(obj, patients, mut.type, cna.binary, SNP.only,include.silent, cna.relax, specify.plat){
   UseMethod("createbin")
 }
 
@@ -345,7 +356,7 @@ createbin.default <- function(obj) {
 ############# MUTATION MATRIX ################
 ##############################################
 
-createbin.maf <- function(obj, patients, mut.type, cna.binary, SNP.only, include.silent, cna.relax, spe.plat){
+createbin.maf <- function(obj, patients, mut.type, cna.binary, SNP.only, include.silent, cna.relax, specify.plat){
   maf <- as_tibble(obj)
   maf$Hugo_Symbol <- as.character(maf$Hugo_Symbol)
   # recode gene names that have been changed between panel versions to make sure they are consistent and counted as the same gene
@@ -391,8 +402,8 @@ createbin.maf <- function(obj, patients, mut.type, cna.binary, SNP.only, include
 
   maf <- as_tibble(maf) %>%
     filter(.data$Variant_Classification != Variant.filt,
-                                   .data$Variant_Type %in% SNP.filt,
-                                   tolower(.data$Mutation_Status) %in% tolower(Mut.filt))
+           .data$Variant_Type %in% SNP.filt,
+           tolower(.data$Mutation_Status) %in% tolower(Mut.filt))
 
 
   #### out frame
@@ -417,7 +428,7 @@ createbin.maf <- function(obj, patients, mut.type, cna.binary, SNP.only, include
 ############# FUSION MATRIX ###############
 ###########################################
 
-createbin.fusion <- function(obj, patients, mut.type,cna.binary, SNP.only,include.silent, cna.relax, spe.plat){
+createbin.fusion <- function(obj, patients, mut.type,cna.binary, SNP.only,include.silent, cna.relax, specify.plat){
   fusion <- as_tibble(obj)
   # quick data checks #
   if(length(match("Tumor_Sample_Barcode",colnames(fusion))) == 0)
@@ -448,7 +459,7 @@ createbin.fusion <- function(obj, patients, mut.type,cna.binary, SNP.only,includ
 ############# COPY NUMBER MATRIX ###############
 ################################################
 
-createbin.cna <- function(obj, patients, mut.type,cna.binary, SNP.only,include.silent, cna.relax, spe.plat){
+createbin.cna <- function(obj, patients, mut.type,cna.binary, SNP.only,include.silent, cna.relax, specify.plat){
   cna <- obj
   rownames(cna) <- cna[,1]
   cna <- cna[,-1]
@@ -503,7 +514,7 @@ createbin.cna <- function(obj, patients, mut.type,cna.binary, SNP.only,include.s
 }
 
 ### cna from API ###
-createbin.api <- function(obj, patients, mut.type,cna.binary, SNP.only,include.silent, cna.relax, spe.plat){
+createbin.api <- function(obj, patients, mut.type,cna.binary, SNP.only,include.silent, cna.relax, specify.plat){
   cna <- as.data.frame(obj)
 
   # recreate orginal format #

@@ -26,7 +26,7 @@ test_that("missing column error",{
 
 })
 
-# test_that("read in 1000 patients with spe.plat", {
+# test_that("read in 1000 patients with specify.plat", {
 #    mat <- mut %>%
 #     filter(Tumor_Sample_Barcode %in% patients)
 #   plots <- maf.summary(maf = mat)

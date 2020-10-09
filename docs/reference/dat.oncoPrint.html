@@ -98,9 +98,6 @@ Enables creation of a matrix used to generate an OncoPrint heatmap." />
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/API-tutorial.html">API-tutorial</a>
-    </li>
-    <li>
       <a href="../articles/Analizing-genomic-data.html">Analizing genomic data</a>
     </li>
     <li>
@@ -173,7 +170,7 @@ columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see 
     <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>gnomeR</span>)
 <span class='no'>patients</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>as.character</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/unique.html'>unique</a></span>(<span class='no'>mut</span>$<span class='no'>Tumor_Sample_Barcode</span>))
 <span class='no'>bin.mut</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='binmat.html'>binmat</a></span>(<span class='kw'>patients</span> <span class='kw'>=</span> <span class='no'>patients</span>,<span class='kw'>maf</span> <span class='kw'>=</span> <span class='no'>mut</span>,<span class='kw'>mut.type</span> <span class='kw'>=</span> <span class='st'>"SOMATIC"</span>,
-<span class='kw'>SNP.only</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,<span class='kw'>include.silent</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>spe.plat</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+<span class='kw'>SNP.only</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,<span class='kw'>include.silent</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>specify.plat</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
 <span class='no'>gen.dat</span> <span class='kw'>&lt;-</span> <span class='no'>bin.mut</span>[<span class='fl'>1</span>:<span class='fl'>500</span>,
 <span class='fu'><a href='https://rdrr.io/r/base/names.html'>names</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/sort.html'>sort</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/apply.html'>apply</a></span>(<span class='no'>bin.mut</span>,<span class='fl'>2</span>, <span class='no'>sum</span>),<span class='kw'>decreasing</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>))[<span class='fl'>1</span>:<span class='fl'>15</span>]]
 <span class='no'>dat</span> <span class='kw'>&lt;-</span> <span class='fu'>dat.oncoPrint</span>(<span class='no'>gen.dat</span>)

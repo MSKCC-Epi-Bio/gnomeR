@@ -38,12 +38,15 @@ The main purpose of `gnomeR` is to streamline the processing of genomic files pr
 - cna: An optional CNA files. If inputed the outcome will be added to the matrix with columns ending in ".cna", .del" and ".amp" (depending on subsequent arguments).
 - cna.binary: A boolean argument specifying if the cna events should be enforced as binary. In which case separate columns for amplifications and deletions will be created. Default is FALSE in which case columns ending in ".cna" will be added to the output.
 - cna.relax: If cna.binary is TRUE, cna data only enables to count both gains and shallow deletions as amplifications and deletions respectively.
-- spe.plat: boolean specifying if specific IMPACT platforms should be considered. When TRUE NAs will fill the cells for genes of patients that were not sequenced on that plaform. Default is TRUE.
-- set.plat character argument specifying which IMPACT platform the data should be reduced to if spe.plat is set to TRUE. Options are "341" and "410". Default is NULL.
+- specify.plat: boolean specifying if specific IMPACT platforms should be considered. When TRUE NAs will fill the cells for genes of patients that were not sequenced on that plaform. Default is TRUE.
+- set.plat: character argument specifying which IMPACT platform the data should be reduced to if specify.plat is set to TRUE. Options are "341" and "410". Default is NULL.
 - rm.empty: boolean specifying if columns with no events founds should be removed. Default is TRUE.
-- pathway boolean specifying if pathway annotation should be applied. If TRUE, the function will return a supplementary binary dataframe with columns being each pathway and each row being a sample. Default is FALSE.
-- col.names character vector of the necessary columns to be used. By default: col.names = c(Tumor_Sample_Barcode = NULL, Hugo_Symbol = NULL, Variant_Classification = NULL, Mutation_Status = NULL, Variant_Type = NULL)
+- pathway: boolean specifying if pathway annotation should be applied. If TRUE, the function will return a supplementary binary dataframe with columns being each pathway and each row being a sample. Default is FALSE.
+- col.names: character vector of the necessary columns to be used. By default: col.names = c(Tumor_Sample_Barcode = NULL, Hugo_Symbol = NULL, Variant_Classification = NULL, Mutation_Status = NULL, Variant_Type = NULL)
 - oncokb boolean specfiying if maf file should be oncokb annotated. Variants found to be 'Oncogenic' and 'Likely Oncogenic' will be kept. Default is FALSE.
+- oncokb: boolean specfiying if maf file should be oncokb annotated. Default is FALSE.
+- keep_onco A character vector specifying which oncoKB annotated variants to keep. Options are 'Oncogenic', 'Likely Oncogenic', 'Predicted Oncogenic', 'Likely Neutral' and 'Inconclusive'. By default 'Oncogenic', 'Likely Oncogenic' and 'Predicted Oncogenic' variants will be kept (recommended).
+- token: the token affiliated to your oncoKB account.
 
 This function returns a matrix containing all the genetic information with rows as samples and columns as features.
 A warning will be thrown if some samples were found to have no mutations in the MAF file.
@@ -55,9 +58,6 @@ In the follwing sections we will present examples to process each of the datatyp
 ## Mutations
 
 The most commmon type of genetic features used in genomic studies at MSKCC. The IMPACT sequencing panel consist of a curated list of genes that are known to have cancer related properties when altered. You can find a complete list of these genes and which platform they were added on in the `impact_genes` datafile.
-Note that the MAF files provided through the API embedded in this package and the one provided through raw download on the website are slightly different and we will thus present examples using both these datasets.
-
-### Processing raw mutation data
 
 We included in `gnomeR` an example of raw downloaded MAF file directly from the website in the `mut` dataset. We show here an example selecting a random subset of 100 samples in the `mut` dataset:
 
@@ -69,39 +69,16 @@ kable(df[1:10, 1:10])
 ```
 
 Note that by default in the situation above the outputted dataframe is a binary matrix made from all types of mutations and adjusting the features for the platform they were added on. Thus all samples that were sequenced on the original platform have NA's in the cells of for features that were added on subsequent platforms.
-In the case where the user plans on using methods that do not accept missing values, the `spe.plat` argument can be changed to FALSE to replace all the NA's mentioned above to 0. We show below such an example, we moreover make this example including only SNPs (including silent mutations):
+In the case where the user plans on using methods that do not accept missing values, the `specify.plat` argument can be changed to FALSE to replace all the NA's mentioned above to 0. We show below such an example, we moreover make this example including only SNPs (including silent mutations):
 
 ```{r}
-df <- binmat(patients = samples ,maf = mut, SNP.only = TRUE, include.silent = TRUE, spe.plat = FALSE)
+df <- binmat(patients = samples ,maf = mut, SNP.only = TRUE, include.silent = TRUE, specify.plat = FALSE)
 kable(df[1:10, 1:10])
-```
-
-### Processing mutation data from the API
-
-In this section we show the same examples as above but using the data downloaded through the API:
-
-```{r, results="hide"}
-# samples.tcga <- tcga_samples$patient_id[1:50]
-# dat <- get_genetics(sample_ids = samples.tcga, database = 'tcga', fusions = FALSE, cna = FALSE)
-# df <- binmat(maf = dat$mut)
-```
-
-```{r}
-# kable(df[1:10, 1:10])
-```
-
-Similarly,
-
-```{r}
-# df <- binmat(maf = dat$mut, SNP.only = TRUE, include.silent = TRUE, spe.plat = FALSE)
-# kable(df[1:10, 1:10])
 ```
 
 ## Fusions
 
 Fusions are a particular genetic event where two genes merge to create a fusion gene which is a hybrid gene formed from the two previously independent genes. It can occur as a result of translocation, interstitial deletion, or chromosomal inversion. In IMPACT datasets these can be found either in their own file or aggregated in the MAF file for mutations. In general the file containing the fusions will be very similar to a MAF file, explaining why they may be found together. We show here how to process these alterations in both cases listed above. Note that fusions are particularly rare events and thus the resulting data is very sparse.
-
-### Processing raw fusion data
 
 We included in `gnomeR` an example of raw downloaded MAF file directly from the website in the `fusion` dataset. We show here an example selecting the same random subset of 100 samples as in the previous section:
 
@@ -111,32 +88,19 @@ df <- binmat(patients = samples ,fusion = fusion)
 kable(df[1:10, 1:10])
 ```
 
-### Processing fusions from the API
-
-In the API provided in `gnomeR` the fusion data comes merged with the mutation data. Note that we included an option to automatically filter them out if the user wishes so.
-
-```{r, results="hide"}
-# dat <- get_genetics(sample_ids = samples.tcga, database = 'tcga',mutations = FALSE, fusions = TRUE, cna = FALSE)
-# df <- binmat(maf = dat$mut)
-```
-
-```{r}
-# kable(df[1:10, 1:10])
-```
-
-Similarly to the mutation data the fusions are affected by the `spe.plat` and `set.plat` arguments as well.
+Similarly to the mutation data the fusions are affected by the `specify.plat` and `set.plat` arguments as well.
 
 
 ## Copy-number alterations (CNA)
 
-The final type of data we have left to cover are CNAs. This a phenomenon in which sections of the genome are repeated and the number of repeats in the genome varies between individuals. Copy number variation is a type of structural variation: specifically, it is a type of duplication or deletion event that affects a considerable number of base pairs. We will show in this section how to process CNA from IMPACT data. Once again we include an example dataset, `cna` in `gnomeR`. We will show in this section how to process raw CNA data and CNA data from the API.
+The final type of data we have left to cover are CNAs. This a phenomenon in which sections of the genome are repeated and the number of repeats in the genome varies between individuals. Copy number variation is a type of structural variation: specifically, it is a type of duplication or deletion event that affects a considerable number of base pairs. We will show in this section how to process CNA from IMPACT data. Once again we include an example dataset, `cna` in `gnomeR`.
 
 The processing function for CNA is affected by two additional arguments:
 
 - `cna.binary`: boolean declaring if the CNA data should be segregated between amplification and deletions or kept as factor variable with its original levels
 - `cna.relax`: a boolean declaring if only deep deletions and full amplifications should be annotated in the case where `cna.binary` is set to FALSE. 
 
-Note that the `spe.plat` and `set.plat` also affect CNA.
+Note that the `specify.plat` and `set.plat` also affect CNA.
 
 ### Processing raw CNA data
 
@@ -154,25 +118,11 @@ df <- binmat(patients = samples, cna = cna, cna.binary = FALSE)
 kable(df[1:10, 1:10])
 ```
 
-
-### Processing CNA data from the API
-
-Setting the `cna` argument to TRUE in the `get_genetics()` function will retrieve the CNA data for the specified samples that can then further be processed in a similar fashion to the above:
-
-```{r, results="hide"}
-# dat <- get_genetics(sample_ids = samples.tcga, database = 'tcga',mutations = FALSE, fusions = FALSE, cna = TRUE)
-# df <- binmat(cna = dat$cna)
-```
-
-```{r}
-# kable(df[1:10, 1:10])
-```
-
 Setting `cna.binary` argument to FALSE yields the following events coded in a single column with their original levels:
 
 ```{r}
-# df <- binmat(patients = samples, cna = dat$cna,cna.binary = FALSE)
-# kable(df[1:10, 1:10])
+df <- binmat(patients = samples, cna = cna,cna.binary = FALSE)
+kable(df[1:10, 1:10])
 ```
 
 ## Processing full genetic profiles for samples
@@ -187,22 +137,6 @@ Once again we show how to perform this using the files directly downloaded from 
 df <- binmat(patients = samples,maf = mut, fusion = fusion, cna = cna, cna.binary = FALSE)
 kable(df[1:10, c(1:3,243,244,300:305)])
 ```
-
-
-### From the API
-
-Similarly we get retrieve all the genetic events at once through the `get_genetics()` function and proceed to process them.
-
-```{r, results="hide"}
-# dat <- get_genetics(sample_ids = samples.tcga, database = 'tcga',mutations = TRUE, fusions = TRUE, cna = TRUE)
-# df <- binmat(maf = dat$mut, cna = dat$cna,cna.binary = FALSE)
-```
-
-```{r}
-# kable(df[1:10, c(1:3,243,244,300:305)])
-```
-
-Note that here the fusions are embedded in the mutation file.
 
 
 # Pathway level alterations
@@ -226,7 +160,7 @@ In particular problems it may be of interest of creating pathways customized to 
 pathway <- as.data.frame(cbind(c("PIK3CA","KRAS","TERT","TP53"),
                                c("path1","path1","path2","path3")))
 pathway_dat <- custom_pathway(mat = df$mut, pathway = pathway)
-kable(pathway_dat[1:5,])
+kable(pathway_dat[1:10,],row.names = T)
 ```
 
 # OncoKB annotation 

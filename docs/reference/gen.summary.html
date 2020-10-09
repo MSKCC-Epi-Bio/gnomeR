@@ -97,9 +97,6 @@ are dichotomized at their median." />
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/API-tutorial.html">API-tutorial</a>
-    </li>
-    <li>
       <a href="../articles/Analizing-genomic-data.html">Analizing genomic data</a>
     </li>
     <li>
@@ -233,8 +230,14 @@ Default is 0 (all features included).</p></td>
 #&gt; ATM    1.00e+00  0.41  2.47
 #&gt; APC    1.00e+00  0.46  2.06
 #&gt; 
-#&gt; $forest.plot</div><div class='img'><img src='gen.summary-1.png' alt='' width='700' height='433' /></div><div class='output co'>#&gt; 
-#&gt; $vPlot</div><div class='img'><img src='gen.summary-2.png' alt='' width='700' height='433' /></div><div class='output co'>#&gt; </div><div class='input'><span class='co'>## Continuous outcome ##</span>
+#&gt; $forest.plot</div><div class='output co'>#&gt; 
+#&gt; $vPlot</div><div class='output co'>#&gt; <span class='message'>No trace type specified:</span>
+#&gt; <span class='message'>  Based on info supplied, a 'scatter' trace seems appropriate.</span>
+#&gt; <span class='message'>  Read more about this trace type -&gt; https://plot.ly/r/reference/#scatter</span></div><div class='output co'>#&gt; <span class='warning'>Warning: `arrange_()` is deprecated as of dplyr 0.7.0.</span>
+#&gt; <span class='warning'>Please use `arrange()` instead.</span>
+#&gt; <span class='warning'>See vignette('programming') for more help</span>
+#&gt; <span class='warning'><span style='color: #555555;'>This warning is displayed once every 8 hours.</span><span></span>
+#&gt; <span class='warning'></span><span style='color: #555555;'>Call `lifecycle::last_warnings()` to see where this warning was generated.</span><span></span></div><div class='img'><img src='gen.summary-1.png' alt='' width='700' height='433' /></div><div class='output co'>#&gt; </div><div class='input'><span class='co'>## Continuous outcome ##</span>
 <span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span>(<span class='fl'>1</span>)
 <span class='no'>outcome</span> <span class='kw'>&lt;-</span>  <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span>(<span class='kw'>n</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span>(<span class='no'>gen.dat</span>))
 <span class='no'>tab.out</span> <span class='kw'>&lt;-</span> <span class='fu'>gen.summary</span>(<span class='kw'>gen.dat</span> <span class='kw'>=</span> <span class='no'>gen.dat</span>,
@@ -260,11 +263,7 @@ Default is 0 (all features included).</p></td>
 #&gt; FAT1    0.05765920 0.19219623 0.76431286   0.06126915 0.8120824
 #&gt; NOTCH1  0.03600625 0.20270690 0.85909483   0.05470460 0.8590948</div><div class='input'><span class='no'>tab.out</span>$<span class='no'>vPlot</span></div><div class='output co'>#&gt; <span class='message'>No trace type specified:</span>
 #&gt; <span class='message'>  Based on info supplied, a 'scatter' trace seems appropriate.</span>
-#&gt; <span class='message'>  Read more about this trace type -&gt; https://plot.ly/r/reference/#scatter</span></div><div class='output co'>#&gt; <span class='warning'>Warning: `arrange_()` is deprecated as of dplyr 0.7.0.</span>
-#&gt; <span class='warning'>Please use `arrange()` instead.</span>
-#&gt; <span class='warning'>See vignette('programming') for more help</span>
-#&gt; <span class='warning'><span style='color: #555555;'>This warning is displayed once every 8 hours.</span><span></span>
-#&gt; <span class='warning'></span><span style='color: #555555;'>Call `lifecycle::last_warnings()` to see where this warning was generated.</span><span></span></div><div class='output co'>#&gt; <span class='warning'>Warning: `line.width` does not currently support multiple values.</span></div></span></pre>
+#&gt; <span class='message'>  Read more about this trace type -&gt; https://plot.ly/r/reference/#scatter</span></div><div class='output co'>#&gt; <span class='warning'>Warning: `line.width` does not currently support multiple values.</span></div><div class='output co'>#&gt; <span class='warning'>Warning: minimal value for n is 3, returning requested palette with 3 different levels</span></div><div class='output co'>#&gt; <span class='warning'>Warning: minimal value for n is 3, returning requested palette with 3 different levels</span></div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

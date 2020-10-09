@@ -98,9 +98,6 @@ Enables creation of a custom pathway binary matrix from a binmat() `object`" />
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/API-tutorial.html">API-tutorial</a>
-    </li>
-    <li>
       <a href="../articles/Analizing-genomic-data.html">Analizing genomic data</a>
     </li>
     <li>
@@ -173,7 +170,7 @@ pathway</p></td>
     <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>gnomeR</span>)
 <span class='no'>patients</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>as.character</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/unique.html'>unique</a></span>(<span class='no'>mut</span>$<span class='no'>Tumor_Sample_Barcode</span>))[<span class='fl'>1</span>:<span class='fl'>200</span>]
 <span class='no'>bin.mut</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='binmat.html'>binmat</a></span>(<span class='kw'>patients</span> <span class='kw'>=</span> <span class='no'>patients</span>,<span class='kw'>maf</span> <span class='kw'>=</span> <span class='no'>mut</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: All samples were sequenced on the same platform.</span>
-#&gt; <span class='warning'>              The spe.plat argument has been overwritten to FALSE.</span></div><div class='input'><span class='no'>pathway</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/as.data.frame.html'>as.data.frame</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>cbind</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"PIK3CA"</span>,<span class='st'>"KRAS"</span>,<span class='st'>"TERT"</span>,<span class='st'>"TP53"</span>),<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"path1"</span>,<span class='st'>"path1"</span>,<span class='st'>"path2"</span>,<span class='st'>"path3"</span>)))
+#&gt; <span class='warning'>              The specify.plat argument has been overwritten to FALSE.</span></div><div class='input'><span class='no'>pathway</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/as.data.frame.html'>as.data.frame</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>cbind</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"PIK3CA"</span>,<span class='st'>"KRAS"</span>,<span class='st'>"TERT"</span>,<span class='st'>"TP53"</span>),<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"path1"</span>,<span class='st'>"path1"</span>,<span class='st'>"path2"</span>,<span class='st'>"path3"</span>)))
 <span class='fu'>custom_pathway</span>(<span class='kw'>mat</span> <span class='kw'>=</span> <span class='no'>bin.mut</span>, <span class='kw'>pathway</span> <span class='kw'>=</span> <span class='no'>pathway</span>)</div><div class='output co'>#&gt;                   path1 path2 path3
 #&gt; P-0000062-T01-IM3     0     0     1
 #&gt; P-0000065-T01-IM3     1     1     0

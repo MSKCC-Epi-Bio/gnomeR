@@ -191,3 +191,47 @@
 #'     \item{Cancer_Code}{Cancer site following TCGA abbreviations}
 #'     }
 "tcga_samples"
+
+
+#' Intervals sequenced in 341 panel
+#'
+#' List of the genes and their corresponding positions sequenced in the targeted panel of IMPACT containing 341 genes.
+#'
+#' @format A data frame with 6360 lines
+#' \describe{
+#'     \item{V1}{Chromosome}
+#'     \item{V2}{Start position}
+#'     \item{V3}{End position}
+#'     \item{V4}{Strand}
+#'     \item{V5}{Interval name}
+#'     }
+"ti_341"
+
+#' Intervals sequenced in 410 panel
+#'
+#' List of the genes and their corresponding positions sequenced in the targeted panel of IMPACT containing 410 genes.
+#'
+#' @format A data frame with 7016 lines
+#' \describe{
+#'     \item{V1}{Chromosome}
+#'     \item{V2}{Start position}
+#'     \item{V3}{End position}
+#'     \item{V4}{Strand}
+#'     \item{V5}{Interval name}
+#'     }
+"ti_410"
+
+
+#' Intervals sequenced in 468 panel
+#'
+#' List of the genes and their corresponding positions sequenced in the targeted panel of IMPACT containing 468 genes.
+#'
+#' @format A data frame with 7872 lines
+#' \describe{
+#'     \item{V1}{Chromosome}
+#'     \item{V2}{Start position}
+#'     \item{V3}{End position}
+#'     \item{V4}{Strand}
+#'     \item{V5}{Interval name}
+#'     }
+"ti_468"

@@ -101,9 +101,6 @@ a predefined list of patients (rows are patients and columns are genes)" />
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/API-tutorial.html">API-tutorial</a>
-    </li>
-    <li>
       <a href="../articles/Analizing-genomic-data.html">Analizing genomic data</a>
     </li>
     <li>
@@ -164,13 +161,14 @@ a predefined list of patients (rows are patients and columns are genes)</p>
   <span class='kw'>cna</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>cna.binary</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
   <span class='kw'>cna.relax</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>spe.plat</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='kw'>specify.plat</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
   <span class='kw'>set.plat</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>rm.empty</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
   <span class='kw'>pathway</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
   <span class='kw'>col.names</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='kw'>Tumor_Sample_Barcode</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>Hugo_Symbol</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>Variant_Classification</span>
     <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>Mutation_Status</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>Variant_Type</span> <span class='kw'>=</span> <span class='kw'>NULL</span>),
   <span class='kw'>oncokb</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>keep_onco</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"Oncogenic"</span>, <span class='st'>"Likely Oncogenic"</span>, <span class='st'>"Predicted Oncogenic"</span>),
   <span class='kw'>token</span> <span class='kw'>=</span> <span class='st'>""</span>,
   <span class='no'>...</span>
 )</pre>
@@ -221,14 +219,14 @@ amplifications and deletions will be created.</p></td>
       <td><p>for cna data only enables to count both gains and shallow deletions as amplifications and deletions respectively.</p></td>
     </tr>
     <tr>
-      <th>spe.plat</th>
+      <th>specify.plat</th>
       <td><p>boolean specifying if specific IMPACT platforms should be considered. When TRUE NAs will fill the cells for genes
 of patients that were not sequenced on that plaform. Default is TRUE.</p></td>
     </tr>
     <tr>
       <th>set.plat</th>
-      <td><p>character argument specifying which IMPACT platform the data should be reduced to if spe.plat is set to TRUE.
-Options are "341", "410" and "468". Default is NULL.</p></td>
+      <td><p>character argument specifying which IMPACT platform the data should be reduced to if specify.plat is set to TRUE.
+Options are "341" and "410". Default is NULL.</p></td>
     </tr>
     <tr>
       <th>rm.empty</th>
@@ -246,8 +244,13 @@ Hugo_Symbol = NULL, Variant_Classification = NULL, Mutation_Status = NULL, Varia
     </tr>
     <tr>
       <th>oncokb</th>
-      <td><p>boolean specfiying if maf file should be oncokb annotated. Variants found to be 'Oncogenic'
-and 'Likely Oncogenic' will be kept. Default is FALSE.</p></td>
+      <td><p>boolean specfiying if maf file should be oncokb annotated. Default is FALSE.</p></td>
+    </tr>
+    <tr>
+      <th>keep_onco</th>
+      <td><p>A character vector specifying which oncoKB annotated variants to keep. Options are
+'Oncogenic', 'Likely Oncogenic', 'Predicted Oncogenic', 'Likely Neutral' and 'Inconclusive'. By default
+'Oncogenic', 'Likely Oncogenic' and 'Predicted Oncogenic' variants will be kept (recommended).</p></td>
     </tr>
     <tr>
       <th>token</th>
@@ -269,11 +272,11 @@ and 'Likely Oncogenic' will be kept. Default is FALSE.</p></td>
 <span class='no'>patients</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>as.character</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/unique.html'>unique</a></span>(<span class='no'>mut</span>$<span class='no'>Tumor_Sample_Barcode</span>))[<span class='fl'>1</span>:<span class='fl'>200</span>]
 <span class='no'>bin.mut</span> <span class='kw'>&lt;-</span> <span class='fu'>binmat</span>(<span class='kw'>patients</span> <span class='kw'>=</span> <span class='no'>patients</span>,<span class='kw'>maf</span> <span class='kw'>=</span> <span class='no'>mut</span>,
 <span class='kw'>mut.type</span> <span class='kw'>=</span> <span class='st'>"SOMATIC"</span>,<span class='kw'>SNP.only</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-<span class='kw'>include.silent</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>spe.plat</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+<span class='kw'>include.silent</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>specify.plat</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
 <span class='no'>bin.mut</span> <span class='kw'>&lt;-</span> <span class='fu'>binmat</span>(<span class='kw'>patients</span> <span class='kw'>=</span> <span class='no'>patients</span>,<span class='kw'>maf</span> <span class='kw'>=</span> <span class='no'>mut</span>,
 <span class='kw'>mut.type</span> <span class='kw'>=</span> <span class='st'>"SOMATIC"</span>,<span class='kw'>SNP.only</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
 <span class='kw'>include.silent</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-<span class='kw'>cna.relax</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>spe.plat</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+<span class='kw'>cna.relax</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>specify.plat</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
  <span class='kw'>set.plat</span> <span class='kw'>=</span> <span class='st'>"410"</span>, <span class='kw'>rm.empty</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

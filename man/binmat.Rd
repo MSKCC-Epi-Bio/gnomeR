@@ -16,7 +16,7 @@ binmat(
   cna = NULL,
   cna.binary = TRUE,
   cna.relax = FALSE,
-  spe.plat = TRUE,
+  specify.plat = TRUE,
   set.plat = NULL,
   rm.empty = TRUE,
   pathway = FALSE,
@@ -53,10 +53,10 @@ amplifications and deletions will be created.}
 
 \item{cna.relax}{for cna data only enables to count both gains and shallow deletions as amplifications and deletions respectively.}
 
-\item{spe.plat}{boolean specifying if specific IMPACT platforms should be considered. When TRUE NAs will fill the cells for genes
+\item{specify.plat}{boolean specifying if specific IMPACT platforms should be considered. When TRUE NAs will fill the cells for genes
 of patients that were not sequenced on that plaform. Default is TRUE.}
 
-\item{set.plat}{character argument specifying which IMPACT platform the data should be reduced to if spe.plat is set to TRUE.
+\item{set.plat}{character argument specifying which IMPACT platform the data should be reduced to if specify.plat is set to TRUE.
 Options are "341" and "410". Default is NULL.}
 
 \item{rm.empty}{boolean specifying if columns with no events founds should be removed. Default is TRUE.}
@@ -91,10 +91,10 @@ library(gnomeR)
 patients <- as.character(unique(mut$Tumor_Sample_Barcode))[1:200]
 bin.mut <- binmat(patients = patients,maf = mut,
 mut.type = "SOMATIC",SNP.only = FALSE,
-include.silent = FALSE, spe.plat = FALSE)
+include.silent = FALSE, specify.plat = FALSE)
 bin.mut <- binmat(patients = patients,maf = mut,
 mut.type = "SOMATIC",SNP.only = FALSE,
 include.silent = FALSE,
-cna.relax = TRUE, spe.plat = FALSE,
+cna.relax = TRUE, specify.plat = FALSE,
  set.plat = "410", rm.empty = FALSE)
 }
