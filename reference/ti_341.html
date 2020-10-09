@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>IMPACT Gene Meta Data — impact_gene_info • gnomeR</title>
+<title>Intervals sequenced in 341 panel — ti_341 • gnomeR</title>
 
 
 <!-- jquery -->
@@ -39,9 +39,8 @@
 
 
 
-<meta property="og:title" content="IMPACT Gene Meta Data — impact_gene_info" />
-<meta property="og:description" content="Dataframe labeling all genes found in IMPACT along with their corresponding
-platform and Entrez ID." />
+<meta property="og:title" content="Intervals sequenced in 341 panel — ti_341" />
+<meta property="og:description" content="List of the genes and their corresponding positions sequenced in the targeted panel of IMPACT containing 341 genes." />
 
 
 
@@ -133,41 +132,29 @@ platform and Entrez ID." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>IMPACT Gene Meta Data</h1>
+    <h1>Intervals sequenced in 341 panel</h1>
     <small class="dont-index">Source: <a href='https://github.com/AxelitoMartin/gnomeR/blob/master/R/data.R'><code>R/data.R</code></a></small>
-    <div class="hidden name"><code>impact_gene_info.Rd</code></div>
+    <div class="hidden name"><code>ti_341.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Dataframe labeling all genes found in IMPACT along with their corresponding
-platform and Entrez ID.</p>
+    <p>List of the genes and their corresponding positions sequenced in the targeted panel of IMPACT containing 341 genes.</p>
     </div>
 
-    <pre class="usage"><span class='va'>impact_gene_info</span></pre>
+    <pre class="usage"><span class='va'>ti_341</span></pre>
 
 
     <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
 
-    <p>A data frame with 574 observations and 3 variables</p><dl>
-  <dt>hugo_symbol</dt><dd><p>Factor w/ 574 levels,
-   Column containing all HUGO symbols genes included in IMPACT</p></dd>
-  <dt>entrez_gene_id</dt><dd><p>Integer, contains all Entrez IDs for genes included in IMPACT</p></dd>
-  <dt>platform_added</dt><dd><p>Character, indicates platform at which each gene was added.
-  Options are `341`, `410`, `468`</p></dd>
-  <dt>platform_341</dt><dd><p>Character, indicates whether each gene was included in
-  IMPACT platform 341. Options are `included` and `not included`</p></dd>
-  <dt>platform_410</dt><dd><p>Character, indicates whether each gene was included in
-  IMPACT platform 410. Options are `included` and `not included`</p></dd>
-  <dt>platform_468</dt><dd><p>Character, indicates whether each gene was included in
-  IMPACT platform 468. Options are `included` and `not included`</p></dd>
-  <dt>pathway</dt><dd><p>Character, indicates whether each gene belongs to one of the pathways
-  defined in Oncogenic Signaling Pathways in The Cancer Genome Atlas`</p></dd>
-
+    <p>A data frame with 6360 lines</p><dl>
+    <dt>V1</dt><dd><p>Chromosome</p></dd>
+    <dt>V2</dt><dd><p>Start position</p></dd>
+    <dt>V3</dt><dd><p>End position</p></dd>
+    <dt>V4</dt><dd><p>Strand</p></dd>
+    <dt>V5</dt><dd><p>Interval name</p></dd>
+    
 </dl>
 
-    <h2 class="hasAnchor" id="source"><a class="anchor" href="#source"></a>Source</h2>
-
-    <p><a href='https://cbioportal.mskcc.org/'>https://cbioportal.mskcc.org/</a></p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

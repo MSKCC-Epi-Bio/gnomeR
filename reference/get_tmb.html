@@ -6,7 +6,9 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>IMPACT Gene Meta Data — impact_gene_info • gnomeR</title>
+<title>get_tmb
+Function to calculate the tumor mutation burden of individual patients in a MAF file. Note that this can only be applied to
+samples sequenced using one of the IMPACT panels. Other samples will be annotated as missing. — get_tmb • gnomeR</title>
 
 
 <!-- jquery -->
@@ -39,9 +41,12 @@
 
 
 
-<meta property="og:title" content="IMPACT Gene Meta Data — impact_gene_info" />
-<meta property="og:description" content="Dataframe labeling all genes found in IMPACT along with their corresponding
-platform and Entrez ID." />
+<meta property="og:title" content="get_tmb
+Function to calculate the tumor mutation burden of individual patients in a MAF file. Note that this can only be applied to
+samples sequenced using one of the IMPACT panels. Other samples will be annotated as missing. — get_tmb" />
+<meta property="og:description" content="get_tmb
+Function to calculate the tumor mutation burden of individual patients in a MAF file. Note that this can only be applied to
+samples sequenced using one of the IMPACT panels. Other samples will be annotated as missing." />
 
 
 
@@ -133,42 +138,65 @@ platform and Entrez ID." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>IMPACT Gene Meta Data</h1>
-    <small class="dont-index">Source: <a href='https://github.com/AxelitoMartin/gnomeR/blob/master/R/data.R'><code>R/data.R</code></a></small>
-    <div class="hidden name"><code>impact_gene_info.Rd</code></div>
+    <h1>get_tmb
+Function to calculate the tumor mutation burden of individual patients in a MAF file. Note that this can only be applied to
+samples sequenced using one of the IMPACT panels. Other samples will be annotated as missing.</h1>
+    <small class="dont-index">Source: <a href='https://github.com/AxelitoMartin/gnomeR/blob/master/R/get_tmb.R'><code>R/get_tmb.R</code></a></small>
+    <div class="hidden name"><code>get_tmb.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Dataframe labeling all genes found in IMPACT along with their corresponding
-platform and Entrez ID.</p>
+    <p>get_tmb
+Function to calculate the tumor mutation burden of individual patients in a MAF file. Note that this can only be applied to
+samples sequenced using one of the IMPACT panels. Other samples will be annotated as missing.</p>
     </div>
 
-    <pre class="usage"><span class='va'>impact_gene_info</span></pre>
+    <pre class="usage"><span class='fu'>get_tmb</span><span class='op'>(</span>
+  patients <span class='op'>=</span> <span class='cn'>NULL</span>,
+  maf <span class='op'>=</span> <span class='cn'>NULL</span>,
+  mut.type <span class='op'>=</span> <span class='st'>"SOMATIC"</span>,
+  col.names <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span>Tumor_Sample_Barcode <span class='op'>=</span> <span class='cn'>NULL</span>, Hugo_Symbol <span class='op'>=</span> <span class='cn'>NULL</span>, Variant_Classification
+    <span class='op'>=</span> <span class='cn'>NULL</span>, Mutation_Status <span class='op'>=</span> <span class='cn'>NULL</span>, Variant_Type <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span>,
+  <span class='va'>...</span>
+<span class='op'>)</span></pre>
 
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>patients</th>
+      <td><p>a character vector that let's the user specify the patients to be used to create the matrix.
+Default is NULL is which case all patients in the MAF file will be used.</p></td>
+    </tr>
+    <tr>
+      <th>maf</th>
+      <td><p>A MAF file of interest.</p></td>
+    </tr>
+    <tr>
+      <th>mut.type</th>
+      <td><p>The mutation type to be used. Options are "SOMATIC", "GERMLINE" or "ALL". Note "ALL" will
+keep all mutations regardless of status (not recommended). Default is SOMATIC.</p></td>
+    </tr>
+    <tr>
+      <th>col.names</th>
+      <td><p>character vector of the necessary columns to be used. By default: col.names = c(Tumor_Sample_Barcode = NULL,
+Hugo_Symbol = NULL, Variant_Classification = NULL, Mutation_Status = NULL, Variant_Type = NULL).</p></td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td><p>Further arguments passed belonging to the binmat function.</p></td>
+    </tr>
+    </table>
 
-    <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A data frame with 574 observations and 3 variables</p><dl>
-  <dt>hugo_symbol</dt><dd><p>Factor w/ 574 levels,
-   Column containing all HUGO symbols genes included in IMPACT</p></dd>
-  <dt>entrez_gene_id</dt><dd><p>Integer, contains all Entrez IDs for genes included in IMPACT</p></dd>
-  <dt>platform_added</dt><dd><p>Character, indicates platform at which each gene was added.
-  Options are `341`, `410`, `468`</p></dd>
-  <dt>platform_341</dt><dd><p>Character, indicates whether each gene was included in
-  IMPACT platform 341. Options are `included` and `not included`</p></dd>
-  <dt>platform_410</dt><dd><p>Character, indicates whether each gene was included in
-  IMPACT platform 410. Options are `included` and `not included`</p></dd>
-  <dt>platform_468</dt><dd><p>Character, indicates whether each gene was included in
-  IMPACT platform 468. Options are `included` and `not included`</p></dd>
-  <dt>pathway</dt><dd><p>Character, indicates whether each gene belongs to one of the pathways
-  defined in Oncogenic Signaling Pathways in The Cancer Genome Atlas`</p></dd>
+    <p>TMB A single column dataframe containing the calculated tumor mutation burden of all samples specified adjusted
+ for the IMPACT panel used for sequencing.</p>
 
-</dl>
-
-    <h2 class="hasAnchor" id="source"><a class="anchor" href="#source"></a>Source</h2>
-
-    <p><a href='https://cbioportal.mskcc.org/'>https://cbioportal.mskcc.org/</a></p>
-
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/AxelitoMartin/gnomeR'>gnomeR</a></span><span class='op'>)</span>
+<span class='va'>TMB</span> <span class='op'>&lt;-</span> <span class='fu'>get_tmb</span><span class='op'>(</span>maf <span class='op'>=</span> <span class='va'>mut</span><span class='op'>)</span>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
