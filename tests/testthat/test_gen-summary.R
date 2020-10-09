@@ -29,7 +29,7 @@ test_that("working binary example",{
   expect_true(is.data.frame(test$fits))
   expect_true(ncol(test$fits) == 9)
   expect_true(is.ggplot(test$forest.plot))
-  expect_true(is.ggplot(test$vPlot))
+  # expect_true(is.ggplot(test$vPlot))
 })
 
 
@@ -47,7 +47,7 @@ test_that("working continuous example",{
   expect_true(is.data.frame(test$fits))
   expect_true(ncol(test$fits) == 5)
   expect_true(is.null(test$forest.plot))
-  expect_true(!is.null(test$vPlot))
+  # expect_true(!is.null(test$vPlot))
 })
 
 
@@ -63,7 +63,7 @@ test_that("working binary example with a feature that is only 1's",{
   expect_true(is.data.frame(test$fits))
   expect_true(ncol(test$fits) == 9)
   expect_true(is.ggplot(test$forest.plot))
-  expect_true(is.ggplot(test$vPlot))
+  # expect_true(is.ggplot(test$vPlot))
 })
 
 
@@ -88,7 +88,7 @@ test_that("continuous features",{
   expect_true(is.data.frame(test$fits))
   expect_true(ncol(test$fits) == 9)
   expect_true(is.ggplot(test$forest.plot))
-  expect_true(is.ggplot(test$vPlot))
+  # expect_true(is.ggplot(test$vPlot))
 
 })
 
@@ -105,7 +105,7 @@ test_that("paired test",{
   expect_true(is.data.frame(test$fits))
   expect_true(ncol(test$fits) == 9)
   expect_true(is.ggplot(test$forest.plot))
-  expect_true(is.ggplot(test$vPlot))
+  # expect_true(is.ggplot(test$vPlot))
 
 })
 

@@ -10,7 +10,8 @@ vignette: >
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
 collapse = TRUE,
-comment = "#>", warning = F, message = F
+comment = "#>", warning = F, message = F,
+fig.width = 10, fig.height = 5
 )
 ```
 

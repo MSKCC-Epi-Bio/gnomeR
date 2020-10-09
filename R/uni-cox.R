@@ -160,8 +160,9 @@ uni.cox <- function(X,surv.dat,surv.formula,filter = 0,genes = NULL){
     )
   uniVolcano <- plot_ly(data = uni, x = ~Coefficient, y = ~-log10(Pvalue),
                         text = ~paste('Feature :',Feature,
-                                      '<br> Hazard Ratio :',HR),
-                        mode = "markers",size = ~MutationFrequency,color = ~MutationFrequency) %>%
+                                      '<br> Hazard Ratio :',HR,
+                                      '<br> Mutation Frequency :',MutationFrequency),
+                        mode = "markers",color = ~ifelse(.data$FDR <= 0.05,"red","blue")) %>%
     layout(title ="Volcano Plot")
 
 

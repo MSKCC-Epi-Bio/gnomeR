@@ -1,5 +1,6 @@
 ---
 output: github_document
+always_allow_html: true
 ---
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
@@ -16,6 +17,7 @@ knitr::opts_chunk$set(
 library(gnomeR)
 library(knitr)
 library(dplyr)
+library(gt)
 ```
 
 # gnomeR
@@ -27,18 +29,30 @@ library(dplyr)
 
 the `gnomeR` package provides a consistent framework for genetic data processing, visualization and analysis. This is primarily targeted to IMPACT datasets but can also be applied to any genomic data provided by CbioPortal. 
 
-  - [**Dowloading and gathering data from CbioPortal**](https://axelitomartin.github.io/gnomeR/articles/API-tutorial.html) through an integrated API using simply the sample IDs of the samples of interests or the name of the study to retrive all samples in that study. 
+  - [**Dowloading and gathering data from CbioPortal**](https://github.com/karissawhiting/cbioportalr) through an integrated API using simply the sample IDs of the samples of interests or the name of the study to retrive all samples in that study. A separate package `cbioportalr` was developed independently.
   - [**Processing genomic data**](https://axelitomartin.github.io/gnomeR/articles/Data-processing.html) retrieved for mutations (MAF file), fusions (MAF file) and copy-number alterations (and when available segmentation files) into an analysis ready format. 
   - [**Visualization of the processed data**](https://axelitomartin.github.io/gnomeR/articles/Visualizations.html) provided through MAF file summaries, OncoPrints and heatmaps.
   - [**Analyzing the processed data**](https://axelitomartin.github.io/gnomeR/articles/Analizing-genomic-data.html) for association with binary, continuous and survival outcome. Including further visualiztion to improve understanding of the results. 
   
 ## Installation
 
-You can install the development version from [GitHub](https://github.com/) with:
+You can install `gnomeR` from [GitHub](https://github.com/) with:
 
 ``` r
 # install.packages("devtools")
 devtools::install_github("AxelitoMartin/gnomeR")
+```
+
+Similarly for those who wish to explore the development version of `gnomeR`:
+
+``` r
+devtools::install_github("AxelitoMartin/gnomeR", ref = "development")
+```
+
+Along with its companion package for cbioPortal data download:
+
+``` r
+devtools::install_github("karissawhiting/cbioportalr")
 ```
 
 ## Examples
@@ -70,6 +84,8 @@ get_cbioportal_token()
 Now that the Cbioportal API is set up in your environment, you must first specify the database of interest (IMPACT or TCGA are the two available options). Following this one can either sepcify the samples or study of interest:
 
 ```{r, eval = F}
+library(gnomeR)
+library(cbioportalr)
 ids <- as.character(unique(mut$Tumor_Sample_Barcode)[1:100])
 df <- get_genetics(sample_ids = ids,database = "msk_impact",
                        mutations = TRUE, fusions = TRUE, cna = TRUE)
@@ -92,7 +108,7 @@ set.seed(123)
 patients <- as.character(unique(mut$Tumor_Sample_Barcode))[sample(1:length(unique(mut$Tumor_Sample_Barcode)), 100, replace=FALSE)]
 
 gen.dat <- binmat(patients = patients, maf = mut, fusion = fusion, cna = cna)
-kable(gen.dat[1:10,1:10],row.names = T)
+gt(gen.dat[1:10,1:10],rownames_to_stub = TRUE)
 ```
 
 ### Visualization 
@@ -133,7 +149,7 @@ In this section we will quickly overview the possible analysis in gnomeR.
 
 #### Binary and continuous outcomes
 
-The `gen.summary()` function let's the user perform a large scale association between the genomic features present in the `binat()` function output and an outcome of choice:
+The `gen.summary()` function let's the user perform a large scale association between the genomic features present in the `binmat()` function output and an outcome of choice:
 
 - binary (unpaired test using Fisher's exact test and paired test using McNemmar's exact test)
 - continuous (using simple linear regression)
@@ -141,14 +157,14 @@ The `gen.summary()` function let's the user perform a large scale association be
 ```{r}
 outcome <- factor(rbinom(n = length(patients),size = 1,prob = 1/2),levels = c("0","1"))
 out <- gen.summary(gen.dat = gen.dat,outcome = outcome,filter = 0.05)
-kable(out$fits[1:10,],row.names = T)
+gt(out$fits[1:10,],rownames_to_stub = TRUE)
 out$forest.plot
 out$vPlot
 ```
 
 #### Survival analysis 
 
-##### Univariate 
+Similarly we include simple tools to perform univariate Cox's proportional regression adjusted for false discovery rate in the `uni.cox()` function.
 
 ```{r}
 time <- rexp(length(patients))
@@ -159,3 +175,8 @@ kable(out$tab[1:10,],row.names = T)
 # out$p
 out$KM[[1]]
 ```
+
+### Further analytical tools
+
+The primary goal of `gnomeR` not being in depth analysis of genomic data but rather reliable, modulable and reproducible framework for processing various types of genomic data. For users interested in large scale genomic analytical methods we compiled various packages developed by Memorial Sloan-Kettering Cancer Center employees under an umbrella R package, [gnomeVerse](https://github.com/AxelitoMartin/genomeVerse).
+
