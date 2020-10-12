@@ -110,15 +110,12 @@
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
 <p>You can install <code>gnomeR</code> from <a href="https://github.com/">GitHub</a> with:</p>
-<div class="sourceCode" id="cb1"><pre class="downlit">
-<span class="co"># install.packages("devtools")</span>
-<span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"AxelitoMartin/gnomeR"</span><span class="op">)</span></pre></div>
+<div class="sourceCode" id="cb1"><pre class="r"><span class="co"># install.packages("devtools")</span>
+<span class="kw pkg">devtools</span><span class="kw ns">::</span><span class="fu"><a href="https://devtools.r-lib.org//reference/remote-reexports.html">install_github</a></span>(<span class="st">"AxelitoMartin/gnomeR"</span>)</pre></div>
 <p>Similarly for those who wish to explore the development version of <code>gnomeR</code>:</p>
-<div class="sourceCode" id="cb2"><pre class="downlit">
-<span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"AxelitoMartin/gnomeR"</span>, ref <span class="op">=</span> <span class="st">"development"</span><span class="op">)</span></pre></div>
+<div class="sourceCode" id="cb2"><pre class="r"><span class="kw pkg">devtools</span><span class="kw ns">::</span><span class="fu"><a href="https://devtools.r-lib.org//reference/remote-reexports.html">install_github</a></span>(<span class="st">"AxelitoMartin/gnomeR"</span>, <span class="kw">ref</span> <span class="kw">=</span> <span class="st">"development"</span>)</pre></div>
 <p>Along with its companion package for cbioPortal data download:</p>
-<div class="sourceCode" id="cb3"><pre class="downlit">
-<span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"karissawhiting/cbioportalr"</span><span class="op">)</span></pre></div>
+<div class="sourceCode" id="cb3"><pre class="r"><span class="kw pkg">devtools</span><span class="kw ns">::</span><span class="fu"><a href="https://devtools.r-lib.org//reference/remote-reexports.html">install_github</a></span>(<span class="st">"karissawhiting/cbioportalr"</span>)</pre></div>
 </div>
 <div id="examples" class="section level2">
 <h2 class="hasAnchor">
@@ -127,767 +124,180 @@
 <h3 class="hasAnchor">
 <a href="#setting-up-the-api" class="anchor"></a>Setting up the API</h3>
 <p>In order to download the data from CbioPortal, one must first require a token from the website <a href="https://cbioportal.mskcc.org/">CbioPortal</a> wich will prompt a login page with your MSKCC credentials. Then navigate to “Web API” in the top bar menu, following this simply download a token and copy it after running the following command in R:</p>
-<div class="sourceCode" id="cb4"><pre class="downlit">
-<span class="fu">usethis</span><span class="fu">::</span><span class="fu">edit_r_environ</span><span class="op">(</span><span class="op">)</span></pre></div>
+<div class="sourceCode" id="cb4"><pre class="r"><span class="kw pkg">usethis</span><span class="kw ns">::</span><span class="fu"><a href="https://usethis.r-lib.org/reference/edit.html">edit_r_environ</a></span>()</pre></div>
 <p>And pasting the token you were given in the .Renviron file that was created and saving after pasting your token.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit">
-<span class="va">CBIOPORTAL_TOKEN</span> <span class="op">=</span> <span class="st">'YOUR_TOKEN'</span></pre></div>
+<div class="sourceCode" id="cb5"><pre class="r"><span class="no">CBIOPORTAL_TOKEN</span> <span class="kw">=</span> <span class="st">'YOUR_TOKEN'</span></pre></div>
 <p>You can test your connection using:</p>
-<div class="sourceCode" id="cb6"><pre class="downlit">
-<span class="fu">get_cbioportal_token</span><span class="op">(</span><span class="op">)</span></pre></div>
+<div class="sourceCode" id="cb6"><pre class="r"><span class="fu">get_cbioportal_token</span>()</pre></div>
 </div>
 <div id="retrieving-data" class="section level3">
 <h3 class="hasAnchor">
 <a href="#retrieving-data" class="anchor"></a>Retrieving data</h3>
 <p>Now that the Cbioportal API is set up in your environment, you must first specify the database of interest (IMPACT or TCGA are the two available options). Following this one can either sepcify the samples or study of interest:</p>
-<div class="sourceCode" id="cb7"><pre class="downlit">
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/AxelitoMartin/gnomeR">gnomeR</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">cbioportalr</span><span class="op">)</span>
-<span class="va">ids</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html">as.character</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span><span class="op">(</span><span class="va">mut</span><span class="op">$</span><span class="va">Tumor_Sample_Barcode</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">100</span><span class="op">]</span><span class="op">)</span>
-<span class="va">df</span> <span class="op">&lt;-</span> <span class="fu">get_genetics</span><span class="op">(</span>sample_ids <span class="op">=</span> <span class="va">ids</span>,database <span class="op">=</span> <span class="st">"msk_impact"</span>,
-                       mutations <span class="op">=</span> <span class="cn">TRUE</span>, fusions <span class="op">=</span> <span class="cn">TRUE</span>, cna <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></pre></div>
+<div class="sourceCode" id="cb7"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">gnomeR</span>)
+<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">cbioportalr</span>)
+<span class="no">ids</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html">as.character</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span>(<span class="no">mut</span>$<span class="no">Tumor_Sample_Barcode</span>)[<span class="fl">1</span>:<span class="fl">100</span>])
+<span class="no">df</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/cbioportalr/man/get_genetics.html">get_genetics</a></span>(<span class="kw">sample_ids</span> <span class="kw">=</span> <span class="no">ids</span>,<span class="kw">database</span> <span class="kw">=</span> <span class="st">"msk_impact"</span>,
+                       <span class="kw">mutations</span> <span class="kw">=</span> <span class="fl">TRUE</span>, <span class="kw">fusions</span> <span class="kw">=</span> <span class="fl">TRUE</span>, <span class="kw">cna</span> <span class="kw">=</span> <span class="fl">TRUE</span>)</pre></div>
 </div>
 <div id="processing-the-downloaded-data" class="section level3">
 <h3 class="hasAnchor">
 <a href="#processing-the-downloaded-data" class="anchor"></a>Processing the downloaded data</h3>
 <p>The <code><a href="reference/binmat.html">binmat()</a></code> function is the feature of the data processing of <code>gnomeR</code>. It takes genomic inputs from various sources of CbioPortal (mutation files, fusion files and copy number raw counts) to give out a clean binary matrix of n samples by all the events that were found in the files.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit">
-<span class="va">df.clean</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/binmat.html">binmat</a></span><span class="op">(</span>maf <span class="op">=</span> <span class="va">df</span><span class="op">$</span><span class="va">mut</span>, cna <span class="op">=</span> <span class="va">df</span><span class="op">$</span><span class="va">cna</span><span class="op">)</span></pre></div>
+<div class="sourceCode" id="cb8"><pre class="r"><span class="no">df.clean</span> <span class="kw">&lt;-</span> <span class="fu"><a href="reference/binmat.html">binmat</a></span>(<span class="kw">maf</span> <span class="kw">=</span> <span class="no">df</span>$<span class="no">mut</span>, <span class="kw">cna</span> <span class="kw">=</span> <span class="no">df</span>$<span class="no">cna</span>)</pre></div>
 <p>We further included example datasets from the raw dowloaded files on CbioPortal (<code>mut</code>, <code>fusion</code>, <code>cna</code>) which we will use for the following examples.</p>
-<div class="sourceCode" id="cb9"><pre class="downlit">
-<span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span>
-<span class="va">patients</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html">as.character</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span><span class="op">(</span><span class="va">mut</span><span class="op">$</span><span class="va">Tumor_Sample_Barcode</span><span class="op">)</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span><span class="op">(</span><span class="va">mut</span><span class="op">$</span><span class="va">Tumor_Sample_Barcode</span><span class="op">)</span><span class="op">)</span>, <span class="fl">100</span>, replace<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span><span class="op">]</span>
+<div class="sourceCode" id="cb9"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span>(<span class="fl">123</span>)
+<span class="no">patients</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html">as.character</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span>(<span class="no">mut</span>$<span class="no">Tumor_Sample_Barcode</span>))[<span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample</a></span>(<span class="fl">1</span>:<span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span>(<span class="no">mut</span>$<span class="no">Tumor_Sample_Barcode</span>)), <span class="fl">100</span>, <span class="kw">replace</span><span class="kw">=</span><span class="fl">FALSE</span>)]
 
-<span class="va">gen.dat</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/binmat.html">binmat</a></span><span class="op">(</span>patients <span class="op">=</span> <span class="va">patients</span>, maf <span class="op">=</span> <span class="va">mut</span>, fusion <span class="op">=</span> <span class="va">fusion</span>, cna <span class="op">=</span> <span class="va">cna</span><span class="op">)</span>
-<span class="fu">gt</span><span class="op">(</span><span class="va">gen.dat</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">]</span>,rownames_to_stub <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></pre></div>
-<!--html_preserve-->
-<style>html {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
-}
-
-#uehsjrjlbj .gt_table {
-  display: table;
-  border-collapse: collapse;
-  margin-left: auto;
-  margin-right: auto;
-  color: #333333;
-  font-size: 16px;
-  font-weight: normal;
-  font-style: normal;
-  background-color: #FFFFFF;
-  width: auto;
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #A8A8A8;
-  border-right-style: none;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #A8A8A8;
-  border-left-style: none;
-  border-left-width: 2px;
-  border-left-color: #D3D3D3;
-}
-
-#uehsjrjlbj .gt_heading {
-  background-color: #FFFFFF;
-  text-align: center;
-  border-bottom-color: #FFFFFF;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-}
-
-#uehsjrjlbj .gt_title {
-  color: #333333;
-  font-size: 125%;
-  font-weight: initial;
-  padding-top: 4px;
-  padding-bottom: 4px;
-  border-bottom-color: #FFFFFF;
-  border-bottom-width: 0;
-}
-
-#uehsjrjlbj .gt_subtitle {
-  color: #333333;
-  font-size: 85%;
-  font-weight: initial;
-  padding-top: 0;
-  padding-bottom: 4px;
-  border-top-color: #FFFFFF;
-  border-top-width: 0;
-}
-
-#uehsjrjlbj .gt_bottom_border {
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-}
-
-#uehsjrjlbj .gt_col_headings {
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-}
-
-#uehsjrjlbj .gt_col_heading {
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: normal;
-  text-transform: inherit;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-  vertical-align: bottom;
-  padding-top: 5px;
-  padding-bottom: 6px;
-  padding-left: 5px;
-  padding-right: 5px;
-  overflow-x: hidden;
-}
-
-#uehsjrjlbj .gt_column_spanner_outer {
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: normal;
-  text-transform: inherit;
-  padding-top: 0;
-  padding-bottom: 0;
-  padding-left: 4px;
-  padding-right: 4px;
-}
-
-#uehsjrjlbj .gt_column_spanner_outer:first-child {
-  padding-left: 0;
-}
-
-#uehsjrjlbj .gt_column_spanner_outer:last-child {
-  padding-right: 0;
-}
-
-#uehsjrjlbj .gt_column_spanner {
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  vertical-align: bottom;
-  padding-top: 5px;
-  padding-bottom: 6px;
-  overflow-x: hidden;
-  display: inline-block;
-  width: 100%;
-}
-
-#uehsjrjlbj .gt_group_heading {
-  padding: 8px;
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: initial;
-  text-transform: inherit;
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-  vertical-align: middle;
-}
-
-#uehsjrjlbj .gt_empty_group_heading {
-  padding: 0.5px;
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: initial;
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  vertical-align: middle;
-}
-
-#uehsjrjlbj .gt_from_md > :first-child {
-  margin-top: 0;
-}
-
-#uehsjrjlbj .gt_from_md > :last-child {
-  margin-bottom: 0;
-}
-
-#uehsjrjlbj .gt_row {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  margin: 10px;
-  border-top-style: solid;
-  border-top-width: 1px;
-  border-top-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-  vertical-align: middle;
-  overflow-x: hidden;
-}
-
-#uehsjrjlbj .gt_stub {
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: initial;
-  text-transform: inherit;
-  border-right-style: solid;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-  padding-left: 12px;
-}
-
-#uehsjrjlbj .gt_summary_row {
-  color: #333333;
-  background-color: #FFFFFF;
-  text-transform: inherit;
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#uehsjrjlbj .gt_first_summary_row {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #D3D3D3;
-}
-
-#uehsjrjlbj .gt_grand_summary_row {
-  color: #333333;
-  background-color: #FFFFFF;
-  text-transform: inherit;
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#uehsjrjlbj .gt_first_grand_summary_row {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-top-style: double;
-  border-top-width: 6px;
-  border-top-color: #D3D3D3;
-}
-
-#uehsjrjlbj .gt_striped {
-  background-color: rgba(128, 128, 128, 0.05);
-}
-
-#uehsjrjlbj .gt_table_body {
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-}
-
-#uehsjrjlbj .gt_footnotes {
-  color: #333333;
-  background-color: #FFFFFF;
-  border-bottom-style: none;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 2px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-}
-
-#uehsjrjlbj .gt_footnote {
-  margin: 0px;
-  font-size: 90%;
-  padding: 4px;
-}
-
-#uehsjrjlbj .gt_sourcenotes {
-  color: #333333;
-  background-color: #FFFFFF;
-  border-bottom-style: none;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 2px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-}
-
-#uehsjrjlbj .gt_sourcenote {
-  font-size: 90%;
-  padding: 4px;
-}
-
-#uehsjrjlbj .gt_left {
-  text-align: left;
-}
-
-#uehsjrjlbj .gt_center {
-  text-align: center;
-}
-
-#uehsjrjlbj .gt_right {
-  text-align: right;
-  font-variant-numeric: tabular-nums;
-}
-
-#uehsjrjlbj .gt_font_normal {
-  font-weight: normal;
-}
-
-#uehsjrjlbj .gt_font_bold {
-  font-weight: bold;
-}
-
-#uehsjrjlbj .gt_font_italic {
-  font-style: italic;
-}
-
-#uehsjrjlbj .gt_super {
-  font-size: 65%;
-}
-
-#uehsjrjlbj .gt_footnote_marks {
-  font-style: italic;
-  font-size: 65%;
-}
-</style>
-<div id="uehsjrjlbj" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<table class="table gt_table">
-<thead class="gt_col_headings"><tr>
-<th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1">
-</th>
-<th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1">
-<p>FLT4</p>
-</th>
-<th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1">
-<p>KRAS</p>
-</th>
-<th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1">
-<p>TP53</p>
-</th>
-<th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1">
-<p>NF1</p>
-</th>
-<th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1">
-<p>ARID1A</p>
-</th>
-<th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1">
-<p>CARD11</p>
-</th>
-<th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1">
-<p>ARID5B</p>
-</th>
-<th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1">
-<p>BCOR</p>
-</th>
-<th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1">
-<p>MLL2</p>
-</th>
-<th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1">
-<p>SMAD3</p>
-</th>
+<span class="no">gen.dat</span> <span class="kw">&lt;-</span> <span class="fu"><a href="reference/binmat.html">binmat</a></span>(<span class="kw">patients</span> <span class="kw">=</span> <span class="no">patients</span>, <span class="kw">maf</span> <span class="kw">=</span> <span class="no">mut</span>, <span class="kw">fusion</span> <span class="kw">=</span> <span class="no">fusion</span>, <span class="kw">cna</span> <span class="kw">=</span> <span class="no">cna</span>)
+<span class="fu">kable</span>(<span class="no">gen.dat</span>[<span class="fl">1</span>:<span class="fl">10</span>,<span class="fl">1</span>:<span class="fl">10</span>],<span class="kw">row.names</span> <span class="kw">=</span> <span class="fl">TRUE</span>)</pre></div>
+<table class="table">
+<thead><tr class="header">
+<th align="left"></th>
+<th align="right">TP53</th>
+<th align="right">IGF1R</th>
+<th align="right">KEAP1</th>
+<th align="right">KDM5C</th>
+<th align="right">KRAS</th>
+<th align="right">TERT</th>
+<th align="right">MAP2K1</th>
+<th align="right">NCOR1</th>
+<th align="right">DDR2</th>
+<th align="right">FIP1L1</th>
 </tr></thead>
-<tbody class="gt_table_body">
-<tr>
-<td class="gt_row gt_left gt_stub">
-<p>P-0010604-T01-IM5</p>
-</td>
-<td class="gt_row gt_right">
-<p>0</p>
-</td>
-<td class="gt_row gt_right">
-<p>0</p>
-</td>
-<td class="gt_row gt_right">
-<p>1</p>
-</td>
-<td class="gt_row gt_right">
-<p>0</p>
-</td>
-<td class="gt_row gt_right">
-<p>0</p>
-</td>
-<td class="gt_row gt_right">
-<p>0</p>
-</td>
-<td class="gt_row gt_right">
-<p>0</p>
-</td>
-<td class="gt_row gt_right">
-<p>0</p>
-</td>
-<td class="gt_row gt_right">
-<p>0</p>
-</td>
-<td class="gt_row gt_right">
-<p>0</p>
-</td>
+<tbody>
+<tr class="odd">
+<td align="left">P-0010604-T01-IM5</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
 </tr>
-<tr>
-<td class="gt_row gt_left gt_stub">
-<p>P-0002651-T01-IM3</p>
-</td>
-<td class="gt_row gt_right">
-<p>0</p>
-</td>
-<td class="gt_row gt_right">
-<p>0</p>
-</td>
-<td class="gt_row gt_right">
-<p>1</p>
-</td>
-<td class="gt_row gt_right">
-<p>0</p>
-</td>
-<td class="gt_row gt_right">
-<p>0</p>
-</td>
-<td class="gt_row gt_right">
-<p>0</p>
-</td>
-<td class="gt_row gt_right">
-<p>0</p>
-</td>
-<td class="gt_row gt_right">
-<p>0</p>
-</td>
-<td class="gt_row gt_right">
-<p>0</p>
-</td>
-<td class="gt_row gt_right">
-<p>0</p>
-</td>
+<tr class="even">
+<td align="left">P-0002651-T01-IM3</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
 </tr>
-<tr>
-<td class="gt_row gt_left gt_stub">
-<p>P-0000270-T01-IM3</p>
-</td>
-<td class="gt_row gt_right">
-<p>0</p>
-</td>
-<td class="gt_row gt_right">
-<p>0</p>
-</td>
-<td class="gt_row gt_right">
-<p>1</p>
-</td>
-<td class="gt_row gt_right">
-<p>0</p>
-</td>
-<td class="gt_row gt_right">
-<p>1</p>
-</td>
-<td class="gt_row gt_right">
-<p>1</p>
-</td>
-<td class="gt_row gt_right">
-<p>1</p>
-</td>
-<td class="gt_row gt_right">
-<p>0</p>
-</td>
-<td class="gt_row gt_right">
-<p>0</p>
-</td>
-<td class="gt_row gt_right">
-<p>0</p>
-</td>
+<tr class="odd">
+<td align="left">P-0000270-T01-IM3</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
 </tr>
-<tr>
-<td class="gt_row gt_left gt_stub">
-<p>P-0002915-T01-IM3</p>
-</td>
-<td class="gt_row gt_right">
-<p>0</p>
-</td>
-<td class="gt_row gt_right">
-<p>0</p>
-</td>
-<td class="gt_row gt_right">
-<p>0</p>
-</td>
-<td class="gt_row gt_right">
-<p>0</p>
-</td>
-<td class="gt_row gt_right">
-<p>0</p>
-</td>
-<td class="gt_row gt_right">
-<p>0</p>
-</td>
-<td class="gt_row gt_right">
-<p>0</p>
-</td>
-<td class="gt_row gt_right">
-<p>0</p>
-</td>
-<td class="gt_row gt_right">
-<p>0</p>
-</td>
-<td class="gt_row gt_right">
-<p>0</p>
-</td>
+<tr class="even">
+<td align="left">P-0002915-T01-IM3</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
 </tr>
-<tr>
-<td class="gt_row gt_left gt_stub">
-<p>P-0011099-T01-IM5</p>
-</td>
-<td class="gt_row gt_right">
-<p>0</p>
-</td>
-<td class="gt_row gt_right">
-<p>0</p>
-</td>
-<td class="gt_row gt_right">
-<p>0</p>
-</td>
-<td class="gt_row gt_right">
-<p>0</p>
-</td>
-<td class="gt_row gt_right">
-<p>0</p>
-</td>
-<td class="gt_row gt_right">
-<p>0</p>
-</td>
-<td class="gt_row gt_right">
-<p>0</p>
-</td>
-<td class="gt_row gt_right">
-<p>0</p>
-</td>
-<td class="gt_row gt_right">
-<p>0</p>
-</td>
-<td class="gt_row gt_right">
-<p>0</p>
-</td>
+<tr class="odd">
+<td align="left">P-0011099-T01-IM5</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
 </tr>
-<tr>
-<td class="gt_row gt_left gt_stub">
-<p>P-0000080-T01-IM3</p>
-</td>
-<td class="gt_row gt_right">
-<p>0</p>
-</td>
-<td class="gt_row gt_right">
-<p>0</p>
-</td>
-<td class="gt_row gt_right">
-<p>1</p>
-</td>
-<td class="gt_row gt_right">
-<p>0</p>
-</td>
-<td class="gt_row gt_right">
-<p>0</p>
-</td>
-<td class="gt_row gt_right">
-<p>0</p>
-</td>
-<td class="gt_row gt_right">
-<p>0</p>
-</td>
-<td class="gt_row gt_right">
-<p>0</p>
-</td>
-<td class="gt_row gt_right">
-<p>0</p>
-</td>
-<td class="gt_row gt_right">
-<p>0</p>
-</td>
+<tr class="even">
+<td align="left">P-0000080-T01-IM3</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
 </tr>
-<tr>
-<td class="gt_row gt_left gt_stub">
-<p>P-0001741-T01-IM3</p>
-</td>
-<td class="gt_row gt_right">
-<p>0</p>
-</td>
-<td class="gt_row gt_right">
-<p>1</p>
-</td>
-<td class="gt_row gt_right">
-<p>1</p>
-</td>
-<td class="gt_row gt_right">
-<p>0</p>
-</td>
-<td class="gt_row gt_right">
-<p>1</p>
-</td>
-<td class="gt_row gt_right">
-<p>0</p>
-</td>
-<td class="gt_row gt_right">
-<p>0</p>
-</td>
-<td class="gt_row gt_right">
-<p>0</p>
-</td>
-<td class="gt_row gt_right">
-<p>0</p>
-</td>
-<td class="gt_row gt_right">
-<p>0</p>
-</td>
+<tr class="odd">
+<td align="left">P-0001741-T01-IM3</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
 </tr>
-<tr>
-<td class="gt_row gt_left gt_stub">
-<p>P-0003964-T01-IM3</p>
-</td>
-<td class="gt_row gt_right">
-<p>0</p>
-</td>
-<td class="gt_row gt_right">
-<p>1</p>
-</td>
-<td class="gt_row gt_right">
-<p>0</p>
-</td>
-<td class="gt_row gt_right">
-<p>0</p>
-</td>
-<td class="gt_row gt_right">
-<p>0</p>
-</td>
-<td class="gt_row gt_right">
-<p>0</p>
-</td>
-<td class="gt_row gt_right">
-<p>0</p>
-</td>
-<td class="gt_row gt_right">
-<p>0</p>
-</td>
-<td class="gt_row gt_right">
-<p>0</p>
-</td>
-<td class="gt_row gt_right">
-<p>0</p>
-</td>
+<tr class="even">
+<td align="left">P-0003964-T01-IM3</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
 </tr>
-<tr>
-<td class="gt_row gt_left gt_stub">
-<p>P-0003842-T01-IM5</p>
-</td>
-<td class="gt_row gt_right">
-<p>0</p>
-</td>
-<td class="gt_row gt_right">
-<p>0</p>
-</td>
-<td class="gt_row gt_right">
-<p>0</p>
-</td>
-<td class="gt_row gt_right">
-<p>0</p>
-</td>
-<td class="gt_row gt_right">
-<p>0</p>
-</td>
-<td class="gt_row gt_right">
-<p>0</p>
-</td>
-<td class="gt_row gt_right">
-<p>0</p>
-</td>
-<td class="gt_row gt_right">
-<p>0</p>
-</td>
-<td class="gt_row gt_right">
-<p>0</p>
-</td>
-<td class="gt_row gt_right">
-<p>0</p>
-</td>
+<tr class="odd">
+<td align="left">P-0003842-T01-IM5</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
 </tr>
-<tr>
-<td class="gt_row gt_left gt_stub">
-<p>P-0002597-T02-IM5</p>
-</td>
-<td class="gt_row gt_right">
-<p>0</p>
-</td>
-<td class="gt_row gt_right">
-<p>0</p>
-</td>
-<td class="gt_row gt_right">
-<p>0</p>
-</td>
-<td class="gt_row gt_right">
-<p>0</p>
-</td>
-<td class="gt_row gt_right">
-<p>0</p>
-</td>
-<td class="gt_row gt_right">
-<p>0</p>
-</td>
-<td class="gt_row gt_right">
-<p>0</p>
-</td>
-<td class="gt_row gt_right">
-<p>0</p>
-</td>
-<td class="gt_row gt_right">
-<p>0</p>
-</td>
-<td class="gt_row gt_right">
-<p>0</p>
-</td>
+<tr class="even">
+<td align="left">P-0002597-T02-IM5</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
 </tr>
 </tbody>
 </table>
-</div>
-<!--/html_preserve-->
 </div>
 <div id="visualization" class="section level3">
 <h3 class="hasAnchor">
@@ -896,30 +306,26 @@
 <h4 class="hasAnchor">
 <a href="#maf" class="anchor"></a>MAF</h4>
 <p>Before we move on to more complex visualizations, we integrate the <code><a href="reference/maf_viz.html">maf_viz()</a></code> function to give an overview of the distribution of the different mutations across the cohort of interest:</p>
-<div class="sourceCode" id="cb10"><pre class="downlit">
-<span class="va">sum.plots</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/maf_viz.html">maf_viz</a></span><span class="op">(</span>maf <span class="op">=</span> <span class="va">mut</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span><span class="op">(</span><span class="va">Tumor_Sample_Barcode</span> <span class="op">%in%</span> <span class="va">patients</span><span class="op">)</span><span class="op">)</span>
-<span class="va">sum.plots</span><span class="op">$</span><span class="va">topgenes</span></pre></div>
+<div class="sourceCode" id="cb10"><pre class="r"><span class="no">sum.plots</span> <span class="kw">&lt;-</span> <span class="fu"><a href="reference/maf_viz.html">maf_viz</a></span>(<span class="kw">maf</span> <span class="kw">=</span> <span class="no">mut</span> <span class="kw">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span>(<span class="no">Tumor_Sample_Barcode</span> <span class="kw">%in%</span> <span class="no">patients</span>))
+<span class="no">sum.plots</span>$<span class="no">topgenes</span></pre></div>
 <p><img src="reference/figures/README-unnamed-chunk-8-1.png" width="100%"></p>
-<div class="sourceCode" id="cb11"><pre class="downlit">
-<span class="va">sum.plots</span><span class="op">$</span><span class="va">genecomut</span></pre></div>
+<div class="sourceCode" id="cb11"><pre class="r"><span class="no">sum.plots</span>$<span class="no">genecomut</span></pre></div>
 <p><img src="reference/figures/README-unnamed-chunk-8-2.png" width="100%"></p>
 </div>
 <div id="oncoprints" class="section level4">
 <h4 class="hasAnchor">
 <a href="#oncoprints" class="anchor"></a>OncoPrints</h4>
 <p>OncoPrints are a convenient way to display the overall genomic profiles of samples in the cohort of interest. This is best used for a subset of genes that are under consideration.</p>
-<div class="sourceCode" id="cb12"><pre class="downlit">
-<span class="va">genes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"TP53"</span>,<span class="st">"PIK3CA"</span>,<span class="st">"KRAS"</span>,<span class="st">"TERT"</span>,<span class="st">"EGFR"</span>,<span class="st">"FAT"</span>,<span class="st">"ALK"</span>,<span class="st">"CDKN2A"</span>,<span class="st">"CDKN2B"</span><span class="op">)</span>
-<span class="fu"><a href="reference/plot_oncoPrint.html">plot_oncoPrint</a></span><span class="op">(</span>gen.dat <span class="op">=</span> <span class="va">gen.dat</span> <span class="op">%&gt;%</span> <span class="fu">select</span><span class="op">(</span><span class="fu">starts_with</span><span class="op">(</span><span class="va">genes</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></pre></div>
+<div class="sourceCode" id="cb12"><pre class="r"><span class="no">genes</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"TP53"</span>,<span class="st">"PIK3CA"</span>,<span class="st">"KRAS"</span>,<span class="st">"TERT"</span>,<span class="st">"EGFR"</span>,<span class="st">"FAT"</span>,<span class="st">"ALK"</span>,<span class="st">"CDKN2A"</span>,<span class="st">"CDKN2B"</span>)
+<span class="fu"><a href="reference/plot_oncoPrint.html">plot_oncoPrint</a></span>(<span class="kw">gen.dat</span> <span class="kw">=</span> <span class="no">gen.dat</span> <span class="kw">%&gt;%</span> <span class="fu">select</span>(<span class="fu">starts_with</span>(<span class="no">genes</span>)))</pre></div>
 <p><img src="reference/figures/README-unnamed-chunk-9-1.png" width="100%"></p>
 </div>
 <div id="facets" class="section level4">
 <h4 class="hasAnchor">
 <a href="#facets" class="anchor"></a>FACETs</h4>
 <p><a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5027494/">FACETs</a> is an ASCN tool and open-source software with a broad application to whole genome, whole-exome, as well as targeted panel sequencing platforms. It is a fully integrated stand-alone pipeline that includes sequencing BAM file post-processing, joint segmentation of total- and allele-specific read counts, and integer copy number calls corrected for tumor purity, ploidy and clonal heterogeneity, with comprehensive output.</p>
-<div class="sourceCode" id="cb13"><pre class="downlit">
-<span class="va">p.heat</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/facets.heatmap.html">facets.heatmap</a></span><span class="op">(</span>seg <span class="op">=</span> <span class="va">seg</span>, patients <span class="op">=</span> <span class="va">patients</span>, min.purity <span class="op">=</span> <span class="fl">0</span><span class="op">)</span>
-<span class="va">p.heat</span><span class="op">$</span><span class="va">p</span></pre></div>
+<div class="sourceCode" id="cb13"><pre class="r"><span class="no">p.heat</span> <span class="kw">&lt;-</span> <span class="fu"><a href="reference/facets.heatmap.html">facets.heatmap</a></span>(<span class="kw">seg</span> <span class="kw">=</span> <span class="no">seg</span>, <span class="kw">patients</span> <span class="kw">=</span> <span class="no">patients</span>, <span class="kw">min.purity</span> <span class="kw">=</span> <span class="fl">0</span>)
+<span class="no">p.heat</span>$<span class="no">p</span></pre></div>
 <p><img src="reference/figures/README-unnamed-chunk-10-1.png" width="100%"></p>
 </div>
 </div>
@@ -935,722 +341,162 @@
 <li>binary (unpaired test using Fisher’s exact test and paired test using McNemmar’s exact test)</li>
 <li>continuous (using simple linear regression)</li>
 </ul>
-<!-- end list --><div class="sourceCode" id="cb14"><pre class="downlit">
-<span class="va">outcome</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Binomial.html">rbinom</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">patients</span><span class="op">)</span>,size <span class="op">=</span> <span class="fl">1</span>,prob <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fl">2</span><span class="op">)</span>,levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"0"</span>,<span class="st">"1"</span><span class="op">)</span><span class="op">)</span>
-<span class="va">out</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/gen.summary.html">gen.summary</a></span><span class="op">(</span>gen.dat <span class="op">=</span> <span class="va">gen.dat</span>,outcome <span class="op">=</span> <span class="va">outcome</span>,filter <span class="op">=</span> <span class="fl">0.05</span><span class="op">)</span>
-<span class="fu">gt</span><span class="op">(</span><span class="va">out</span><span class="op">$</span><span class="va">fits</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span>,<span class="op">]</span>,rownames_to_stub <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></pre></div>
-<!--html_preserve-->
-<style>html {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
-}
-
-#jxvwzkaysj .gt_table {
-  display: table;
-  border-collapse: collapse;
-  margin-left: auto;
-  margin-right: auto;
-  color: #333333;
-  font-size: 16px;
-  font-weight: normal;
-  font-style: normal;
-  background-color: #FFFFFF;
-  width: auto;
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #A8A8A8;
-  border-right-style: none;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #A8A8A8;
-  border-left-style: none;
-  border-left-width: 2px;
-  border-left-color: #D3D3D3;
-}
-
-#jxvwzkaysj .gt_heading {
-  background-color: #FFFFFF;
-  text-align: center;
-  border-bottom-color: #FFFFFF;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-}
-
-#jxvwzkaysj .gt_title {
-  color: #333333;
-  font-size: 125%;
-  font-weight: initial;
-  padding-top: 4px;
-  padding-bottom: 4px;
-  border-bottom-color: #FFFFFF;
-  border-bottom-width: 0;
-}
-
-#jxvwzkaysj .gt_subtitle {
-  color: #333333;
-  font-size: 85%;
-  font-weight: initial;
-  padding-top: 0;
-  padding-bottom: 4px;
-  border-top-color: #FFFFFF;
-  border-top-width: 0;
-}
-
-#jxvwzkaysj .gt_bottom_border {
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-}
-
-#jxvwzkaysj .gt_col_headings {
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-}
-
-#jxvwzkaysj .gt_col_heading {
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: normal;
-  text-transform: inherit;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-  vertical-align: bottom;
-  padding-top: 5px;
-  padding-bottom: 6px;
-  padding-left: 5px;
-  padding-right: 5px;
-  overflow-x: hidden;
-}
-
-#jxvwzkaysj .gt_column_spanner_outer {
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: normal;
-  text-transform: inherit;
-  padding-top: 0;
-  padding-bottom: 0;
-  padding-left: 4px;
-  padding-right: 4px;
-}
-
-#jxvwzkaysj .gt_column_spanner_outer:first-child {
-  padding-left: 0;
-}
-
-#jxvwzkaysj .gt_column_spanner_outer:last-child {
-  padding-right: 0;
-}
-
-#jxvwzkaysj .gt_column_spanner {
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  vertical-align: bottom;
-  padding-top: 5px;
-  padding-bottom: 6px;
-  overflow-x: hidden;
-  display: inline-block;
-  width: 100%;
-}
-
-#jxvwzkaysj .gt_group_heading {
-  padding: 8px;
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: initial;
-  text-transform: inherit;
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-  vertical-align: middle;
-}
-
-#jxvwzkaysj .gt_empty_group_heading {
-  padding: 0.5px;
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: initial;
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  vertical-align: middle;
-}
-
-#jxvwzkaysj .gt_from_md > :first-child {
-  margin-top: 0;
-}
-
-#jxvwzkaysj .gt_from_md > :last-child {
-  margin-bottom: 0;
-}
-
-#jxvwzkaysj .gt_row {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  margin: 10px;
-  border-top-style: solid;
-  border-top-width: 1px;
-  border-top-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-  vertical-align: middle;
-  overflow-x: hidden;
-}
-
-#jxvwzkaysj .gt_stub {
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: initial;
-  text-transform: inherit;
-  border-right-style: solid;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-  padding-left: 12px;
-}
-
-#jxvwzkaysj .gt_summary_row {
-  color: #333333;
-  background-color: #FFFFFF;
-  text-transform: inherit;
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#jxvwzkaysj .gt_first_summary_row {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #D3D3D3;
-}
-
-#jxvwzkaysj .gt_grand_summary_row {
-  color: #333333;
-  background-color: #FFFFFF;
-  text-transform: inherit;
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#jxvwzkaysj .gt_first_grand_summary_row {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-top-style: double;
-  border-top-width: 6px;
-  border-top-color: #D3D3D3;
-}
-
-#jxvwzkaysj .gt_striped {
-  background-color: rgba(128, 128, 128, 0.05);
-}
-
-#jxvwzkaysj .gt_table_body {
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-}
-
-#jxvwzkaysj .gt_footnotes {
-  color: #333333;
-  background-color: #FFFFFF;
-  border-bottom-style: none;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 2px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-}
-
-#jxvwzkaysj .gt_footnote {
-  margin: 0px;
-  font-size: 90%;
-  padding: 4px;
-}
-
-#jxvwzkaysj .gt_sourcenotes {
-  color: #333333;
-  background-color: #FFFFFF;
-  border-bottom-style: none;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 2px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-}
-
-#jxvwzkaysj .gt_sourcenote {
-  font-size: 90%;
-  padding: 4px;
-}
-
-#jxvwzkaysj .gt_left {
-  text-align: left;
-}
-
-#jxvwzkaysj .gt_center {
-  text-align: center;
-}
-
-#jxvwzkaysj .gt_right {
-  text-align: right;
-  font-variant-numeric: tabular-nums;
-}
-
-#jxvwzkaysj .gt_font_normal {
-  font-weight: normal;
-}
-
-#jxvwzkaysj .gt_font_bold {
-  font-weight: bold;
-}
-
-#jxvwzkaysj .gt_font_italic {
-  font-style: italic;
-}
-
-#jxvwzkaysj .gt_super {
-  font-size: 65%;
-}
-
-#jxvwzkaysj .gt_footnote_marks {
-  font-style: italic;
-  font-size: 65%;
-}
-</style>
-<div id="jxvwzkaysj" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<table class="table gt_table">
-<thead class="gt_col_headings"><tr>
-<th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1">
-</th>
-<th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1">
-<p>Feature</p>
-</th>
-<th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1">
-<p>Overall</p>
-</th>
-<th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1">
-<p>0(N=48)</p>
-</th>
-<th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1">
-<p>1(N=52)</p>
-</th>
-<th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1">
-<p>OddsRatio</p>
-</th>
-<th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1">
-<p>Pvalue</p>
-</th>
-<th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1">
-<p>FDR</p>
-</th>
-<th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1">
-<p>Lower</p>
-</th>
-<th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1">
-<p>Upper</p>
-</th>
+<!-- end list --><div class="sourceCode" id="cb14"><pre class="r"><span class="no">outcome</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span>(<span class="fu"><a href="https://rdrr.io/r/stats/Binomial.html">rbinom</a></span>(<span class="kw">n</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span>(<span class="no">patients</span>),<span class="kw">size</span> <span class="kw">=</span> <span class="fl">1</span>,<span class="kw">prob</span> <span class="kw">=</span> <span class="fl">1</span>/<span class="fl">2</span>),<span class="kw">levels</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"0"</span>,<span class="st">"1"</span>))
+<span class="no">out</span> <span class="kw">&lt;-</span> <span class="fu"><a href="reference/gen.summary.html">gen.summary</a></span>(<span class="kw">gen.dat</span> <span class="kw">=</span> <span class="no">gen.dat</span>,<span class="kw">outcome</span> <span class="kw">=</span> <span class="no">outcome</span>,<span class="kw">filter</span> <span class="kw">=</span> <span class="fl">0.05</span>)
+<span class="fu">kable</span>(<span class="no">out</span>$<span class="no">fits</span>[<span class="fl">1</span>:<span class="fl">10</span>,],<span class="kw">row.names</span> <span class="kw">=</span> <span class="fl">TRUE</span>)</pre></div>
+<table class="table">
+<thead><tr class="header">
+<th align="left"></th>
+<th align="left">Feature</th>
+<th align="left">Overall</th>
+<th align="left">0(N=50)</th>
+<th align="left">1(N=50)</th>
+<th align="left">OddsRatio</th>
+<th align="left">Pvalue</th>
+<th align="left">FDR</th>
+<th align="left">Lower</th>
+<th align="left">Upper</th>
 </tr></thead>
-<tbody class="gt_table_body">
-<tr>
-<td class="gt_row gt_left gt_stub">
-<p>PIK3CA</p>
-</td>
-<td class="gt_row gt_left">
-<p>PIK3CA</p>
-</td>
-<td class="gt_row gt_left">
-<p>12%</p>
-</td>
-<td class="gt_row gt_left">
-<p>18.75%</p>
-</td>
-<td class="gt_row gt_left">
-<p>5.77%</p>
-</td>
-<td class="gt_row gt_left">
-<p>0.27</p>
-</td>
-<td class="gt_row gt_left">
-<p>6.47e-02</p>
-</td>
-<td class="gt_row gt_left">
-<p>9.51e-01</p>
-</td>
-<td class="gt_row gt_left">
-<p>0.04</p>
-</td>
-<td class="gt_row gt_left">
-<p>1.17</p>
-</td>
+<tbody>
+<tr class="odd">
+<td align="left">MYC.Amp</td>
+<td align="left">MYC.Amp</td>
+<td align="left">6%</td>
+<td align="left">10%</td>
+<td align="left">2%</td>
+<td align="left">0.19</td>
+<td align="left">2.04e-01</td>
+<td align="left">1.00e+00</td>
+<td align="left">0</td>
+<td align="left">1.76</td>
 </tr>
-<tr>
-<td class="gt_row gt_left gt_stub">
-<p>CDH1</p>
-</td>
-<td class="gt_row gt_left">
-<p>CDH1</p>
-</td>
-<td class="gt_row gt_left">
-<p>6%</p>
-</td>
-<td class="gt_row gt_left">
-<p>10.42%</p>
-</td>
-<td class="gt_row gt_left">
-<p>1.92%</p>
-</td>
-<td class="gt_row gt_left">
-<p>0.17</p>
-</td>
-<td class="gt_row gt_left">
-<p>1.02e-01</p>
-</td>
-<td class="gt_row gt_left">
-<p>9.51e-01</p>
-</td>
-<td class="gt_row gt_left">
-<p>0</p>
-</td>
-<td class="gt_row gt_left">
-<p>1.61</p>
-</td>
+<tr class="even">
+<td align="left">PIK3CA</td>
+<td align="left">PIK3CA</td>
+<td align="left">12%</td>
+<td align="left">8%</td>
+<td align="left">16%</td>
+<td align="left">2.17</td>
+<td align="left">3.57e-01</td>
+<td align="left">1.00e+00</td>
+<td align="left">0.53</td>
+<td align="left">10.6</td>
 </tr>
-<tr>
-<td class="gt_row gt_left gt_stub">
-<p>PTPRD</p>
-</td>
-<td class="gt_row gt_left">
-<p>PTPRD</p>
-</td>
-<td class="gt_row gt_left">
-<p>8%</p>
-</td>
-<td class="gt_row gt_left">
-<p>12.5%</p>
-</td>
-<td class="gt_row gt_left">
-<p>3.85%</p>
-</td>
-<td class="gt_row gt_left">
-<p>0.28</p>
-</td>
-<td class="gt_row gt_left">
-<p>1.49e-01</p>
-</td>
-<td class="gt_row gt_left">
-<p>9.51e-01</p>
-</td>
-<td class="gt_row gt_left">
-<p>0.03</p>
-</td>
-<td class="gt_row gt_left">
-<p>1.69</p>
-</td>
+<tr class="odd">
+<td align="left">EPHA5</td>
+<td align="left">EPHA5</td>
+<td align="left">5%</td>
+<td align="left">8%</td>
+<td align="left">2%</td>
+<td align="left">0.24</td>
+<td align="left">3.62e-01</td>
+<td align="left">1.00e+00</td>
+<td align="left">0</td>
+<td align="left">2.52</td>
 </tr>
-<tr>
-<td class="gt_row gt_left gt_stub">
-<p>TERT</p>
-</td>
-<td class="gt_row gt_left">
-<p>TERT</p>
-</td>
-<td class="gt_row gt_left">
-<p>15%</p>
-</td>
-<td class="gt_row gt_left">
-<p>20.83%</p>
-</td>
-<td class="gt_row gt_left">
-<p>9.62%</p>
-</td>
-<td class="gt_row gt_left">
-<p>0.41</p>
-</td>
-<td class="gt_row gt_left">
-<p>1.62e-01</p>
-</td>
-<td class="gt_row gt_left">
-<p>9.51e-01</p>
-</td>
-<td class="gt_row gt_left">
-<p>0.1</p>
-</td>
-<td class="gt_row gt_left">
-<p>1.45</p>
-</td>
+<tr class="even">
+<td align="left">FLT4</td>
+<td align="left">FLT4</td>
+<td align="left">5%</td>
+<td align="left">2%</td>
+<td align="left">8%</td>
+<td align="left">4.21</td>
+<td align="left">3.62e-01</td>
+<td align="left">1.00e+00</td>
+<td align="left">0.4</td>
+<td align="left">213.8</td>
 </tr>
-<tr>
-<td class="gt_row gt_left gt_stub">
-<p>EPHA5</p>
-</td>
-<td class="gt_row gt_left">
-<p>EPHA5</p>
-</td>
-<td class="gt_row gt_left">
-<p>5%</p>
-</td>
-<td class="gt_row gt_left">
-<p>8.33%</p>
-</td>
-<td class="gt_row gt_left">
-<p>1.92%</p>
-</td>
-<td class="gt_row gt_left">
-<p>0.22</p>
-</td>
-<td class="gt_row gt_left">
-<p>1.92e-01</p>
-</td>
-<td class="gt_row gt_left">
-<p>9.51e-01</p>
-</td>
-<td class="gt_row gt_left">
-<p>0</p>
-</td>
-<td class="gt_row gt_left">
-<p>2.32</p>
-</td>
+<tr class="odd">
+<td align="left">DOT1L</td>
+<td align="left">DOT1L</td>
+<td align="left">5%</td>
+<td align="left">2%</td>
+<td align="left">8%</td>
+<td align="left">4.21</td>
+<td align="left">3.62e-01</td>
+<td align="left">1.00e+00</td>
+<td align="left">0.4</td>
+<td align="left">213.8</td>
 </tr>
-<tr>
-<td class="gt_row gt_left gt_stub">
-<p>TSC1</p>
-</td>
-<td class="gt_row gt_left">
-<p>TSC1</p>
-</td>
-<td class="gt_row gt_left">
-<p>5%</p>
-</td>
-<td class="gt_row gt_left">
-<p>8.33%</p>
-</td>
-<td class="gt_row gt_left">
-<p>1.92%</p>
-</td>
-<td class="gt_row gt_left">
-<p>0.22</p>
-</td>
-<td class="gt_row gt_left">
-<p>1.92e-01</p>
-</td>
-<td class="gt_row gt_left">
-<p>9.51e-01</p>
-</td>
-<td class="gt_row gt_left">
-<p>0</p>
-</td>
-<td class="gt_row gt_left">
-<p>2.32</p>
-</td>
+<tr class="even">
+<td align="left">ERBB2.Amp</td>
+<td align="left">ERBB2.Amp</td>
+<td align="left">5%</td>
+<td align="left">2%</td>
+<td align="left">8%</td>
+<td align="left">4.21</td>
+<td align="left">3.62e-01</td>
+<td align="left">1.00e+00</td>
+<td align="left">0.4</td>
+<td align="left">213.8</td>
 </tr>
-<tr>
-<td class="gt_row gt_left gt_stub">
-<p>NOTCH3</p>
-</td>
-<td class="gt_row gt_left">
-<p>NOTCH3</p>
-</td>
-<td class="gt_row gt_left">
-<p>5%</p>
-</td>
-<td class="gt_row gt_left">
-<p>8.33%</p>
-</td>
-<td class="gt_row gt_left">
-<p>1.92%</p>
-</td>
-<td class="gt_row gt_left">
-<p>0.22</p>
-</td>
-<td class="gt_row gt_left">
-<p>1.92e-01</p>
-</td>
-<td class="gt_row gt_left">
-<p>9.51e-01</p>
-</td>
-<td class="gt_row gt_left">
-<p>0</p>
-</td>
-<td class="gt_row gt_left">
-<p>2.32</p>
-</td>
+<tr class="odd">
+<td align="left">STK11</td>
+<td align="left">STK11</td>
+<td align="left">7%</td>
+<td align="left">10%</td>
+<td align="left">4%</td>
+<td align="left">0.38</td>
+<td align="left">4.36e-01</td>
+<td align="left">1.00e+00</td>
+<td align="left">0.03</td>
+<td align="left">2.46</td>
 </tr>
-<tr>
-<td class="gt_row gt_left gt_stub">
-<p>CDKN2A.Del</p>
-</td>
-<td class="gt_row gt_left">
-<p>CDKN2A.Del</p>
-</td>
-<td class="gt_row gt_left">
-<p>8%</p>
-</td>
-<td class="gt_row gt_left">
-<p>4.17%</p>
-</td>
-<td class="gt_row gt_left">
-<p>11.54%</p>
-</td>
-<td class="gt_row gt_left">
-<p>2.97</p>
-</td>
-<td class="gt_row gt_left">
-<p>2.72e-01</p>
-</td>
-<td class="gt_row gt_left">
-<p>9.51e-01</p>
-</td>
-<td class="gt_row gt_left">
-<p>0.5</p>
-</td>
-<td class="gt_row gt_left">
-<p>31.58</p>
-</td>
+<tr class="even">
+<td align="left">APC</td>
+<td align="left">APC</td>
+<td align="left">7%</td>
+<td align="left">4%</td>
+<td align="left">10%</td>
+<td align="left">2.64</td>
+<td align="left">4.36e-01</td>
+<td align="left">1.00e+00</td>
+<td align="left">0.41</td>
+<td align="left">29.07</td>
 </tr>
-<tr>
-<td class="gt_row gt_left gt_stub">
-<p>EGFR</p>
-</td>
-<td class="gt_row gt_left">
-<p>EGFR</p>
-</td>
-<td class="gt_row gt_left">
-<p>9%</p>
-</td>
-<td class="gt_row gt_left">
-<p>12.5%</p>
-</td>
-<td class="gt_row gt_left">
-<p>5.77%</p>
-</td>
-<td class="gt_row gt_left">
-<p>0.43</p>
-</td>
-<td class="gt_row gt_left">
-<p>3.05e-01</p>
-</td>
-<td class="gt_row gt_left">
-<p>9.51e-01</p>
-</td>
-<td class="gt_row gt_left">
-<p>0.07</p>
-</td>
-<td class="gt_row gt_left">
-<p>2.17</p>
-</td>
+<tr class="odd">
+<td align="left">MLL</td>
+<td align="left">MLL</td>
+<td align="left">9%</td>
+<td align="left">12%</td>
+<td align="left">6%</td>
+<td align="left">0.47</td>
+<td align="left">4.87e-01</td>
+<td align="left">1.00e+00</td>
+<td align="left">0.07</td>
+<td align="left">2.37</td>
 </tr>
-<tr>
-<td class="gt_row gt_left gt_stub">
-<p>MLL2</p>
-</td>
-<td class="gt_row gt_left">
-<p>MLL2</p>
-</td>
-<td class="gt_row gt_left">
-<p>5%</p>
-</td>
-<td class="gt_row gt_left">
-<p>2.08%</p>
-</td>
-<td class="gt_row gt_left">
-<p>7.69%</p>
-</td>
-<td class="gt_row gt_left">
-<p>3.87</p>
-</td>
-<td class="gt_row gt_left">
-<p>3.64e-01</p>
-</td>
-<td class="gt_row gt_left">
-<p>9.51e-01</p>
-</td>
-<td class="gt_row gt_left">
-<p>0.37</p>
-</td>
-<td class="gt_row gt_left">
-<p>196.71</p>
-</td>
+<tr class="even">
+<td align="left">FAT1</td>
+<td align="left">FAT1</td>
+<td align="left">11%</td>
+<td align="left">14%</td>
+<td align="left">8%</td>
+<td align="left">0.54</td>
+<td align="left">5.25e-01</td>
+<td align="left">1.00e+00</td>
+<td align="left">0.11</td>
+<td align="left">2.29</td>
 </tr>
 </tbody>
 </table>
-</div>
-<!--/html_preserve-->
-<div class="sourceCode" id="cb15"><pre class="downlit">
-<span class="va">out</span><span class="op">$</span><span class="va">forest.plot</span></pre></div>
+<div class="sourceCode" id="cb15"><pre class="r"><span class="no">out</span>$<span class="no">forest.plot</span></pre></div>
 <p><img src="reference/figures/README-unnamed-chunk-11-1.png" width="100%"></p>
-<div class="sourceCode" id="cb16"><pre class="downlit">
-<span class="va">out</span><span class="op">$</span><span class="va">vPlot</span></pre></div>
-<p><img src="reference/figures/README-unnamed-chunk-11-2.png" width="100%"></p>
+<div class="sourceCode" id="cb16"><pre class="r"><span class="no">out</span>$<span class="no">vPlot</span></pre></div>
+<!--html_preserve-->
+<div id="htmlwidget-d8c7d17cf4080686b93c" class="plotly html-widget" style="width:100%;height:480px;">
+</div>
+<script type="application/json" data-for="htmlwidget-d8c7d17cf4080686b93c">{"x":{"visdat":{"4a061cfcacce":["function () ","plotlyVisDat"]},"cur_data":"4a061cfcacce","attrs":{"4a061cfcacce":{"x":{},"y":{},"text":{},"mode":"markers","alpha_stroke":1,"sizes":[10,100],"spans":[1,20]}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"title":"Volcano Plot","xaxis":{"domain":[0,1],"automargin":true,"title":".data$OddsRatio"},"yaxis":{"domain":[0,1],"automargin":true,"title":"-log10(.data$Pvalue)"},"hovermode":"closest","showlegend":false},"source":"A","config":{"showSendToCloud":false},"data":[{"x":[0.19,2.17,0.24,4.21,4.21,4.21,0.38,2.64,0.47,0.54,0.59,0.48,2.07,0.48,2.07,0.48,2.07,0.48,0.48,1.73,0.58,1,0.66,1.17,1,1,1.53,1.53,0.66,1.27,0.74,1,1.53,0.66,1,0.66,0.66,0.66,1],"y":[0.690369832574101,0.447331783887807,0.441291429466834,0.441291429466834,0.441291429466834,0.441291429466834,0.360513510731414,0.360513510731414,0.312471038785366,0.279840696594043,0.25649023527157,0.168770306132937,0.168770306132937,0.168770306132937,0.168770306132937,0.168770306132937,0.168770306132937,0.168770306132937,0.168770306132937,0.145693958198919,0.145693958198919,-0,-0,-0,-0,-0,-0,-0,-0,-0,-0,-0,-0,-0,-0,-0,-0,-0,-0],"text":["Gene : MYC.Amp <\/br> Odds Ratio : 0.19","Gene : PIK3CA <\/br> Odds Ratio : 2.17","Gene : EPHA5 <\/br> Odds Ratio : 0.24","Gene : FLT4 <\/br> Odds Ratio : 4.21","Gene : DOT1L <\/br> Odds Ratio : 4.21","Gene : ERBB2.Amp <\/br> Odds Ratio : 4.21","Gene : STK11 <\/br> Odds Ratio : 0.38","Gene : APC <\/br> Odds Ratio : 2.64","Gene : MLL <\/br> Odds Ratio : 0.47","Gene : FAT1 <\/br> Odds Ratio : 0.54","Gene : KRAS <\/br> Odds Ratio : 0.59","Gene : RB1 <\/br> Odds Ratio : 0.48","Gene : CDH1 <\/br> Odds Ratio : 2.07","Gene : ATM <\/br> Odds Ratio : 0.48","Gene : PIK3C2G <\/br> Odds Ratio : 2.07","Gene : ALK <\/br> Odds Ratio : 0.48","Gene : CDK12.Amp <\/br> Odds Ratio : 2.07","Gene : CDKN2B.Del <\/br> Odds Ratio : 0.48","Gene : FGFR1.Amp <\/br> Odds Ratio : 0.48","Gene : NOTCH1 <\/br> Odds Ratio : 1.73","Gene : CDKN2A.Del <\/br> Odds Ratio : 0.58","Gene : TP53 <\/br> Odds Ratio : 1","Gene : KEAP1 <\/br> Odds Ratio : 0.66","Gene : TERT <\/br> Odds Ratio : 1.17","Gene : MLL3 <\/br> Odds Ratio : 1","Gene : PTPRT <\/br> Odds Ratio : 1","Gene : AR <\/br> Odds Ratio : 1.53","Gene : TSC1 <\/br> Odds Ratio : 1.53","Gene : MLL2 <\/br> Odds Ratio : 0.66","Gene : EGFR <\/br> Odds Ratio : 1.27","Gene : CREBBP <\/br> Odds Ratio : 0.74","Gene : BRAF <\/br> Odds Ratio : 1","Gene : SMARCA4 <\/br> Odds Ratio : 1.53","Gene : NOTCH3 <\/br> Odds Ratio : 0.66","Gene : PTPRD <\/br> Odds Ratio : 1","Gene : GATA3 <\/br> Odds Ratio : 0.66","Gene : CCND1.Amp <\/br> Odds Ratio : 0.66","Gene : FGF19.Amp <\/br> Odds Ratio : 0.66","Gene : MCL1.Amp <\/br> Odds Ratio : 1"],"mode":"markers","type":"scatter","marker":{"color":"rgba(31,119,180,1)","line":{"color":"rgba(31,119,180,1)"}},"error_y":{"color":"rgba(31,119,180,1)"},"error_x":{"color":"rgba(31,119,180,1)"},"line":{"color":"rgba(31,119,180,1)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.2,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script><!--/html_preserve-->
 </div>
 <div id="survival-analysis" class="section level4">
 <h4 class="hasAnchor">
 <a href="#survival-analysis" class="anchor"></a>Survival analysis</h4>
 <p>Similarly we include simple tools to perform univariate Cox’s proportional regression adjusted for false discovery rate in the <code><a href="reference/uni.cox.html">uni.cox()</a></code> function.</p>
-<div class="sourceCode" id="cb17"><pre class="downlit">
-<span class="va">time</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Exponential.html">rexp</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">patients</span><span class="op">)</span><span class="op">)</span>
-<span class="va">status</span> <span class="op">&lt;-</span> <span class="va">outcome</span>
-<span class="va">surv.dat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html">cbind</a></span><span class="op">(</span><span class="va">time</span>,<span class="va">status</span><span class="op">)</span><span class="op">)</span>
-<span class="va">out</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/uni.cox.html">uni.cox</a></span><span class="op">(</span>X <span class="op">=</span> <span class="va">gen.dat</span>, surv.dat <span class="op">=</span> <span class="va">surv.dat</span>, surv.formula <span class="op">=</span> <span class="fu">Surv</span><span class="op">(</span><span class="va">time</span>,<span class="va">status</span><span class="op">)</span><span class="op">~</span><span class="va">.</span>,filter <span class="op">=</span> <span class="fl">0.05</span><span class="op">)</span>
-<span class="fu">kable</span><span class="op">(</span><span class="va">out</span><span class="op">$</span><span class="va">tab</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span>,<span class="op">]</span>,row.names <span class="op">=</span> <span class="cn">T</span><span class="op">)</span></pre></div>
+<div class="sourceCode" id="cb17"><pre class="r"><span class="no">time</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Exponential.html">rexp</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span>(<span class="no">patients</span>))
+<span class="no">status</span> <span class="kw">&lt;-</span> <span class="no">outcome</span>
+<span class="no">surv.dat</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/cbind.html">cbind</a></span>(<span class="no">time</span>,<span class="no">status</span>))
+<span class="no">out</span> <span class="kw">&lt;-</span> <span class="fu"><a href="reference/uni.cox.html">uni.cox</a></span>(<span class="kw">X</span> <span class="kw">=</span> <span class="no">gen.dat</span>, <span class="kw">surv.dat</span> <span class="kw">=</span> <span class="no">surv.dat</span>, <span class="kw">surv.formula</span> <span class="kw">=</span> <span class="fu">Surv</span>(<span class="no">time</span>,<span class="no">status</span>)~<span class="no">.</span>,<span class="kw">filter</span> <span class="kw">=</span> <span class="fl">0.05</span>)
+<span class="fu">kable</span>(<span class="no">out</span>$<span class="no">tab</span>[<span class="fl">1</span>:<span class="fl">10</span>,],<span class="kw">row.names</span> <span class="kw">=</span> <span class="fl">TRUE</span>)</pre></div>
 <table class="table">
 <thead><tr class="header">
 <th align="left"></th>
@@ -1664,99 +510,98 @@
 <tbody>
 <tr class="odd">
 <td align="left">1</td>
-<td align="left">STK11</td>
-<td align="right">0.930</td>
-<td align="right">2.540</td>
-<td align="right">0.0516</td>
-<td align="right">0.7208300</td>
-<td align="right">0.07</td>
+<td align="left">MLL</td>
+<td align="right">-1.480</td>
+<td align="right">0.228</td>
+<td align="right">0.0155</td>
+<td align="right">0.6043112</td>
+<td align="right">0.09</td>
 </tr>
 <tr class="even">
 <td align="left">2</td>
-<td align="left">CDKN2A.Del</td>
-<td align="right">0.816</td>
-<td align="right">2.260</td>
-<td align="right">0.0637</td>
-<td align="right">0.7208300</td>
-<td align="right">0.08</td>
+<td align="left">STK11</td>
+<td align="right">-1.460</td>
+<td align="right">0.233</td>
+<td align="right">0.0519</td>
+<td align="right">0.9122695</td>
+<td align="right">0.07</td>
 </tr>
 <tr class="odd">
 <td align="left">3</td>
-<td align="left">TERT</td>
-<td align="right">-0.862</td>
-<td align="right">0.422</td>
-<td align="right">0.0703</td>
-<td align="right">0.7208300</td>
-<td align="right">0.15</td>
+<td align="left">KEAP1</td>
+<td align="right">-1.020</td>
+<td align="right">0.362</td>
+<td align="right">0.1670</td>
+<td align="right">0.9122695</td>
+<td align="right">0.05</td>
 </tr>
 <tr class="even">
 <td align="left">4</td>
-<td align="left">MLL2</td>
-<td align="right">0.915</td>
-<td align="right">2.500</td>
-<td align="right">0.0859</td>
-<td align="right">0.7208300</td>
-<td align="right">0.05</td>
+<td align="left">NOTCH1</td>
+<td align="right">0.609</td>
+<td align="right">1.840</td>
+<td align="right">0.2070</td>
+<td align="right">0.9122695</td>
+<td align="right">0.08</td>
 </tr>
 <tr class="odd">
 <td align="left">5</td>
-<td align="left">PTPRD</td>
-<td align="right">-1.180</td>
-<td align="right">0.309</td>
-<td align="right">0.1040</td>
-<td align="right">0.7208300</td>
-<td align="right">0.08</td>
+<td align="left">DOT1L</td>
+<td align="right">0.659</td>
+<td align="right">1.930</td>
+<td align="right">0.2110</td>
+<td align="right">0.9122695</td>
+<td align="right">0.05</td>
 </tr>
 <tr class="even">
 <td align="left">6</td>
 <td align="left">TSC1</td>
-<td align="right">-1.610</td>
-<td align="right">0.199</td>
-<td align="right">0.1110</td>
-<td align="right">0.7208300</td>
+<td align="right">0.750</td>
+<td align="right">2.120</td>
+<td align="right">0.2130</td>
+<td align="right">0.9122695</td>
 <td align="right">0.05</td>
 </tr>
 <tr class="odd">
 <td align="left">7</td>
-<td align="left">CDH1</td>
-<td align="right">-1.430</td>
-<td align="right">0.238</td>
-<td align="right">0.1560</td>
-<td align="right">0.8462973</td>
+<td align="left">MYC.Amp</td>
+<td align="right">-1.200</td>
+<td align="right">0.301</td>
+<td align="right">0.2350</td>
+<td align="right">0.9122695</td>
 <td align="right">0.06</td>
 </tr>
 <tr class="even">
 <td align="left">8</td>
-<td align="left">PIK3CA</td>
-<td align="right">-0.784</td>
-<td align="right">0.457</td>
-<td align="right">0.1890</td>
-<td align="right">0.8462973</td>
-<td align="right">0.12</td>
+<td align="left">CDH1</td>
+<td align="right">0.605</td>
+<td align="right">1.830</td>
+<td align="right">0.2520</td>
+<td align="right">0.9122695</td>
+<td align="right">0.06</td>
 </tr>
 <tr class="odd">
 <td align="left">9</td>
-<td align="left">EPHA5</td>
-<td align="right">-1.230</td>
-<td align="right">0.292</td>
-<td align="right">0.2240</td>
-<td align="right">0.8462973</td>
-<td align="right">0.05</td>
+<td align="left">FGFR1.Amp</td>
+<td align="right">-0.826</td>
+<td align="right">0.438</td>
+<td align="right">0.2550</td>
+<td align="right">0.9122695</td>
+<td align="right">0.06</td>
 </tr>
 <tr class="even">
 <td align="left">10</td>
-<td align="left">FLT4</td>
-<td align="right">-0.870</td>
-<td align="right">0.419</td>
-<td align="right">0.2300</td>
-<td align="right">0.8462973</td>
+<td align="left">EPHA5</td>
+<td align="right">-1.080</td>
+<td align="right">0.340</td>
+<td align="right">0.2870</td>
+<td align="right">0.9122695</td>
 <td align="right">0.05</td>
 </tr>
 </tbody>
 </table>
-<div class="sourceCode" id="cb18"><pre class="downlit">
-<span class="co"># out$p</span>
-<span class="va">out</span><span class="op">$</span><span class="va">KM</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></pre></div>
+<div class="sourceCode" id="cb18"><pre class="r"><span class="co"># out$p</span>
+<span class="no">out</span>$<span class="no">KM</span><span class="kw">[[</span><span class="fl">1</span>]]</pre></div>
 <p><img src="reference/figures/README-unnamed-chunk-12-1.png" width="100%"></p>
 </div>
 </div>
@@ -1812,7 +657,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
 </div>
 
       </footer>
