@@ -17,7 +17,6 @@ knitr::opts_chunk$set(
 library(gnomeR)
 library(knitr)
 library(dplyr)
-library(gt)
 ```
 
 # gnomeR
@@ -108,7 +107,7 @@ set.seed(123)
 patients <- as.character(unique(mut$Tumor_Sample_Barcode))[sample(1:length(unique(mut$Tumor_Sample_Barcode)), 100, replace=FALSE)]
 
 gen.dat <- binmat(patients = patients, maf = mut, fusion = fusion, cna = cna)
-gt(gen.dat[1:10,1:10],rownames_to_stub = TRUE)
+kable(gen.dat[1:10,1:10],row.names = TRUE)
 ```
 
 ### Visualization 
@@ -157,9 +156,9 @@ The `gen.summary()` function let's the user perform a large scale association be
 ```{r}
 outcome <- factor(rbinom(n = length(patients),size = 1,prob = 1/2),levels = c("0","1"))
 out <- gen.summary(gen.dat = gen.dat,outcome = outcome,filter = 0.05)
-gt(out$fits[1:10,],rownames_to_stub = TRUE)
+kable(out$fits[1:10,],row.names = TRUE)
 out$forest.plot
-out$vPlot
+# out$vPlot
 ```
 
 #### Survival analysis 
@@ -171,7 +170,7 @@ time <- rexp(length(patients))
 status <- outcome
 surv.dat <- as.data.frame(cbind(time,status))
 out <- uni.cox(X = gen.dat, surv.dat = surv.dat, surv.formula = Surv(time,status)~.,filter = 0.05)
-kable(out$tab[1:10,],row.names = T)
+kable(out$tab[1:10,],row.names = TRUE)
 # out$p
 out$KM[[1]]
 ```

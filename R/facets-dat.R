@@ -31,7 +31,7 @@
 
 
 facets.dat <- function (seg = NULL, filenames = NULL, path = NULL, patients = NULL,
-          min.purity = 0.3, epsilon = 0.005, adaptive = FALSE)
+                        min.purity = 0.3, epsilon = 0.005, adaptive = FALSE)
 {
   if (is.null(seg) && is.null(filenames))
     stop("You must provide either a complete segmentation file\n         or a list of files to be loaded with their corresponding path")
@@ -54,48 +54,48 @@ facets.dat <- function (seg = NULL, filenames = NULL, path = NULL, patients = NU
     purity <- c()
     missing <- c()
     s <- 0
-  for (i in 1:length(filenames)) {
-  fit <- NULL
-  try(load(paste0(path, "/", filenames[i])), silent = T)
-  if (is.na(fit$purity)) {
-    fit$purity <- 0
-  }
-  if (is.na(fit$ploidy)) {
-    fit$ploidy <- 0
-  }
-  if (!is.null(fit) && !is.na(fit$purity) && fit$purity >=
-    min.purity) {
-    s <- s + 1
-    dipLogR[s] <- fit$dipLogR
-    ploidy[s] <- fit$ploidy
-    purity[s] <- fit$purity
-    cncf <- as.data.frame(fit$cncf %>% select(
-      .data$chrom,
-      .data$start, .data$end, .data$tcn.em, .data$lcn.em, .data$num.mark
-    ))
-    cncf.comp <- cncf[stats::complete.cases(cncf), ]
+    for (i in 1:length(filenames)) {
+      fit <- NULL
+      try(load(paste0(path, "/", filenames[i])), silent = T)
+      if (is.na(fit$purity)) {
+        fit$purity <- 0
+      }
+      if (is.na(fit$ploidy)) {
+        fit$ploidy <- 0
+      }
+      if (!is.null(fit) && !is.na(fit$purity) && fit$purity >=
+          min.purity) {
+        s <- s + 1
+        dipLogR[s] <- fit$dipLogR
+        ploidy[s] <- fit$ploidy
+        purity[s] <- fit$purity
+        cncf <- as.data.frame(fit$cncf %>% select(
+          .data$chrom,
+          .data$start, .data$end, .data$tcn.em, .data$lcn.em, .data$num.mark
+        ))
+        cncf.comp <- cncf[stats::complete.cases(cncf), ]
 
-    FGAs[s] <- as.numeric(unique(cncf.comp %>%
-      mutate(
-        numerator = .data$end - .data$start,
-        seg.sum = sum(.data$end - .data$start),
-        FGA = sum(.data$numerator[!(.data$tcn.em ==
-          2 & .data$lcn.em == 1)]) / .data$seg.sum) %>%
-        select(.data$FGA)))
+        FGAs[s] <- as.numeric(unique(cncf.comp %>%
+                                       mutate(
+                                         numerator = .data$end - .data$start,
+                                         seg.sum = sum(.data$end - .data$start),
+                                         FGA = sum(.data$numerator[!(.data$tcn.em ==
+                                                                       2 & .data$lcn.em == 1)]) / .data$seg.sum) %>%
+                                       select(.data$FGA)))
 
-    cncf$sample <- rep(patients[i], nrow(cncf))
-    cncf$seg.mean <- log2(cncf$tcn.em / fit$ploidy +
-      1 * 10^(-6))
-    cncf <- cncf[, c(
-      "sample", "chrom", "start",
-      "end", "num.mark", "seg.mean"
-    )]
-    all.dat <- rbind(all.dat, cncf)
-  }
-  else {
-    missing <- c(missing, filenames[i])
-  }
-}
+        cncf$sample <- rep(patients[i], nrow(cncf))
+        cncf$seg.mean <- log2(cncf$tcn.em / fit$ploidy +
+                                1 * 10^(-6))
+        cncf <- cncf[, c(
+          "sample", "chrom", "start",
+          "end", "num.mark", "seg.mean"
+        )]
+        all.dat <- rbind(all.dat, cncf)
+      }
+      else {
+        missing <- c(missing, filenames[i])
+      }
+    }
 
     if (length(as.character(abbreviate(missing, minlength = 17))) >
         0)
@@ -131,17 +131,17 @@ facets.dat <- function (seg = NULL, filenames = NULL, path = NULL, patients = NU
         cncf <- as.data.frame(seg.filt %>% filter(.data$ID ==
                                                     patients[i]) %>% rename(sample = .data$ID, start = .data$loc.start,
                                                                             end = .data$loc.end) %>% mutate(chrom = as.numeric(as.character(.data$chrom)),
-                                                                                                      start = as.numeric(as.character(.data$start)), end = as.numeric(as.character(.data$end)),
-                                                                                                      num.mark = as.numeric(as.character(.data$num.mark)),
-                                                                                                      seg_mean = log2(.data$tcn/ploidy + 1 * 10^(-6))) %>%
+                                                                                                            start = as.numeric(as.character(.data$start)), end = as.numeric(as.character(.data$end)),
+                                                                                                            num.mark = as.numeric(as.character(.data$num.mark)),
+                                                                                                            seg_mean = log2(.data$tcn/ploidy + 1 * 10^(-6))) %>%
                                 filter(!is.infinite(.data$seg_mean) & !is.na(.data$seg_mean)))
       }
       else cncf <- as.data.frame(seg.filt %>% filter(.data$ID ==
                                                        patients[i]) %>% rename(sample = .data$ID, start = .data$loc.start,
                                                                                end = .data$loc.end) %>% mutate(chrom = as.numeric(as.character(.data$chrom)),
-                                                                                                         start = as.numeric(as.character(.data$start)), end = as.numeric(as.character(.data$end)),
-                                                                                                         num.mark = as.numeric(as.character(.data$num.mark)),
-                                                                                                         seg.mean = as.numeric(as.character(.data$seg.mean))) %>%
+                                                                                                               start = as.numeric(as.character(.data$start)), end = as.numeric(as.character(.data$end)),
+                                                                                                               num.mark = as.numeric(as.character(.data$num.mark)),
+                                                                                                               seg.mean = as.numeric(as.character(.data$seg.mean))) %>%
                                    select(.data$sample, .data$chrom, .data$start, .data$end, .data$num.mark, .data$seg.mean))
       all.dat <- rbind(all.dat, cncf)
     }
