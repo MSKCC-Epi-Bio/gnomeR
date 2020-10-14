@@ -53,8 +53,6 @@ devtools::install_github("AxelitoMartin/gnomeR", ref = "development")
 
 Along with its companion package for cbioPortal data download:
 
-NOTE: This package is currently in a private repo. Please contact whitingk@mskcc.org for access. 
-
 ``` r
 devtools::install_github("karissawhiting/cbioportalr")
 ```
@@ -231,20 +229,6 @@ out$forest.plot
 
 <img src="man/figures/README-unnamed-chunk-11-1.png" width="100%" />
 
-``` r
-out$vPlot
-```
-
-<!--html_preserve-->
-
-<div id="htmlwidget-d8c7d17cf4080686b93c" class="plotly html-widget" style="width:100%;height:480px;">
-
-</div>
-
-<script type="application/json" data-for="htmlwidget-d8c7d17cf4080686b93c">{"x":{"visdat":{"4a061cfcacce":["function () ","plotlyVisDat"]},"cur_data":"4a061cfcacce","attrs":{"4a061cfcacce":{"x":{},"y":{},"text":{},"mode":"markers","alpha_stroke":1,"sizes":[10,100],"spans":[1,20]}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"title":"Volcano Plot","xaxis":{"domain":[0,1],"automargin":true,"title":".data$OddsRatio"},"yaxis":{"domain":[0,1],"automargin":true,"title":"-log10(.data$Pvalue)"},"hovermode":"closest","showlegend":false},"source":"A","config":{"showSendToCloud":false},"data":[{"x":[0.19,2.17,0.24,4.21,4.21,4.21,0.38,2.64,0.47,0.54,0.59,0.48,2.07,0.48,2.07,0.48,2.07,0.48,0.48,1.73,0.58,1,0.66,1.17,1,1,1.53,1.53,0.66,1.27,0.74,1,1.53,0.66,1,0.66,0.66,0.66,1],"y":[0.690369832574101,0.447331783887807,0.441291429466834,0.441291429466834,0.441291429466834,0.441291429466834,0.360513510731414,0.360513510731414,0.312471038785366,0.279840696594043,0.25649023527157,0.168770306132937,0.168770306132937,0.168770306132937,0.168770306132937,0.168770306132937,0.168770306132937,0.168770306132937,0.168770306132937,0.145693958198919,0.145693958198919,-0,-0,-0,-0,-0,-0,-0,-0,-0,-0,-0,-0,-0,-0,-0,-0,-0,-0],"text":["Gene : MYC.Amp <\/br> Odds Ratio : 0.19","Gene : PIK3CA <\/br> Odds Ratio : 2.17","Gene : EPHA5 <\/br> Odds Ratio : 0.24","Gene : FLT4 <\/br> Odds Ratio : 4.21","Gene : DOT1L <\/br> Odds Ratio : 4.21","Gene : ERBB2.Amp <\/br> Odds Ratio : 4.21","Gene : STK11 <\/br> Odds Ratio : 0.38","Gene : APC <\/br> Odds Ratio : 2.64","Gene : MLL <\/br> Odds Ratio : 0.47","Gene : FAT1 <\/br> Odds Ratio : 0.54","Gene : KRAS <\/br> Odds Ratio : 0.59","Gene : RB1 <\/br> Odds Ratio : 0.48","Gene : CDH1 <\/br> Odds Ratio : 2.07","Gene : ATM <\/br> Odds Ratio : 0.48","Gene : PIK3C2G <\/br> Odds Ratio : 2.07","Gene : ALK <\/br> Odds Ratio : 0.48","Gene : CDK12.Amp <\/br> Odds Ratio : 2.07","Gene : CDKN2B.Del <\/br> Odds Ratio : 0.48","Gene : FGFR1.Amp <\/br> Odds Ratio : 0.48","Gene : NOTCH1 <\/br> Odds Ratio : 1.73","Gene : CDKN2A.Del <\/br> Odds Ratio : 0.58","Gene : TP53 <\/br> Odds Ratio : 1","Gene : KEAP1 <\/br> Odds Ratio : 0.66","Gene : TERT <\/br> Odds Ratio : 1.17","Gene : MLL3 <\/br> Odds Ratio : 1","Gene : PTPRT <\/br> Odds Ratio : 1","Gene : AR <\/br> Odds Ratio : 1.53","Gene : TSC1 <\/br> Odds Ratio : 1.53","Gene : MLL2 <\/br> Odds Ratio : 0.66","Gene : EGFR <\/br> Odds Ratio : 1.27","Gene : CREBBP <\/br> Odds Ratio : 0.74","Gene : BRAF <\/br> Odds Ratio : 1","Gene : SMARCA4 <\/br> Odds Ratio : 1.53","Gene : NOTCH3 <\/br> Odds Ratio : 0.66","Gene : PTPRD <\/br> Odds Ratio : 1","Gene : GATA3 <\/br> Odds Ratio : 0.66","Gene : CCND1.Amp <\/br> Odds Ratio : 0.66","Gene : FGF19.Amp <\/br> Odds Ratio : 0.66","Gene : MCL1.Amp <\/br> Odds Ratio : 1"],"mode":"markers","type":"scatter","marker":{"color":"rgba(31,119,180,1)","line":{"color":"rgba(31,119,180,1)"}},"error_y":{"color":"rgba(31,119,180,1)"},"error_x":{"color":"rgba(31,119,180,1)"},"line":{"color":"rgba(31,119,180,1)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.2,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
-
-<!--/html_preserve-->
-
 #### Survival analysis
 
 Similarly we include simple tools to perform univariate Cox’s
@@ -273,7 +257,6 @@ kable(out$tab[1:10,],row.names = TRUE)
 | 10 | EPHA5     |     \-1.080 | 0.340 | 0.2870 | 0.9122695 |              0.05 |
 
 ``` r
-# out$p
 out$KM[[1]]
 ```
 
