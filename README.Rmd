@@ -158,7 +158,6 @@ outcome <- factor(rbinom(n = length(patients),size = 1,prob = 1/2),levels = c("0
 out <- gen.summary(gen.dat = gen.dat,outcome = outcome,filter = 0.05)
 kable(out$fits[1:10,],row.names = TRUE)
 out$forest.plot
-# out$vPlot
 ```
 
 #### Survival analysis 
@@ -171,7 +170,6 @@ status <- outcome
 surv.dat <- as.data.frame(cbind(time,status))
 out <- uni.cox(X = gen.dat, surv.dat = surv.dat, surv.formula = Surv(time,status)~.,filter = 0.05)
 kable(out$tab[1:10,],row.names = TRUE)
-# out$p
 out$KM[[1]]
 ```
 
