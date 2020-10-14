@@ -53,6 +53,8 @@ devtools::install_github("AxelitoMartin/gnomeR", ref = "development")
 
 Along with its companion package for cbioPortal data download:
 
+NOTE: This package is currently in a private repo. Please contact whitingk@mskcc.org for access. 
+
 ``` r
 devtools::install_github("karissawhiting/cbioportalr")
 ```
