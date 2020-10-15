@@ -51,7 +51,7 @@ get_tmb <- function(patients = NULL, maf = NULL,
 
   bb <- NULL
   for(i in 1:length(samples)){
-    x=subset(mut, Tumor_Sample_Barcode==samples[i])
+    x=subset(maf, Tumor_Sample_Barcode==samples[i])
     bb[i] <- nrow(x)/d[idx[i]]
   }
   names(bb) <- samples
