@@ -106,7 +106,10 @@ binmat <- function(patients=NULL, maf = NULL, mut.type = "SOMATIC",SNP.only = FA
     if(!is.null(fusion))
       patients <- unique(c(patients, as.character(unique(fusion$Tumor_Sample_Barcode))))
     if(!is.null(cna))
-      patients <- unique(c(patients, as.character(unique(fusion$Tumor_Sample_Barcode))))
+      if("api" %in% class(cna))
+        patients <- unique(c(patients, as.character(unique(cna$sampleId))))
+      else
+        patients <- unique(c(patients, as.character(unique(gsub("\\.","-",colnames(cna))))))
   }
 
   mut <- NULL
@@ -460,6 +463,7 @@ createbin.fusion <- function(obj, patients, mut.type,cna.binary, SNP.only,includ
 ################################################
 
 createbin.cna <- function(obj, patients, mut.type,cna.binary, SNP.only,include.silent, cna.relax, specify.plat){
+  cna <- as.data.frame(cna)
   cna <- obj
   rownames(cna) <- cna[,1]
   cna <- cna[,-1]
