@@ -489,17 +489,21 @@ createbin.cna <- function(obj, patients, mut.type,cna.binary, SNP.only,include.s
   cna <- obj
   cna <- as.data.frame(tibble::as_tibble(cna))
   cna$Hugo_Symbol <- as.character(cna$Hugo_Symbol)
-  if (sum(grepl("KMT2D|KMT2C|MYCL", cna$Hugo_Symbol)) > 1) {
-    cna <- cna %>%
-      mutate(Hugo_Symbol = case_when(
-        .data$Hugo_Symbol == "KMT2D" ~ "MLL2",
-        .data$Hugo_Symbol == "KMT2C" ~ "MLL3",
-        .data$Hugo_Symbol == "MYCL" ~ "MYCL1",
-        TRUE ~ .data$Hugo_Symbol
-      ))
 
-    warning("KMT2C/KMT2D/MYCL have been recoded to MLL3/MLL2/MYCL1 in cna file.")
-  }
+  cna <- cna %>%
+    filter(!(Hugo_Symbol %in% c("KMT2D","KMT2C","MYCL")))
+
+  # if (sum(grepl("KMT2D|KMT2C|MYCL", cna$Hugo_Symbol)) > 1) {
+  #   cna <- cna %>%
+  #     mutate(Hugo_Symbol = case_when(
+  #       .data$Hugo_Symbol == "KMT2D" ~ "MLL2",
+  #       .data$Hugo_Symbol == "KMT2C" ~ "MLL3",
+  #       .data$Hugo_Symbol == "MYCL" ~ "MYCL1",
+  #       TRUE ~ .data$Hugo_Symbol
+  #     ))
+  #
+  #   warning("KMT2C/KMT2D/MYCL have been recoded to MLL3/MLL2/MYCL1 in cna file.")
+  # }
 
   rownames(cna) <- cna$Hugo_Symbol
   cna <- cna[,-1]
