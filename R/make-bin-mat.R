@@ -530,8 +530,8 @@ createbin.cna <- function(obj, patients, mut.type,cna.binary, SNP.only,include.s
       rownames(add )  <- missing
       colnames(add) <- colnames(cna)
       cna <- as.data.frame(rbind(cna,add))
-      cna <- cna[match(patients,rownames(cna)),]
     }
+    cna <- cna[match(patients,rownames(cna)),]
   }
   if(!cna.binary){
     # add missing
