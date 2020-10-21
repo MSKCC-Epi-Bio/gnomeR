@@ -450,7 +450,7 @@ createbin.fusion <- function(obj, patients, mut.type,cna.binary, SNP.only,includ
     stop("The fusion file inputted is missing a patient name column. (Tumor_Sample_Barcode)")
   if(length(match("Hugo_Symbol",colnames(fusion))) == 0)
     stop("The fusion file inputted is missing a gene name column. (Hugo_Symbol)")
-
+  fusion$Hugo_Symbol <- as.character(fusion$Hugo_Symbol)
   if (sum(grepl("KMT2D|KMT2C|MYCL", fusion$Hugo_Symbol)) > 1) {
     fusion <- fusion %>%
       mutate(Hugo_Symbol = case_when(
@@ -488,7 +488,7 @@ createbin.fusion <- function(obj, patients, mut.type,cna.binary, SNP.only,includ
 createbin.cna <- function(obj, patients, mut.type,cna.binary, SNP.only,include.silent, cna.relax, specify.plat){
   cna <- obj
   cna <- as.data.frame(tibble::as_tibble(cna))
-
+  cna$Hugo_Symbol <- as.character(cna$Hugo_Symbol)
   if (sum(grepl("KMT2D|KMT2C|MYCL", cna$Hugo_Symbol)) > 1) {
     cna <- cna %>%
       mutate(Hugo_Symbol = case_when(
