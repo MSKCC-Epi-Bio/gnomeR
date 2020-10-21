@@ -109,7 +109,7 @@ binmat <- function(patients=NULL, maf = NULL, mut.type = "SOMATIC",SNP.only = FA
       if("api" %in% class(cna))
         patients <- unique(c(patients, as.character(unique(cna$sampleId))))
       else
-        patients <- unique(c(patients, as.character(unique(gsub("\\.","-",colnames(cna))))))
+        patients <- unique(c(patients, as.character(unique(gsub("\\.","-",colnames(cna)[-1])))))
   }
 
   mut <- NULL
@@ -294,14 +294,14 @@ binmat <- function(patients=NULL, maf = NULL, mut.type = "SOMATIC",SNP.only = FA
     if(specify.plat){
       g.impact <- g.impact
       # remove 410 platform patients #
-      missing <- setdiff(c(g.impact$g468, paste0(g.impact$g468,".fus"),paste0(g.impact$g468,".Del"),paste0(g.impact$g468,".Amp")),
-                         c(g.impact$g410, paste0(g.impact$g410,".fus"),paste0(g.impact$g410,".Del"),paste0(g.impact$g410,".Amp")))
+      missing <- setdiff(c(g.impact$g468, paste0(g.impact$g468,".fus"),paste0(g.impact$g468,".Del"),paste0(g.impact$g468,".Amp"),paste0(g.impact$g468,".cna")),
+                         c(g.impact$g410, paste0(g.impact$g410,".fus"),paste0(g.impact$g410,".Del"),paste0(g.impact$g410,".Amp"),paste0(g.impact$g410,".cna")))
       if(sum(v == "5", na.rm = T) > 0 && sum(missing %in% colnames(mut)) > 0)
         mut[which(v == "5"), stats::na.omit(match(missing, colnames(mut)))] <- NA
 
       # remove 341 platform patients #
-      missing <- setdiff(c(g.impact$g468, paste0(g.impact$g468,".fus"),paste0(g.impact$g468,".Del"),paste0(g.impact$g468,".Amp")),
-                         c(g.impact$g341, paste0(g.impact$g341,".fus"),paste0(g.impact$g341,".Del"),paste0(g.impact$g341,".Amp")))
+      missing <- setdiff(c(g.impact$g468, paste0(g.impact$g468,".fus"),paste0(g.impact$g468,".Del"),paste0(g.impact$g468,".Amp"),paste0(g.impact$g468,".cna")),
+                         c(g.impact$g341, paste0(g.impact$g341,".fus"),paste0(g.impact$g341,".Del"),paste0(g.impact$g341,".Amp"),paste0(g.impact$g341,".cna")))
       if(sum(v == "3", na.rm = T) > 0 && sum(missing %in% colnames(mut)) > 0)
         mut[which(v == "3"), stats::na.omit(match(missing, colnames(mut)))] <- NA
 
@@ -310,11 +310,11 @@ binmat <- function(patients=NULL, maf = NULL, mut.type = "SOMATIC",SNP.only = FA
 
   if(!is.null(set.plat)){
     if(set.plat == "341"){
-      keep <- c(g.impact$g341, paste0(g.impact$g341,".fus"),paste0(g.impact$g341,".Del"),paste0(g.impact$g341,".Amp"))
+      keep <- c(g.impact$g341, paste0(g.impact$g341,".fus"),paste0(g.impact$g341,".Del"),paste0(g.impact$g341,".Amp"),paste0(g.impact$g341,".cna"))
       mut <- mut[,colnames(mut) %in% keep]
     }
     if(set.plat == "410"){
-      keep <- c(g.impact$g410, paste0(g.impact$g410,".fus"),paste0(g.impact$g410,".Del"),paste0(g.impact$g410,".Amp"))
+      keep <- c(g.impact$g410, paste0(g.impact$g410,".fus"),paste0(g.impact$g410,".Del"),paste0(g.impact$g410,".Amp"),paste0(g.impact$g410,".cna"))
       mut <- mut[,colnames(mut) %in% keep]
     }
   }
@@ -363,35 +363,47 @@ createbin.maf <- function(obj, patients, mut.type, cna.binary, SNP.only, include
   maf <- as_tibble(obj)
   maf$Hugo_Symbol <- as.character(maf$Hugo_Symbol)
   # recode gene names that have been changed between panel versions to make sure they are consistent and counted as the same gene
-  if (sum(grepl("KMT2D", maf$Hugo_Symbol)) > 1) {
+  if (sum(grepl("KMT2D|KMT2C|MYCL", maf$Hugo_Symbol)) > 1) {
     maf <- maf %>%
       mutate(Hugo_Symbol = case_when(
         .data$Hugo_Symbol == "KMT2D" ~ "MLL2",
-        TRUE ~ .data$Hugo_Symbol
-      ))
-
-    warning("KMT2D has been recoded to MLL2")
-  }
-
-  if (sum(grepl("KMT2C", maf$Hugo_Symbol)) > 1) {
-    maf <- maf %>%
-      mutate(Hugo_Symbol = case_when(
         .data$Hugo_Symbol == "KMT2C" ~ "MLL3",
-        TRUE ~ .data$Hugo_Symbol
-      ))
-
-    warning("KMT2C has been recoded to MLL3")
-  }
-
-  if (sum(grepl("MYCL", maf$Hugo_Symbol)) > 1) {
-    maf <- maf %>%
-      mutate(Hugo_Symbol = case_when(
         .data$Hugo_Symbol == "MYCL" ~ "MYCL1",
         TRUE ~ .data$Hugo_Symbol
       ))
 
-    warning("MYCL has been recoded to MYCL1")
+    warning("KMT2C/KMT2D/MYCL have been recoded to MLL3/MLL2/MYCL1 in MAF file.")
   }
+
+  # if (sum(grepl("KMT2D", maf$Hugo_Symbol)) > 1) {
+  #   maf <- maf %>%
+  #     mutate(Hugo_Symbol = case_when(
+  #       .data$Hugo_Symbol == "KMT2D" ~ "MLL2",
+  #       TRUE ~ .data$Hugo_Symbol
+  #     ))
+  #
+  #   warning("KMT2D has been recoded to MLL2")
+  # }
+  #
+  # if (sum(grepl("KMT2C", maf$Hugo_Symbol)) > 1) {
+  #   maf <- maf %>%
+  #     mutate(Hugo_Symbol = case_when(
+  #       .data$Hugo_Symbol == "KMT2C" ~ "MLL3",
+  #       TRUE ~ .data$Hugo_Symbol
+  #     ))
+  #
+  #   warning("KMT2C has been recoded to MLL3")
+  # }
+  #
+  # if (sum(grepl("MYCL", maf$Hugo_Symbol)) > 1) {
+  #   maf <- maf %>%
+  #     mutate(Hugo_Symbol = case_when(
+  #       .data$Hugo_Symbol == "MYCL" ~ "MYCL1",
+  #       TRUE ~ .data$Hugo_Symbol
+  #     ))
+  #
+  #   warning("MYCL has been recoded to MYCL1")
+  # }
 
   # # clean gen dat #
   if(SNP.only) SNP.filt = "SNP"
@@ -438,7 +450,18 @@ createbin.fusion <- function(obj, patients, mut.type,cna.binary, SNP.only,includ
     stop("The fusion file inputted is missing a patient name column. (Tumor_Sample_Barcode)")
   if(length(match("Hugo_Symbol",colnames(fusion))) == 0)
     stop("The fusion file inputted is missing a gene name column. (Hugo_Symbol)")
+  fusion$Hugo_Symbol <- as.character(fusion$Hugo_Symbol)
+  if (sum(grepl("KMT2D|KMT2C|MYCL", fusion$Hugo_Symbol)) > 1) {
+    fusion <- fusion %>%
+      mutate(Hugo_Symbol = case_when(
+        .data$Hugo_Symbol == "KMT2D" ~ "MLL2",
+        .data$Hugo_Symbol == "KMT2C" ~ "MLL3",
+        .data$Hugo_Symbol == "MYCL" ~ "MYCL1",
+        TRUE ~ .data$Hugo_Symbol
+      ))
 
+    warning("KMT2C/KMT2D/MYCL have been recoded to MLL3/MLL2/MYCL1 in fusion file.")
+  }
 
   fusion <- as_tibble(fusion) %>%
     filter(.data$Tumor_Sample_Barcode %in% patients)
@@ -463,9 +486,26 @@ createbin.fusion <- function(obj, patients, mut.type,cna.binary, SNP.only,includ
 ################################################
 
 createbin.cna <- function(obj, patients, mut.type,cna.binary, SNP.only,include.silent, cna.relax, specify.plat){
-  cna <- as.data.frame(cna)
   cna <- obj
-  rownames(cna) <- cna[,1]
+  cna <- as.data.frame(tibble::as_tibble(cna))
+  cna$Hugo_Symbol <- as.character(cna$Hugo_Symbol)
+
+  cna <- cna %>%
+    filter(!(Hugo_Symbol %in% c("KMT2D","KMT2C","MYCL")))
+
+  # if (sum(grepl("KMT2D|KMT2C|MYCL", cna$Hugo_Symbol)) > 1) {
+  #   cna <- cna %>%
+  #     mutate(Hugo_Symbol = case_when(
+  #       .data$Hugo_Symbol == "KMT2D" ~ "MLL2",
+  #       .data$Hugo_Symbol == "KMT2C" ~ "MLL3",
+  #       .data$Hugo_Symbol == "MYCL" ~ "MYCL1",
+  #       TRUE ~ .data$Hugo_Symbol
+  #     ))
+  #
+  #   warning("KMT2C/KMT2D/MYCL have been recoded to MLL3/MLL2/MYCL1 in cna file.")
+  # }
+
+  rownames(cna) <- cna$Hugo_Symbol
   cna <- cna[,-1]
   cna <- as.data.frame(t(cna))
   rownames(cna) <- gsub("\\.","-",rownames(cna))
@@ -494,8 +534,8 @@ createbin.cna <- function(obj, patients, mut.type,cna.binary, SNP.only,include.s
       rownames(add )  <- missing
       colnames(add) <- colnames(cna)
       cna <- as.data.frame(rbind(cna,add))
-      cna <- cna[match(patients,rownames(cna)),]
     }
+    cna <- cna[match(patients,rownames(cna)),]
   }
   if(!cna.binary){
     # add missing
@@ -507,11 +547,12 @@ createbin.cna <- function(obj, patients, mut.type,cna.binary, SNP.only,include.s
       cna <- as.data.frame(rbind(cna,add))
       cna <- cna[match(patients,rownames(cna)),]
     }
-
+    cna <- cna[match(patients,rownames(cna)),]
     cna <- cna %>%
       mutate_all(~ factor(as.numeric(as.character(.)),
                           levels = c("0","-2","-1.5","2")[which(c(0,-2,-1.5,2) %in% as.numeric(as.character(.)))]))
     colnames(cna) <- paste0(colnames(cna),".cna")
+    rownames(cna) <- patients
   }
 
   return(cna)
