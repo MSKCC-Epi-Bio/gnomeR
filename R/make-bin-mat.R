@@ -108,8 +108,10 @@ binmat <- function(patients=NULL, maf = NULL, mut.type = "SOMATIC",SNP.only = FA
     if(!is.null(cna))
       if("api" %in% class(cna))
         patients <- unique(c(patients, as.character(unique(cna$sampleId))))
-      else
+      else if(length(grep("oncogenic", colnames(cna), ignore.case = TRUE)) == 0)
         patients <- unique(c(patients, as.character(unique(gsub("\\.","-",colnames(cna)[-1])))))
+      else if(length(grep("oncogenic", colnames(cna), ignore.case = TRUE)) > 0)
+        patients <- unique(c(patients, as.character(unique(cna$SAMPLE_ID))))
   }
 
   mut <- NULL
@@ -235,9 +237,43 @@ binmat <- function(patients=NULL, maf = NULL, mut.type = "SOMATIC",SNP.only = FA
 
     else{
       cna <- as.data.frame(cna)
+
+      if(length(grep("oncogenic",colnames(cna), ignore.case = TRUE)) > 0){
+        if(oncokb){
+          warning("Your data is already oncokb annotated. 'oncokb' argument was overwriten to FALSE.")
+          oncokb <- FALSE
+        }
+
+        cna <- cna %>%
+          filter(.data$oncogenic %in% keep_onco) #%>%
+        # dplyr::mutate(SAMPLE_ID = gsub("\\.","-",SAMPLE_ID))
+
+        temp.cna <- as.data.frame(matrix(0L,
+                                         nrow = length(unique(cna$HUGO_SYMBOL)),
+                                         ncol = length(unique(cna$SAMPLE_ID))+1))
+        # rownames(temp.cna) <- unique(cna$SAMPLE_ID)
+        temp.cna[,1] <- unique(as.character(cna$HUGO_SYMBOL))
+        colnames(temp.cna) <- c("Hugo_Symbol",unique(as.character(cna$SAMPLE_ID)))
+
+        for(i in colnames(temp.cna)[-1]){
+          temp <- cna %>%
+            filter(.data$SAMPLE_ID %in% i) %>%
+            select(.data$SAMPLE_ID, .data$HUGO_SYMBOL, .data$ALTERATION)
+          if(nrow(temp)>0){
+            temp.cna[match(temp$HUGO_SYMBOL, temp.cna[,1]),match(i, colnames(temp.cna))] <- as.character(temp$ALTERATION)
+          }
+        }
+        temp.cna[temp.cna == "Amplification"] <- 2
+        temp.cna[temp.cna == "Deletion"] <- -2
+
+        cna <- temp.cna
+        temp.cna <- NULL
+      }
+
+
       if(oncokb){
         cna <- oncokb(maf = NULL, fusion = NULL, cna = cna, token = token,...)$cna_oncokb %>%
-          filter(.data$oncogenic %in% c("Oncogenic","Likely Oncogenic")) #%>%
+          filter(.data$oncogenic %in% keep_onco) #%>%
         # dplyr::mutate(SAMPLE_ID = gsub("\\.","-",SAMPLE_ID))
 
         temp.cna <- as.data.frame(matrix(0L,
