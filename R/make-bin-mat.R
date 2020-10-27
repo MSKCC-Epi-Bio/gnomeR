@@ -598,6 +598,17 @@ createbin.cna <- function(obj, patients, mut.type,cna.binary, SNP.only,include.s
 createbin.api <- function(obj, patients, mut.type,cna.binary, SNP.only,include.silent, cna.relax, specify.plat){
   cna <- as.data.frame(obj)
 
+  cna$Hugo_Symbol <- as.character(cna$Hugo_Symbol)
+  if (sum(grepl("KMT2D|KMT2C|MYCL", cna$Hugo_Symbol)) > 1) {
+    cna <- cna %>%
+      mutate(Hugo_Symbol = case_when(
+        .data$Hugo_Symbol == "KMT2D" ~ "MLL2",
+        .data$Hugo_Symbol == "KMT2C" ~ "MLL3",
+        .data$Hugo_Symbol == "MYCL" ~ "MYCL1",
+        TRUE ~ .data$Hugo_Symbol
+      )) %>%
+      filter(!is.na(Hugo_Symbol))
+  }
   # recreate orginal format #
   temp <- as.data.frame(matrix(0L,ncol = length(patients)+1, nrow = length(unique(cna$Hugo_Symbol))))
   colnames(temp) <- c("Hugo_Symbol",patients)
@@ -654,6 +665,7 @@ createbin.api <- function(obj, patients, mut.type,cna.binary, SNP.only,include.s
       mutate_all(~ factor(as.numeric(as.character(.)),
                           levels = c("0","-2","-1.5","2")[which(c(0,-2,-1.5,2) %in% as.numeric(as.character(.)))]))
     colnames(cna) <- paste0(colnames(cna),".cna")
+    rownames(cna) <- patients
   }
 
   return(cna)
