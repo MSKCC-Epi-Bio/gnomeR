@@ -24,6 +24,7 @@ library(dplyr)
 <!-- badges: start -->
 [![Travis build status](https://travis-ci.com/AxelitoMartin/gnomeR.svg?branch=development)](https://travis-ci.org/AxelitoMartin/gnomeR)
 [![Codecov test coverage](https://codecov.io/gh/AxelitoMartin/gnomeR/branch/development/graph/badge.svg)](https://codecov.io/gh/AxelitoMartin/gnomeR?branch=development)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.4171636.svg)](https://doi.org/10.5281/zenodo.4171636)
 <!-- badges: end -->
 
 the `gnomeR` package provides a consistent framework for genetic data processing, visualization and analysis. This is primarily targeted to IMPACT datasets but can also be applied to any genomic data provided by CbioPortal. 
