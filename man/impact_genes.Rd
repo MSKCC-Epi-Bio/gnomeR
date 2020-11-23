@@ -3,18 +3,30 @@
 \docType{data}
 \name{impact_genes}
 \alias{impact_genes}
-\title{List of genes entrezID for the API}
+\title{IMPACT Gene Meta Data}
 \format{
-dataframe of the IDs
+A data frame of impact genes
 \describe{
- \item{id}{EntrezID}
- \item{hugo_symbol}{Gene name}
+  \item{hugo_symbol}{Factor w/ 574 levels,
+   Column containing all HUGO symbols genes included in IMPACT}
+  \item{platform_341}{Character, indicates whether each gene was included in
+  IMPACT platform 341. Options are `included` and `not included`}
+  \item{platform_410}{Character, indicates whether each gene was included in
+  IMPACT platform 410. Options are `included` and `not included`}
+  \item{platform_468}{Character, indicates whether each gene was included in
+  IMPACT platform 468. Options are `included` and `not included`}
+  \item{pathway}{Character, indicates whether each gene belongs to one of the pathways
+  defined in Oncogenic Signaling Pathways in The Cancer Genome Atlas`}
 }
+}
+\source{
+\url{https://cbioportal.mskcc.org/}
 }
 \usage{
 impact_genes
 }
 \description{
-We include all the gene IDs in IMPACT
+Dataframe labeling all genes found in IMPACT along with their corresponding
+platform and Entrez ID.
 }
 \keyword{datasets}

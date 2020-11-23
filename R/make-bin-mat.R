@@ -361,19 +361,27 @@ binmat <- function(patients=NULL, maf = NULL, mut.type = "SOMATIC",SNP.only = FA
 
   # create pathway levels alterations table #
   if(pathway){
-    pathway_dat <- as.data.frame(do.call('cbind',lapply(unique(impact_gene_info$pathway[!is.na(impact_gene_info$pathway)]),function(x){
-      genes <- as.character(unlist(impact_gene_info %>%
-                                     filter(.data$pathway == x) %>% select(.data$hugo_symbol)))
-      as.numeric(apply(mut %>% select(starts_with(genes)),1,function(y){
-        ifelse(sum(abs(as.numeric(as.character(y))),na.rm = T)>0, 1,0)
-      }))
-    })))
-    colnames(pathway_dat) <- unique(impact_gene_info$pathway[!is.na(impact_gene_info$pathway)])
-    rownames(pathway_dat) <- rownames(mut)
-    return(list(mut = mut, pathway_dat = pathway_dat))
-  }
 
-  return(mut)
+    pathway_dat <- purrr::map2_dfc(pathways$pathway, pathways$genes, function(x, y) {
+
+      genes <- y[y %in% names(mut)]
+      res <- apply(mut %>% select(genes), 1,
+            function(y){
+              ifelse(sum(abs(as.numeric(as.character(y))),
+                         na.rm = T) > 0, 1, 0)}) %>%
+        as.numeric(.) %>%
+        as.data.frame()
+
+      names(res) <- x
+      return(res)
+      }
+    )
+
+    rownames(pathway_dat) <- rownames(mut)
+
+    mut <- list(mut = mut, pathway_dat = pathway_dat)
+  }
+  mut
 }
 
 

@@ -38,7 +38,7 @@ check_maf_input <- function(maf)  {
 
   # recode aliases
   maf$Hugo_Symbol_Old <- maf$Hugo_Symbol
-  maf$Hugo_Symbol <- map_chr(maf$Hugo_Symbol, ~resolve_alias(.x,
+  maf$Hugo_Symbol <- purrr::map_chr(maf$Hugo_Symbol, ~resolve_alias(.x,
                                       alias_table = alias_table))
 
   message <- maf %>%
@@ -49,7 +49,7 @@ check_maf_input <- function(maf)  {
   if(nrow(message) > 0) {
     warning(paste0("To ensure gene with multiple names/aliases are correctly grouped together, the
     following genes in your maf dataframe have been recoded: \n",
-                   map2(message$Hugo_Symbol_Old,
+                   purrr::map2(message$Hugo_Symbol_Old,
                         message$Hugo_Symbol,
                         ~paste0(.x, " recoded to ", .y, " \n"))))
   }
