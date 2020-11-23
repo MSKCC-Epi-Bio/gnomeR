@@ -23,6 +23,28 @@
 "impact_gene_info"
 
 
+#' IMPACT Gene Meta Data
+#'
+#' Dataframe labeling all genes found in IMPACT along with their corresponding
+#' platform and Entrez ID.
+#'
+#' @format A data frame of impact genes
+#' \describe{
+#'   \item{hugo_symbol}{Factor w/ 574 levels,
+#'    Column containing all HUGO symbols genes included in IMPACT}
+#'   \item{platform_341}{Character, indicates whether each gene was included in
+#'   IMPACT platform 341. Options are `included` and `not included`}
+#'   \item{platform_410}{Character, indicates whether each gene was included in
+#'   IMPACT platform 410. Options are `included` and `not included`}
+#'   \item{platform_468}{Character, indicates whether each gene was included in
+#'   IMPACT platform 468. Options are `included` and `not included`}
+#'   \item{pathway}{Character, indicates whether each gene belongs to one of the pathways
+#'   defined in Oncogenic Signaling Pathways in The Cancer Genome Atlas`}
+#' }
+#' @source \url{https://cbioportal.mskcc.org/}
+"impact_gene_info"
+
+
 #' An example of clinical patient level information file from
 #' IMPACT cbioPortal dataset.
 #'
