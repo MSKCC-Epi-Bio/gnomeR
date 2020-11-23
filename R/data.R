@@ -42,7 +42,21 @@
 #'   defined in Oncogenic Signaling Pathways in The Cancer Genome Atlas`}
 #' }
 #' @source \url{https://cbioportal.mskcc.org/}
-"impact_gene_info"
+"impact_genes"
+
+
+#' IMPACT Gene Pathways
+#'
+#' Dataframe labeling all genes found in IMPACT along with their corresponding
+#' platform and Entrez ID.
+#'
+#' @format A data frame of impact genes
+#' \describe{
+#'   \item{pathway}{name of pathway}
+#'   \item{genes}{vectors of genes in each pathways}
+#' }
+#' @source \url{https://cbioportal.mskcc.org/}
+"pathways"
 
 
 #' An example of clinical patient level information file from
@@ -182,16 +196,6 @@
 "g.impact"
 
 
-#' List of genes entrezID for the API
-#'
-#' We include all the gene IDs in IMPACT
-#'
-#' @format dataframe of the IDs
-#' \describe{
-#'  \item{id}{EntrezID}
-#'  \item{hugo_symbol}{Gene name}
-#' }
-"impact_genes"
 
 #' A vector of 19441 hugo symbols in TCGA
 #'

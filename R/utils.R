@@ -33,7 +33,7 @@ check_maf_input <- function(maf)  {
       as.character(maf$Tumor_Sample_Barcode)
 
   # get table of gene aliases
-  alias_table <- unnest(impact_genes, cols = alias) %>%
+  alias_table <- tidyr::unnest(impact_genes, cols = alias) %>%
     select(hugo_symbol, alias)
 
   # recode aliases
@@ -104,7 +104,7 @@ substrRight <- function(x, n) {
 #' @export
 #'
 #' @examples
-#' resolve_alias("KMT2D", alias_table = unnest(impact_genes, cols = alias))
+#' resolve_alias("KMT2D", alias_table = tidyr::unnest(impact_genes, cols = alias))
 #'
 resolve_alias <- function(gene_to_check, alias_table = all_alias_table) {
 
