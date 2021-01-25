@@ -15,8 +15,8 @@ A data frame of impact genes
   IMPACT platform 410. Options are `included` and `not included`}
   \item{platform_468}{Character, indicates whether each gene was included in
   IMPACT platform 468. Options are `included` and `not included`}
-  \item{pathway}{Character, indicates whether each gene belongs to one of the pathways
-  defined in Oncogenic Signaling Pathways in The Cancer Genome Atlas`}
+  \item{alias}{List of character vectors of hugo_symbol aliases commonly used
+  for IMPACT genes.}
 }
 }
 \source{

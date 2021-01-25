@@ -54,6 +54,7 @@ check_maf_input <- function(maf)  {
                         ~paste0(.x, " recoded to ", .y, " \n"))))
   }
 
+  return(maf)
 }
 
 

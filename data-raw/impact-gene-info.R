@@ -10,28 +10,28 @@ library(tidyverse)
 # load(here::here("data", "ti_468.rda"))
 #
 # l <- list("ti_341" = ti_341,
-#      "ti_410" = ti_410,
-#      "ti_468" = ti_468)
+#           "ti_410" = ti_410,
+#           "ti_468" = ti_468)
 #
 # # function to extract gene name
 # extract_genes <- function(impact_plat, name) {
 #
 #   impact_plat %>%
 #     transmute(gene = str_extract(.data$V5, "[^_]+"),
-#            platform = name) %>%
+#               platform = name) %>%
 #     filter(gene != "Tiling") %>%
 #     distinct()
 # }
 #
 # # create data frame of genes
 # impact_genes <- map2_df(l, names(l),
-#                      ~extract_genes(impact_plat = .x,
-#                                     name = .y))
+#                         ~extract_genes(impact_plat = .x,
+#                                        name = .y))
 #
 # impact_genes_wide <- impact_genes %>%
 #   mutate(value = "included") %>%
 #   pivot_wider(names_from = platform,
-#   values_from = value, values_fill = "not_included")
+#               values_from = value, values_fill = "not_included")
 #
 #
 # # Get Aliases  --------------------------------------------------------
@@ -51,8 +51,8 @@ library(tidyverse)
 # all_alias <- impact_genes_wide %>%
 #   select(gene) %>%
 #   dplyr::mutate(alias = purrr::map(gene,
-#                 ~tryCatch(get_alias(.x),
-#                           error = function(e) NA_character_)))
+#                                    ~tryCatch(get_alias(.x),
+#                                              error = function(e) NA_character_)))
 #
 #
 # all_alias_table <- all_alias %>%
@@ -69,9 +69,9 @@ library(tidyverse)
 # recode_alias <- function(data = all_alias_table, accepted_gene, alias_gene) {
 #   data <- data %>%
 #     mutate(gene =
-#            case_when(
-#              gene == alias_gene ~ accepted_gene,
-#              TRUE ~ gene))
+#              case_when(
+#                gene == alias_gene ~ accepted_gene,
+#                TRUE ~ gene))
 #
 #   add_on <- tribble(
 #     ~gene, ~alias,
@@ -131,18 +131,19 @@ library(tidyverse)
 #
 # # create nested version of alias table
 # all_alias_table_nest <- all_alias_table %>%
-#   group_by(gene) %>%
+#   group_by(hugo_symbol) %>%
 #   nest()
 #
 # # join impact gene dataframe and their aliases
 # impact_genes_wide <- impact_genes_wide %>%
+#   rename(hugo_symbol = gene) %>%
 #   left_join(all_alias_table_nest) %>%
 #   rename("alias" = data)
 #
 # impact_genes <- impact_genes_wide
 #
 # names(impact_genes) <- c("hugo_symbol" ,
-#                           "platform_341",
+#                          "platform_341",
 #                          "platform_410",
 #                          "platform_468",
 #                          "alias")
