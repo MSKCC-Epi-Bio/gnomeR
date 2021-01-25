@@ -246,6 +246,7 @@ gen.summary <- function (gen.dat, outcome, filter = 0, paired = F, cont = F,
                                                      temp$MutationFreq <- summary(x)/length(x)
                                                      out <- as.data.frame(temp[2:nrow(temp), c(1,
                                                                                                2, 4, 5)])
+
                                                      rownames(out) <- gsub("x", "",
                                                                            rownames(out))
                                                      # rownames(out) <- gsub("as.factor\\(x\\)", "",
@@ -253,8 +254,13 @@ gen.summary <- function (gen.dat, outcome, filter = 0, paired = F, cont = F,
                                                    }
                                                    return(out)
                                                  })))
-    fits$FDR <- stats::p.adjust(fits$Pvalue, method = "fdr")
+
+    fits <- fits %>% mutate(across(c("Estimate", "SD", "MutationFreq"), round, 2))
+    fits$FDR <- formatC(stats::p.adjust(fits$Pvalue, method = "fdr"), format="e", digits=2)
+    #fits$Pvalue <- formatC(fits$Pvalue, format="e", digits=2)
+
     fits$GeneName <- rownames(fits)
+
     if (all(apply(gen.dat, 2, is.numeric))) {
 
       vPlot <- try(plot_ly(data = fits %>%

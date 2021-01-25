@@ -10,9 +10,9 @@
 #' @param epsilon level of unions when aggregating segments between. Default is 0.005.
 #' @param adaptive CNregions option to create adaptive segments. Default is FALSE.
 #' @return out.cn : a matrix of the union of all segment files with patients as rows and segments as columns
-#' @return ploidy : a vector of the ploidy values for the patients in out.cn
-#' @return purity : a vector of the purity values for the patients in out.cn
-#' @return FGAs : a vector of the fragment of genome altered values for the patients in out.cn
+#' @return ploidy : a vector of the ploidy values for the patients in out.cn (as in facets output)
+#' @return purity : a vector of the purity values for the patients in out.cn (as in facets output)
+#' @return FGAs : a vector of the fragment of genome altered values for the patients in out.cn (only when tcn an lcn are available)
 #' @export
 #' @examples library(gnomeR)
 #' library(dplyr)
@@ -124,6 +124,9 @@ facets.dat <- function (seg = NULL, filenames = NULL, path = NULL, patients = NU
       seg.filt <- seg.filt %>% filter(!is.na(purity), purity >=
                                         min.purity)
     }
+
+    #replace chrX as 22 and chrY as 23
+    seg.filt$chrom = recode_factor(seg.filt$chrom,X="22", Y="23")
     all.dat <- data.frame()
     for (i in 1:length(patients)) {
       if (any(grepl("tcn", colnames(seg.filt))) && any(grepl("ploidy",

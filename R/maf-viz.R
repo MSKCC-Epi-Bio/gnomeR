@@ -39,6 +39,16 @@ maf_viz <- function(maf, ...) {
   return(all_plots)
 }
 
+#' Add a percentage to counts
+#'
+#' @param mafviz barplot An of the mafviz plot that follow barplot visualization
+#'
+#' @return mafviz Barplot The same barplot is now returned with percentages
+#' @export
+#'
+#' @examples
+#' ggvarclass(mut) + add.perc()
+#'
 
 add.perc<-function(x,...){geom_text(
        aes(label=paste0(round(stat(.data$prop)*100,2),"%"), group=1),
