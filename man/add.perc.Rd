@@ -7,7 +7,9 @@
 add.perc(x, ...)
 }
 \arguments{
-\item{mafviz}{barplot An of the mafviz plot that follow barplot visualization}
+\item{x}{A barplot of the mafviz plot that follow barplot visualization}
+
+\item{...}{other arguments as passed to adjust the percentage label size}
 }
 \value{
 mafviz Barplot The same barplot is now returned with percentages

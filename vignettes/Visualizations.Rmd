@@ -56,7 +56,11 @@ plots_summary$topgenes
 plots_summary$genecor
 ```
 
+One can also add the percentage on the barplots. See below - 
 
+```{r}
+ggvarclass(mut) + add.perc(size=2.5)
+```
 # OncoPrints
 
 OncoPrint is a way to visualize multiple genomic alteration events by heatmap provided through the `ComplexHeatmap` package. We implemented an altered version of this function in `gnomeR` through the `plot_oncoPrint()` function that enables the user to explore the co-occurences in genomic and clinical features selected.
@@ -116,6 +120,18 @@ plot_oncoPrint(gen.dat = dat.gen,
                clin.dat = clin.patients.dat)
 ```
 
+## Heatmap
+A final overall picture can also be obtained by heatmap. Heatmaps easily identify any hypermutated samples or genes. 
+
+
+```{r,fig.width=10, fig.height=7}
+
+set.seed(123)
+patients<-as.character(unique(mut$Tumor_Sample_Barcode))[sample(1:length(unique(mut$Tumor_Sample_Barcode)), 100, replace=FALSE)]
+ggheatmap(binmat(patients=patients, maf=mut, cna=cna, fusion=fusion, set.plat=TRUE), show_row_names=FALSE, show_column_names=FALSE)
+
+
+```
 
 # Advanced visualization 
 

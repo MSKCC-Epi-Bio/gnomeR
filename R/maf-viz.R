@@ -41,8 +41,8 @@ maf_viz <- function(maf, ...) {
 
 #' Add a percentage to counts
 #'
-#' @param mafviz barplot An of the mafviz plot that follow barplot visualization
-#'
+#' @param x A barplot of the mafviz plot that follow barplot visualization
+#' @param ... other arguments as passed to adjust the percentage label size
 #' @return mafviz Barplot The same barplot is now returned with percentages
 #' @export
 #'
@@ -51,7 +51,7 @@ maf_viz <- function(maf, ...) {
 #'
 
 add.perc<-function(x,...){geom_text(
-       aes(label=paste0(round(stat(.data$prop)*100,2),"%"), group=1),
+       aes(label=paste0(round(stat(.data$prop)*100,1),"%"), group=1),
        stat="count",
        hjust=0, nudge_y = -0.25,...)}
 
@@ -301,7 +301,7 @@ ggcomut <- function(maf, n_genes = 10, ...) {
   p.comut
 }
 
-#' Heatmap of all events after binmat
+#' Heatmap of all events after binmat - using binary distance
 #'
 #' @param hmat dataframe obtained after binamt
 #' @param ... Further arguments as passed to ComplexHeatmap::Heatmap
@@ -310,8 +310,9 @@ ggcomut <- function(maf, n_genes = 10, ...) {
 #'
 #' @examples
 #' set.seed(123)
-#' patients<-as.character(unique(mut$Tumor_Sample_Barcode))[sample(1:length(unique(mut$Tumor_Sample_Barcode)), 100, replace=FALSE)]
-#' ggheatmap(binmat(patients=patients, maf=mut, cna=cna, fusion=fusion, set.plat=TRUE), show_row_names=FALSE, show_column_names=FALSE)
+#' patients <- as.character(unique(mut$Tumor_Sample_Barcode))[1:200]
+#' gen.dat <- binmat(patients=patients, maf=mut, cna=cna, fusion=fusion, set.plat=TRUE)
+#' ggheatmap(gen.dat, show_row_names=FALSE, show_column_names=FALSE)
 #'
 
 ggheatmap<-function(hmat, ...){

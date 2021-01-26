@@ -255,9 +255,9 @@ gen.summary <- function (gen.dat, outcome, filter = 0, paired = F, cont = F,
                                                    return(out)
                                                  })))
 
+    fits$Pvalue <- as.numeric(formatC(fits$Pvalue, format="e", digits=2))
     fits <- fits %>% mutate(across(c("Estimate", "SD", "MutationFreq"), round, 2))
     fits$FDR <- formatC(stats::p.adjust(fits$Pvalue, method = "fdr"), format="e", digits=2)
-    #fits$Pvalue <- formatC(fits$Pvalue, format="e", digits=2)
 
     fits$GeneName <- rownames(fits)
 

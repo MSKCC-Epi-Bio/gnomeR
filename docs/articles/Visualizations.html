@@ -153,72 +153,81 @@
 <p><img src="Visualizations_files/figure-html/unnamed-chunk-3-5.png" width="960"></p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>plots_summary<span class="sc">$</span>genecor</span></code></pre></div>
 <p><img src="Visualizations_files/figure-html/unnamed-chunk-3-6.png" width="960"></p>
-</div>
-<div id="oncoprints" class="section level1">
-<h1 class="hasAnchor">
-<a href="#oncoprints" class="anchor"></a>OncoPrints</h1>
+<p>One can also add the percentage on the barplots. See below -</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggvarclass</span>(mut) <span class="sc">+</span> <span class="fu">add.perc</span>(<span class="at">size=</span><span class="fl">2.5</span>)</span></code></pre></div>
+<p><img src="Visualizations_files/figure-html/unnamed-chunk-4-1.png" width="960"> # OncoPrints</p>
 <p>OncoPrint is a way to visualize multiple genomic alteration events by heatmap provided through the <code>ComplexHeatmap</code> package. We implemented an altered version of this function in <code>gnomeR</code> through the <code><a href="../reference/plot_oncoPrint.html">plot_oncoPrint()</a></code> function that enables the user to explore the co-occurences in genomic and clinical features selected.</p>
 <p>The <code><a href="../reference/plot_oncoPrint.html">plot_oncoPrint()</a></code> function takes as arguments: - <code>gen.dat</code> a genetic dataframe from <code><a href="../reference/binmat.html">binmat()</a></code> - <code>clin.dat</code> a set of clinical factors for the patients listed in gen.dat - <code>ordered</code> a numeric vector specifying which order the samples should be plotted in (optional)</p>
 <div id="genetics-only" class="section level2">
 <h2 class="hasAnchor">
 <a href="#genetics-only" class="anchor"></a>Genetics only</h2>
 <p>In the first section we show how to use the output of the <code><a href="../reference/binmat.html">binmat()</a></code> output to create an OncoPrint for a selected subset of genes. For consistency we will use the 10 genes used in the comutation plot above.</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>genes <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"ATM"</span>,<span class="st">"BRAF"</span>,<span class="st">"MLL2"</span>,<span class="st">"APC"</span>,<span class="st">"EGFR"</span>,<span class="st">"MLL3"</span>,<span class="st">"PIK3CA"</span>,<span class="st">"KRAS"</span>,<span class="st">"TP53"</span>)</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>dat.gen <span class="ot">&lt;-</span> <span class="fu">binmat</span>(<span class="at">maf =</span> mut, <span class="at">fusion =</span> fusion, <span class="at">cna =</span> cna)</span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>dat.gen <span class="ot">&lt;-</span> dat.gen <span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="fu">starts_with</span>(genes))</span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_oncoPrint</span>(<span class="at">gen.dat =</span> dat.gen)</span></code></pre></div>
-<p><img src="Visualizations_files/figure-html/unnamed-chunk-4-1.png" width="960"></p>
-</div>
-<div id="missing-information" class="section level2">
-<h2 class="hasAnchor">
-<a href="#missing-information" class="anchor"></a>Missing information</h2>
-<p>A critical point of <code>gnomeR</code> is its ability to correct for the different platforms that have existed at MSKCC. We reflect this is in the OncoPrints by including black entries in the missing cells as shown below.</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>genes <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"ATM"</span>,<span class="st">"BRAF"</span>,<span class="st">"MLL2"</span>,<span class="st">"APC"</span>,<span class="st">"EGFR"</span>,<span class="st">"MLL3"</span>,<span class="st">"PIK3CA"</span>,<span class="st">"KRAS"</span>,<span class="st">"TP53"</span>,<span class="st">"EPHA7"</span>)</span>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>genes <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"ATM"</span>,<span class="st">"BRAF"</span>,<span class="st">"MLL2"</span>,<span class="st">"APC"</span>,<span class="st">"EGFR"</span>,<span class="st">"MLL3"</span>,<span class="st">"PIK3CA"</span>,<span class="st">"KRAS"</span>,<span class="st">"TP53"</span>)</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>dat.gen <span class="ot">&lt;-</span> <span class="fu">binmat</span>(<span class="at">maf =</span> mut, <span class="at">fusion =</span> fusion, <span class="at">cna =</span> cna)</span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>dat.gen <span class="ot">&lt;-</span> dat.gen <span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="fu">starts_with</span>(genes))</span>
 <span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_oncoPrint</span>(<span class="at">gen.dat =</span> dat.gen)</span></code></pre></div>
 <p><img src="Visualizations_files/figure-html/unnamed-chunk-5-1.png" width="960"></p>
 </div>
+<div id="missing-information" class="section level2">
+<h2 class="hasAnchor">
+<a href="#missing-information" class="anchor"></a>Missing information</h2>
+<p>A critical point of <code>gnomeR</code> is its ability to correct for the different platforms that have existed at MSKCC. We reflect this is in the OncoPrints by including black entries in the missing cells as shown below.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>genes <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"ATM"</span>,<span class="st">"BRAF"</span>,<span class="st">"MLL2"</span>,<span class="st">"APC"</span>,<span class="st">"EGFR"</span>,<span class="st">"MLL3"</span>,<span class="st">"PIK3CA"</span>,<span class="st">"KRAS"</span>,<span class="st">"TP53"</span>,<span class="st">"EPHA7"</span>)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>dat.gen <span class="ot">&lt;-</span> <span class="fu">binmat</span>(<span class="at">maf =</span> mut, <span class="at">fusion =</span> fusion, <span class="at">cna =</span> cna)</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>dat.gen <span class="ot">&lt;-</span> dat.gen <span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="fu">starts_with</span>(genes))</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_oncoPrint</span>(<span class="at">gen.dat =</span> dat.gen)</span></code></pre></div>
+<p><img src="Visualizations_files/figure-html/unnamed-chunk-6-1.png" width="960"></p>
+</div>
 <div id="adding-clinical-information" class="section level2">
 <h2 class="hasAnchor">
 <a href="#adding-clinical-information" class="anchor"></a>Adding clinical information</h2>
 <p>In this section we will show how the user can further add clinical information to this plot.</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>genes <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"ATM"</span>,<span class="st">"BRAF"</span>,<span class="st">"MLL2"</span>,<span class="st">"APC"</span>,<span class="st">"EGFR"</span>,<span class="st">"MLL3"</span>,<span class="st">"PIK3CA"</span>,<span class="st">"KRAS"</span>,<span class="st">"TP53"</span>,<span class="st">"EPHA7"</span>)</span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>dat.gen <span class="ot">&lt;-</span> <span class="fu">binmat</span>(<span class="at">maf =</span> mut, <span class="at">fusion =</span> fusion, <span class="at">cna =</span> cna)</span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>dat.gen <span class="ot">&lt;-</span> dat.gen <span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="fu">starts_with</span>(genes))</span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>clin.patients.dat <span class="ot">&lt;-</span> clin.patients[<span class="fu">match</span>(</span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">abbreviate</span>(<span class="fu">rownames</span>(dat.gen),<span class="at">strict =</span> <span class="cn">TRUE</span>, <span class="at">minlength =</span> <span class="dv">9</span>),</span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>  clin.patients<span class="sc">$</span>X.Patient.Identifier),] <span class="sc">%&gt;%</span></span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">DMPID =</span> X.Patient.Identifier, <span class="at">Smoker =</span> Smoking.History) <span class="sc">%&gt;%</span></span>
-<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(DMPID, Sex,Smoker) <span class="sc">%&gt;%</span></span>
-<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(DMPID)) <span class="sc">%&gt;%</span></span>
-<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">distinct</span>(DMPID,<span class="at">.keep_all =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>dat.gen <span class="ot">&lt;-</span> dat.gen[<span class="fu">match</span>(clin.patients.dat<span class="sc">$</span>DMPID,</span>
-<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>                         <span class="fu">abbreviate</span>(<span class="fu">rownames</span>(dat.gen),<span class="at">strict =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>                                    <span class="at">minlength =</span> <span class="dv">9</span>)),]</span>
-<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>clin.patients.dat <span class="ot">&lt;-</span> clin.patients.dat <span class="sc">%&gt;%</span></span>
-<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">DMPID =</span> <span class="fu">as.character</span>(DMPID)) <span class="sc">%&gt;%</span> </span>
-<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>    tibble<span class="sc">::</span><span class="fu">column_to_rownames</span>(<span class="st">'DMPID'</span>)</span>
-<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(dat.gen) <span class="ot">&lt;-</span> <span class="fu">rownames</span>(clin.patients.dat)</span>
-<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_oncoPrint</span>(<span class="at">gen.dat =</span> dat.gen,</span>
-<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a>               <span class="at">clin.dat =</span> clin.patients.dat)</span></code></pre></div>
-<p><img src="Visualizations_files/figure-html/unnamed-chunk-6-1.png" width="960"></p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>genes <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"ATM"</span>,<span class="st">"BRAF"</span>,<span class="st">"MLL2"</span>,<span class="st">"APC"</span>,<span class="st">"EGFR"</span>,<span class="st">"MLL3"</span>,<span class="st">"PIK3CA"</span>,<span class="st">"KRAS"</span>,<span class="st">"TP53"</span>,<span class="st">"EPHA7"</span>)</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>dat.gen <span class="ot">&lt;-</span> <span class="fu">binmat</span>(<span class="at">maf =</span> mut, <span class="at">fusion =</span> fusion, <span class="at">cna =</span> cna)</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>dat.gen <span class="ot">&lt;-</span> dat.gen <span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="fu">starts_with</span>(genes))</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>clin.patients.dat <span class="ot">&lt;-</span> clin.patients[<span class="fu">match</span>(</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">abbreviate</span>(<span class="fu">rownames</span>(dat.gen),<span class="at">strict =</span> <span class="cn">TRUE</span>, <span class="at">minlength =</span> <span class="dv">9</span>),</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>  clin.patients<span class="sc">$</span>X.Patient.Identifier),] <span class="sc">%&gt;%</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">DMPID =</span> X.Patient.Identifier, <span class="at">Smoker =</span> Smoking.History) <span class="sc">%&gt;%</span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(DMPID, Sex,Smoker) <span class="sc">%&gt;%</span></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(DMPID)) <span class="sc">%&gt;%</span></span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">distinct</span>(DMPID,<span class="at">.keep_all =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>dat.gen <span class="ot">&lt;-</span> dat.gen[<span class="fu">match</span>(clin.patients.dat<span class="sc">$</span>DMPID,</span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>                         <span class="fu">abbreviate</span>(<span class="fu">rownames</span>(dat.gen),<span class="at">strict =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>                                    <span class="at">minlength =</span> <span class="dv">9</span>)),]</span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>clin.patients.dat <span class="ot">&lt;-</span> clin.patients.dat <span class="sc">%&gt;%</span></span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">DMPID =</span> <span class="fu">as.character</span>(DMPID)) <span class="sc">%&gt;%</span> </span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>    tibble<span class="sc">::</span><span class="fu">column_to_rownames</span>(<span class="st">'DMPID'</span>)</span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(dat.gen) <span class="ot">&lt;-</span> <span class="fu">rownames</span>(clin.patients.dat)</span>
+<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_oncoPrint</span>(<span class="at">gen.dat =</span> dat.gen,</span>
+<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a>               <span class="at">clin.dat =</span> clin.patients.dat)</span></code></pre></div>
+<p><img src="Visualizations_files/figure-html/unnamed-chunk-7-1.png" width="960"></p>
+</div>
+<div id="heatmap" class="section level2">
+<h2 class="hasAnchor">
+<a href="#heatmap" class="anchor"></a>Heatmap</h2>
+<p>A final overall picture can also be obtained by heatmap. Heatmaps easily identify any hypermutated samples or genes.</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>patients<span class="ot">&lt;-</span><span class="fu">as.character</span>(<span class="fu">unique</span>(mut<span class="sc">$</span>Tumor_Sample_Barcode))[<span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(<span class="fu">unique</span>(mut<span class="sc">$</span>Tumor_Sample_Barcode)), <span class="dv">100</span>, <span class="at">replace=</span><span class="cn">FALSE</span>)]</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ggheatmap</span>(<span class="fu">binmat</span>(<span class="at">patients=</span>patients, <span class="at">maf=</span>mut, <span class="at">cna=</span>cna, <span class="at">fusion=</span>fusion, <span class="at">set.plat=</span><span class="cn">TRUE</span>), <span class="at">show_row_names=</span><span class="cn">FALSE</span>, <span class="at">show_column_names=</span><span class="cn">FALSE</span>)</span></code></pre></div>
+<p><img src="Visualizations_files/figure-html/unnamed-chunk-8-1.png" width="960"></p>
 </div>
 </div>
 <div id="advanced-visualization" class="section level1">
 <h1 class="hasAnchor">
 <a href="#advanced-visualization" class="anchor"></a>Advanced visualization</h1>
 <p>The copy-number alterations data we have covered up to now is a discrete estimation of the alterations that occured. There however exist more nuanced and accurate data for copy-number alterations observed in a tumor. In <code>gnomeR</code> we include an example of segmentation file and relevant functions from the <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5027494/"><code>facets</code></a> package that provides an allele-specific copy number and clonal heterogeneity analysis tool for high-throughput DNA sequencing. We show in this section how to visualize this data:</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>samples <span class="ot">&lt;-</span> <span class="fu">as.character</span>(<span class="fu">unique</span>(mut<span class="sc">$</span>Tumor_Sample_Barcode))[<span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(<span class="fu">unique</span>(mut<span class="sc">$</span>Tumor_Sample_Barcode)), <span class="dv">100</span>, <span class="at">replace=</span><span class="cn">FALSE</span>)]</span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>p.heat <span class="ot">&lt;-</span> <span class="fu">facets.heatmap</span>(<span class="at">seg =</span> seg, <span class="at">patients =</span> samples, <span class="at">min.purity =</span> <span class="dv">0</span>)</span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>p.heat<span class="sc">$</span>p</span></code></pre></div>
-<p><img src="Visualizations_files/figure-html/unnamed-chunk-7-1.png" width="960"></p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>samples <span class="ot">&lt;-</span> <span class="fu">as.character</span>(<span class="fu">unique</span>(mut<span class="sc">$</span>Tumor_Sample_Barcode))[<span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(<span class="fu">unique</span>(mut<span class="sc">$</span>Tumor_Sample_Barcode)), <span class="dv">100</span>, <span class="at">replace=</span><span class="cn">FALSE</span>)]</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>p.heat <span class="ot">&lt;-</span> <span class="fu">facets.heatmap</span>(<span class="at">seg =</span> seg, <span class="at">patients =</span> samples, <span class="at">min.purity =</span> <span class="dv">0</span>)</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>p.heat<span class="sc">$</span>p</span></code></pre></div>
+<p><img src="Visualizations_files/figure-html/unnamed-chunk-9-1.png" width="960"></p>
 <p>In the heatmap above we show the estimate gains and losses over segments in each chromosomes (rows) and in each patient (columns). Now that the purity of the tumor sample is an important factor in order to get reliable data. Moreover we include argument <code>ordered</code> and <code>outcome</code> that enables the user to sort the heatmap by a specific feature of interest. We show an example below with a simulated feature of outcome:</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>outcome <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="fu">length</span>(samples))</span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>p.heat <span class="ot">&lt;-</span> <span class="fu">facets.heatmap</span>(<span class="at">seg =</span> seg, <span class="at">patients =</span> samples, <span class="at">min.purity =</span> <span class="dv">0</span>, <span class="at">outcome =</span> outcome, <span class="at">ordered =</span> <span class="fu">order</span>(outcome))</span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>p.heat<span class="sc">$</span>p</span></code></pre></div>
-<p><img src="Visualizations_files/figure-html/unnamed-chunk-8-1.png" width="960"></p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>outcome <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="fu">length</span>(samples))</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>p.heat <span class="ot">&lt;-</span> <span class="fu">facets.heatmap</span>(<span class="at">seg =</span> seg, <span class="at">patients =</span> samples, <span class="at">min.purity =</span> <span class="dv">0</span>, <span class="at">outcome =</span> outcome, <span class="at">ordered =</span> <span class="fu">order</span>(outcome))</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>p.heat<span class="sc">$</span>p</span></code></pre></div>
+<p><img src="Visualizations_files/figure-html/unnamed-chunk-10-1.png" width="960"></p>
 </div>
   </div>
 
@@ -229,13 +238,13 @@
 <a href="#tocnav" class="anchor"></a>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
 <li><a href="#introduction">Introduction</a></li>
-      <li><a href="#summarizing-a-maf-file">Summarizing a MAF file</a></li>
       <li>
-<a href="#oncoprints">OncoPrints</a>
+<a href="#summarizing-a-maf-file">Summarizing a MAF file</a>
       <ul class="nav nav-pills nav-stacked">
 <li><a href="#genetics-only">Genetics only</a></li>
       <li><a href="#missing-information">Missing information</a></li>
       <li><a href="#adding-clinical-information">Adding clinical information</a></li>
+      <li><a href="#heatmap">Heatmap</a></li>
       </ul>
 </li>
       <li><a href="#advanced-visualization">Advanced visualization</a></li>
