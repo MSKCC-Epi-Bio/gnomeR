@@ -208,9 +208,7 @@
 <a href="#heatmap" class="anchor"></a>Heatmap</h2>
 <p>A final overall picture can also be obtained by heatmap. Heatmaps easily identify any hypermutated samples or genes.</p>
 <div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>patients<span class="ot">&lt;-</span><span class="fu">as.character</span>(<span class="fu">unique</span>(mut<span class="sc">$</span>Tumor_Sample_Barcode))[<span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(<span class="fu">unique</span>(mut<span class="sc">$</span>Tumor_Sample_Barcode)), <span class="dv">100</span>, <span class="at">replace=</span><span class="cn">FALSE</span>)]</span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ggheatmap</span>(<span class="fu">binmat</span>(<span class="at">patients=</span>patients, <span class="at">maf=</span>mut, <span class="at">cna=</span>cna, <span class="at">fusion=</span>fusion, <span class="at">set.plat=</span><span class="cn">TRUE</span>), <span class="at">show_row_names=</span><span class="cn">FALSE</span>, <span class="at">show_column_names=</span><span class="cn">FALSE</span>)</span></code></pre></div>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggheatmap</span>(dat.gen,<span class="at">show_column_names=</span><span class="cn">FALSE</span>)</span></code></pre></div>
 <p><img src="Visualizations_files/figure-html/unnamed-chunk-8-1.png" width="960"></p>
 </div>
 </div>

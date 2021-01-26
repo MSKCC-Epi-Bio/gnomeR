@@ -124,12 +124,10 @@ plot_oncoPrint(gen.dat = dat.gen,
 A final overall picture can also be obtained by heatmap. Heatmaps easily identify any hypermutated samples or genes. 
 
 
-```{r,fig.width=10, fig.height=7}
+```{r,fig.width=10, fig.height=6}
 
-set.seed(123)
-patients<-as.character(unique(mut$Tumor_Sample_Barcode))[sample(1:length(unique(mut$Tumor_Sample_Barcode)), 100, replace=FALSE)]
-ggheatmap(binmat(patients=patients, maf=mut, cna=cna, fusion=fusion, set.plat=TRUE), show_row_names=FALSE, show_column_names=FALSE)
-
+ggheatmap(dat.gen,show_column_names=FALSE)
+  
 
 ```
 
