@@ -65,7 +65,7 @@ check_maf_input <- function(maf)  {
 
   # get table of gene aliases
   alias_table <- tidyr::unnest(impact_gene_info, cols = alias) %>%
-    select(hugo_symbol, alias)
+    dplyr::select(hugo_symbol, alias)
 
   # recode aliases
   maf$Hugo_Symbol_Old <- maf$Hugo_Symbol
@@ -73,9 +73,9 @@ check_maf_input <- function(maf)  {
                                                                     alias_table = alias_table))
 
   message <- maf %>%
-    filter(Hugo_Symbol_Old != Hugo_Symbol) %>%
-    select(Hugo_Symbol_Old, Hugo_Symbol) %>%
-    distinct()
+    dplyr::filter(Hugo_Symbol_Old != Hugo_Symbol) %>%
+    dplyr::select(Hugo_Symbol_Old, Hugo_Symbol) %>%
+    dplyr::distinct()
 
   if(nrow(message) > 0) {
     warning(paste0("To ensure gene with multiple names/aliases are correctly grouped together, the
