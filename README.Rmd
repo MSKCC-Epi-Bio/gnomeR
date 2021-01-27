@@ -176,5 +176,5 @@ out$KM[[1]]
 
 ### Further analytical tools
 
-The primary goal of `gnomeR` not being in depth analysis of genomic data but rather reliable, modulable and reproducible framework for processing various types of genomic data. For users interested in large scale genomic analytical methods we compiled various packages developed by Memorial Sloan-Kettering Cancer Center employees under an umbrella R package, [gnomeVerse](https://github.com/AxelitoMartin/genomeVerse).
+The primary goal of `gnomeR` not being in depth analysis of genomic data but rather reliable, modulable and reproducible framework for processing various types of genomic data. For users interested in large scale genomic analytical methods we compiled various packages developed by [Department of Epidemiology and Biostatistics](https://www.mskcc.org/departments/epidemiology-biostatistics), Memorial Sloan-Kettering Cancer Center under an umbrella R package, [gnomeVerse](https://github.com/AxelitoMartin/genomeVerse).
 

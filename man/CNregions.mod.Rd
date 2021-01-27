@@ -46,5 +46,5 @@ library(dplyr)
 samples <-
 as.character(unique(mut$Tumor_Sample_Barcode))[
 sample(1:length(unique(mut$Tumor_Sample_Barcode)), 100, replace=FALSE)]
-CNregions.mod(seg \%>\% filter(ID \%in\% samples))
+CNregions.mod(seg \%>\% filter(ID \%in\% samples))[1:5,1:5]
 }
