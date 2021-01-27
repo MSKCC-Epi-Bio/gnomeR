@@ -79,7 +79,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -114,7 +114,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/AxelitoMartin/gnomeR/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -212,7 +212,10 @@ IMPACT cbioPortal dataset.</p></td>
           <p><code><a href="custom_pathway.html">custom_pathway()</a></code> </p>
         </td>
         <td><p>custom_pathway
-Enables creation of a custom pathway binary matrix from a binmat() `object`</p></td>
+Enables creation of a custom pathway binary matrix from a binmat() `object`. Similarly to the internal file 'pathways.csv', this function takes as input
+a data frame containing the name of the pathways of interest, and for each pathways a character vector of the genes of interest. Note that the different
+events to be considered in each pathways must be considered separetely. For example, if one wishes to consider TP53 deletions in a given pathway, one must
+specify "TP53.Del" in the character vector for that pathway.</p></td>
       </tr><tr>
         
         <td>
@@ -238,12 +241,6 @@ Enables creation of a matrix used to generate an OncoPrint heatmap.</p></td>
           <p><code><a href="fusion.html">fusion</a></code> </p>
         </td>
         <td><p>An example of fusions calls file from IMPACT cbioPortal dataset</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="g.impact.html">g.impact</a></code> </p>
-        </td>
-        <td><p>List of curated genes for IMPACT</p></td>
       </tr><tr>
         
         <td>
@@ -345,12 +342,6 @@ samples sequenced using one of the IMPACT panels. Other samples will be annotate
       </tr><tr>
         
         <td>
-          <p><code><a href="impact_genes.html">impact_genes</a></code> </p>
-        </td>
-        <td><p>List of genes entrezID for the API</p></td>
-      </tr><tr>
-        
-        <td>
           <p><code><a href="maf_viz.html">maf_viz()</a></code> </p>
         </td>
         <td><p>Creates a set of plot summarising a maf file.</p></td>
@@ -369,10 +360,22 @@ samples sequenced using one of the IMPACT panels. Other samples will be annotate
       </tr><tr>
         
         <td>
+          <p><code><a href="pathways.html">pathways</a></code> </p>
+        </td>
+        <td><p>IMPACT Gene Pathways</p></td>
+      </tr><tr>
+        
+        <td>
           <p><code><a href="plot_oncoPrint.html">plot_oncoPrint()</a></code> </p>
         </td>
         <td><p>plot_oncoPrint
 Creates the OncoPrint corresponding to the inputted genetic data</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="resolve_alias.html">resolve_alias()</a></code> </p>
+        </td>
+        <td><p>Resolve Hugo Symbol Names with Aliases</p></td>
       </tr><tr>
         
         <td>
@@ -453,7 +456,7 @@ Performs univariate cox proportional hazard model on every feature</p></td>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

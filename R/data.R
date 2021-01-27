@@ -3,46 +3,20 @@
 #' Dataframe labeling all genes found in IMPACT along with their corresponding
 #' platform and Entrez ID.
 #'
-#' @format A data frame with 574 observations and 3 variables
+#' @format A data frame with 469 observations and 5 variables
 #' \describe{
-#'   \item{hugo_symbol}{Factor w/ 574 levels,
-#'    Column containing all HUGO symbols genes included in IMPACT}
-#'   \item{entrez_gene_id}{Integer, contains all Entrez IDs for genes included in IMPACT}
-#'   \item{platform_added}{Character, indicates platform at which each gene was added.
-#'   Options are `341`, `410`, `468`}
+#'   \item{hugo_symbol}{Column containing all HUGO symbols genes included in IMPACT}
 #'   \item{platform_341}{Character, indicates whether each gene was included in
 #'   IMPACT platform 341. Options are `included` and `not included`}
 #'   \item{platform_410}{Character, indicates whether each gene was included in
 #'   IMPACT platform 410. Options are `included` and `not included`}
 #'   \item{platform_468}{Character, indicates whether each gene was included in
 #'   IMPACT platform 468. Options are `included` and `not included`}
-#'   \item{pathway}{Character, indicates whether each gene belongs to one of the pathways
-#'   defined in Oncogenic Signaling Pathways in The Cancer Genome Atlas`}
+#'   \item{alias}{List of EntrezIDs corresponding to the value in the hugo_symbol column and alias list.}
+#'   \item{alias}{List of known aliases corresponding to the value in the hugo_symbol column.}
 #' }
 #' @source \url{https://cbioportal.mskcc.org/}
 "impact_gene_info"
-
-
-#' IMPACT Gene Meta Data
-#'
-#' Dataframe labeling all genes found in IMPACT along with their corresponding
-#' platform and Entrez ID.
-#'
-#' @format A data frame of impact genes
-#' \describe{
-#'   \item{hugo_symbol}{Factor w/ 574 levels,
-#'    Column containing all HUGO symbols genes included in IMPACT}
-#'   \item{platform_341}{Character, indicates whether each gene was included in
-#'   IMPACT platform 341. Options are `included` and `not included`}
-#'   \item{platform_410}{Character, indicates whether each gene was included in
-#'   IMPACT platform 410. Options are `included` and `not included`}
-#'   \item{platform_468}{Character, indicates whether each gene was included in
-#'   IMPACT platform 468. Options are `included` and `not included`}
-#'   \item{alias}{List of character vectors of hugo_symbol aliases commonly used
-#'   for IMPACT genes.}
-#' }
-#' @source \url{https://cbioportal.mskcc.org/}
-"impact_genes"
 
 
 #' IMPACT Gene Pathways
@@ -179,22 +153,6 @@
 #'  \item{gene}{}
 #' }
 "curated_genes"
-
-
-#' List of curated genes for IMPACT
-#'
-#' We include the curated genes for the IMPACT sequencing from 3 different
-#' platforms. This set of organized as a list of three different character
-#' vectors corresponding to each of the 341, 410 and 468 gene platforms.
-#'
-#' @format A list of 3 items.
-#' \describe{
-#'  \item{g341}{}
-#'  \item{g410}{}
-#'  \item{g468}{}
-#' }
-"g.impact"
-
 
 
 #' A vector of 19441 hugo symbols in TCGA

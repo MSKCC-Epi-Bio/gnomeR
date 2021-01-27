@@ -81,7 +81,7 @@ platform and Entrez ID." />
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -116,7 +116,7 @@ platform and Entrez ID." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/AxelitoMartin/gnomeR/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -143,25 +143,21 @@ platform and Entrez ID." />
 platform and Entrez ID.</p>
     </div>
 
-    <pre class="usage"><span class='no'>impact_gene_info</span></pre>
+    <pre class="usage"><span class='va'>impact_gene_info</span></pre>
 
 
     <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
 
-    <p>A data frame with 574 observations and 3 variables</p><dl'>
-  <dt>hugo_symbol</dt><dd><p>Factor w/ 574 levels,
-   Column containing all HUGO symbols genes included in IMPACT</p></dd>
-  <dt>entrez_gene_id</dt><dd><p>Integer, contains all Entrez IDs for genes included in IMPACT</p></dd>
-  <dt>platform_added</dt><dd><p>Character, indicates platform at which each gene was added.
-  Options are `341`, `410`, `468`</p></dd>
+    <p>A data frame with 469 observations and 5 variables</p><dl>
+  <dt>hugo_symbol</dt><dd><p>Column containing all HUGO symbols genes included in IMPACT</p></dd>
   <dt>platform_341</dt><dd><p>Character, indicates whether each gene was included in
   IMPACT platform 341. Options are `included` and `not included`</p></dd>
   <dt>platform_410</dt><dd><p>Character, indicates whether each gene was included in
   IMPACT platform 410. Options are `included` and `not included`</p></dd>
   <dt>platform_468</dt><dd><p>Character, indicates whether each gene was included in
   IMPACT platform 468. Options are `included` and `not included`</p></dd>
-  <dt>pathway</dt><dd><p>Character, indicates whether each gene belongs to one of the pathways
-  defined in Oncogenic Signaling Pathways in The Cancer Genome Atlas`</p></dd>
+  <dt>alias</dt><dd><p>List of EntrezIDs corresponding to the value in the hugo_symbol column and alias list.</p></dd>
+  <dt>alias</dt><dd><p>List of known aliases corresponding to the value in the hugo_symbol column.</p></dd>
 
 </dl>
 
@@ -184,7 +180,7 @@ platform and Entrez ID.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>
