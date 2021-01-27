@@ -22,6 +22,8 @@ Enables creation of a matrix used to generate an OncoPrint heatmap.
 }
 \examples{
 library(gnomeR)
+library(dplyr)
+library(dtplyr)
 patients <- as.character(unique(mut$Tumor_Sample_Barcode))
 bin.mut <- binmat(patients = patients,maf = mut,mut.type = "SOMATIC",
 SNP.only = FALSE,include.silent = FALSE, specify.plat = FALSE)
@@ -42,6 +44,8 @@ gen.dat <- gen.dat[match(clin.patients.dat$DMPID,
 abbreviate(rownames(gen.dat),strict = TRUE, minlength = 9)),]
 clin.patients.dat <- clin.patients.dat \%>\%
 dplyr::mutate(DMPID = as.character(DMPID)) \%>\%
+  tibble::rownames_to_column("to_rm") \%>\%
+  select(-one_of("to_rm")) \%>\%
   tibble::column_to_rownames('DMPID')
 rownames(gen.dat) <- rownames(clin.patients.dat)
 dat <- dat.oncoPrint(gen.dat = gen.dat,clin.dat = clin.patients.dat)
