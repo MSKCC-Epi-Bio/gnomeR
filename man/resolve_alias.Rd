@@ -7,7 +7,9 @@
 resolve_alias(gene_to_check, alias_table = all_alias_table)
 }
 \arguments{
-\item{alias_table}{}
+\item{gene_to_check}{hugo_symbol to be check}
+
+\item{alias_table}{table containing all the aliases}
 }
 \value{
 if the accepted hugo symbol is input, it is returned back.
@@ -17,6 +19,6 @@ If an alias name is provided, the more common name/more up to date name is retur
 Resolve Hugo Symbol Names with Aliases
 }
 \examples{
-resolve_alias("KMT2D", alias_table = tidyr::unnest(impact_genes, cols = alias))
+resolve_alias("KMT2D", alias_table = tidyr::unnest(impact_gene_info, cols = alias))
 
 }

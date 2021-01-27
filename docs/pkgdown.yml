@@ -1,9 +1,18 @@
+<<<<<<< HEAD
 pandoc: 2.11.2
 pkgdown: 1.4.1
+=======
+pandoc: 2.7.3
+pkgdown: 1.6.1
+>>>>>>> a875652248dbaae97b269cfe4efb962be077b5d8
 pkgdown_sha: ~
 articles:
   Analizing-genomic-data: Analizing-genomic-data.html
   Data-processing: Data-processing.html
   Visualizations: Visualizations.html
   gnomeR-vignette: gnomeR-vignette.html
+<<<<<<< HEAD
+=======
+last_built: 2021-01-27T04:41Z
+>>>>>>> a875652248dbaae97b269cfe4efb962be077b5d8
 

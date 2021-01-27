@@ -9,7 +9,7 @@ test_that("make data genetics only",{
                     cna = cna, mut.type = "SOMATIC",
                     SNP.only = FALSE,include.silent = FALSE, specify.plat = FALSE)
   gen.dat <- bin.mut[,
-                     c("TP53","CDKN2A","CDKN2A.Del","PIK3CA","PIK3CA.Amp")]
+                     c("TP53","CDKN2A","CDKN2A.Del","PIK3CA")]
   gen.dat$TP53 <- rbinom(nrow(gen.dat),1,1/2)
   gen.dat$CDKN2A.Del <- rbinom(nrow(gen.dat),1,1/2)
   out <- plot_oncoPrint(gen.dat)
@@ -27,7 +27,7 @@ test_that("make data with clinical",{
                     cna = cna, mut.type = "SOMATIC",
                     SNP.only = FALSE,include.silent = FALSE, specify.plat = FALSE)
   gen.dat <- bin.mut[,
-                     c("TP53", "CDKN2A","CDKN2A.Del","PIK3CA","PIK3CA.Amp")]
+                     c("TP53","CDKN2A","CDKN2A.Del","PIK3CA")]
   gen.dat$TP53 <- rbinom(nrow(gen.dat),1,1/2)
   gen.dat$CDKN2A.Del <- rbinom(nrow(gen.dat),1,1/2)
   clin.patients.dat <-
@@ -60,7 +60,7 @@ test_that("make data single clinical",{
                     cna = cna, mut.type = "SOMATIC",
                     SNP.only = FALSE,include.silent = FALSE, specify.plat = FALSE)
   gen.dat <- bin.mut[,
-                     c("TP53","CDKN2A","CDKN2A.Del","PIK3CA","PIK3CA.Amp")]
+                     c("TP53","CDKN2A","CDKN2A.Del","PIK3CA")]
   gen.dat$TP53 <- rbinom(nrow(gen.dat),1,1/2)
   gen.dat$CDKN2A.Del <- rbinom(nrow(gen.dat),1,1/2)
   clin.patients.dat <-

@@ -7,7 +7,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>custom_pathway
-Enables creation of a custom pathway binary matrix from a binmat() `object` — custom_pathway • gnomeR</title>
+Enables creation of a custom pathway binary matrix from a binmat() `object`. Similarly to the internal file 'pathways.csv', this function takes as input
+a data frame containing the name of the pathways of interest, and for each pathways a character vector of the genes of interest. Note that the different
+events to be considered in each pathways must be considered separetely. For example, if one wishes to consider TP53 deletions in a given pathway, one must
+specify "TP53.Del" in the character vector for that pathway. — custom_pathway • gnomeR</title>
 
 
 <!-- jquery -->
@@ -37,10 +40,20 @@ Enables creation of a custom pathway binary matrix from a binmat() `object` — 
 
 
 <meta property="og:title" content="custom_pathway
-Enables creation of a custom pathway binary matrix from a binmat() `object` — custom_pathway" />
+Enables creation of a custom pathway binary matrix from a binmat() `object`. Similarly to the internal file 'pathways.csv', this function takes as input
+a data frame containing the name of the pathways of interest, and for each pathways a character vector of the genes of interest. Note that the different
+events to be considered in each pathways must be considered separetely. For example, if one wishes to consider TP53 deletions in a given pathway, one must
+specify "TP53.Del" in the character vector for that pathway. — custom_pathway" />
 <meta property="og:description" content="custom_pathway
+<<<<<<< HEAD
 Enables creation of a custom pathway binary matrix from a binmat() `object`" />
 <meta name="twitter:card" content="summary" />
+=======
+Enables creation of a custom pathway binary matrix from a binmat() `object`. Similarly to the internal file 'pathways.csv', this function takes as input
+a data frame containing the name of the pathways of interest, and for each pathways a character vector of the genes of interest. Note that the different
+events to be considered in each pathways must be considered separetely. For example, if one wishes to consider TP53 deletions in a given pathway, one must
+specify &quot;TP53.Del&quot; in the character vector for that pathway." />
+>>>>>>> a875652248dbaae97b269cfe4efb962be077b5d8
 
 
 
@@ -114,7 +127,11 @@ Enables creation of a custom pathway binary matrix from a binmat() `object`" />
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
+<<<<<<< HEAD
   <a href="https://github.com/AxelitoMartin/gnomeR">
+=======
+  <a href="https://github.com/AxelitoMartin/gnomeR/">
+>>>>>>> a875652248dbaae97b269cfe4efb962be077b5d8
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -133,17 +150,23 @@ Enables creation of a custom pathway binary matrix from a binmat() `object`" />
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>custom_pathway
-Enables creation of a custom pathway binary matrix from a binmat() `object`</h1>
+Enables creation of a custom pathway binary matrix from a binmat() `object`. Similarly to the internal file 'pathways.csv', this function takes as input
+a data frame containing the name of the pathways of interest, and for each pathways a character vector of the genes of interest. Note that the different
+events to be considered in each pathways must be considered separetely. For example, if one wishes to consider TP53 deletions in a given pathway, one must
+specify "TP53.Del" in the character vector for that pathway.</h1>
     <small class="dont-index">Source: <a href='https://github.com/AxelitoMartin/gnomeR/blob/master/R/make-custom-pathway.R'><code>R/make-custom-pathway.R</code></a></small>
     <div class="hidden name"><code>custom_pathway.Rd</code></div>
     </div>
 
     <div class="ref-description">
     <p>custom_pathway
-Enables creation of a custom pathway binary matrix from a binmat() `object`</p>
+Enables creation of a custom pathway binary matrix from a binmat() `object`. Similarly to the internal file 'pathways.csv', this function takes as input
+a data frame containing the name of the pathways of interest, and for each pathways a character vector of the genes of interest. Note that the different
+events to be considered in each pathways must be considered separetely. For example, if one wishes to consider TP53 deletions in a given pathway, one must
+specify "TP53.Del" in the character vector for that pathway.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>custom_pathway</span>(<span class='no'>mat</span>, <span class='no'>pathway</span>)</pre>
+    <pre class="usage"><span class='fu'>custom_pathway</span><span class='op'>(</span><span class='va'>mat</span>, <span class='va'>pathway</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -164,18 +187,25 @@ pathway</p></td>
     <p>pathway_dat : a binary matrix of pathway level alterations</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>gnomeR</span>)
-<span class='no'>patients</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>as.character</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/unique.html'>unique</a></span>(<span class='no'>mut</span>$<span class='no'>Tumor_Sample_Barcode</span>))[<span class='fl'>1</span>:<span class='fl'>200</span>]
-<span class='no'>bin.mut</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='binmat.html'>binmat</a></span>(<span class='kw'>patients</span> <span class='kw'>=</span> <span class='no'>patients</span>,<span class='kw'>maf</span> <span class='kw'>=</span> <span class='no'>mut</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: All samples were sequenced on the same platform.</span>
-#&gt; <span class='warning'>              The specify.plat argument has been overwritten to FALSE.</span></div><div class='input'><span class='no'>pathway</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/as.data.frame.html'>as.data.frame</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>cbind</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"PIK3CA"</span>,<span class='st'>"KRAS"</span>,<span class='st'>"TERT"</span>,<span class='st'>"TP53"</span>),<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"path1"</span>,<span class='st'>"path1"</span>,<span class='st'>"path2"</span>,<span class='st'>"path3"</span>)))
-<span class='fu'>custom_pathway</span>(<span class='kw'>mat</span> <span class='kw'>=</span> <span class='no'>bin.mut</span>, <span class='kw'>pathway</span> <span class='kw'>=</span> <span class='no'>pathway</span>)</div><div class='output co'>#&gt;                   path1 path2 path3
+    <pre class="examples"><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/AxelitoMartin/gnomeR'>gnomeR</a></span><span class='op'>)</span>
+<span class='va'>patients</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>as.character</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/unique.html'>unique</a></span><span class='op'>(</span><span class='va'>mut</span><span class='op'>$</span><span class='va'>Tumor_Sample_Barcode</span><span class='op'>)</span><span class='op'>)</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>200</span><span class='op'>]</span>
+<span class='va'>bin.mut</span> <span class='op'>&lt;-</span> <span class='fu'><a href='binmat.html'>binmat</a></span><span class='op'>(</span>patients <span class='op'>=</span> <span class='va'>patients</span>,maf <span class='op'>=</span> <span class='va'>mut</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='warning'>Warning: To ensure gene with multiple names/aliases are correctly grouped together, the</span>
+#&gt; <span class='warning'>    following genes in your maf dataframe have been recoded: </span>
+#&gt; <span class='warning'>AMER1 recoded to FAM123B </span>
+#&gt; <span class='warning'>To ensure gene with multiple names/aliases are correctly grouped together, the</span>
+#&gt; <span class='warning'>    following genes in your maf dataframe have been recoded: </span>
+#&gt; <span class='warning'>TCEB1 recoded to ELOC </span></div><div class='output co'>#&gt; <span class='warning'>Warning: All samples were sequenced on the same platform.</span>
+#&gt; <span class='warning'>              The specify.plat argument has been overwritten to FALSE.</span></div><div class='input'><span class='va'>pathway</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/as.data.frame.html'>as.data.frame</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>cbind</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"path1"</span>,<span class='st'>"path1"</span>,<span class='st'>"path2"</span>,<span class='st'>"path3"</span><span class='op'>)</span>,<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"PIK3CA"</span>,<span class='st'>"KRAS"</span>,<span class='st'>"TERT"</span>,<span class='st'>"TP53"</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
+<span class='fu'>custom_pathway</span><span class='op'>(</span>mat <span class='op'>=</span> <span class='va'>bin.mut</span>, pathway <span class='op'>=</span> <span class='va'>pathway</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;                   path1 path2 path3
 #&gt; P-0000062-T01-IM3     0     0     1
-#&gt; P-0000065-T01-IM3     1     1     0
+#&gt; P-0000065-T01-IM3     0     1     0
 #&gt; P-0000113-T01-IM3     0     0     1
 #&gt; P-0000140-T01-IM3     0     0     0
 #&gt; P-0000145-T01-IM3     1     0     1
 #&gt; P-0000157-T01-IM3     1     0     0
-#&gt; P-0000185-T01-IM3     1     0     1
+#&gt; P-0000185-T01-IM3     0     0     1
 #&gt; P-0000088-T01-IM3     0     1     1
 #&gt; P-0000193-T01-IM3     0     0     0
 #&gt; P-0000230-T01-IM3     1     0     1
@@ -184,7 +214,7 @@ pathway</p></td>
 #&gt; P-0000244-T01-IM3     0     0     1
 #&gt; P-0000270-T01-IM3     0     0     1
 #&gt; P-0000281-T01-IM3     0     0     0
-#&gt; P-0000300-T01-IM3     1     0     0
+#&gt; P-0000300-T01-IM3     0     0     0
 #&gt; P-0000329-T01-IM3     0     0     1
 #&gt; P-0000336-T01-IM3     0     1     1
 #&gt; P-0000340-T01-IM3     0     0     0
@@ -192,7 +222,7 @@ pathway</p></td>
 #&gt; P-0000370-T01-IM3     0     0     1
 #&gt; P-0000372-T01-IM3     1     0     0
 #&gt; P-0000407-T01-IM3     0     0     1
-#&gt; P-0000426-T01-IM3     1     0     0
+#&gt; P-0000426-T01-IM3     0     0     0
 #&gt; P-0000427-T01-IM3     0     0     0
 #&gt; P-0000447-T01-IM3     0     0     1
 #&gt; P-0000497-T01-IM3     0     0     0
@@ -202,17 +232,17 @@ pathway</p></td>
 #&gt; P-0000546-T01-IM3     0     0     0
 #&gt; P-0000569-T01-IM3     0     0     0
 #&gt; P-0000573-T01-IM3     0     0     1
-#&gt; P-0000625-T01-IM3     1     0     1
+#&gt; P-0000625-T01-IM3     0     0     1
 #&gt; P-0000678-T01-IM3     1     0     1
 #&gt; P-0000684-T01-IM3     0     0     1
 #&gt; P-0000708-T01-IM3     0     0     0
 #&gt; P-0000726-T01-IM3     0     0     1
-#&gt; P-0000745-T01-IM3     1     0     1
+#&gt; P-0000745-T01-IM3     0     0     1
 #&gt; P-0000761-T01-IM3     0     0     1
 #&gt; P-0000770-T01-IM3     0     0     1
 #&gt; P-0000777-T01-IM3     0     0     1
 #&gt; P-0000789-T01-IM3     0     1     1
-#&gt; P-0000791-T01-IM3     1     0     0
+#&gt; P-0000791-T01-IM3     0     0     0
 #&gt; P-0000788-T01-IM3     1     0     0
 #&gt; P-0000795-T01-IM3     0     0     0
 #&gt; P-0000805-T01-IM3     0     0     0
@@ -239,7 +269,7 @@ pathway</p></td>
 #&gt; P-0001096-T01-IM3     0     0     0
 #&gt; P-0001103-T01-IM3     0     0     0
 #&gt; P-0000963-T01-IM3     0     0     1
-#&gt; P-0001107-T01-IM3     1     0     1
+#&gt; P-0001107-T01-IM3     0     0     1
 #&gt; P-0001158-T01-IM3     0     0     1
 #&gt; P-0001177-T01-IM3     0     0     0
 #&gt; P-0001181-T01-IM3     0     0     0
@@ -247,8 +277,8 @@ pathway</p></td>
 #&gt; P-0001208-T01-IM3     1     0     0
 #&gt; P-0001218-T01-IM3     1     0     0
 #&gt; P-0001239-T01-IM3     0     1     0
-#&gt; P-0001255-T01-IM3     1     0     1
-#&gt; P-0001286-T01-IM3     1     0     0
+#&gt; P-0001255-T01-IM3     0     0     1
+#&gt; P-0001286-T01-IM3     0     0     0
 #&gt; P-0001296-T01-IM3     0     0     1
 #&gt; P-0001303-T01-IM3     0     0     1
 #&gt; P-0001293-T01-IM3     0     0     1
@@ -257,10 +287,10 @@ pathway</p></td>
 #&gt; P-0001350-T01-IM3     1     0     0
 #&gt; P-0001345-T01-IM3     0     0     0
 #&gt; P-0000964-T02-IM3     0     0     0
-#&gt; P-0001385-T01-IM3     1     0     1
+#&gt; P-0001385-T01-IM3     0     0     1
 #&gt; P-0001397-T01-IM3     0     0     0
 #&gt; P-0001388-T01-IM3     0     1     0
-#&gt; P-0001427-T01-IM3     1     0     1
+#&gt; P-0001427-T01-IM3     0     0     1
 #&gt; P-0001460-T01-IM3     0     0     1
 #&gt; P-0001485-T01-IM3     0     1     0
 #&gt; P-0000216-T02-IM3     1     0     0
@@ -286,7 +316,7 @@ pathway</p></td>
 #&gt; P-0001711-T01-IM3     0     0     0
 #&gt; P-0001724-T01-IM3     0     0     0
 #&gt; P-0001730-T01-IM3     0     0     0
-#&gt; P-0001741-T01-IM3     1     0     1
+#&gt; P-0001741-T01-IM3     0     0     1
 #&gt; P-0001752-T01-IM3     0     0     1
 #&gt; P-0001781-T01-IM3     0     0     0
 #&gt; P-0001787-T01-IM3     0     0     1
@@ -302,7 +332,7 @@ pathway</p></td>
 #&gt; P-0001684-T02-IM3     0     0     0
 #&gt; P-0002060-T01-IM3     0     0     1
 #&gt; P-0002063-T01-IM3     0     1     0
-#&gt; P-0002069-T01-IM3     1     0     0
+#&gt; P-0002069-T01-IM3     0     0     0
 #&gt; P-0000715-T03-IM3     0     1     0
 #&gt; P-0002091-T01-IM3     0     0     1
 #&gt; P-0002096-T01-IM3     0     0     0
@@ -330,8 +360,8 @@ pathway</p></td>
 #&gt; P-0002396-T01-IM3     1     1     0
 #&gt; P-0002405-T01-IM3     0     1     1
 #&gt; P-0002407-T01-IM3     0     0     1
-#&gt; P-0002421-T01-IM3     1     0     1
-#&gt; P-0002434-T01-IM3     1     0     0
+#&gt; P-0002421-T01-IM3     0     0     1
+#&gt; P-0002434-T01-IM3     0     0     0
 #&gt; P-0002442-T01-IM3     0     0     1
 #&gt; P-0002456-T01-IM3     1     0     0
 #&gt; P-0002463-T01-IM3     1     0     0
@@ -344,13 +374,13 @@ pathway</p></td>
 #&gt; P-0002605-T01-IM3     0     0     1
 #&gt; P-0002614-T01-IM3     1     0     0
 #&gt; P-0002608-T01-IM3     0     0     0
-#&gt; P-0002616-T01-IM3     1     0     0
+#&gt; P-0002616-T01-IM3     0     0     0
 #&gt; P-0002624-T01-IM3     0     0     0
 #&gt; P-0002629-T01-IM3     0     0     1
 #&gt; P-0002651-T01-IM3     0     0     1
 #&gt; P-0002656-T01-IM3     0     0     0
 #&gt; P-0002658-T01-IM3     0     0     1
-#&gt; P-0002673-T01-IM3     1     0     1
+#&gt; P-0002673-T01-IM3     0     0     1
 #&gt; P-0001942-T03-IM3     0     0     1
 #&gt; P-0002640-T01-IM3     0     0     0
 #&gt; P-0002706-T01-IM3     0     1     0
@@ -360,15 +390,225 @@ pathway</p></td>
 #&gt; P-0002783-T01-IM3     0     0     1
 #&gt; P-0002794-T01-IM3     0     0     0
 #&gt; P-0002828-T01-IM3     0     0     0
-#&gt; P-0002830-T01-IM3     1     0     0
+#&gt; P-0002830-T01-IM3     0     0     0
 #&gt; P-0002844-T01-IM3     0     0     0
 #&gt; P-0002881-T01-IM3     0     0     0
 #&gt; P-0002915-T01-IM3     1     0     0
-#&gt; P-0002921-T01-IM3     1     0     0
+#&gt; P-0002921-T01-IM3     0     0     0
 #&gt; P-0002940-T01-IM3     1     0     0
-#&gt; P-0002955-T01-IM3     1     0     0
+#&gt; P-0002955-T01-IM3     0     0     0
 #&gt; P-0002750-T02-IM3     0     0     0
-#&gt; P-0002960-T01-IM3     0     0     1</div></pre>
+#&gt; P-0002960-T01-IM3     0     0     1</div><div class='input'><span class='co'>### Considering CNA as well ###</span>
+<span class='va'>bin.mut</span> <span class='op'>&lt;-</span> <span class='fu'><a href='binmat.html'>binmat</a></span><span class='op'>(</span>patients <span class='op'>=</span> <span class='va'>patients</span>,maf <span class='op'>=</span> <span class='va'>mut</span>,cna <span class='op'>=</span> <span class='va'>cna</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='warning'>Warning: To ensure gene with multiple names/aliases are correctly grouped together, the</span>
+#&gt; <span class='warning'>    following genes in your maf dataframe have been recoded: </span>
+#&gt; <span class='warning'>AMER1 recoded to FAM123B </span>
+#&gt; <span class='warning'>To ensure gene with multiple names/aliases are correctly grouped together, the</span>
+#&gt; <span class='warning'>    following genes in your maf dataframe have been recoded: </span>
+#&gt; <span class='warning'>TCEB1 recoded to ELOC </span></div><div class='output co'>#&gt; <span class='warning'>Warning: All samples were sequenced on the same platform.</span>
+#&gt; <span class='warning'>              The specify.plat argument has been overwritten to FALSE.</span></div><div class='input'><span class='va'>pathway</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/as.data.frame.html'>as.data.frame</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>cbind</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"path1"</span>,<span class='st'>"path1"</span>,<span class='st'>"path2"</span>,<span class='st'>"path3"</span>,<span class='st'>"path4"</span><span class='op'>)</span>,<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"PIK3CA"</span>,<span class='st'>"KRAS"</span>,<span class='st'>"TERT"</span>,<span class='st'>"TP53"</span>,<span class='st'>"TP53.Del"</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
+<span class='fu'>custom_pathway</span><span class='op'>(</span>mat <span class='op'>=</span> <span class='va'>bin.mut</span>, pathway <span class='op'>=</span> <span class='va'>pathway</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;                   path1 path2 path3 path4
+#&gt; P-0000062-T01-IM3     0     0     1     0
+#&gt; P-0000065-T01-IM3     0     1     0     0
+#&gt; P-0000113-T01-IM3     0     0     1     0
+#&gt; P-0000140-T01-IM3     0     0     0     0
+#&gt; P-0000145-T01-IM3     1     0     1     0
+#&gt; P-0000157-T01-IM3     1     0     0     0
+#&gt; P-0000185-T01-IM3     0     0     1     0
+#&gt; P-0000088-T01-IM3     0     1     1     0
+#&gt; P-0000193-T01-IM3     0     0     0     0
+#&gt; P-0000230-T01-IM3     1     0     1     0
+#&gt; P-0000231-T01-IM3     0     0     1     0
+#&gt; P-0000242-T01-IM3     0     0     1     0
+#&gt; P-0000244-T01-IM3     0     0     1     0
+#&gt; P-0000270-T01-IM3     0     0     1     0
+#&gt; P-0000281-T01-IM3     0     0     0     0
+#&gt; P-0000300-T01-IM3     0     0     0     0
+#&gt; P-0000329-T01-IM3     0     0     1     0
+#&gt; P-0000336-T01-IM3     0     1     1     0
+#&gt; P-0000340-T01-IM3     0     0     0     0
+#&gt; P-0000363-T01-IM3     0     0     1     0
+#&gt; P-0000370-T01-IM3     0     0     1     0
+#&gt; P-0000372-T01-IM3     1     0     0     0
+#&gt; P-0000407-T01-IM3     0     0     1     0
+#&gt; P-0000426-T01-IM3     0     0     0     0
+#&gt; P-0000427-T01-IM3     0     0     0     0
+#&gt; P-0000447-T01-IM3     0     0     1     0
+#&gt; P-0000497-T01-IM3     0     0     0     0
+#&gt; P-0000510-T01-IM3     0     0     0     0
+#&gt; P-0000530-T01-IM3     1     0     0     0
+#&gt; P-0000538-T01-IM3     0     0     1     0
+#&gt; P-0000546-T01-IM3     0     0     0     0
+#&gt; P-0000569-T01-IM3     0     0     0     0
+#&gt; P-0000573-T01-IM3     0     0     1     0
+#&gt; P-0000625-T01-IM3     0     0     1     0
+#&gt; P-0000678-T01-IM3     1     0     1     0
+#&gt; P-0000684-T01-IM3     0     0     1     0
+#&gt; P-0000708-T01-IM3     0     0     0     0
+#&gt; P-0000726-T01-IM3     0     0     1     0
+#&gt; P-0000745-T01-IM3     0     0     1     0
+#&gt; P-0000761-T01-IM3     0     0     1     0
+#&gt; P-0000770-T01-IM3     0     0     1     0
+#&gt; P-0000777-T01-IM3     0     0     1     0
+#&gt; P-0000789-T01-IM3     0     1     1     0
+#&gt; P-0000791-T01-IM3     0     0     0     0
+#&gt; P-0000788-T01-IM3     1     0     0     0
+#&gt; P-0000795-T01-IM3     0     0     0     0
+#&gt; P-0000805-T01-IM3     0     0     0     0
+#&gt; P-0000809-T01-IM3     0     0     0     0
+#&gt; P-0000838-T01-IM3     0     0     0     0
+#&gt; P-0000842-T01-IM3     0     0     0     0
+#&gt; P-0000847-T01-IM3     0     0     0     0
+#&gt; P-0000855-T01-IM3     0     0     1     0
+#&gt; P-0000861-T01-IM3     0     0     0     0
+#&gt; P-0000820-T02-IM3     0     0     0     0
+#&gt; P-0000878-T01-IM3     0     0     1     0
+#&gt; P-0000879-T01-IM3     0     1     0     0
+#&gt; P-0000904-T01-IM3     0     1     0     0
+#&gt; P-0000912-T01-IM3     0     0     0     0
+#&gt; P-0000914-T01-IM3     0     0     0     0
+#&gt; P-0000929-T01-IM3     0     0     1     0
+#&gt; P-0000954-T01-IM3     0     1     1     0
+#&gt; P-0001001-T01-IM3     0     0     0     0
+#&gt; P-0001004-T01-IM3     0     0     0     0
+#&gt; P-0001027-T01-IM3     0     0     0     0
+#&gt; P-0001046-T01-IM3     0     0     1     0
+#&gt; P-0001038-T01-IM3     0     0     1     0
+#&gt; P-0000955-T01-IM3     0     0     0     0
+#&gt; P-0001096-T01-IM3     0     0     0     0
+#&gt; P-0001103-T01-IM3     0     0     0     0
+#&gt; P-0000963-T01-IM3     0     0     1     0
+#&gt; P-0001107-T01-IM3     0     0     1     0
+#&gt; P-0001158-T01-IM3     0     0     1     0
+#&gt; P-0001177-T01-IM3     0     0     0     0
+#&gt; P-0001181-T01-IM3     0     0     0     0
+#&gt; P-0001197-T01-IM3     0     0     1     0
+#&gt; P-0001208-T01-IM3     1     0     0     0
+#&gt; P-0001218-T01-IM3     1     0     0     0
+#&gt; P-0001239-T01-IM3     0     1     0     0
+#&gt; P-0001255-T01-IM3     0     0     1     0
+#&gt; P-0001286-T01-IM3     0     0     0     0
+#&gt; P-0001296-T01-IM3     0     0     1     0
+#&gt; P-0001303-T01-IM3     0     0     1     0
+#&gt; P-0001293-T01-IM3     0     0     1     0
+#&gt; P-0001320-T01-IM3     0     0     1     0
+#&gt; P-0001337-T01-IM3     0     0     0     0
+#&gt; P-0001350-T01-IM3     1     0     0     0
+#&gt; P-0001345-T01-IM3     0     0     0     0
+#&gt; P-0000964-T02-IM3     0     0     0     0
+#&gt; P-0001385-T01-IM3     0     0     1     0
+#&gt; P-0001397-T01-IM3     0     0     0     0
+#&gt; P-0001388-T01-IM3     0     1     0     0
+#&gt; P-0001427-T01-IM3     0     0     1     0
+#&gt; P-0001460-T01-IM3     0     0     1     0
+#&gt; P-0001485-T01-IM3     0     1     0     0
+#&gt; P-0000216-T02-IM3     1     0     0     0
+#&gt; P-0001493-T01-IM3     0     0     0     0
+#&gt; P-0001507-T01-IM3     0     0     0     0
+#&gt; P-0001512-T01-IM3     0     0     0     0
+#&gt; P-0001538-T01-IM3     0     1     0     0
+#&gt; P-0001540-T01-IM3     0     0     0     0
+#&gt; P-0001555-T01-IM3     0     0     1     0
+#&gt; P-0001551-T01-IM3     0     0     1     0
+#&gt; P-0001564-T01-IM3     0     0     1     0
+#&gt; P-0001583-T01-IM3     1     0     1     0
+#&gt; P-0001596-T01-IM3     0     0     0     0
+#&gt; P-0001585-T01-IM3     0     0     0     0
+#&gt; P-0001603-T01-IM3     0     1     1     0
+#&gt; P-0001611-T01-IM3     0     0     1     0
+#&gt; P-0001616-T01-IM3     0     0     1     0
+#&gt; P-0001358-T02-IM3     1     1     0     0
+#&gt; P-0001669-T01-IM3     0     0     0     0
+#&gt; P-0001687-T01-IM3     0     0     0     0
+#&gt; P-0001680-T02-IM3     0     1     0     0
+#&gt; P-0001701-T01-IM3     0     0     1     0
+#&gt; P-0001711-T01-IM3     0     0     0     0
+#&gt; P-0001724-T01-IM3     0     0     0     0
+#&gt; P-0001730-T01-IM3     0     0     0     0
+#&gt; P-0001741-T01-IM3     0     0     1     0
+#&gt; P-0001752-T01-IM3     0     0     1     0
+#&gt; P-0001781-T01-IM3     0     0     0     0
+#&gt; P-0001787-T01-IM3     0     0     1     0
+#&gt; P-0001822-T01-IM3     0     0     0     0
+#&gt; P-0001823-T01-IM3     0     0     1     0
+#&gt; P-0001830-T01-IM3     1     0     1     0
+#&gt; P-0001861-T01-IM3     0     0     1     0
+#&gt; P-0001884-T01-IM3     0     0     0     0
+#&gt; P-0001919-T01-IM3     0     0     0     0
+#&gt; P-0001930-T01-IM3     0     0     0     0
+#&gt; P-0001991-T01-IM3     0     1     0     0
+#&gt; P-0002021-T01-IM3     0     0     1     0
+#&gt; P-0001684-T02-IM3     0     0     0     0
+#&gt; P-0002060-T01-IM3     0     0     1     0
+#&gt; P-0002063-T01-IM3     0     1     0     0
+#&gt; P-0002069-T01-IM3     0     0     0     0
+#&gt; P-0000715-T03-IM3     0     1     0     0
+#&gt; P-0002091-T01-IM3     0     0     1     0
+#&gt; P-0002096-T01-IM3     0     0     0     0
+#&gt; P-0001135-T02-IM3     0     1     1     0
+#&gt; P-0002127-T01-IM3     0     0     0     0
+#&gt; P-0002135-T01-IM3     0     0     0     0
+#&gt; P-0002144-T01-IM3     0     0     0     0
+#&gt; P-0002141-T01-IM3     0     1     0     0
+#&gt; P-0002160-T01-IM3     0     0     1     0
+#&gt; P-0002164-T01-IM3     0     0     1     0
+#&gt; P-0002207-T01-IM3     0     0     1     0
+#&gt; P-0000377-T03-IM3     0     0     1     0
+#&gt; P-0002240-T01-IM3     0     0     1     0
+#&gt; P-0002257-T01-IM3     0     0     1     0
+#&gt; P-0002291-T01-IM3     1     0     1     0
+#&gt; P-0002292-T01-IM3     0     1     1     0
+#&gt; P-0002296-T01-IM3     0     0     0     0
+#&gt; P-0002313-T01-IM3     0     0     1     0
+#&gt; P-0002327-T01-IM3     1     0     1     0
+#&gt; P-0002343-T01-IM3     0     0     1     0
+#&gt; P-0002344-T01-IM3     0     1     1     0
+#&gt; P-0002273-T02-IM3     0     0     0     0
+#&gt; P-0002367-T01-IM3     0     1     1     0
+#&gt; P-0002374-T01-IM3     0     0     1     0
+#&gt; P-0002396-T01-IM3     1     1     0     0
+#&gt; P-0002405-T01-IM3     0     1     1     0
+#&gt; P-0002407-T01-IM3     0     0     1     0
+#&gt; P-0002421-T01-IM3     0     0     1     0
+#&gt; P-0002434-T01-IM3     0     0     0     0
+#&gt; P-0002442-T01-IM3     0     0     1     0
+#&gt; P-0002456-T01-IM3     1     0     0     0
+#&gt; P-0002463-T01-IM3     1     0     0     0
+#&gt; P-0002500-T01-IM3     0     0     0     0
+#&gt; P-0002510-T01-IM3     0     1     0     0
+#&gt; P-0002536-T01-IM3     0     0     1     0
+#&gt; P-0002533-T01-IM3     0     0     0     0
+#&gt; P-0002580-T01-IM3     0     0     0     0
+#&gt; P-0002591-T01-IM3     1     0     1     1
+#&gt; P-0002605-T01-IM3     0     0     1     0
+#&gt; P-0002614-T01-IM3     1     0     0     0
+#&gt; P-0002608-T01-IM3     0     0     0     0
+#&gt; P-0002616-T01-IM3     0     0     0     0
+#&gt; P-0002624-T01-IM3     0     0     0     0
+#&gt; P-0002629-T01-IM3     0     0     1     0
+#&gt; P-0002651-T01-IM3     0     1     1     0
+#&gt; P-0002656-T01-IM3     0     0     0     0
+#&gt; P-0002658-T01-IM3     0     0     1     0
+#&gt; P-0002673-T01-IM3     0     0     1     0
+#&gt; P-0001942-T03-IM3     0     0     1     0
+#&gt; P-0002640-T01-IM3     0     0     0     0
+#&gt; P-0002706-T01-IM3     0     1     0     0
+#&gt; P-0002729-T01-IM3     0     0     1     0
+#&gt; P-0002770-T01-IM3     0     0     1     0
+#&gt; P-0002777-T01-IM3     0     1     1     0
+#&gt; P-0002783-T01-IM3     0     0     1     0
+#&gt; P-0002794-T01-IM3     0     0     0     0
+#&gt; P-0002828-T01-IM3     0     0     0     0
+#&gt; P-0002830-T01-IM3     0     0     0     0
+#&gt; P-0002844-T01-IM3     0     0     0     0
+#&gt; P-0002881-T01-IM3     0     0     0     0
+#&gt; P-0002915-T01-IM3     1     0     0     0
+#&gt; P-0002921-T01-IM3     0     0     0     0
+#&gt; P-0002940-T01-IM3     1     0     0     0
+#&gt; P-0002955-T01-IM3     0     0     0     0
+#&gt; P-0002750-T02-IM3     0     1     0     0
+#&gt; P-0002960-T01-IM3     0     0     1     0</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -388,7 +628,11 @@ pathway</p></td>
 </div>
 
 <div class="pkgdown">
+<<<<<<< HEAD
   <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
+=======
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+>>>>>>> a875652248dbaae97b269cfe4efb962be077b5d8
 </div>
 
       </footer>
