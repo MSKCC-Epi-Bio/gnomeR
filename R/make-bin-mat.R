@@ -119,22 +119,23 @@ binmat <- function(patients=NULL, maf = NULL, mut.type = "SOMATIC",SNP.only = FA
   if(!is.null(maf)){
 
     # quick data checks #
-    if(is.na(match("Tumor_Sample_Barcode",colnames(maf))))
-      stop("The MAF file inputted is missing a patient name column. (Tumor_Sample_Barcode)")
-    if(is.na(match("Hugo_Symbol",colnames(maf))))
-      stop("The MAF file inputted is missing a gene name column. (Hugo_Symbol)")
-    if(is.na(match("Variant_Classification",colnames(maf))))
-      stop("The MAF file inputted is missing a variant classification column. (Variant_Classification)")
-    if(is.na(match("Mutation_Status",colnames(maf)))){
-      warning("The MAF file inputted is missing a mutation status column (Mutation_Status). It will be assumed that
-            all variants are of the same type (SOMATIC/GERMLINE).")
-      maf$Mutation_Status <- rep("SOMATIC",nrow(maf))
-    }
-    if(is.na(match("Variant_Type",colnames(maf)))){
-      warning("The MAF file inputted is missing a mutation status column (Variant_Type). It will be assumed that
-            all variants are of the same type (SNPs).")
-      maf$Variant_Type <- rep("SNPs",nrow(maf))
-    }
+    maf <- check_maf_input(maf)
+    # if(is.na(match("Tumor_Sample_Barcode",colnames(maf))))
+    #   stop("The MAF file inputted is missing a patient name column. (Tumor_Sample_Barcode)")
+    # if(is.na(match("Hugo_Symbol",colnames(maf))))
+    #   stop("The MAF file inputted is missing a gene name column. (Hugo_Symbol)")
+    # if(is.na(match("Variant_Classification",colnames(maf))))
+    #   stop("The MAF file inputted is missing a variant classification column. (Variant_Classification)")
+    # if(is.na(match("Mutation_Status",colnames(maf)))){
+    #   warning("The MAF file inputted is missing a mutation status column (Mutation_Status). It will be assumed that
+    #         all variants are of the same type (SOMATIC/GERMLINE).")
+    #   maf$Mutation_Status <- rep("SOMATIC",nrow(maf))
+    # }
+    # if(is.na(match("Variant_Type",colnames(maf)))){
+    #   warning("The MAF file inputted is missing a mutation status column (Variant_Type). It will be assumed that
+    #         all variants are of the same type (SNPs).")
+    #   maf$Variant_Type <- rep("SNPs",nrow(maf))
+    # }
 
     # filter/define patients #
     # if(!is.null(patients)) maf <- maf[maf$Tumor_Sample_Barcode %in% patients,]
@@ -312,6 +313,15 @@ binmat <- function(patients=NULL, maf = NULL, mut.type = "SOMATIC",SNP.only = FA
     else mut <- cna
   }
 
+  # fix colnames #
+  colnames(mut) <- gsub("-",".",colnames(mut))
+
+  # define g.impact from impact_gene_info
+  g.impact <- list()
+  g.impact$g341 <- impact_gene_info$hugo_symbol[impact_gene_info$platform_341 == "included"]
+  g.impact$g410 <- impact_gene_info$hugo_symbol[impact_gene_info$platform_410 == "included"]
+  g.impact$g468 <- impact_gene_info$hugo_symbol[impact_gene_info$platform_468 == "included"]
+
   # specific platform for IMPACT #
   if(specify.plat){
 
@@ -328,7 +338,7 @@ binmat <- function(patients=NULL, maf = NULL, mut.type = "SOMATIC",SNP.only = FA
       specify.plat = F
     }
     if(specify.plat){
-      g.impact <- g.impact
+
       # remove 410 platform patients #
       missing <- setdiff(c(g.impact$g468, paste0(g.impact$g468,".fus"),paste0(g.impact$g468,".Del"),paste0(g.impact$g468,".Amp"),paste0(g.impact$g468,".cna")),
                          c(g.impact$g410, paste0(g.impact$g410,".fus"),paste0(g.impact$g410,".Del"),paste0(g.impact$g410,".Amp"),paste0(g.impact$g410,".cna")))
@@ -361,19 +371,36 @@ binmat <- function(patients=NULL, maf = NULL, mut.type = "SOMATIC",SNP.only = FA
 
   # create pathway levels alterations table #
   if(pathway){
-    pathway_dat <- as.data.frame(do.call('cbind',lapply(unique(impact_gene_info$pathway[!is.na(impact_gene_info$pathway)]),function(x){
-      genes <- as.character(unlist(impact_gene_info %>%
-                                     filter(.data$pathway == x) %>% select(.data$hugo_symbol)))
-      as.numeric(apply(mut %>% select(starts_with(genes)),1,function(y){
-        ifelse(sum(abs(as.numeric(as.character(y))),na.rm = T)>0, 1,0)
-      }))
-    })))
-    colnames(pathway_dat) <- unique(impact_gene_info$pathway[!is.na(impact_gene_info$pathway)])
-    rownames(pathway_dat) <- rownames(mut)
-    return(list(mut = mut, pathway_dat = pathway_dat))
-  }
 
-  return(mut)
+    pathway_dat <- purrr::map2_dfc(pathways$pathway, pathways$genes, function(x, y) {
+
+      genes <- y[y %in% names(mut)]
+      res <- apply(mut %>% select(genes), 1,
+            function(y){
+              ifelse(sum(abs(as.numeric(as.character(y))),
+                         na.rm = T) > 0, 1, 0)}) %>%
+        as.numeric(.) %>%
+        as.data.frame()
+
+      names(res) <- x
+      return(res)
+      }
+    )
+
+    rownames(pathway_dat) <- rownames(mut)
+
+    mut <- list(mut = mut, pathway_dat = pathway_dat)
+  }
+  # get possible genes that were not part of IMPACT #
+  unique_genes <- unique(gsub(".Del|.Amp|.fus|.cna","",colnames(mut)))
+  missing_genes <- unique_genes[which(!(unique_genes %in% impact_gene_info$hugo_symbol))]
+  if(length(missing_genes) > 0 && specify.plat)
+    warning(paste0("Some genes in the final matrix were not part of the official IMPACT panel and thus couldn't be annotate
+            for missing status. If you wish to have a complete list of genes in IMPACT please see 'impact_gene_info'. ",
+                 paste0(missing_genes,collapse = ", ")
+                   )
+            )
+  mut
 }
 
 
@@ -399,17 +426,17 @@ createbin.maf <- function(obj, patients, mut.type, cna.binary, SNP.only, include
   maf <- as_tibble(obj)
   maf$Hugo_Symbol <- as.character(maf$Hugo_Symbol)
   # recode gene names that have been changed between panel versions to make sure they are consistent and counted as the same gene
-  if (sum(grepl("KMT2D|KMT2C|MYCL", maf$Hugo_Symbol)) > 1) {
-    maf <- maf %>%
-      mutate(Hugo_Symbol = case_when(
-        .data$Hugo_Symbol == "KMT2D" ~ "MLL2",
-        .data$Hugo_Symbol == "KMT2C" ~ "MLL3",
-        .data$Hugo_Symbol == "MYCL" ~ "MYCL1",
-        TRUE ~ .data$Hugo_Symbol
-      ))
-
-    warning("KMT2C/KMT2D/MYCL have been recoded to MLL3/MLL2/MYCL1 in MAF file.")
-  }
+  # if (sum(grepl("KMT2D|KMT2C|MYCL", maf$Hugo_Symbol)) > 1) {
+  #   maf <- maf %>%
+  #     mutate(Hugo_Symbol = case_when(
+  #       .data$Hugo_Symbol == "KMT2D" ~ "MLL2",
+  #       .data$Hugo_Symbol == "KMT2C" ~ "MLL3",
+  #       .data$Hugo_Symbol == "MYCL" ~ "MYCL1",
+  #       TRUE ~ .data$Hugo_Symbol
+  #     ))
+  #
+  #   warning("KMT2C/KMT2D/MYCL have been recoded to MLL3/MLL2/MYCL1 in MAF file.")
+  # }
 
   # if (sum(grepl("KMT2D", maf$Hugo_Symbol)) > 1) {
   #   maf <- maf %>%
@@ -487,17 +514,27 @@ createbin.fusion <- function(obj, patients, mut.type,cna.binary, SNP.only,includ
   if(length(match("Hugo_Symbol",colnames(fusion))) == 0)
     stop("The fusion file inputted is missing a gene name column. (Hugo_Symbol)")
   fusion$Hugo_Symbol <- as.character(fusion$Hugo_Symbol)
-  if (sum(grepl("KMT2D|KMT2C|MYCL", fusion$Hugo_Symbol)) > 1) {
-    fusion <- fusion %>%
-      mutate(Hugo_Symbol = case_when(
-        .data$Hugo_Symbol == "KMT2D" ~ "MLL2",
-        .data$Hugo_Symbol == "KMT2C" ~ "MLL3",
-        .data$Hugo_Symbol == "MYCL" ~ "MYCL1",
-        TRUE ~ .data$Hugo_Symbol
-      ))
 
-    warning("KMT2C/KMT2D/MYCL have been recoded to MLL3/MLL2/MYCL1 in fusion file.")
-  }
+  # get table of gene aliases
+  alias_table <- tidyr::unnest(impact_gene_info, cols = alias) %>%
+    select(hugo_symbol, alias)
+
+  # recode aliases
+  fusion$Hugo_Symbol_Old <- fusion$Hugo_Symbol
+  fusion$Hugo_Symbol <- purrr::map_chr(fusion$Hugo_Symbol, ~resolve_alias(.x,
+                                                                    alias_table = alias_table))
+
+  # if (sum(grepl("KMT2D|KMT2C|MYCL", fusion$Hugo_Symbol)) > 1) {
+  #   fusion <- fusion %>%
+  #     mutate(Hugo_Symbol = case_when(
+  #       .data$Hugo_Symbol == "KMT2D" ~ "MLL2",
+  #       .data$Hugo_Symbol == "KMT2C" ~ "MLL3",
+  #       .data$Hugo_Symbol == "MYCL" ~ "MYCL1",
+  #       TRUE ~ .data$Hugo_Symbol
+  #     ))
+  #
+  #   warning("KMT2C/KMT2D/MYCL have been recoded to MLL3/MLL2/MYCL1 in fusion file.")
+  # }
 
   fusion <- as_tibble(fusion) %>%
     filter(.data$Tumor_Sample_Barcode %in% patients)
@@ -526,8 +563,17 @@ createbin.cna <- function(obj, patients, mut.type,cna.binary, SNP.only,include.s
   cna <- as.data.frame(tibble::as_tibble(cna))
   cna$Hugo_Symbol <- as.character(cna$Hugo_Symbol)
 
-  cna <- cna %>%
-    filter(!(Hugo_Symbol %in% c("KMT2D","KMT2C","MYCL")))
+  # get table of gene aliases
+  alias_table <- tidyr::unnest(impact_gene_info, cols = alias) %>%
+    select(hugo_symbol, alias)
+
+  # recode aliases
+  cna$Hugo_Symbol_Old <- cna$Hugo_Symbol
+  cna$Hugo_Symbol <- purrr::map_chr(cna$Hugo_Symbol, ~resolve_alias(.x,
+                                                                          alias_table = alias_table))
+
+  # cna <- cna %>%
+  #   filter(!(Hugo_Symbol %in% c("KMT2D","KMT2C","MYCL")))
 
   # if (sum(grepl("KMT2D|KMT2C|MYCL", cna$Hugo_Symbol)) > 1) {
   #   cna <- cna %>%

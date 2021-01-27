@@ -1,4 +1,3 @@
-
 #' Creates a set of plot summarising a maf file.
 #' @param maf Raw maf dataframe containing alteration data
 #' @param ... any argument belonging to the binmat method

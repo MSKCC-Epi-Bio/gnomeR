@@ -3,7 +3,10 @@
 \name{custom_pathway}
 \alias{custom_pathway}
 \title{custom_pathway
-Enables creation of a custom pathway binary matrix from a binmat() `object`}
+Enables creation of a custom pathway binary matrix from a binmat() `object`. Similarly to the internal file 'pathways.csv', this function takes as input
+a data frame containing the name of the pathways of interest, and for each pathways a character vector of the genes of interest. Note that the different
+events to be considered in each pathways must be considered separetely. For example, if one wishes to consider TP53 deletions in a given pathway, one must
+specify "TP53.Del" in the character vector for that pathway.}
 \usage{
 custom_pathway(mat, pathway)
 }
@@ -18,12 +21,19 @@ pathway_dat : a binary matrix of pathway level alterations
 }
 \description{
 custom_pathway
-Enables creation of a custom pathway binary matrix from a binmat() `object`
+Enables creation of a custom pathway binary matrix from a binmat() `object`. Similarly to the internal file 'pathways.csv', this function takes as input
+a data frame containing the name of the pathways of interest, and for each pathways a character vector of the genes of interest. Note that the different
+events to be considered in each pathways must be considered separetely. For example, if one wishes to consider TP53 deletions in a given pathway, one must
+specify "TP53.Del" in the character vector for that pathway.
 }
 \examples{
 library(gnomeR)
 patients <- as.character(unique(mut$Tumor_Sample_Barcode))[1:200]
 bin.mut <- binmat(patients = patients,maf = mut)
-pathway <- as.data.frame(cbind(c("PIK3CA","KRAS","TERT","TP53"),c("path1","path1","path2","path3")))
+pathway <- as.data.frame(cbind(c("path1","path1","path2","path3"),c("PIK3CA","KRAS","TERT","TP53")))
+custom_pathway(mat = bin.mut, pathway = pathway)
+### Considering CNA as well ###
+bin.mut <- binmat(patients = patients,maf = mut,cna = cna)
+pathway <- as.data.frame(cbind(c("path1","path1","path2","path3","path4"),c("PIK3CA","KRAS","TERT","TP53","TP53.Del")))
 custom_pathway(mat = bin.mut, pathway = pathway)
 }

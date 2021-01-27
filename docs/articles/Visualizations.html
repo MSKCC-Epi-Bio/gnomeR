@@ -73,7 +73,11 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
+<<<<<<< HEAD
   <a href="https://github.com/AxelitoMartin/gnomeR">
+=======
+  <a href="https://github.com/AxelitoMartin/gnomeR/">
+>>>>>>> a875652248dbaae97b269cfe4efb962be077b5d8
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -88,7 +92,11 @@
 
       
 
+<<<<<<< HEAD
       </header><script src="Visualizations_files/header-attrs-2.6/header-attrs.js"></script><div class="row">
+=======
+      </header><script src="Visualizations_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
+>>>>>>> a875652248dbaae97b269cfe4efb962be077b5d8
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1>Visualizations</h1>
@@ -101,8 +109,14 @@
 
     
     
+<<<<<<< HEAD
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gnomeR)</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span></code></pre></div>
+=======
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/AxelitoMartin/gnomeR">gnomeR</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span><span class="op">)</span></code></pre></div>
+>>>>>>> a875652248dbaae97b269cfe4efb962be077b5d8
 <div id="introduction" class="section level1">
 <h1 class="hasAnchor">
 <a href="#introduction" class="anchor"></a>Introduction</h1>
@@ -140,6 +154,7 @@
 <code>genecor</code> summarise the correlation of genes that are most frequently mutated in a heatmap</li>
 </ul>
 <p>An example of a subset of these plots is shown below.</p>
+<<<<<<< HEAD
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>plots_summary <span class="ot">&lt;-</span> <span class="fu">maf_viz</span>(<span class="at">maf =</span> mut)</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>plots_summary<span class="sc">$</span>varclass</span></code></pre></div>
 <p><img src="Visualizations_files/figure-html/unnamed-chunk-3-1.png" width="960"></p>
@@ -152,6 +167,26 @@
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>plots_summary<span class="sc">$</span>topgenes</span></code></pre></div>
 <p><img src="Visualizations_files/figure-html/unnamed-chunk-3-5.png" width="960"></p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>plots_summary<span class="sc">$</span>genecor</span></code></pre></div>
+=======
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">plots_summary</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/maf_viz.html">maf_viz</a></span><span class="op">(</span>maf <span class="op">=</span> <span class="va">mut</span><span class="op">)</span>
+<span class="va">plots_summary</span><span class="op">$</span><span class="va">varclass</span></code></pre></div>
+<p><img src="Visualizations_files/figure-html/unnamed-chunk-3-1.png" width="960"></p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">plots_summary</span><span class="op">$</span><span class="va">vartype</span></code></pre></div>
+<p><img src="Visualizations_files/figure-html/unnamed-chunk-3-2.png" width="960"></p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">plots_summary</span><span class="op">$</span><span class="va">snvclass</span></code></pre></div>
+<p><img src="Visualizations_files/figure-html/unnamed-chunk-3-3.png" width="960"></p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">plots_summary</span><span class="op">$</span><span class="va">samplevar</span></code></pre></div>
+<p><img src="Visualizations_files/figure-html/unnamed-chunk-3-4.png" width="960"></p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">plots_summary</span><span class="op">$</span><span class="va">topgenes</span></code></pre></div>
+<p><img src="Visualizations_files/figure-html/unnamed-chunk-3-5.png" width="960"></p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">plots_summary</span><span class="op">$</span><span class="va">genecor</span></code></pre></div>
+>>>>>>> a875652248dbaae97b269cfe4efb962be077b5d8
 <p><img src="Visualizations_files/figure-html/unnamed-chunk-3-6.png" width="960"></p>
 <p>One can also add the percentage on the barplots. See below -</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggvarclass</span>(mut) <span class="sc">+</span> <span class="fu">add.perc</span>(<span class="at">size=</span><span class="fl">2.5</span>)</span></code></pre></div>
@@ -162,26 +197,45 @@
 <h2 class="hasAnchor">
 <a href="#genetics-only" class="anchor"></a>Genetics only</h2>
 <p>In the first section we show how to use the output of the <code><a href="../reference/binmat.html">binmat()</a></code> output to create an OncoPrint for a selected subset of genes. For consistency we will use the 10 genes used in the comutation plot above.</p>
+<<<<<<< HEAD
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>genes <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"ATM"</span>,<span class="st">"BRAF"</span>,<span class="st">"MLL2"</span>,<span class="st">"APC"</span>,<span class="st">"EGFR"</span>,<span class="st">"MLL3"</span>,<span class="st">"PIK3CA"</span>,<span class="st">"KRAS"</span>,<span class="st">"TP53"</span>)</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>dat.gen <span class="ot">&lt;-</span> <span class="fu">binmat</span>(<span class="at">maf =</span> mut, <span class="at">fusion =</span> fusion, <span class="at">cna =</span> cna)</span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>dat.gen <span class="ot">&lt;-</span> dat.gen <span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="fu">starts_with</span>(genes))</span>
 <span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_oncoPrint</span>(<span class="at">gen.dat =</span> dat.gen)</span></code></pre></div>
 <p><img src="Visualizations_files/figure-html/unnamed-chunk-5-1.png" width="960"></p>
+=======
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">genes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"ATM"</span>,<span class="st">"BRAF"</span>,<span class="st">"MLL2"</span>,<span class="st">"APC"</span>,<span class="st">"EGFR"</span>,<span class="st">"MLL3"</span>,<span class="st">"PIK3CA"</span>,<span class="st">"KRAS"</span>,<span class="st">"TP53"</span><span class="op">)</span>
+<span class="va">dat.gen</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/binmat.html">binmat</a></span><span class="op">(</span>maf <span class="op">=</span> <span class="va">mut</span>, fusion <span class="op">=</span> <span class="va">fusion</span>, cna <span class="op">=</span> <span class="va">cna</span><span class="op">)</span>
+<span class="va">dat.gen</span> <span class="op">&lt;-</span> <span class="va">dat.gen</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html">starts_with</a></span><span class="op">(</span><span class="va">genes</span><span class="op">)</span><span class="op">)</span>
+<span class="fu"><a href="../reference/plot_oncoPrint.html">plot_oncoPrint</a></span><span class="op">(</span>gen.dat <span class="op">=</span> <span class="va">dat.gen</span><span class="op">)</span></code></pre></div>
+<p><img src="Visualizations_files/figure-html/unnamed-chunk-4-1.png" width="960"></p>
+>>>>>>> a875652248dbaae97b269cfe4efb962be077b5d8
 </div>
 <div id="missing-information" class="section level2">
 <h2 class="hasAnchor">
 <a href="#missing-information" class="anchor"></a>Missing information</h2>
 <p>A critical point of <code>gnomeR</code> is its ability to correct for the different platforms that have existed at MSKCC. We reflect this is in the OncoPrints by including black entries in the missing cells as shown below.</p>
+<<<<<<< HEAD
 <div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>genes <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"ATM"</span>,<span class="st">"BRAF"</span>,<span class="st">"MLL2"</span>,<span class="st">"APC"</span>,<span class="st">"EGFR"</span>,<span class="st">"MLL3"</span>,<span class="st">"PIK3CA"</span>,<span class="st">"KRAS"</span>,<span class="st">"TP53"</span>,<span class="st">"EPHA7"</span>)</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>dat.gen <span class="ot">&lt;-</span> <span class="fu">binmat</span>(<span class="at">maf =</span> mut, <span class="at">fusion =</span> fusion, <span class="at">cna =</span> cna)</span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>dat.gen <span class="ot">&lt;-</span> dat.gen <span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="fu">starts_with</span>(genes))</span>
 <span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_oncoPrint</span>(<span class="at">gen.dat =</span> dat.gen)</span></code></pre></div>
 <p><img src="Visualizations_files/figure-html/unnamed-chunk-6-1.png" width="960"></p>
+=======
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">genes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"ATM"</span>,<span class="st">"BRAF"</span>,<span class="st">"MLL2"</span>,<span class="st">"APC"</span>,<span class="st">"EGFR"</span>,<span class="st">"MLL3"</span>,<span class="st">"PIK3CA"</span>,<span class="st">"KRAS"</span>,<span class="st">"TP53"</span>,<span class="st">"EPHA7"</span><span class="op">)</span>
+<span class="va">dat.gen</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/binmat.html">binmat</a></span><span class="op">(</span>maf <span class="op">=</span> <span class="va">mut</span>, fusion <span class="op">=</span> <span class="va">fusion</span>, cna <span class="op">=</span> <span class="va">cna</span><span class="op">)</span>
+<span class="va">dat.gen</span> <span class="op">&lt;-</span> <span class="va">dat.gen</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html">starts_with</a></span><span class="op">(</span><span class="va">genes</span><span class="op">)</span><span class="op">)</span>
+<span class="fu"><a href="../reference/plot_oncoPrint.html">plot_oncoPrint</a></span><span class="op">(</span>gen.dat <span class="op">=</span> <span class="va">dat.gen</span><span class="op">)</span></code></pre></div>
+<p><img src="Visualizations_files/figure-html/unnamed-chunk-5-1.png" width="960"></p>
+>>>>>>> a875652248dbaae97b269cfe4efb962be077b5d8
 </div>
 <div id="adding-clinical-information" class="section level2">
 <h2 class="hasAnchor">
 <a href="#adding-clinical-information" class="anchor"></a>Adding clinical information</h2>
 <p>In this section we will show how the user can further add clinical information to this plot.</p>
+<<<<<<< HEAD
 <div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>genes <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"ATM"</span>,<span class="st">"BRAF"</span>,<span class="st">"MLL2"</span>,<span class="st">"APC"</span>,<span class="st">"EGFR"</span>,<span class="st">"MLL3"</span>,<span class="st">"PIK3CA"</span>,<span class="st">"KRAS"</span>,<span class="st">"TP53"</span>,<span class="st">"EPHA7"</span>)</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>dat.gen <span class="ot">&lt;-</span> <span class="fu">binmat</span>(<span class="at">maf =</span> mut, <span class="at">fusion =</span> fusion, <span class="at">cna =</span> cna)</span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>dat.gen <span class="ot">&lt;-</span> dat.gen <span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="fu">starts_with</span>(genes))</span>
@@ -210,12 +264,36 @@
 <div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggheatmap</span>(dat.gen,<span class="at">show_column_names=</span><span class="cn">FALSE</span>)</span></code></pre></div>
 <p><img src="Visualizations_files/figure-html/unnamed-chunk-8-1.png" width="960"></p>
+=======
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">genes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"ATM"</span>,<span class="st">"BRAF"</span>,<span class="st">"MLL2"</span>,<span class="st">"APC"</span>,<span class="st">"EGFR"</span>,<span class="st">"MLL3"</span>,<span class="st">"PIK3CA"</span>,<span class="st">"KRAS"</span>,<span class="st">"TP53"</span>,<span class="st">"EPHA7"</span><span class="op">)</span>
+<span class="va">dat.gen</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/binmat.html">binmat</a></span><span class="op">(</span>maf <span class="op">=</span> <span class="va">mut</span>, fusion <span class="op">=</span> <span class="va">fusion</span>, cna <span class="op">=</span> <span class="va">cna</span><span class="op">)</span>
+<span class="va">dat.gen</span> <span class="op">&lt;-</span> <span class="va">dat.gen</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html">starts_with</a></span><span class="op">(</span><span class="va">genes</span><span class="op">)</span><span class="op">)</span>
+<span class="va">clin.patients.dat</span> <span class="op">&lt;-</span> <span class="va">clin.patients</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/match.html">match</a></span><span class="op">(</span>
+  <span class="fu"><a href="https://rdrr.io/r/base/abbreviate.html">abbreviate</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span><span class="op">(</span><span class="va">dat.gen</span><span class="op">)</span>,strict <span class="op">=</span> <span class="cn">TRUE</span>, minlength <span class="op">=</span> <span class="fl">9</span><span class="op">)</span>,
+  <span class="va">clin.patients</span><span class="op">$</span><span class="va">X.Patient.Identifier</span><span class="op">)</span>,<span class="op">]</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html">rename</a></span><span class="op">(</span>DMPID <span class="op">=</span> <span class="va">X.Patient.Identifier</span>, Smoker <span class="op">=</span> <span class="va">Smoking.History</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">DMPID</span>, <span class="va">Sex</span>,<span class="va">Smoker</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">DMPID</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/distinct.html">distinct</a></span><span class="op">(</span><span class="va">DMPID</span>,.keep_all <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
+<span class="va">dat.gen</span> <span class="op">&lt;-</span> <span class="va">dat.gen</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/match.html">match</a></span><span class="op">(</span><span class="va">clin.patients.dat</span><span class="op">$</span><span class="va">DMPID</span>,
+                         <span class="fu"><a href="https://rdrr.io/r/base/abbreviate.html">abbreviate</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span><span class="op">(</span><span class="va">dat.gen</span><span class="op">)</span>,strict <span class="op">=</span> <span class="cn">TRUE</span>,
+                                    minlength <span class="op">=</span> <span class="fl">9</span><span class="op">)</span><span class="op">)</span>,<span class="op">]</span>
+<span class="va">clin.patients.dat</span> <span class="op">&lt;-</span> <span class="va">clin.patients.dat</span> <span class="op">%&gt;%</span>
+    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>DMPID <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html">as.character</a></span><span class="op">(</span><span class="va">DMPID</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+    <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/rownames.html">column_to_rownames</a></span><span class="op">(</span><span class="st">'DMPID'</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span><span class="op">(</span><span class="va">dat.gen</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span><span class="op">(</span><span class="va">clin.patients.dat</span><span class="op">)</span>
+<span class="fu"><a href="../reference/plot_oncoPrint.html">plot_oncoPrint</a></span><span class="op">(</span>gen.dat <span class="op">=</span> <span class="va">dat.gen</span>,
+               clin.dat <span class="op">=</span> <span class="va">clin.patients.dat</span><span class="op">)</span></code></pre></div>
+<p><img src="Visualizations_files/figure-html/unnamed-chunk-6-1.png" width="960"></p>
+>>>>>>> a875652248dbaae97b269cfe4efb962be077b5d8
 </div>
 </div>
 <div id="advanced-visualization" class="section level1">
 <h1 class="hasAnchor">
 <a href="#advanced-visualization" class="anchor"></a>Advanced visualization</h1>
 <p>The copy-number alterations data we have covered up to now is a discrete estimation of the alterations that occured. There however exist more nuanced and accurate data for copy-number alterations observed in a tumor. In <code>gnomeR</code> we include an example of segmentation file and relevant functions from the <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5027494/"><code>facets</code></a> package that provides an allele-specific copy number and clonal heterogeneity analysis tool for high-throughput DNA sequencing. We show in this section how to visualize this data:</p>
+<<<<<<< HEAD
 <div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>samples <span class="ot">&lt;-</span> <span class="fu">as.character</span>(<span class="fu">unique</span>(mut<span class="sc">$</span>Tumor_Sample_Barcode))[<span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(<span class="fu">unique</span>(mut<span class="sc">$</span>Tumor_Sample_Barcode)), <span class="dv">100</span>, <span class="at">replace=</span><span class="cn">FALSE</span>)]</span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>p.heat <span class="ot">&lt;-</span> <span class="fu">facets.heatmap</span>(<span class="at">seg =</span> seg, <span class="at">patients =</span> samples, <span class="at">min.purity =</span> <span class="dv">0</span>)</span>
@@ -226,6 +304,20 @@
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>p.heat <span class="ot">&lt;-</span> <span class="fu">facets.heatmap</span>(<span class="at">seg =</span> seg, <span class="at">patients =</span> samples, <span class="at">min.purity =</span> <span class="dv">0</span>, <span class="at">outcome =</span> outcome, <span class="at">ordered =</span> <span class="fu">order</span>(outcome))</span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>p.heat<span class="sc">$</span>p</span></code></pre></div>
 <p><img src="Visualizations_files/figure-html/unnamed-chunk-10-1.png" width="960"></p>
+=======
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span>
+<span class="va">samples</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html">as.character</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span><span class="op">(</span><span class="va">mut</span><span class="op">$</span><span class="va">Tumor_Sample_Barcode</span><span class="op">)</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span><span class="op">(</span><span class="va">mut</span><span class="op">$</span><span class="va">Tumor_Sample_Barcode</span><span class="op">)</span><span class="op">)</span>, <span class="fl">100</span>, replace<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span><span class="op">]</span>
+<span class="va">p.heat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/facets.heatmap.html">facets.heatmap</a></span><span class="op">(</span>seg <span class="op">=</span> <span class="va">seg</span>, patients <span class="op">=</span> <span class="va">samples</span>, min.purity <span class="op">=</span> <span class="fl">0</span><span class="op">)</span>
+<span class="va">p.heat</span><span class="op">$</span><span class="va">p</span></code></pre></div>
+<p><img src="Visualizations_files/figure-html/unnamed-chunk-7-1.png" width="960"></p>
+<p>In the heatmap above we show the estimate gains and losses over segments in each chromosomes (rows) and in each patient (columns). Now that the purity of the tumor sample is an important factor in order to get reliable data. Moreover we include argument <code>ordered</code> and <code>outcome</code> that enables the user to sort the heatmap by a specific feature of interest. We show an example below with a simulated feature of outcome:</p>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">outcome</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">samples</span><span class="op">)</span><span class="op">)</span>
+<span class="va">p.heat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/facets.heatmap.html">facets.heatmap</a></span><span class="op">(</span>seg <span class="op">=</span> <span class="va">seg</span>, patients <span class="op">=</span> <span class="va">samples</span>, min.purity <span class="op">=</span> <span class="fl">0</span>, outcome <span class="op">=</span> <span class="va">outcome</span>, ordered <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/order.html">order</a></span><span class="op">(</span><span class="va">outcome</span><span class="op">)</span><span class="op">)</span>
+<span class="va">p.heat</span><span class="op">$</span><span class="va">p</span></code></pre></div>
+<p><img src="Visualizations_files/figure-html/unnamed-chunk-8-1.png" width="960"></p>
+>>>>>>> a875652248dbaae97b269cfe4efb962be077b5d8
 </div>
   </div>
 
@@ -259,7 +351,11 @@
 </div>
 
 <div class="pkgdown">
+<<<<<<< HEAD
   <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
+=======
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+>>>>>>> a875652248dbaae97b269cfe4efb962be077b5d8
 </div>
 
       </footer>

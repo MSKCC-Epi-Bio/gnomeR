@@ -73,7 +73,11 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
+<<<<<<< HEAD
   <a href="https://github.com/AxelitoMartin/gnomeR">
+=======
+  <a href="https://github.com/AxelitoMartin/gnomeR/">
+>>>>>>> a875652248dbaae97b269cfe4efb962be077b5d8
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -88,7 +92,11 @@
 
       
 
+<<<<<<< HEAD
       </header><script src="Analizing-genomic-data_files/header-attrs-2.6/header-attrs.js"></script><script src="Analizing-genomic-data_files/htmlwidgets-1.5.1/htmlwidgets.js"></script><script src="Analizing-genomic-data_files/plotly-binding-4.9.2.1/plotly.js"></script><script src="Analizing-genomic-data_files/typedarray-0.1/typedarray.min.js"></script><script src="Analizing-genomic-data_files/jquery-1.11.3/jquery.min.js"></script><link href="Analizing-genomic-data_files/crosstalk-1.1.0.1/css/crosstalk.css" rel="stylesheet">
+=======
+      </header><script src="Analizing-genomic-data_files/accessible-code-block-0.0.1/empty-anchor.js"></script><script src="Analizing-genomic-data_files/htmlwidgets-1.5.3/htmlwidgets.js"></script><script src="Analizing-genomic-data_files/plotly-binding-4.9.2.2/plotly.js"></script><script src="Analizing-genomic-data_files/typedarray-0.1/typedarray.min.js"></script><script src="Analizing-genomic-data_files/jquery-1.11.3/jquery.min.js"></script><link href="Analizing-genomic-data_files/crosstalk-1.1.0.1/css/crosstalk.css" rel="stylesheet">
+>>>>>>> a875652248dbaae97b269cfe4efb962be077b5d8
 <script src="Analizing-genomic-data_files/crosstalk-1.1.0.1/js/crosstalk.min.js"></script><link href="Analizing-genomic-data_files/plotly-htmlwidgets-css-1.52.2/plotly-htmlwidgets.css" rel="stylesheet">
 <script src="Analizing-genomic-data_files/plotly-main-1.52.2/plotly-latest.min.js"></script><div class="row">
   <div class="col-md-9 contents">
@@ -103,7 +111,12 @@
 
     
     
+<<<<<<< HEAD
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gnomeR)</span></code></pre></div>
+=======
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/AxelitoMartin/gnomeR">gnomeR</a></span><span class="op">)</span></code></pre></div>
+>>>>>>> a875652248dbaae97b269cfe4efb962be077b5d8
 <div id="introduction" class="section level1">
 <h1 class="hasAnchor">
 <a href="#introduction" class="anchor"></a>Introduction</h1>
@@ -132,24 +145,45 @@
 <code>rank</code> Should the table returned be ordered by Pvalue. Boolean, default is TRUE.</li>
 </ul>
 <p>In the following analyses we will be using the following subset of samples:</p>
+<<<<<<< HEAD
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>samples <span class="ot">&lt;-</span> <span class="fu">as.character</span>(<span class="fu">unique</span>(mut<span class="sc">$</span>Tumor_Sample_Barcode))[<span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(<span class="fu">unique</span>(mut<span class="sc">$</span>Tumor_Sample_Barcode)), <span class="dv">100</span>, <span class="at">replace=</span><span class="cn">FALSE</span>)]</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">binmat</span>(<span class="at">patients =</span> samples,<span class="at">maf =</span> mut, <span class="at">fusion =</span> fusion, <span class="at">cna =</span> cna, <span class="at">cna.binary =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
+=======
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span>
+<span class="va">samples</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html">as.character</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span><span class="op">(</span><span class="va">mut</span><span class="op">$</span><span class="va">Tumor_Sample_Barcode</span><span class="op">)</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span><span class="op">(</span><span class="va">mut</span><span class="op">$</span><span class="va">Tumor_Sample_Barcode</span><span class="op">)</span><span class="op">)</span>, <span class="fl">100</span>, replace<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span><span class="op">]</span>
+<span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/binmat.html">binmat</a></span><span class="op">(</span>patients <span class="op">=</span> <span class="va">samples</span>,maf <span class="op">=</span> <span class="va">mut</span>, fusion <span class="op">=</span> <span class="va">fusion</span>, cna <span class="op">=</span> <span class="va">cna</span>, cna.binary <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
+>>>>>>> a875652248dbaae97b269cfe4efb962be077b5d8
 <div id="categorical" class="section level2">
 <h2 class="hasAnchor">
 <a href="#categorical" class="anchor"></a>Categorical</h2>
 <p>For this example we will be using the recorded sample type of the samples we randomly selected above. Thus looking for differences between primary and metastatic samples:</p>
+<<<<<<< HEAD
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>outcome <span class="ot">&lt;-</span> <span class="fu">as.character</span>(clin.sample<span class="sc">$</span>Sample.Type[<span class="fu">match</span>(samples,clin.sample<span class="sc">$</span>Sample.Identifier)])</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>test <span class="ot">&lt;-</span> <span class="fu">gen.summary</span>(<span class="at">gen.dat =</span> df,</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>                <span class="at">outcome =</span> outcome,</span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>                <span class="at">filter =</span> <span class="fl">0.05</span>,<span class="at">paired =</span> <span class="cn">FALSE</span>,</span>
 <span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>                <span class="at">cont =</span> <span class="cn">FALSE</span>,<span class="at">rank =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+=======
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">outcome</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html">as.character</a></span><span class="op">(</span><span class="va">clin.sample</span><span class="op">$</span><span class="va">Sample.Type</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/match.html">match</a></span><span class="op">(</span><span class="va">samples</span>,<span class="va">clin.sample</span><span class="op">$</span><span class="va">Sample.Identifier</span><span class="op">)</span><span class="op">]</span><span class="op">)</span>
+<span class="va">test</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gen.summary.html">gen.summary</a></span><span class="op">(</span>gen.dat <span class="op">=</span> <span class="va">df</span>,
+                outcome <span class="op">=</span> <span class="va">outcome</span>,
+                filter <span class="op">=</span> <span class="fl">0.05</span>,paired <span class="op">=</span> <span class="cn">FALSE</span>,
+                cont <span class="op">=</span> <span class="cn">FALSE</span>,rank <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
+>>>>>>> a875652248dbaae97b269cfe4efb962be077b5d8
 <p>Using the Fisher’s exact test the <code><a href="../reference/gen.summary.html">gen.summary()</a></code> function returns the following:</p>
 <ul>
 <li>
 <code>fits</code> a summary table of the distribution of features across outcomes and the test performed</li>
 </ul>
+<<<<<<< HEAD
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(test<span class="sc">$</span>fits[<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>,])</span></code></pre></div>
+=======
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu">kable</span><span class="op">(</span><span class="va">test</span><span class="op">$</span><span class="va">fits</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span>,<span class="op">]</span><span class="op">)</span></code></pre></div>
+>>>>>>> a875652248dbaae97b269cfe4efb962be077b5d8
 <table class="table">
 <thead><tr class="header">
 <th align="left"></th>
@@ -172,23 +206,11 @@
 <td align="left">0%</td>
 <td align="left">0</td>
 <td align="left">3.12e-02</td>
-<td align="left">8.19e-01</td>
+<td align="left">8.36e-01</td>
 <td align="left">0</td>
 <td align="left">0.99</td>
 </tr>
 <tr class="even">
-<td align="left">MLL2</td>
-<td align="left">MLL2</td>
-<td align="left">5%</td>
-<td align="left">9.09%</td>
-<td align="left">0%</td>
-<td align="left">0</td>
-<td align="left">6.24e-02</td>
-<td align="left">8.19e-01</td>
-<td align="left">0</td>
-<td align="left">1.29</td>
-</tr>
-<tr class="odd">
 <td align="left">CDKN2B.cna</td>
 <td align="left">CDKN2B.cna</td>
 <td align="left">-12%</td>
@@ -196,11 +218,11 @@
 <td align="left">-22.22%</td>
 <td align="left">0.15</td>
 <td align="left">8.75e-02</td>
-<td align="left">8.19e-01</td>
+<td align="left">8.36e-01</td>
 <td align="left">0</td>
 <td align="left">1.42</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">CREBBP</td>
 <td align="left">CREBBP</td>
 <td align="left">7%</td>
@@ -208,11 +230,11 @@
 <td align="left">2.22%</td>
 <td align="left">0.19</td>
 <td align="left">1.25e-01</td>
-<td align="left">8.19e-01</td>
+<td align="left">8.36e-01</td>
 <td align="left">0</td>
 <td align="left">1.64</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">ERBB2.cna</td>
 <td align="left">ERBB2.cna</td>
 <td align="left">10%</td>
@@ -220,11 +242,11 @@
 <td align="left">17.78%</td>
 <td align="left">5.19</td>
 <td align="left">1.71e-01</td>
-<td align="left">8.19e-01</td>
+<td align="left">8.36e-01</td>
 <td align="left">0.49</td>
 <td align="left">263.77</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">MLL3</td>
 <td align="left">MLL3</td>
 <td align="left">6%</td>
@@ -232,23 +254,23 @@
 <td align="left">2.22%</td>
 <td align="left">0.23</td>
 <td align="left">2.19e-01</td>
-<td align="left">8.19e-01</td>
+<td align="left">8.36e-01</td>
+<td align="left">0</td>
+<td align="left">2.17</td>
+</tr>
+<tr class="even">
+<td align="left">CDH1</td>
+<td align="left">CDH1</td>
+<td align="left">6%</td>
+<td align="left">9.09%</td>
+<td align="left">2.22%</td>
+<td align="left">0.23</td>
+<td align="left">2.19e-01</td>
+<td align="left">8.36e-01</td>
 <td align="left">0</td>
 <td align="left">2.17</td>
 </tr>
 <tr class="odd">
-<td align="left">CDH1</td>
-<td align="left">CDH1</td>
-<td align="left">6%</td>
-<td align="left">9.09%</td>
-<td align="left">2.22%</td>
-<td align="left">0.23</td>
-<td align="left">2.19e-01</td>
-<td align="left">8.19e-01</td>
-<td align="left">0</td>
-<td align="left">2.17</td>
-</tr>
-<tr class="even">
 <td align="left">MYC.cna</td>
 <td align="left">MYC.cna</td>
 <td align="left">12%</td>
@@ -256,11 +278,11 @@
 <td align="left">4.44%</td>
 <td align="left">0.23</td>
 <td align="left">2.19e-01</td>
-<td align="left">8.19e-01</td>
+<td align="left">8.36e-01</td>
 <td align="left">0</td>
 <td align="left">2.17</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">EGFR</td>
 <td align="left">EGFR</td>
 <td align="left">9%</td>
@@ -268,11 +290,11 @@
 <td align="left">13.33%</td>
 <td align="left">2.64</td>
 <td align="left">2.92e-01</td>
-<td align="left">8.19e-01</td>
+<td align="left">8.36e-01</td>
 <td align="left">0.52</td>
 <td align="left">17.34</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">KEAP1</td>
 <td align="left">KEAP1</td>
 <td align="left">5%</td>
@@ -280,7 +302,19 @@
 <td align="left">2.22%</td>
 <td align="left">0.29</td>
 <td align="left">3.75e-01</td>
-<td align="left">8.19e-01</td>
+<td align="left">8.36e-01</td>
+<td align="left">0.01</td>
+<td align="left">3.1</td>
+</tr>
+<tr class="even">
+<td align="left">AR</td>
+<td align="left">AR</td>
+<td align="left">5%</td>
+<td align="left">7.27%</td>
+<td align="left">2.22%</td>
+<td align="left">0.29</td>
+<td align="left">3.75e-01</td>
+<td align="left">8.36e-01</td>
 <td align="left">0.01</td>
 <td align="left">3.1</td>
 </tr>
@@ -290,32 +324,59 @@
 <li>
 <code>forest.plot</code> a forest plot of the most significant features</li>
 </ul>
+<<<<<<< HEAD
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>test<span class="sc">$</span>forest.plot</span></code></pre></div>
+=======
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">test</span><span class="op">$</span><span class="va">forest.plot</span></code></pre></div>
+>>>>>>> a875652248dbaae97b269cfe4efb962be077b5d8
 <p><img src="Analizing-genomic-data_files/figure-html/unnamed-chunk-6-1.png" width="960"></p>
 <ul>
 <li>
 <code>vPlot</code> a volcano plot summarising the odds ratios and pvalues of the the features included in the test</li>
 </ul>
+<<<<<<< HEAD
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>test<span class="sc">$</span>vPlot</span></code></pre></div>
 <div id="htmlwidget-54a4873249b169eb6149" style="width:960px;height:480px;" class="plotly html-widget"></div>
 <script type="application/json" data-for="htmlwidget-54a4873249b169eb6149">{"x":{"visdat":{"663b3e9e3f1":["function () ","plotlyVisDat"]},"cur_data":"663b3e9e3f1","attrs":{"663b3e9e3f1":{"x":{},"y":{},"text":{},"mode":"markers","alpha_stroke":1,"sizes":[10,100],"spans":[1,20]}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"title":"Volcano Plot","xaxis":{"domain":[0,1],"automargin":true,"title":".data$OddsRatio"},"yaxis":{"domain":[0,1],"automargin":true,"title":"-log10(.data$Pvalue)"},"hovermode":"closest","showlegend":false},"source":"A","config":{"showSendToCloud":false},"data":[{"x":[0,0,0.15,0.19,5.19,0.23,0.23,0.23,2.64,0.29,0.29,0.29,0.29,0.29,2.56,2.56,2.56,2.56,0.7,0.47,0.47,0.47,0.58,1.48,1.88,1.88,0.6,0.67,0.74,1.24,0.81,1.24,1.24,0.81,0.81,1.24,1.24,0.81,0.98],"y":[1.50584540598156,1.20481541031758,1.05799194697769,0.903089986991944,0.767003889607846,0.659555885159882,0.659555885159882,0.659555885159882,0.534617148551582,0.425968732272281,0.425968732272281,0.425968732272281,0.425968732272281,0.425968732272281,0.393618634889395,0.393618634889395,0.393618634889395,0.393618634889395,0.382999658879101,0.343901797987168,0.343901797987168,0.335358024443874,0.268411234813261,0.238824186844269,0.183758700008217,0.183758700008217,0.162411561764489,0.1249387366083,0.114638779968488,-0,-0,-0,-0,-0,-0,-0,-0,-0,-0],"text":["Gene : FGFR1.cna <\/br> Odds Ratio : 0","Gene : MLL2 <\/br> Odds Ratio : 0","Gene : CDKN2B.cna <\/br> Odds Ratio : 0.15","Gene : CREBBP <\/br> Odds Ratio : 0.19","Gene : ERBB2.cna <\/br> Odds Ratio : 5.19","Gene : MLL3 <\/br> Odds Ratio : 0.23","Gene : CDH1 <\/br> Odds Ratio : 0.23","Gene : MYC.cna <\/br> Odds Ratio : 0.23","Gene : EGFR <\/br> Odds Ratio : 2.64","Gene : KEAP1 <\/br> Odds Ratio : 0.29","Gene : AR <\/br> Odds Ratio : 0.29","Gene : SMARCA4 <\/br> Odds Ratio : 0.29","Gene : CCND1.cna <\/br> Odds Ratio : 0.29","Gene : FGF19.cna <\/br> Odds Ratio : 0.29","Gene : RB1 <\/br> Odds Ratio : 2.56","Gene : BRAF <\/br> Odds Ratio : 2.56","Gene : PIK3C2G <\/br> Odds Ratio : 2.56","Gene : CDK12.cna <\/br> Odds Ratio : 2.56","Gene : TP53 <\/br> Odds Ratio : 0.7","Gene : STK11 <\/br> Odds Ratio : 0.47","Gene : APC <\/br> Odds Ratio : 0.47","Gene : CDKN2A.cna <\/br> Odds Ratio : 0.47","Gene : PIK3CA <\/br> Odds Ratio : 0.58","Gene : TERT <\/br> Odds Ratio : 1.48","Gene : EPHA5 <\/br> Odds Ratio : 1.88","Gene : TSC1 <\/br> Odds Ratio : 1.88","Gene : MCL1.cna <\/br> Odds Ratio : 0.6","Gene : FAT1 <\/br> Odds Ratio : 0.67","Gene : KRAS <\/br> Odds Ratio : 0.74","Gene : PTPRT <\/br> Odds Ratio : 1.24","Gene : FLT4 <\/br> Odds Ratio : 0.81","Gene : NOTCH1 <\/br> Odds Ratio : 1.24","Gene : ATM <\/br> Odds Ratio : 1.24","Gene : DOT1L <\/br> Odds Ratio : 0.81","Gene : NOTCH3 <\/br> Odds Ratio : 0.81","Gene : ALK <\/br> Odds Ratio : 1.24","Gene : PTPRD <\/br> Odds Ratio : 1.24","Gene : GATA3 <\/br> Odds Ratio : 0.81","Gene : MLL <\/br> Odds Ratio : 0.98"],"mode":"markers","type":"scatter","marker":{"color":"rgba(31,119,180,1)","line":{"color":"rgba(31,119,180,1)"}},"error_y":{"color":"rgba(31,119,180,1)"},"error_x":{"color":"rgba(31,119,180,1)"},"line":{"color":"rgba(31,119,180,1)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.2,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+=======
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">test</span><span class="op">$</span><span class="va">vPlot</span></code></pre></div>
+<div id="htmlwidget-54a4873249b169eb6149" style="width:960px;height:480px;" class="plotly html-widget"></div>
+<script type="application/json" data-for="htmlwidget-54a4873249b169eb6149">{"x":{"visdat":{"34e39c48c47":["function () ","plotlyVisDat"]},"cur_data":"34e39c48c47","attrs":{"34e39c48c47":{"x":{},"y":{},"text":{},"mode":"markers","alpha_stroke":1,"sizes":[10,100],"spans":[1,20]}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"title":"Volcano Plot","xaxis":{"domain":[0,1],"automargin":true,"title":".data$OddsRatio"},"yaxis":{"domain":[0,1],"automargin":true,"title":"-log10(.data$Pvalue)"},"hovermode":"closest","showlegend":false},"source":"A","config":{"showSendToCloud":false},"data":[{"x":[0,0.15,0.19,5.19,0.23,0.23,0.23,2.64,0.29,0.29,0.29,0.29,0.29,2.56,2.56,2.56,2.56,0.7,0.47,0.47,0.47,0.58,1.48,1.88,1.88,0.6,0.67,0.74,1.24,0.81,1.24,1.24,0.81,0.81,1.24,1.24,0.81,0.98],"y":[1.50584540598156,1.05799194697769,0.903089986991944,0.767003889607846,0.659555885159882,0.659555885159882,0.659555885159882,0.534617148551582,0.425968732272281,0.425968732272281,0.425968732272281,0.425968732272281,0.425968732272281,0.393618634889395,0.393618634889395,0.393618634889395,0.393618634889395,0.382999658879101,0.343901797987168,0.343901797987168,0.335358024443874,0.268411234813261,0.238824186844269,0.183758700008217,0.183758700008217,0.162411561764489,0.1249387366083,0.114638779968488,-0,-0,-0,-0,-0,-0,-0,-0,-0,-0],"text":["Gene : FGFR1.cna <\/br> Odds Ratio : 0","Gene : CDKN2B.cna <\/br> Odds Ratio : 0.15","Gene : CREBBP <\/br> Odds Ratio : 0.19","Gene : ERBB2.cna <\/br> Odds Ratio : 5.19","Gene : MLL3 <\/br> Odds Ratio : 0.23","Gene : CDH1 <\/br> Odds Ratio : 0.23","Gene : MYC.cna <\/br> Odds Ratio : 0.23","Gene : EGFR <\/br> Odds Ratio : 2.64","Gene : KEAP1 <\/br> Odds Ratio : 0.29","Gene : AR <\/br> Odds Ratio : 0.29","Gene : SMARCA4 <\/br> Odds Ratio : 0.29","Gene : CCND1.cna <\/br> Odds Ratio : 0.29","Gene : FGF19.cna <\/br> Odds Ratio : 0.29","Gene : RB1 <\/br> Odds Ratio : 2.56","Gene : BRAF <\/br> Odds Ratio : 2.56","Gene : PIK3C2G <\/br> Odds Ratio : 2.56","Gene : CDK12.cna <\/br> Odds Ratio : 2.56","Gene : TP53 <\/br> Odds Ratio : 0.7","Gene : STK11 <\/br> Odds Ratio : 0.47","Gene : APC <\/br> Odds Ratio : 0.47","Gene : CDKN2A.cna <\/br> Odds Ratio : 0.47","Gene : PIK3CA <\/br> Odds Ratio : 0.58","Gene : TERT <\/br> Odds Ratio : 1.48","Gene : EPHA5 <\/br> Odds Ratio : 1.88","Gene : TSC1 <\/br> Odds Ratio : 1.88","Gene : MCL1.cna <\/br> Odds Ratio : 0.6","Gene : FAT1 <\/br> Odds Ratio : 0.67","Gene : KRAS <\/br> Odds Ratio : 0.74","Gene : PTPRT <\/br> Odds Ratio : 1.24","Gene : FLT4 <\/br> Odds Ratio : 0.81","Gene : NOTCH1 <\/br> Odds Ratio : 1.24","Gene : ATM <\/br> Odds Ratio : 1.24","Gene : DOT1L <\/br> Odds Ratio : 0.81","Gene : NOTCH3 <\/br> Odds Ratio : 0.81","Gene : ALK <\/br> Odds Ratio : 1.24","Gene : PTPRD <\/br> Odds Ratio : 1.24","Gene : GATA3 <\/br> Odds Ratio : 0.81","Gene : MLL <\/br> Odds Ratio : 0.98"],"mode":"markers","type":"scatter","marker":{"color":"rgba(31,119,180,1)","line":{"color":"rgba(31,119,180,1)"}},"error_y":{"color":"rgba(31,119,180,1)"},"error_x":{"color":"rgba(31,119,180,1)"},"line":{"color":"rgba(31,119,180,1)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.2,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+>>>>>>> a875652248dbaae97b269cfe4efb962be077b5d8
 </div>
 <div id="continous" class="section level2">
 <h2 class="hasAnchor">
 <a href="#continous" class="anchor"></a>Continous</h2>
 <p>In this section we show to use the <code><a href="../reference/gen.summary.html">gen.summary()</a></code> function with a continuous outcome. Given the lack of continuous variables in the IMPACT clinical set we show an example here with a simulate continuous gaussian outcome. We perform this using linear regression.</p>
+<<<<<<< HEAD
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>outcome <span class="ot">&lt;-</span>  <span class="fu">rnorm</span>(<span class="at">n =</span> <span class="fu">nrow</span>(df))</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>tab.out <span class="ot">&lt;-</span> <span class="fu">gen.summary</span>(<span class="at">gen.dat =</span> df,</span>
 <span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>                   <span class="at">outcome =</span> outcome,</span>
 <span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>                   <span class="at">filter =</span> <span class="fl">0.05</span>,<span class="at">paired =</span> <span class="cn">FALSE</span>,</span>
 <span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>                   <span class="at">cont =</span> <span class="cn">TRUE</span>,<span class="at">rank =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+=======
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>
+<span class="va">outcome</span> <span class="op">&lt;-</span>  <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">df</span><span class="op">)</span><span class="op">)</span>
+<span class="va">tab.out</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gen.summary.html">gen.summary</a></span><span class="op">(</span>gen.dat <span class="op">=</span> <span class="va">df</span>,
+                   outcome <span class="op">=</span> <span class="va">outcome</span>,
+                   filter <span class="op">=</span> <span class="fl">0.05</span>,paired <span class="op">=</span> <span class="cn">FALSE</span>,
+                   cont <span class="op">=</span> <span class="cn">TRUE</span>,rank <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
+>>>>>>> a875652248dbaae97b269cfe4efb962be077b5d8
 <p>This returns the following:</p>
 <ul>
 <li>
 <code>fits</code> a summary of the univariate fits that were performed</li>
 </ul>
+<<<<<<< HEAD
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(tab.out<span class="sc">$</span>fits[<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>,])</span></code></pre></div>
+=======
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu">kable</span><span class="op">(</span><span class="va">tab.out</span><span class="op">$</span><span class="va">fits</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span>,<span class="op">]</span><span class="op">)</span></code></pre></div>
+>>>>>>> a875652248dbaae97b269cfe4efb962be077b5d8
 <table class="table">
 <thead><tr class="header">
 <th align="left"></th>
@@ -412,9 +473,16 @@
 <li>
 <code>vPlot</code> a volcano plot summarising the coefficient and pvalues of the the features included in the test</li>
 </ul>
+<<<<<<< HEAD
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>tab.out<span class="sc">$</span>vPlot</span></code></pre></div>
 <div id="htmlwidget-d57ecbd3ad10bd2d35a2" style="width:960px;height:480px;" class="plotly html-widget"></div>
 <script type="application/json" data-for="htmlwidget-d57ecbd3ad10bd2d35a2">{"x":{"visdat":{"663b6e5098b7":["function () ","plotlyVisDat"]},"cur_data":"663b6e5098b7","attrs":{"663b6e5098b7":{"x":{},"y":{},"text":{},"mode":"markers","color":{},"alpha_stroke":1,"sizes":[10,100],"spans":[1,20]}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"title":"Volcano Plot","xaxis":{"domain":[0,1],"automargin":true,"title":"Estimate"},"yaxis":{"domain":[0,1],"automargin":true,"title":"-log10(.data$Pvalue)"},"hovermode":"closest","showlegend":false},"source":"A","config":{"showSendToCloud":false},"data":[{"x":[0.19,0.28,-0.2,-0.06,0.71,0.03,-0.53,0.61,0.7,-0.28,-0.13,-0.07,0.44,0.05,0.22,0.19,0.06,0.11,-0.16,0.23,-0.36,0.28,-0.15,0.09,-0.16,-0.03,0.24,0.2,0.31,-0.02,-0.02,0.08,0.01,0.14,0.15,-0.02,0.07,-0.34,-0.05],"y":[0.511449283499556,0.303643611266668,0.334419008982047,0.0925886392254138,1.08092190762393,0.0282604091122217,0.798602875679548,0.96657624451305,1.03810452633215,0.300162274132754,0.191114132640188,0.0958256317158365,0.537602002101044,0.0510982390297863,0.218963061378868,0.268411234813261,0.0574958938319193,0.10790539730952,0.166852888087215,0.266000713461613,0.410050398674292,0.372634143407267,0.149353764816933,0.0861861476162833,0.192464971931147,0.0254883072626717,0.273272790973428,0.267606240177031,0.341035157335565,0.0241088635982073,0.0419141514789149,0.181774106386044,0.0190880622231565,0.342944147142896,0.328827157284917,0.0419141514789149,0.149966742310231,1.12205304837081,0.102372908709559],"text":["Gene : 1 <\/br> Estimate : 0.19","Gene : 2 <\/br> Estimate : 0.28","Gene : 3 <\/br> Estimate : -0.2","Gene : 4 <\/br> Estimate : -0.06","Gene : 5 <\/br> Estimate : 0.71","Gene : 6 <\/br> Estimate : 0.03","Gene : 7 <\/br> Estimate : -0.53","Gene : 8 <\/br> Estimate : 0.61","Gene : 9 <\/br> Estimate : 0.7","Gene : 10 <\/br> Estimate : -0.28","Gene : 11 <\/br> Estimate : -0.13","Gene : 12 <\/br> Estimate : -0.07","Gene : 13 <\/br> Estimate : 0.44","Gene : 14 <\/br> Estimate : 0.05","Gene : 15 <\/br> Estimate : 0.22","Gene : 16 <\/br> Estimate : 0.19","Gene : 17 <\/br> Estimate : 0.06","Gene : 18 <\/br> Estimate : 0.11","Gene : 19 <\/br> Estimate : -0.16","Gene : 20 <\/br> Estimate : 0.23","Gene : 21 <\/br> Estimate : -0.36","Gene : 22 <\/br> Estimate : 0.28","Gene : 23 <\/br> Estimate : -0.15","Gene : 24 <\/br> Estimate : 0.09","Gene : 25 <\/br> Estimate : -0.16","Gene : 26 <\/br> Estimate : -0.03","Gene : 27 <\/br> Estimate : 0.24","Gene : 28 <\/br> Estimate : 0.2","Gene : 29 <\/br> Estimate : 0.31","Gene : 30 <\/br> Estimate : -0.02","Gene : 31 <\/br> Estimate : -0.02","Gene : 32 <\/br> Estimate : 0.08","Gene : 33 <\/br> Estimate : 0.01","Gene : 34 <\/br> Estimate : 0.14","Gene : 35 <\/br> Estimate : 0.15","Gene : 36 <\/br> Estimate : -0.02","Gene : 37 <\/br> Estimate : 0.07","Gene : 38 <\/br> Estimate : -0.34","Gene : 39 <\/br> Estimate : -0.05"],"mode":"markers","type":"scatter","name":"Non signifcant","marker":{"color":"rgba(252,141,98,1)","line":{"color":"rgba(252,141,98,1)"}},"textfont":{"color":"rgba(252,141,98,1)"},"error_y":{"color":"rgba(252,141,98,1)"},"error_x":{"color":"rgba(252,141,98,1)"},"line":{"color":"rgba(252,141,98,1)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.2,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+=======
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">tab.out</span><span class="op">$</span><span class="va">vPlot</span></code></pre></div>
+<div id="htmlwidget-d57ecbd3ad10bd2d35a2" style="width:960px;height:480px;" class="plotly html-widget"></div>
+<script type="application/json" data-for="htmlwidget-d57ecbd3ad10bd2d35a2">{"x":{"visdat":{"34e2a73d7a3":["function () ","plotlyVisDat"]},"cur_data":"34e2a73d7a3","attrs":{"34e2a73d7a3":{"x":{},"y":{},"text":{},"mode":"markers","color":{},"alpha_stroke":1,"sizes":[10,100],"spans":[1,20]}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"title":"Volcano Plot","xaxis":{"domain":[0,1],"automargin":true,"title":"Estimate"},"yaxis":{"domain":[0,1],"automargin":true,"title":"-log10(.data$Pvalue)"},"hovermode":"closest","showlegend":false},"source":"A","config":{"showSendToCloud":false},"data":[{"x":[0.189709956729779,0.281567391428104,-0.197036430860263,-0.0616473704229985,0.71446028451033,0.0298977502409672,-0.533672203538495,0.608155042301431,0.6954128779122,-0.27890730696643,-0.128807979503838,-0.0724250661530108,0.437980448380099,0.0466238690844162,0.194028864604635,0.0553728818081404,0.106348431115086,-0.156859913798305,0.232040754098736,-0.3573356076939,0.283383790173519,-0.154795609056231,0.086514145779625,-0.164913708154918,-0.0296064387132369,0.237443115293697,0.20404863034375,0.308985808092999,-0.0213568755109466,-0.0238722397805627,0.0842948988229428,0.00898311731845412,0.142604552893705,0.150205821274101,-0.0238722397805627,0.0713930329441947,-0.335983348257018,-0.0506579256782887],"y":[0.51191282486021,0.303425888169885,0.333979882570798,0.0926892743774005,1.0810984813215,0.0280430265615312,0.79780056174869,0.965778004803114,1.03792118203731,0.29987497597354,0.191412618611926,0.0956824940817294,0.537313358918172,0.0511718239605528,0.268294154154151,0.057522352416599,0.107815237027776,0.167167018782131,0.265815314305332,0.410470787164416,0.373043788976791,0.149210548144601,0.0859775068358139,0.192589290549936,0.0254129191264236,0.273393847500029,0.2672890440616,0.340838003094281,0.0240356776657631,0.0416914391805496,0.181734120601173,0.019064521619541,0.343341126060251,0.328978974981895,0.0416914391805496,0.150082670496113,1.12215035190545,0.102197088330457],"text":["Gene : TP53 <\/br> Estimate : 0.19","Gene : KEAP1 <\/br> Estimate : 0.28","Gene : KRAS <\/br> Estimate : -0.2","Gene : TERT <\/br> Estimate : -0.06","Gene : EPHA5 <\/br> Estimate : 0.71","Gene : MLL3 <\/br> Estimate : 0.03","Gene : RB1 <\/br> Estimate : -0.53","Gene : PTPRT <\/br> Estimate : 0.61","Gene : AR <\/br> Estimate : 0.7","Gene : FLT4 <\/br> Estimate : -0.28","Gene : PIK3CA <\/br> Estimate : -0.13","Gene : FAT1 <\/br> Estimate : -0.07","Gene : TSC1 <\/br> Estimate : 0.44","Gene : NOTCH1 <\/br> Estimate : 0.05","Gene : EGFR <\/br> Estimate : 0.19","Gene : CREBBP <\/br> Estimate : 0.06","Gene : CDH1 <\/br> Estimate : 0.11","Gene : BRAF <\/br> Estimate : -0.16","Gene : ATM <\/br> Estimate : 0.23","Gene : DOT1L <\/br> Estimate : -0.36","Gene : STK11 <\/br> Estimate : 0.28","Gene : SMARCA4 <\/br> Estimate : -0.15","Gene : PIK3C2G <\/br> Estimate : 0.09","Gene : APC <\/br> Estimate : -0.16","Gene : NOTCH3 <\/br> Estimate : -0.03","Gene : ALK <\/br> Estimate : 0.24","Gene : PTPRD <\/br> Estimate : 0.2","Gene : GATA3 <\/br> Estimate : 0.31","Gene : MLL <\/br> Estimate : -0.02","Gene : CCND1.cna <\/br> Estimate : -0.02","Gene : CDK12.cna <\/br> Estimate : 0.08","Gene : CDKN2A.cna <\/br> Estimate : 0.01","Gene : CDKN2B.cna <\/br> Estimate : 0.14","Gene : ERBB2.cna <\/br> Estimate : 0.15","Gene : FGF19.cna <\/br> Estimate : -0.02","Gene : FGFR1.cna <\/br> Estimate : 0.07","Gene : MCL1.cna <\/br> Estimate : -0.34","Gene : MYC.cna <\/br> Estimate : -0.05"],"mode":"markers","type":"scatter","name":"Non signifcant","marker":{"color":"rgba(252,141,98,1)","line":{"color":"rgba(252,141,98,1)"}},"textfont":{"color":"rgba(252,141,98,1)"},"error_y":{"color":"rgba(252,141,98,1)"},"error_x":{"color":"rgba(252,141,98,1)"},"line":{"color":"rgba(252,141,98,1)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.2,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+>>>>>>> a875652248dbaae97b269cfe4efb962be077b5d8
 </div>
 </div>
 <div id="survival-outcome" class="section level1">
@@ -434,6 +502,7 @@
 <code>genes</code> a character vector of gene names that will be the only ones to be kept. Default is NULL, all genes are used.</li>
 </ul>
 <p>Here we show an example using the survival data included in the IMPACT clinical dataset:</p>
+<<<<<<< HEAD
 <div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>surv.dat <span class="ot">&lt;-</span> clin.patients <span class="sc">%&gt;%</span></span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(X.Patient.Identifier <span class="sc">%in%</span></span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>           <span class="fu">abbreviate</span>(samples,<span class="at">strict =</span> <span class="cn">TRUE</span>, <span class="at">minlength =</span> <span class="dv">9</span>)) <span class="sc">%&gt;%</span></span>
@@ -449,12 +518,35 @@
 <span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>                   <span class="fu">abbreviate</span>(<span class="fu">rownames</span>(df),<span class="at">strict =</span> <span class="cn">TRUE</span>, <span class="at">minlength =</span> <span class="dv">9</span>)),]</span>
 <span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>test <span class="ot">&lt;-</span> <span class="fu">uni.cox</span>(<span class="at">X =</span> X, <span class="at">surv.dat =</span> surv.dat, </span>
 <span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>        <span class="at">surv.formula =</span> <span class="fu">Surv</span>(time,status)<span class="sc">~</span>.,<span class="at">filter =</span> <span class="fl">0.1</span>)</span></code></pre></div>
+=======
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">surv.dat</span> <span class="op">&lt;-</span> <span class="va">clin.patients</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">X.Patient.Identifier</span> <span class="op">%in%</span>
+           <span class="fu"><a href="https://rdrr.io/r/base/abbreviate.html">abbreviate</a></span><span class="op">(</span><span class="va">samples</span>,strict <span class="op">=</span> <span class="cn">TRUE</span>, minlength <span class="op">=</span> <span class="fl">9</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">X.Patient.Identifier</span>,<span class="va">Overall.Survival..Months.</span>,
+         <span class="va">Overall.Survival.Status</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html">rename</a></span><span class="op">(</span>DMPID <span class="op">=</span> <span class="va">X.Patient.Identifier</span>,
+         time <span class="op">=</span> <span class="va">Overall.Survival..Months.</span>,
+         status <span class="op">=</span> <span class="va">Overall.Survival.Status</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>time <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/character.html">as.character</a></span><span class="op">(</span><span class="va">time</span><span class="op">)</span><span class="op">)</span>,
+         status <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span><span class="op">(</span><span class="va">status</span> <span class="op">==</span> <span class="st">"LIVING"</span>,<span class="fl">0</span>,<span class="fl">1</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">time</span><span class="op">)</span><span class="op">)</span>
+<span class="va">X</span> <span class="op">&lt;-</span> <span class="va">df</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/match.html">match</a></span><span class="op">(</span><span class="va">surv.dat</span><span class="op">$</span><span class="va">DMPID</span>,
+                   <span class="fu"><a href="https://rdrr.io/r/base/abbreviate.html">abbreviate</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span><span class="op">(</span><span class="va">df</span><span class="op">)</span>,strict <span class="op">=</span> <span class="cn">TRUE</span>, minlength <span class="op">=</span> <span class="fl">9</span><span class="op">)</span><span class="op">)</span>,<span class="op">]</span>
+<span class="va">test</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/uni.cox.html">uni.cox</a></span><span class="op">(</span>X <span class="op">=</span> <span class="va">X</span>, surv.dat <span class="op">=</span> <span class="va">surv.dat</span>, 
+        surv.formula <span class="op">=</span> <span class="fu">Surv</span><span class="op">(</span><span class="va">time</span>,<span class="va">status</span><span class="op">)</span><span class="op">~</span><span class="va">.</span>,filter <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span></code></pre></div>
+>>>>>>> a875652248dbaae97b269cfe4efb962be077b5d8
 <p>This returns the following:</p>
 <ul>
 <li>
 <code>tab</code> a summary of the univariate fits that were performed</li>
 </ul>
+<<<<<<< HEAD
 <div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(test<span class="sc">$</span>tab[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>,])</span></code></pre></div>
+=======
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu">kable</span><span class="op">(</span><span class="va">test</span><span class="op">$</span><span class="va">tab</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>,<span class="op">]</span><span class="op">)</span></code></pre></div>
+>>>>>>> a875652248dbaae97b269cfe4efb962be077b5d8
 <table class="table">
 <thead><tr class="header">
 <th align="left">Feature</th>
@@ -511,6 +603,7 @@
 <li>
 <code>p</code> an interactive volcano plot summarizing the hazard ratio for each ratio as a function of it’s p-value</li>
 </ul>
+<<<<<<< HEAD
 <div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>test<span class="sc">$</span>p</span></code></pre></div>
 <div id="htmlwidget-e76df25d4e1770d66a86" style="width:960px;height:480px;" class="plotly html-widget"></div>
 <script type="application/json" data-for="htmlwidget-e76df25d4e1770d66a86">{"x":{"visdat":{"663b4aee35ab":["function () ","plotlyVisDat"]},"cur_data":"663b4aee35ab","attrs":{"663b4aee35ab":{"x":{},"y":{},"text":{},"mode":"markers","color":{},"alpha_stroke":1,"sizes":[10,100],"spans":[1,20]}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"title":"Volcano Plot","xaxis":{"domain":[0,1],"automargin":true,"title":"Coefficient"},"yaxis":{"domain":[0,1],"automargin":true,"title":"-log10(Pvalue)"},"hovermode":"closest","showlegend":false},"source":"A","config":{"showSendToCloud":false},"data":[{"x":[0.89,0.7,0.49,0.38,-0.42,0.13],"y":[1.22914798835786,0.692503962086787,0.640164517660112,0.349692476868063,0.245651664288981,0.0909791457888439],"text":["Feature : TERT <br> Hazard Ratio : 2.44 <br> Mutation Frequency : 0.14","Feature : MLL <br> Hazard Ratio : 2.01 <br> Mutation Frequency : 0.11","Feature : TP53 <br> Hazard Ratio : 1.63 <br> Mutation Frequency : 0.36","Feature : PIK3CA <br> Hazard Ratio : 1.46 <br> Mutation Frequency : 0.14","Feature : KRAS <br> Hazard Ratio : 0.66 <br> Mutation Frequency : 0.14","Feature : FAT1 <br> Hazard Ratio : 1.14 <br> Mutation Frequency : 0.14"],"mode":"markers","type":"scatter","name":"blue","marker":{"color":"rgba(252,141,98,1)","line":{"color":"rgba(252,141,98,1)"}},"textfont":{"color":"rgba(252,141,98,1)"},"error_y":{"color":"rgba(252,141,98,1)"},"error_x":{"color":"rgba(252,141,98,1)"},"line":{"color":"rgba(252,141,98,1)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.2,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script><ul>
@@ -518,6 +611,17 @@
 <code>KM</code> a list of Kaplan-Meier plots for the 10 most significant features</li>
 </ul>
 <div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>test<span class="sc">$</span>KM[[<span class="dv">1</span>]]</span></code></pre></div>
+=======
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">test</span><span class="op">$</span><span class="va">p</span></code></pre></div>
+<div id="htmlwidget-e76df25d4e1770d66a86" style="width:960px;height:480px;" class="plotly html-widget"></div>
+<script type="application/json" data-for="htmlwidget-e76df25d4e1770d66a86">{"x":{"visdat":{"34e5cd48e4b":["function () ","plotlyVisDat"]},"cur_data":"34e5cd48e4b","attrs":{"34e5cd48e4b":{"x":{},"y":{},"text":{},"mode":"markers","color":{},"alpha_stroke":1,"sizes":[10,100],"spans":[1,20]}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"title":"Volcano Plot","xaxis":{"domain":[0,1],"automargin":true,"title":"Coefficient"},"yaxis":{"domain":[0,1],"automargin":true,"title":"-log10(Pvalue)"},"hovermode":"closest","showlegend":false},"source":"A","config":{"showSendToCloud":false},"data":[{"x":[0.89,0.7,0.486,0.381,-0.421,0.131],"y":[1.22914798835786,0.692503962086787,0.640164517660112,0.349692476868064,0.245651664288981,0.0909791457888439],"text":["Feature : TERT <br> Hazard Ratio : 2.44 <br> Mutation Frequency : 0.137","Feature : MLL <br> Hazard Ratio : 2.01 <br> Mutation Frequency : 0.1096","Feature : TP53 <br> Hazard Ratio : 1.63 <br> Mutation Frequency : 0.3562","Feature : PIK3CA <br> Hazard Ratio : 1.46 <br> Mutation Frequency : 0.137","Feature : KRAS <br> Hazard Ratio : 0.656 <br> Mutation Frequency : 0.137","Feature : FAT1 <br> Hazard Ratio : 1.14 <br> Mutation Frequency : 0.137"],"mode":"markers","type":"scatter","name":"blue","marker":{"color":"rgba(252,141,98,1)","line":{"color":"rgba(252,141,98,1)"}},"textfont":{"color":"rgba(252,141,98,1)"},"error_y":{"color":"rgba(252,141,98,1)"},"error_x":{"color":"rgba(252,141,98,1)"},"line":{"color":"rgba(252,141,98,1)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.2,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script><ul>
+<li>
+<code>KM</code> a list of Kaplan-Meier plots for the 10 most significant features</li>
+</ul>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">test</span><span class="op">$</span><span class="va">KM</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></code></pre></div>
+>>>>>>> a875652248dbaae97b269cfe4efb962be077b5d8
 <p><img src="Analizing-genomic-data_files/figure-html/unnamed-chunk-14-1.png" width="960"></p>
 </div>
   </div>
@@ -550,7 +654,11 @@
 </div>
 
 <div class="pkgdown">
+<<<<<<< HEAD
   <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
+=======
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+>>>>>>> a875652248dbaae97b269cfe4efb962be077b5d8
 </div>
 
       </footer>

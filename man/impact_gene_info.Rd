@@ -5,21 +5,17 @@
 \alias{impact_gene_info}
 \title{IMPACT Gene Meta Data}
 \format{
-A data frame with 574 observations and 3 variables
+A data frame with 469 observations and 5 variables
 \describe{
-  \item{hugo_symbol}{Factor w/ 574 levels,
-   Column containing all HUGO symbols genes included in IMPACT}
-  \item{entrez_gene_id}{Integer, contains all Entrez IDs for genes included in IMPACT}
-  \item{platform_added}{Character, indicates platform at which each gene was added.
-  Options are `341`, `410`, `468`}
+  \item{hugo_symbol}{Column containing all HUGO symbols genes included in IMPACT}
   \item{platform_341}{Character, indicates whether each gene was included in
   IMPACT platform 341. Options are `included` and `not included`}
   \item{platform_410}{Character, indicates whether each gene was included in
   IMPACT platform 410. Options are `included` and `not included`}
   \item{platform_468}{Character, indicates whether each gene was included in
   IMPACT platform 468. Options are `included` and `not included`}
-  \item{pathway}{Character, indicates whether each gene belongs to one of the pathways
-  defined in Oncogenic Signaling Pathways in The Cancer Genome Atlas`}
+  \item{alias}{List of EntrezIDs corresponding to the value in the hugo_symbol column and alias list.}
+  \item{alias}{List of known aliases corresponding to the value in the hugo_symbol column.}
 }
 }
 \source{
