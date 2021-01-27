@@ -3,6 +3,7 @@
 S3method(print,palette)
 export("%>%")
 export(CNregions.mod)
+export(add.perc)
 export(binmat)
 export(check_maf_column)
 export(check_maf_input)

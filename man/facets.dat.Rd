@@ -32,11 +32,11 @@ facets.dat(
 \value{
 out.cn : a matrix of the union of all segment files with patients as rows and segments as columns
 
-ploidy : a vector of the ploidy values for the patients in out.cn
+ploidy : a vector of the ploidy values for the patients in out.cn (as in facets output)
 
-purity : a vector of the purity values for the patients in out.cn
+purity : a vector of the purity values for the patients in out.cn (as in facets output)
 
-FGAs : a vector of the fragment of genome altered values for the patients in out.cn
+FGAs : a vector of the fragment of genome altered values for the patients in out.cn (only when tcn an lcn are available)
 }
 \description{
 Creates a copy number alteration matrix from segment files.

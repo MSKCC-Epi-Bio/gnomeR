@@ -10,27 +10,23 @@
 
 
 <!-- jquery -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous" />
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
-
-<!-- bootstrap-toc -->
-<link rel="stylesheet" href="../bootstrap-toc.css">
-<script src="../bootstrap-toc.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
 
 <!-- headroom.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -43,6 +39,7 @@
 <meta property="og:description" content="Creates a summary table of the distribution of the genetic features by a specific outcome/covariate of interest. The difference
 is tested using Fisher's exact test and further adjusted for multiple comparisons. Note that continuous genetic factors
 are dichotomized at their median." />
+<meta name="twitter:card" content="summary" />
 
 
 
@@ -60,7 +57,7 @@ are dichotomized at their median." />
 
   </head>
 
-  <body data-spy="scroll" data-target="#toc">
+  <body>
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -82,7 +79,7 @@ are dichotomized at their median." />
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -116,8 +113,8 @@ are dichotomized at their median." />
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="https://github.com/AxelitoMartin/gnomeR/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+  <a href="https://github.com/AxelitoMartin/gnomeR">
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -244,31 +241,35 @@ Default is 0 (all features included).</p></td>
                    <span class='kw'>outcome</span> <span class='kw'>=</span> <span class='no'>outcome</span>,
                    <span class='kw'>filter</span> <span class='kw'>=</span> <span class='fl'>0.05</span>,<span class='kw'>paired</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
                    <span class='kw'>cont</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,<span class='kw'>rank</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
-<span class='no'>tab.out</span>$<span class='no'>fits</span></div><div class='output co'>#&gt;           Estimate         SD     Pvalue MutationFreq       FDR
-#&gt; TERT    0.25771092 0.12896408 0.04627708   0.14879650 0.6687127
-#&gt; BRAF    0.29107349 0.21041434 0.16724057   0.05032823 0.6687127
-#&gt; PIK3CA -0.19670254 0.14870787 0.18658472   0.10722101 0.6687127
-#&gt; RB1    -0.26959944 0.21047721 0.20088266   0.05032823 0.6687127
-#&gt; ATM    -0.23702856 0.20240914 0.24219687   0.05470460 0.6687127
-#&gt; KRAS   -0.13150580 0.13834524 0.34233114   0.12691466 0.6687127
-#&gt; EGFR    0.13080516 0.16488262 0.42800322   0.08533917 0.6687127
-#&gt; MLL2    0.13295169 0.18053747 0.46185367   0.07002188 0.6687127
-#&gt; CDKN2A  0.15020209 0.20653499 0.46744826   0.05251641 0.6687127
-#&gt; MLL3   -0.11928213 0.17800877 0.50313952   0.07221007 0.6687127
-#&gt; APC    -0.11162773 0.17104091 0.51431953   0.07877462 0.6687127
-#&gt; TP53   -0.05910738 0.09310112 0.52583042   0.42888403 0.6687127
-#&gt; ZFHX3  -0.17243487 0.28163447 0.54096218   0.05982906 0.6687127
-#&gt; ARID1A -0.10214478 0.17105393 0.55070456   0.07877462 0.6687127
-#&gt; ATRX   -0.09403244 0.19895900 0.63670938   0.05689278 0.7216040
-#&gt; FAT1    0.05765920 0.19219623 0.76431286   0.06126915 0.8120824
-#&gt; NOTCH1  0.03600625 0.20270690 0.85909483   0.05470460 0.8590948</div><div class='input'><span class='no'>tab.out</span>$<span class='no'>vPlot</span></div><div class='output co'>#&gt; <span class='message'>No trace type specified:</span>
+<span class='no'>tab.out</span>$<span class='no'>fits</span></div><div class='output co'>#&gt;    Estimate   SD Pvalue MutationFreq      FDR
+#&gt; 3      0.26 0.13 0.0463         0.15 6.69e-01
+#&gt; 12     0.29 0.21 0.1670         0.05 6.69e-01
+#&gt; 6     -0.20 0.15 0.1870         0.11 6.69e-01
+#&gt; 5     -0.27 0.21 0.2010         0.05 6.69e-01
+#&gt; 13    -0.24 0.20 0.2420         0.05 6.69e-01
+#&gt; 2     -0.13 0.14 0.3420         0.13 6.69e-01
+#&gt; 11     0.13 0.16 0.4280         0.09 6.69e-01
+#&gt; 9      0.13 0.18 0.4620         0.07 6.69e-01
+#&gt; 17     0.15 0.21 0.4670         0.05 6.69e-01
+#&gt; 4     -0.12 0.18 0.5030         0.07 6.69e-01
+#&gt; 15    -0.11 0.17 0.5140         0.08 6.69e-01
+#&gt; 1     -0.06 0.09 0.5260         0.43 6.69e-01
+#&gt; 16    -0.17 0.28 0.5410         0.06 6.69e-01
+#&gt; 10    -0.10 0.17 0.5510         0.08 6.69e-01
+#&gt; 14    -0.09 0.20 0.6370         0.06 7.22e-01
+#&gt; 7      0.06 0.19 0.7640         0.06 8.12e-01
+#&gt; 8      0.04 0.20 0.8590         0.05 8.59e-01</div><div class='input'><span class='no'>tab.out</span>$<span class='no'>vPlot</span></div><div class='output co'>#&gt; <span class='message'>No trace type specified:</span>
 #&gt; <span class='message'>  Based on info supplied, a 'scatter' trace seems appropriate.</span>
 #&gt; <span class='message'>  Read more about this trace type -&gt; https://plot.ly/r/reference/#scatter</span></div><div class='output co'>#&gt; <span class='warning'>Warning: `line.width` does not currently support multiple values.</span></div><div class='output co'>#&gt; <span class='warning'>Warning: minimal value for n is 3, returning requested palette with 3 different levels</span></div><div class='output co'>#&gt; <span class='warning'>Warning: minimal value for n is 3, returning requested palette with 3 different levels</span></div></span></pre>
   </div>
-  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
-    <nav id="toc" data-toggle="toc" class="sticky-top">
-      <h2 data-toc-skip>Contents</h2>
-    </nav>
+  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
+    <h2>Contents</h2>
+    <ul class="nav nav-pills nav-stacked">
+      <li><a href="#arguments">Arguments</a></li>
+      <li><a href="#value">Value</a></li>
+      <li><a href="#examples">Examples</a></li>
+    </ul>
+
   </div>
 </div>
 
@@ -279,7 +280,7 @@ Default is 0 (all features included).</p></td>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
 </div>
 
       </footer>
