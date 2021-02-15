@@ -87,7 +87,7 @@ oncokb <- function(maf = NULL, fusion = NULL, cna = NULL,
   if(!is.null(fusion)){
     fusionAnnotate(in_fusion = 'temp_fusion.txt', out_fusion = 'temp_fusion_oncoKB.txt',
                    clin_file = clin.file,
-                   token = 'c228f079-e544-4027-a5cd-d2fd3534fd5b')
+                   token = token)
     # remove temp files and load oncokb annotated one #
     file.remove("temp_fusion.txt")
     fusion_oncokb <- read.delim('temp_fusion_oncoKB.txt')
@@ -98,7 +98,7 @@ oncokb <- function(maf = NULL, fusion = NULL, cna = NULL,
   if(!is.null(cna)){
     cnaAnnotate(in_cna = 'temp_cna.txt', out_cna = 'temp_cna_oncoKB.txt',
                 clin_file = clin.file,
-                token = 'c228f079-e544-4027-a5cd-d2fd3534fd5b')
+                token = token)
     # remove temp files and load oncokb annotated one #
     file.remove("temp_cna.txt")
     cna_oncokb <- read.delim('temp_cna_oncoKB.txt')

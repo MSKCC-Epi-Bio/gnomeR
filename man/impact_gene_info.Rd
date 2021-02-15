@@ -15,7 +15,7 @@ A data frame with 469 observations and 5 variables
   \item{platform_468}{Character, indicates whether each gene was included in
   IMPACT platform 468. Options are `included` and `not included`}
   \item{alias}{List of EntrezIDs corresponding to the value in the hugo_symbol column and alias list.}
-  \item{alias}{List of known aliases corresponding to the value in the hugo_symbol column.}
+  \item{entrez_id}{List of known aliases corresponding to the value in the hugo_symbol column.}
 }
 }
 \source{

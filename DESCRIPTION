@@ -53,11 +53,11 @@ Imports:
     reshape2,
     stringr,
     survival,
-    plotly,
     rlang,
     forcats,
     purrr,
     reticulate,
+    plotly,
     tidyr
 Suggests: 
     knitr,
