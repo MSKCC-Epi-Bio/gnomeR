@@ -113,6 +113,8 @@ binmat <- function(patients=NULL, maf = NULL, mut.type = "SOMATIC",SNP.only = FA
       else if(length(grep("oncogenic", colnames(cna), ignore.case = TRUE)) > 0)
         patients <- unique(c(patients, as.character(unique(cna$SAMPLE_ID))))
   }
+  else
+    patients <- as.character(patients)
 
   mut <- NULL
 
@@ -142,7 +144,7 @@ binmat <- function(patients=NULL, maf = NULL, mut.type = "SOMATIC",SNP.only = FA
     # else patients <- as.character(unique(maf$Tumor_Sample_Barcode))
     if(oncokb)
       maf <- oncokb(maf = maf, fusion = NULL, cna = NULL, token = token,...)$maf_oncokb %>%
-        filter(.data$oncogenic %in% keep_onco)
+        filter(.data$ONCOGENIC %in% keep_onco)
     # set maf to maf class #
     maf <- structure(maf,class = c("data.frame","maf"))
     # getting mutation binary matrix #
@@ -157,7 +159,7 @@ binmat <- function(patients=NULL, maf = NULL, mut.type = "SOMATIC",SNP.only = FA
     fusion <- as.data.frame(fusion)
     if(oncokb)
       fusion <- oncokb(maf = NULL, fusion = fusion, cna = NULL, token = token,...)$fusion_oncokb %>%
-        filter(.data$oncogenic %in% keep_onco)
+        filter(.data$ONCOGENIC %in% keep_onco)
     fusion <- structure(fusion,class = c("data.frame","fusion"))
     # filter/define patients #
     # if(is.null(patients)) patients <- as.character(unique(fusion$Tumor_Sample_Barcode))
@@ -175,30 +177,8 @@ binmat <- function(patients=NULL, maf = NULL, mut.type = "SOMATIC",SNP.only = FA
 
       ## oncokb for API ##
       if(oncokb){
-
-        temp.cna <- as.data.frame(matrix(0L,
-                                         nrow = length(unique(cna$Hugo_Symbol)),
-                                         ncol = length(unique(cna$sampleId))+1))
-        # rownames(temp.cna) <- unique(cna$SAMPLE_ID)
-        temp.cna[,1] <- unique(cna$Hugo_Symbol)
-        colnames(temp.cna) <- c("Hugo_Symbol",unique(cna$sampleId))
-
-        for(i in colnames(temp.cna)[-1]){
-          temp <- as_tibble(cna) %>%
-            filter(.data$sampleId %in% i) %>%
-            select(.data$sampleId, .data$Hugo_Symbol, .data$alteration)
-          if(nrow(temp)>0){
-            temp.cna[match(temp$Hugo_Symbol, temp.cna[,1]),match(i, colnames(temp.cna))] <- temp$alteration
-          }
-        }
-        temp.cna[temp.cna == "Amplification"] <- 2
-        temp.cna[temp.cna == "Deletion"] <- -2
-
-        cna <- temp.cna
-        temp.cna <- NULL
-
         cna <- oncokb(maf = NULL, fusion = NULL, cna = cna, token = token,...)$cna_oncokb %>%
-          filter(.data$oncogenic %in% keep_onco) #%>%
+          filter(.data$ONCOGENIC %in% keep_onco) #%>%
         # dplyr::mutate(SAMPLE_ID = gsub("\\.","-",SAMPLE_ID))
 
         temp.cna <- as.data.frame(matrix(0L,
@@ -246,7 +226,7 @@ binmat <- function(patients=NULL, maf = NULL, mut.type = "SOMATIC",SNP.only = FA
         }
 
         cna <- cna %>%
-          filter(.data$oncogenic %in% keep_onco) #%>%
+          filter(.data$ONCOGENIC %in% keep_onco) #%>%
         # dplyr::mutate(SAMPLE_ID = gsub("\\.","-",SAMPLE_ID))
 
         temp.cna <- as.data.frame(matrix(0L,
@@ -274,7 +254,7 @@ binmat <- function(patients=NULL, maf = NULL, mut.type = "SOMATIC",SNP.only = FA
 
       if(oncokb){
         cna <- oncokb(maf = NULL, fusion = NULL, cna = cna, token = token,...)$cna_oncokb %>%
-          filter(.data$oncogenic %in% keep_onco) #%>%
+          filter(.data$ONCOGENIC %in% keep_onco) #%>%
         # dplyr::mutate(SAMPLE_ID = gsub("\\.","-",SAMPLE_ID))
 
         temp.cna <- as.data.frame(matrix(0L,

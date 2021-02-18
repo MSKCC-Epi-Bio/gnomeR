@@ -32,7 +32,6 @@ def main(argv):
     if argv.oncokb_api_url:
         setoncokbbaseurl(argv.oncokb_api_url)
     setoncokbapitoken(argv.oncokb_api_bearer_token)
-    getcuratedgenes()
 
     cancertypemap = {}
     if argv.input_clinical_file:
@@ -40,7 +39,7 @@ def main(argv):
 
     log.info('annotating %s ...' % argv.input_file)
     processsv(argv.input_file, argv.output_file, argv.previous_result_file, argv.default_cancer_type,
-              cancertypemap, True, argv.structural_variant_name_format)
+              cancertypemap, argv.structural_variant_name_format)
 
     log.info('done!')
 
@@ -54,7 +53,7 @@ if __name__ == "__main__":
     parser.add_argument('-p', dest='previous_result_file', default='', type=str)
     parser.add_argument('-c', dest='input_clinical_file', default='', type=str)
     parser.add_argument('-s', dest='sample_ids_filter', default=None, type=str)
-    parser.add_argument('-t', dest='default_cancer_type', default='cancer', type=str)
+    parser.add_argument('-t', dest='default_cancer_type', default='', type=str)
     parser.add_argument('-u', dest='oncokb_api_url', default='', type=str)
     parser.add_argument('-v', dest='cancer_hotspots_base_url', default='', type=str)
     parser.add_argument('-b', dest='oncokb_api_bearer_token', default='', type=str)

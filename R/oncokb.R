@@ -65,8 +65,31 @@ oncokb <- function(maf = NULL, fusion = NULL, cna = NULL,
                 file = "temp_maf.txt",quote = F, sep = '\t', row.names = FALSE)
   if(!is.null(fusion))
     write.table(fusion, file = "temp_fusion.txt",quote = F, sep = '\t', row.names = FALSE)
-  if(!is.null(cna))
+  if(!is.null(cna)){
+    if("api" %in% class(cna)){
+      temp.cna <- as.data.frame(matrix(0L,
+                                       nrow = length(unique(cna$Hugo_Symbol)),
+                                       ncol = length(unique(cna$sampleId))+1))
+      # rownames(temp.cna) <- unique(cna$SAMPLE_ID)
+      temp.cna[,1] <- unique(cna$Hugo_Symbol)
+      colnames(temp.cna) <- c("Hugo_Symbol",unique(cna$sampleId))
+
+      for(i in colnames(temp.cna)[-1]){
+        temp <- as_tibble(cna) %>%
+          filter(.data$sampleId %in% i) %>%
+          select(.data$sampleId, .data$Hugo_Symbol, .data$alteration)
+        if(nrow(temp)>0){
+          temp.cna[match(temp$Hugo_Symbol, temp.cna[,1]),match(i, colnames(temp.cna))] <- temp$alteration
+        }
+      }
+      temp.cna[temp.cna == "Amplification"] <- 2
+      temp.cna[temp.cna == "Deletion"] <- -2
+
+      cna <- temp.cna
+      temp.cna <- NULL
+    }
     write.table(cna, file = "temp_cna.txt",quote = F, sep = '\t', row.names = FALSE)
+  }
   if(clin.file != ""){
     write.table(clin.file, file = "temp_clin.txt",quote = F, sep = '\t', row.names = FALSE)
     clin.file = "temp_clin.txt"
@@ -96,6 +119,7 @@ oncokb <- function(maf = NULL, fusion = NULL, cna = NULL,
 
   # annotate cna #
   if(!is.null(cna)){
+
     cnaAnnotate(in_cna = 'temp_cna.txt', out_cna = 'temp_cna_oncoKB.txt',
                 clin_file = clin.file,
                 token = token)

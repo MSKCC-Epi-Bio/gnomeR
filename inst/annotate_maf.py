@@ -23,8 +23,9 @@ def mafAnnotate(in_maf, out_maf, clin_file, token):
   # oncokbapiurl = "https://www.oncokb.org/api/v1"
   # setoncokbbaseurl(oncokbapiurl)
   setoncokbapitoken(token)
-  getcuratedgenes()
+  # getcuratedgenes()
 
+  default_reference_genome = None
   default_cancer_type = 'cancer'
   cancertypemap = {}
   if clin_file != '':
@@ -35,6 +36,6 @@ def mafAnnotate(in_maf, out_maf, clin_file, token):
   # log.info('default_cancer_type %s ...' % default_cancer_type)
   
   log.info('annotating MAF %s ...' % in_maf)
-  processalterationevents(in_maf, out_maf, False, default_cancer_type, cancertypemap, True, False)
+  processalterationevents(in_maf, out_maf, False, default_cancer_type, cancertypemap, True, False, default_reference_genome)
 #argv.input_file, argv.output_file, argv.previous_result_file, argv.default_cancer_type, cancertypemap, True, argv.annotate_hotspot
   log.info('MAF done!')
