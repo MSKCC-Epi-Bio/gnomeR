@@ -84,9 +84,6 @@ check_maf_input <- function(maf)  {
                                message$Hugo_Symbol,
                                ~paste0(.x, " recoded to ", .y, " \n"))))
   }
-
-  # maf <- maf %>%
-  #   mutate(Hugo_Symbol = gsub("-",".",as.character(Hugo_Symbol)))
   return(maf)
 }
 

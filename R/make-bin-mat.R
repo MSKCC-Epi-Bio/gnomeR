@@ -356,15 +356,15 @@ binmat <- function(patients=NULL, maf = NULL, mut.type = "SOMATIC",SNP.only = FA
 
       genes <- y[y %in% names(mut)]
       res <- apply(mut %>% select(genes), 1,
-            function(y){
-              ifelse(sum(abs(as.numeric(as.character(y))),
-                         na.rm = T) > 0, 1, 0)}) %>%
+                   function(y){
+                     ifelse(sum(abs(as.numeric(as.character(y))),
+                                na.rm = T) > 0, 1, 0)}) %>%
         as.numeric(.) %>%
         as.data.frame()
 
       names(res) <- x
       return(res)
-      }
+    }
     )
 
     rownames(pathway_dat) <- rownames(mut)
@@ -377,9 +377,9 @@ binmat <- function(patients=NULL, maf = NULL, mut.type = "SOMATIC",SNP.only = FA
   if(length(missing_genes) > 0 && specify.plat)
     warning(paste0("Some genes in the final matrix were not part of the official IMPACT panel and thus couldn't be annotate
             for missing status. If you wish to have a complete list of genes in IMPACT please see 'impact_gene_info'. ",
-                 paste0(missing_genes,collapse = ", ")
-                   )
-            )
+                   paste0(missing_genes,collapse = ", ")
+    )
+    )
   mut
 }
 
@@ -405,48 +405,6 @@ createbin.default <- function(obj) {
 createbin.maf <- function(obj, patients, mut.type, cna.binary, SNP.only, include.silent, cna.relax, specify.plat){
   maf <- as_tibble(obj)
   maf$Hugo_Symbol <- as.character(maf$Hugo_Symbol)
-  # recode gene names that have been changed between panel versions to make sure they are consistent and counted as the same gene
-  # if (sum(grepl("KMT2D|KMT2C|MYCL", maf$Hugo_Symbol)) > 1) {
-  #   maf <- maf %>%
-  #     mutate(Hugo_Symbol = case_when(
-  #       .data$Hugo_Symbol == "KMT2D" ~ "MLL2",
-  #       .data$Hugo_Symbol == "KMT2C" ~ "MLL3",
-  #       .data$Hugo_Symbol == "MYCL" ~ "MYCL1",
-  #       TRUE ~ .data$Hugo_Symbol
-  #     ))
-  #
-  #   warning("KMT2C/KMT2D/MYCL have been recoded to MLL3/MLL2/MYCL1 in MAF file.")
-  # }
-
-  # if (sum(grepl("KMT2D", maf$Hugo_Symbol)) > 1) {
-  #   maf <- maf %>%
-  #     mutate(Hugo_Symbol = case_when(
-  #       .data$Hugo_Symbol == "KMT2D" ~ "MLL2",
-  #       TRUE ~ .data$Hugo_Symbol
-  #     ))
-  #
-  #   warning("KMT2D has been recoded to MLL2")
-  # }
-  #
-  # if (sum(grepl("KMT2C", maf$Hugo_Symbol)) > 1) {
-  #   maf <- maf %>%
-  #     mutate(Hugo_Symbol = case_when(
-  #       .data$Hugo_Symbol == "KMT2C" ~ "MLL3",
-  #       TRUE ~ .data$Hugo_Symbol
-  #     ))
-  #
-  #   warning("KMT2C has been recoded to MLL3")
-  # }
-  #
-  # if (sum(grepl("MYCL", maf$Hugo_Symbol)) > 1) {
-  #   maf <- maf %>%
-  #     mutate(Hugo_Symbol = case_when(
-  #       .data$Hugo_Symbol == "MYCL" ~ "MYCL1",
-  #       TRUE ~ .data$Hugo_Symbol
-  #     ))
-  #
-  #   warning("MYCL has been recoded to MYCL1")
-  # }
 
   # # clean gen dat #
   if(SNP.only) SNP.filt = "SNP"
@@ -502,19 +460,7 @@ createbin.fusion <- function(obj, patients, mut.type,cna.binary, SNP.only,includ
   # recode aliases
   fusion$Hugo_Symbol_Old <- fusion$Hugo_Symbol
   fusion$Hugo_Symbol <- purrr::map_chr(fusion$Hugo_Symbol, ~resolve_alias(.x,
-                                                                    alias_table = alias_table))
-
-  # if (sum(grepl("KMT2D|KMT2C|MYCL", fusion$Hugo_Symbol)) > 1) {
-  #   fusion <- fusion %>%
-  #     mutate(Hugo_Symbol = case_when(
-  #       .data$Hugo_Symbol == "KMT2D" ~ "MLL2",
-  #       .data$Hugo_Symbol == "KMT2C" ~ "MLL3",
-  #       .data$Hugo_Symbol == "MYCL" ~ "MYCL1",
-  #       TRUE ~ .data$Hugo_Symbol
-  #     ))
-  #
-  #   warning("KMT2C/KMT2D/MYCL have been recoded to MLL3/MLL2/MYCL1 in fusion file.")
-  # }
+                                                                          alias_table = alias_table))
 
   fusion <- as_tibble(fusion) %>%
     filter(.data$Tumor_Sample_Barcode %in% patients)
@@ -548,24 +494,29 @@ createbin.cna <- function(obj, patients, mut.type,cna.binary, SNP.only,include.s
     select(hugo_symbol, alias)
 
   # recode aliases
-  cna$Hugo_Symbol_Old <- cna$Hugo_Symbol
+  # cna$Hugo_Symbol_Old <- cna$Hugo_Symbol
   cna$Hugo_Symbol <- purrr::map_chr(cna$Hugo_Symbol, ~resolve_alias(.x,
-                                                                          alias_table = alias_table))
-
-  # cna <- cna %>%
-  #   filter(!(Hugo_Symbol %in% c("KMT2D","KMT2C","MYCL")))
-
-  # if (sum(grepl("KMT2D|KMT2C|MYCL", cna$Hugo_Symbol)) > 1) {
-  #   cna <- cna %>%
-  #     mutate(Hugo_Symbol = case_when(
-  #       .data$Hugo_Symbol == "KMT2D" ~ "MLL2",
-  #       .data$Hugo_Symbol == "KMT2C" ~ "MLL3",
-  #       .data$Hugo_Symbol == "MYCL" ~ "MYCL1",
-  #       TRUE ~ .data$Hugo_Symbol
-  #     ))
-  #
-  #   warning("KMT2C/KMT2D/MYCL have been recoded to MLL3/MLL2/MYCL1 in cna file.")
-  # }
+                                                                    alias_table = alias_table))
+  dups <- cna$Hugo_Symbol[duplicated(cna$Hugo_Symbol)]
+  if(length(dups) > 0){
+    for(i in dups){
+      temp <- cna[which(cna$Hugo_Symbol == i),] # grep(i, cna$Hugo_Symbol,fixed = TRUE)
+      temp2 <- as.character(unlist(apply(temp, 2, function(x){
+        if(all(is.na(x)))
+          out <- NA
+        else if(anyNA(x))
+          out <- x[!is.na(x)]
+        else if(length(unique(x)) > 1)
+          out <- x[which(x != 0)]
+        else
+          out <- x[1]
+        return(out)
+      })))
+      temp2[-1] <- as.numeric(temp2[-1])
+      cna <- rbind(cna[-which(cna$Hugo_Symbol == i),],
+                   temp2)
+    }
+  }
 
   rownames(cna) <- cna$Hugo_Symbol
   cna <- cna[,-1]
@@ -624,17 +575,19 @@ createbin.cna <- function(obj, patients, mut.type,cna.binary, SNP.only,include.s
 createbin.api <- function(obj, patients, mut.type,cna.binary, SNP.only,include.silent, cna.relax, specify.plat){
   cna <- as.data.frame(obj)
 
+  cna <- as.data.frame(tibble::as_tibble(cna))
   cna$Hugo_Symbol <- as.character(cna$Hugo_Symbol)
-  if (sum(grepl("KMT2D|KMT2C|MYCL", cna$Hugo_Symbol)) > 1) {
-    cna <- cna %>%
-      mutate(Hugo_Symbol = case_when(
-        .data$Hugo_Symbol == "KMT2D" ~ "MLL2",
-        .data$Hugo_Symbol == "KMT2C" ~ "MLL3",
-        .data$Hugo_Symbol == "MYCL" ~ "MYCL1",
-        TRUE ~ .data$Hugo_Symbol
-      )) %>%
-      filter(!is.na(Hugo_Symbol))
-  }
+
+  # get table of gene aliases
+  alias_table <- tidyr::unnest(impact_gene_info, cols = alias) %>%
+    select(hugo_symbol, alias)
+
+  # recode aliases
+  # cna$Hugo_Symbol_Old <- cna$Hugo_Symbol
+  cna$Hugo_Symbol <- purrr::map_chr(cna$Hugo_Symbol, ~resolve_alias(.x,
+                                                                    alias_table = alias_table))
+
+
   # recreate orginal format #
   temp <- as.data.frame(matrix(0L,ncol = length(patients)+1, nrow = length(unique(cna$Hugo_Symbol))))
   colnames(temp) <- c("Hugo_Symbol",patients)
