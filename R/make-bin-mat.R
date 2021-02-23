@@ -1,4 +1,5 @@
 #' binmat
+#' \%lifecycle{stable}
 #' Enables creation of a binary matrix from a maf file with
 #' a predefined list of patients (rows are patients and columns are genes)
 #' @param patients a character vector that let's the user specify the patients to be used to create the matrix.
@@ -15,7 +16,8 @@
 #' Default is NULL.
 #' @param cna.binary A boolean argument specifying if the cna events should be enforced as binary. In which case separate columns for
 #' amplifications and deletions will be created.
-#' @param cna.relax for cna data only enables to count both gains and shallow deletions as amplifications and deletions respectively.
+#' @param cna.relax By default this argument is set to TRUE, where all deletions (-1 shallow and -2 deep) are counted as an event same for all gains (1 gain, 2 amplification) as an event.
+#'  When set to FALSE only deep deletions (-2) and amplifications (2) will be annotated as events.
 #' @param specify.plat boolean specifying if specific IMPACT platforms should be considered. When TRUE NAs will fill the cells for genes
 #' of patients that were not sequenced on that plaform. Default is TRUE.
 #' @param set.plat character argument specifying which IMPACT platform the data should be reduced to if specify.plat is set to TRUE.
@@ -54,7 +56,7 @@
 ###############################################
 
 binmat <- function(patients=NULL, maf = NULL, mut.type = "SOMATIC",SNP.only = FALSE,include.silent = FALSE,
-                   fusion = NULL,cna = NULL,cna.binary = TRUE,cna.relax = FALSE, specify.plat = TRUE,
+                   fusion = NULL,cna = NULL,cna.binary = TRUE,cna.relax = TRUE, specify.plat = TRUE,
                    set.plat = NULL,rm.empty = TRUE, pathway = FALSE,
                    col.names = c(Tumor_Sample_Barcode = NULL, Hugo_Symbol = NULL,
                                  Variant_Classification = NULL, Mutation_Status = NULL, Variant_Type = NULL),
@@ -472,8 +474,10 @@ createbin.fusion <- function(obj, patients, mut.type,cna.binary, SNP.only,includ
 
   for(i in patients){
     genes <- fusion$Hugo_Symbol[fusion$Tumor_Sample_Barcode %in% i]
-    if(length(genes) != 0){fusion.out[match(i,rownames(fusion.out)),
-                                      match(unique(as.character(genes)),colnames(fusion.out))] <- 1}
+    if(length(genes) != 0)
+      fusion.out[match(i,rownames(fusion.out)),
+                 match(unique(as.character(genes)),colnames(fusion.out))] <- 1
+
   }
   colnames(fusion.out) <- paste0(colnames(fusion.out),".fus")
   return(fusion.out)

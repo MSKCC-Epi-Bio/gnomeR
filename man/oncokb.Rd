@@ -2,7 +2,10 @@
 % Please edit documentation in R/oncokb.R
 \name{oncokb}
 \alias{oncokb}
-\title{OncoKB annotate}
+\title{OncoKB annotate
+\\%lifecycle{stable}
+Enables oncokb annotation of MAF, fusions and CNA files. This is performed using the OncoKB annotator found at https://github.com/oncokb/oncokb-annotator.
+See details there for file formats.}
 \usage{
 oncokb(
   maf = NULL,
@@ -27,6 +30,8 @@ oncokb(
 OncoKB annotated files
 }
 \description{
+OncoKB annotate
+\\%lifecycle{stable}
 Enables oncokb annotation of MAF, fusions and CNA files. This is performed using the OncoKB annotator found at https://github.com/oncokb/oncokb-annotator.
 See details there for file formats.
 }

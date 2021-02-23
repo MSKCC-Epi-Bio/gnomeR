@@ -1,5 +1,5 @@
 #' get_tmb
-#' \lifecycle{experimental}
+#' \%lifecycle{experimental}
 #' Function to calculate the tumor mutation burden of individual patients in a MAF file. Note that this can only be applied to
 #' samples sequenced using one of the IMPACT panels. Other samples will be annotated as missing.
 #' @param patients a character vector that let's the user specify the patients to be used to create the matrix.

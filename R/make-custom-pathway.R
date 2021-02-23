@@ -1,4 +1,5 @@
 #' custom_pathway
+#' \%lifecycle{stable}
 #' Enables creation of a custom pathway binary matrix from a binmat() `object`. Similarly to the internal file 'pathways.csv', this function takes as input
 #' a data frame containing the name of the pathways of interest, and for each pathways a character vector of the genes of interest. Note that the different
 #' events to be considered in each pathways must be considered separetely. For example, if one wishes to consider TP53 deletions in a given pathway, one must

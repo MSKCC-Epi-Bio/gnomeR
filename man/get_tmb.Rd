@@ -3,7 +3,7 @@
 \name{get_tmb}
 \alias{get_tmb}
 \title{get_tmb
-\lifecycle{experimental}
+\\%lifecycle{experimental}
 Function to calculate the tumor mutation burden of individual patients in a MAF file. Note that this can only be applied to
 samples sequenced using one of the IMPACT panels. Other samples will be annotated as missing.}
 \usage{
@@ -36,7 +36,7 @@ for the IMPACT panel used for sequencing.
 }
 \description{
 get_tmb
-\lifecycle{experimental}
+\\%lifecycle{experimental}
 Function to calculate the tumor mutation burden of individual patients in a MAF file. Note that this can only be applied to
 samples sequenced using one of the IMPACT panels. Other samples will be annotated as missing.
 }

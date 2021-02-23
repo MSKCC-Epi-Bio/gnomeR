@@ -60,8 +60,8 @@
 #  transmute(gene = str_remove_all(value, "gene_list: "))
 #
 # l <- list("jj_341" = jj_341,
-#           "jj_341" = jj_341,
-#           "jj_341" = jj_341)
+#           "jj_410" = jj_410,
+#           "jj_468" = jj_468)
 #
 #
 # # create data frame of genes
@@ -85,12 +85,12 @@
 #   rename(gene = hugoGeneSymbol,
 #          entrez_id = entrezGeneId)
 #
-# l <- list("ti_341" = ti_341,
+# l_jj <- list("ti_341" = ti_341,
 #           "ti_410" = ti_410,
 #           "ti_468" = ti_468)
 #
 # # create data frame of genes
-# impact_genes <- map2_df(l, names(l),
+# impact_genes <- map2_df(l_jj, names(l_jj),
 #                         ~clean_genes(impact_plat = .x,
 #                                        name = .y))
 #
