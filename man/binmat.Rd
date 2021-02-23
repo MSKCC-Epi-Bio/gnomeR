@@ -21,6 +21,7 @@ binmat(
   set.plat = NULL,
   rm.empty = TRUE,
   pathway = FALSE,
+  recode.aliases = TRUE,
   col.names = c(Tumor_Sample_Barcode = NULL, Hugo_Symbol = NULL, Variant_Classification
     = NULL, Mutation_Status = NULL, Variant_Type = NULL),
   oncokb = FALSE,
@@ -65,6 +66,9 @@ Options are "341" and "410". Default is NULL.}
 
 \item{pathway}{boolean specifying if pathway annotation should be applied. If TRUE, the function will return a supplementary binary
 dataframe with columns being each pathway and each row being a sample. Default is FALSE.}
+
+\item{recode.aliases}{bolean specifying if automated gene name alias matching should be done. Default is TRUE. When TRUE
+the function will check for genes that may have more than 1 name in your data using the aliases im gnomeR::impact_gene_info alias column}
 
 \item{col.names}{character vector of the necessary columns to be used. By default: col.names = c(Tumor_Sample_Barcode = NULL,
 Hugo_Symbol = NULL, Variant_Classification = NULL, Mutation_Status = NULL, Variant_Type = NULL)}

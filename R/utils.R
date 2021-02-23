@@ -9,7 +9,9 @@
 #'
 #' check_maf_input(mut)
 #'
-check_maf_input <- function(maf)  {
+check_maf_input <- function(maf, ...)  {
+
+  arguments <- list(...)
 
   # data checks for maf files
   if(is.na(match("Tumor_Sample_Barcode",colnames(maf))))
@@ -63,27 +65,31 @@ check_maf_input <- function(maf)  {
   if(!is.character(maf$Tumor_Sample_Barcode)) maf$Tumor_Sample_Barcode <-
       as.character(maf$Tumor_Sample_Barcode)
 
+  if(arguments$recode.aliases == TRUE) {
+
   # get table of gene aliases
-  alias_table <- tidyr::unnest(impact_gene_info, cols = alias) %>%
-    dplyr::select(hugo_symbol, alias)
+    alias_table <- tidyr::unnest(impact_gene_info, cols = alias) %>%
+      dplyr::select(hugo_symbol, alias)
 
-  # recode aliases
-  maf$Hugo_Symbol_Old <- maf$Hugo_Symbol
-  maf$Hugo_Symbol <- purrr::map_chr(maf$Hugo_Symbol, ~resolve_alias(.x,
-                                                                    alias_table = alias_table))
+    # recode aliases
+    maf$Hugo_Symbol_Old <- maf$Hugo_Symbol
+    maf$Hugo_Symbol <- purrr::map_chr(maf$Hugo_Symbol, ~resolve_alias(.x,
+                                                                      alias_table = alias_table))
 
-  message <- maf %>%
-    dplyr::filter(Hugo_Symbol_Old != Hugo_Symbol) %>%
-    dplyr::select(Hugo_Symbol_Old, Hugo_Symbol) %>%
-    dplyr::distinct()
+    message <- maf %>%
+      dplyr::filter(Hugo_Symbol_Old != Hugo_Symbol) %>%
+      dplyr::select(Hugo_Symbol_Old, Hugo_Symbol) %>%
+      dplyr::distinct()
 
-  if(nrow(message) > 0) {
-    warning(paste0("To ensure gene with multiple names/aliases are correctly grouped together, the
-    following genes in your maf dataframe have been recoded: \n",
-                   purrr::map2(message$Hugo_Symbol_Old,
-                               message$Hugo_Symbol,
-                               ~paste0(.x, " recoded to ", .y, " \n"))))
+    if(nrow(message) > 0) {
+      warning(paste0("MUTATION DATA: To ensure gene with multiple names/aliases are correctly grouped together, the
+      following genes in your maf dataframe have been recoded. You can supress this with recode.aliases = FALSE \n \n",
+                     purrr::map2(message$Hugo_Symbol_Old,
+                                 message$Hugo_Symbol,
+                                 ~paste0(.x, " recoded to ", .y, " \n"))))
+    }
   }
+
   return(maf)
 }
 

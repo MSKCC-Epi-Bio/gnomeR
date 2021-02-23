@@ -4,7 +4,7 @@
 \alias{check_maf_input}
 \title{Checks MAF input to ensure column names are correct and renamed genes are corrected}
 \usage{
-check_maf_input(maf)
+check_maf_input(maf, ...)
 }
 \arguments{
 \item{maf}{Raw maf dataframe containing alteration data}
