@@ -16,7 +16,7 @@ log = logging.getLogger('OncoKB Annotator')
 
 def cnaAnnotate(in_cna, out_cna, clin_file, token):
   setoncokbapitoken(token)
-  getcuratedgenes()
+  # getcuratedgenes()
 
   default_cancer_type = 'cancer'
   cancertypemap = {}
@@ -25,7 +25,9 @@ def cnaAnnotate(in_cna, out_cna, clin_file, token):
     
   log.info('annotating CNAs %s ...' % in_cna)
   processcnagisticdata(in_cna, out_cna, False, default_cancer_type,
-                         cancertypemap, True, False)
+                         cancertypemap, False)
+  # processcnagisticdata(argv.input_file, argv.output_file, argv.previous_result_file, argv.default_cancer_type,
+  #                        cancertypemap, argv.annotate_gain_loss)
   # argv.input_file, argv.output_file, argv.previous_result_file, argv.default_cancer_type,
   #                        cancertypemap, True, argv.annotate_gain_loss
   log.info('CNAs done!')

@@ -46,6 +46,8 @@ gen.dat <- gen.dat[match(clin.patients.dat$DMPID,
 abbreviate(rownames(gen.dat),strict = TRUE,
  minlength = 9)),]
 clin.patients.dat <- clin.patients.dat \%>\%
+  tibble::rownames_to_column("to_rm") \%>\%
+  select(-one_of("to_rm")) \%>\%
   tibble::column_to_rownames('DMPID')
 rownames(gen.dat) <- rownames(clin.patients.dat)
 plot_oncoPrint(gen.dat = gen.dat,

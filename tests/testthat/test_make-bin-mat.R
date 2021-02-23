@@ -34,7 +34,7 @@ test_that("missing column error",{
 
 test_that("when patients is NULL", {
   mat = binmat(maf=mut)
-  expect_equal(ncol(mat), 376)
+  expect_equal(ncol(mat), 375)
   expect_equal(nrow(mat), 457)
 })
 
@@ -61,7 +61,7 @@ test_that("read in 300 patients with rm.empty", {
 bin.mut = binmat(patients = patients,maf = mut,SNP.only = T,include.silent = F, specify.plat = T, rm.empty = TRUE)
   #this sample if set.seed is same has no mutations.
   #samples have changed, now there are 457 samples
- expect_equal(ncol(bin.mut),331)
+ expect_equal(ncol(bin.mut),330)
 })
 
 #what if we don't have impact samples

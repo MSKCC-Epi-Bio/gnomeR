@@ -9,4 +9,4 @@ surv.dat <- as.data.frame(cbind(time,status))
 #global variables for gen-sumamry
 patients100 <- patients[1:100]
 outcome <- as.character(clin.sample$Sample.Type[match(patients100,clin.sample$Sample.Identifier)])
-gen.dat <- binmat(patients = patients100,maf = mut)
+gen.dat <- try(binmat(patients = patients100,maf = mut),silent = TRUE)

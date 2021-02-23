@@ -53,11 +53,13 @@ Imports:
     reshape2,
     stringr,
     survival,
-    plotly,
     rlang,
     forcats,
     purrr,
-    reticulate
+    reticulate,
+    plotly,
+    tidyr,
+    lifecycle
 Suggests: 
     knitr,
     rmarkdown,
@@ -66,3 +68,4 @@ Suggests:
     covr
 VignetteBuilder: knitr
 Language: en-US
+Roxygen: list(markdown = TRUE)

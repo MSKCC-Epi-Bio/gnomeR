@@ -7,12 +7,12 @@
 \format{
 A data frame with 30240 observations with 6 variables
 \describe{
- \item{ID}{Factor, IMPACT sample ID}
- \item{chrom}{}
- \item{loc.start}{}
- \item{loc.end}{}
- \item{num.mark}{}
- \item{seg.mean}{}
+\item{ID}{Factor, IMPACT sample ID}
+\item{chrom}{}
+\item{loc.start}{}
+\item{loc.end}{}
+\item{num.mark}{}
+\item{seg.mean}{}
 }
 }
 \source{

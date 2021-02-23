@@ -7,12 +7,12 @@
 \format{
 A data frame with 7016 lines
 \describe{
-    \item{V1}{Chromosome}
-    \item{V2}{Start position}
-    \item{V3}{End position}
-    \item{V4}{Strand}
-    \item{V5}{Interval name}
-    }
+\item{V1}{Chromosome}
+\item{V2}{Start position}
+\item{V3}{End position}
+\item{V4}{Strand}
+\item{V5}{Interval name}
+}
 }
 \usage{
 ti_410

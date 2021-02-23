@@ -29,6 +29,8 @@
 #' abbreviate(rownames(gen.dat),strict = TRUE,
 #'  minlength = 9)),]
 #' clin.patients.dat <- clin.patients.dat %>%
+#'   tibble::rownames_to_column("to_rm") %>%
+#'   select(-one_of("to_rm")) %>%
 #'   tibble::column_to_rownames('DMPID')
 #' rownames(gen.dat) <- rownames(clin.patients.dat)
 #' plot_oncoPrint(gen.dat = gen.dat,
@@ -149,7 +151,8 @@ plot_oncoPrint <- function(gen.dat,clin.dat=NULL,ordered=NULL){
                      heatmap_legend_param = list(title = "Alterations", at = c("MUT","DEL","AMP","FUS","MIS",names(added)),
                                                  labels = c("Mutation","Deletion","Amplification","Fusion","Missing",names(added))),
                      top_annotation = HeatmapAnnotation(
-                       column_barplot = anno_oncoprint_barplot(c("MUT","DEL","AMP","FUS"))))
+                       column_barplot = anno_oncoprint_barplot(c("MUT","DEL","AMP","FUS"))),
+                     alter_fun_is_vectorized = FALSE)
     }
     else{
       row_order <- order(apply(mat, 1, function(x){sum(gsub("MIS;","  ",x) != "  ")}),decreasing = T)
@@ -181,7 +184,8 @@ plot_oncoPrint <- function(gen.dat,clin.dat=NULL,ordered=NULL){
                      heatmap_legend_param = list(title = "Alterations", at = c("MUT","DEL","AMP","FUS","MIS",names(added)),
                                                  labels = c("Mutation","Deletion","Amplification","Fusion","Missing",names(added))),
                      top_annotation = HeatmapAnnotation(
-                       column_barplot = anno_oncoprint_barplot(c("MUT","DEL","AMP","FUS"))))
+                       column_barplot = anno_oncoprint_barplot(c("MUT","DEL","AMP","FUS"))),
+                     alter_fun_is_vectorized = FALSE)
     }
   }
 
@@ -217,7 +221,8 @@ plot_oncoPrint <- function(gen.dat,clin.dat=NULL,ordered=NULL){
                      heatmap_legend_param = list(title = "Alterations", at = c("MUT","DEL","AMP","FUS","MIS"),
                                                  labels = c("Mutation","Deletion","Amplification","Fusion","Missing")),
                      top_annotation = HeatmapAnnotation(
-                       column_barplot = anno_oncoprint_barplot(c("MUT","DEL","AMP","FUS"))))
+                       column_barplot = anno_oncoprint_barplot(c("MUT","DEL","AMP","FUS"))),
+                     alter_fun_is_vectorized = FALSE)
     }
     else{
       row_order <- order(apply(mat, 1, function(x){sum(gsub("MIS;","  ",x) != "  ")}),decreasing = T)
@@ -250,7 +255,8 @@ plot_oncoPrint <- function(gen.dat,clin.dat=NULL,ordered=NULL){
                      heatmap_legend_param = list(title = "Alterations", at = c("MUT","DEL","AMP","FUS","MIS"),
                                                  labels = c("Mutation","Deletion","Amplification","Fusion","Missing")),
                      top_annotation = HeatmapAnnotation(
-                       column_barplot = anno_oncoprint_barplot(c("MUT","DEL","AMP","FUS"))))
+                       column_barplot = anno_oncoprint_barplot(c("MUT","DEL","AMP","FUS"))),
+                     alter_fun_is_vectorized = FALSE)
     }
   }
 

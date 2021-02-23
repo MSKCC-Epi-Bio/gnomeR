@@ -55,7 +55,7 @@ test_that("make data with clinical",{
                     cna = cna, mut.type = "SOMATIC",
                     SNP.only = FALSE,include.silent = FALSE, specify.plat = FALSE)
   gen.dat <- bin.mut[,
-                     c("TP53","CDKN2A","CDKN2A.Del","PIK3CA","PIK3CA.Amp")]
+                     c("TP53","CDKN2A","CDKN2A.Del","PIK3CA")]
   gen.dat$TP53 <- rbinom(nrow(gen.dat),1,1/2)
   gen.dat$CDKN2A.Del <- rbinom(nrow(gen.dat),1,1/2)
   clin.patients.dat <-
@@ -72,6 +72,8 @@ test_that("make data with clinical",{
   gen.dat <- gen.dat[match(clin.patients.dat$DMPID,
   abbreviate(rownames(gen.dat),strict = TRUE, minlength = 9)),]
   clin.patients.dat <- clin.patients.dat %>%
+    tibble::rownames_to_column("to_rm") %>%
+    select(-one_of("to_rm")) %>%
     tibble::column_to_rownames('DMPID')
   rownames(gen.dat) <- rownames(clin.patients.dat)
   out <- dat.oncoPrint(gen.dat,clin.patients.dat)

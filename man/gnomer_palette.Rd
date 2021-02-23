@@ -15,8 +15,8 @@ or the needed number of colors if less than the total.}
 
 \item{type}{Either "continuous" or "discrete". Use continuous if you want
 to automatically interpolate between colours.
-  @importFrom graphics rgb rect par image text
-  @importFrom grDevices colorRampPalette}
+@importFrom graphics rgb rect par image text
+@importFrom grDevices colorRampPalette}
 }
 \value{
 A vector of colours.

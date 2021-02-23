@@ -8,12 +8,12 @@ IMPACT cbioPortal dataset.}
 \format{
 A data frame with 497 observations on the following 6 variables
 \describe{
-  \item{X.Patient.Identifier}{Factor, IMPACT patient ID}
-  \item{Sex}{Factor, Sex information: `Female`, `Male`}
-  \item{Patient.s.Vital.Status}{Factor, indicates whether the patient is alive or deceased}
-  \item{Smoking.History}{Factor, Indicates if person has a history of smoking}
-  \item{Overall.Survival..Months.}{Overall survival in months}
-  \item{Overall.Survival.Status}{Survival status}
+\item{X.Patient.Identifier}{Factor, IMPACT patient ID}
+\item{Sex}{Factor, Sex information: \code{Female}, \code{Male}}
+\item{Patient.s.Vital.Status}{Factor, indicates whether the patient is alive or deceased}
+\item{Smoking.History}{Factor, Indicates if person has a history of smoking}
+\item{Overall.Survival..Months.}{Overall survival in months}
+\item{Overall.Survival.Status}{Survival status}
 }
 }
 \source{

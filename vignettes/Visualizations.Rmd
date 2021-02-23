@@ -2,12 +2,12 @@
 title: "Visualizations"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Visualizations}
+%\VignetteIndexEntry{Visualizations}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
----
+  ---
   
-```{r, include = FALSE}
+  ```{r, include = FALSE}
 knitr::opts_chunk$set(
 collapse = TRUE,
 comment = "#>", warning = F, message = F,
@@ -56,7 +56,11 @@ plots_summary$topgenes
 plots_summary$genecor
 ```
 
+One can also add the percentage on the barplots. See below - 
 
+```{r}
+ggvarclass(mut) + add.perc(size=2.5)
+```
 # OncoPrints
 
 OncoPrint is a way to visualize multiple genomic alteration events by heatmap provided through the `ComplexHeatmap` package. We implemented an altered version of this function in `gnomeR` through the `plot_oncoPrint()` function that enables the user to explore the co-occurences in genomic and clinical features selected.
@@ -109,13 +113,25 @@ dat.gen <- dat.gen[match(clin.patients.dat$DMPID,
                          abbreviate(rownames(dat.gen),strict = TRUE,
                                     minlength = 9)),]
 clin.patients.dat <- clin.patients.dat %>%
-    mutate(DMPID = as.character(DMPID)) %>% 
-    tibble::column_to_rownames('DMPID')
+  mutate(DMPID = as.character(DMPID)) %>% 
+  tibble::rownames_to_column("to_rm") %>% 
+  select(-one_of("to_rm")) %>% 
+  tibble::column_to_rownames('DMPID')
 rownames(dat.gen) <- rownames(clin.patients.dat)
 plot_oncoPrint(gen.dat = dat.gen,
                clin.dat = clin.patients.dat)
 ```
 
+## Heatmap
+A final overall picture can also be obtained by heatmap. Heatmaps easily identify any hypermutated samples or genes. 
+
+
+```{r,fig.width=10, fig.height=6}
+
+ggheatmap(dat.gen,show_column_names=FALSE)
+
+
+```
 
 # Advanced visualization 
 

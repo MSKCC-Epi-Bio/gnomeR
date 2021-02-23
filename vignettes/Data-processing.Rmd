@@ -146,7 +146,7 @@ Genome Atlas](https://www.cell.com/cell/pdf/S0092-8674(18)30359-3.pdf). It consi
 We show below an example of this matrix. 
 
 ```{r}
-df <- binmat(patients = samples,maf = mut, cna = cna,cna.binary = FALSE,pathway = T)
+df <- binmat(patients = samples,maf = mut, cna = cna,pathway = T)
 kable(df$pathway_dat[1:5,])
 ```
 
@@ -157,9 +157,19 @@ Note that this is returned as an additional element of `binmat()` and the origin
 In particular problems it may be of interest of creating pathways customized to the study conducted. To enable the user to use these specfic pathways we created the `custom_pathway()` function, this function takes as argument a binary output from `binmat()` with a dataframe containing the name of the genes and their corresponding pathways:
 
 ```{r}
-pathway <- as.data.frame(cbind(c("PIK3CA","KRAS","TERT","TP53"),
-                               c("path1","path1","path2","path3")))
-pathway_dat <- custom_pathway(mat = df$mut, pathway = pathway)
+df <- binmat(patients = samples,maf = mut, fusion = fusion, cna = cna)
+pathway <- as.data.frame(cbind(c("path1","path1","path2","path3"),
+                               c("PIK3CA","KRAS, NRAS","TERT","TP53")))
+pathway_dat <- custom_pathway(mat = df, pathway = pathway)
+kable(pathway_dat[1:10,],row.names = T)
+```
+
+Note that the different genetic events are considered separetely here. As an example say one wants to include a fourth pathway for TP53 deletions and fusions, these must be specified as such, see example below:
+
+```{r}
+pathway <- as.data.frame(cbind(c("path1","path1","path2","path3", "path4"),
+                               c("PIK3CA","KRAS, NRAS","TERT","TP53","TP53.Del, TP53.fus")))
+pathway_dat <- custom_pathway(mat = df, pathway = pathway)
 kable(pathway_dat[1:10,],row.names = T)
 ```
 

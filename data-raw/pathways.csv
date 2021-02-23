@@ -1,0 +1,13 @@
+﻿pathway,genes,source
+RTK-RAS," EGFR, EGFR.fus, EGFR.Amp, ERBB2, ERBB2.Amp, ERBB2.fus, ERBB3,ERBB4, ERBB4.fus, MET, MET.Amp, PDGFRA, PDGFRA.Amp, FGFR1, FGFR1.fus, FGFR1.Amp, FGFR2, FGFR2.Amp, FGFR2.fus, FGFR3, FGFR4, IGF1R,RET,  ROS1, ALK, FLT3, NTRK1, NTRK2, NTRK3, JAK2, CBL, ERRFI1, ABL1, SOS1, NF1, NF1.fus, RASA1, RASA1.Del, PTPN11, KRAS, KRAS.Amp, HRAS, HRAS.Amp, NRAS, RIT1, RIT1.Amp, ARAF, ARAF.Amp, BRAF, BRAF.fus, BRAF.Amp, RAC1, RAC1.Amp, MAPK1, MAPK1.Amp, MAP2K1, MAP2K2", https://pubmed.ncbi.nlm.nih.gov/29625050/
+TGF-B," TGFBR1, TGFBR2, TGFBR2.fus, TGFBR2.Del, ACVR1, SMAD2, SMAD2.fus, SMAD2.Del, SMAD3, SMAD3.Del, SMAD3.fus, SMAD4, SMAD4.Del", https://pubmed.ncbi.nlm.nih.gov/29625050/
+c-MYC," EGFR.Amp, MYC.Amp",  https://pubmed.ncbi.nlm.nih.gov/30655893/
+chromosomal_Instability,"TP53, APC, KRAS",https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3983432/
+p53,"ATM.fus,ATM.Del, CHEK2, TP53.fus, TP53.Del, MDM2, CDKN2A.Del, MDM4, ATM, TP53, CDKN2A", https://pubmed.ncbi.nlm.nih.gov/29625050/
+WNT," APC, RNF43, RNF43.Del, TCF7L2, AMER1, AXIN1, AXIN2.Del, GSK3B, CTNNB1, AXIN2", https://pubmed.ncbi.nlm.nih.gov/29625050/
+Min1," TGFBR1, TGFBR2, BRAF, TP53, KRAS, SMAD4",  https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3983432/
+PI3K," PTEN, PTEN.Del, PIK3R2, INPP4B, INPP4B.Del, PIK3CA, PIK3CA.Amp, PIK3CB,PIK3CB.Amp, PIK3R1.Del, PIK3R1, AKT1, AKT3, AKT2, AKT2.Amp, PPP2R1A, STK11, STK11.Del, TSC1, TSC1.Del, TSC2, RHEB, RICTOR, RICTOR.Amp,MTOR, RPTOR, RPTOR.fus", https://pubmed.ncbi.nlm.nih.gov/29625050/
+cell_cycle," CDKN1A, CDKN1B, CDKN1B.Del, CCNE1.Amp, RB1, RB1, RB1.Del, RB1.fus, CCND1.Amp, CCND2, CCND2.Amp, CCND3.Amp, E2F3, CDK4.fus, CDK6, CDK6, CDK6.Amp", https://pubmed.ncbi.nlm.nih.gov/29625050/
+hippo," FAT1, FAT1.Del, FAT1.fus, NF2, LATS1, LATS1.fus, LATS2, YAP1.Amp", https://pubmed.ncbi.nlm.nih.gov/29625050/
+notch,"  FBXW7, NOTCH1, NOTCH2, NOTCH2.Del, NOTCH2.fus, NOTCH3, NOTCH4, 
+CREBBP, EP300, EP300.Del, NCOR1, KDM5A.Amp", https://pubmed.ncbi.nlm.nih.gov/29625050/
