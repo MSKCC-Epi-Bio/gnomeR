@@ -7,15 +7,15 @@
 \format{
 A data frame with 469 observations and 5 variables
 \describe{
-  \item{hugo_symbol}{Column containing all HUGO symbols genes included in IMPACT}
-  \item{platform_341}{Character, indicates whether each gene was included in
-  IMPACT platform 341. Options are `included` and `not included`}
-  \item{platform_410}{Character, indicates whether each gene was included in
-  IMPACT platform 410. Options are `included` and `not included`}
-  \item{platform_468}{Character, indicates whether each gene was included in
-  IMPACT platform 468. Options are `included` and `not included`}
-  \item{alias}{List of EntrezIDs corresponding to the value in the hugo_symbol column and alias list.}
-  \item{entrez_id}{List of known aliases corresponding to the value in the hugo_symbol column.}
+\item{hugo_symbol}{Column containing all HUGO symbols genes included in IMPACT}
+\item{platform_341}{Character, indicates whether each gene was included in
+IMPACT platform 341. Options are \code{included} and \verb{not included}}
+\item{platform_410}{Character, indicates whether each gene was included in
+IMPACT platform 410. Options are \code{included} and \verb{not included}}
+\item{platform_468}{Character, indicates whether each gene was included in
+IMPACT platform 468. Options are \code{included} and \verb{not included}}
+\item{alias}{List of EntrezIDs corresponding to the value in the hugo_symbol column and alias list.}
+\item{entrez_id}{List of known aliases corresponding to the value in the hugo_symbol column.}
 }
 }
 \source{

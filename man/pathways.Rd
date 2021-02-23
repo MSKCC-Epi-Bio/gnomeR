@@ -7,8 +7,8 @@
 \format{
 A data frame of impact genes
 \describe{
-  \item{pathway}{name of pathway}
-  \item{genes}{vectors of genes in each pathways}
+\item{pathway}{name of pathway}
+\item{genes}{vectors of genes in each pathways}
 }
 }
 \source{

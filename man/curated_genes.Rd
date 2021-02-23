@@ -7,8 +7,8 @@
 \format{
 A data frame with 417 observations on the following 2 variables.
 \describe{
- \item{id}{}
- \item{gene}{}
+\item{id}{}
+\item{gene}{}
 }
 }
 \usage{

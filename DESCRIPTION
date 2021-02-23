@@ -58,7 +58,8 @@ Imports:
     purrr,
     reticulate,
     plotly,
-    tidyr
+    tidyr,
+    lifecycle
 Suggests: 
     knitr,
     rmarkdown,
@@ -67,3 +68,4 @@ Suggests:
     covr
 VignetteBuilder: knitr
 Language: en-US
+Roxygen: list(markdown = TRUE)

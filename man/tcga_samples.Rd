@@ -7,9 +7,9 @@
 \format{
 A data frame with 10275 samples
 \describe{
-    \item{patient_id}{Sample ID}
-    \item{Cancer_Code}{Cancer site following TCGA abbreviations}
-    }
+\item{patient_id}{Sample ID}
+\item{Cancer_Code}{Cancer site following TCGA abbreviations}
+}
 }
 \usage{
 tcga_samples

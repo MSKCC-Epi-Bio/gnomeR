@@ -3,7 +3,7 @@
 \name{custom_pathway}
 \alias{custom_pathway}
 \title{custom_pathway
-Enables creation of a custom pathway binary matrix from a binmat() `object`. Similarly to the internal file 'pathways.csv', this function takes as input
+Enables creation of a custom pathway binary matrix from a binmat() \code{object}. Similarly to the internal file 'pathways.csv', this function takes as input
 a data frame containing the name of the pathways of interest, and for each pathways a character vector of the genes of interest. Note that the different
 events to be considered in each pathways must be considered separetely. For example, if one wishes to consider TP53 deletions in a given pathway, one must
 specify "TP53.Del" in the character vector for that pathway.}
@@ -21,7 +21,7 @@ pathway_dat : a binary matrix of pathway level alterations
 }
 \description{
 custom_pathway
-Enables creation of a custom pathway binary matrix from a binmat() `object`. Similarly to the internal file 'pathways.csv', this function takes as input
+Enables creation of a custom pathway binary matrix from a binmat() \code{object}. Similarly to the internal file 'pathways.csv', this function takes as input
 a data frame containing the name of the pathways of interest, and for each pathways a character vector of the genes of interest. Note that the different
 events to be considered in each pathways must be considered separetely. For example, if one wishes to consider TP53 deletions in a given pathway, one must
 specify "TP53.Del" in the character vector for that pathway.

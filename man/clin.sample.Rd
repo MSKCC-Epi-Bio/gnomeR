@@ -7,22 +7,22 @@
 \format{
 A data frame with 500 observations on the following 16 variables
 \describe{
-  \item{X.Patient.Identifier}{Factor, IMPACT patient ID}
-  \item{Sample.Identifier}{Factor, IMPACT sample ID}
-  \item{Sample.Collection.Source}{Factor, was the sample collected in-house?}
-  \item{Specimen.Preservation.Type}{Factor, indicates whether the patient is alive or deceased}
-  \item{Specimen.Type}{Factor, Indicates if person has a history of smoking}
-  \item{DNA.Input}{}
-  \item{Sample.coverage}{}
-  \item{Tumor.Purity}{}
-  \item{Matched.Status}{Overall survival in months}
-  \item{Sample.Type}{Survival status}
-  \item{Primary.Tumor.Site}{Survival status}
-  \item{Metastatic.Site}{Survival status}
-  \item{Sample.Class}{Survival status}
-  \item{Oncotree.Code}{Survival status}
-  \item{Cancer.Type}{Survival status}
-  \item{Cancer.Type.Detailed}{Survival status}
+\item{X.Patient.Identifier}{Factor, IMPACT patient ID}
+\item{Sample.Identifier}{Factor, IMPACT sample ID}
+\item{Sample.Collection.Source}{Factor, was the sample collected in-house?}
+\item{Specimen.Preservation.Type}{Factor, indicates whether the patient is alive or deceased}
+\item{Specimen.Type}{Factor, Indicates if person has a history of smoking}
+\item{DNA.Input}{}
+\item{Sample.coverage}{}
+\item{Tumor.Purity}{}
+\item{Matched.Status}{Overall survival in months}
+\item{Sample.Type}{Survival status}
+\item{Primary.Tumor.Site}{Survival status}
+\item{Metastatic.Site}{Survival status}
+\item{Sample.Class}{Survival status}
+\item{Oncotree.Code}{Survival status}
+\item{Cancer.Type}{Survival status}
+\item{Cancer.Type.Detailed}{Survival status}
 }
 }
 \source{

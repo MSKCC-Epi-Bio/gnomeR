@@ -13,7 +13,7 @@ gnomer_colors
 \description{
 Sometimes you just need a huge palette of fairly distinguishable colors.
 This is a named vector of Ronglai-approved colors good for things like TCGA PanCan (33 cancer types)
-or clustering solutions with high K. Run `gnomer_colors` to
+or clustering solutions with high K. Run \code{gnomer_colors} to
 see the hex codes for the study colors.
 }
 \keyword{datasets}

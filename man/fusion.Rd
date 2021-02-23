@@ -7,17 +7,17 @@
 \format{
 A data frame with 127 observations with 10 variables
 \describe{
- \item{Hugo_Symbol}{Factor w/ 574 levels,
-   Column containing all HUGO symbols genes}
- \item{Entrez_Gene_Id}{Entrez Gene ID (NA in this dataset)}
- \item{Center}{Cancer Center ID. All are `MSKCC-DMP` in this dataset}
- \item{Tumor_Sample_Barcode}{Factor, IMPACT sample ID}
- \item{Fusion}{Factor, type of fusion}
- \item{DNA_support}{Factor, all are `yes` in this data}
- \item{RNA_support}{Factor, all are `unknown` in this data}
- \item{Method}{All are NA in this data}
- \item{Frame}{Factor, `in frame`, `out of frame` or `unknown`}
- \item{Comments}{}
+\item{Hugo_Symbol}{Factor w/ 574 levels,
+Column containing all HUGO symbols genes}
+\item{Entrez_Gene_Id}{Entrez Gene ID (NA in this dataset)}
+\item{Center}{Cancer Center ID. All are \code{MSKCC-DMP} in this dataset}
+\item{Tumor_Sample_Barcode}{Factor, IMPACT sample ID}
+\item{Fusion}{Factor, type of fusion}
+\item{DNA_support}{Factor, all are \code{yes} in this data}
+\item{RNA_support}{Factor, all are \code{unknown} in this data}
+\item{Method}{All are NA in this data}
+\item{Frame}{Factor, \verb{in frame}, \verb{out of frame} or \code{unknown}}
+\item{Comments}{}
 }
 }
 \source{
