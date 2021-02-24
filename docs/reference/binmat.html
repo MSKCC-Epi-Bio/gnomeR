@@ -7,6 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>binmat
+\
 Enables creation of a binary matrix from a maf file with
 a predefined list of patients (rows are patients and columns are genes) — binmat • gnomeR</title>
 
@@ -42,9 +43,11 @@ a predefined list of patients (rows are patients and columns are genes) — binm
 
 
 <meta property="og:title" content="binmat
+\
 Enables creation of a binary matrix from a maf file with
 a predefined list of patients (rows are patients and columns are genes) — binmat" />
 <meta property="og:description" content="binmat
+\
 Enables creation of a binary matrix from a maf file with
 a predefined list of patients (rows are patients and columns are genes)" />
 
@@ -107,7 +110,7 @@ a predefined list of patients (rows are patients and columns are genes)" />
       <a href="../articles/Data-processing.html">Data-processing</a>
     </li>
     <li>
-      <a href="../articles/Visualizations.html">UNKNOWN TITLE</a>
+      <a href="../articles/Visualizations.html">Visualizations</a>
     </li>
     <li>
       <a href="../articles/gnomeR-vignette.html">gnomeR for IMPACT data</a>
@@ -139,6 +142,7 @@ a predefined list of patients (rows are patients and columns are genes)" />
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>binmat
+\<!-- %lifecycle{stable} -->
 Enables creation of a binary matrix from a maf file with
 a predefined list of patients (rows are patients and columns are genes)</h1>
     <small class="dont-index">Source: <a href='https://github.com/AxelitoMartin/gnomeR/blob/master/R/make-bin-mat.R'><code>R/make-bin-mat.R</code></a></small>
@@ -147,6 +151,7 @@ a predefined list of patients (rows are patients and columns are genes)</h1>
 
     <div class="ref-description">
     <p>binmat
+\<!-- %lifecycle{stable} -->
 Enables creation of a binary matrix from a maf file with
 a predefined list of patients (rows are patients and columns are genes)</p>
     </div>
@@ -165,6 +170,7 @@ a predefined list of patients (rows are patients and columns are genes)</p>
   set.plat <span class='op'>=</span> <span class='cn'>NULL</span>,
   rm.empty <span class='op'>=</span> <span class='cn'>TRUE</span>,
   pathway <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  recode.aliases <span class='op'>=</span> <span class='cn'>TRUE</span>,
   col.names <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span>Tumor_Sample_Barcode <span class='op'>=</span> <span class='cn'>NULL</span>, Hugo_Symbol <span class='op'>=</span> <span class='cn'>NULL</span>, Variant_Classification
     <span class='op'>=</span> <span class='cn'>NULL</span>, Mutation_Status <span class='op'>=</span> <span class='cn'>NULL</span>, Variant_Type <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span>,
   oncokb <span class='op'>=</span> <span class='cn'>FALSE</span>,
@@ -216,7 +222,8 @@ amplifications and deletions will be created.</p></td>
     </tr>
     <tr>
       <th>cna.relax</th>
-      <td><p>for cna data only enables to count both gains and shallow deletions as amplifications and deletions respectively.</p></td>
+      <td><p>By default this argument is set to FALSE, where only deep deletions (-2) and amplifications (2) will be annotated as events.
+When set to FTRUE all deletions (-1 shallow and -2 deep) are counted as an event same for all gains (1 gain, 2 amplification) as an event.</p></td>
     </tr>
     <tr>
       <th>specify.plat</th>
@@ -236,6 +243,11 @@ Options are "341" and "410". Default is NULL.</p></td>
       <th>pathway</th>
       <td><p>boolean specifying if pathway annotation should be applied. If TRUE, the function will return a supplementary binary
 dataframe with columns being each pathway and each row being a sample. Default is FALSE.</p></td>
+    </tr>
+    <tr>
+      <th>recode.aliases</th>
+      <td><p>bolean specifying if automated gene name alias matching should be done. Default is TRUE. When TRUE
+the function will check for genes that may have more than 1 name in your data using the aliases im gnomeR::impact_gene_info alias column</p></td>
     </tr>
     <tr>
       <th>col.names</th>
@@ -273,22 +285,18 @@ Hugo_Symbol = NULL, Variant_Classification = NULL, Mutation_Status = NULL, Varia
 <span class='va'>bin.mut</span> <span class='op'>&lt;-</span> <span class='fu'>binmat</span><span class='op'>(</span>patients <span class='op'>=</span> <span class='va'>patients</span>,maf <span class='op'>=</span> <span class='va'>mut</span>,
 mut.type <span class='op'>=</span> <span class='st'>"SOMATIC"</span>,SNP.only <span class='op'>=</span> <span class='cn'>FALSE</span>,
 include.silent <span class='op'>=</span> <span class='cn'>FALSE</span>, specify.plat <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='warning'>Warning: To ensure gene with multiple names/aliases are correctly grouped together, the</span>
-#&gt; <span class='warning'>    following genes in your maf dataframe have been recoded: </span>
-#&gt; <span class='warning'>AMER1 recoded to FAM123B </span>
-#&gt; <span class='warning'>To ensure gene with multiple names/aliases are correctly grouped together, the</span>
-#&gt; <span class='warning'>    following genes in your maf dataframe have been recoded: </span>
-#&gt; <span class='warning'>TCEB1 recoded to ELOC </span></div><div class='input'><span class='va'>bin.mut</span> <span class='op'>&lt;-</span> <span class='fu'>binmat</span><span class='op'>(</span>patients <span class='op'>=</span> <span class='va'>patients</span>,maf <span class='op'>=</span> <span class='va'>mut</span>,
+</div><div class='output co'>#&gt; <span class='warning'>Warning: MUTATION DATA: To ensure gene with multiple names/aliases are correctly grouped together, the</span>
+#&gt; <span class='warning'>      following genes in your maf dataframe have been recoded. You can supress this with recode.aliases = FALSE </span>
+#&gt; <span class='warning'> </span>
+#&gt; <span class='warning'>AMER1 recoded to FAM123B </span></div><div class='input'><span class='va'>bin.mut</span> <span class='op'>&lt;-</span> <span class='fu'>binmat</span><span class='op'>(</span>patients <span class='op'>=</span> <span class='va'>patients</span>,maf <span class='op'>=</span> <span class='va'>mut</span>,
 mut.type <span class='op'>=</span> <span class='st'>"SOMATIC"</span>,SNP.only <span class='op'>=</span> <span class='cn'>FALSE</span>,
 include.silent <span class='op'>=</span> <span class='cn'>FALSE</span>,
 cna.relax <span class='op'>=</span> <span class='cn'>TRUE</span>, specify.plat <span class='op'>=</span> <span class='cn'>FALSE</span>,
  set.plat <span class='op'>=</span> <span class='st'>"410"</span>, rm.empty <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='warning'>Warning: To ensure gene with multiple names/aliases are correctly grouped together, the</span>
-#&gt; <span class='warning'>    following genes in your maf dataframe have been recoded: </span>
-#&gt; <span class='warning'>AMER1 recoded to FAM123B </span>
-#&gt; <span class='warning'>To ensure gene with multiple names/aliases are correctly grouped together, the</span>
-#&gt; <span class='warning'>    following genes in your maf dataframe have been recoded: </span>
-#&gt; <span class='warning'>TCEB1 recoded to ELOC </span></div></pre>
+</div><div class='output co'>#&gt; <span class='warning'>Warning: MUTATION DATA: To ensure gene with multiple names/aliases are correctly grouped together, the</span>
+#&gt; <span class='warning'>      following genes in your maf dataframe have been recoded. You can supress this with recode.aliases = FALSE </span>
+#&gt; <span class='warning'> </span>
+#&gt; <span class='warning'>AMER1 recoded to FAM123B </span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

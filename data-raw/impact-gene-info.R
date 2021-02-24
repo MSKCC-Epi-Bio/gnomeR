@@ -60,8 +60,8 @@
 #  transmute(gene = str_remove_all(value, "gene_list: "))
 #
 # l <- list("jj_341" = jj_341,
-#           "jj_341" = jj_341,
-#           "jj_341" = jj_341)
+#           "jj_410" = jj_410,
+#           "jj_468" = jj_468)
 #
 #
 # # create data frame of genes
@@ -85,12 +85,12 @@
 #   rename(gene = hugoGeneSymbol,
 #          entrez_id = entrezGeneId)
 #
-# l <- list("ti_341" = ti_341,
+# l_jj <- list("ti_341" = ti_341,
 #           "ti_410" = ti_410,
 #           "ti_468" = ti_468)
 #
 # # create data frame of genes
-# impact_genes <- map2_df(l, names(l),
+# impact_genes <- map2_df(l_jj, names(l_jj),
 #                         ~clean_genes(impact_plat = .x,
 #                                        name = .y))
 #
@@ -131,8 +131,13 @@
 # #[1] "FAM123B" "FAM175A" "FAM46C"  "MLL"     "MLL2"    "MLL3"    "MRE11A"  "MYCL1"
 # # [9] "PAK7"    "PARK2"   "RFWD2"
 #
+# #  [1] "FAM123B" "FAM175A" "FAM46C"  "MLL"     "MLL2"    "MLL3"    "MRE11A"  "MYCL1"
+# #  [9] "PAK7"    "PARK2"   "RFWD2"
+# #  "TCEB1"   "FAM58A"  "GTF2I"   "MLL4"    "SETD8"
+# # [17] "WHSC1"   "WHSC1L1"
+#
 # # check if genes that are not in ours (`diff) are available as aliases to other genes
-# # result is 0, so all "missing" genes are in our aliases
+# # result is 1 -"GTF2I"
 # setdiff(diff, all_alias_table$alias)
 #
 #
@@ -164,15 +169,20 @@
 #   recode_alias(., accepted_gene = "FAM46C", alias_gene = "TENT5C") %>%
 #
 #   recode_alias(., accepted_gene = "MLL", alias_gene = "KMT2A") %>%
-#   recode_alias(., accepted_gene = "MLL2", alias_gene = "KMT2B") %>%
+#   recode_alias(., accepted_gene = "MLL2", alias_gene = "KMT2D") %>%
 #   recode_alias(., accepted_gene = "MLL3", alias_gene = "KMT2C") %>%
-#   recode_alias(., accepted_gene = "MLL4", alias_gene = "KMT2D") %>%
+#   recode_alias(., accepted_gene = "MLL4", alias_gene = "KMT2B") %>%
 #
 #   recode_alias(., accepted_gene = "MRE11A", alias_gene = "MRE11") %>%
 #   recode_alias(., accepted_gene = "MYCL1", alias_gene = "MYCL") %>%
 #   recode_alias(., accepted_gene = "PAK7", alias_gene = "PAK5") %>%
 #   recode_alias(., accepted_gene = "PARK2", alias_gene = "PRKN") %>%
-#   recode_alias(., accepted_gene = "RFWD2", alias_gene = "COP1")
+#   recode_alias(., accepted_gene = "RFWD2", alias_gene = "COP1") %>%
+#   recode_alias(., accepted_gene = "TCEB1", alias_gene = "ELOC") %>%
+#   recode_alias(., accepted_gene = "FAM58A", alias_gene = "CCNQ") %>%
+#   recode_alias(., accepted_gene = "SETD8", alias_gene = "KMT5A") %>%
+#   recode_alias(., accepted_gene = "WHSC1", alias_gene = "NSD2") %>%
+#   recode_alias(., accepted_gene = "WHSC1L1", alias_gene = "NSD3")
 #
 # # check genes that are in both main gene col and alias col
 # all_alias_table$gene[map_lgl(all_alias_table$gene, ~.x %in% all_alias_table$alias)] %>% unique()
@@ -251,6 +261,7 @@
 #                          "alias")
 #
 # usethis::use_data(impact_gene_info , overwrite = TRUE)
-# #save(impact_gene_info, file = here::here("impact_gene_info.RData"))
-#
-#
+
+#save(impact_gene_info, file = here::here("impact_gene_info.RData"))
+
+

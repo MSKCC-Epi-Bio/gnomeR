@@ -64,7 +64,9 @@ plot_oncoPrint <- function(gen.dat,clin.dat=NULL,ordered=NULL){
     # get all values #
     clin.factors <- unique(unlist(apply(mat,2,unique)))
     clin.factors <- clin.factors[-stats::na.omit(match(c("MUT;","AMP;","DEL;","FUS;","  ","MIS;",
-                                                  "MUT;FUS;","MUT;DEL;","MUT;AMP;"),clin.factors))]
+                                                  "MUT;FUS;","MUT;DEL;","MUT;AMP;","MUT;DEL;FUS;",
+                                                  "DEL;FUS;","MUT;AMP;FUS;",
+                                                  "AMP;FUS;"),clin.factors))]
     if(length(clin.factors) == 0){
       col = c("MUT" = "#008000", "AMP" = "red", "DEL" = "blue", "FUS" = "orange","MIS" = "black")
       alter_fun = list(

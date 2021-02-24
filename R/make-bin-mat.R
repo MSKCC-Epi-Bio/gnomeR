@@ -1,4 +1,5 @@
 #' binmat
+#' \%lifecycle{stable}
 #' Enables creation of a binary matrix from a maf file with
 #' a predefined list of patients (rows are patients and columns are genes)
 #' @param patients a character vector that let's the user specify the patients to be used to create the matrix.
@@ -15,7 +16,8 @@
 #' Default is NULL.
 #' @param cna.binary A boolean argument specifying if the cna events should be enforced as binary. In which case separate columns for
 #' amplifications and deletions will be created.
-#' @param cna.relax for cna data only enables to count both gains and shallow deletions as amplifications and deletions respectively.
+#' @param cna.relax By default this argument is set to FALSE, where only deep deletions (-2) and amplifications (2) will be annotated as events.
+#'  When set to FTRUE all deletions (-1 shallow and -2 deep) are counted as an event same for all gains (1 gain, 2 amplification) as an event.
 #' @param specify.plat boolean specifying if specific IMPACT platforms should be considered. When TRUE NAs will fill the cells for genes
 #' of patients that were not sequenced on that plaform. Default is TRUE.
 #' @param set.plat character argument specifying which IMPACT platform the data should be reduced to if specify.plat is set to TRUE.
@@ -23,6 +25,8 @@
 #' @param rm.empty boolean specifying if columns with no events founds should be removed. Default is TRUE.
 #' @param pathway boolean specifying if pathway annotation should be applied. If TRUE, the function will return a supplementary binary
 #' dataframe with columns being each pathway and each row being a sample. Default is FALSE.
+#' @param recode.aliases bolean specifying if automated gene name alias matching should be done. Default is TRUE. When TRUE
+#' the function will check for genes that may have more than 1 name in your data using the aliases im gnomeR::impact_gene_info alias column
 #' @param col.names character vector of the necessary columns to be used. By default: col.names = c(Tumor_Sample_Barcode = NULL,
 #'  Hugo_Symbol = NULL, Variant_Classification = NULL, Mutation_Status = NULL, Variant_Type = NULL)
 #' @param oncokb boolean specfiying if maf file should be oncokb annotated. Default is FALSE.
@@ -56,6 +60,7 @@
 binmat <- function(patients=NULL, maf = NULL, mut.type = "SOMATIC",SNP.only = FALSE,include.silent = FALSE,
                    fusion = NULL,cna = NULL,cna.binary = TRUE,cna.relax = FALSE, specify.plat = TRUE,
                    set.plat = NULL,rm.empty = TRUE, pathway = FALSE,
+                   recode.aliases = TRUE,
                    col.names = c(Tumor_Sample_Barcode = NULL, Hugo_Symbol = NULL,
                                  Variant_Classification = NULL, Mutation_Status = NULL, Variant_Type = NULL),
                    oncokb = FALSE, keep_onco = c("Oncogenic","Likely Oncogenic","Predicted Oncogenic"), token = '',...){
@@ -121,7 +126,7 @@ binmat <- function(patients=NULL, maf = NULL, mut.type = "SOMATIC",SNP.only = FA
   if(!is.null(maf)){
 
     # quick data checks #
-    maf <- check_maf_input(maf)
+    maf <- check_maf_input(maf, recode.aliases= recode.aliases)
     # if(is.na(match("Tumor_Sample_Barcode",colnames(maf))))
     #   stop("The MAF file inputted is missing a patient name column. (Tumor_Sample_Barcode)")
     # if(is.na(match("Hugo_Symbol",colnames(maf))))
@@ -149,7 +154,7 @@ binmat <- function(patients=NULL, maf = NULL, mut.type = "SOMATIC",SNP.only = FA
     maf <- structure(maf,class = c("data.frame","maf"))
     # getting mutation binary matrix #
     mut <- createbin(obj = maf, patients = patients, mut.type = mut.type, cna.binary = cna.binary,cna.relax = cna.relax,
-                     SNP.only = SNP.only, include.silent = include.silent, specify.plat = specify.plat)
+                     SNP.only = SNP.only, include.silent = include.silent, specify.plat = specify.plat, recode.aliases = recode.aliases)
 
   }
 
@@ -164,7 +169,7 @@ binmat <- function(patients=NULL, maf = NULL, mut.type = "SOMATIC",SNP.only = FA
     # filter/define patients #
     # if(is.null(patients)) patients <- as.character(unique(fusion$Tumor_Sample_Barcode))
     fusion <- createbin(obj = fusion, patients = patients, mut.type = mut.type, cna.binary = cna.binary,
-                        SNP.only = SNP.only, include.silent = include.silent, specify.plat = specify.plat)
+                        SNP.only = SNP.only, include.silent = include.silent, specify.plat = specify.plat, recode.aliases = recode.aliases)
     if(!is.null(mut)){
       mut <- as.data.frame(cbind(mut,fusion))
       rownames(mut) <- patients}
@@ -205,14 +210,15 @@ binmat <- function(patients=NULL, maf = NULL, mut.type = "SOMATIC",SNP.only = FA
         cna <- structure(cna,class = c("data.frame","cna"))
         # if(is.null(patients)) patients <- gsub("\\.","-",as.character(colnames(cna)))[-1]
         cna <- createbin(obj = cna, patients = patients, mut.type = mut.type, cna.binary = cna.binary,cna.relax = cna.relax,
-                         SNP.only = SNP.only, include.silent = include.silent, specify.plat = specify.plat)
+                         SNP.only = SNP.only, include.silent = include.silent, specify.plat = specify.plat, recode.aliases = recode.aliases)
 
       }
 
       else{
         # if(is.null(patients)) patients <- unique(cna$sampleId)
         cna <- createbin(obj = cna, patients = patients, mut.type = mut.type, cna.binary = cna.binary,cna.relax = cna.relax,
-                         SNP.only = SNP.only, include.silent = include.silent, specify.plat = specify.plat)
+                         SNP.only = SNP.only, include.silent = include.silent, specify.plat = specify.plat,
+                         recode.aliases = recode.aliases)
       }
     }
 
@@ -285,7 +291,7 @@ binmat <- function(patients=NULL, maf = NULL, mut.type = "SOMATIC",SNP.only = FA
       #   colnames(cna) <- gsub("\\.","-",colnames(cna))
       # }
       cna <- createbin(obj = cna, patients = patients, mut.type = mut.type, cna.binary = cna.binary,cna.relax = cna.relax,
-                       SNP.only = SNP.only, include.silent = include.silent, specify.plat = specify.plat)
+                       SNP.only = SNP.only, include.silent = include.silent, specify.plat = specify.plat, recode.aliases = recode.aliases)
     }
     if(!is.null(mut)){
       mut <- as.data.frame(cbind(mut,cna))
@@ -375,8 +381,7 @@ binmat <- function(patients=NULL, maf = NULL, mut.type = "SOMATIC",SNP.only = FA
   unique_genes <- unique(gsub(".Del|.Amp|.fus|.cna","",colnames(mut)))
   missing_genes <- unique_genes[which(!(unique_genes %in% impact_gene_info$hugo_symbol))]
   if(length(missing_genes) > 0 && specify.plat)
-    warning(paste0("Some genes in the final matrix were not part of the official IMPACT panel and thus couldn't be annotate
-            for missing status. If you wish to have a complete list of genes in IMPACT please see 'impact_gene_info'. ",
+    warning(paste0("The following genes in the final matrix were not part of the official IMPACT panel and thus couldn't be annotated for missing status. To see a complete list of genes in IMPACT please see 'impact_gene_info': ",
                    paste0(missing_genes,collapse = ", ")
     )
     )
@@ -389,7 +394,7 @@ binmat <- function(patients=NULL, maf = NULL, mut.type = "SOMATIC",SNP.only = FA
 ##############################################
 
 
-createbin <- function(obj, patients, mut.type, cna.binary, SNP.only,include.silent, cna.relax, specify.plat){
+createbin <- function(obj, patients, mut.type, cna.binary, SNP.only,include.silent, cna.relax, specify.plat, recode.aliases){
   UseMethod("createbin")
 }
 
@@ -402,7 +407,7 @@ createbin.default <- function(obj) {
 ############# MUTATION MATRIX ################
 ##############################################
 
-createbin.maf <- function(obj, patients, mut.type, cna.binary, SNP.only, include.silent, cna.relax, specify.plat){
+createbin.maf <- function(obj, patients, mut.type, cna.binary, SNP.only, include.silent, cna.relax, specify.plat, recode.aliases = recode.aliases){
   maf <- as_tibble(obj)
   maf$Hugo_Symbol <- as.character(maf$Hugo_Symbol)
 
@@ -444,7 +449,9 @@ createbin.maf <- function(obj, patients, mut.type, cna.binary, SNP.only, include
 ############# FUSION MATRIX ###############
 ###########################################
 
-createbin.fusion <- function(obj, patients, mut.type,cna.binary, SNP.only,include.silent, cna.relax, specify.plat){
+createbin.fusion <- function(obj, patients, mut.type,cna.binary,
+                             SNP.only,include.silent, cna.relax,
+                             specify.plat, recode.aliases){
   fusion <- as_tibble(obj)
   # quick data checks #
   if(length(match("Tumor_Sample_Barcode",colnames(fusion))) == 0)
@@ -457,10 +464,28 @@ createbin.fusion <- function(obj, patients, mut.type,cna.binary, SNP.only,includ
   alias_table <- tidyr::unnest(impact_gene_info, cols = alias) %>%
     select(hugo_symbol, alias)
 
-  # recode aliases
-  fusion$Hugo_Symbol_Old <- fusion$Hugo_Symbol
-  fusion$Hugo_Symbol <- purrr::map_chr(fusion$Hugo_Symbol, ~resolve_alias(.x,
-                                                                          alias_table = alias_table))
+  # recode aliases ---
+  if(recode.aliases == TRUE) {
+
+    fusion$Hugo_Symbol_Old <- fusion$Hugo_Symbol
+    fusion$Hugo_Symbol <- purrr::map_chr(fusion$Hugo_Symbol, ~resolve_alias(.x,
+                                                                            alias_table = alias_table))
+
+    message <- fusion %>%
+      dplyr::filter(Hugo_Symbol_Old != Hugo_Symbol) %>%
+      dplyr::select(Hugo_Symbol_Old, Hugo_Symbol) %>%
+      dplyr::distinct()
+
+    if(nrow(message) > 0) {
+      warning(paste0("FUSION DATA: To ensure gene with multiple names/aliases are correctly grouped together, the
+      following genes in your fusion data have been recoded. You can supress this with recode.aliases = FALSE \n \n",
+                     purrr::map2(message$Hugo_Symbol_Old,
+                                 message$Hugo_Symbol,
+                                 ~paste0(.x, " recoded to ", .y, " \n"))))
+    }
+  }
+
+
 
   fusion <- as_tibble(fusion) %>%
     filter(.data$Tumor_Sample_Barcode %in% patients)
@@ -472,8 +497,10 @@ createbin.fusion <- function(obj, patients, mut.type,cna.binary, SNP.only,includ
 
   for(i in patients){
     genes <- fusion$Hugo_Symbol[fusion$Tumor_Sample_Barcode %in% i]
-    if(length(genes) != 0){fusion.out[match(i,rownames(fusion.out)),
-                                      match(unique(as.character(genes)),colnames(fusion.out))] <- 1}
+    if(length(genes) != 0)
+      fusion.out[match(i,rownames(fusion.out)),
+                 match(unique(as.character(genes)),colnames(fusion.out))] <- 1
+
   }
   colnames(fusion.out) <- paste0(colnames(fusion.out),".fus")
   return(fusion.out)
@@ -484,7 +511,9 @@ createbin.fusion <- function(obj, patients, mut.type,cna.binary, SNP.only,includ
 ############# COPY NUMBER MATRIX ###############
 ################################################
 
-createbin.cna <- function(obj, patients, mut.type,cna.binary, SNP.only,include.silent, cna.relax, specify.plat){
+createbin.cna <- function(obj, patients, mut.type,cna.binary,
+                          SNP.only,include.silent, cna.relax,
+                          specify.plat, recode.aliases){
   cna <- obj
   cna <- as.data.frame(tibble::as_tibble(cna))
   cna$Hugo_Symbol <- as.character(cna$Hugo_Symbol)
@@ -493,10 +522,28 @@ createbin.cna <- function(obj, patients, mut.type,cna.binary, SNP.only,include.s
   alias_table <- tidyr::unnest(impact_gene_info, cols = alias) %>%
     select(hugo_symbol, alias)
 
-  # recode aliases
-  # cna$Hugo_Symbol_Old <- cna$Hugo_Symbol
-  cna$Hugo_Symbol <- purrr::map_chr(cna$Hugo_Symbol, ~resolve_alias(.x,
-                                                                    alias_table = alias_table))
+    # recode aliases ---
+  if(recode.aliases == TRUE) {
+
+    cna$Hugo_Symbol_Old <- cna$Hugo_Symbol
+    cna$Hugo_Symbol <- purrr::map_chr(cna$Hugo_Symbol, ~resolve_alias(.x,
+                                                                      alias_table = alias_table))
+
+    message <- cna %>%
+      dplyr::filter(Hugo_Symbol_Old != Hugo_Symbol) %>%
+      dplyr::select(Hugo_Symbol_Old, Hugo_Symbol) %>%
+      dplyr::distinct()
+
+    if(nrow(message) > 0) {
+      warning(paste0("CNA DATA: To ensure gene with multiple names/aliases are correctly grouped together, the
+      following genes in your CNA data have been recoded. You can supress this with recode.aliases = FALSE. \n \n",
+                     purrr::map2(message$Hugo_Symbol_Old,
+                                 message$Hugo_Symbol,
+                                 ~paste0(.x, " recoded to ", .y, " \n"))))
+    }
+  }
+
+
   dups <- cna$Hugo_Symbol[duplicated(cna$Hugo_Symbol)]
   if(length(dups) > 0){
     for(i in dups){
@@ -572,7 +619,8 @@ createbin.cna <- function(obj, patients, mut.type,cna.binary, SNP.only,include.s
 }
 
 ### cna from API ###
-createbin.api <- function(obj, patients, mut.type,cna.binary, SNP.only,include.silent, cna.relax, specify.plat){
+createbin.api <- function(obj, patients, mut.type,cna.binary,
+                          SNP.only,include.silent, cna.relax, specify.plat, recode.aliases){
   cna <- as.data.frame(obj)
 
   cna <- as.data.frame(tibble::as_tibble(cna))

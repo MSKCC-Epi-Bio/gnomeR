@@ -4,10 +4,12 @@
 \alias{check_maf_input}
 \title{Checks MAF input to ensure column names are correct and renamed genes are corrected}
 \usage{
-check_maf_input(maf)
+check_maf_input(maf, ...)
 }
 \arguments{
 \item{maf}{Raw maf dataframe containing alteration data}
+
+\item{...}{Further arguments parsed through binmat() (recode.aliases).}
 }
 \value{
 a corrected maf file or an error if problems with maf
@@ -17,6 +19,6 @@ Checks MAF input to ensure column names are correct and renamed genes are correc
 }
 \examples{
 
-check_maf_input(mut)
+check_maf_input(mut,recode.aliases = TRUE)
 
 }
