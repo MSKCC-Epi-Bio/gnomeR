@@ -16,7 +16,7 @@ binmat(
   fusion = NULL,
   cna = NULL,
   cna.binary = TRUE,
-  cna.relax = TRUE,
+  cna.relax = FALSE,
   specify.plat = TRUE,
   set.plat = NULL,
   rm.empty = TRUE,
@@ -53,8 +53,8 @@ Default is NULL.}
 \item{cna.binary}{A boolean argument specifying if the cna events should be enforced as binary. In which case separate columns for
 amplifications and deletions will be created.}
 
-\item{cna.relax}{By default this argument is set to TRUE, where all deletions (-1 shallow and -2 deep) are counted as an event same for all gains (1 gain, 2 amplification) as an event.
-When set to FALSE only deep deletions (-2) and amplifications (2) will be annotated as events.}
+\item{cna.relax}{By default this argument is set to FALSE, where only deep deletions (-2) and amplifications (2) will be annotated as events.
+When set to FTRUE all deletions (-1 shallow and -2 deep) are counted as an event same for all gains (1 gain, 2 amplification) as an event.}
 
 \item{specify.plat}{boolean specifying if specific IMPACT platforms should be considered. When TRUE NAs will fill the cells for genes
 of patients that were not sequenced on that plaform. Default is TRUE.}

@@ -184,7 +184,8 @@ X <- bin.mut[match(surv.dat$DMPID,abbreviate(rownames(bin.mut),strict = T, minle
 surv.test <- uni.cox(X = X, surv.dat = surv.dat,surv.formula = Surv(time,status)~.,filter = 0.05)
 kable(surv.test$tab,row.names = T)
 surv.test$p
-surv.test$KM
+surv.test$KM[[1]]
+surv.test$KM[[2]]
 ```
 
 
@@ -201,7 +202,9 @@ OncoPrints are a convenient way to study comutation patterns in our cohort throu
 We show here an example with the most common genes.
 
 ```{r}
-gen.dat <- bin.mut[,names(sort(apply(bin.mut,2, sum),decreasing = T))[1:15]]
+keep_genes <- names(sort(apply(bin.mut[,-grep(".Del|.Amp|.fus",colnames(bin.mut))],2, sum),decreasing = T)[1:15])
+gen.dat <- bin.mut %>% 
+  select(starts_with(keep_genes))
 plot_oncoPrint(gen.dat)
 ```
 

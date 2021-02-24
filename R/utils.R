@@ -1,13 +1,13 @@
 #' Checks MAF input to ensure column names are correct and renamed genes are corrected
 #'
 #' @param maf Raw maf dataframe containing alteration data
-#'
+#' @param ... Further arguments parsed through binmat() (recode.aliases).
 #' @return a corrected maf file or an error if problems with maf
 #' @export
 #'
 #' @examples
 #'
-#' check_maf_input(mut)
+#' check_maf_input(mut,recode.aliases = TRUE)
 #'
 check_maf_input <- function(maf, ...)  {
 
