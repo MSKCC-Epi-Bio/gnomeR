@@ -173,6 +173,7 @@ Modified CNregions function from the facets package to handle small sample sizes
           <p><code><a href="binmat.html">binmat()</a></code> </p>
         </td>
         <td><p>binmat
+\<!-- %lifecycle{stable} -->
 Enables creation of a binary matrix from a maf file with
 a predefined list of patients (rows are patients and columns are genes)</p></td>
       </tr><tr>
@@ -218,7 +219,8 @@ IMPACT cbioPortal dataset.</p></td>
           <p><code><a href="custom_pathway.html">custom_pathway()</a></code> </p>
         </td>
         <td><p>custom_pathway
-Enables creation of a custom pathway binary matrix from a binmat() `object`. Similarly to the internal file 'pathways.csv', this function takes as input
+\<!-- %lifecycle{stable} -->
+Enables creation of a custom pathway binary matrix from a binmat() <code>object</code>. Similarly to the internal file 'pathways.csv', this function takes as input
 a data frame containing the name of the pathways of interest, and for each pathways a character vector of the genes of interest. Note that the different
 events to be considered in each pathways must be considered separetely. For example, if one wishes to consider TP53 deletions in a given pathway, one must
 specify "TP53.Del" in the character vector for that pathway.</p></td>
@@ -259,6 +261,7 @@ Enables creation of a matrix used to generate an OncoPrint heatmap.</p></td>
           <p><code><a href="get_tmb.html">get_tmb()</a></code> </p>
         </td>
         <td><p>get_tmb
+\<!-- %lifecycle{experimental} -->
 Function to calculate the tumor mutation burden of individual patients in a MAF file. Note that this can only be applied to
 samples sequenced using one of the IMPACT panels. Other samples will be annotated as missing.</p></td>
       </tr><tr>
@@ -362,7 +365,10 @@ samples sequenced using one of the IMPACT panels. Other samples will be annotate
         <td>
           <p><code><a href="oncokb.html">oncokb()</a></code> </p>
         </td>
-        <td><p>OncoKB annotate</p></td>
+        <td><p>OncoKB annotate
+\<!-- %lifecycle{stable} -->
+Enables oncokb annotation of MAF, fusions and CNA files. This is performed using the OncoKB annotator found at https://github.com/oncokb/oncokb-annotator.
+See details there for file formats.</p></td>
       </tr><tr>
         
         <td>
