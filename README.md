@@ -9,7 +9,7 @@
 status](https://travis-ci.com/AxelitoMartin/gnomeR.svg?branch=development)](https://travis-ci.org/AxelitoMartin/gnomeR)
 [![Codecov test
 coverage](https://codecov.io/gh/AxelitoMartin/gnomeR/branch/development/graph/badge.svg)](https://codecov.io/gh/AxelitoMartin/gnomeR?branch=development)
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.4171636.svg)](https://doi.org/10.5281/zenodo.4171636)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.4171608.svg)](https://doi.org/10.5281/zenodo.4171608)
 <!-- badges: end -->
 
 the `gnomeR` package provides a consistent framework for genetic data
@@ -244,18 +244,18 @@ out <- uni.cox(X = gen.dat, surv.dat = surv.dat, surv.formula = Surv(time,status
 kable(out$tab[1:10,],row.names = TRUE)
 ```
 
-|    | Feature | Coefficient |    HR | Pvalue |       FDR | MutationFrequency |
-| :- | :------ | ----------: | ----: | -----: | --------: | ----------------: |
-| 1  | MLL     |     \-1.480 | 0.228 | 0.0155 | 0.4803499 |              0.09 |
-| 2  | STK11   |     \-1.460 | 0.233 | 0.0519 | 0.8046534 |              0.07 |
-| 3  | KEAP1   |     \-1.020 | 0.362 | 0.1670 | 0.8930230 |              0.05 |
-| 4  | NOTCH1  |       0.609 | 1.840 | 0.2070 | 0.8930230 |              0.08 |
-| 5  | DOT1L   |       0.659 | 1.930 | 0.2110 | 0.8930230 |              0.05 |
-| 6  | TSC1    |       0.750 | 2.120 | 0.2130 | 0.8930230 |              0.05 |
-| 7  | CDH1    |       0.605 | 1.830 | 0.2520 | 0.8930230 |              0.06 |
-| 8  | EPHA5   |     \-1.080 | 0.340 | 0.2870 | 0.8930230 |              0.05 |
-| 9  | PIK3CA  |       0.410 | 1.510 | 0.2950 | 0.8930230 |              0.12 |
-| 10 | PTPRD   |       0.491 | 1.630 | 0.3570 | 0.8930230 |              0.08 |
+|        | Feature | Coefficient |   HR | Pvalue |   FDR | MutationFrequency |
+| :----- | :------ | ----------: | ---: | -----: | ----: | ----------------: |
+| MLL    | MLL     |      \-1.48 | 0.23 | 0.0155 | 0.496 |              0.09 |
+| STK11  | STK11   |      \-1.46 | 0.23 | 0.0519 | 0.831 |              0.07 |
+| KEAP1  | KEAP1   |      \-1.02 | 0.36 | 0.1670 | 0.922 |              0.05 |
+| NOTCH1 | NOTCH1  |        0.61 | 1.84 | 0.2070 | 0.922 |              0.08 |
+| DOT1L  | DOT1L   |        0.66 | 1.93 | 0.2110 | 0.922 |              0.05 |
+| TSC1   | TSC1    |        0.75 | 2.12 | 0.2130 | 0.922 |              0.05 |
+| CDH1   | CDH1    |        0.60 | 1.83 | 0.2520 | 0.922 |              0.06 |
+| EPHA5  | EPHA5   |      \-1.08 | 0.34 | 0.2870 | 0.922 |              0.05 |
+| PIK3CA | PIK3CA  |        0.41 | 1.51 | 0.2950 | 0.922 |              0.12 |
+| PTPRD  | PTPRD   |        0.49 | 1.63 | 0.3570 | 0.922 |              0.08 |
 
 ``` r
 out$KM[[1]]
@@ -269,5 +269,7 @@ The primary goal of `gnomeR` not being in depth analysis of genomic data
 but rather reliable, modulable and reproducible framework for processing
 various types of genomic data. For users interested in large scale
 genomic analytical methods we compiled various packages developed by
-Memorial Sloan-Kettering Cancer Center employees under an umbrella R
-package, [gnomeVerse](https://github.com/AxelitoMartin/genomeVerse).
+[Department of Epidemiology and
+Biostatistics](https://www.mskcc.org/departments/epidemiology-biostatistics),
+Memorial Sloan-Kettering Cancer Center under an umbrella R package,
+[gnomeVerse](https://github.com/AxelitoMartin/genomeVerse).
