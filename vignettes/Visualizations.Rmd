@@ -2,10 +2,10 @@
 title: "Visualizations"
 output: rmarkdown::html_vignette
 vignette: >
-%\VignetteIndexEntry{Visualizations}
+  %\VignetteIndexEntry{Visualizations}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
-  ---
+---
   
   ```{r, include = FALSE}
 knitr::opts_chunk$set(
