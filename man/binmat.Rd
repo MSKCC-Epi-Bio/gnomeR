@@ -27,6 +27,7 @@ binmat(
   oncokb = FALSE,
   keep_onco = c("Oncogenic", "Likely Oncogenic", "Predicted Oncogenic"),
   token = "",
+  sample_panels = NULL,
   ...
 )
 }
@@ -60,7 +61,7 @@ When set to FTRUE all deletions (-1 shallow and -2 deep) are counted as an event
 of patients that were not sequenced on that plaform. Default is TRUE.}
 
 \item{set.plat}{character argument specifying which IMPACT platform the data should be reduced to if specify.plat is set to TRUE.
-Options are "341" and "410". Default is NULL.}
+Options are "341", "410" and "468. Default is NULL.}
 
 \item{rm.empty}{boolean specifying if columns with no events founds should be removed. Default is TRUE.}
 
@@ -80,6 +81,10 @@ Hugo_Symbol = NULL, Variant_Classification = NULL, Mutation_Status = NULL, Varia
 'Oncogenic', 'Likely Oncogenic' and 'Predicted Oncogenic' variants will be kept (recommended).}
 
 \item{token}{the token affiliated to your oncoKB account.}
+
+\item{sample_panels}{A dataframe containing the sample ids corresponding to the patients argument in the first
+column and their corresponding genomic panel. At the moment gnomeR can handle panels from the following centers:
+MSKCC, DFCI, VICC and UHN. See objects impact_gene_info and panel_names for more information.}
 
 \item{...}{Further arguments passed to the oncokb() function such a token}
 }
