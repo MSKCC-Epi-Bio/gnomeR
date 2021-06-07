@@ -213,15 +213,15 @@
 #
 # impact_gene_info <- impact_genes_wide
 #
-# names(impact_gene_info) <- c("hugo_symbol" ,
-#                          "platform_341",
-#                          "platform_410",
-#                          "platform_468",
-#                          "entrez_id",
-#                          "alias")
+# names(impact_gene_info) <- c("entrez_id",
+#                              "hugo_symbol",
+#                              "platform_341",
+#                              "platform_410",
+#                              "platform_468",
+#                              "alias")
 #
 # usethis::use_data(impact_gene_info , overwrite = TRUE)
-
-# save(impact_gene_info, file = here::here("impact_gene_info.RData"))
+#
+# # save(impact_gene_info, file = here::here("impact_gene_info.RData"))
 
 
