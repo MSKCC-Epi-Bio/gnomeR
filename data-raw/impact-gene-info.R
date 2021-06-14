@@ -1,4 +1,4 @@
-# library(cbioportalr)
+# library(cbioportalR)
 # library(tidyverse)
 # library(gnomeR)
 #
@@ -33,7 +33,7 @@
 # # a function to get aliases from cbioportal API
 # get_alias <- function(hugo_symbol) {
 #   url_path = paste0("genes/", hugo_symbol, "/aliases")
-#   res <- cbioportalr::cbp_api(url_path)
+#   res <- cbioportalR::cbp_api(url_path)
 #
 #   res <- res$content
 #   unlist(res)
@@ -71,7 +71,7 @@
 #
 #
 # # *API Panel Files ---
-# get_cbioportal_db("msk_impact")
+# get_cbioportal_db("cbioportal.mskcc.org")
 #
 # ti_341 <- get_panel(panel_id = "IMPACT341") %>%
 #   rename(gene = hugoGeneSymbol,
@@ -85,12 +85,12 @@
 #   rename(gene = hugoGeneSymbol,
 #          entrez_id = entrezGeneId)
 #
-# l_jj <- list("ti_341" = ti_341,
+# l_api <- list("ti_341" = ti_341,
 #           "ti_410" = ti_410,
 #           "ti_468" = ti_468)
 #
 # # create data frame of genes
-# impact_genes <- map2_df(l_jj, names(l_jj),
+# impact_genes <- map2_df(l_api, names(l_api),
 #                         ~clean_genes(impact_plat = .x,
 #                                        name = .y))
 #
@@ -128,13 +128,8 @@
 # diff <- setdiff(jj_impact_genes$gene, all_alias_table$gene)
 #
 # diff
-# #[1] "FAM123B" "FAM175A" "FAM46C"  "MLL"     "MLL2"    "MLL3"    "MRE11A"  "MYCL1"
-# # [9] "PAK7"    "PARK2"   "RFWD2"
-#
-# #  [1] "FAM123B" "FAM175A" "FAM46C"  "MLL"     "MLL2"    "MLL3"    "MRE11A"  "MYCL1"
-# #  [9] "PAK7"    "PARK2"   "RFWD2"
-# #  "TCEB1"   "FAM58A"  "GTF2I"   "MLL4"    "SETD8"
-# # [17] "WHSC1"   "WHSC1L1"
+# # [1] "FAM123B" "FAM175A" "FAM46C"  "MLL"     "MLL2"    "MLL3"    "MRE11A"  "MYCL1"   "PAK7"    "PARK2"   "RFWD2"
+# # [12] "TCEB1"   "FAM58A"  "GTF2I"   "MLL4"    "SETD8"   "WHSC1"   "WHSC1L1"
 #
 # # check if genes that are not in ours (`diff) are available as aliases to other genes
 # # result is 1 -"GTF2I"
@@ -161,36 +156,22 @@
 #   return(data)
 # }
 #
-# # chosing the ones in JJ's list as the "main" and the API as "alias" under the
-# # assumption that JJ's list is more up to date because it has MLL family
+# # NOTE: On 2021-05-17 we decided to use API genes as accepted over JJ's list based on genecards.org. NO recoding here anymore
+#
+# # Check for genes duplicated in both accepted and alias columns
+# # all_alias_table %>%
+# #   filter(gene == alias) %>% View()
+#
 # all_alias_table <- all_alias_table %>%
-#   recode_alias(., accepted_gene = "FAM123B", alias_gene = "AMER1") %>%
-#   recode_alias(., accepted_gene = "FAM175A", alias_gene = "ABRAXAS1") %>%
-#   recode_alias(., accepted_gene = "FAM46C", alias_gene = "TENT5C") %>%
-#
-#   recode_alias(., accepted_gene = "MLL", alias_gene = "KMT2A") %>%
-#   recode_alias(., accepted_gene = "MLL2", alias_gene = "KMT2D") %>%
-#   recode_alias(., accepted_gene = "MLL3", alias_gene = "KMT2C") %>%
-#   recode_alias(., accepted_gene = "MLL4", alias_gene = "KMT2B") %>%
-#
-#   recode_alias(., accepted_gene = "MRE11A", alias_gene = "MRE11") %>%
-#   recode_alias(., accepted_gene = "MYCL1", alias_gene = "MYCL") %>%
-#   recode_alias(., accepted_gene = "PAK7", alias_gene = "PAK5") %>%
-#   recode_alias(., accepted_gene = "PARK2", alias_gene = "PRKN") %>%
-#   recode_alias(., accepted_gene = "RFWD2", alias_gene = "COP1") %>%
-#   recode_alias(., accepted_gene = "TCEB1", alias_gene = "ELOC") %>%
-#   recode_alias(., accepted_gene = "FAM58A", alias_gene = "CCNQ") %>%
-#   recode_alias(., accepted_gene = "SETD8", alias_gene = "KMT5A") %>%
-#   recode_alias(., accepted_gene = "WHSC1", alias_gene = "NSD2") %>%
-#   recode_alias(., accepted_gene = "WHSC1L1", alias_gene = "NSD3")
+#   filter(gene != alias)
 #
 # # check genes that are in both main gene col and alias col
 # all_alias_table$gene[map_lgl(all_alias_table$gene, ~.x %in% all_alias_table$alias)] %>% unique()
-# #[1] "HGF"    "MLL4"   "KRAS"   "RAD54L" "TP53"   "EZH1"   "MLL2"
+# #[1] "HGF"    "KRAS"   "RAD54L" "TP53"   "EZH1"
 #
 # all_alias_table <- all_alias_table %>%
 #
-#   # I don't think these are aliases even though they came up.
+#   # I don't think these are aliases even though they came up. They usually only come up one way
 #   # I think they are separate genes although I am not sure
 #   filter(!(gene == "SOS1" & alias == "HGF")) %>%
 #   filter(!(gene == "HRAS" & alias == "KRAS")) %>%
@@ -200,7 +181,6 @@
 #   filter(!(gene == "MLL2" & alias == "MLL4")) %>%
 #   filter(!(gene == "MLL4" & alias == "MLL2")) %>%
 #   filter(!(gene == "ATRX" & alias == "RAD54L")) %>%
-#   filter(!(gene == alias) | is.na(alias)) %>%
 #   distinct()
 #
 # # check we've recoded all
@@ -209,22 +189,9 @@
 # all_alias_table <- all_alias_table %>%
 #   rename("hugo_symbol" = gene)
 #
-# impact_genes_wide$gene <- map_chr(impact_genes_wide$gene,
-#                                   ~resolve_alias(.x,
-#                                                  alias_table = all_alias_table))
 #
 # impact_genes_wide <- impact_genes_wide %>%
 #   distinct()
-#
-# # there are some discrepancies with included/not included in panels but all dupes are included in all panels so fixing
-# impact_genes_wide <- impact_genes_wide %>%
-#   group_by(gene) %>%
-#   mutate(sum = n()) %>%
-#   mutate(across(contains("ti_"), ~case_when(sum > 1 ~ "included", TRUE ~ .x))) %>%
-#   select(-sum) %>% distinct() %>%
-#
-#   # need to freshly rejoin entrez ID because recoding above
-#   select(-entrez_id)
 #
 #
 # # create nested version of alias table to be joined to main dataframe
@@ -238,30 +205,23 @@
 #   group_by(hugo_symbol) %>%
 #   nest(data = c(alias, alias_entrez_id))
 #
-# # if entrez id is NA, grab the first alias entrez ID (if available) so we have an ID for everything
-# all_alias_table_nest  <- all_alias_table_nest %>%
-#   mutate(entrez_id = case_when(
-#     is.na(entrez_id) ~ map(data, ~na.omit(.x$alias_entrez_id)[1]),
-#                            TRUE ~ list(entrez_id)))
-#
-#
 #
 # # join impact gene dataframe and their aliases
 # impact_genes_wide <- impact_genes_wide %>%
 #   rename("hugo_symbol" = gene) %>%
-#   left_join(., all_alias_table_nest)
+#   left_join(., all_alias_table_nest, by = c("hugo_symbol", "entrez_id"))
 #
 # impact_gene_info <- impact_genes_wide
 #
-# names(impact_gene_info) <- c("hugo_symbol" ,
-#                          "platform_341",
-#                          "platform_410",
-#                          "platform_468",
-#                          "entrez_id",
-#                          "alias")
+# names(impact_gene_info) <- c("entrez_id",
+#                              "hugo_symbol",
+#                              "platform_341",
+#                              "platform_410",
+#                              "platform_468",
+#                              "alias")
 #
 # usethis::use_data(impact_gene_info , overwrite = TRUE)
-
-#save(impact_gene_info, file = here::here("impact_gene_info.RData"))
+#
+# # save(impact_gene_info, file = here::here("impact_gene_info.RData"))
 
 
