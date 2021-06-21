@@ -4,7 +4,7 @@
 \alias{gen.summary}
 \title{gen.summary}
 \usage{
-gen.summary(gen.dat, outcome, filter = 0, paired = F, cont = F, rank = T)
+gen.summary(gen.dat, outcome, filter = 0, cont = F, rank = T)
 }
 \arguments{
 \item{gen.dat}{A matrix or dataframe, with patients as rows and features as columns.}
@@ -14,8 +14,6 @@ gen.summary(gen.dat, outcome, filter = 0, paired = F, cont = F, rank = T)
 \item{filter}{a numeric value between 0 and 1 (1 not included) that is the lower bound for the proportion of patients
 having a genetic event (only for binary features). All features with an event rate lower than that value will be removed.
 Default is 0 (all features included).}
-
-\item{paired}{Boolean if the data are paired. Default is FALSE.}
 
 \item{cont}{Should the outcome be treated as a continuous value. Default is FALSE treated as categorical.}
 
@@ -39,14 +37,14 @@ outcome <- as.character(clin.sample$Sample.Type[match(patients,clin.sample$Sampl
 gen.dat <- binmat(patients = patients,maf = mut)
 gen.summary(gen.dat = gen.dat,
         outcome = outcome,
-        filter = 0.05,paired = FALSE,
+        filter = 0.05,
         cont = FALSE,rank = TRUE)
 ## Continuous outcome ##
 set.seed(1)
 outcome <-  rnorm(n = nrow(gen.dat))
 tab.out <- gen.summary(gen.dat = gen.dat,
                    outcome = outcome,
-                   filter = 0.05,paired = FALSE,
+                   filter = 0.05,
                    cont = TRUE,rank = TRUE)
 tab.out$fits
 tab.out$vPlot

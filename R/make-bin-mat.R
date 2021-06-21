@@ -335,7 +335,8 @@ binmat <- function(patients=NULL, maf = NULL, mut.type = "SOMATIC",SNP.only = FA
                       samples_to_annotate <-
                         as.character(rownames(mut_to_annotate)[grep("-IM5|-IH5",rownames(mut_to_annotate))])
                     }
-                    if(p == "6"){
+                    # need to add IM7 specific panel #
+                    if(p %in% c("6","7")){
                       p_name <- "MSK_468"
                       samples_to_annotate <-
                         as.character(rownames(mut_to_annotate)[grep("-IM6|-IH6",rownames(mut_to_annotate))])
@@ -659,6 +660,7 @@ createbin.cna <- function(obj, patients, mut.type,cna.binary,
                                  message$Hugo_Symbol,
                                  ~paste0(.x, " recoded to ", .y, " \n"))))
     }
+    cna <- cna %>% select(-one_of("Hugo_Symbol_Old"))
   }
 
 
@@ -697,7 +699,7 @@ createbin.cna <- function(obj, patients, mut.type,cna.binary,
       }
       if(!cna.relax){
         yA <- ifelse(x==2,1,0)
-        yD <- ifelse(x==-2,1,0)
+        yD <- ifelse(x<=-0.9,1,0)
       }
       out <- as.data.frame(cbind(yA,yD))
       colnames(out) <- c("Amp","Del")
@@ -714,6 +716,7 @@ createbin.cna <- function(obj, patients, mut.type,cna.binary,
       cna <- as.data.frame(rbind(cna,add))
     }
     cna <- cna[match(patients,rownames(cna)),]
+    cna[is.na(cna)] <- 0
   }
   if(!cna.binary){
     # add missing
@@ -726,14 +729,36 @@ createbin.cna <- function(obj, patients, mut.type,cna.binary,
       cna <- cna[match(patients,rownames(cna)),]
     }
     cna <- cna[match(patients,rownames(cna)),]
+
     cna <- cna %>%
-      mutate_all(~ factor(as.numeric(as.character(.)),
-                          levels = c("0","-2","-1.5","2")[which(c(0,-2,-1.5,2) %in% as.numeric(as.character(.)))]))
+      # filter(rownames(cna) == "P-0000244-T01-IM3") %>%
+      mutate_all(~ as.numeric(gsub(" ","",as.character(.)))) %>%
+      mutate_all(
+        ~ case_when(
+          . == 0 ~ "NEUTRAL",
+          . %in% c(-1.5,-1) ~ "LOH",
+          . == 1 ~ "GAIN",
+          . == 2 ~ "AMPLIFICATION",
+          . == -2 ~ "DELETION",
+        )
+      ) %>%
+      mutate_all(
+        ~factor(.,
+                levels = c("NEUTRAL","DELETION","LOH","GAIN","AMPLIFICATION")[
+                  which(c("NEUTRAL","DELETION","LOH","GAIN","AMPLIFICATION") %in% .)
+                ])
+      )
+
+    # cna <- cna %>%
+    #   mutate_all(~ factor(as.numeric(as.character(.)),
+    #                       levels = c("0","-2","-1.5","2")[which(c(0,-2,-1.5,2) %in% as.numeric(as.character(.)))]))
     colnames(cna) <- paste0(colnames(cna),".cna")
     rownames(cna) <- patients
+
+    cna[is.na(cna)] <- "NEUTRAL"
   }
 
-  cna[is.na(cna)] <- 0
+  # cna[is.na(cna)] <- 0
   return(cna)
 }
 
@@ -808,10 +833,29 @@ createbin.api <- function(obj, patients, mut.type,cna.binary,
     }
 
     cna <- cna %>%
-      mutate_all(~ factor(as.numeric(as.character(.)),
-                          levels = c("0","-2","-1.5","2")[which(c(0,-2,-1.5,2) %in% as.numeric(as.character(.)))]))
+      # filter(rownames(cna) == "P-0000244-T01-IM3") %>%
+      mutate_all(~ as.numeric(gsub(" ","",as.character(.)))) %>%
+      mutate_all(
+        ~ case_when(
+          . == 0 ~ "NEUTRAL",
+          . %in% c(-1.5,-1) ~ "LOH",
+          . == 1 ~ "GAIN",
+          . == 2 ~ "AMPLIFICATION",
+          . == -2 ~ "DELETION",
+        )
+      ) %>%
+      mutate_all(
+        ~factor(.,
+                levels = c("NEUTRAL","DELETION","LOH","GAIN","AMPLIFICATION")[
+                  which(c("NEUTRAL","DELETION","LOH","GAIN","AMPLIFICATION") %in% .)
+                  ])
+      )
+
+
     colnames(cna) <- paste0(colnames(cna),".cna")
     rownames(cna) <- patients
+
+    cna[is.na(cna)] <- "NEUTRAL"
   }
 
   return(cna)

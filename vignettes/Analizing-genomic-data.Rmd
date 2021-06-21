@@ -56,7 +56,7 @@ For this example we will be using the recorded sample type of the samples we ran
 outcome <- as.character(clin.sample$Sample.Type[match(samples,clin.sample$Sample.Identifier)])
 test <- gen.summary(gen.dat = df,
                 outcome = outcome,
-                filter = 0.05,paired = FALSE,
+                filter = 0.05,
                 cont = FALSE,rank = TRUE)
 ```
 
@@ -90,7 +90,7 @@ set.seed(1)
 outcome <-  rnorm(n = nrow(df))
 tab.out <- gen.summary(gen.dat = df,
                    outcome = outcome,
-                   filter = 0.05,paired = FALSE,
+                   filter = 0.05,
                    cont = TRUE,rank = TRUE)
 ```
 
