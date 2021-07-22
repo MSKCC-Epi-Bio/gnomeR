@@ -145,7 +145,7 @@
 <code class="sourceCode R"><span class="va">outcome</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html">as.character</a></span><span class="op">(</span><span class="va">clin.sample</span><span class="op">$</span><span class="va">Sample.Type</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/match.html">match</a></span><span class="op">(</span><span class="va">samples</span>,<span class="va">clin.sample</span><span class="op">$</span><span class="va">Sample.Identifier</span><span class="op">)</span><span class="op">]</span><span class="op">)</span>
 <span class="va">test</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gen.summary.html">gen.summary</a></span><span class="op">(</span>gen.dat <span class="op">=</span> <span class="va">df</span>,
                 outcome <span class="op">=</span> <span class="va">outcome</span>,
-                filter <span class="op">=</span> <span class="fl">0.05</span>,paired <span class="op">=</span> <span class="cn">FALSE</span>,
+                filter <span class="op">=</span> <span class="fl">0.05</span>,
                 cont <span class="op">=</span> <span class="cn">FALSE</span>,rank <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
 <p>Using the Fisher’s exact test the <code><a href="../reference/gen.summary.html">gen.summary()</a></code> function returns the following:</p>
 <ul>
@@ -155,6 +155,18 @@
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">kable</span><span class="op">(</span><span class="va">test</span><span class="op">$</span><span class="va">fits</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span>,<span class="op">]</span><span class="op">)</span></code></pre></div>
 <table class="table">
+<colgroup>
+<col width="19%">
+<col width="19%">
+<col width="6%">
+<col width="13%">
+<col width="11%">
+<col width="7%">
+<col width="4%">
+<col width="5%">
+<col width="7%">
+<col width="5%">
+</colgroup>
 <thead><tr class="header">
 <th align="left"></th>
 <th align="left">Feature</th>
@@ -162,131 +174,131 @@
 <th align="left">Metastasis(N=55)</th>
 <th align="left">Primary(N=45)</th>
 <th align="left">OddsRatio</th>
-<th align="left">Pvalue</th>
-<th align="left">FDR</th>
 <th align="left">Lower</th>
 <th align="left">Upper</th>
+<th align="left">Pvalue</th>
+<th align="right">FDR</th>
 </tr></thead>
 <tbody>
 <tr class="odd">
-<td align="left">FGFR1.cna</td>
-<td align="left">FGFR1.cna</td>
-<td align="left">12%</td>
-<td align="left">21.82%</td>
+<td align="left">CDK12.cna.AMPLIFICATION</td>
+<td align="left">CDK12.cna.AMPLIFICATION</td>
+<td align="left">6%</td>
 <td align="left">0%</td>
-<td align="left">0</td>
-<td align="left">3.12e-02</td>
-<td align="left">8.19e-01</td>
-<td align="left">0</td>
-<td align="left">0.99</td>
+<td align="left">13.333%</td>
+<td align="left">Inf</td>
+<td align="left">1.54</td>
+<td align="left">Inf</td>
+<td align="left">6.83e-03</td>
+<td align="right">0.1944</td>
 </tr>
 <tr class="even">
-<td align="left">MLL2</td>
-<td align="left">MLL2</td>
-<td align="left">5%</td>
-<td align="left">9.09%</td>
-<td align="left">0%</td>
-<td align="left">0</td>
-<td align="left">6.24e-02</td>
-<td align="left">8.19e-01</td>
-<td align="left">0</td>
-<td align="left">1.29</td>
-</tr>
-<tr class="odd">
-<td align="left">CDKN2B.cna</td>
-<td align="left">CDKN2B.cna</td>
-<td align="left">-12%</td>
-<td align="left">-3.64%</td>
-<td align="left">-22.22%</td>
-<td align="left">0.15</td>
-<td align="left">8.75e-02</td>
-<td align="left">8.19e-01</td>
-<td align="left">0</td>
-<td align="left">1.42</td>
-</tr>
-<tr class="even">
-<td align="left">CREBBP</td>
-<td align="left">CREBBP</td>
+<td align="left">STK11</td>
+<td align="left">STK11</td>
 <td align="left">7%</td>
-<td align="left">10.91%</td>
-<td align="left">2.22%</td>
-<td align="left">0.19</td>
-<td align="left">1.25e-01</td>
-<td align="left">8.19e-01</td>
+<td align="left">12.727%</td>
+<td align="left">0%</td>
 <td align="left">0</td>
-<td align="left">1.64</td>
+<td align="left">0</td>
+<td align="left">0.8</td>
+<td align="left">1.55e-02</td>
+<td align="right">0.1944</td>
 </tr>
 <tr class="odd">
-<td align="left">ERBB2.cna</td>
-<td align="left">ERBB2.cna</td>
-<td align="left">10%</td>
-<td align="left">3.64%</td>
-<td align="left">17.78%</td>
+<td align="left">ERBB2.cna.AMPLIFICATION</td>
+<td align="left">ERBB2.cna.AMPLIFICATION</td>
+<td align="left">5%</td>
+<td align="left">0%</td>
+<td align="left">11.111%</td>
+<td align="left">Inf</td>
+<td align="left">1.18</td>
+<td align="left">Inf</td>
+<td align="left">1.62e-02</td>
+<td align="right">0.1944</td>
+</tr>
+<tr class="even">
+<td align="left">FGFR1.cna.AMPLIFICATION</td>
+<td align="left">FGFR1.cna.AMPLIFICATION</td>
+<td align="left">6%</td>
+<td align="left">1.818%</td>
+<td align="left">11.111%</td>
+<td align="left">6.64</td>
+<td align="left">0.7</td>
+<td align="left">324.48</td>
+<td align="left">8.75e-02</td>
+<td align="right">0.6840</td>
+</tr>
+<tr class="odd">
+<td align="left">NOTCH1</td>
+<td align="left">NOTCH1</td>
+<td align="left">8%</td>
+<td align="left">3.636%</td>
+<td align="left">13.333%</td>
+<td align="left">4.02</td>
+<td align="left">0.67</td>
+<td align="left">42.79</td>
+<td align="left">1.35e-01</td>
+<td align="right">0.6840</td>
+</tr>
+<tr class="even">
+<td align="left">TP53</td>
+<td align="left">TP53</td>
+<td align="left">38%</td>
+<td align="left">30.909%</td>
+<td align="left">46.667%</td>
+<td align="left">1.94</td>
+<td align="left">0.8</td>
+<td align="left">4.81</td>
+<td align="left">1.47e-01</td>
+<td align="right">0.6840</td>
+</tr>
+<tr class="odd">
+<td align="left">TERT</td>
+<td align="left">TERT</td>
+<td align="left">15%</td>
+<td align="left">20%</td>
+<td align="left">8.889%</td>
+<td align="left">0.39</td>
+<td align="left">0.08</td>
+<td align="left">1.46</td>
+<td align="left">1.62e-01</td>
+<td align="right">0.6840</td>
+</tr>
+<tr class="even">
+<td align="left">DOT1L</td>
+<td align="left">DOT1L</td>
+<td align="left">5%</td>
+<td align="left">1.818%</td>
+<td align="left">8.889%</td>
 <td align="left">5.19</td>
-<td align="left">1.71e-01</td>
-<td align="left">8.19e-01</td>
 <td align="left">0.49</td>
 <td align="left">263.77</td>
-</tr>
-<tr class="even">
-<td align="left">MLL3</td>
-<td align="left">MLL3</td>
-<td align="left">6%</td>
-<td align="left">9.09%</td>
-<td align="left">2.22%</td>
-<td align="left">0.23</td>
-<td align="left">2.19e-01</td>
-<td align="left">8.19e-01</td>
-<td align="left">0</td>
-<td align="left">2.17</td>
+<td align="left">1.71e-01</td>
+<td align="right">0.6840</td>
 </tr>
 <tr class="odd">
-<td align="left">CDH1</td>
-<td align="left">CDH1</td>
-<td align="left">6%</td>
-<td align="left">9.09%</td>
-<td align="left">2.22%</td>
-<td align="left">0.23</td>
-<td align="left">2.19e-01</td>
-<td align="left">8.19e-01</td>
-<td align="left">0</td>
-<td align="left">2.17</td>
-</tr>
-<tr class="even">
-<td align="left">MYC.cna</td>
-<td align="left">MYC.cna</td>
-<td align="left">12%</td>
-<td align="left">18.18%</td>
-<td align="left">4.44%</td>
-<td align="left">0.23</td>
-<td align="left">2.19e-01</td>
-<td align="left">8.19e-01</td>
-<td align="left">0</td>
-<td align="left">2.17</td>
-</tr>
-<tr class="odd">
-<td align="left">EGFR</td>
-<td align="left">EGFR</td>
-<td align="left">9%</td>
-<td align="left">5.45%</td>
-<td align="left">13.33%</td>
-<td align="left">2.64</td>
-<td align="left">2.92e-01</td>
-<td align="left">8.19e-01</td>
-<td align="left">0.52</td>
-<td align="left">17.34</td>
-</tr>
-<tr class="even">
-<td align="left">KEAP1</td>
-<td align="left">KEAP1</td>
+<td align="left">GATA3</td>
+<td align="left">GATA3</td>
 <td align="left">5%</td>
-<td align="left">7.27%</td>
-<td align="left">2.22%</td>
-<td align="left">0.29</td>
-<td align="left">3.75e-01</td>
-<td align="left">8.19e-01</td>
-<td align="left">0.01</td>
-<td align="left">3.1</td>
+<td align="left">1.818%</td>
+<td align="left">8.889%</td>
+<td align="left">5.19</td>
+<td align="left">0.49</td>
+<td align="left">263.77</td>
+<td align="left">1.71e-01</td>
+<td align="right">0.6840</td>
+</tr>
+<tr class="even">
+<td align="left">PTPRT</td>
+<td align="left">PTPRT</td>
+<td align="left">6%</td>
+<td align="left">9.091%</td>
+<td align="left">2.222%</td>
+<td align="left">0.23</td>
+<td align="left">0</td>
+<td align="left">2.17</td>
+<td align="left">2.19e-01</td>
+<td align="right">0.7140</td>
 </tr>
 </tbody>
 </table>
@@ -304,7 +316,7 @@
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">test</span><span class="op">$</span><span class="va">vPlot</span></code></pre></div>
 <div id="htmlwidget-54a4873249b169eb6149" style="width:960px;height:480px;" class="plotly html-widget"></div>
-<script type="application/json" data-for="htmlwidget-54a4873249b169eb6149">{"x":{"visdat":{"1606852775419":["function () ","plotlyVisDat"]},"cur_data":"1606852775419","attrs":{"1606852775419":{"x":{},"y":{},"text":{},"mode":"markers","alpha_stroke":1,"sizes":[10,100],"spans":[1,20]}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"title":"Volcano Plot","xaxis":{"domain":[0,1],"automargin":true,"title":".data$OddsRatio"},"yaxis":{"domain":[0,1],"automargin":true,"title":"-log10(.data$Pvalue)"},"hovermode":"closest","showlegend":false},"source":"A","config":{"showSendToCloud":false},"data":[{"x":[0,0,0.15,0.19,5.19,0.23,0.23,0.23,2.64,0.29,0.29,0.29,0.29,0.29,2.56,2.56,2.56,2.56,0.7,0.47,0.47,0.47,0.58,1.48,1.88,1.88,0.6,0.67,0.74,1.24,0.81,1.24,1.24,0.81,0.81,1.24,1.24,0.81,0.98],"y":[1.50584540598156,1.20481541031758,1.05799194697769,0.903089986991944,0.767003889607846,0.659555885159882,0.659555885159882,0.659555885159882,0.534617148551582,0.425968732272281,0.425968732272281,0.425968732272281,0.425968732272281,0.425968732272281,0.393618634889395,0.393618634889395,0.393618634889395,0.393618634889395,0.382999658879101,0.343901797987168,0.343901797987168,0.335358024443874,0.268411234813261,0.238824186844269,0.183758700008217,0.183758700008217,0.162411561764489,0.1249387366083,0.114638779968488,-0,-0,-0,-0,-0,-0,-0,-0,-0,-0],"text":["Gene : FGFR1.cna <\/br> Odds Ratio : 0","Gene : MLL2 <\/br> Odds Ratio : 0","Gene : CDKN2B.cna <\/br> Odds Ratio : 0.15","Gene : CREBBP <\/br> Odds Ratio : 0.19","Gene : ERBB2.cna <\/br> Odds Ratio : 5.19","Gene : MLL3 <\/br> Odds Ratio : 0.23","Gene : CDH1 <\/br> Odds Ratio : 0.23","Gene : MYC.cna <\/br> Odds Ratio : 0.23","Gene : EGFR <\/br> Odds Ratio : 2.64","Gene : KEAP1 <\/br> Odds Ratio : 0.29","Gene : AR <\/br> Odds Ratio : 0.29","Gene : SMARCA4 <\/br> Odds Ratio : 0.29","Gene : CCND1.cna <\/br> Odds Ratio : 0.29","Gene : FGF19.cna <\/br> Odds Ratio : 0.29","Gene : RB1 <\/br> Odds Ratio : 2.56","Gene : BRAF <\/br> Odds Ratio : 2.56","Gene : PIK3C2G <\/br> Odds Ratio : 2.56","Gene : CDK12.cna <\/br> Odds Ratio : 2.56","Gene : TP53 <\/br> Odds Ratio : 0.7","Gene : STK11 <\/br> Odds Ratio : 0.47","Gene : APC <\/br> Odds Ratio : 0.47","Gene : CDKN2A.cna <\/br> Odds Ratio : 0.47","Gene : PIK3CA <\/br> Odds Ratio : 0.58","Gene : TERT <\/br> Odds Ratio : 1.48","Gene : EPHA5 <\/br> Odds Ratio : 1.88","Gene : TSC1 <\/br> Odds Ratio : 1.88","Gene : MCL1.cna <\/br> Odds Ratio : 0.6","Gene : FAT1 <\/br> Odds Ratio : 0.67","Gene : KRAS <\/br> Odds Ratio : 0.74","Gene : PTPRT <\/br> Odds Ratio : 1.24","Gene : FLT4 <\/br> Odds Ratio : 0.81","Gene : NOTCH1 <\/br> Odds Ratio : 1.24","Gene : ATM <\/br> Odds Ratio : 1.24","Gene : DOT1L <\/br> Odds Ratio : 0.81","Gene : NOTCH3 <\/br> Odds Ratio : 0.81","Gene : ALK <\/br> Odds Ratio : 1.24","Gene : PTPRD <\/br> Odds Ratio : 1.24","Gene : GATA3 <\/br> Odds Ratio : 0.81","Gene : MLL <\/br> Odds Ratio : 0.98"],"mode":"markers","type":"scatter","marker":{"color":"rgba(31,119,180,1)","line":{"color":"rgba(31,119,180,1)"}},"error_y":{"color":"rgba(31,119,180,1)"},"error_x":{"color":"rgba(31,119,180,1)"},"line":{"color":"rgba(31,119,180,1)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.2,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+<script type="application/json" data-for="htmlwidget-54a4873249b169eb6149">{"x":{"visdat":{"e47d278c96d1":["function () ","plotlyVisDat"]},"cur_data":"e47d278c96d1","attrs":{"e47d278c96d1":{"x":{},"y":{},"text":{},"mode":"markers","alpha_stroke":1,"sizes":[10,100],"spans":[1,20]}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"title":"Volcano Plot","xaxis":{"domain":[0,1],"automargin":true,"title":".data$OddsRatio"},"yaxis":{"domain":[0,1],"automargin":true,"title":"-log10(.data$Pvalue)"},"hovermode":"closest","showlegend":false},"source":"A","config":{"showSendToCloud":false},"data":[{"x":[null,0,null,6.64,4.02,1.94,0.39,5.19,5.19,0.23,0.23,3.27,0.29,0.29,2.56,2.56,2.56,2.15,1.88,1.88,1.88,1.88,0.6,0.6,0.6,1.68,1.59,1.25,0.74,0.81,1.02,1.24,0.81,1.24,1.24,0.81],"y":[2.16557929631847,1.80966830182971,1.79048498545737,1.05799194697769,0.869666231504994,0.832682665251824,0.790484985457369,0.767003889607846,0.767003889607846,0.659555885159882,0.659555885159882,0.623423042943488,0.425968732272281,0.425968732272281,0.393618634889395,0.393618634889395,0.393618634889395,0.335358024443874,0.183758700008217,0.183758700008217,0.183758700008217,0.183758700008217,0.162411561764489,0.162411561764489,0.162411561764489,0.156144577376839,0.137868620686963,0.11690664142431,0.114638779968488,-0,-0,-0,-0,-0,-0,-0],"text":["Gene : CDK12.cna.AMPLIFICATION <\/br> Odds Ratio : Inf","Gene : STK11 <\/br> Odds Ratio : 0","Gene : ERBB2.cna.AMPLIFICATION <\/br> Odds Ratio : Inf","Gene : FGFR1.cna.AMPLIFICATION <\/br> Odds Ratio : 6.64","Gene : NOTCH1 <\/br> Odds Ratio : 4.02","Gene : TP53 <\/br> Odds Ratio : 1.94","Gene : TERT <\/br> Odds Ratio : 0.39","Gene : DOT1L <\/br> Odds Ratio : 5.19","Gene : GATA3 <\/br> Odds Ratio : 5.19","Gene : PTPRT <\/br> Odds Ratio : 0.23","Gene : MYC.cna.AMPLIFICATION <\/br> Odds Ratio : 0.23","Gene : CREBBP <\/br> Odds Ratio : 3.27","Gene : KEAP1 <\/br> Odds Ratio : 0.29","Gene : EPHA5 <\/br> Odds Ratio : 0.29","Gene : CDH1 <\/br> Odds Ratio : 2.56","Gene : ATM <\/br> Odds Ratio : 2.56","Gene : ALK <\/br> Odds Ratio : 2.56","Gene : PTPRD <\/br> Odds Ratio : 2.15","Gene : AR <\/br> Odds Ratio : 1.88","Gene : TSC1 <\/br> Odds Ratio : 1.88","Gene : SMARCA4 <\/br> Odds Ratio : 1.88","Gene : NOTCH3 <\/br> Odds Ratio : 1.88","Gene : RB1 <\/br> Odds Ratio : 0.6","Gene : BRAF <\/br> Odds Ratio : 0.6","Gene : MCL1.cna.AMPLIFICATION <\/br> Odds Ratio : 0.6","Gene : APC <\/br> Odds Ratio : 1.68","Gene : EGFR <\/br> Odds Ratio : 1.59","Gene : PIK3CA <\/br> Odds Ratio : 1.25","Gene : KRAS <\/br> Odds Ratio : 0.74","Gene : FLT4 <\/br> Odds Ratio : 0.81","Gene : FAT1 <\/br> Odds Ratio : 1.02","Gene : PIK3C2G <\/br> Odds Ratio : 1.24","Gene : CCND1.cna.AMPLIFICATION <\/br> Odds Ratio : 0.81","Gene : CDKN2A.cna.DELETION <\/br> Odds Ratio : 1.24","Gene : CDKN2B.cna.DELETION <\/br> Odds Ratio : 1.24","Gene : FGF19.cna.AMPLIFICATION <\/br> Odds Ratio : 0.81"],"mode":"markers","type":"scatter","marker":{"color":"rgba(31,119,180,1)","line":{"color":"rgba(31,119,180,1)"}},"error_y":{"color":"rgba(31,119,180,1)"},"error_x":{"color":"rgba(31,119,180,1)"},"line":{"color":"rgba(31,119,180,1)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.2,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
 </div>
 <div id="continous" class="section level2">
 <h2 class="hasAnchor">
@@ -315,7 +327,7 @@
 <span class="va">outcome</span> <span class="op">&lt;-</span>  <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">df</span><span class="op">)</span><span class="op">)</span>
 <span class="va">tab.out</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gen.summary.html">gen.summary</a></span><span class="op">(</span>gen.dat <span class="op">=</span> <span class="va">df</span>,
                    outcome <span class="op">=</span> <span class="va">outcome</span>,
-                   filter <span class="op">=</span> <span class="fl">0.05</span>,paired <span class="op">=</span> <span class="cn">FALSE</span>,
+                   filter <span class="op">=</span> <span class="fl">0.05</span>,
                    cont <span class="op">=</span> <span class="cn">TRUE</span>,rank <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
 <p>This returns the following:</p>
 <ul>
@@ -327,92 +339,125 @@
 <table class="table">
 <thead><tr class="header">
 <th align="left"></th>
+<th align="left">Feature</th>
+<th align="right">EventFrequency</th>
 <th align="right">Estimate</th>
 <th align="right">SD</th>
-<th align="right">Pvalue</th>
-<th align="right">MutationFreq</th>
+<th align="right">Lower</th>
+<th align="right">Upper</th>
+<th align="left">Pvalue</th>
 <th align="left">FDR</th>
 </tr></thead>
 <tbody>
 <tr class="odd">
-<td align="left">MCL1.cna</td>
-<td align="right">-0.34</td>
-<td align="right">0.19</td>
-<td align="right">0.0755</td>
-<td align="right">0.12</td>
-<td align="left">9.57e-01</td>
-</tr>
-<tr class="even">
-<td align="left">EPHA5</td>
-<td align="right">0.71</td>
-<td align="right">0.41</td>
-<td align="right">0.0830</td>
+<td align="left">SMARCA4.x</td>
+<td align="left">SMARCA4</td>
 <td align="right">0.05</td>
-<td align="left">9.57e-01</td>
-</tr>
-<tr class="odd">
-<td align="left">AR</td>
-<td align="right">0.70</td>
-<td align="right">0.41</td>
-<td align="right">0.0916</td>
-<td align="right">0.05</td>
-<td align="left">9.57e-01</td>
+<td align="right">1.116</td>
+<td align="right">0.399</td>
+<td align="right">0.335</td>
+<td align="right">1.898</td>
+<td align="left">6.13e-03</td>
+<td align="left">2.21e-01</td>
 </tr>
 <tr class="even">
-<td align="left">PTPRT</td>
-<td align="right">0.61</td>
-<td align="right">0.38</td>
-<td align="right">0.1080</td>
-<td align="right">0.06</td>
-<td align="left">9.57e-01</td>
-</tr>
-<tr class="odd">
-<td align="left">RB1</td>
-<td align="right">-0.53</td>
-<td align="right">0.38</td>
-<td align="right">0.1590</td>
-<td align="right">0.06</td>
-<td align="left">9.57e-01</td>
-</tr>
-<tr class="even">
-<td align="left">TSC1</td>
-<td align="right">0.44</td>
-<td align="right">0.41</td>
-<td align="right">0.2900</td>
-<td align="right">0.05</td>
-<td align="left">9.57e-01</td>
-</tr>
-<tr class="odd">
-<td align="left">TP53</td>
-<td align="right">0.19</td>
-<td align="right">0.19</td>
-<td align="right">0.3080</td>
-<td align="right">0.38</td>
-<td align="left">9.57e-01</td>
-</tr>
-<tr class="even">
+<td align="left">DOT1L.x</td>
 <td align="left">DOT1L</td>
-<td align="right">-0.36</td>
-<td align="right">0.41</td>
-<td align="right">0.3890</td>
 <td align="right">0.05</td>
-<td align="left">9.57e-01</td>
+<td align="right">1.007</td>
+<td align="right">0.402</td>
+<td align="right">0.220</td>
+<td align="right">1.794</td>
+<td align="left">1.38e-02</td>
+<td align="left">2.49e-01</td>
 </tr>
 <tr class="odd">
-<td align="left">STK11</td>
-<td align="right">0.28</td>
-<td align="right">0.35</td>
-<td align="right">0.4240</td>
-<td align="right">0.07</td>
-<td align="left">9.57e-01</td>
+<td align="left">KEAP1.x</td>
+<td align="left">KEAP1</td>
+<td align="right">0.05</td>
+<td align="right">0.723</td>
+<td align="right">0.408</td>
+<td align="right">-0.077</td>
+<td align="right">1.522</td>
+<td align="left">7.95e-02</td>
+<td align="left">5.40e-01</td>
 </tr>
 <tr class="even">
-<td align="left">CDKN2B.cna</td>
-<td align="right">0.14</td>
-<td align="right">0.19</td>
-<td align="right">0.4540</td>
-<td align="right">-0.12</td>
-<td align="left">9.57e-01</td>
+<td align="left">NOTCH3.x</td>
+<td align="left">NOTCH3</td>
+<td align="right">0.05</td>
+<td align="right">0.651</td>
+<td align="right">0.409</td>
+<td align="right">-0.151</td>
+<td align="right">1.453</td>
+<td align="left">1.15e-01</td>
+<td align="left">5.40e-01</td>
+</tr>
+<tr class="odd">
+<td align="left">ALK.x</td>
+<td align="left">ALK</td>
+<td align="right">0.06</td>
+<td align="right">0.566</td>
+<td align="right">0.376</td>
+<td align="right">-0.171</td>
+<td align="right">1.302</td>
+<td align="left">1.35e-01</td>
+<td align="left">5.40e-01</td>
+</tr>
+<tr class="even">
+<td align="left">KRAS.x</td>
+<td align="left">KRAS</td>
+<td align="right">0.13</td>
+<td align="right">0.388</td>
+<td align="right">0.266</td>
+<td align="right">-0.133</td>
+<td align="right">0.908</td>
+<td align="left">1.47e-01</td>
+<td align="left">5.40e-01</td>
+</tr>
+<tr class="odd">
+<td align="left">AR.x</td>
+<td align="left">AR</td>
+<td align="right">0.05</td>
+<td align="right">0.583</td>
+<td align="right">0.410</td>
+<td align="right">-0.221</td>
+<td align="right">1.387</td>
+<td align="left">1.58e-01</td>
+<td align="left">5.40e-01</td>
+</tr>
+<tr class="even">
+<td align="left">NOTCH1.x</td>
+<td align="left">NOTCH1</td>
+<td align="right">0.08</td>
+<td align="right">0.462</td>
+<td align="right">0.329</td>
+<td align="right">-0.184</td>
+<td align="right">1.107</td>
+<td align="left">1.64e-01</td>
+<td align="left">5.40e-01</td>
+</tr>
+<tr class="odd">
+<td align="left">EPHA5.x</td>
+<td align="left">EPHA5</td>
+<td align="right">0.05</td>
+<td align="right">0.563</td>
+<td align="right">0.410</td>
+<td align="right">-0.241</td>
+<td align="right">1.368</td>
+<td align="left">1.73e-01</td>
+<td align="left">5.40e-01</td>
+</tr>
+<tr class="even">
+<td align="left">FAT1.x</td>
+<td align="left">FAT1</td>
+<td align="right">0.11</td>
+<td align="right">0.381</td>
+<td align="right">0.286</td>
+<td align="right">-0.179</td>
+<td align="right">0.942</td>
+<td align="left">1.86e-01</td>
+<td align="left">5.40e-01</td>
 </tr>
 </tbody>
 </table>
@@ -423,7 +468,7 @@
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">tab.out</span><span class="op">$</span><span class="va">vPlot</span></code></pre></div>
 <div id="htmlwidget-d57ecbd3ad10bd2d35a2" style="width:960px;height:480px;" class="plotly html-widget"></div>
-<script type="application/json" data-for="htmlwidget-d57ecbd3ad10bd2d35a2">{"x":{"visdat":{"16068166f0048":["function () ","plotlyVisDat"]},"cur_data":"16068166f0048","attrs":{"16068166f0048":{"x":{},"y":{},"text":{},"mode":"markers","color":{},"alpha_stroke":1,"sizes":[10,100],"spans":[1,20]}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"title":"Volcano Plot","xaxis":{"domain":[0,1],"automargin":true,"title":"Estimate"},"yaxis":{"domain":[0,1],"automargin":true,"title":"-log10(.data$Pvalue)"},"hovermode":"closest","showlegend":false},"source":"A","config":{"showSendToCloud":false},"data":[{"x":[0.19,0.28,-0.2,-0.06,0.71,0.03,-0.53,0.61,0.7,-0.28,-0.13,-0.07,0.44,0.05,0.22,0.19,0.06,0.11,-0.16,0.23,-0.36,0.28,-0.15,0.09,-0.16,-0.03,0.24,0.2,0.31,-0.02,-0.02,0.08,0.01,0.14,0.15,-0.02,0.07,-0.34,-0.05],"y":[0.511449283499556,0.303643611266668,0.334419008982047,0.0925886392254138,1.08092190762393,0.0282604091122217,0.798602875679548,0.96657624451305,1.03810452633215,0.300162274132754,0.191114132640188,0.0958256317158365,0.537602002101044,0.0510982390297863,0.218963061378868,0.268411234813261,0.0574958938319193,0.10790539730952,0.166852888087215,0.266000713461613,0.410050398674292,0.372634143407267,0.149353764816933,0.0861861476162833,0.192464971931147,0.0254883072626717,0.273272790973428,0.267606240177031,0.341035157335565,0.0241088635982073,0.0419141514789149,0.181774106386044,0.0190880622231565,0.342944147142896,0.328827157284917,0.0419141514789149,0.149966742310231,1.12205304837081,0.102372908709559],"text":["Gene : TP53 <\/br> Estimate : 0.19","Gene : KEAP1 <\/br> Estimate : 0.28","Gene : KRAS <\/br> Estimate : -0.2","Gene : TERT <\/br> Estimate : -0.06","Gene : EPHA5 <\/br> Estimate : 0.71","Gene : MLL3 <\/br> Estimate : 0.03","Gene : RB1 <\/br> Estimate : -0.53","Gene : PTPRT <\/br> Estimate : 0.61","Gene : AR <\/br> Estimate : 0.7","Gene : FLT4 <\/br> Estimate : -0.28","Gene : PIK3CA <\/br> Estimate : -0.13","Gene : FAT1 <\/br> Estimate : -0.07","Gene : TSC1 <\/br> Estimate : 0.44","Gene : NOTCH1 <\/br> Estimate : 0.05","Gene : MLL2 <\/br> Estimate : 0.22","Gene : EGFR <\/br> Estimate : 0.19","Gene : CREBBP <\/br> Estimate : 0.06","Gene : CDH1 <\/br> Estimate : 0.11","Gene : BRAF <\/br> Estimate : -0.16","Gene : ATM <\/br> Estimate : 0.23","Gene : DOT1L <\/br> Estimate : -0.36","Gene : STK11 <\/br> Estimate : 0.28","Gene : SMARCA4 <\/br> Estimate : -0.15","Gene : PIK3C2G <\/br> Estimate : 0.09","Gene : APC <\/br> Estimate : -0.16","Gene : NOTCH3 <\/br> Estimate : -0.03","Gene : ALK <\/br> Estimate : 0.24","Gene : PTPRD <\/br> Estimate : 0.2","Gene : GATA3 <\/br> Estimate : 0.31","Gene : MLL <\/br> Estimate : -0.02","Gene : CCND1.cna <\/br> Estimate : -0.02","Gene : CDK12.cna <\/br> Estimate : 0.08","Gene : CDKN2A.cna <\/br> Estimate : 0.01","Gene : CDKN2B.cna <\/br> Estimate : 0.14","Gene : ERBB2.cna <\/br> Estimate : 0.15","Gene : FGF19.cna <\/br> Estimate : -0.02","Gene : FGFR1.cna <\/br> Estimate : 0.07","Gene : MCL1.cna <\/br> Estimate : -0.34","Gene : MYC.cna <\/br> Estimate : -0.05"],"mode":"markers","type":"scatter","name":"Non signifcant","marker":{"color":"rgba(252,141,98,1)","line":{"color":"rgba(252,141,98,1)"}},"textfont":{"color":"rgba(252,141,98,1)"},"error_y":{"color":"rgba(252,141,98,1)"},"error_x":{"color":"rgba(252,141,98,1)"},"line":{"color":"rgba(252,141,98,1)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.2,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+<script type="application/json" data-for="htmlwidget-d57ecbd3ad10bd2d35a2">{"x":{"visdat":{"e47dc4709c6":["function () ","plotlyVisDat"]},"cur_data":"e47dc4709c6","attrs":{"e47dc4709c6":{"x":{},"y":{},"text":{},"mode":"markers","color":{},"size":{},"alpha_stroke":1,"sizes":[10,100],"spans":[1,20]}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"title":"Volcano Plot","xaxis":{"domain":[0,1],"automargin":true,"title":"Estimate"},"yaxis":{"domain":[0,1],"automargin":true,"title":"-log10(Pvalue)"},"hovermode":"closest","showlegend":false},"source":"A","config":{"showSendToCloud":false},"data":[{"x":[1.116,1.007,0.723,0.651,0.566,0.388,0.583,0.462,0.563,0.381,0.49,0.488,0.474,-0.453,-0.45,-0.464,0.456,0.456,0.342,0.36,-0.382,-0.329,-0.295,0.181,0.235,0.221,-0.145,0.163,0.144,0.094,-0.116,0.06,0.123,-0.127,-0.003,0.001],"y":[2.21253952548158,1.86012091359876,1.09963287134353,0.939302159646388,0.869666231504994,0.832682665251824,0.801342913045577,0.785156151952302,0.761953896871205,0.730487055782084,0.707743928643524,0.703334809738469,0.673664139071249,0.632644078973981,0.627087997029893,0.580044251510242,0.568636235841013,0.568636235841013,0.517126416391246,0.510041520575165,0.500312917381596,0.369572124974976,0.3585258894959,0.323306390375133,0.270025714300444,0.250263684430939,0.177178354696895,0.175223537524454,0.137272471682025,0.132532512140949,0.129011186239425,0.126679398184601,0.126679398184601,0.119186407719209,0.00261361560268669,0.000869458712628891],"text":["Feature : SMARCA4  <\/br> Estimate : 1.12","Feature : DOT1L  <\/br> Estimate : 1.01","Feature : KEAP1  <\/br> Estimate : 0.72","Feature : NOTCH3  <\/br> Estimate : 0.65","Feature : ALK  <\/br> Estimate : 0.57","Feature : KRAS  <\/br> Estimate : 0.39","Feature : AR  <\/br> Estimate : 0.58","Feature : NOTCH1  <\/br> Estimate : 0.46","Feature : EPHA5  <\/br> Estimate : 0.56","Feature : FAT1  <\/br> Estimate : 0.38","Feature : BRAF  <\/br> Estimate : 0.49","Feature : MCL1_cna AMPLIFICATION <\/br> Estimate : 0.49","Feature : PTPRT  <\/br> Estimate : 0.47","Feature : FGFR1_cna AMPLIFICATION <\/br> Estimate : -0.45","Feature : CDH1  <\/br> Estimate : -0.45","Feature : FLT4  <\/br> Estimate : -0.46","Feature : CCND1_cna AMPLIFICATION <\/br> Estimate : 0.46","Feature : FGF19_cna AMPLIFICATION <\/br> Estimate : 0.46","Feature : PTPRD  <\/br> Estimate : 0.34","Feature : CREBBP  <\/br> Estimate : 0.36","Feature : CDK12_cna AMPLIFICATION <\/br> Estimate : -0.38","Feature : ERBB2_cna AMPLIFICATION <\/br> Estimate : -0.33","Feature : MYC_cna AMPLIFICATION <\/br> Estimate : -0.3","Feature : TERT  <\/br> Estimate : 0.18","Feature : ATM  <\/br> Estimate : 0.23","Feature : CDKN2B_cna DELETION <\/br> Estimate : 0.22","Feature : CDKN2A_cna DELETION <\/br> Estimate : -0.14","Feature : PIK3C2G  <\/br> Estimate : 0.16","Feature : GATA3  <\/br> Estimate : 0.14","Feature : PIK3CA  <\/br> Estimate : 0.09","Feature : APC  <\/br> Estimate : -0.12","Feature : TP53  <\/br> Estimate : 0.06","Feature : RB1  <\/br> Estimate : 0.12","Feature : TSC1  <\/br> Estimate : -0.13","Feature : STK11  <\/br> Estimate : 0","Feature : EGFR  <\/br> Estimate : 0"],"mode":"markers","type":"scatter","name":"Non signifcant","marker":{"color":"rgba(252,141,98,1)","size":[10,10,10,10,12.7272727272727,31.8181818181818,10,18.1818181818182,10,26.3636363636364,12.7272727272727,12.7272727272727,12.7272727272727,12.7272727272727,12.7272727272727,10,10,10,18.1818181818182,15.4545454545455,12.7272727272727,10,12.7272727272727,37.2727272727273,12.7272727272727,12.7272727272727,18.1818181818182,12.7272727272727,10,29.0909090909091,15.4545454545455,100,12.7272727272727,10,15.4545454545455,20.9090909090909],"sizemode":"area","line":{"color":"rgba(252,141,98,1)"}},"textfont":{"color":"rgba(252,141,98,1)","size":[10,10,10,10,12.7272727272727,31.8181818181818,10,18.1818181818182,10,26.3636363636364,12.7272727272727,12.7272727272727,12.7272727272727,12.7272727272727,12.7272727272727,10,10,10,18.1818181818182,15.4545454545455,12.7272727272727,10,12.7272727272727,37.2727272727273,12.7272727272727,12.7272727272727,18.1818181818182,12.7272727272727,10,29.0909090909091,15.4545454545455,100,12.7272727272727,10,15.4545454545455,20.9090909090909]},"error_y":{"color":"rgba(252,141,98,1)","width":[]},"error_x":{"color":"rgba(252,141,98,1)","width":[]},"line":{"color":"rgba(252,141,98,1)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.2,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
 </div>
 </div>
 <div id="survival-outcome" class="section level1">
@@ -470,57 +515,75 @@
 <thead><tr class="header">
 <th align="left"></th>
 <th align="left">Feature</th>
-<th align="right">Coefficient</th>
+<th align="right">EventFrequency</th>
+<th align="right">Estimate</th>
 <th align="right">HR</th>
-<th align="right">Pvalue</th>
-<th align="right">FDR</th>
-<th align="right">MutationFrequency</th>
+<th align="right">SD</th>
+<th align="right">Lower</th>
+<th align="right">Upper</th>
+<th align="left">Pvalue</th>
+<th align="left">FDR</th>
 </tr></thead>
 <tbody>
 <tr class="odd">
+<td align="left">TERT.x</td>
 <td align="left">TERT</td>
-<td align="left">TERT</td>
-<td align="right">0.89</td>
-<td align="right">2.44</td>
-<td align="right">0.059</td>
-<td align="right">0.354</td>
-<td align="right">0.14</td>
+<td align="right">0.137</td>
+<td align="right">0.890</td>
+<td align="right">2.435</td>
+<td align="right">0.471</td>
+<td align="right">0.967</td>
+<td align="right">6.134</td>
+<td align="left">5.90e-02</td>
+<td align="left">2.95e-01</td>
 </tr>
 <tr class="even">
-<td align="left">MLL</td>
-<td align="left">MLL</td>
-<td align="right">0.70</td>
-<td align="right">2.01</td>
-<td align="right">0.203</td>
-<td align="right">0.458</td>
-<td align="right">0.11</td>
+<td align="left">TP53.x</td>
+<td align="left">TP53</td>
+<td align="right">0.356</td>
+<td align="right">0.486</td>
+<td align="right">1.626</td>
+<td align="right">0.404</td>
+<td align="right">0.737</td>
+<td align="right">3.590</td>
+<td align="left">2.29e-01</td>
+<td align="left">5.72e-01</td>
 </tr>
 <tr class="odd">
-<td align="left">TP53</td>
-<td align="left">TP53</td>
-<td align="right">0.49</td>
-<td align="right">1.63</td>
-<td align="right">0.229</td>
-<td align="right">0.458</td>
-<td align="right">0.36</td>
+<td align="left">PIK3CA.x</td>
+<td align="left">PIK3CA</td>
+<td align="right">0.137</td>
+<td align="right">0.381</td>
+<td align="right">1.463</td>
+<td align="right">0.501</td>
+<td align="right">0.549</td>
+<td align="right">3.903</td>
+<td align="left">4.47e-01</td>
+<td align="left">7.10e-01</td>
 </tr>
 <tr class="even">
-<td align="left">PIK3CA</td>
-<td align="left">PIK3CA</td>
-<td align="right">0.38</td>
-<td align="right">1.46</td>
-<td align="right">0.447</td>
-<td align="right">0.671</td>
-<td align="right">0.14</td>
+<td align="left">KRAS.x</td>
+<td align="left">KRAS</td>
+<td align="right">0.137</td>
+<td align="right">-0.421</td>
+<td align="right">0.656</td>
+<td align="right">0.738</td>
+<td align="right">0.155</td>
+<td align="right">2.787</td>
+<td align="left">5.68e-01</td>
+<td align="left">7.10e-01</td>
 </tr>
 <tr class="odd">
-<td align="left">KRAS</td>
-<td align="left">KRAS</td>
-<td align="right">-0.42</td>
-<td align="right">0.66</td>
-<td align="right">0.568</td>
-<td align="right">0.682</td>
-<td align="right">0.14</td>
+<td align="left">FAT1.x</td>
+<td align="left">FAT1</td>
+<td align="right">0.137</td>
+<td align="right">0.131</td>
+<td align="right">1.140</td>
+<td align="right">0.548</td>
+<td align="right">0.389</td>
+<td align="right">3.337</td>
+<td align="left">8.11e-01</td>
+<td align="left">8.11e-01</td>
 </tr>
 </tbody>
 </table>
@@ -531,7 +594,7 @@
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">test</span><span class="op">$</span><span class="va">p</span></code></pre></div>
 <div id="htmlwidget-e76df25d4e1770d66a86" style="width:960px;height:480px;" class="plotly html-widget"></div>
-<script type="application/json" data-for="htmlwidget-e76df25d4e1770d66a86">{"x":{"visdat":{"160686f6b7308":["function () ","plotlyVisDat"]},"cur_data":"160686f6b7308","attrs":{"160686f6b7308":{"x":{},"y":{},"text":{},"mode":"markers","color":{},"alpha_stroke":1,"sizes":[10,100],"spans":[1,20]}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"title":"Volcano Plot","xaxis":{"domain":[0,1],"automargin":true,"title":"Coefficient"},"yaxis":{"domain":[0,1],"automargin":true,"title":"-log10(Pvalue)"},"hovermode":"closest","showlegend":false},"source":"A","config":{"showSendToCloud":false},"data":[{"x":[0.89,0.7,0.49,0.38,-0.42,0.13],"y":[1.22914798835786,0.692503962086787,0.640164517660112,0.349692476868064,0.245651664288981,0.0909791457888439],"text":["Feature : TERT <br> Hazard Ratio : 2.44 <br> Mutation Frequency : 0.14","Feature : MLL <br> Hazard Ratio : 2.01 <br> Mutation Frequency : 0.11","Feature : TP53 <br> Hazard Ratio : 1.63 <br> Mutation Frequency : 0.36","Feature : PIK3CA <br> Hazard Ratio : 1.46 <br> Mutation Frequency : 0.14","Feature : KRAS <br> Hazard Ratio : 0.66 <br> Mutation Frequency : 0.14","Feature : FAT1 <br> Hazard Ratio : 1.14 <br> Mutation Frequency : 0.14"],"mode":"markers","type":"scatter","name":"blue","marker":{"color":"rgba(252,141,98,1)","line":{"color":"rgba(252,141,98,1)"}},"textfont":{"color":"rgba(252,141,98,1)"},"error_y":{"color":"rgba(252,141,98,1)"},"error_x":{"color":"rgba(252,141,98,1)"},"line":{"color":"rgba(252,141,98,1)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.2,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script><ul>
+<script type="application/json" data-for="htmlwidget-e76df25d4e1770d66a86">{"x":{"visdat":{"e47d22bc7088":["function () ","plotlyVisDat"]},"cur_data":"e47d22bc7088","attrs":{"e47d22bc7088":{"x":{},"y":{},"text":{},"mode":"markers","color":{},"alpha_stroke":1,"sizes":[10,100],"spans":[1,20]}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"title":"Volcano Plot","xaxis":{"domain":[0,1],"automargin":true,"title":"Estimate"},"yaxis":{"domain":[0,1],"automargin":true,"title":"-log10(Pvalue)"},"hovermode":"closest","showlegend":false},"source":"A","config":{"showSendToCloud":false},"data":[{"x":[0.89,0.486,0.381,-0.421,0.131],"y":[1.22914798835786,0.640164517660112,0.349692476868064,0.245651664288981,0.0909791457888439],"text":["Feature : TERT  <br> Hazard Ratio : 2.435 <br> Event Frequency : 0.137","Feature : TP53  <br> Hazard Ratio : 1.626 <br> Event Frequency : 0.356","Feature : PIK3CA  <br> Hazard Ratio : 1.463 <br> Event Frequency : 0.137","Feature : KRAS  <br> Hazard Ratio : 0.656 <br> Event Frequency : 0.137","Feature : FAT1  <br> Hazard Ratio : 1.14 <br> Event Frequency : 0.137"],"mode":"markers","type":"scatter","name":"red","marker":{"color":"rgba(252,141,98,1)","line":{"color":"rgba(252,141,98,1)"}},"textfont":{"color":"rgba(252,141,98,1)"},"error_y":{"color":"rgba(252,141,98,1)"},"error_x":{"color":"rgba(252,141,98,1)"},"line":{"color":"rgba(252,141,98,1)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.2,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script><ul>
 <li>
 <code>KM</code> a list of Kaplan-Meier plots for the 10 most significant features</li>
 </ul>

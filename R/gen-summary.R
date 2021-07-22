@@ -11,6 +11,8 @@
 #' Default is 0 (all features included).
 #' @param cont Should the outcome be treated as a continuous value. Default is FALSE treated as categorical.
 #' @param rank Should the table returned be ordered by Pvalue. Boolean, default is T
+#' @param na.filt A numeric value between 0 and 1 (1 not included) that is the upper bound for the proportion of missing
+#' values in the features of the inputted gen.dat matrix. Variables that exceed this proportion of missing values will be removed.
 #' @return fits : a table of odds ratio and pvalues.
 #' @return forest.plot : A forest plot of the top 10 hits.
 #' @export
@@ -37,11 +39,14 @@
 #' tibble
 
 
-gen.summary <- function (gen.dat, outcome, filter = 0, cont = F, rank = T){
+gen.summary <- function (gen.dat, outcome, filter = 0, cont = F, rank = T, na.filt = 0){
 
   # perform checks #
   if(filter < 0 || filter >= 1)
     stop("The filter should be between 0 and 1 (1 non included) to proceed.")
+
+  if(na.filt < 0 || na.filt >= 1)
+    stop("The filter for missing proportion should be between 0 and 1 (1 non included) to proceed.")
 
   if (length(unique(outcome))/length(outcome) > 0.5 && cont == F){
     warning("The outcome you provided had too many unique values, and will be considered continuous.")
@@ -63,10 +68,20 @@ gen.summary <- function (gen.dat, outcome, filter = 0, cont = F, rank = T){
 
     # find those to remove #
     rm <- apply(gen.dat, 2, function(x) {
-      any(summary(as.factor(x[!is.na(x)]))/length(x[!is.na(x)]) < filter)
+      any(summary(as.factor(x[!is.na(x)]))/length(x) < filter) # length(x[!is.na(x)])
     })
     genes.rm <- names(rm[which(rm)])
     gen.dat <- gen.dat %>% select(-one_of(genes.rm))
+  }
+
+  # apply filter for missing values #
+  if(na.filt > 0){
+    rm <- apply(gen.dat, 2, function(x) {
+      sum(is.na(x))/length(x) > na.filt
+    })
+    genes.rm <- names(rm[which(rm)])
+    if(length(genes.rm) > 0)
+      gen.dat <- gen.dat %>% select(-one_of(genes.rm))
   }
 
   # check that some features are left after filtering #

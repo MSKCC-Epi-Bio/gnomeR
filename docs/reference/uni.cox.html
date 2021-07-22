@@ -146,7 +146,7 @@ Performs univariate cox proportional hazard model on every feature</h1>
 Performs univariate cox proportional hazard model on every feature</p>
     </div>
 
-    <pre class="usage"><span class='fu'>uni.cox</span><span class='op'>(</span><span class='va'>X</span>, <span class='va'>surv.dat</span>, <span class='va'>surv.formula</span>, filter <span class='op'>=</span> <span class='fl'>0</span>, genes <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>uni.cox</span><span class='op'>(</span><span class='va'>X</span>, <span class='va'>surv.dat</span>, <span class='va'>surv.formula</span>, filter <span class='op'>=</span> <span class='fl'>0</span>, genes <span class='op'>=</span> <span class='cn'>NULL</span>, na.filt <span class='op'>=</span> <span class='fl'>0</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -174,6 +174,11 @@ Default is 0 (all features included).</p></td>
       <th>genes</th>
       <td><p>a character vector of gene names that will be the only ones to be kept. Default is NULL, all genes are used.</p></td>
     </tr>
+    <tr>
+      <th>na.filt</th>
+      <td><p>A numeric value between 0 and 1 (1 not included) that is the upper bound for the proportion of missing
+values in the features of the inputted gen.dat matrix. Variables that exceed this proportion of missing values will be removed.</p></td>
+    </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
@@ -191,8 +196,48 @@ Default is 0 (all features included).</p></td>
 </div><div class='output co'>#&gt; <span class='warning'>Warning: MUTATION DATA: To ensure gene with multiple names/aliases are correctly grouped together, the</span>
 #&gt; <span class='warning'>      following genes in your maf dataframe have been recoded. You can supress this with recode.aliases = FALSE </span>
 #&gt; <span class='warning'> </span>
-#&gt; <span class='warning'>AMER1 recoded to FAM123B </span></div><div class='output co'>#&gt; <span class='warning'>Warning: All samples were sequenced on the same platform.</span>
-#&gt; <span class='warning'>              The specify.plat argument has been overwritten to FALSE.</span></div><div class='input'><span class='va'>surv.dat</span> <span class='op'>&lt;-</span> <span class='va'>clin.patients</span> <span class='op'>%&gt;%</span>
+#&gt; <span class='warning'>MLL3 recoded to KMT2C </span>
+#&gt; <span class='warning'>MUTATION DATA: To ensure gene with multiple names/aliases are correctly grouped together, the</span>
+#&gt; <span class='warning'>      following genes in your maf dataframe have been recoded. You can supress this with recode.aliases = FALSE </span>
+#&gt; <span class='warning'> </span>
+#&gt; <span class='warning'>MLL2 recoded to KMT2D </span>
+#&gt; <span class='warning'>MUTATION DATA: To ensure gene with multiple names/aliases are correctly grouped together, the</span>
+#&gt; <span class='warning'>      following genes in your maf dataframe have been recoded. You can supress this with recode.aliases = FALSE </span>
+#&gt; <span class='warning'> </span>
+#&gt; <span class='warning'>MRE11A recoded to MRE11 </span>
+#&gt; <span class='warning'>MUTATION DATA: To ensure gene with multiple names/aliases are correctly grouped together, the</span>
+#&gt; <span class='warning'>      following genes in your maf dataframe have been recoded. You can supress this with recode.aliases = FALSE </span>
+#&gt; <span class='warning'> </span>
+#&gt; <span class='warning'>MLL recoded to KMT2A </span>
+#&gt; <span class='warning'>MUTATION DATA: To ensure gene with multiple names/aliases are correctly grouped together, the</span>
+#&gt; <span class='warning'>      following genes in your maf dataframe have been recoded. You can supress this with recode.aliases = FALSE </span>
+#&gt; <span class='warning'> </span>
+#&gt; <span class='warning'>PARK2 recoded to PRKN </span>
+#&gt; <span class='warning'>MUTATION DATA: To ensure gene with multiple names/aliases are correctly grouped together, the</span>
+#&gt; <span class='warning'>      following genes in your maf dataframe have been recoded. You can supress this with recode.aliases = FALSE </span>
+#&gt; <span class='warning'> </span>
+#&gt; <span class='warning'>RFWD2 recoded to COP1 </span>
+#&gt; <span class='warning'>MUTATION DATA: To ensure gene with multiple names/aliases are correctly grouped together, the</span>
+#&gt; <span class='warning'>      following genes in your maf dataframe have been recoded. You can supress this with recode.aliases = FALSE </span>
+#&gt; <span class='warning'> </span>
+#&gt; <span class='warning'>PAK7 recoded to PAK5 </span>
+#&gt; <span class='warning'>MUTATION DATA: To ensure gene with multiple names/aliases are correctly grouped together, the</span>
+#&gt; <span class='warning'>      following genes in your maf dataframe have been recoded. You can supress this with recode.aliases = FALSE </span>
+#&gt; <span class='warning'> </span>
+#&gt; <span class='warning'>FAM46C recoded to TENT5C </span>
+#&gt; <span class='warning'>MUTATION DATA: To ensure gene with multiple names/aliases are correctly grouped together, the</span>
+#&gt; <span class='warning'>      following genes in your maf dataframe have been recoded. You can supress this with recode.aliases = FALSE </span>
+#&gt; <span class='warning'> </span>
+#&gt; <span class='warning'>FAM175A recoded to ABRAXAS1 </span>
+#&gt; <span class='warning'>MUTATION DATA: To ensure gene with multiple names/aliases are correctly grouped together, the</span>
+#&gt; <span class='warning'>      following genes in your maf dataframe have been recoded. You can supress this with recode.aliases = FALSE </span>
+#&gt; <span class='warning'> </span>
+#&gt; <span class='warning'>MYCL1 recoded to MYCL </span>
+#&gt; <span class='warning'>MUTATION DATA: To ensure gene with multiple names/aliases are correctly grouped together, the</span>
+#&gt; <span class='warning'>      following genes in your maf dataframe have been recoded. You can supress this with recode.aliases = FALSE </span>
+#&gt; <span class='warning'> </span>
+#&gt; <span class='warning'>TCEB1 recoded to ELOC </span></div><div class='output co'>#&gt; <span class='warning'>Warning: When panels argument is NULL only IMPACT samples can be annotated for missingness.</span>
+#&gt; <span class='warning'>          If you are using GENIE data, we recommend that you provide this argument.</span></div><div class='input'><span class='va'>surv.dat</span> <span class='op'>&lt;-</span> <span class='va'>clin.patients</span> <span class='op'>%&gt;%</span>
 <span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>X.Patient.Identifier</span> <span class='op'>%in%</span>
 <span class='fu'><a href='https://rdrr.io/r/base/abbreviate.html'>abbreviate</a></span><span class='op'>(</span><span class='va'>patients</span>,strict <span class='op'>=</span> <span class='cn'>TRUE</span>, minlength <span class='op'>=</span> <span class='fl'>9</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
   <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span><span class='va'>X.Patient.Identifier</span>,<span class='va'>Overall.Survival..Months.</span>,
@@ -207,44 +252,55 @@ Default is 0 (all features included).</p></td>
 <span class='fu'><a href='https://rdrr.io/r/base/abbreviate.html'>abbreviate</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>rownames</a></span><span class='op'>(</span><span class='va'>gen.dat</span><span class='op'>)</span>,strict <span class='op'>=</span> <span class='cn'>TRUE</span>, minlength <span class='op'>=</span> <span class='fl'>9</span><span class='op'>)</span><span class='op'>)</span>,<span class='op'>]</span>
 <span class='fu'>uni.cox</span><span class='op'>(</span>X <span class='op'>=</span> <span class='va'>X</span>, surv.dat <span class='op'>=</span> <span class='va'>surv.dat</span>,
 surv.formula <span class='op'>=</span> <span class='fu'>Surv</span><span class='op'>(</span><span class='va'>time</span>,<span class='va'>status</span><span class='op'>)</span><span class='op'>~</span><span class='va'>.</span>,filter <span class='op'>=</span> <span class='fl'>0.05</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='warning'>Warning: Loglik converged before variable  1 ; coefficient may be infinite. </span></div><div class='output co'>#&gt; <span class='warning'>Warning: Vectorized input to `element_text()` is not officially supported.</span>
-#&gt; <span class='warning'>Results may be unexpected or may change in future versions of ggplot2.</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Vectorized input to `element_text()` is not officially supported.</span>
-#&gt; <span class='warning'>Results may be unexpected or may change in future versions of ggplot2.</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Vectorized input to `element_text()` is not officially supported.</span>
-#&gt; <span class='warning'>Results may be unexpected or may change in future versions of ggplot2.</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Vectorized input to `element_text()` is not officially supported.</span>
-#&gt; <span class='warning'>Results may be unexpected or may change in future versions of ggplot2.</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Vectorized input to `element_text()` is not officially supported.</span>
-#&gt; <span class='warning'>Results may be unexpected or may change in future versions of ggplot2.</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Vectorized input to `element_text()` is not officially supported.</span>
-#&gt; <span class='warning'>Results may be unexpected or may change in future versions of ggplot2.</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Vectorized input to `element_text()` is not officially supported.</span>
-#&gt; <span class='warning'>Results may be unexpected or may change in future versions of ggplot2.</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Vectorized input to `element_text()` is not officially supported.</span>
-#&gt; <span class='warning'>Results may be unexpected or may change in future versions of ggplot2.</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Vectorized input to `element_text()` is not officially supported.</span>
-#&gt; <span class='warning'>Results may be unexpected or may change in future versions of ggplot2.</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Vectorized input to `element_text()` is not officially supported.</span>
-#&gt; <span class='warning'>Results may be unexpected or may change in future versions of ggplot2.</span></div><div class='output co'>#&gt; $tab
-#&gt;         Feature Coefficient   HR  Pvalue   FDR MutationFrequency
-#&gt; EGFR       EGFR        0.84 2.32 0.00821 0.214              0.10
-#&gt; MLL         MLL        0.94 2.57 0.01960 0.227              0.06
-#&gt; RB1         RB1        0.72 2.06 0.03480 0.227              0.09
-#&gt; CREBBP   CREBBP        0.90 2.46 0.03490 0.227              0.06
-#&gt; MLL2       MLL2        0.56 1.76 0.08590 0.341              0.10
-#&gt; TP53       TP53        0.40 1.49 0.08780 0.341              0.44
-#&gt; ATRX       ATRX       -1.21 0.30 0.09180 0.341              0.07
-#&gt; NF1         NF1        0.62 1.87 0.14800 0.455              0.06
-#&gt; KRAS       KRAS        0.48 1.62 0.15800 0.455              0.13
-#&gt; CDH1       CDH1       -0.97 0.38 0.17500 0.456              0.06
-#&gt; APC         APC       -0.65 0.52 0.27000 0.617              0.07
-#&gt; KEAP1     KEAP1        0.42 1.52 0.29100 0.617              0.08
-#&gt; PTEN       PTEN       -0.60 0.55 0.30900 0.617              0.06
-#&gt; TERT       TERT        0.30 1.35 0.34800 0.646              0.14
-#&gt; EPHA5     EPHA5       -0.27 0.77 0.60300 0.996              0.06
-#&gt; PIK3CA   PIK3CA        0.16 1.17 0.67100 0.996              0.11
-#&gt; NOTCH1   NOTCH1       -0.21 0.81 0.67900 0.996              0.07
-#&gt; SMARCA4 SMARCA4       -0.18 0.83 0.72100 0.996              0.06
-#&gt; ARID1A   ARID1A        0.12 1.12 0.78600 0.996              0.08
-#&gt; POLE       POLE       -0.12 0.89 0.84100 0.996              0.05
-#&gt; FAT1       FAT1       -0.07 0.94 0.86700 0.996              0.11
-#&gt; MLL3       MLL3       -0.06 0.94 0.89400 0.996              0.06
-#&gt; STK11     STK11        0.02 1.02 0.96300 0.996              0.09
-#&gt; PTPRT     PTPRT       -0.01 0.99 0.97800 0.996              0.05
-#&gt; ATM         ATM        0.01 1.01 0.97800 0.996              0.07
-#&gt; BRCA2     BRCA2      -18.16 0.00 0.99600 0.996              0.05
+</div><div class='output co'>#&gt; <span class='warning'>Warning: Loglik converged before variable  1 ; coefficient may be infinite. </span></div><div class='output co'>#&gt; $tab
+#&gt;            Feature EventFrequency Estimate    HR       SD Lower Upper   Pvalue
+#&gt; EGFR.x       EGFR           0.100    0.840 2.317    0.318 1.243 4.320 8.21e-03
+#&gt; RB1.x         RB1           0.093    0.721 2.057    0.342 1.053 4.018 3.48e-02
+#&gt; CREBBP.x   CREBBP           0.057    0.902 2.465    0.428 1.066 5.697 3.49e-02
+#&gt; TP53.x       TP53           0.443    0.400 1.492    0.234 0.942 2.363 8.78e-02
+#&gt; ATRX.x       ATRX           0.071   -1.209 0.298    0.717 0.073 1.217 9.18e-02
+#&gt; NF1.x         NF1           0.064    0.624 1.866    0.431 0.802 4.346 1.48e-01
+#&gt; KRAS.x       KRAS           0.129    0.483 1.621    0.342 0.830 3.166 1.58e-01
+#&gt; CDH1.x       CDH1           0.057   -0.972 0.378    0.717 0.093 1.543 1.75e-01
+#&gt; APC.x         APC           0.071   -0.650 0.522    0.590 0.164 1.659 2.70e-01
+#&gt; KEAP1.x     KEAP1           0.079    0.420 1.522    0.398 0.697 3.322 2.91e-01
+#&gt; PTEN.x       PTEN           0.057   -0.601 0.548    0.590 0.172 1.744 3.09e-01
+#&gt; TERT.x       TERT           0.136    0.297 1.346    0.317 0.724 2.505 3.48e-01
+#&gt; EPHA5.x     EPHA5           0.064   -0.268 0.765    0.514 0.279 2.098 6.03e-01
+#&gt; PIK3CA.x   PIK3CA           0.107    0.160 1.173    0.376 0.562 2.450 6.71e-01
+#&gt; NOTCH1.x   NOTCH1           0.071   -0.213 0.808    0.514 0.295 2.216 6.79e-01
+#&gt; SMARCA4.x SMARCA4           0.064   -0.184 0.832    0.514 0.304 2.281 7.21e-01
+#&gt; ARID1A.x   ARID1A           0.079    0.116 1.123    0.427 0.486 2.592 7.86e-01
+#&gt; POLE.x       POLE           0.050   -0.118 0.888    0.590 0.279 2.826 8.41e-01
+#&gt; FAT1.x       FAT1           0.107   -0.067 0.935    0.398 0.429 2.040 8.67e-01
+#&gt; STK11.x     STK11           0.086    0.020 1.020    0.426 0.442 2.353 9.63e-01
+#&gt; PTPRT.x     PTPRT           0.050   -0.014 0.986    0.515 0.360 2.703 9.78e-01
+#&gt; ATM.x         ATM           0.071    0.013 1.013    0.465 0.407 2.521 9.78e-01
+#&gt; BRCA2.x     BRCA2           0.050  -18.164 0.000 3374.407 0.000   Inf 9.96e-01
+#&gt;                FDR
+#&gt; EGFR.x    1.89e-01
+#&gt; RB1.x     2.67e-01
+#&gt; CREBBP.x  2.67e-01
+#&gt; TP53.x    4.23e-01
+#&gt; ATRX.x    4.23e-01
+#&gt; NF1.x     5.04e-01
+#&gt; KRAS.x    5.04e-01
+#&gt; CDH1.x    5.04e-01
+#&gt; APC.x     6.45e-01
+#&gt; KEAP1.x   6.45e-01
+#&gt; PTEN.x    6.45e-01
+#&gt; TERT.x    6.66e-01
+#&gt; EPHA5.x   9.96e-01
+#&gt; PIK3CA.x  9.96e-01
+#&gt; NOTCH1.x  9.96e-01
+#&gt; SMARCA4.x 9.96e-01
+#&gt; ARID1A.x  9.96e-01
+#&gt; POLE.x    9.96e-01
+#&gt; FAT1.x    9.96e-01
+#&gt; STK11.x   9.96e-01
+#&gt; PTPRT.x   9.96e-01
+#&gt; ATM.x     9.96e-01
+#&gt; BRCA2.x   9.96e-01
 #&gt; 
 #&gt; $p</div><div class='output co'>#&gt; <span class='message'>No trace type specified:</span>
 #&gt; <span class='message'>  Based on info supplied, a 'scatter' trace seems appropriate.</span>

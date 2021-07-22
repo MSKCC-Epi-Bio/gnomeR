@@ -145,7 +145,7 @@ is tested using Fisher's exact test and further adjusted for multiple comparison
 are dichotomized at their median.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>gen.summary</span><span class='op'>(</span><span class='va'>gen.dat</span>, <span class='va'>outcome</span>, filter <span class='op'>=</span> <span class='fl'>0</span>, paired <span class='op'>=</span> <span class='cn'>F</span>, cont <span class='op'>=</span> <span class='cn'>F</span>, rank <span class='op'>=</span> <span class='cn'>T</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>gen.summary</span><span class='op'>(</span><span class='va'>gen.dat</span>, <span class='va'>outcome</span>, filter <span class='op'>=</span> <span class='fl'>0</span>, cont <span class='op'>=</span> <span class='cn'>F</span>, rank <span class='op'>=</span> <span class='cn'>T</span>, na.filt <span class='op'>=</span> <span class='fl'>0</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -165,16 +165,17 @@ having a genetic event (only for binary features). All features with an event ra
 Default is 0 (all features included).</p></td>
     </tr>
     <tr>
-      <th>paired</th>
-      <td><p>Boolean if the data are paired. Default is FALSE.</p></td>
-    </tr>
-    <tr>
       <th>cont</th>
       <td><p>Should the outcome be treated as a continuous value. Default is FALSE treated as categorical.</p></td>
     </tr>
     <tr>
       <th>rank</th>
       <td><p>Should the table returned be ordered by Pvalue. Boolean, default is T</p></td>
+    </tr>
+    <tr>
+      <th>na.filt</th>
+      <td><p>A numeric value between 0 and 1 (1 not included) that is the upper bound for the proportion of missing
+values in the features of the inputted gen.dat matrix. Variables that exceed this proportion of missing values will be removed.</p></td>
     </tr>
     </table>
 
@@ -192,47 +193,82 @@ Default is 0 (all features included).</p></td>
 </div><div class='output co'>#&gt; <span class='warning'>Warning: MUTATION DATA: To ensure gene with multiple names/aliases are correctly grouped together, the</span>
 #&gt; <span class='warning'>      following genes in your maf dataframe have been recoded. You can supress this with recode.aliases = FALSE </span>
 #&gt; <span class='warning'> </span>
-#&gt; <span class='warning'>AMER1 recoded to FAM123B </span></div><div class='output co'>#&gt; <span class='warning'>Warning: The following genes in the final matrix were not part of the official IMPACT panel and thus couldn't be annotated for missing status. To see a complete list of genes in IMPACT please see 'impact_gene_info': FIP1L1, INSRR</span></div><div class='input'><span class='fu'>gen.summary</span><span class='op'>(</span>gen.dat <span class='op'>=</span> <span class='va'>gen.dat</span>,
+#&gt; <span class='warning'>MLL3 recoded to KMT2C </span>
+#&gt; <span class='warning'>MUTATION DATA: To ensure gene with multiple names/aliases are correctly grouped together, the</span>
+#&gt; <span class='warning'>      following genes in your maf dataframe have been recoded. You can supress this with recode.aliases = FALSE </span>
+#&gt; <span class='warning'> </span>
+#&gt; <span class='warning'>MLL2 recoded to KMT2D </span>
+#&gt; <span class='warning'>MUTATION DATA: To ensure gene with multiple names/aliases are correctly grouped together, the</span>
+#&gt; <span class='warning'>      following genes in your maf dataframe have been recoded. You can supress this with recode.aliases = FALSE </span>
+#&gt; <span class='warning'> </span>
+#&gt; <span class='warning'>MRE11A recoded to MRE11 </span>
+#&gt; <span class='warning'>MUTATION DATA: To ensure gene with multiple names/aliases are correctly grouped together, the</span>
+#&gt; <span class='warning'>      following genes in your maf dataframe have been recoded. You can supress this with recode.aliases = FALSE </span>
+#&gt; <span class='warning'> </span>
+#&gt; <span class='warning'>MLL recoded to KMT2A </span>
+#&gt; <span class='warning'>MUTATION DATA: To ensure gene with multiple names/aliases are correctly grouped together, the</span>
+#&gt; <span class='warning'>      following genes in your maf dataframe have been recoded. You can supress this with recode.aliases = FALSE </span>
+#&gt; <span class='warning'> </span>
+#&gt; <span class='warning'>PARK2 recoded to PRKN </span>
+#&gt; <span class='warning'>MUTATION DATA: To ensure gene with multiple names/aliases are correctly grouped together, the</span>
+#&gt; <span class='warning'>      following genes in your maf dataframe have been recoded. You can supress this with recode.aliases = FALSE </span>
+#&gt; <span class='warning'> </span>
+#&gt; <span class='warning'>RFWD2 recoded to COP1 </span>
+#&gt; <span class='warning'>MUTATION DATA: To ensure gene with multiple names/aliases are correctly grouped together, the</span>
+#&gt; <span class='warning'>      following genes in your maf dataframe have been recoded. You can supress this with recode.aliases = FALSE </span>
+#&gt; <span class='warning'> </span>
+#&gt; <span class='warning'>PAK7 recoded to PAK5 </span>
+#&gt; <span class='warning'>MUTATION DATA: To ensure gene with multiple names/aliases are correctly grouped together, the</span>
+#&gt; <span class='warning'>      following genes in your maf dataframe have been recoded. You can supress this with recode.aliases = FALSE </span>
+#&gt; <span class='warning'> </span>
+#&gt; <span class='warning'>FAM46C recoded to TENT5C </span>
+#&gt; <span class='warning'>MUTATION DATA: To ensure gene with multiple names/aliases are correctly grouped together, the</span>
+#&gt; <span class='warning'>      following genes in your maf dataframe have been recoded. You can supress this with recode.aliases = FALSE </span>
+#&gt; <span class='warning'> </span>
+#&gt; <span class='warning'>FAM175A recoded to ABRAXAS1 </span>
+#&gt; <span class='warning'>MUTATION DATA: To ensure gene with multiple names/aliases are correctly grouped together, the</span>
+#&gt; <span class='warning'>      following genes in your maf dataframe have been recoded. You can supress this with recode.aliases = FALSE </span>
+#&gt; <span class='warning'> </span>
+#&gt; <span class='warning'>MYCL1 recoded to MYCL </span>
+#&gt; <span class='warning'>MUTATION DATA: To ensure gene with multiple names/aliases are correctly grouped together, the</span>
+#&gt; <span class='warning'>      following genes in your maf dataframe have been recoded. You can supress this with recode.aliases = FALSE </span>
+#&gt; <span class='warning'> </span>
+#&gt; <span class='warning'>TCEB1 recoded to ELOC </span></div><div class='output co'>#&gt; <span class='warning'>Warning: When panels argument is NULL only IMPACT samples can be annotated for missingness.</span>
+#&gt; <span class='warning'>          If you are using GENIE data, we recommend that you provide this argument.</span></div><div class='input'><span class='fu'>gen.summary</span><span class='op'>(</span>gen.dat <span class='op'>=</span> <span class='va'>gen.dat</span>,
         outcome <span class='op'>=</span> <span class='va'>outcome</span>,
-        filter <span class='op'>=</span> <span class='fl'>0.05</span>,paired <span class='op'>=</span> <span class='cn'>FALSE</span>,
+        filter <span class='op'>=</span> <span class='fl'>0.05</span>,
         cont <span class='op'>=</span> <span class='cn'>FALSE</span>,rank <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; <span class='warning'>Warning: geom_hline(): Ignoring `mapping` because `yintercept` was provided.</span></div><div class='output co'>#&gt; $fits
-#&gt;        Feature Overall Metastasis(N=200) Primary(N=257) OddsRatio   Pvalue
-#&gt; FAT1      FAT1   6.13%                9%          3.89%      0.41 2.99e-02
-#&gt; ATRX      ATRX   5.69%              3.5%          7.39%       2.2 1.02e-01
-#&gt; CDKN2A  CDKN2A   5.25%                7%          3.89%      0.54 1.46e-01
-#&gt; PIK3CA  PIK3CA  10.72%               13%          8.95%      0.66 1.73e-01
-#&gt; TP53      TP53  42.89%               46%         40.47%       0.8 2.54e-01
-#&gt; BRAF      BRAF   5.03%              6.5%          3.89%      0.58 2.81e-01
-#&gt; TERT      TERT  14.88%             13.5%         15.95%      1.22 5.09e-01
-#&gt; NOTCH1  NOTCH1   5.47%              4.5%          6.23%      1.41 5.35e-01
-#&gt; MLL3      MLL3   7.22%                8%          6.61%      0.81 5.89e-01
-#&gt; EGFR      EGFR   8.53%              9.5%          7.78%       0.8 6.13e-01
-#&gt; KRAS      KRAS  12.69%             13.5%         12.06%      0.88 6.73e-01
-#&gt; RB1        RB1   5.03%              4.5%          5.45%      1.22 6.74e-01
-#&gt; MLL2      MLL2      7%              7.5%          6.61%      0.87 7.16e-01
-#&gt; ARID1A  ARID1A   7.88%              8.5%          7.39%      0.86 7.27e-01
-#&gt; ZFHX3    ZFHX3   3.06%              2.5%           3.5%      1.32 7.82e-01
-#&gt; ATM        ATM   5.47%              5.5%          5.45%      0.99 1.00e+00
-#&gt; APC        APC   7.88%                8%          7.78%      0.97 1.00e+00
-#&gt;             FDR Lower Upper
-#&gt; FAT1   5.08e-01  0.17  0.96
-#&gt; ATRX   7.35e-01  0.86  6.32
-#&gt; CDKN2A 7.35e-01  0.21  1.34
-#&gt; PIK3CA 7.35e-01  0.35  1.25
-#&gt; TP53   7.96e-01  0.54  1.18
-#&gt; BRAF   7.96e-01  0.22  1.48
-#&gt; TERT   8.83e-01   0.7  2.14
-#&gt; NOTCH1 8.83e-01  0.57   3.7
-#&gt; MLL3   8.83e-01  0.38  1.77
-#&gt; EGFR   8.83e-01  0.39  1.64
-#&gt; KRAS   8.83e-01  0.49  1.59
-#&gt; RB1    8.83e-01  0.48  3.27
-#&gt; MLL2   8.83e-01   0.4  1.93
-#&gt; ARID1A 8.83e-01  0.41  1.82
-#&gt; ZFHX3  8.86e-01  0.38  5.17
-#&gt; ATM    1.00e+00  0.41  2.47
-#&gt; APC    1.00e+00  0.46  2.06
+#&gt;        Feature Overall Metastasis(N=200) Primary(N=257) OddsRatio Lower Upper
+#&gt; RB1        RB1  5.033%                7%         3.502%      0.48  0.18  1.23
+#&gt; FAT1      FAT1  6.127%                8%         4.669%      0.56  0.24  1.31
+#&gt; BRAF      BRAF  5.033%              6.5%         3.891%      0.58  0.22  1.48
+#&gt; TERT      TERT  14.88%               17%         13.23%      0.74  0.43  1.29
+#&gt; APC        APC  7.877%              9.5%         6.615%      0.68  0.32  1.42
+#&gt; NOTCH1  NOTCH1   5.47%              6.5%         4.669%      0.71  0.29  1.72
+#&gt; ARID1A  ARID1A  7.877%                9%         7.004%      0.76  0.36   1.6
+#&gt; EGFR      EGFR  8.534%              9.5%         7.782%       0.8  0.39  1.64
+#&gt; ATM        ATM   5.47%                6%         5.058%      0.84  0.34  2.05
+#&gt; CDKN2A  CDKN2A  5.252%              5.5%         5.058%      0.92  0.37  2.31
+#&gt; ATRX      ATRX  5.689%                6%         5.447%       0.9  0.38  2.19
+#&gt; TP53      TP53 42.888%             43.5%        42.412%      0.96  0.65  1.41
+#&gt; PIK3CA  PIK3CA 10.722%               11%        10.506%      0.95   0.5  1.81
+#&gt; KRAS      KRAS 12.691%             12.5%         12.84%      1.03  0.57  1.88
+#&gt;          Pvalue       FDR
+#&gt; RB1    1.30e-01 0.8260000
+#&gt; FAT1   1.70e-01 0.8260000
+#&gt; BRAF   2.81e-01 0.8260000
+#&gt; TERT   2.90e-01 0.8260000
+#&gt; APC    2.95e-01 0.8260000
+#&gt; NOTCH1 4.14e-01 0.9476923
+#&gt; ARID1A 4.85e-01 0.9476923
+#&gt; EGFR   6.13e-01 0.9476923
+#&gt; ATM    6.83e-01 0.9476923
+#&gt; CDKN2A 8.36e-01 0.9476923
+#&gt; ATRX   8.40e-01 0.9476923
+#&gt; TP53   8.49e-01 0.9476923
+#&gt; PIK3CA 8.80e-01 0.9476923
+#&gt; KRAS   1.00e+00 1.0000000
 #&gt; 
 #&gt; $forest.plot</div><div class='output co'>#&gt; 
 #&gt; $vPlot</div><div class='output co'>#&gt; <span class='message'>No trace type specified:</span>
@@ -242,27 +278,24 @@ Default is 0 (all features included).</p></td>
 <span class='va'>outcome</span> <span class='op'>&lt;-</span>  <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span>n <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span><span class='op'>(</span><span class='va'>gen.dat</span><span class='op'>)</span><span class='op'>)</span>
 <span class='va'>tab.out</span> <span class='op'>&lt;-</span> <span class='fu'>gen.summary</span><span class='op'>(</span>gen.dat <span class='op'>=</span> <span class='va'>gen.dat</span>,
                    outcome <span class='op'>=</span> <span class='va'>outcome</span>,
-                   filter <span class='op'>=</span> <span class='fl'>0.05</span>,paired <span class='op'>=</span> <span class='cn'>FALSE</span>,
+                   filter <span class='op'>=</span> <span class='fl'>0.05</span>,
                    cont <span class='op'>=</span> <span class='cn'>TRUE</span>,rank <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
 <span class='va'>tab.out</span><span class='op'>$</span><span class='va'>fits</span>
-</div><div class='output co'>#&gt;        Estimate   SD Pvalue MutationFreq      FDR
-#&gt; TERT       0.26 0.13 0.0463         0.15 6.69e-01
-#&gt; BRAF       0.29 0.21 0.1670         0.05 6.69e-01
-#&gt; PIK3CA    -0.20 0.15 0.1870         0.11 6.69e-01
-#&gt; RB1       -0.27 0.21 0.2010         0.05 6.69e-01
-#&gt; ATM       -0.24 0.20 0.2420         0.05 6.69e-01
-#&gt; KRAS      -0.13 0.14 0.3420         0.13 6.69e-01
-#&gt; EGFR       0.13 0.16 0.4280         0.09 6.69e-01
-#&gt; MLL2       0.13 0.18 0.4620         0.07 6.69e-01
-#&gt; CDKN2A     0.15 0.21 0.4670         0.05 6.69e-01
-#&gt; MLL3      -0.12 0.18 0.5030         0.07 6.69e-01
-#&gt; APC       -0.11 0.17 0.5140         0.08 6.69e-01
-#&gt; TP53      -0.06 0.09 0.5260         0.43 6.69e-01
-#&gt; ZFHX3     -0.17 0.28 0.5410         0.06 6.69e-01
-#&gt; ARID1A    -0.10 0.17 0.5510         0.08 6.69e-01
-#&gt; ATRX      -0.09 0.20 0.6370         0.06 7.22e-01
-#&gt; FAT1       0.06 0.19 0.7640         0.06 8.12e-01
-#&gt; NOTCH1     0.04 0.20 0.8590         0.05 8.59e-01</div><div class='input'><span class='va'>tab.out</span><span class='op'>$</span><span class='va'>vPlot</span>
+</div><div class='output co'>#&gt;          Feature EventFrequency Estimate    SD  Lower Upper   Pvalue      FDR
+#&gt; PIK3CA.x PIK3CA           0.107   -0.235 0.149 -0.526 0.056 1.14e-01 9.46e-01
+#&gt; RB1.x       RB1           0.050   -0.291 0.210 -0.704 0.121 1.67e-01 9.46e-01
+#&gt; TERT.x     TERT           0.149    0.165 0.129 -0.088 0.418 2.03e-01 9.46e-01
+#&gt; BRAF.x     BRAF           0.050    0.226 0.211 -0.187 0.639 2.83e-01 9.77e-01
+#&gt; TP53.x     TP53           0.429    0.073 0.093 -0.109 0.256 4.31e-01 9.77e-01
+#&gt; ATRX.x     ATRX           0.057    0.125 0.199 -0.265 0.515 5.30e-01 9.77e-01
+#&gt; NOTCH1.x NOTCH1           0.055   -0.085 0.203 -0.482 0.312 6.75e-01 9.77e-01
+#&gt; KRAS.x     KRAS           0.127    0.056 0.138 -0.216 0.327 6.87e-01 9.77e-01
+#&gt; CDKN2A.x CDKN2A           0.053    0.061 0.207 -0.344 0.466 7.68e-01 9.77e-01
+#&gt; APC.x       APC           0.079   -0.039 0.171 -0.375 0.296 8.18e-01 9.77e-01
+#&gt; ARID1A.x ARID1A           0.079   -0.034 0.171 -0.370 0.301 8.40e-01 9.77e-01
+#&gt; EGFR.x     EGFR           0.085   -0.019 0.165 -0.343 0.304 9.06e-01 9.77e-01
+#&gt; ATM.x       ATM           0.055    0.018 0.203 -0.380 0.415 9.30e-01 9.77e-01
+#&gt; FAT1.x     FAT1           0.061   -0.005 0.192 -0.382 0.371 9.77e-01 9.77e-01</div><div class='input'><span class='va'>tab.out</span><span class='op'>$</span><span class='va'>vPlot</span>
 </div><div class='output co'>#&gt; <span class='message'>No trace type specified:</span>
 #&gt; <span class='message'>  Based on info supplied, a 'scatter' trace seems appropriate.</span>
 #&gt; <span class='message'>  Read more about this trace type -&gt; https://plotly.com/r/reference/#scatter</span></div><div class='output co'>#&gt; <span class='warning'>Warning: `line.width` does not currently support multiple values.</span></div><div class='output co'>#&gt; <span class='warning'>Warning: minimal value for n is 3, returning requested palette with 3 different levels</span></div><div class='output co'>#&gt; <span class='warning'>Warning: minimal value for n is 3, returning requested palette with 3 different levels</span></div></pre>

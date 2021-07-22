@@ -238,7 +238,7 @@ ggtopgenes <- function(maf, n_genes = 10) {
     select(.data$Hugo_Symbol) %>%
     pull(.data$Hugo_Symbol)
 
-  top_genes <- top_genes[1:n_genes] %>%
+  top_genes <- top_genes[1:min(length(top_genes),n_genes)] %>%
     as.character()
 
   maf2 <- maf %>%
@@ -276,7 +276,8 @@ gggenecor <- function(maf, n_genes = 10, ...) {
 
   keep <- names(sort(apply(bin.maf,2,
                            function(x){sum(x)}),
-                     decreasing = T))[1:n_genes]
+                     decreasing = T))
+  keep <- keep[1:min(length(keep),n_genes)]
   bin.maf <- bin.maf[,keep]
 
   p.corr <- GGally::ggcorr(dat = bin.maf, cor_matrix = stats::cor(bin.maf),limits = NULL)
@@ -301,7 +302,8 @@ ggcomut <- function(maf, n_genes = 10, ...) {
   bin.maf <- binmat(maf = maf,...)
   keep <- names(sort(apply(bin.maf,2,
                            function(x){sum(x)}),
-                     decreasing = T))[1:n_genes]
+                     decreasing = T))
+  keep <- keep[1:min(length(keep),n_genes)]
   bin.maf <- bin.maf[,keep]
 
   co.mut <- apply(bin.maf,2,function(x){

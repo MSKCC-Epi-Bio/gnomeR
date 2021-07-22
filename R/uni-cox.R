@@ -8,6 +8,8 @@
 #' having a genetic event (only for binary features). All features with an event rate lower than that value will be removed.
 #' Default is 0 (all features included).
 #' @param genes a character vector of gene names that will be the only ones to be kept. Default is NULL, all genes are used.
+#' @param na.filt A numeric value between 0 and 1 (1 not included) that is the upper bound for the proportion of missing
+#' values in the features of the inputted gen.dat matrix. Variables that exceed this proportion of missing values will be removed.
 #' @return tab A table of all the fits performed sorted by adjusted pvalues.
 #' @return p An interactive plot of log(pvalue) by hazard ration.
 #' @return KM List of survival plots of the top 10 most significant genes
@@ -39,11 +41,14 @@
 #' @importFrom plotly plot_ly layout
 
 
-uni.cox <- function(X,surv.dat,surv.formula,filter = 0,genes = NULL){
+uni.cox <- function(X,surv.dat,surv.formula,filter = 0,genes = NULL, na.filt = 0){
 
   # filtering #
   if(!(filter >= 0 && filter < 1))
     stop("Please select a filter value between 0 and 1")
+  if(na.filt < 0 || na.filt >= 1)
+    stop("The filter for missing proportion should be between 0 and 1 (1 non included) to proceed.")
+
   if(!is.null(genes) && sum(colnames(X) %in% genes) == 0)
     stop("The genes argument inputted did not match any of the columns in the features matrix X.")
   else if(!is.null(genes) && sum(colnames(X) %in% genes) > 0){
@@ -78,10 +83,20 @@ uni.cox <- function(X,surv.dat,surv.formula,filter = 0,genes = NULL){
 
     # find those to remove #
     rm <- apply(X, 2, function(x) {
-      any(summary(as.factor(x[!is.na(x)]))/length(x[!is.na(x)]) < filter)
+      any(summary(as.factor(x[!is.na(x)]))/length(x) < filter) # length(x[!is.na(x)])
     })
     genes.rm <- names(rm[which(rm)])
     X <- X %>% select(-one_of(genes.rm))
+  }
+
+  # apply filter for missing values #
+  if(na.filt > 0){
+    rm <- apply(X, 2, function(x) {
+      sum(is.na(x))/length(x) > na.filt
+    })
+    genes.rm <- names(rm[which(rm)])
+    if(length(genes.rm) > 0)
+      X <- X %>% select(-one_of(genes.rm))
   }
 
   if(is.null(dim(X)) )
@@ -149,7 +164,7 @@ uni.cox <- function(X,surv.dat,surv.formula,filter = 0,genes = NULL){
   uniVolcano <- plot_ly(data = fits %>%
                           mutate(FDRsign = ifelse(as.numeric(as.character(.data$FDR)) <
                                                     0.05, "Significant", "Non signifcant"),
-                                 Pvalue = as.numeric(Pvalue)), x = ~HR, y = ~-log10(Pvalue),
+                                 Pvalue = as.numeric(Pvalue)), x = ~Estimate, y = ~-log10(Pvalue),
                         text = ~paste('Feature :',Feature,
                                       '<br> Hazard Ratio :',HR,
                                       '<br> Event Frequency :',EventFrequency),

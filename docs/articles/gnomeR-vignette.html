@@ -127,18 +127,18 @@
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://dplyr.tidyverse.org/reference/tbl_df.html">as.tbl</a></span><span class="op">(</span><span class="va">mut</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">Tumor_Sample_Barcode</span>,<span class="va">Hugo_Symbol</span>,<span class="va">Variant_Classification</span>,<span class="va">Variant_Type</span>,<span class="va">Reference_Allele</span>,<span class="va">Tumor_Seq_Allele2</span><span class="op">)</span>
 <span class="co">#&gt; # A tibble: 3,179 x 6</span>
-<span class="co">#&gt;    Tumor_Sample_Ba… Hugo_Symbol Variant_Classif… Variant_Type Reference_Allele</span>
-<span class="co">#&gt;    &lt;fct&gt;            &lt;fct&gt;       &lt;fct&gt;            &lt;fct&gt;        &lt;fct&gt;           </span>
-<span class="co">#&gt;  1 P-0000062-T01-I… TP53        Missense_Mutati… SNP          G               </span>
-<span class="co">#&gt;  2 P-0000062-T01-I… EZH2        Missense_Mutati… SNP          G               </span>
-<span class="co">#&gt;  3 P-0000062-T01-I… MDM2        Missense_Mutati… SNP          A               </span>
-<span class="co">#&gt;  4 P-0000062-T01-I… IGF1R       Missense_Mutati… SNP          T               </span>
-<span class="co">#&gt;  5 P-0000062-T01-I… KEAP1       Missense_Mutati… SNP          G               </span>
-<span class="co">#&gt;  6 P-0000062-T01-I… KDM5C       Missense_Mutati… SNP          G               </span>
-<span class="co">#&gt;  7 P-0000065-T01-I… KRAS        Missense_Mutati… SNP          C               </span>
-<span class="co">#&gt;  8 P-0000065-T01-I… TERT        5'Flank          SNP          G               </span>
-<span class="co">#&gt;  9 P-0000065-T01-I… MAP2K1      Missense_Mutati… SNP          T               </span>
-<span class="co">#&gt; 10 P-0000065-T01-I… NCOR1       Nonsense_Mutati… SNP          C               </span>
+<span class="co">#&gt;    Tumor_Sample_Bar… Hugo_Symbol Variant_Classifi… Variant_Type Reference_Allele</span>
+<span class="co">#&gt;    &lt;fct&gt;             &lt;fct&gt;       &lt;fct&gt;             &lt;fct&gt;        &lt;fct&gt;           </span>
+<span class="co">#&gt;  1 P-0000062-T01-IM3 TP53        Missense_Mutation SNP          G               </span>
+<span class="co">#&gt;  2 P-0000062-T01-IM3 EZH2        Missense_Mutation SNP          G               </span>
+<span class="co">#&gt;  3 P-0000062-T01-IM3 MDM2        Missense_Mutation SNP          A               </span>
+<span class="co">#&gt;  4 P-0000062-T01-IM3 IGF1R       Missense_Mutation SNP          T               </span>
+<span class="co">#&gt;  5 P-0000062-T01-IM3 KEAP1       Missense_Mutation SNP          G               </span>
+<span class="co">#&gt;  6 P-0000062-T01-IM3 KDM5C       Missense_Mutation SNP          G               </span>
+<span class="co">#&gt;  7 P-0000065-T01-IM3 KRAS        Missense_Mutation SNP          C               </span>
+<span class="co">#&gt;  8 P-0000065-T01-IM3 TERT        5'Flank           SNP          G               </span>
+<span class="co">#&gt;  9 P-0000065-T01-IM3 MAP2K1      Missense_Mutation SNP          T               </span>
+<span class="co">#&gt; 10 P-0000065-T01-IM3 NCOR1       Nonsense_Mutation SNP          C               </span>
 <span class="co">#&gt; # … with 3,169 more rows, and 1 more variable: Tumor_Seq_Allele2 &lt;fct&gt;</span></code></pre></div>
 </div>
 <div id="cna" class="section level2">
@@ -147,13 +147,13 @@
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://dplyr.tidyverse.org/reference/tbl_df.html">as.tbl</a></span><span class="op">(</span><span class="va">cna</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span><span class="op">)</span>
 <span class="co">#&gt; # A tibble: 5 x 5</span>
-<span class="co">#&gt;   Hugo_Symbol P.0001890.T01.I… P.0000569.T01.I… P.0000795.T01.I…</span>
-<span class="co">#&gt;   &lt;fct&gt;                  &lt;int&gt;            &lt;int&gt;            &lt;int&gt;</span>
-<span class="co">#&gt; 1 ABL1                       0                0                0</span>
-<span class="co">#&gt; 2 ACVR1                      0                0                0</span>
-<span class="co">#&gt; 3 AKT1                       0                0                0</span>
-<span class="co">#&gt; 4 AKT2                       0                0                0</span>
-<span class="co">#&gt; 5 AKT3                       0                0                0</span>
+<span class="co">#&gt;   Hugo_Symbol P.0001890.T01.IM3 P.0000569.T01.IM3 P.0000795.T01.IM3</span>
+<span class="co">#&gt;   &lt;fct&gt;                   &lt;int&gt;             &lt;int&gt;             &lt;int&gt;</span>
+<span class="co">#&gt; 1 ABL1                        0                 0                 0</span>
+<span class="co">#&gt; 2 ACVR1                       0                 0                 0</span>
+<span class="co">#&gt; 3 AKT1                        0                 0                 0</span>
+<span class="co">#&gt; 4 AKT2                        0                 0                 0</span>
+<span class="co">#&gt; 5 AKT3                        0                 0                 0</span>
 <span class="co">#&gt; # … with 1 more variable: P.0002060.T01.IM3 &lt;int&gt;</span></code></pre></div>
 </div>
 <div id="fusions" class="section level2">
@@ -185,14 +185,14 @@
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://dplyr.tidyverse.org/reference/tbl_df.html">as.tbl</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">clin.patients</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#&gt; # A tibble: 6 x 6</span>
-<span class="co">#&gt;   X.Patient.Ident… Sex   Patient.s.Vital… Smoking.History Overall.Surviva…</span>
-<span class="co">#&gt;   &lt;fct&gt;            &lt;fct&gt; &lt;fct&gt;            &lt;fct&gt;           &lt;fct&gt;           </span>
-<span class="co">#&gt; 1 P-0000062        Male  DECEASED         Never           23.44           </span>
-<span class="co">#&gt; 2 P-0000065        Fema… DECEASED         Prev/Curr Smok… 12.69           </span>
-<span class="co">#&gt; 3 P-0000080        Fema… DECEASED         Never           &lt;NA&gt;            </span>
-<span class="co">#&gt; 4 P-0000088        Male  DECEASED         Never           26.13           </span>
-<span class="co">#&gt; 5 P-0000096        Male  DECEASED         Prev/Curr Smok… 17.62           </span>
-<span class="co">#&gt; 6 P-0000113        Fema… ALIVE            Prev/Curr Smok… 31.85           </span>
+<span class="co">#&gt;   X.Patient.Identif… Sex    Patient.s.Vital.… Smoking.History Overall.Survival.…</span>
+<span class="co">#&gt;   &lt;fct&gt;              &lt;fct&gt;  &lt;fct&gt;             &lt;fct&gt;           &lt;fct&gt;             </span>
+<span class="co">#&gt; 1 P-0000062          Male   DECEASED          Never           23.44             </span>
+<span class="co">#&gt; 2 P-0000065          Female DECEASED          Prev/Curr Smok… 12.69             </span>
+<span class="co">#&gt; 3 P-0000080          Female DECEASED          Never           NA                </span>
+<span class="co">#&gt; 4 P-0000088          Male   DECEASED          Never           26.13             </span>
+<span class="co">#&gt; 5 P-0000096          Male   DECEASED          Prev/Curr Smok… 17.62             </span>
+<span class="co">#&gt; 6 P-0000113          Female ALIVE             Prev/Curr Smok… 31.85             </span>
 <span class="co">#&gt; # … with 1 more variable: Overall.Survival.Status &lt;fct&gt;</span></code></pre></div>
 </div>
 <div id="samples-information" class="section level3">
@@ -201,14 +201,14 @@
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://dplyr.tidyverse.org/reference/tbl_df.html">as.tbl</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">clin.sample</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#&gt; # A tibble: 6 x 16</span>
-<span class="co">#&gt;   X.Patient.Ident… Sample.Identifi… Sample.Collecti… Specimen.Preser…</span>
-<span class="co">#&gt;   &lt;fct&gt;            &lt;fct&gt;            &lt;fct&gt;            &lt;fct&gt;           </span>
-<span class="co">#&gt; 1 P-0002656        P-0002656-T01-I… Outside          FFPE            </span>
-<span class="co">#&gt; 2 P-0001680        P-0001680-T02-I… Outside          FFPE            </span>
-<span class="co">#&gt; 3 P-0001741        P-0001741-T01-I… Outside          FFPE            </span>
-<span class="co">#&gt; 4 P-0002640        P-0002640-T01-I… Outside          FFPE            </span>
-<span class="co">#&gt; 5 P-0002091        P-0002091-T01-I… In-House         FFPE            </span>
-<span class="co">#&gt; 6 P-0001197        P-0001197-T01-I… Outside          FFPE            </span>
+<span class="co">#&gt;   X.Patient.Identif… Sample.Identifier Sample.Collection.S… Specimen.Preservati…</span>
+<span class="co">#&gt;   &lt;fct&gt;              &lt;fct&gt;             &lt;fct&gt;                &lt;fct&gt;               </span>
+<span class="co">#&gt; 1 P-0002656          P-0002656-T01-IM3 Outside              FFPE                </span>
+<span class="co">#&gt; 2 P-0001680          P-0001680-T02-IM3 Outside              FFPE                </span>
+<span class="co">#&gt; 3 P-0001741          P-0001741-T01-IM3 Outside              FFPE                </span>
+<span class="co">#&gt; 4 P-0002640          P-0002640-T01-IM3 Outside              FFPE                </span>
+<span class="co">#&gt; 5 P-0002091          P-0002091-T01-IM3 In-House             FFPE                </span>
+<span class="co">#&gt; 6 P-0001197          P-0001197-T01-IM3 Outside              FFPE                </span>
 <span class="co">#&gt; # … with 12 more variables: Specimen.Type &lt;fct&gt;, DNA.Input &lt;fct&gt;,</span>
 <span class="co">#&gt; #   Sample.coverage &lt;fct&gt;, Tumor.Purity &lt;fct&gt;, Matched.Status &lt;fct&gt;,</span>
 <span class="co">#&gt; #   Sample.Type &lt;fct&gt;, Primary.Tumor.Site &lt;fct&gt;, Metastatic.Site &lt;fct&gt;,</span>
@@ -243,7 +243,7 @@
 <code class="sourceCode R"><span class="va">patients</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html">as.character</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span><span class="op">(</span><span class="va">mut</span><span class="op">$</span><span class="va">Tumor_Sample_Barcode</span><span class="op">)</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">200</span><span class="op">]</span>
 <span class="va">bin.mut</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/binmat.html">binmat</a></span><span class="op">(</span>patients <span class="op">=</span> <span class="va">patients</span>,maf <span class="op">=</span> <span class="va">mut</span>,mut.type <span class="op">=</span> <span class="st">"SOMATIC"</span>,SNP.only <span class="op">=</span> <span class="cn">FALSE</span>,include.silent <span class="op">=</span> <span class="cn">FALSE</span>, specify.plat <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
 <span class="fu"><a href="https://dplyr.tidyverse.org/reference/tbl_df.html">as.tbl</a></span><span class="op">(</span><span class="va">bin.mut</span><span class="op">)</span>
-<span class="co">#&gt; # A tibble: 200 x 275</span>
+<span class="co">#&gt; # A tibble: 200 x 265</span>
 <span class="co">#&gt;     TP53  EZH2  MDM2 IGF1R KEAP1 KDM5C  KRAS  TERT MAP2K1 NCOR1  DDR2  IDH1</span>
 <span class="co">#&gt;    &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;</span>
 <span class="co">#&gt;  1     1     1     1     1     1     1     0     0      0     0     0     0</span>
@@ -256,30 +256,30 @@
 <span class="co">#&gt;  8     1     0     0     1     0     0     0     1      0     0     0     0</span>
 <span class="co">#&gt;  9     0     0     0     0     0     0     0     0      0     0     0     0</span>
 <span class="co">#&gt; 10     1     0     0     0     0     0     0     0      0     0     0     0</span>
-<span class="co">#&gt; # … with 190 more rows, and 263 more variables: FIP1L1 &lt;dbl&gt;, EPHA5 &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   RASA1 &lt;dbl&gt;, RAD50 &lt;dbl&gt;, ESR1 &lt;dbl&gt;, HGF &lt;dbl&gt;, MLL3 &lt;dbl&gt;, RET &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   FLT1 &lt;dbl&gt;, BRCA2 &lt;dbl&gt;, RB1 &lt;dbl&gt;, PTPRT &lt;dbl&gt;, AR &lt;dbl&gt;, FOXL2 &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   FLT4 &lt;dbl&gt;, PIK3CA &lt;dbl&gt;, EP300 &lt;dbl&gt;, FBXW7 &lt;dbl&gt;, MPL &lt;dbl&gt;, RIT1 &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   NTRK1 &lt;dbl&gt;, FAT1 &lt;dbl&gt;, RICTOR &lt;dbl&gt;, TNFAIP3 &lt;dbl&gt;, ARID1B &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   GNAQ &lt;dbl&gt;, SYK &lt;dbl&gt;, TSC1 &lt;dbl&gt;, NOTCH1 &lt;dbl&gt;, PAK1 &lt;dbl&gt;, MLL2 &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   POLE &lt;dbl&gt;, TRAF7 &lt;dbl&gt;, NF1 &lt;dbl&gt;, GNA11 &lt;dbl&gt;, INSR &lt;dbl&gt;, AXL &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   ERG &lt;dbl&gt;, ARID1A &lt;dbl&gt;, MLH1 &lt;dbl&gt;, EGFR &lt;dbl&gt;, TBX3 &lt;dbl&gt;, MDC1 &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   RECQL4 &lt;dbl&gt;, SPEN &lt;dbl&gt;, NTRK2 &lt;dbl&gt;, STAG2 &lt;dbl&gt;, CREBBP &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   AKT1 &lt;dbl&gt;, CTNNB1 &lt;dbl&gt;, PDPK1 &lt;dbl&gt;, CTCF &lt;dbl&gt;, CDH1 &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   PPP2R1A &lt;dbl&gt;, CCND1 &lt;dbl&gt;, RUNX1 &lt;dbl&gt;, CARD11 &lt;dbl&gt;, ARID5B &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   ERBB2 &lt;dbl&gt;, BCOR &lt;dbl&gt;, BRAF &lt;dbl&gt;, ATM &lt;dbl&gt;, MTOR &lt;dbl&gt;, STK40 &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   SPOP &lt;dbl&gt;, RAF1 &lt;dbl&gt;, MAP3K13 &lt;dbl&gt;, BRCA1 &lt;dbl&gt;, CIC &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   RPS6KA4 &lt;dbl&gt;, AKT3 &lt;dbl&gt;, NTRK3 &lt;dbl&gt;, ATRX &lt;dbl&gt;, PBRM1 &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   ASXL2 &lt;dbl&gt;, SF3B1 &lt;dbl&gt;, PIK3CB &lt;dbl&gt;, TET2 &lt;dbl&gt;, CDKN2B &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   MRE11A &lt;dbl&gt;, CBL &lt;dbl&gt;, TSHR &lt;dbl&gt;, BLM &lt;dbl&gt;, CBFB &lt;dbl&gt;, DOT1L &lt;dbl&gt;,</span>
+<span class="co">#&gt; # … with 190 more rows, and 253 more variables: EPHA5 &lt;dbl&gt;, RASA1 &lt;dbl&gt;,</span>
+<span class="co">#&gt; #   RAD50 &lt;dbl&gt;, ESR1 &lt;dbl&gt;, HGF &lt;dbl&gt;, RET &lt;dbl&gt;, FLT1 &lt;dbl&gt;, BRCA2 &lt;dbl&gt;,</span>
+<span class="co">#&gt; #   RB1 &lt;dbl&gt;, PTPRT &lt;dbl&gt;, AR &lt;dbl&gt;, FOXL2 &lt;dbl&gt;, FLT4 &lt;dbl&gt;, PIK3CA &lt;dbl&gt;,</span>
+<span class="co">#&gt; #   EP300 &lt;dbl&gt;, FBXW7 &lt;dbl&gt;, MPL &lt;dbl&gt;, RIT1 &lt;dbl&gt;, NTRK1 &lt;dbl&gt;, FAT1 &lt;dbl&gt;,</span>
+<span class="co">#&gt; #   RICTOR &lt;dbl&gt;, TNFAIP3 &lt;dbl&gt;, ARID1B &lt;dbl&gt;, GNAQ &lt;dbl&gt;, SYK &lt;dbl&gt;,</span>
+<span class="co">#&gt; #   TSC1 &lt;dbl&gt;, NOTCH1 &lt;dbl&gt;, PAK1 &lt;dbl&gt;, POLE &lt;dbl&gt;, TRAF7 &lt;dbl&gt;, NF1 &lt;dbl&gt;,</span>
+<span class="co">#&gt; #   GNA11 &lt;dbl&gt;, INSR &lt;dbl&gt;, AXL &lt;dbl&gt;, ERG &lt;dbl&gt;, ARID1A &lt;dbl&gt;, MLH1 &lt;dbl&gt;,</span>
+<span class="co">#&gt; #   EGFR &lt;dbl&gt;, TBX3 &lt;dbl&gt;, MDC1 &lt;dbl&gt;, RECQL4 &lt;dbl&gt;, SPEN &lt;dbl&gt;, NTRK2 &lt;dbl&gt;,</span>
+<span class="co">#&gt; #   STAG2 &lt;dbl&gt;, CREBBP &lt;dbl&gt;, AKT1 &lt;dbl&gt;, CTNNB1 &lt;dbl&gt;, PDPK1 &lt;dbl&gt;,</span>
+<span class="co">#&gt; #   CTCF &lt;dbl&gt;, CDH1 &lt;dbl&gt;, PPP2R1A &lt;dbl&gt;, CCND1 &lt;dbl&gt;, RUNX1 &lt;dbl&gt;,</span>
+<span class="co">#&gt; #   CARD11 &lt;dbl&gt;, ARID5B &lt;dbl&gt;, ERBB2 &lt;dbl&gt;, BCOR &lt;dbl&gt;, BRAF &lt;dbl&gt;, ATM &lt;dbl&gt;,</span>
+<span class="co">#&gt; #   MTOR &lt;dbl&gt;, STK40 &lt;dbl&gt;, SPOP &lt;dbl&gt;, RAF1 &lt;dbl&gt;, MAP3K13 &lt;dbl&gt;,</span>
+<span class="co">#&gt; #   BRCA1 &lt;dbl&gt;, CIC &lt;dbl&gt;, RPS6KA4 &lt;dbl&gt;, AKT3 &lt;dbl&gt;, NTRK3 &lt;dbl&gt;, ATRX &lt;dbl&gt;,</span>
+<span class="co">#&gt; #   PBRM1 &lt;dbl&gt;, ASXL2 &lt;dbl&gt;, SF3B1 &lt;dbl&gt;, PIK3CB &lt;dbl&gt;, TET2 &lt;dbl&gt;,</span>
+<span class="co">#&gt; #   CDKN2B &lt;dbl&gt;, CBL &lt;dbl&gt;, TSHR &lt;dbl&gt;, BLM &lt;dbl&gt;, CBFB &lt;dbl&gt;, DOT1L &lt;dbl&gt;,</span>
 <span class="co">#&gt; #   RBM10 &lt;dbl&gt;, SMAD3 &lt;dbl&gt;, CDK8 &lt;dbl&gt;, GATA2 &lt;dbl&gt;, STK11 &lt;dbl&gt;,</span>
 <span class="co">#&gt; #   SMARCA4 &lt;dbl&gt;, PIK3C2G &lt;dbl&gt;, HIST1H3B &lt;dbl&gt;, MYOD1 &lt;dbl&gt;, APC &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   EPHA3 &lt;dbl&gt;, ETV6 &lt;dbl&gt;, PTCH1 &lt;dbl&gt;, TET1 &lt;dbl&gt;, BMPR1A &lt;dbl&gt;, …</span></code></pre></div>
+<span class="co">#&gt; #   EPHA3 &lt;dbl&gt;, ETV6 &lt;dbl&gt;, PTCH1 &lt;dbl&gt;, TET1 &lt;dbl&gt;, BMPR1A &lt;dbl&gt;,</span>
+<span class="co">#&gt; #   GRIN2A &lt;dbl&gt;, NOTCH3 &lt;dbl&gt;, TMPRSS2 &lt;dbl&gt;, NSD1 &lt;dbl&gt;, …</span></code></pre></div>
 <p>Similarly including fusions and CNAs:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">bin.mut</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/binmat.html">binmat</a></span><span class="op">(</span>patients <span class="op">=</span> <span class="va">patients</span>,maf <span class="op">=</span> <span class="va">mut</span>,mut.type <span class="op">=</span> <span class="st">"SOMATIC"</span>,SNP.only <span class="op">=</span> <span class="cn">FALSE</span>,include.silent <span class="op">=</span> <span class="cn">FALSE</span>, fusion <span class="op">=</span> <span class="va">fusion</span>, cna <span class="op">=</span> <span class="va">cna</span>, specify.plat <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
 <span class="fu"><a href="https://dplyr.tidyverse.org/reference/tbl_df.html">as.tbl</a></span><span class="op">(</span><span class="va">bin.mut</span><span class="op">)</span>
-<span class="co">#&gt; # A tibble: 200 x 452</span>
+<span class="co">#&gt; # A tibble: 200 x 506</span>
 <span class="co">#&gt;     TP53  EZH2  MDM2 IGF1R KEAP1 KDM5C  KRAS  TERT MAP2K1 NCOR1  DDR2  IDH1</span>
 <span class="co">#&gt;    &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;</span>
 <span class="co">#&gt;  1     1     1     1     1     1     1     0     0      0     0     0     0</span>
@@ -292,25 +292,25 @@
 <span class="co">#&gt;  8     1     0     0     1     0     0     0     1      0     0     0     0</span>
 <span class="co">#&gt;  9     0     0     0     0     0     0     0     0      0     0     0     0</span>
 <span class="co">#&gt; 10     1     0     0     0     0     0     0     0      0     0     0     0</span>
-<span class="co">#&gt; # … with 190 more rows, and 440 more variables: FIP1L1 &lt;dbl&gt;, EPHA5 &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   RASA1 &lt;dbl&gt;, RAD50 &lt;dbl&gt;, ESR1 &lt;dbl&gt;, HGF &lt;dbl&gt;, MLL3 &lt;dbl&gt;, RET &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   FLT1 &lt;dbl&gt;, BRCA2 &lt;dbl&gt;, RB1 &lt;dbl&gt;, PTPRT &lt;dbl&gt;, AR &lt;dbl&gt;, FOXL2 &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   FLT4 &lt;dbl&gt;, PIK3CA &lt;dbl&gt;, EP300 &lt;dbl&gt;, FBXW7 &lt;dbl&gt;, MPL &lt;dbl&gt;, RIT1 &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   NTRK1 &lt;dbl&gt;, FAT1 &lt;dbl&gt;, RICTOR &lt;dbl&gt;, TNFAIP3 &lt;dbl&gt;, ARID1B &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   GNAQ &lt;dbl&gt;, SYK &lt;dbl&gt;, TSC1 &lt;dbl&gt;, NOTCH1 &lt;dbl&gt;, PAK1 &lt;dbl&gt;, MLL2 &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   POLE &lt;dbl&gt;, TRAF7 &lt;dbl&gt;, NF1 &lt;dbl&gt;, GNA11 &lt;dbl&gt;, INSR &lt;dbl&gt;, AXL &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   ERG &lt;dbl&gt;, ARID1A &lt;dbl&gt;, MLH1 &lt;dbl&gt;, EGFR &lt;dbl&gt;, TBX3 &lt;dbl&gt;, MDC1 &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   RECQL4 &lt;dbl&gt;, SPEN &lt;dbl&gt;, NTRK2 &lt;dbl&gt;, STAG2 &lt;dbl&gt;, CREBBP &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   AKT1 &lt;dbl&gt;, CTNNB1 &lt;dbl&gt;, PDPK1 &lt;dbl&gt;, CTCF &lt;dbl&gt;, CDH1 &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   PPP2R1A &lt;dbl&gt;, CCND1 &lt;dbl&gt;, RUNX1 &lt;dbl&gt;, CARD11 &lt;dbl&gt;, ARID5B &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   ERBB2 &lt;dbl&gt;, BCOR &lt;dbl&gt;, BRAF &lt;dbl&gt;, ATM &lt;dbl&gt;, MTOR &lt;dbl&gt;, STK40 &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   SPOP &lt;dbl&gt;, RAF1 &lt;dbl&gt;, MAP3K13 &lt;dbl&gt;, BRCA1 &lt;dbl&gt;, CIC &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   RPS6KA4 &lt;dbl&gt;, AKT3 &lt;dbl&gt;, NTRK3 &lt;dbl&gt;, ATRX &lt;dbl&gt;, PBRM1 &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   ASXL2 &lt;dbl&gt;, SF3B1 &lt;dbl&gt;, PIK3CB &lt;dbl&gt;, TET2 &lt;dbl&gt;, CDKN2B &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   MRE11A &lt;dbl&gt;, CBL &lt;dbl&gt;, TSHR &lt;dbl&gt;, BLM &lt;dbl&gt;, CBFB &lt;dbl&gt;, DOT1L &lt;dbl&gt;,</span>
+<span class="co">#&gt; # … with 190 more rows, and 494 more variables: EPHA5 &lt;dbl&gt;, RASA1 &lt;dbl&gt;,</span>
+<span class="co">#&gt; #   RAD50 &lt;dbl&gt;, ESR1 &lt;dbl&gt;, HGF &lt;dbl&gt;, RET &lt;dbl&gt;, FLT1 &lt;dbl&gt;, BRCA2 &lt;dbl&gt;,</span>
+<span class="co">#&gt; #   RB1 &lt;dbl&gt;, PTPRT &lt;dbl&gt;, AR &lt;dbl&gt;, FOXL2 &lt;dbl&gt;, FLT4 &lt;dbl&gt;, PIK3CA &lt;dbl&gt;,</span>
+<span class="co">#&gt; #   EP300 &lt;dbl&gt;, FBXW7 &lt;dbl&gt;, MPL &lt;dbl&gt;, RIT1 &lt;dbl&gt;, NTRK1 &lt;dbl&gt;, FAT1 &lt;dbl&gt;,</span>
+<span class="co">#&gt; #   RICTOR &lt;dbl&gt;, TNFAIP3 &lt;dbl&gt;, ARID1B &lt;dbl&gt;, GNAQ &lt;dbl&gt;, SYK &lt;dbl&gt;,</span>
+<span class="co">#&gt; #   TSC1 &lt;dbl&gt;, NOTCH1 &lt;dbl&gt;, PAK1 &lt;dbl&gt;, POLE &lt;dbl&gt;, TRAF7 &lt;dbl&gt;, NF1 &lt;dbl&gt;,</span>
+<span class="co">#&gt; #   GNA11 &lt;dbl&gt;, INSR &lt;dbl&gt;, AXL &lt;dbl&gt;, ERG &lt;dbl&gt;, ARID1A &lt;dbl&gt;, MLH1 &lt;dbl&gt;,</span>
+<span class="co">#&gt; #   EGFR &lt;dbl&gt;, TBX3 &lt;dbl&gt;, MDC1 &lt;dbl&gt;, RECQL4 &lt;dbl&gt;, SPEN &lt;dbl&gt;, NTRK2 &lt;dbl&gt;,</span>
+<span class="co">#&gt; #   STAG2 &lt;dbl&gt;, CREBBP &lt;dbl&gt;, AKT1 &lt;dbl&gt;, CTNNB1 &lt;dbl&gt;, PDPK1 &lt;dbl&gt;,</span>
+<span class="co">#&gt; #   CTCF &lt;dbl&gt;, CDH1 &lt;dbl&gt;, PPP2R1A &lt;dbl&gt;, CCND1 &lt;dbl&gt;, RUNX1 &lt;dbl&gt;,</span>
+<span class="co">#&gt; #   CARD11 &lt;dbl&gt;, ARID5B &lt;dbl&gt;, ERBB2 &lt;dbl&gt;, BCOR &lt;dbl&gt;, BRAF &lt;dbl&gt;, ATM &lt;dbl&gt;,</span>
+<span class="co">#&gt; #   MTOR &lt;dbl&gt;, STK40 &lt;dbl&gt;, SPOP &lt;dbl&gt;, RAF1 &lt;dbl&gt;, MAP3K13 &lt;dbl&gt;,</span>
+<span class="co">#&gt; #   BRCA1 &lt;dbl&gt;, CIC &lt;dbl&gt;, RPS6KA4 &lt;dbl&gt;, AKT3 &lt;dbl&gt;, NTRK3 &lt;dbl&gt;, ATRX &lt;dbl&gt;,</span>
+<span class="co">#&gt; #   PBRM1 &lt;dbl&gt;, ASXL2 &lt;dbl&gt;, SF3B1 &lt;dbl&gt;, PIK3CB &lt;dbl&gt;, TET2 &lt;dbl&gt;,</span>
+<span class="co">#&gt; #   CDKN2B &lt;dbl&gt;, CBL &lt;dbl&gt;, TSHR &lt;dbl&gt;, BLM &lt;dbl&gt;, CBFB &lt;dbl&gt;, DOT1L &lt;dbl&gt;,</span>
 <span class="co">#&gt; #   RBM10 &lt;dbl&gt;, SMAD3 &lt;dbl&gt;, CDK8 &lt;dbl&gt;, GATA2 &lt;dbl&gt;, STK11 &lt;dbl&gt;,</span>
 <span class="co">#&gt; #   SMARCA4 &lt;dbl&gt;, PIK3C2G &lt;dbl&gt;, HIST1H3B &lt;dbl&gt;, MYOD1 &lt;dbl&gt;, APC &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   EPHA3 &lt;dbl&gt;, ETV6 &lt;dbl&gt;, PTCH1 &lt;dbl&gt;, TET1 &lt;dbl&gt;, BMPR1A &lt;dbl&gt;, …</span></code></pre></div>
+<span class="co">#&gt; #   EPHA3 &lt;dbl&gt;, ETV6 &lt;dbl&gt;, PTCH1 &lt;dbl&gt;, TET1 &lt;dbl&gt;, BMPR1A &lt;dbl&gt;,</span>
+<span class="co">#&gt; #   GRIN2A &lt;dbl&gt;, NOTCH3 &lt;dbl&gt;, TMPRSS2 &lt;dbl&gt;, NSD1 &lt;dbl&gt;, …</span></code></pre></div>
 </div>
 <div id="visualizing-genetics" class="section level2">
 <h2 class="hasAnchor">
@@ -347,12 +347,11 @@
 <div id="binary-outcome" class="section level2">
 <h2 class="hasAnchor">
 <a href="#binary-outcome" class="anchor"></a>Binary outcome</h2>
-<p>The <code>gen.summary</code> function allows us to test for potential differences in genetic event frequencies using Fisher’s exact test for unpaired data and the McNemar exact test for paired data. This function takes the following arguments:</p>
+<p>The <code>gen.summary</code> function allows us to test for potential differences in genetic event frequencies using Fisher’s exact test for unpaired data. This function takes the following arguments:</p>
 <ul>
 <li>gen.dat : a binary matrix of genetic events with patients as rows and columns as genes</li>
 <li>outcome : a binary vector corresponding to the patients in the gen.dat argument</li>
 <li>filter : a value in [0,1) that will remove all genes that have a frequency below that threshold. Default is 0, including all</li>
-<li>paired : boolean specifying is the observations are paired. Default is false</li>
 <li>cont : boolean specifying if the outcome is continuous. Default is false (see following section for an example)</li>
 <li>rank : boolean specifying if the output table should be ranked by pvalue</li>
 </ul>
@@ -361,7 +360,7 @@
 <span class="va">gen.dat</span> <span class="op">&lt;-</span> <span class="va">bin.mut</span>
 <span class="va">bin.test</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gen.summary.html">gen.summary</a></span><span class="op">(</span>gen.dat <span class="op">=</span> <span class="va">gen.dat</span>,
         outcome <span class="op">=</span> <span class="va">outcome</span>,
-        filter <span class="op">=</span> <span class="fl">0.05</span>,paired <span class="op">=</span> <span class="cn">F</span>,cont <span class="op">=</span> <span class="cn">F</span>,rank <span class="op">=</span> <span class="cn">T</span><span class="op">)</span>
+        filter <span class="op">=</span> <span class="fl">0.05</span>,cont <span class="op">=</span> <span class="cn">F</span>,rank <span class="op">=</span> <span class="cn">T</span><span class="op">)</span>
 <span class="fu">kable</span><span class="op">(</span><span class="va">bin.test</span><span class="op">$</span><span class="va">fits</span>,row.names <span class="op">=</span> <span class="cn">T</span><span class="op">)</span></code></pre></div>
 <table class="table">
 <thead><tr class="header">
@@ -371,275 +370,299 @@
 <th align="left">Metastasis(N=94)</th>
 <th align="left">Primary(N=106)</th>
 <th align="left">OddsRatio</th>
-<th align="left">Pvalue</th>
-<th align="left">FDR</th>
 <th align="left">Lower</th>
 <th align="left">Upper</th>
+<th align="left">Pvalue</th>
+<th align="right">FDR</th>
 </tr></thead>
 <tbody>
 <tr class="odd">
+<td align="left">MYC.Amp</td>
+<td align="left">MYC.Amp</td>
+<td align="left">5%</td>
+<td align="left">9.574%</td>
+<td align="left">0.943%</td>
+<td align="left">0.09</td>
+<td align="left">0</td>
+<td align="left">0.68</td>
+<td align="left">6.84e-03</td>
+<td align="right">0.1641600</td>
+</tr>
+<tr class="even">
 <td align="left">CREBBP</td>
 <td align="left">CREBBP</td>
 <td align="left">5%</td>
-<td align="left">8.51%</td>
-<td align="left">1.89%</td>
+<td align="left">8.511%</td>
+<td align="left">1.887%</td>
 <td align="left">0.21</td>
-<td align="left">4.82e-02</td>
-<td align="left">9.73e-01</td>
 <td align="left">0.02</td>
 <td align="left">1.08</td>
+<td align="left">4.82e-02</td>
+<td align="right">0.5072000</td>
+</tr>
+<tr class="odd">
+<td align="left">CDKN2A.Del</td>
+<td align="left">CDKN2A.Del</td>
+<td align="left">5.5%</td>
+<td align="left">2.128%</td>
+<td align="left">8.491%</td>
+<td align="left">4.24</td>
+<td align="left">0.85</td>
+<td align="left">41.39</td>
+<td align="left">6.34e-02</td>
+<td align="right">0.5072000</td>
 </tr>
 <tr class="even">
 <td align="left">FAT1</td>
 <td align="left">FAT1</td>
 <td align="left">8%</td>
-<td align="left">11.7%</td>
-<td align="left">4.72%</td>
+<td align="left">11.702%</td>
+<td align="left">4.717%</td>
 <td align="left">0.38</td>
-<td align="left">1.15e-01</td>
-<td align="left">9.73e-01</td>
 <td align="left">0.1</td>
 <td align="left">1.23</td>
+<td align="left">1.15e-01</td>
+<td align="right">0.5480000</td>
 </tr>
 <tr class="odd">
+<td align="left">CCND1.Amp</td>
+<td align="left">CCND1.Amp</td>
+<td align="left">5.5%</td>
+<td align="left">8.511%</td>
+<td align="left">2.83%</td>
+<td align="left">0.31</td>
+<td align="left">0.05</td>
+<td align="left">1.36</td>
+<td align="left">1.19e-01</td>
+<td align="right">0.5480000</td>
+</tr>
+<tr class="even">
 <td align="left">EGFR</td>
 <td align="left">EGFR</td>
 <td align="left">8.5%</td>
-<td align="left">11.7%</td>
+<td align="left">11.702%</td>
 <td align="left">5.66%</td>
 <td align="left">0.45</td>
-<td align="left">1.37e-01</td>
-<td align="left">9.73e-01</td>
 <td align="left">0.13</td>
 <td align="left">1.41</td>
+<td align="left">1.37e-01</td>
+<td align="right">0.5480000</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">BRAF</td>
 <td align="left">BRAF</td>
 <td align="left">5%</td>
-<td align="left">7.45%</td>
+<td align="left">7.447%</td>
 <td align="left">2.83%</td>
 <td align="left">0.36</td>
-<td align="left">1.95e-01</td>
-<td align="left">9.73e-01</td>
 <td align="left">0.06</td>
 <td align="left">1.65</td>
+<td align="left">1.95e-01</td>
+<td align="right">0.6685714</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">ARID1A</td>
 <td align="left">ARID1A</td>
 <td align="left">7%</td>
-<td align="left">9.57%</td>
-<td align="left">4.72%</td>
+<td align="left">9.574%</td>
+<td align="left">4.717%</td>
 <td align="left">0.47</td>
-<td align="left">2.67e-01</td>
-<td align="left">9.73e-01</td>
 <td align="left">0.12</td>
 <td align="left">1.63</td>
+<td align="left">2.67e-01</td>
+<td align="right">0.7723636</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">ATRX</td>
 <td align="left">ATRX</td>
 <td align="left">7.5%</td>
-<td align="left">5.32%</td>
-<td align="left">9.43%</td>
+<td align="left">5.319%</td>
+<td align="left">9.434%</td>
 <td align="left">1.85</td>
-<td align="left">2.97e-01</td>
-<td align="left">9.73e-01</td>
 <td align="left">0.55</td>
 <td align="left">7.17</td>
+<td align="left">2.97e-01</td>
+<td align="right">0.7723636</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">PTEN</td>
 <td align="left">PTEN</td>
 <td align="left">5%</td>
-<td align="left">3.19%</td>
-<td align="left">6.6%</td>
+<td align="left">3.191%</td>
+<td align="left">6.604%</td>
 <td align="left">2.14</td>
-<td align="left">3.40e-01</td>
-<td align="left">9.73e-01</td>
 <td align="left">0.47</td>
 <td align="left">13.19</td>
+<td align="left">3.40e-01</td>
+<td align="right">0.7723636</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">CDKN2A</td>
 <td align="left">CDKN2A</td>
 <td align="left">5.5%</td>
-<td align="left">7.45%</td>
-<td align="left">3.77%</td>
+<td align="left">7.447%</td>
+<td align="left">3.774%</td>
 <td align="left">0.49</td>
-<td align="left">3.54e-01</td>
-<td align="left">9.73e-01</td>
 <td align="left">0.1</td>
 <td align="left">2</td>
+<td align="left">3.54e-01</td>
+<td align="right">0.7723636</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">SMARCA4</td>
 <td align="left">SMARCA4</td>
 <td align="left">5%</td>
-<td align="left">6.38%</td>
-<td align="left">3.77%</td>
+<td align="left">6.383%</td>
+<td align="left">3.774%</td>
 <td align="left">0.58</td>
-<td align="left">5.21e-01</td>
-<td align="left">1.00e+00</td>
 <td align="left">0.12</td>
 <td align="left">2.52</td>
-</tr>
-<tr class="even">
-<td align="left">MLL2</td>
-<td align="left">MLL2</td>
-<td align="left">7%</td>
-<td align="left">8.51%</td>
-<td align="left">5.66%</td>
-<td align="left">0.65</td>
-<td align="left">5.80e-01</td>
-<td align="left">1.00e+00</td>
-<td align="left">0.18</td>
-<td align="left">2.22</td>
+<td align="left">5.21e-01</td>
+<td align="right">1.0000000</td>
 </tr>
 <tr class="odd">
 <td align="left">TP53</td>
 <td align="left">TP53</td>
 <td align="left">47%</td>
-<td align="left">48.94%</td>
-<td align="left">45.28%</td>
+<td align="left">48.936%</td>
+<td align="left">45.283%</td>
 <td align="left">0.86</td>
-<td align="left">6.71e-01</td>
-<td align="left">1.00e+00</td>
 <td align="left">0.48</td>
 <td align="left">1.56</td>
+<td align="left">6.71e-01</td>
+<td align="right">1.0000000</td>
 </tr>
 <tr class="even">
 <td align="left">TERT</td>
 <td align="left">TERT</td>
 <td align="left">13.5%</td>
-<td align="left">14.89%</td>
-<td align="left">12.26%</td>
+<td align="left">14.894%</td>
+<td align="left">12.264%</td>
 <td align="left">0.8</td>
-<td align="left">6.80e-01</td>
-<td align="left">1.00e+00</td>
 <td align="left">0.32</td>
 <td align="left">1.96</td>
+<td align="left">6.80e-01</td>
+<td align="right">1.0000000</td>
 </tr>
 <tr class="odd">
 <td align="left">ATM</td>
 <td align="left">ATM</td>
 <td align="left">5%</td>
-<td align="left">4.26%</td>
+<td align="left">4.255%</td>
 <td align="left">5.66%</td>
 <td align="left">1.35</td>
-<td align="left">7.52e-01</td>
-<td align="left">1.00e+00</td>
 <td align="left">0.31</td>
 <td align="left">6.71</td>
+<td align="left">7.52e-01</td>
+<td align="right">1.0000000</td>
 </tr>
 <tr class="even">
-<td align="left">MLL3</td>
-<td align="left">MLL3</td>
+<td align="left">MCL1.Amp</td>
+<td align="left">MCL1.Amp</td>
 <td align="left">6.5%</td>
-<td align="left">7.45%</td>
+<td align="left">7.447%</td>
 <td align="left">5.66%</td>
 <td align="left">0.75</td>
-<td align="left">7.75e-01</td>
-<td align="left">1.00e+00</td>
 <td align="left">0.2</td>
 <td align="left">2.71</td>
+<td align="left">7.75e-01</td>
+<td align="right">1.0000000</td>
 </tr>
 <tr class="odd">
 <td align="left">APC</td>
 <td align="left">APC</td>
 <td align="left">8.5%</td>
-<td align="left">7.45%</td>
-<td align="left">9.43%</td>
+<td align="left">7.447%</td>
+<td align="left">9.434%</td>
 <td align="left">1.29</td>
-<td align="left">8.00e-01</td>
-<td align="left">1.00e+00</td>
 <td align="left">0.42</td>
 <td align="left">4.19</td>
+<td align="left">8.00e-01</td>
+<td align="right">1.0000000</td>
 </tr>
 <tr class="even">
 <td align="left">KRAS</td>
 <td align="left">KRAS</td>
 <td align="left">13.5%</td>
-<td align="left">12.77%</td>
-<td align="left">14.15%</td>
+<td align="left">12.766%</td>
+<td align="left">14.151%</td>
 <td align="left">1.13</td>
-<td align="left">8.38e-01</td>
-<td align="left">1.00e+00</td>
 <td align="left">0.46</td>
 <td align="left">2.8</td>
+<td align="left">8.38e-01</td>
+<td align="right">1.0000000</td>
 </tr>
 <tr class="odd">
 <td align="left">KEAP1</td>
 <td align="left">KEAP1</td>
 <td align="left">6%</td>
-<td align="left">6.38%</td>
+<td align="left">6.383%</td>
 <td align="left">5.66%</td>
 <td align="left">0.88</td>
-<td align="left">1.00e+00</td>
-<td align="left">1.00e+00</td>
 <td align="left">0.23</td>
 <td align="left">3.42</td>
+<td align="left">1.00e+00</td>
+<td align="right">1.0000000</td>
 </tr>
 <tr class="even">
 <td align="left">RB1</td>
 <td align="left">RB1</td>
 <td align="left">7%</td>
-<td align="left">7.45%</td>
-<td align="left">6.6%</td>
+<td align="left">7.447%</td>
+<td align="left">6.604%</td>
 <td align="left">0.88</td>
-<td align="left">1.00e+00</td>
-<td align="left">1.00e+00</td>
 <td align="left">0.25</td>
 <td align="left">3.07</td>
+<td align="left">1.00e+00</td>
+<td align="right">1.0000000</td>
 </tr>
 <tr class="odd">
 <td align="left">PIK3CA</td>
 <td align="left">PIK3CA</td>
 <td align="left">11.5%</td>
-<td align="left">11.7%</td>
-<td align="left">11.32%</td>
+<td align="left">11.702%</td>
+<td align="left">11.321%</td>
 <td align="left">0.96</td>
-<td align="left">1.00e+00</td>
-<td align="left">1.00e+00</td>
 <td align="left">0.37</td>
 <td align="left">2.55</td>
+<td align="left">1.00e+00</td>
+<td align="right">1.0000000</td>
 </tr>
 <tr class="even">
 <td align="left">NOTCH1</td>
 <td align="left">NOTCH1</td>
 <td align="left">6.5%</td>
-<td align="left">6.38%</td>
-<td align="left">6.6%</td>
+<td align="left">6.383%</td>
+<td align="left">6.604%</td>
 <td align="left">1.04</td>
-<td align="left">1.00e+00</td>
-<td align="left">1.00e+00</td>
 <td align="left">0.29</td>
 <td align="left">3.89</td>
+<td align="left">1.00e+00</td>
+<td align="right">1.0000000</td>
 </tr>
 <tr class="odd">
 <td align="left">NF1</td>
 <td align="left">NF1</td>
 <td align="left">7%</td>
-<td align="left">7.45%</td>
-<td align="left">6.6%</td>
+<td align="left">7.447%</td>
+<td align="left">6.604%</td>
 <td align="left">0.88</td>
-<td align="left">1.00e+00</td>
-<td align="left">1.00e+00</td>
 <td align="left">0.25</td>
 <td align="left">3.07</td>
+<td align="left">1.00e+00</td>
+<td align="right">1.0000000</td>
 </tr>
 <tr class="even">
 <td align="left">STK11</td>
 <td align="left">STK11</td>
 <td align="left">6%</td>
-<td align="left">6.38%</td>
+<td align="left">6.383%</td>
 <td align="left">5.66%</td>
 <td align="left">0.88</td>
-<td align="left">1.00e+00</td>
-<td align="left">1.00e+00</td>
 <td align="left">0.23</td>
 <td align="left">3.42</td>
+<td align="left">1.00e+00</td>
+<td align="right">1.0000000</td>
 </tr>
 </tbody>
 </table>
@@ -648,8 +671,8 @@
 <p><img src="gnomeR-vignette_files/figure-html/unnamed-chunk-12-1.png" width="768"></p>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">bin.test</span><span class="op">$</span><span class="va">vPlot</span></code></pre></div>
-<div id="htmlwidget-9ac434b6c1de5c802b8a" style="width:768px;height:384px;" class="plotly html-widget"></div>
-<script type="application/json" data-for="htmlwidget-9ac434b6c1de5c802b8a">{"x":{"visdat":{"16111205d4eaf":["function () ","plotlyVisDat"]},"cur_data":"16111205d4eaf","attrs":{"16111205d4eaf":{"x":{},"y":{},"text":{},"mode":"markers","alpha_stroke":1,"sizes":[10,100],"spans":[1,20]}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"title":"Volcano Plot","xaxis":{"domain":[0,1],"automargin":true,"title":".data$OddsRatio"},"yaxis":{"domain":[0,1],"automargin":true,"title":"-log10(.data$Pvalue)"},"hovermode":"closest","showlegend":false},"source":"A","config":{"showSendToCloud":false},"data":[{"x":[0.21,0.38,0.45,0.36,0.47,1.85,2.14,0.49,0.58,0.65,0.86,0.8,1.35,0.75,1.29,1.13,0.88,0.88,0.96,1.04,0.88,0.88],"y":[1.31695296176115,0.939302159646388,0.863279432843593,0.709965388637482,0.573488738635425,0.527243550682788,0.468521082957745,0.450996737974212,0.283162276700476,0.236572006437063,0.173277479831008,0.167491087293764,0.123782159408358,0.11069829749369,0.0969100130080564,0.0767559813697235,-0,-0,-0,-0,-0,-0],"text":["Gene : CREBBP <\/br> Odds Ratio : 0.21","Gene : FAT1 <\/br> Odds Ratio : 0.38","Gene : EGFR <\/br> Odds Ratio : 0.45","Gene : BRAF <\/br> Odds Ratio : 0.36","Gene : ARID1A <\/br> Odds Ratio : 0.47","Gene : ATRX <\/br> Odds Ratio : 1.85","Gene : PTEN <\/br> Odds Ratio : 2.14","Gene : CDKN2A <\/br> Odds Ratio : 0.49","Gene : SMARCA4 <\/br> Odds Ratio : 0.58","Gene : MLL2 <\/br> Odds Ratio : 0.65","Gene : TP53 <\/br> Odds Ratio : 0.86","Gene : TERT <\/br> Odds Ratio : 0.8","Gene : ATM <\/br> Odds Ratio : 1.35","Gene : MLL3 <\/br> Odds Ratio : 0.75","Gene : APC <\/br> Odds Ratio : 1.29","Gene : KRAS <\/br> Odds Ratio : 1.13","Gene : KEAP1 <\/br> Odds Ratio : 0.88","Gene : RB1 <\/br> Odds Ratio : 0.88","Gene : PIK3CA <\/br> Odds Ratio : 0.96","Gene : NOTCH1 <\/br> Odds Ratio : 1.04","Gene : NF1 <\/br> Odds Ratio : 0.88","Gene : STK11 <\/br> Odds Ratio : 0.88"],"mode":"markers","type":"scatter","marker":{"color":"rgba(31,119,180,1)","line":{"color":"rgba(31,119,180,1)"}},"error_y":{"color":"rgba(31,119,180,1)"},"error_x":{"color":"rgba(31,119,180,1)"},"line":{"color":"rgba(31,119,180,1)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.2,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-5d19869fba326f8331fd" style="width:768px;height:384px;" class="plotly html-widget"></div>
+<script type="application/json" data-for="htmlwidget-5d19869fba326f8331fd">{"x":{"visdat":{"e4f6107240b7":["function () ","plotlyVisDat"]},"cur_data":"e4f6107240b7","attrs":{"e4f6107240b7":{"x":{},"y":{},"text":{},"mode":"markers","alpha_stroke":1,"sizes":[10,100],"spans":[1,20]}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"title":"Volcano Plot","xaxis":{"domain":[0,1],"automargin":true,"title":".data$OddsRatio"},"yaxis":{"domain":[0,1],"automargin":true,"title":"-log10(.data$Pvalue)"},"hovermode":"closest","showlegend":false},"source":"A","config":{"showSendToCloud":false},"data":[{"x":[0.09,0.21,4.24,0.38,0.31,0.45,0.36,0.47,1.85,2.14,0.49,0.58,0.86,0.8,1.35,0.75,1.29,1.13,0.88,0.88,0.96,1.04,0.88,0.88],"y":[2.16494389827988,1.31695296176115,1.19791074211827,0.939302159646388,0.924453038607469,0.863279432843593,0.709965388637482,0.573488738635425,0.527243550682788,0.468521082957745,0.450996737974212,0.283162276700476,0.173277479831008,0.167491087293764,0.123782159408358,0.11069829749369,0.0969100130080564,0.0767559813697235,-0,-0,-0,-0,-0,-0],"text":["Gene : MYC.Amp <\/br> Odds Ratio : 0.09","Gene : CREBBP <\/br> Odds Ratio : 0.21","Gene : CDKN2A.Del <\/br> Odds Ratio : 4.24","Gene : FAT1 <\/br> Odds Ratio : 0.38","Gene : CCND1.Amp <\/br> Odds Ratio : 0.31","Gene : EGFR <\/br> Odds Ratio : 0.45","Gene : BRAF <\/br> Odds Ratio : 0.36","Gene : ARID1A <\/br> Odds Ratio : 0.47","Gene : ATRX <\/br> Odds Ratio : 1.85","Gene : PTEN <\/br> Odds Ratio : 2.14","Gene : CDKN2A <\/br> Odds Ratio : 0.49","Gene : SMARCA4 <\/br> Odds Ratio : 0.58","Gene : TP53 <\/br> Odds Ratio : 0.86","Gene : TERT <\/br> Odds Ratio : 0.8","Gene : ATM <\/br> Odds Ratio : 1.35","Gene : MCL1.Amp <\/br> Odds Ratio : 0.75","Gene : APC <\/br> Odds Ratio : 1.29","Gene : KRAS <\/br> Odds Ratio : 1.13","Gene : KEAP1 <\/br> Odds Ratio : 0.88","Gene : RB1 <\/br> Odds Ratio : 0.88","Gene : PIK3CA <\/br> Odds Ratio : 0.96","Gene : NOTCH1 <\/br> Odds Ratio : 1.04","Gene : NF1 <\/br> Odds Ratio : 0.88","Gene : STK11 <\/br> Odds Ratio : 0.88"],"mode":"markers","type":"scatter","marker":{"color":"rgba(31,119,180,1)","line":{"color":"rgba(31,119,180,1)"}},"error_y":{"color":"rgba(31,119,180,1)"},"error_x":{"color":"rgba(31,119,180,1)"},"line":{"color":"rgba(31,119,180,1)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.2,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
 </div>
 <div id="continuous-outcome" class="section level2">
 <h2 class="hasAnchor">
@@ -660,200 +683,291 @@
 <span class="va">outcome</span> <span class="op">&lt;-</span>  <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">gen.dat</span><span class="op">)</span><span class="op">)</span>
 <span class="va">tab.out</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gen.summary.html">gen.summary</a></span><span class="op">(</span>gen.dat <span class="op">=</span> <span class="va">gen.dat</span>,
         outcome <span class="op">=</span> <span class="va">outcome</span>,
-        filter <span class="op">=</span> <span class="fl">0.05</span>,paired <span class="op">=</span> <span class="cn">F</span>,cont <span class="op">=</span> <span class="cn">T</span>,rank <span class="op">=</span> <span class="cn">T</span><span class="op">)</span>
+        filter <span class="op">=</span> <span class="fl">0.05</span>,cont <span class="op">=</span> <span class="cn">T</span>,rank <span class="op">=</span> <span class="cn">T</span><span class="op">)</span>
 <span class="fu">kable</span><span class="op">(</span><span class="va">tab.out</span><span class="op">$</span><span class="va">fits</span>,row.names <span class="op">=</span> <span class="cn">T</span><span class="op">)</span></code></pre></div>
 <table class="table">
 <thead><tr class="header">
 <th align="left"></th>
+<th align="left">Feature</th>
+<th align="right">EventFrequency</th>
 <th align="right">Estimate</th>
 <th align="right">SD</th>
-<th align="right">Pvalue</th>
-<th align="right">MutationFreq</th>
+<th align="right">Lower</th>
+<th align="right">Upper</th>
+<th align="left">Pvalue</th>
 <th align="left">FDR</th>
 </tr></thead>
 <tbody>
 <tr class="odd">
+<td align="left">CREBBP.x</td>
 <td align="left">CREBBP</td>
-<td align="right">0.71</td>
-<td align="right">0.30</td>
-<td align="right">0.0187</td>
-<td align="right">0.05</td>
-<td align="left">4.11e-01</td>
+<td align="right">0.050</td>
+<td align="right">0.706</td>
+<td align="right">0.298</td>
+<td align="right">0.122</td>
+<td align="right">1.291</td>
+<td align="left">1.87e-02</td>
+<td align="left">4.49e-01</td>
 </tr>
 <tr class="even">
+<td align="left">RB1.x</td>
 <td align="left">RB1</td>
-<td align="right">-0.50</td>
-<td align="right">0.26</td>
-<td align="right">0.0498</td>
-<td align="right">0.07</td>
-<td align="left">5.24e-01</td>
+<td align="right">0.070</td>
+<td align="right">-0.505</td>
+<td align="right">0.256</td>
+<td align="right">-1.006</td>
+<td align="right">-0.004</td>
+<td align="left">4.98e-02</td>
+<td align="left">5.71e-01</td>
 </tr>
 <tr class="odd">
+<td align="left">BRAF.x</td>
 <td align="left">BRAF</td>
-<td align="right">0.54</td>
-<td align="right">0.30</td>
-<td align="right">0.0714</td>
-<td align="right">0.05</td>
-<td align="left">5.24e-01</td>
+<td align="right">0.050</td>
+<td align="right">0.543</td>
+<td align="right">0.300</td>
+<td align="right">-0.044</td>
+<td align="right">1.131</td>
+<td align="left">7.14e-02</td>
+<td align="left">5.71e-01</td>
 </tr>
 <tr class="even">
+<td align="left">STK11.x</td>
 <td align="left">STK11</td>
-<td align="right">-0.39</td>
-<td align="right">0.28</td>
-<td align="right">0.1560</td>
-<td align="right">0.06</td>
-<td align="left">7.00e-01</td>
+<td align="right">0.060</td>
+<td align="right">-0.393</td>
+<td align="right">0.276</td>
+<td align="right">-0.934</td>
+<td align="right">0.148</td>
+<td align="left">1.56e-01</td>
+<td align="left">7.66e-01</td>
 </tr>
 <tr class="odd">
+<td align="left">KEAP1.x</td>
 <td align="left">KEAP1</td>
-<td align="right">-0.38</td>
-<td align="right">0.28</td>
-<td align="right">0.1710</td>
-<td align="right">0.06</td>
-<td align="left">7.00e-01</td>
+<td align="right">0.060</td>
+<td align="right">-0.379</td>
+<td align="right">0.276</td>
+<td align="right">-0.920</td>
+<td align="right">0.162</td>
+<td align="left">1.71e-01</td>
+<td align="left">7.66e-01</td>
 </tr>
 <tr class="even">
+<td align="left">TERT.x</td>
 <td align="left">TERT</td>
-<td align="right">0.25</td>
-<td align="right">0.19</td>
-<td align="right">0.1910</td>
-<td align="right">0.14</td>
-<td align="left">7.00e-01</td>
+<td align="right">0.135</td>
+<td align="right">0.252</td>
+<td align="right">0.192</td>
+<td align="right">-0.125</td>
+<td align="right">0.628</td>
+<td align="left">1.91e-01</td>
+<td align="left">7.66e-01</td>
 </tr>
 <tr class="odd">
+<td align="left">MCL1.Amp.x</td>
+<td align="left">MCL1_Amp</td>
+<td align="right">0.065</td>
+<td align="right">-0.302</td>
+<td align="right">0.266</td>
+<td align="right">-0.824</td>
+<td align="right">0.220</td>
+<td align="left">2.59e-01</td>
+<td align="left">8.86e-01</td>
+</tr>
+<tr class="even">
+<td align="left">CCND1.Amp.x</td>
+<td align="left">CCND1_Amp</td>
+<td align="right">0.055</td>
+<td align="right">-0.271</td>
+<td align="right">0.288</td>
+<td align="right">-0.836</td>
+<td align="right">0.294</td>
+<td align="left">3.48e-01</td>
+<td align="left">9.49e-01</td>
+</tr>
+<tr class="odd">
+<td align="left">FAT1.x</td>
 <td align="left">FAT1</td>
-<td align="right">0.21</td>
-<td align="right">0.24</td>
-<td align="right">0.3930</td>
-<td align="right">0.08</td>
-<td align="left">9.24e-01</td>
+<td align="right">0.080</td>
+<td align="right">0.208</td>
+<td align="right">0.242</td>
+<td align="right">-0.267</td>
+<td align="right">0.683</td>
+<td align="left">3.93e-01</td>
+<td align="left">9.49e-01</td>
 </tr>
 <tr class="even">
+<td align="left">SMARCA4.x</td>
 <td align="left">SMARCA4</td>
-<td align="right">-0.24</td>
-<td align="right">0.30</td>
-<td align="right">0.4290</td>
-<td align="right">0.05</td>
-<td align="left">9.24e-01</td>
+<td align="right">0.050</td>
+<td align="right">-0.239</td>
+<td align="right">0.302</td>
+<td align="right">-0.831</td>
+<td align="right">0.352</td>
+<td align="left">4.29e-01</td>
+<td align="left">9.49e-01</td>
 </tr>
 <tr class="odd">
+<td align="left">APC.x</td>
 <td align="left">APC</td>
-<td align="right">0.16</td>
-<td align="right">0.24</td>
-<td align="right">0.5100</td>
-<td align="right">0.09</td>
-<td align="left">9.24e-01</td>
+<td align="right">0.085</td>
+<td align="right">0.156</td>
+<td align="right">0.236</td>
+<td align="right">-0.307</td>
+<td align="right">0.618</td>
+<td align="left">5.10e-01</td>
+<td align="left">9.49e-01</td>
 </tr>
 <tr class="even">
+<td align="left">NF1.x</td>
 <td align="left">NF1</td>
-<td align="right">0.16</td>
-<td align="right">0.26</td>
-<td align="right">0.5340</td>
-<td align="right">0.07</td>
-<td align="left">9.24e-01</td>
+<td align="right">0.070</td>
+<td align="right">0.161</td>
+<td align="right">0.258</td>
+<td align="right">-0.345</td>
+<td align="right">0.666</td>
+<td align="left">5.34e-01</td>
+<td align="left">9.49e-01</td>
 </tr>
 <tr class="odd">
+<td align="left">EGFR.x</td>
 <td align="left">EGFR</td>
-<td align="right">-0.14</td>
-<td align="right">0.24</td>
-<td align="right">0.5410</td>
-<td align="right">0.09</td>
-<td align="left">9.24e-01</td>
+<td align="right">0.085</td>
+<td align="right">-0.144</td>
+<td align="right">0.236</td>
+<td align="right">-0.607</td>
+<td align="right">0.318</td>
+<td align="left">5.41e-01</td>
+<td align="left">9.49e-01</td>
 </tr>
 <tr class="even">
+<td align="left">ATM.x</td>
 <td align="left">ATM</td>
-<td align="right">-0.18</td>
-<td align="right">0.30</td>
-<td align="right">0.5560</td>
-<td align="right">0.05</td>
-<td align="left">9.24e-01</td>
+<td align="right">0.050</td>
+<td align="right">-0.178</td>
+<td align="right">0.302</td>
+<td align="right">-0.770</td>
+<td align="right">0.414</td>
+<td align="left">5.56e-01</td>
+<td align="left">9.49e-01</td>
 </tr>
 <tr class="odd">
-<td align="left">MLL3</td>
-<td align="right">-0.15</td>
-<td align="right">0.27</td>
-<td align="right">0.5680</td>
-<td align="right">0.06</td>
-<td align="left">9.24e-01</td>
-</tr>
-<tr class="even">
+<td align="left">ATRX.x</td>
 <td align="left">ATRX</td>
-<td align="right">-0.11</td>
-<td align="right">0.25</td>
-<td align="right">0.6550</td>
-<td align="right">0.07</td>
-<td align="left">9.24e-01</td>
+<td align="right">0.075</td>
+<td align="right">-0.112</td>
+<td align="right">0.250</td>
+<td align="right">-0.602</td>
+<td align="right">0.378</td>
+<td align="left">6.55e-01</td>
+<td align="left">9.49e-01</td>
 </tr>
-<tr class="odd">
+<tr class="even">
+<td align="left">PTEN.x</td>
 <td align="left">PTEN</td>
-<td align="right">-0.13</td>
-<td align="right">0.30</td>
-<td align="right">0.6690</td>
-<td align="right">0.05</td>
-<td align="left">9.24e-01</td>
+<td align="right">0.050</td>
+<td align="right">-0.130</td>
+<td align="right">0.302</td>
+<td align="right">-0.722</td>
+<td align="right">0.463</td>
+<td align="left">6.69e-01</td>
+<td align="left">9.49e-01</td>
 </tr>
-<tr class="even">
+<tr class="odd">
+<td align="left">CDKN2A.x</td>
 <td align="left">CDKN2A</td>
-<td align="right">0.12</td>
-<td align="right">0.29</td>
-<td align="right">0.6720</td>
-<td align="right">0.06</td>
-<td align="left">9.24e-01</td>
+<td align="right">0.055</td>
+<td align="right">0.122</td>
+<td align="right">0.289</td>
+<td align="right">-0.444</td>
+<td align="right">0.688</td>
+<td align="left">6.72e-01</td>
+<td align="left">9.49e-01</td>
 </tr>
-<tr class="odd">
+<tr class="even">
+<td align="left">KRAS.x</td>
 <td align="left">KRAS</td>
-<td align="right">-0.07</td>
-<td align="right">0.19</td>
-<td align="right">0.7270</td>
-<td align="right">0.14</td>
-<td align="left">9.41e-01</td>
+<td align="right">0.135</td>
+<td align="right">-0.067</td>
+<td align="right">0.193</td>
+<td align="right">-0.445</td>
+<td align="right">0.310</td>
+<td align="left">7.27e-01</td>
+<td align="left">9.60e-01</td>
 </tr>
-<tr class="even">
+<tr class="odd">
+<td align="left">PIK3CA.x</td>
 <td align="left">PIK3CA</td>
-<td align="right">-0.05</td>
-<td align="right">0.21</td>
-<td align="right">0.7960</td>
-<td align="right">0.12</td>
-<td align="left">9.73e-01</td>
+<td align="right">0.115</td>
+<td align="right">-0.053</td>
+<td align="right">0.206</td>
+<td align="right">-0.458</td>
+<td align="right">0.351</td>
+<td align="left">7.96e-01</td>
+<td align="left">9.60e-01</td>
+</tr>
+<tr class="even">
+<td align="left">MYC.Amp.x</td>
+<td align="left">MYC_Amp</td>
+<td align="right">0.050</td>
+<td align="right">0.069</td>
+<td align="right">0.302</td>
+<td align="right">-0.523</td>
+<td align="right">0.661</td>
+<td align="left">8.19e-01</td>
+<td align="left">9.60e-01</td>
 </tr>
 <tr class="odd">
+<td align="left">CDKN2A.Del.x</td>
+<td align="left">CDKN2A_Del</td>
+<td align="right">0.055</td>
+<td align="right">-0.044</td>
+<td align="right">0.289</td>
+<td align="right">-0.610</td>
+<td align="right">0.522</td>
+<td align="left">8.78e-01</td>
+<td align="left">9.60e-01</td>
+</tr>
+<tr class="even">
+<td align="left">TP53.x</td>
 <td align="left">TP53</td>
-<td align="right">-0.02</td>
-<td align="right">0.13</td>
-<td align="right">0.9070</td>
-<td align="right">0.47</td>
-<td align="left">9.82e-01</td>
-</tr>
-<tr class="even">
-<td align="left">ARID1A</td>
-<td align="right">-0.02</td>
-<td align="right">0.26</td>
-<td align="right">0.9500</td>
-<td align="right">0.07</td>
-<td align="left">9.82e-01</td>
+<td align="right">0.470</td>
+<td align="right">-0.015</td>
+<td align="right">0.132</td>
+<td align="right">-0.274</td>
+<td align="right">0.243</td>
+<td align="left">9.07e-01</td>
+<td align="left">9.60e-01</td>
 </tr>
 <tr class="odd">
-<td align="left">NOTCH1</td>
-<td align="right">0.01</td>
-<td align="right">0.27</td>
-<td align="right">0.9600</td>
-<td align="right">0.06</td>
-<td align="left">9.82e-01</td>
+<td align="left">ARID1A.x</td>
+<td align="left">ARID1A</td>
+<td align="right">0.070</td>
+<td align="right">-0.016</td>
+<td align="right">0.258</td>
+<td align="right">-0.522</td>
+<td align="right">0.490</td>
+<td align="left">9.50e-01</td>
+<td align="left">9.60e-01</td>
 </tr>
 <tr class="even">
-<td align="left">MLL2</td>
-<td align="right">-0.01</td>
-<td align="right">0.26</td>
-<td align="right">0.9820</td>
-<td align="right">0.07</td>
-<td align="left">9.82e-01</td>
+<td align="left">NOTCH1.x</td>
+<td align="left">NOTCH1</td>
+<td align="right">0.065</td>
+<td align="right">0.014</td>
+<td align="right">0.267</td>
+<td align="right">-0.510</td>
+<td align="right">0.537</td>
+<td align="left">9.60e-01</td>
+<td align="left">9.60e-01</td>
 </tr>
 </tbody>
 </table>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">tab.out</span><span class="op">$</span><span class="va">vPlot</span></code></pre></div>
-<div id="htmlwidget-1aff39f455c140b559bf" style="width:768px;height:384px;" class="plotly html-widget"></div>
-<script type="application/json" data-for="htmlwidget-1aff39f455c140b559bf">{"x":{"visdat":{"1611156368d7b":["function () ","plotlyVisDat"]},"cur_data":"1611156368d7b","attrs":{"1611156368d7b":{"x":{},"y":{},"text":{},"mode":"markers","color":{},"size":{},"alpha_stroke":1,"sizes":[10,100],"spans":[1,20]}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"title":"Volcano Plot","xaxis":{"domain":[0,1],"automargin":true,"title":".data$Estimate"},"yaxis":{"domain":[0,1],"automargin":true,"title":"-log10(.data$Pvalue)"},"hovermode":"closest","showlegend":false},"source":"A","config":{"showSendToCloud":false},"data":[{"x":[-0.02,-0.38,-0.07,0.25,-0.15,-0.5,-0.05,0.21,0.01,-0.01,0.16,-0.02,-0.14,0.71,0.54,-0.18,-0.11,-0.39,-0.24,0.16,-0.13,0.12],"y":[0.0423927129399047,0.767003889607846,0.138465589140962,0.718966632752272,0.245651664288981,1.30277065724028,0.0990869322623309,0.405607449624573,0.0177287669604316,0.00788851221305034,0.272458742971444,0.0222763947111523,0.266802734893431,1.7281583934635,1.14630178822383,0.254925208417942,0.183758700008217,0.806875401645538,0.367542707815276,0.292429823902064,0.174573882232177,0.172630726946175],"text":["Gene : TP53 <\/br> Estimate : -0.02","Gene : KEAP1 <\/br> Estimate : -0.38","Gene : KRAS <\/br> Estimate : -0.07","Gene : TERT <\/br> Estimate : 0.25","Gene : MLL3 <\/br> Estimate : -0.15","Gene : RB1 <\/br> Estimate : -0.5","Gene : PIK3CA <\/br> Estimate : -0.05","Gene : FAT1 <\/br> Estimate : 0.21","Gene : NOTCH1 <\/br> Estimate : 0.01","Gene : MLL2 <\/br> Estimate : -0.01","Gene : NF1 <\/br> Estimate : 0.16","Gene : ARID1A <\/br> Estimate : -0.02","Gene : EGFR <\/br> Estimate : -0.14","Gene : CREBBP <\/br> Estimate : 0.71","Gene : BRAF <\/br> Estimate : 0.54","Gene : ATM <\/br> Estimate : -0.18","Gene : ATRX <\/br> Estimate : -0.11","Gene : STK11 <\/br> Estimate : -0.39","Gene : SMARCA4 <\/br> Estimate : -0.24","Gene : APC <\/br> Estimate : 0.16","Gene : PTEN <\/br> Estimate : -0.13","Gene : CDKN2A <\/br> Estimate : 0.12"],"mode":"markers","type":"scatter","name":"Non signifcant","marker":{"color":"rgba(252,141,98,1)","size":[100,12.1428571428571,29.2857142857143,29.2857142857143,12.1428571428571,14.2857142857143,25,16.4285714285714,12.1428571428571,14.2857142857143,14.2857142857143,14.2857142857143,18.5714285714286,10,10,10,14.2857142857143,12.1428571428571,10,18.5714285714286,10,12.1428571428571],"sizemode":"area","line":{"color":"rgba(252,141,98,1)"}},"textfont":{"color":"rgba(252,141,98,1)","size":[100,12.1428571428571,29.2857142857143,29.2857142857143,12.1428571428571,14.2857142857143,25,16.4285714285714,12.1428571428571,14.2857142857143,14.2857142857143,14.2857142857143,18.5714285714286,10,10,10,14.2857142857143,12.1428571428571,10,18.5714285714286,10,12.1428571428571]},"error_y":{"color":"rgba(252,141,98,1)","width":[]},"error_x":{"color":"rgba(252,141,98,1)","width":[]},"line":{"color":"rgba(252,141,98,1)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.2,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-c614fe989b5e2e4e2d8a" style="width:768px;height:384px;" class="plotly html-widget"></div>
+<script type="application/json" data-for="htmlwidget-c614fe989b5e2e4e2d8a">{"x":{"visdat":{"e4f6695c30f4":["function () ","plotlyVisDat"]},"cur_data":"e4f6695c30f4","attrs":{"e4f6695c30f4":{"x":{},"y":{},"text":{},"mode":"markers","color":{},"size":{},"alpha_stroke":1,"sizes":[10,100],"spans":[1,20]}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"title":"Volcano Plot","xaxis":{"domain":[0,1],"automargin":true,"title":"Estimate"},"yaxis":{"domain":[0,1],"automargin":true,"title":"-log10(Pvalue)"},"hovermode":"closest","showlegend":false},"source":"A","config":{"showSendToCloud":false},"data":[{"x":[0.706,-0.505,0.543,-0.393,-0.379,0.252,-0.302,-0.271,0.208,-0.239,0.156,0.161,-0.144,-0.178,-0.112,-0.13,0.122,-0.067,-0.053,0.069,-0.044,-0.015,-0.016,0.014],"y":[1.7281583934635,1.30277065724028,1.14630178822383,0.806875401645538,0.767003889607846,0.718966632752272,0.586700235918748,0.458420756053419,0.405607449624573,0.367542707815276,0.292429823902064,0.272458742971444,0.266802734893431,0.254925208417942,0.183758700008217,0.174573882232177,0.172630726946175,0.138465589140962,0.0990869322623309,0.0867160982395816,0.0565054840938974,0.0423927129399047,0.0222763947111523,0.0177287669604316],"text":["Feature : CREBBP  <\/br> Estimate : 0.71","Feature : RB1  <\/br> Estimate : -0.5","Feature : BRAF  <\/br> Estimate : 0.54","Feature : STK11  <\/br> Estimate : -0.39","Feature : KEAP1  <\/br> Estimate : -0.38","Feature : TERT  <\/br> Estimate : 0.25","Feature : MCL1_Amp  <\/br> Estimate : -0.3","Feature : CCND1_Amp  <\/br> Estimate : -0.27","Feature : FAT1  <\/br> Estimate : 0.21","Feature : SMARCA4  <\/br> Estimate : -0.24","Feature : APC  <\/br> Estimate : 0.16","Feature : NF1  <\/br> Estimate : 0.16","Feature : EGFR  <\/br> Estimate : -0.14","Feature : ATM  <\/br> Estimate : -0.18","Feature : ATRX  <\/br> Estimate : -0.11","Feature : PTEN  <\/br> Estimate : -0.13","Feature : CDKN2A  <\/br> Estimate : 0.12","Feature : KRAS  <\/br> Estimate : -0.07","Feature : PIK3CA  <\/br> Estimate : -0.05","Feature : MYC_Amp  <\/br> Estimate : 0.07","Feature : CDKN2A_Del  <\/br> Estimate : -0.04","Feature : TP53  <\/br> Estimate : -0.01","Feature : ARID1A  <\/br> Estimate : -0.02","Feature : NOTCH1  <\/br> Estimate : 0.01"],"mode":"markers","type":"scatter","name":"Non signifcant","marker":{"color":"rgba(252,141,98,1)","size":[10,14.2857142857143,10,12.1428571428571,12.1428571428571,28.2142857142857,13.2142857142857,11.0714285714286,16.4285714285714,10,17.5,14.2857142857143,17.5,10,15.3571428571429,10,11.0714285714286,28.2142857142857,23.9285714285714,10,11.0714285714286,100,14.2857142857143,13.2142857142857],"sizemode":"area","line":{"color":"rgba(252,141,98,1)"}},"textfont":{"color":"rgba(252,141,98,1)","size":[10,14.2857142857143,10,12.1428571428571,12.1428571428571,28.2142857142857,13.2142857142857,11.0714285714286,16.4285714285714,10,17.5,14.2857142857143,17.5,10,15.3571428571429,10,11.0714285714286,28.2142857142857,23.9285714285714,10,11.0714285714286,100,14.2857142857143,13.2142857142857]},"error_y":{"color":"rgba(252,141,98,1)","width":[]},"error_x":{"color":"rgba(252,141,98,1)","width":[]},"line":{"color":"rgba(252,141,98,1)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.2,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
 </div>
 <div id="time-to-event-outcome" class="section level2">
 <h2 class="hasAnchor">
@@ -881,253 +995,382 @@
 <thead><tr class="header">
 <th align="left"></th>
 <th align="left">Feature</th>
-<th align="right">Coefficient</th>
+<th align="right">EventFrequency</th>
+<th align="right">Estimate</th>
 <th align="right">HR</th>
-<th align="right">Pvalue</th>
-<th align="right">FDR</th>
-<th align="right">MutationFrequency</th>
+<th align="right">SD</th>
+<th align="right">Lower</th>
+<th align="right">Upper</th>
+<th align="left">Pvalue</th>
+<th align="left">FDR</th>
 </tr></thead>
 <tbody>
 <tr class="odd">
+<td align="left">EGFR.x</td>
 <td align="left">EGFR</td>
-<td align="left">EGFR</td>
-<td align="right">0.84</td>
-<td align="right">2.32</td>
-<td align="right">0.00821</td>
-<td align="right">0.214</td>
-<td align="right">0.10</td>
+<td align="right">0.100</td>
+<td align="right">0.840</td>
+<td align="right">2.317</td>
+<td align="right">0.318</td>
+<td align="right">1.243</td>
+<td align="right">4.320</td>
+<td align="left">8.21e-03</td>
+<td align="left">2.46e-01</td>
 </tr>
 <tr class="even">
-<td align="left">MLL</td>
-<td align="left">MLL</td>
-<td align="right">0.94</td>
-<td align="right">2.57</td>
-<td align="right">0.01960</td>
-<td align="right">0.227</td>
-<td align="right">0.06</td>
-</tr>
-<tr class="odd">
+<td align="left">RB1.x</td>
 <td align="left">RB1</td>
-<td align="left">RB1</td>
-<td align="right">0.72</td>
-<td align="right">2.06</td>
-<td align="right">0.03480</td>
-<td align="right">0.227</td>
-<td align="right">0.09</td>
+<td align="right">0.093</td>
+<td align="right">0.721</td>
+<td align="right">2.057</td>
+<td align="right">0.342</td>
+<td align="right">1.053</td>
+<td align="right">4.018</td>
+<td align="left">3.48e-02</td>
+<td align="left">3.49e-01</td>
 </tr>
-<tr class="even">
+<tr class="odd">
+<td align="left">CREBBP.x</td>
 <td align="left">CREBBP</td>
-<td align="left">CREBBP</td>
-<td align="right">0.90</td>
-<td align="right">2.46</td>
-<td align="right">0.03490</td>
-<td align="right">0.227</td>
-<td align="right">0.06</td>
-</tr>
-<tr class="odd">
-<td align="left">MLL2</td>
-<td align="left">MLL2</td>
-<td align="right">0.56</td>
-<td align="right">1.76</td>
-<td align="right">0.08590</td>
-<td align="right">0.341</td>
-<td align="right">0.10</td>
+<td align="right">0.057</td>
+<td align="right">0.902</td>
+<td align="right">2.465</td>
+<td align="right">0.428</td>
+<td align="right">1.066</td>
+<td align="right">5.697</td>
+<td align="left">3.49e-02</td>
+<td align="left">3.49e-01</td>
 </tr>
 <tr class="even">
+<td align="left">TP53.x</td>
 <td align="left">TP53</td>
-<td align="left">TP53</td>
-<td align="right">0.40</td>
-<td align="right">1.49</td>
-<td align="right">0.08780</td>
-<td align="right">0.341</td>
-<td align="right">0.44</td>
+<td align="right">0.443</td>
+<td align="right">0.400</td>
+<td align="right">1.492</td>
+<td align="right">0.234</td>
+<td align="right">0.942</td>
+<td align="right">2.363</td>
+<td align="left">8.78e-02</td>
+<td align="left">4.59e-01</td>
 </tr>
 <tr class="odd">
+<td align="left">MYC.Amp.x</td>
+<td align="left">MYC_Amp</td>
+<td align="right">0.057</td>
+<td align="right">0.785</td>
+<td align="right">2.193</td>
+<td align="right">0.465</td>
+<td align="right">0.882</td>
+<td align="right">5.453</td>
+<td align="left">9.11e-02</td>
+<td align="left">4.59e-01</td>
+</tr>
+<tr class="even">
+<td align="left">ATRX.x</td>
 <td align="left">ATRX</td>
-<td align="left">ATRX</td>
-<td align="right">-1.21</td>
-<td align="right">0.30</td>
-<td align="right">0.09180</td>
-<td align="right">0.341</td>
-<td align="right">0.07</td>
+<td align="right">0.071</td>
+<td align="right">-1.209</td>
+<td align="right">0.298</td>
+<td align="right">0.717</td>
+<td align="right">0.073</td>
+<td align="right">1.217</td>
+<td align="left">9.18e-02</td>
+<td align="left">4.59e-01</td>
 </tr>
-<tr class="even">
+<tr class="odd">
+<td align="left">NF1.x</td>
 <td align="left">NF1</td>
-<td align="left">NF1</td>
-<td align="right">0.62</td>
-<td align="right">1.87</td>
-<td align="right">0.14800</td>
-<td align="right">0.455</td>
-<td align="right">0.06</td>
+<td align="right">0.064</td>
+<td align="right">0.624</td>
+<td align="right">1.866</td>
+<td align="right">0.431</td>
+<td align="right">0.802</td>
+<td align="right">4.346</td>
+<td align="left">1.48e-01</td>
+<td align="left">5.84e-01</td>
 </tr>
-<tr class="odd">
+<tr class="even">
+<td align="left">KRAS.x</td>
 <td align="left">KRAS</td>
-<td align="left">KRAS</td>
-<td align="right">0.48</td>
-<td align="right">1.62</td>
-<td align="right">0.15800</td>
-<td align="right">0.455</td>
-<td align="right">0.13</td>
+<td align="right">0.129</td>
+<td align="right">0.483</td>
+<td align="right">1.621</td>
+<td align="right">0.342</td>
+<td align="right">0.830</td>
+<td align="right">3.166</td>
+<td align="left">1.58e-01</td>
+<td align="left">5.84e-01</td>
 </tr>
-<tr class="even">
+<tr class="odd">
+<td align="left">CDH1.x</td>
 <td align="left">CDH1</td>
-<td align="left">CDH1</td>
-<td align="right">-0.97</td>
-<td align="right">0.38</td>
-<td align="right">0.17500</td>
-<td align="right">0.456</td>
-<td align="right">0.06</td>
+<td align="right">0.057</td>
+<td align="right">-0.972</td>
+<td align="right">0.378</td>
+<td align="right">0.717</td>
+<td align="right">0.093</td>
+<td align="right">1.543</td>
+<td align="left">1.75e-01</td>
+<td align="left">5.84e-01</td>
+</tr>
+<tr class="even">
+<td align="left">CDKN2A.Del.x</td>
+<td align="left">CDKN2A_Del</td>
+<td align="right">0.057</td>
+<td align="right">0.553</td>
+<td align="right">1.739</td>
+<td align="right">0.427</td>
+<td align="right">0.753</td>
+<td align="right">4.014</td>
+<td align="left">1.95e-01</td>
+<td align="left">5.85e-01</td>
 </tr>
 <tr class="odd">
+<td align="left">APC.x</td>
 <td align="left">APC</td>
-<td align="left">APC</td>
-<td align="right">-0.65</td>
-<td align="right">0.52</td>
-<td align="right">0.27000</td>
-<td align="right">0.617</td>
-<td align="right">0.07</td>
+<td align="right">0.071</td>
+<td align="right">-0.650</td>
+<td align="right">0.522</td>
+<td align="right">0.590</td>
+<td align="right">0.164</td>
+<td align="right">1.659</td>
+<td align="left">2.70e-01</td>
+<td align="left">6.95e-01</td>
 </tr>
 <tr class="even">
+<td align="left">KEAP1.x</td>
 <td align="left">KEAP1</td>
-<td align="left">KEAP1</td>
-<td align="right">0.42</td>
-<td align="right">1.52</td>
-<td align="right">0.29100</td>
-<td align="right">0.617</td>
-<td align="right">0.08</td>
+<td align="right">0.079</td>
+<td align="right">0.420</td>
+<td align="right">1.522</td>
+<td align="right">0.398</td>
+<td align="right">0.697</td>
+<td align="right">3.322</td>
+<td align="left">2.91e-01</td>
+<td align="left">6.95e-01</td>
 </tr>
 <tr class="odd">
+<td align="left">PTEN.x</td>
 <td align="left">PTEN</td>
-<td align="left">PTEN</td>
-<td align="right">-0.60</td>
-<td align="right">0.55</td>
-<td align="right">0.30900</td>
-<td align="right">0.617</td>
-<td align="right">0.06</td>
+<td align="right">0.057</td>
+<td align="right">-0.601</td>
+<td align="right">0.548</td>
+<td align="right">0.590</td>
+<td align="right">0.172</td>
+<td align="right">1.744</td>
+<td align="left">3.09e-01</td>
+<td align="left">6.95e-01</td>
 </tr>
 <tr class="even">
+<td align="left">CCND1.Amp.x</td>
+<td align="left">CCND1_Amp</td>
+<td align="right">0.064</td>
+<td align="right">0.406</td>
+<td align="right">1.501</td>
+<td align="right">0.427</td>
+<td align="right">0.650</td>
+<td align="right">3.465</td>
+<td align="left">3.41e-01</td>
+<td align="left">6.95e-01</td>
+</tr>
+<tr class="odd">
+<td align="left">TERT.x</td>
 <td align="left">TERT</td>
-<td align="left">TERT</td>
-<td align="right">0.30</td>
-<td align="right">1.35</td>
-<td align="right">0.34800</td>
-<td align="right">0.646</td>
-<td align="right">0.14</td>
+<td align="right">0.136</td>
+<td align="right">0.297</td>
+<td align="right">1.346</td>
+<td align="right">0.317</td>
+<td align="right">0.724</td>
+<td align="right">2.505</td>
+<td align="left">3.48e-01</td>
+<td align="left">6.95e-01</td>
+</tr>
+<tr class="even">
+<td align="left">MCL1.Amp.x</td>
+<td align="left">MCL1_Amp</td>
+<td align="right">0.057</td>
+<td align="right">-0.284</td>
+<td align="right">0.753</td>
+<td align="right">0.515</td>
+<td align="right">0.274</td>
+<td align="right">2.065</td>
+<td align="left">5.81e-01</td>
+<td align="left">9.31e-01</td>
 </tr>
 <tr class="odd">
+<td align="left">EPHA5.x</td>
 <td align="left">EPHA5</td>
-<td align="left">EPHA5</td>
-<td align="right">-0.27</td>
-<td align="right">0.77</td>
-<td align="right">0.60300</td>
-<td align="right">0.996</td>
-<td align="right">0.06</td>
+<td align="right">0.064</td>
+<td align="right">-0.268</td>
+<td align="right">0.765</td>
+<td align="right">0.514</td>
+<td align="right">0.279</td>
+<td align="right">2.098</td>
+<td align="left">6.03e-01</td>
+<td align="left">9.31e-01</td>
 </tr>
 <tr class="even">
+<td align="left">PIK3CA.x</td>
 <td align="left">PIK3CA</td>
-<td align="left">PIK3CA</td>
-<td align="right">0.16</td>
-<td align="right">1.17</td>
-<td align="right">0.67100</td>
-<td align="right">0.996</td>
-<td align="right">0.11</td>
+<td align="right">0.107</td>
+<td align="right">0.160</td>
+<td align="right">1.173</td>
+<td align="right">0.376</td>
+<td align="right">0.562</td>
+<td align="right">2.450</td>
+<td align="left">6.71e-01</td>
+<td align="left">9.31e-01</td>
 </tr>
 <tr class="odd">
+<td align="left">NOTCH1.x</td>
 <td align="left">NOTCH1</td>
-<td align="left">NOTCH1</td>
-<td align="right">-0.21</td>
-<td align="right">0.81</td>
-<td align="right">0.67900</td>
-<td align="right">0.996</td>
-<td align="right">0.07</td>
+<td align="right">0.071</td>
+<td align="right">-0.213</td>
+<td align="right">0.808</td>
+<td align="right">0.514</td>
+<td align="right">0.295</td>
+<td align="right">2.216</td>
+<td align="left">6.79e-01</td>
+<td align="left">9.31e-01</td>
 </tr>
 <tr class="even">
+<td align="left">FGF19.Amp.x</td>
+<td align="left">FGF19_Amp</td>
+<td align="right">0.050</td>
+<td align="right">0.210</td>
+<td align="right">1.234</td>
+<td align="right">0.515</td>
+<td align="right">0.450</td>
+<td align="right">3.388</td>
+<td align="left">6.83e-01</td>
+<td align="left">9.31e-01</td>
+</tr>
+<tr class="odd">
+<td align="left">FGF3.Amp.x</td>
+<td align="left">FGF3_Amp</td>
+<td align="right">0.050</td>
+<td align="right">0.210</td>
+<td align="right">1.234</td>
+<td align="right">0.515</td>
+<td align="right">0.450</td>
+<td align="right">3.388</td>
+<td align="left">6.83e-01</td>
+<td align="left">9.31e-01</td>
+</tr>
+<tr class="even">
+<td align="left">FGF4.Amp.x</td>
+<td align="left">FGF4_Amp</td>
+<td align="right">0.050</td>
+<td align="right">0.210</td>
+<td align="right">1.234</td>
+<td align="right">0.515</td>
+<td align="right">0.450</td>
+<td align="right">3.388</td>
+<td align="left">6.83e-01</td>
+<td align="left">9.31e-01</td>
+</tr>
+<tr class="odd">
+<td align="left">SMARCA4.x</td>
 <td align="left">SMARCA4</td>
-<td align="left">SMARCA4</td>
-<td align="right">-0.18</td>
-<td align="right">0.83</td>
-<td align="right">0.72100</td>
-<td align="right">0.996</td>
-<td align="right">0.06</td>
+<td align="right">0.064</td>
+<td align="right">-0.184</td>
+<td align="right">0.832</td>
+<td align="right">0.514</td>
+<td align="right">0.304</td>
+<td align="right">2.281</td>
+<td align="left">7.21e-01</td>
+<td align="left">9.41e-01</td>
 </tr>
-<tr class="odd">
+<tr class="even">
+<td align="left">ARID1A.x</td>
 <td align="left">ARID1A</td>
-<td align="left">ARID1A</td>
-<td align="right">0.12</td>
-<td align="right">1.12</td>
-<td align="right">0.78600</td>
-<td align="right">0.996</td>
-<td align="right">0.08</td>
+<td align="right">0.079</td>
+<td align="right">0.116</td>
+<td align="right">1.123</td>
+<td align="right">0.427</td>
+<td align="right">0.486</td>
+<td align="right">2.592</td>
+<td align="left">7.86e-01</td>
+<td align="left">9.82e-01</td>
 </tr>
-<tr class="even">
+<tr class="odd">
+<td align="left">POLE.x</td>
 <td align="left">POLE</td>
-<td align="left">POLE</td>
-<td align="right">-0.12</td>
-<td align="right">0.89</td>
-<td align="right">0.84100</td>
-<td align="right">0.996</td>
-<td align="right">0.05</td>
+<td align="right">0.050</td>
+<td align="right">-0.118</td>
+<td align="right">0.888</td>
+<td align="right">0.590</td>
+<td align="right">0.279</td>
+<td align="right">2.826</td>
+<td align="left">8.41e-01</td>
+<td align="left">9.96e-01</td>
 </tr>
-<tr class="odd">
+<tr class="even">
+<td align="left">FAT1.x</td>
 <td align="left">FAT1</td>
-<td align="left">FAT1</td>
-<td align="right">-0.07</td>
-<td align="right">0.94</td>
-<td align="right">0.86700</td>
-<td align="right">0.996</td>
-<td align="right">0.11</td>
-</tr>
-<tr class="even">
-<td align="left">MLL3</td>
-<td align="left">MLL3</td>
-<td align="right">-0.06</td>
-<td align="right">0.94</td>
-<td align="right">0.89400</td>
-<td align="right">0.996</td>
-<td align="right">0.06</td>
+<td align="right">0.107</td>
+<td align="right">-0.067</td>
+<td align="right">0.935</td>
+<td align="right">0.398</td>
+<td align="right">0.429</td>
+<td align="right">2.040</td>
+<td align="left">8.67e-01</td>
+<td align="left">9.96e-01</td>
 </tr>
 <tr class="odd">
+<td align="left">STK11.x</td>
 <td align="left">STK11</td>
-<td align="left">STK11</td>
-<td align="right">0.02</td>
-<td align="right">1.02</td>
-<td align="right">0.96300</td>
-<td align="right">0.996</td>
-<td align="right">0.09</td>
+<td align="right">0.086</td>
+<td align="right">0.020</td>
+<td align="right">1.020</td>
+<td align="right">0.426</td>
+<td align="right">0.442</td>
+<td align="right">2.353</td>
+<td align="left">9.63e-01</td>
+<td align="left">9.96e-01</td>
 </tr>
 <tr class="even">
+<td align="left">PTPRT.x</td>
 <td align="left">PTPRT</td>
-<td align="left">PTPRT</td>
-<td align="right">-0.01</td>
-<td align="right">0.99</td>
-<td align="right">0.97800</td>
-<td align="right">0.996</td>
-<td align="right">0.05</td>
+<td align="right">0.050</td>
+<td align="right">-0.014</td>
+<td align="right">0.986</td>
+<td align="right">0.515</td>
+<td align="right">0.360</td>
+<td align="right">2.703</td>
+<td align="left">9.78e-01</td>
+<td align="left">9.96e-01</td>
 </tr>
 <tr class="odd">
+<td align="left">ATM.x</td>
 <td align="left">ATM</td>
-<td align="left">ATM</td>
-<td align="right">0.01</td>
-<td align="right">1.01</td>
-<td align="right">0.97800</td>
-<td align="right">0.996</td>
-<td align="right">0.07</td>
+<td align="right">0.071</td>
+<td align="right">0.013</td>
+<td align="right">1.013</td>
+<td align="right">0.465</td>
+<td align="right">0.407</td>
+<td align="right">2.521</td>
+<td align="left">9.78e-01</td>
+<td align="left">9.96e-01</td>
 </tr>
 <tr class="even">
+<td align="left">BRCA2.x</td>
 <td align="left">BRCA2</td>
-<td align="left">BRCA2</td>
-<td align="right">-18.16</td>
-<td align="right">0.00</td>
-<td align="right">0.99600</td>
-<td align="right">0.996</td>
-<td align="right">0.05</td>
+<td align="right">0.050</td>
+<td align="right">-18.164</td>
+<td align="right">0.000</td>
+<td align="right">3374.407</td>
+<td align="right">0.000</td>
+<td align="right">Inf</td>
+<td align="left">9.96e-01</td>
+<td align="left">9.96e-01</td>
 </tr>
 </tbody>
 </table>
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">surv.test</span><span class="op">$</span><span class="va">p</span></code></pre></div>
-<div id="htmlwidget-b3a4d129819b4378e9c8" style="width:768px;height:384px;" class="plotly html-widget"></div>
-<script type="application/json" data-for="htmlwidget-b3a4d129819b4378e9c8">{"x":{"visdat":{"161115922b62":["function () ","plotlyVisDat"]},"cur_data":"161115922b62","attrs":{"161115922b62":{"x":{},"y":{},"text":{},"mode":"markers","color":{},"alpha_stroke":1,"sizes":[10,100],"spans":[1,20]}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"title":"Volcano Plot","xaxis":{"domain":[0,1],"automargin":true,"title":"Coefficient"},"yaxis":{"domain":[0,1],"automargin":true,"title":"-log10(Pvalue)"},"hovermode":"closest","showlegend":false},"source":"A","config":{"showSendToCloud":false},"data":[{"x":[0.84,0.94,0.72,0.9,0.56,0.4,-1.21,0.62,0.48,-0.97,-0.65,0.42,-0.6,0.3,-0.27,0.16,-0.21,-0.18,0.12,-0.12,-0.07,-0.06,0.02,-0.01,0.01,-18.16],"y":[2.08565684288056,1.70774392864352,1.45842075605342,1.45717457304082,1.06600683616876,1.0565054840939,1.03715731879876,0.829738284605043,0.801342913045577,0.756961951313706,0.568636235841013,0.536107011014093,0.510041520575165,0.458420756053419,0.219682687859849,0.173277479831008,0.168130225719498,0.142064735280571,0.104577453960592,0.0752040042020878,0.0619809025237897,0.0486624812040823,0.0163737128754655,0.00966114521239857,0.00966114521239857,0.00174066157630127],"text":["Feature : EGFR <br> Hazard Ratio : 2.32 <br> Mutation Frequency : 0.1","Feature : MLL <br> Hazard Ratio : 2.57 <br> Mutation Frequency : 0.06","Feature : RB1 <br> Hazard Ratio : 2.06 <br> Mutation Frequency : 0.09","Feature : CREBBP <br> Hazard Ratio : 2.46 <br> Mutation Frequency : 0.06","Feature : MLL2 <br> Hazard Ratio : 1.76 <br> Mutation Frequency : 0.1","Feature : TP53 <br> Hazard Ratio : 1.49 <br> Mutation Frequency : 0.44","Feature : ATRX <br> Hazard Ratio : 0.3 <br> Mutation Frequency : 0.07","Feature : NF1 <br> Hazard Ratio : 1.87 <br> Mutation Frequency : 0.06","Feature : KRAS <br> Hazard Ratio : 1.62 <br> Mutation Frequency : 0.13","Feature : CDH1 <br> Hazard Ratio : 0.38 <br> Mutation Frequency : 0.06","Feature : APC <br> Hazard Ratio : 0.52 <br> Mutation Frequency : 0.07","Feature : KEAP1 <br> Hazard Ratio : 1.52 <br> Mutation Frequency : 0.08","Feature : PTEN <br> Hazard Ratio : 0.55 <br> Mutation Frequency : 0.06","Feature : TERT <br> Hazard Ratio : 1.35 <br> Mutation Frequency : 0.14","Feature : EPHA5 <br> Hazard Ratio : 0.77 <br> Mutation Frequency : 0.06","Feature : PIK3CA <br> Hazard Ratio : 1.17 <br> Mutation Frequency : 0.11","Feature : NOTCH1 <br> Hazard Ratio : 0.81 <br> Mutation Frequency : 0.07","Feature : SMARCA4 <br> Hazard Ratio : 0.83 <br> Mutation Frequency : 0.06","Feature : ARID1A <br> Hazard Ratio : 1.12 <br> Mutation Frequency : 0.08","Feature : POLE <br> Hazard Ratio : 0.89 <br> Mutation Frequency : 0.05","Feature : FAT1 <br> Hazard Ratio : 0.94 <br> Mutation Frequency : 0.11","Feature : MLL3 <br> Hazard Ratio : 0.94 <br> Mutation Frequency : 0.06","Feature : STK11 <br> Hazard Ratio : 1.02 <br> Mutation Frequency : 0.09","Feature : PTPRT <br> Hazard Ratio : 0.99 <br> Mutation Frequency : 0.05","Feature : ATM <br> Hazard Ratio : 1.01 <br> Mutation Frequency : 0.07","Feature : BRCA2 <br> Hazard Ratio : 0 <br> Mutation Frequency : 0.05"],"mode":"markers","type":"scatter","name":"blue","marker":{"color":"rgba(252,141,98,1)","line":{"color":"rgba(252,141,98,1)"}},"textfont":{"color":"rgba(252,141,98,1)"},"error_y":{"color":"rgba(252,141,98,1)"},"error_x":{"color":"rgba(252,141,98,1)"},"line":{"color":"rgba(252,141,98,1)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.2,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script><div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<div id="htmlwidget-7d200d446b1470f0c856" style="width:768px;height:384px;" class="plotly html-widget"></div>
+<script type="application/json" data-for="htmlwidget-7d200d446b1470f0c856">{"x":{"visdat":{"e4f64cb53a78":["function () ","plotlyVisDat"]},"cur_data":"e4f64cb53a78","attrs":{"e4f64cb53a78":{"x":{},"y":{},"text":{},"mode":"markers","color":{},"alpha_stroke":1,"sizes":[10,100],"spans":[1,20]}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"title":"Volcano Plot","xaxis":{"domain":[0,1],"automargin":true,"title":"Estimate"},"yaxis":{"domain":[0,1],"automargin":true,"title":"-log10(Pvalue)"},"hovermode":"closest","showlegend":false},"source":"A","config":{"showSendToCloud":false},"data":[{"x":[0.84,0.721,0.902,0.4,0.785,-1.209,0.624,0.483,-0.972,0.553,-0.65,0.42,-0.601,0.406,0.297,-0.284,-0.268,0.16,-0.213,0.21,0.21,0.21,-0.184,0.116,-0.118,-0.067,0.02,-0.014,0.013,-18.164],"y":[2.08565684288056,1.45842075605342,1.45717457304082,1.0565054840939,1.040481623027,1.03715731879876,0.829738284605043,0.801342913045577,0.756961951313706,0.709965388637482,0.568636235841013,0.536107011014093,0.510041520575165,0.467245621007502,0.458420756053419,0.235823867609669,0.219682687859849,0.173277479831008,0.168130225719498,0.165579296318467,0.165579296318467,0.165579296318467,0.142064735280571,0.104577453960592,0.0752040042020878,0.0619809025237897,0.0163737128754655,0.00966114521239857,0.00966114521239857,0.00174066157630127],"text":["Feature : EGFR  <br> Hazard Ratio : 2.317 <br> Event Frequency : 0.1","Feature : RB1  <br> Hazard Ratio : 2.057 <br> Event Frequency : 0.093","Feature : CREBBP  <br> Hazard Ratio : 2.465 <br> Event Frequency : 0.057","Feature : TP53  <br> Hazard Ratio : 1.492 <br> Event Frequency : 0.443","Feature : MYC_Amp  <br> Hazard Ratio : 2.193 <br> Event Frequency : 0.057","Feature : ATRX  <br> Hazard Ratio : 0.298 <br> Event Frequency : 0.071","Feature : NF1  <br> Hazard Ratio : 1.866 <br> Event Frequency : 0.064","Feature : KRAS  <br> Hazard Ratio : 1.621 <br> Event Frequency : 0.129","Feature : CDH1  <br> Hazard Ratio : 0.378 <br> Event Frequency : 0.057","Feature : CDKN2A_Del  <br> Hazard Ratio : 1.739 <br> Event Frequency : 0.057","Feature : APC  <br> Hazard Ratio : 0.522 <br> Event Frequency : 0.071","Feature : KEAP1  <br> Hazard Ratio : 1.522 <br> Event Frequency : 0.079","Feature : PTEN  <br> Hazard Ratio : 0.548 <br> Event Frequency : 0.057","Feature : CCND1_Amp  <br> Hazard Ratio : 1.501 <br> Event Frequency : 0.064","Feature : TERT  <br> Hazard Ratio : 1.346 <br> Event Frequency : 0.136","Feature : MCL1_Amp  <br> Hazard Ratio : 0.753 <br> Event Frequency : 0.057","Feature : EPHA5  <br> Hazard Ratio : 0.765 <br> Event Frequency : 0.064","Feature : PIK3CA  <br> Hazard Ratio : 1.173 <br> Event Frequency : 0.107","Feature : NOTCH1  <br> Hazard Ratio : 0.808 <br> Event Frequency : 0.071","Feature : FGF19_Amp  <br> Hazard Ratio : 1.234 <br> Event Frequency : 0.05","Feature : FGF3_Amp  <br> Hazard Ratio : 1.234 <br> Event Frequency : 0.05","Feature : FGF4_Amp  <br> Hazard Ratio : 1.234 <br> Event Frequency : 0.05","Feature : SMARCA4  <br> Hazard Ratio : 0.832 <br> Event Frequency : 0.064","Feature : ARID1A  <br> Hazard Ratio : 1.123 <br> Event Frequency : 0.079","Feature : POLE  <br> Hazard Ratio : 0.888 <br> Event Frequency : 0.05","Feature : FAT1  <br> Hazard Ratio : 0.935 <br> Event Frequency : 0.107","Feature : STK11  <br> Hazard Ratio : 1.02 <br> Event Frequency : 0.086","Feature : PTPRT  <br> Hazard Ratio : 0.986 <br> Event Frequency : 0.05","Feature : ATM  <br> Hazard Ratio : 1.013 <br> Event Frequency : 0.071","Feature : BRCA2  <br> Hazard Ratio : 0 <br> Event Frequency : 0.05"],"mode":"markers","type":"scatter","name":"red","marker":{"color":"rgba(252,141,98,1)","line":{"color":"rgba(252,141,98,1)"}},"textfont":{"color":"rgba(252,141,98,1)"},"error_y":{"color":"rgba(252,141,98,1)"},"error_x":{"color":"rgba(252,141,98,1)"},"line":{"color":"rgba(252,141,98,1)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.2,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script><div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">surv.test</span><span class="op">$</span><span class="va">KM</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></code></pre></div>
 <p><img src="gnomeR-vignette_files/figure-html/unnamed-chunk-14-2.png" width="768"></p>
 <div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
@@ -1191,69 +1434,69 @@
 <div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://dplyr.tidyverse.org/reference/tbl_df.html">as.tbl</a></span><span class="op">(</span><span class="va">facet</span><span class="op">$</span><span class="va">out.cn</span><span class="op">)</span>
 <span class="co">#&gt; # A tibble: 100 x 644</span>
-<span class="co">#&gt;    `chr1.2488138-1… `chr1.11167550-… `chr1.14192672-… `chr1.15296019-…</span>
-<span class="co">#&gt;               &lt;dbl&gt;            &lt;dbl&gt;            &lt;dbl&gt;            &lt;dbl&gt;</span>
-<span class="co">#&gt;  1           0.0326           0.0326           0.0326           0.0326</span>
-<span class="co">#&gt;  2          -0.0198          -0.0198          -0.0198          -0.0198</span>
-<span class="co">#&gt;  3           0.0939           0.0939           0.0939           0.0939</span>
-<span class="co">#&gt;  4          -0.155            0.0092           0.0092           0.0092</span>
-<span class="co">#&gt;  5          -0.029           -0.029           -0.029           -0.029 </span>
-<span class="co">#&gt;  6           0.0431           0.0431           0.0431           0.0431</span>
-<span class="co">#&gt;  7           0.113            0.113            0.113            0.113 </span>
-<span class="co">#&gt;  8          -0.408           -0.0501          -0.0501          -0.0501</span>
-<span class="co">#&gt;  9          -0.0555          -0.0555          -0.0555          -0.0555</span>
-<span class="co">#&gt; 10          -0.0391          -0.0391          -0.0391          -0.0391</span>
-<span class="co">#&gt; # … with 90 more rows, and 640 more variables: `chr1.16199471-16235896` &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   `chr1.16235896-17345415` &lt;dbl&gt;, `chr1.17345415-22587878` &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   `chr1.22587878-30535114` &lt;dbl&gt;, `chr1.30535114-35013586` &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   `chr1.35013586-35468429` &lt;dbl&gt;, `chr1.35468429-36411737` &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   `chr1.36411737-45795044` &lt;dbl&gt;, `chr1.45795044-51434461` &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   `chr1.51434461-59564373` &lt;dbl&gt;, `chr1.59564373-65300293` &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   `chr1.65300293-65301840` &lt;dbl&gt;, `chr1.65301840-66042078` &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   `chr1.66042078-70742063` &lt;dbl&gt;, `chr1.70742063-82939537` &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   `chr1.82939537-96258925` &lt;dbl&gt;, `chr1.96258925-99589424` &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   `chr1.99589424-108079945` &lt;dbl&gt;, `chr1.108079945-113234456` &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   `chr1.113234456-117273534` &lt;dbl&gt;, `chr1.117273534-118145461` &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   `chr1.118145461-118223984` &lt;dbl&gt;, `chr1.118223984-120199189` &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   `chr1.120199189-120491113` &lt;dbl&gt;, `chr1.120491113-120572570` &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   `chr1.120572570-120611984` &lt;dbl&gt;, `chr1.120611984-147282446` &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   `chr1.147282446-152330945` &lt;dbl&gt;, `chr1.152330945-155870294` &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   `chr1.155870294-156785626` &lt;dbl&gt;, `chr1.156785626-161284206` &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   `chr1.161284206-162688895` &lt;dbl&gt;, `chr1.162688895-169022903` &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   `chr1.169022903-175914298` &lt;dbl&gt;, `chr1.175914298-176175911` &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   `chr1.176175911-180810233` &lt;dbl&gt;, `chr1.180810233-185520600` &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   `chr1.185520600-193094295` &lt;dbl&gt;, `chr1.193094295-202188641` &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   `chr1.202188641-204494686` &lt;dbl&gt;, `chr1.204494686-206646614` &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   `chr1.206646614-206942027` &lt;dbl&gt;, `chr1.206942027-209632563` &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   `chr1.209632563-219991341` &lt;dbl&gt;, `chr1.219991341-226064745` &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   `chr1.226064745-226549202` &lt;dbl&gt;, `chr1.226549202-226589998` &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   `chr1.226589998-234272887` &lt;dbl&gt;, `chr1.234272887-243663067` &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   `chr1.243663067-245977996` &lt;dbl&gt;, `chr2.4717089-25100738` &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   `chr2.25100738-28539877` &lt;dbl&gt;, `chr2.28539877-29416439` &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   `chr2.29416439-34654129` &lt;dbl&gt;, `chr2.34654129-38467258` &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   `chr2.38467258-47596683` &lt;dbl&gt;, `chr2.47596683-47600656` &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   `chr2.47600656-50178151` &lt;dbl&gt;, `chr2.50178151-60170875` &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   `chr2.60170875-61706028` &lt;dbl&gt;, `chr2.61706028-61711156` &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   `chr2.61711156-72126420` &lt;dbl&gt;, `chr2.72126420-96919700` &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   `chr2.96919700-99136565` &lt;dbl&gt;, `chr2.99136565-99149899` &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   `chr2.99149899-99373720` &lt;dbl&gt;, `chr2.99373720-120048729` &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   `chr2.120048729-125424612` &lt;dbl&gt;, `chr2.125424612-158739584` &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   `chr2.158739584-173914775` &lt;dbl&gt;, `chr2.173914775-178129282` &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   `chr2.178129282-185198425` &lt;dbl&gt;, `chr2.185198425-189541688` &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   `chr2.189541688-193538820` &lt;dbl&gt;, `chr2.193538820-193562208` &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   `chr2.193562208-198257106` &lt;dbl&gt;, `chr2.198257106-198299710` &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   `chr2.198299710-202123030` &lt;dbl&gt;, `chr2.202123030-203723989` &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   `chr2.203723989-204836598` &lt;dbl&gt;, `chr2.204836598-212248563` &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   `chr2.212248563-216768839` &lt;dbl&gt;, `chr2.216768839-217736131` &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   `chr2.217736131-242800953` &lt;dbl&gt;, `chr3.1449872-12955982` &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   `chr3.12955982-24205251` &lt;dbl&gt;, `chr3.24205251-30733002` &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   `chr3.30733002-33432307` &lt;dbl&gt;, `chr3.33432307-37035097` &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   `chr3.37035097-37038155` &lt;dbl&gt;, `chr3.37038155-38180336` &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   `chr3.38180336-41265566` &lt;dbl&gt;, `chr3.41265566-43177020` &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   `chr3.43177020-47058664` &lt;dbl&gt;, `chr3.47058664-59789176` &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   `chr3.59789176-69788801` &lt;dbl&gt;, `chr3.69788801-71015124` &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   `chr3.71015124-71019922` &lt;dbl&gt;, `chr3.71019922-71064752` &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   `chr3.71064752-71247137` &lt;dbl&gt;, …</span></code></pre></div>
+<span class="co">#&gt;    `chr1.2488138-1116… `chr1.11167550-141… `chr1.14192672-15… `chr1.15296019-16…</span>
+<span class="co">#&gt;                  &lt;dbl&gt;               &lt;dbl&gt;              &lt;dbl&gt;              &lt;dbl&gt;</span>
+<span class="co">#&gt;  1              0.0326              0.0326             0.0326             0.0326</span>
+<span class="co">#&gt;  2             -0.0198             -0.0198            -0.0198            -0.0198</span>
+<span class="co">#&gt;  3              0.0939              0.0939             0.0939             0.0939</span>
+<span class="co">#&gt;  4             -0.155               0.0092             0.0092             0.0092</span>
+<span class="co">#&gt;  5             -0.029              -0.029             -0.029             -0.029 </span>
+<span class="co">#&gt;  6              0.0431              0.0431             0.0431             0.0431</span>
+<span class="co">#&gt;  7              0.113               0.113              0.113              0.113 </span>
+<span class="co">#&gt;  8             -0.408              -0.0501            -0.0501            -0.0501</span>
+<span class="co">#&gt;  9             -0.0555             -0.0555            -0.0555            -0.0555</span>
+<span class="co">#&gt; 10             -0.0391             -0.0391            -0.0391            -0.0391</span>
+<span class="co">#&gt; # … with 90 more rows, and 640 more variables: chr1.16199471-16235896 &lt;dbl&gt;,</span>
+<span class="co">#&gt; #   chr1.16235896-17345415 &lt;dbl&gt;, chr1.17345415-22587878 &lt;dbl&gt;,</span>
+<span class="co">#&gt; #   chr1.22587878-30535114 &lt;dbl&gt;, chr1.30535114-35013586 &lt;dbl&gt;,</span>
+<span class="co">#&gt; #   chr1.35013586-35468429 &lt;dbl&gt;, chr1.35468429-36411737 &lt;dbl&gt;,</span>
+<span class="co">#&gt; #   chr1.36411737-45795044 &lt;dbl&gt;, chr1.45795044-51434461 &lt;dbl&gt;,</span>
+<span class="co">#&gt; #   chr1.51434461-59564373 &lt;dbl&gt;, chr1.59564373-65300293 &lt;dbl&gt;,</span>
+<span class="co">#&gt; #   chr1.65300293-65301840 &lt;dbl&gt;, chr1.65301840-66042078 &lt;dbl&gt;,</span>
+<span class="co">#&gt; #   chr1.66042078-70742063 &lt;dbl&gt;, chr1.70742063-82939537 &lt;dbl&gt;,</span>
+<span class="co">#&gt; #   chr1.82939537-96258925 &lt;dbl&gt;, chr1.96258925-99589424 &lt;dbl&gt;,</span>
+<span class="co">#&gt; #   chr1.99589424-108079945 &lt;dbl&gt;, chr1.108079945-113234456 &lt;dbl&gt;,</span>
+<span class="co">#&gt; #   chr1.113234456-117273534 &lt;dbl&gt;, chr1.117273534-118145461 &lt;dbl&gt;,</span>
+<span class="co">#&gt; #   chr1.118145461-118223984 &lt;dbl&gt;, chr1.118223984-120199189 &lt;dbl&gt;,</span>
+<span class="co">#&gt; #   chr1.120199189-120491113 &lt;dbl&gt;, chr1.120491113-120572570 &lt;dbl&gt;,</span>
+<span class="co">#&gt; #   chr1.120572570-120611984 &lt;dbl&gt;, chr1.120611984-147282446 &lt;dbl&gt;,</span>
+<span class="co">#&gt; #   chr1.147282446-152330945 &lt;dbl&gt;, chr1.152330945-155870294 &lt;dbl&gt;,</span>
+<span class="co">#&gt; #   chr1.155870294-156785626 &lt;dbl&gt;, chr1.156785626-161284206 &lt;dbl&gt;,</span>
+<span class="co">#&gt; #   chr1.161284206-162688895 &lt;dbl&gt;, chr1.162688895-169022903 &lt;dbl&gt;,</span>
+<span class="co">#&gt; #   chr1.169022903-175914298 &lt;dbl&gt;, chr1.175914298-176175911 &lt;dbl&gt;,</span>
+<span class="co">#&gt; #   chr1.176175911-180810233 &lt;dbl&gt;, chr1.180810233-185520600 &lt;dbl&gt;,</span>
+<span class="co">#&gt; #   chr1.185520600-193094295 &lt;dbl&gt;, chr1.193094295-202188641 &lt;dbl&gt;,</span>
+<span class="co">#&gt; #   chr1.202188641-204494686 &lt;dbl&gt;, chr1.204494686-206646614 &lt;dbl&gt;,</span>
+<span class="co">#&gt; #   chr1.206646614-206942027 &lt;dbl&gt;, chr1.206942027-209632563 &lt;dbl&gt;,</span>
+<span class="co">#&gt; #   chr1.209632563-219991341 &lt;dbl&gt;, chr1.219991341-226064745 &lt;dbl&gt;,</span>
+<span class="co">#&gt; #   chr1.226064745-226549202 &lt;dbl&gt;, chr1.226549202-226589998 &lt;dbl&gt;,</span>
+<span class="co">#&gt; #   chr1.226589998-234272887 &lt;dbl&gt;, chr1.234272887-243663067 &lt;dbl&gt;,</span>
+<span class="co">#&gt; #   chr1.243663067-245977996 &lt;dbl&gt;, chr2.4717089-25100738 &lt;dbl&gt;,</span>
+<span class="co">#&gt; #   chr2.25100738-28539877 &lt;dbl&gt;, chr2.28539877-29416439 &lt;dbl&gt;,</span>
+<span class="co">#&gt; #   chr2.29416439-34654129 &lt;dbl&gt;, chr2.34654129-38467258 &lt;dbl&gt;,</span>
+<span class="co">#&gt; #   chr2.38467258-47596683 &lt;dbl&gt;, chr2.47596683-47600656 &lt;dbl&gt;,</span>
+<span class="co">#&gt; #   chr2.47600656-50178151 &lt;dbl&gt;, chr2.50178151-60170875 &lt;dbl&gt;,</span>
+<span class="co">#&gt; #   chr2.60170875-61706028 &lt;dbl&gt;, chr2.61706028-61711156 &lt;dbl&gt;,</span>
+<span class="co">#&gt; #   chr2.61711156-72126420 &lt;dbl&gt;, chr2.72126420-96919700 &lt;dbl&gt;,</span>
+<span class="co">#&gt; #   chr2.96919700-99136565 &lt;dbl&gt;, chr2.99136565-99149899 &lt;dbl&gt;,</span>
+<span class="co">#&gt; #   chr2.99149899-99373720 &lt;dbl&gt;, chr2.99373720-120048729 &lt;dbl&gt;,</span>
+<span class="co">#&gt; #   chr2.120048729-125424612 &lt;dbl&gt;, chr2.125424612-158739584 &lt;dbl&gt;,</span>
+<span class="co">#&gt; #   chr2.158739584-173914775 &lt;dbl&gt;, chr2.173914775-178129282 &lt;dbl&gt;,</span>
+<span class="co">#&gt; #   chr2.178129282-185198425 &lt;dbl&gt;, chr2.185198425-189541688 &lt;dbl&gt;,</span>
+<span class="co">#&gt; #   chr2.189541688-193538820 &lt;dbl&gt;, chr2.193538820-193562208 &lt;dbl&gt;,</span>
+<span class="co">#&gt; #   chr2.193562208-198257106 &lt;dbl&gt;, chr2.198257106-198299710 &lt;dbl&gt;,</span>
+<span class="co">#&gt; #   chr2.198299710-202123030 &lt;dbl&gt;, chr2.202123030-203723989 &lt;dbl&gt;,</span>
+<span class="co">#&gt; #   chr2.203723989-204836598 &lt;dbl&gt;, chr2.204836598-212248563 &lt;dbl&gt;,</span>
+<span class="co">#&gt; #   chr2.212248563-216768839 &lt;dbl&gt;, chr2.216768839-217736131 &lt;dbl&gt;,</span>
+<span class="co">#&gt; #   chr2.217736131-242800953 &lt;dbl&gt;, chr3.1449872-12955982 &lt;dbl&gt;,</span>
+<span class="co">#&gt; #   chr3.12955982-24205251 &lt;dbl&gt;, chr3.24205251-30733002 &lt;dbl&gt;,</span>
+<span class="co">#&gt; #   chr3.30733002-33432307 &lt;dbl&gt;, chr3.33432307-37035097 &lt;dbl&gt;,</span>
+<span class="co">#&gt; #   chr3.37035097-37038155 &lt;dbl&gt;, chr3.37038155-38180336 &lt;dbl&gt;,</span>
+<span class="co">#&gt; #   chr3.38180336-41265566 &lt;dbl&gt;, chr3.41265566-43177020 &lt;dbl&gt;,</span>
+<span class="co">#&gt; #   chr3.43177020-47058664 &lt;dbl&gt;, chr3.47058664-59789176 &lt;dbl&gt;,</span>
+<span class="co">#&gt; #   chr3.59789176-69788801 &lt;dbl&gt;, chr3.69788801-71015124 &lt;dbl&gt;,</span>
+<span class="co">#&gt; #   chr3.71015124-71019922 &lt;dbl&gt;, chr3.71019922-71064752 &lt;dbl&gt;,</span>
+<span class="co">#&gt; #   chr3.71064752-71247137 &lt;dbl&gt;, …</span></code></pre></div>
 </div>
 </div>
   </div>

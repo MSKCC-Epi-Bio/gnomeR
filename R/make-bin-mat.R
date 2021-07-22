@@ -690,16 +690,17 @@ createbin.cna <- function(obj, patients, mut.type,cna.binary,
   cna <- as.data.frame(t(cna))
   rownames(cna) <- gsub("\\.","-",rownames(cna))
   cna <- cna[rownames(cna) %in% patients,]
+  samples_temp <- rownames(cna)
 
   if(cna.binary){
     temp <- do.call("cbind",apply(cna,2,function(x){
       if(cna.relax){
-        yA <- ifelse(x>=0.9,1,0)
-        yD <- ifelse(x<=-0.9,1,0)
+        yA <- ifelse(as.numeric(x)>=0.9,1,0)
+        yD <- ifelse(as.numeric(x)<=-0.9,1,0)
       }
       if(!cna.relax){
-        yA <- ifelse(x==2,1,0)
-        yD <- ifelse(x<=-0.9,1,0)
+        yA <- ifelse(as.numeric(x)==2,1,0)
+        yD <- ifelse(as.numeric(x)<=-0.9,1,0) #==-2
       }
       out <- as.data.frame(cbind(yA,yD))
       colnames(out) <- c("Amp","Del")
@@ -707,6 +708,8 @@ createbin.cna <- function(obj, patients, mut.type,cna.binary,
     }))
 
     cna <- temp[,apply(temp,2,function(x){sum(x,na.rm=T) > 0})]
+    rownames(cna) <- samples_temp
+
     # add missing
     if(length(which(is.na(match(patients,rownames(cna))))) > 0){
       missing <- patients[which(is.na(match(patients,rownames(cna))))]
@@ -731,7 +734,6 @@ createbin.cna <- function(obj, patients, mut.type,cna.binary,
     cna <- cna[match(patients,rownames(cna)),]
 
     cna <- cna %>%
-      # filter(rownames(cna) == "P-0000244-T01-IM3") %>%
       mutate_all(~ as.numeric(gsub(" ","",as.character(.)))) %>%
       mutate_all(
         ~ case_when(
@@ -794,12 +796,13 @@ createbin.api <- function(obj, patients, mut.type,cna.binary,
   cna <- cna[,-1]
   cna <- as.data.frame(t(cna))
   cna <- cna[rownames(cna) %in% patients,]
+  samples_temp <- rownames(cna)
 
   if(cna.binary){
     temp <- do.call("cbind",apply(cna,2,function(x){
       if(cna.relax){
         yA <- ifelse(x>=0.9,1,0)
-        yD <- ifelse(x<=-0.9,1,0)
+        yD <- ifelse(as.numeric(x)<=-0.9,1,0) #==-2 # yD <- ifelse(x<=-0.9,1,0)
       }
       if(!cna.relax){
         yA <- ifelse(x==2,1,0)
@@ -811,6 +814,8 @@ createbin.api <- function(obj, patients, mut.type,cna.binary,
     }))
 
     cna <- temp[,apply(temp,2,function(x){sum(x,na.rm=T) > 0})]
+    rownames(cna) <- samples_temp
+
     # add missing
     if(length(which(is.na(match(patients,rownames(cna))))) > 0){
       missing <- patients[which(is.na(match(patients,rownames(cna))))]

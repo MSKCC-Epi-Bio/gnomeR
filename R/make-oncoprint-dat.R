@@ -69,9 +69,9 @@ dat.oncoPrint <- function(gen.dat,clin.dat=NULL){
     gen.dat <- gen.dat[,-which(apply(gen.dat,2,function(x){anyNA(as.numeric(x[!is.na(x)]))}))]
   }
 
-  if(!all(apply(gen.dat,2,function(x){length(unique(x[!is.na(x)])) == 2}))){
+  if(!all(apply(gen.dat,2,function(x){length(unique(x[!is.na(x)])) <= 2}))){
     warning("All genetic components were not binary. Those which weren't will be removed")
-    gen.dat <- gen.dat[,which(apply(gen.dat,2,function(x){length(unique(x[!is.na(x)])) == 2}))]
+    gen.dat <- gen.dat[,-which(apply(gen.dat,2,function(x){length(unique(x[!is.na(x)])) > 2}))]
   }
 
 

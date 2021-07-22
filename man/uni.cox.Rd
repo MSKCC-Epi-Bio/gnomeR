@@ -5,7 +5,7 @@
 \title{uni.cox
 Performs univariate cox proportional hazard model on every feature}
 \usage{
-uni.cox(X, surv.dat, surv.formula, filter = 0, genes = NULL)
+uni.cox(X, surv.dat, surv.formula, filter = 0, genes = NULL, na.filt = 0)
 }
 \arguments{
 \item{X}{Matrix/surv.datframe of genomic features, continuous or binary (note cannot handle categorical surv.dat for the moment).}
@@ -20,6 +20,9 @@ having a genetic event (only for binary features). All features with an event ra
 Default is 0 (all features included).}
 
 \item{genes}{a character vector of gene names that will be the only ones to be kept. Default is NULL, all genes are used.}
+
+\item{na.filt}{A numeric value between 0 and 1 (1 not included) that is the upper bound for the proportion of missing
+values in the features of the inputted gen.dat matrix. Variables that exceed this proportion of missing values will be removed.}
 }
 \value{
 tab A table of all the fits performed sorted by adjusted pvalues.
