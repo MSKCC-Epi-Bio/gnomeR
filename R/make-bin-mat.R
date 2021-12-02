@@ -558,7 +558,10 @@ createbin.maf <- function(obj, patients, mut.type, cna.binary, SNP.only, include
 
   missing.mut <- apply(mut,1,function(x){sum(x)==0})
   if(sum(missing.mut) > 0)
-    warning(paste0("Some patients did not have any mutations found in the MAF file.", paste0(rownames(mut)[missing.mut], collapse = ",")))
+    warning(paste0("Some patients did not have any mutations found in the MAF file. (",
+                   sum(missing.mut), ",",
+                   round(sum(missing.mut)/nrow(mut)*100, digits = 2),"%): ",
+                   paste0(rownames(mut)[missing.mut], collapse = ",")))
 
   return(mut)
 }

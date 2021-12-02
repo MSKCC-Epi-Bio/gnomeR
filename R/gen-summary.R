@@ -155,9 +155,9 @@ gen.summary <- function (gen.dat, outcome, filter = 0, cont = F, rank = T, na.fi
     ps <- c()
     for(i in 1:length(fits)){
       if(is.null(dim(fits[[i]])))
-        ps[i] <- fits[[i]][5]
+        ps[i] <- fits[[i]]["Pvalue"]
       else{
-        ps[i] <- fits[[i]][1,5]
+        ps[i] <- fits[[i]][1,"Pvalue"]
         if(nrow(fits[[i]])==1)
           names(fits)[[i]] <- paste0(names(fits)[[i]],".",rownames(fits[[i]]))
       }
