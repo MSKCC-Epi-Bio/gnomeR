@@ -5,7 +5,13 @@
 \title{plot_oncoPrint
 Creates the OncoPrint corresponding to the inputted genetic data}
 \usage{
-plot_oncoPrint(gen.dat, clin.dat = NULL, ordered = NULL)
+plot_oncoPrint(
+  gen.dat,
+  clin.dat = NULL,
+  ordered_samples = NULL,
+  rank_genes = TRUE,
+  background_color = "#CCCCCC"
+)
 }
 \arguments{
 \item{gen.dat}{A binary matrix or dataframe, with patients as rows and features as columns. Note that the names of the
@@ -13,8 +19,12 @@ columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see 
 
 \item{clin.dat}{An optional clinical file, including only the features the user wishes to add to the plot. Default is NULL.}
 
-\item{ordered}{An optional vector of length equal to the number of patients under consideration. Indicates the new order (from left to right)
+\item{ordered_samples}{An optional vector of length equal to the number of patients under consideration. Indicates the new order (from left to right)
 to be plotted.}
+
+\item{rank_genes}{Boolean argument specifying if the genes should be ranked by event frequency. Default is TRUE.}
+
+\item{background_color}{Color name to be used to fill the background of the OncoPrint.}
 }
 \value{
 p : an oncoprint object

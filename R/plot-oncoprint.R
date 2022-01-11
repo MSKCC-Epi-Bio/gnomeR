@@ -3,8 +3,10 @@
 #' @param gen.dat A binary matrix or dataframe, with patients as rows and features as columns. Note that the names of the
 #' columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see create.bin.matrix for more details on this format).
 #' @param clin.dat An optional clinical file, including only the features the user wishes to add to the plot. Default is NULL.
-#' @param ordered An optional vector of length equal to the number of patients under consideration. Indicates the new order (from left to right)
+#' @param ordered_samples An optional vector of length equal to the number of patients under consideration. Indicates the new order (from left to right)
 #' to be plotted.
+#' @param rank_genes Boolean argument specifying if the genes should be ranked by event frequency. Default is TRUE.
+#' @param background_color Color name to be used to fill the background of the OncoPrint.
 #' @return p : an oncoprint object
 #' @export
 #' @examples library(gnomeR)
@@ -39,9 +41,10 @@
 #' ComplexHeatmap
 #' tibble
 
-plot_oncoPrint <- function(gen.dat,clin.dat=NULL,ordered=NULL){
+plot_oncoPrint <- function(gen.dat,clin.dat=NULL,ordered_samples=NULL, rank_genes = TRUE,background_color = "#CCCCCC"){
 
 
+  # if(rank_genes){
   oncoprint_column_order = function(count_matrix = NULL) {
     scoreCol = function(x) {
       score = 0
@@ -56,6 +59,13 @@ plot_oncoPrint <- function(gen.dat,clin.dat=NULL,ordered=NULL){
                    2, scoreCol)
     order(scores, decreasing = TRUE)
   }
+  # }
+  # else{
+  #   oncoprint_column_order <- function(count_matrix = NULL){
+  #     1:ncol(count_matrix)
+  #   }
+  # }
+
 
   # make data #
   mat <- dat.oncoPrint(gen.dat,clin.dat)
@@ -64,14 +74,14 @@ plot_oncoPrint <- function(gen.dat,clin.dat=NULL,ordered=NULL){
     # get all values #
     clin.factors <- unique(unlist(apply(mat,2,unique)))
     clin.factors <- clin.factors[-stats::na.omit(match(c("MUT;","AMP;","DEL;","FUS;","  ","MIS;",
-                                                  "MUT;FUS;","MUT;DEL;","MUT;AMP;","MUT;DEL;FUS;",
-                                                  "DEL;FUS;","MUT;AMP;FUS;",
-                                                  "AMP;FUS;"),clin.factors))]
+                                                         "MUT;FUS;","MUT;DEL;","MUT;AMP;","MUT;DEL;FUS;",
+                                                         "DEL;FUS;","MUT;AMP;FUS;",
+                                                         "AMP;FUS;"),clin.factors))]
     if(length(clin.factors) == 0){
       col = c("MUT" = "#008000", "AMP" = "red", "DEL" = "blue", "FUS" = "orange","MIS" = "black")
       alter_fun = list(
         background = function(x, y, w, h) {
-          grid::grid.rect(x, y, w-unit(0.5, "mm"), h-unit(0.5, "mm"), gp = grid::gpar(fill = "#CCCCCC", col = NA))
+          grid::grid.rect(x, y, w-unit(0.5, "mm"), h-unit(0.5, "mm"), gp = grid::gpar(fill = background_color, col = NA))
         },
         DEL = function(x, y, w, h) {
           grid::grid.rect(x, y, w-unit(0.5, "mm"), h-unit(0.5, "mm"), gp = grid::gpar(fill = "blue", col = NA))
@@ -102,7 +112,7 @@ plot_oncoPrint <- function(gen.dat,clin.dat=NULL,ordered=NULL){
 
       for(k in 1:length(sum.factors)){
         if(as.numeric(sum.factors[k]) == 2){
-          added <- c(added, c("purple", "#CCCCCC"))
+          added <- c(added, c("purple", background_color))
           names.toadd <- c(names.toadd,
                            levels(as.factor(clin.factors[grep(names(sum.factors)[k],clin.factors)])))
         }
@@ -117,7 +127,7 @@ plot_oncoPrint <- function(gen.dat,clin.dat=NULL,ordered=NULL){
       col = c("MUT" = "#008000", "AMP" = "red", "DEL" = "blue", "FUS" = "orange","MIS" = "black",added)
       alter_fun = list(
         background = function(x, y, w, h) {
-          grid::grid.rect(x, y, w-unit(0.5, "mm"), h-unit(0.5, "mm"), gp = grid::gpar(fill = "#CCCCCC", col = NA))
+          grid::grid.rect(x, y, w-unit(0.5, "mm"), h-unit(0.5, "mm"), gp = grid::gpar(fill = background_color, col = NA))
         },
         DEL = function(x, y, w, h) {
           grid::grid.rect(x, y, w-unit(0.5, "mm"), h-unit(0.5, "mm"), gp = grid::gpar(fill = "blue", col = NA))
@@ -145,8 +155,13 @@ plot_oncoPrint <- function(gen.dat,clin.dat=NULL,ordered=NULL){
       alter_fun <- c(alter_fun,to.add)
     }
 
-    if(!is.null(ordered)) {
-      sorted.mat <- mat[,ordered]
+    if(!is.null(ordered_samples)) {
+      if(rank_genes)
+        row_order <- order(apply(mat, 1, function(x){sum(gsub("MIS;","  ",x) != "  ")}),decreasing = T)
+      else
+        row_order <- 1:nrow(mat)
+
+      sorted.mat <- mat[row_order,ordered_samples]
 
       p <- oncoPrint(sorted.mat, get_type = function(x) strsplit(x, ";")[[1]],
                      alter_fun = alter_fun, col = col, column_order = 1:ncol(sorted.mat),row_order = 1:nrow(sorted.mat),
@@ -157,7 +172,10 @@ plot_oncoPrint <- function(gen.dat,clin.dat=NULL,ordered=NULL){
                      alter_fun_is_vectorized = FALSE)
     }
     else{
-      row_order <- order(apply(mat, 1, function(x){sum(gsub("MIS;","  ",x) != "  ")}),decreasing = T)
+      if(rank_genes)
+        row_order <- order(apply(mat, 1, function(x){sum(gsub("MIS;","  ",x) != "  ")}),decreasing = T)
+      else
+        row_order <- 1:nrow(mat)
 
       get_type2 = function(x) gsub("^\\s+|\\s+$", "", ComplexHeatmap::default_get_type(x))
       all_type = unique(unlist(lapply(mat, get_type2)))
@@ -196,7 +214,7 @@ plot_oncoPrint <- function(gen.dat,clin.dat=NULL,ordered=NULL){
     col = c("MUT" = "#008000", "AMP" = "red", "DEL" = "blue", "FUS" = "orange", "MIS" = "black")
     alter_fun = list(
       background = function(x, y, w, h) {
-        grid::grid.rect(x, y, w-unit(0.5, "mm"), h-unit(0.5, "mm"), gp = grid::gpar(fill = "#CCCCCC", col = NA))
+        grid::grid.rect(x, y, w-unit(0.5, "mm"), h-unit(0.5, "mm"), gp = grid::gpar(fill = background_color, col = NA))
       },
       DEL = function(x, y, w, h) {
         grid::grid.rect(x, y, w-unit(0.5, "mm"), h-unit(0.5, "mm"), gp = grid::gpar(fill = "blue", col = NA))
@@ -215,8 +233,13 @@ plot_oncoPrint <- function(gen.dat,clin.dat=NULL,ordered=NULL){
       }
     )
 
-    if(!is.null(ordered)) {
-      sorted.mat <- mat[,ordered]
+    if(!is.null(ordered_samples)) {
+      if(rank_genes)
+        row_order <- order(apply(mat, 1, function(x){sum(gsub("MIS;","  ",x) != "  ")}),decreasing = T)
+      else
+        row_order <- 1:nrow(mat)
+
+      sorted.mat <- mat[row_order,ordered_samples]
 
       p <- oncoPrint(sorted.mat, get_type = function(x) strsplit(x, ";")[[1]],
                      alter_fun = alter_fun, col = col, column_order = 1:ncol(sorted.mat),row_order = 1:nrow(sorted.mat),
@@ -227,7 +250,10 @@ plot_oncoPrint <- function(gen.dat,clin.dat=NULL,ordered=NULL){
                      alter_fun_is_vectorized = FALSE)
     }
     else{
-      row_order <- order(apply(mat, 1, function(x){sum(gsub("MIS;","  ",x) != "  ")}),decreasing = T)
+      if(rank_genes)
+        row_order <- order(apply(mat, 1, function(x){sum(gsub("MIS;","  ",x) != "  ")}),decreasing = T)
+      else
+        row_order <- 1:nrow(mat)
 
       get_type2 = function(x) gsub("^\\s+|\\s+$", "", ComplexHeatmap::default_get_type(x))
       all_type = unique(unlist(lapply(mat, get_type2)))

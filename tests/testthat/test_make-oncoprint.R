@@ -14,7 +14,7 @@ test_that("make data genetics only",{
   gen.dat$CDKN2A.Del <- rbinom(nrow(gen.dat),1,1/2)
   out <- plot_oncoPrint(gen.dat)
   expect_true(typeof(out) == "S4")
-  out <- plot_oncoPrint(gen.dat,ordered = 1:nrow(gen.dat))
+  out <- plot_oncoPrint(gen.dat,ordered_samples = 1:nrow(gen.dat))
   expect_true(typeof(out) == "S4")
 
 })
@@ -46,7 +46,7 @@ test_that("make data with clinical",{
   clin.patients.dat <- clin.patients.dat %>%
     tibble::column_to_rownames('DMPID')
   rownames(gen.dat) <- rownames(clin.patients.dat)
-  out <- plot_oncoPrint(gen.dat,clin.patients.dat,ordered = 1:nrow(gen.dat))
+  out <- plot_oncoPrint(gen.dat,clin.patients.dat,ordered_samples = 1:nrow(gen.dat))
   expect_true(typeof(out) == "S4")
 
 })
