@@ -75,7 +75,7 @@ CBIOPORTAL_TOKEN = 'YOUR_TOKEN'
 You can test your connection using:
 
 ```{r,eval = F}
-get_cbioportal_token()
+cbioportalr::get_cbioportal_token()
 ```
 
 
