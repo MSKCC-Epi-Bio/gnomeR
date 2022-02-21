@@ -367,7 +367,7 @@ binmat <- function(patients=NULL, maf = NULL, mut.type = "SOMATIC",SNP.only = FA
         do.call('rbind',
                 lapply(panels_to_use, function(p){
                   p_name <- panel_names$Panel[match(p, panel_names$Sequence.Assay.ID)]
-                  samples_to_annotate <- as.character(sample_panels[sample_panels[,2] == p,1])
+                  samples_to_annotate <- as.character(unlist(sample_panels[sample_panels[,2] == p,1]))
                   # need to change this to all genes that are not included! #
                   gene_to_NA <- setdiff(gsub(".fus|.Del|.Amp|.cna","",colnames(mut)) ,
                                         as.character(unlist(genie_gene_info %>%
