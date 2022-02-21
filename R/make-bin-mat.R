@@ -362,7 +362,7 @@ binmat <- function(patients=NULL, maf = NULL, mut.type = "SOMATIC",SNP.only = FA
       }
     }
     else{
-      panels_to_use <- unique(as.character(sample_panels[,2]))
+      panels_to_use <- unique(as.character(unlist(sample_panels[,2])))
       mut_annotated <- as.data.frame(
         do.call('rbind',
                 lapply(panels_to_use, function(p){
