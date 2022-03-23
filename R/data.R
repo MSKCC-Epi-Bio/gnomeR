@@ -18,6 +18,56 @@
 #' @source \url{https://cbioportal.mskcc.org/}
 "impact_gene_info"
 
+#' GENIE consortium Gene Meta Data
+#'
+#' Dataframe labeling all genes found in the GENIE consortium along with their corresponding
+#' platform and Entrez ID.
+#'
+#' @format A data frame with 469 observations and 5 variables
+#' \describe{
+#'   \item{hugo_symbol}{Column containing all HUGO symbols genes included in IMPACT}
+#'   \item{MSK_341}{Character, indicates whether each gene was included in
+#'   IMPACT platform 341. Options are `included` and `not included`}
+#'   \item{MSK_410}{Character, indicates whether each gene was included in
+#'   IMPACT platform 410. Options are `included` and `not included`}
+#'   \item{MSK_468}{Character, indicates whether each gene was included in
+#'   IMPACT platform 468. Options are `included` and `not included`}
+#'   \item{DFCI_1}{Character, indicates whether each gene was included in
+#'   the original Dana Farber Cancer Institute sequencing panel. Options are `included` and `not included`}
+#'   \item{DFCI_2}{Character, indicates whether each gene was included in
+#'   the second Dana Farber Cancer Institute sequencing panel. Options are `included` and `not included`}
+#'   \item{DFCI_3}{Character, indicates whether each gene was included in
+#'   the third Dana Farber Cancer Institute sequencing panel. Options are `included` and `not included`}
+#'   \item{DFCI_3.1}{Character, indicates whether each gene was included in
+#'   the updated third Dana Farber Cancer Institute sequencing panel. Options are `included` and `not included`}
+#'   \item{UHN_48}{Character, indicates whether each gene was included in
+#'   the first 48 genes sequencing panel of the University Health Network. Options are `included` and `not included`}
+#'   \item{UHN_50}{Character, indicates whether each gene was included in
+#'   the 50 genes sequencing panel of the University Health Network. Options are `included` and `not included`}
+#'   \item{VICC_1_SOLIDTUMOR}{Character, indicates whether each gene was included in
+#'   the sequencing panel of the Vanderbilt-Ingram Cancer Center. Options are `included` and `not included`}
+#'   \item{VICC_1_T7}{Character, indicates whether each gene was included in
+#'   the sequencing panel of the Vanderbilt-Ingram Cancer Center. Options are `included` and `not included`}
+#'   \item{VICC_1_T5A}{Character, indicates whether each gene was included in
+#'   the sequencing panel of the Vanderbilt-Ingram Cancer Center. Options are `included` and `not included`}
+#'   \item{alias}{List of EntrezIDs corresponding to the value in the hugo_symbol column and alias list.}
+#'   \item{entrez_id}{List of known aliases corresponding to the value in the hugo_symbol column.}
+#' }
+#' @source \url{https://cbioportal.mskcc.org/}
+"genie_gene_info"
+
+
+#' GENIE panel names as found in synapse data
+#'
+#' Dataframe labeling all panels in the GENIE data and their corresponding names.
+#'
+#' @format A data frame with 469 observations and 5 variables
+#' \describe{
+#'   \item{Sequence.Assay.ID}{Column containing all panel names as found in GENIE data}
+#'   \item{Panel}{Character, indicates corresponding names in gnomeR.}
+#' }
+#' @source \url{https://cbioportal.mskcc.org/}
+"panel_names"
 
 #' IMPACT Gene Pathways
 #'

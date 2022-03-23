@@ -4,7 +4,7 @@
 \alias{gen.summary}
 \title{gen.summary}
 \usage{
-gen.summary(gen.dat, outcome, filter = 0, paired = F, cont = F, rank = T)
+gen.summary(gen.dat, outcome, filter = 0, cont = F, rank = T, na.filt = 0)
 }
 \arguments{
 \item{gen.dat}{A matrix or dataframe, with patients as rows and features as columns.}
@@ -15,11 +15,12 @@ gen.summary(gen.dat, outcome, filter = 0, paired = F, cont = F, rank = T)
 having a genetic event (only for binary features). All features with an event rate lower than that value will be removed.
 Default is 0 (all features included).}
 
-\item{paired}{Boolean if the data are paired. Default is FALSE.}
-
 \item{cont}{Should the outcome be treated as a continuous value. Default is FALSE treated as categorical.}
 
 \item{rank}{Should the table returned be ordered by Pvalue. Boolean, default is T}
+
+\item{na.filt}{A numeric value between 0 and 1 (1 not included) that is the upper bound for the proportion of missing
+values in the features of the inputted gen.dat matrix. Variables that exceed this proportion of missing values will be removed.}
 }
 \value{
 fits : a table of odds ratio and pvalues.
@@ -39,14 +40,14 @@ outcome <- as.character(clin.sample$Sample.Type[match(patients,clin.sample$Sampl
 gen.dat <- binmat(patients = patients,maf = mut)
 gen.summary(gen.dat = gen.dat,
         outcome = outcome,
-        filter = 0.05,paired = FALSE,
+        filter = 0.05,
         cont = FALSE,rank = TRUE)
 ## Continuous outcome ##
 set.seed(1)
 outcome <-  rnorm(n = nrow(gen.dat))
 tab.out <- gen.summary(gen.dat = gen.dat,
                    outcome = outcome,
-                   filter = 0.05,paired = FALSE,
+                   filter = 0.05,
                    cont = TRUE,rank = TRUE)
 tab.out$fits
 tab.out$vPlot

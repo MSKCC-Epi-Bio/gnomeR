@@ -8,6 +8,8 @@
 #' having a genetic event (only for binary features). All features with an event rate lower than that value will be removed.
 #' Default is 0 (all features included).
 #' @param genes a character vector of gene names that will be the only ones to be kept. Default is NULL, all genes are used.
+#' @param na.filt A numeric value between 0 and 1 (1 not included) that is the upper bound for the proportion of missing
+#' values in the features of the inputted gen.dat matrix. Variables that exceed this proportion of missing values will be removed.
 #' @return tab A table of all the fits performed sorted by adjusted pvalues.
 #' @return p An interactive plot of log(pvalue) by hazard ration.
 #' @return KM List of survival plots of the top 10 most significant genes
@@ -39,11 +41,14 @@
 #' @importFrom plotly plot_ly layout
 
 
-uni.cox <- function(X,surv.dat,surv.formula,filter = 0,genes = NULL){
+uni.cox <- function(X,surv.dat,surv.formula,filter = 0,genes = NULL, na.filt = 0){
 
   # filtering #
   if(!(filter >= 0 && filter < 1))
     stop("Please select a filter value between 0 and 1")
+  if(na.filt < 0 || na.filt >= 1)
+    stop("The filter for missing proportion should be between 0 and 1 (1 non included) to proceed.")
+
   if(!is.null(genes) && sum(colnames(X) %in% genes) == 0)
     stop("The genes argument inputted did not match any of the columns in the features matrix X.")
   else if(!is.null(genes) && sum(colnames(X) %in% genes) > 0){
@@ -55,20 +60,45 @@ uni.cox <- function(X,surv.dat,surv.formula,filter = 0,genes = NULL){
   if(is.null(dim(X)) )
     stop("Only one or fewer genes were found from the 'genes' argument. We need a minimum of two.")
   # remove all columns that are constant #
-  if(length(which(apply(X, 2, function(x){length(unique(x[!is.na(x)])) == 1} || all(is.na(x))))) > 0)
+  if(length(which(apply(X, 2, function(x){length(unique(x[!is.na(x)])) == 1} || all(is.na(x))))) > 0){
     X <- X[,-which(apply(X, 2, function(x){length(unique(x[!is.na(x)])) <= 1 || all(is.na(x))}))]
+    # relevel cna data #
+    if(length(grep("\\.cna",colnames(X))) > 0){
+      X <- cbind(X %>%
+                   select(-c(ends_with(".cna"))),
+                 X %>%
+                   select(ends_with(".cna")) %>%
+                   mutate_all(
+                     ~factor(.,
+                             levels = c("NEUTRAL","DELETION","LOH","GAIN","AMPLIFICATION")[
+                               which(c("NEUTRAL","DELETION","LOH","GAIN","AMPLIFICATION") %in% .)
+                               ])
+                   )
+      )
+    }
+  }
 
-  if(filter > 0){
+  # apply filter to remove rare events #
+  if (filter > 0) {
+
+    # find those to remove #
     rm <- apply(X, 2, function(x) {
-      # if(is.numeric(x))
-      #   sum(x, na.rm = T)/length(x) < filter
-      # else
-      any(summary(as.factor(x[!is.na(x)]))/length(x[!is.na(x)]) < filter)
+      any(summary(as.factor(x[!is.na(x)]))/length(x) < filter) # length(x[!is.na(x)])
     })
     genes.rm <- names(rm[which(rm)])
-    length(genes.rm)
     X <- X %>% select(-one_of(genes.rm))
   }
+
+  # apply filter for missing values #
+  if(na.filt > 0){
+    rm <- apply(X, 2, function(x) {
+      sum(is.na(x))/length(x) > na.filt
+    })
+    genes.rm <- names(rm[which(rm)])
+    if(length(genes.rm) > 0)
+      X <- X %>% select(-one_of(genes.rm))
+  }
+
   if(is.null(dim(X)) )
     stop("Only one or fewer genes are left after filtering. We need a minimum of two. Please relax the filter argument.")
 
@@ -86,6 +116,7 @@ uni.cox <- function(X,surv.dat,surv.formula,filter = 0,genes = NULL){
     timevars <- match(c("time","status"),colnames(surv.dat))
     surv.dat <- surv.dat[,c(timevars,
                             c(1:ncol(surv.dat))[-timevars])]
+    datSurv <- with(surv.dat,Surv(time,status))
   }
   if(length(as.list(survResponse)) == 4){
     colnames(surv.dat)[match(as.list(survResponse)[2:4],colnames(surv.dat))] <- c("time1","time2","status")
@@ -93,80 +124,55 @@ uni.cox <- function(X,surv.dat,surv.formula,filter = 0,genes = NULL){
     timevars <- match(c("time1","time2","status"),colnames(surv.dat))
     surv.dat <- surv.dat[,c(timevars,
                             c(1:ncol(surv.dat))[-timevars])]
+    datSurv <- with(surv.dat,Surv(time1,time2,status))
   }
 
-  ###################################
-  ##### univariate volcano plot #####
-  if(!LT){
-    uni <- lapply(X,function(x){
-      if(length(unique(x[!is.na(x)]))==2){
-        x <- as.numeric(as.character(x))
-        fit <- coxph(Surv(surv.dat$time,surv.dat$status)~x)
-        out <- c(as.numeric(summary(fit)$coefficients[c(1,5)]),sum(x)/length(x))
-        names(out) <- c("Coefficient","Pvalue","MutationFrequency")
-      }
-      else{
-        x <- factor(as.numeric(as.character(x)),
-                    levels = c("0","-2","-1.5","2")[which(c(0,-2,-1.5,2) %in% as.numeric(as.character(x)))])
-        fit <- coxph(Surv(surv.dat$time,surv.dat$status)~x)
-        out <- cbind(summary(fit)$coefficients[,c(1,5)],(summary(x)/length(x))[-1])
-        rownames(out) <- levels(x)[-1]
-        colnames(out) <- c("Coefficient","Pvalue","MutationFrequency")
-      }
-      return(out)
-    })
-  }
 
-  if(LT){
-    uni <- lapply(X,function(x){
-      if(length(unique(x[!is.na(x)]))==2){
-        x <- as.numeric(as.character(x))
-        fit <- coxph(Surv(surv.dat$time1,surv.dat$time2,surv.dat$status)~x)
-        out <- c(as.numeric(summary(fit)$coefficients[c(1,5)]),sum(x)/length(x))
-        names(out) <- c("Coefficient","Pvalue","MutationFrequency")
-      }
-      else{
-        x <- factor(as.numeric(as.character(x)),
-                    levels = c("0","-2","-1.5","2")[which(c(0,-2,-1.5,2) %in% as.numeric(as.character(x)))])
-        fit <- coxph(Surv(surv.dat$time1,surv.dat$time2,surv.dat$status)~x)
-        out <- cbind(summary(fit)$coefficients[,c(1,5)],(summary(x)/length(x))[-1])
-        rownames(out) <- levels(x)[-1]
-        colnames(out) <- c("Coefficient","Pvalue","MutationFrequency")
-      }
-      return(out)
-    })
-  }
+  fits <- lapply(X, function(x){
+    fit <- coxph(datSurv ~ x)
+    temp <- as.data.frame(summary(fit)$coefficient)
+    colnames(temp) <- c("Estimate", "HR", "SD", "tvalue",
+                        "Pvalue")
+    temp$Lower <- round(exp(temp$Estimate - 1.96*temp$SD),3)
+    temp$Upper <- round(exp(temp$Estimate + 1.96*temp$SD),3)
+    if(is.numeric(x))
+      temp$EventFrequency <- round(sum(x[!is.na(x)])/length(x),digits = 3)
+    else
+      temp$EventFrequency <- round(summary(x[!is.na(x)])/length(x),digits = 3)[-1]
+    return(temp)
+  })
 
   ps <- c()
-  for(i in 1:length(uni)){
-    if(is.null(dim(uni[[i]])))
-      ps[i] <- uni[[i]][2]
-    else{
-      ps[i] <- min(uni[[i]][,2])
-      rownames(uni[[i]]) <- paste(names(uni)[[i]],rownames(uni[[i]]))
-    }
+  for(i in 1:length(fits)){
+    ps[i] <- min(fits[[i]]$Pvalue)
+    if(nrow(fits[[i]])==1)
+      names(fits)[[i]] <- paste0(names(fits)[[i]],".",rownames(fits[[i]]))
   }
-  uni <- do.call('rbind',uni[order(as.numeric(ps))])
-  uni <- as.data.frame(cbind(rownames(uni),uni))
-  colnames(uni) <- c("Feature","Coefficient","Pvalue","MutationFrequency")
-  uni$FDR <- as.numeric(formatC(stats::p.adjust(as.numeric(as.character(uni$Pvalue)), method = "fdr"), format="e", digits=2))
-  uni <- uni %>%
-    mutate(
-      Pvalue = as.numeric(formatC(as.numeric(as.character(.data$Pvalue)), format = "e", digits = 2)),
-      HR = round(exp(as.numeric(as.character(.data$Coefficient))),digits=2),
-      Coefficient = round(as.numeric(as.character(.data$Coefficient)), digits = 2),
-      MutationFrequency =round(as.numeric(as.character(.data$MutationFrequency)), digits = 2)
-    )
-  uniVolcano <- plot_ly(data = uni, x = ~Coefficient, y = ~-log10(Pvalue),
+  fits <- as.data.frame(do.call('rbind',fits[order(as.numeric(ps))]))
+
+  fits <- fits %>%
+    mutate(Feature = gsub("\\.","_",gsub("\\.x"," ",rownames(fits))),
+           FDR = formatC(stats::p.adjust(Pvalue, method = 'fdr'), format="e", digits=2),
+           Pvalue = formatC(Pvalue, format="e", digits=2),
+           Estimate = round(Estimate, 3),
+           HR = round(HR, 3),
+           SD = round(SD, 3)
+    ) %>%
+    select(Feature, EventFrequency, Estimate, HR, SD, Lower, Upper, Pvalue, FDR)
+
+  ### Volcano plot ###
+  uniVolcano <- plot_ly(data = fits %>%
+                          mutate(FDRsign = ifelse(as.numeric(as.character(.data$FDR)) <
+                                                    0.05, "Significant", "Non signifcant"),
+                                 Pvalue = as.numeric(Pvalue)), x = ~Estimate, y = ~-log10(Pvalue),
                         text = ~paste('Feature :',Feature,
                                       '<br> Hazard Ratio :',HR,
-                                      '<br> Mutation Frequency :',MutationFrequency),
-                        mode = "markers",color = ~ifelse(.data$FDR <= 0.05,"red","blue")) %>%
+                                      '<br> Event Frequency :',EventFrequency),
+                        mode = "markers",color = ~ifelse(.data$FDRsign == "Significant","blue","red")) %>%
     layout(title ="Volcano Plot")
 
-
   # top KM #
-  top.genes <- unique(gsub(" ","",gsub("-1\\.5| 2| \\-2","",as.character(uni$Feature))))[1:10]
+  top.genes <- gsub("_",".",unique(gsub(" .*","",as.character(fits$Feature)))[1:10])
   top.genes <- top.genes[!is.na(top.genes)]
   if(any(apply(X %>% select(top.genes),2,
                function(x){length(unique(x))/length(x)}) > 0.1)){
@@ -181,49 +187,30 @@ uni.cox <- function(X,surv.dat,surv.formula,filter = 0,genes = NULL){
 
   KM.plots <- lapply(top.genes,function(x){
     y <- X[,x]
-    if(length(unique(y[!is.na(y)]))==2)
-      y <- factor(ifelse(X[,x] == 1,"Mutant","WildType"),levels = c("WildType","Mutant"))
-    else
-      y <- factor(as.numeric(as.character(y)),
-                  levels = c("0","-2","-1.5","2")[which(c(0,-2,-1.5,2) %in% as.numeric(as.character(y)))])
+    # if(length(unique(y[!is.na(y)]))==2)
+    #   y <- factor(ifelse(X[,x] == 1,"Mutant","WildType"),levels = c("WildType","Mutant"))
+    # else
+    #   y <- factor(as.numeric(as.character(y)),
+    #               levels = c("0","-2","-1.5","2")[which(c(0,-2,-1.5,2) %in% as.numeric(as.character(y)))])
+
     temp <- as.data.frame(cbind(surv.dat,y))
     if(LT == FALSE) fit <- survfit(Surv(time,status)~y,data=temp)
     if(LT == TRUE) fit <- survfit(Surv(time1,time2,status)~y,data=temp)
 
-    if(length(unique(y[!is.na(y)]))==2)
-      try(ggsurvplot(
-        fit,
-        data = temp,
-        size = 1,
-        palette =
-          c("#E7B800", "#2E9FDF"),
-        conf.int = TRUE,
-        pval = ifelse(LT,FALSE,TRUE),
-        risk.table = TRUE,
-        legend.labs =
-          c("WildType", "Mutant"),
-        risk.table.col = "strata",
-        risk.table.height = 0.25,
-        ggtheme = theme_bw()
-      ) + labs(title = x),silent = TRUE)
+    ggsurvplot(
+      fit,
+      data = temp,
+      size = 1,
+      conf.int = TRUE,
+      pval = ifelse(LT,FALSE,TRUE),
+      risk.table = TRUE,
+      risk.table.col = "strata",
+      risk.table.height = 0.25,
+      ggtheme = theme_bw()
+    ) + labs(title = x)
 
-    else
-      try(ggsurvplot(
-        fit,
-        data = temp,
-        size = 1,
-        conf.int = TRUE,
-        pval = ifelse(LT,FALSE,TRUE),
-        risk.table = TRUE,
-        risk.table.col = "strata",
-        risk.table.height = 0.25,
-        ggtheme = theme_bw()
-      ) + labs(title = x),silent = TRUE)
   })
 
-  uni <- uni %>%
-    dplyr::select(Feature, Coefficient, HR,	Pvalue, FDR, MutationFrequency)
-
-  return(list("tab" = uni,"p"=uniVolcano,"KM"=KM.plots))
+  return(list("tab" = fits,"p"=uniVolcano,"KM"=KM.plots))
 }
 

@@ -25,15 +25,30 @@
 #' ComplexHeatmap
 
 maf_viz <- function(maf, ...) {
-  all_plots <- list(
-    varclass = ggvarclass,
-    vartype = ggvartype,
-    snvclass = ggsnvclass,
-    samplevar = ggsamplevar,
-    topgenes = ggtopgenes,
-    genecor = gggenecor,
-    genecomut = ggcomut) %>%
-    purrr::invoke_map(, maf)
+
+  if("api" %in% class(maf)){
+    maf <- as_tibble(maf) %>%
+      filter(.data$Variant_Classification != "Fusion")
+    all_plots <- list(
+      varclass = ggvarclass,
+      vartype = ggvartype,
+      samplevar = ggsamplevar,
+      topgenes = ggtopgenes,
+      genecor = gggenecor,
+      genecomut = ggcomut) %>%
+      purrr::invoke_map(, maf)
+  }
+
+  else
+    all_plots <- list(
+      varclass = ggvarclass,
+      vartype = ggvartype,
+      snvclass = ggsnvclass,
+      samplevar = ggsamplevar,
+      topgenes = ggtopgenes,
+      genecor = gggenecor,
+      genecomut = ggcomut) %>%
+      purrr::invoke_map(, maf)
 
   return(all_plots)
 }
@@ -50,9 +65,9 @@ maf_viz <- function(maf, ...) {
 #'
 
 add.perc<-function(x,...){geom_text(
-       aes(label=paste0(round(stat(.data$prop)*100,1),"%"), group=1),
-       stat="count",
-       hjust=0, nudge_y = -0.25,...)}
+  aes(label=paste0(round(stat(.data$prop)*100,1),"%"), group=1),
+  stat="count",
+  hjust=0, nudge_y = -0.25,...)}
 
 
 #' Barplot of Variant Classification Counts
@@ -72,14 +87,14 @@ ggvarclass <- function(maf) {
   # relevel Variant Classification by frequency
   maf <- maf %>%
     mutate(Variant_Classification =
-        stringr::str_replace_all(.data$Variant_Classification, "_", " ")) %>%
+             stringr::str_replace_all(.data$Variant_Classification, "_", " ")) %>%
     mutate(Variant_Classification = .data$Variant_Classification %>%
-        forcats::fct_infreq() %>%
-        forcats::fct_rev())
+             forcats::fct_infreq() %>%
+             forcats::fct_rev())
 
   p.class <- maf %>%
     ggplot(aes(x = .data$Variant_Classification,
-      fill = .data$Variant_Classification)) +
+               fill = .data$Variant_Classification)) +
     geom_bar() +
     coord_flip() +
     theme(legend.position="none") +
@@ -106,13 +121,13 @@ ggvartype <- function(maf) {
   # relevel Variant Type by frequency
   maf <- maf %>%
     mutate(Variant_Type = .data$Variant_Type %>%
-        forcats::fct_infreq() %>%
-        forcats::fct_rev())
+             forcats::fct_infreq() %>%
+             forcats::fct_rev())
 
   p.type <- maf %>%
     ggplot(aes(x = .data$Variant_Type,
-      color=.data$Variant_Type,
-      fill = .data$Variant_Type)) +
+               color=.data$Variant_Type,
+               fill = .data$Variant_Type)) +
     geom_bar() +
     coord_flip() +
     theme_minimal() +
@@ -148,13 +163,13 @@ ggsnvclass <- function(maf) {
     ) %>%
     mutate(SNV_Class = substrRight(.data$HGVSc, 3)) %>%
     mutate(SNV_Class = .data$SNV_Class %>%
-        forcats::fct_infreq() %>%
-        forcats::fct_rev())
+             forcats::fct_infreq() %>%
+             forcats::fct_rev())
 
   p.SNV <- maf %>%
     filter(!grepl("N", .data$SNV_Class)) %>%
     ggplot(aes(x = .data$SNV_Class, color = .data$SNV_Class,
-      fill = .data$SNV_Class)) +
+               fill = .data$SNV_Class)) +
     geom_bar() +
     coord_flip() +
     theme_minimal() +
@@ -162,7 +177,7 @@ ggsnvclass <- function(maf) {
     ggtitle("SNV Class Count") +
     xlab("SNV Class")
 
-    p.SNV
+  p.SNV
 }
 
 #' Histogram of Variants Per Sample Colored By Variant Classification
@@ -181,11 +196,11 @@ ggsamplevar <- function(maf) {
   check_maf_column(maf = maf, "Tumor_Sample_Barcode")
 
   maf2 <- maf %>%
-   group_by(.data$Tumor_Sample_Barcode) %>%
+    group_by(.data$Tumor_Sample_Barcode) %>%
     mutate(n_alts = n()) %>%
     ungroup() %>%
     mutate(Tumor_Sample_Barcode = .data$Tumor_Sample_Barcode %>%
-        forcats::fct_infreq())
+             forcats::fct_infreq())
 
   # distribution of variant per sample
   p.patient.variant <- maf2 %>%
@@ -223,16 +238,16 @@ ggtopgenes <- function(maf, n_genes = 10) {
     select(.data$Hugo_Symbol) %>%
     pull(.data$Hugo_Symbol)
 
-  top_genes <- top_genes[1:n_genes] %>%
+  top_genes <- top_genes[1:min(length(top_genes),n_genes)] %>%
     as.character()
 
-    maf2 <- maf %>%
-      filter(.data$Hugo_Symbol %in% top_genes) %>%
-      ungroup() %>%
-      mutate(Hugo_Symbol = .data$Hugo_Symbol %>%
-        forcats::fct_drop() %>%
-        forcats::fct_infreq() %>%
-          forcats::fct_rev())
+  maf2 <- maf %>%
+    filter(.data$Hugo_Symbol %in% top_genes) %>%
+    ungroup() %>%
+    mutate(Hugo_Symbol = .data$Hugo_Symbol %>%
+             forcats::fct_drop() %>%
+             forcats::fct_infreq() %>%
+             forcats::fct_rev())
 
   p.genes <-  maf2 %>%
     ggplot(aes(x = .data$Hugo_Symbol,
@@ -261,7 +276,8 @@ gggenecor <- function(maf, n_genes = 10, ...) {
 
   keep <- names(sort(apply(bin.maf,2,
                            function(x){sum(x)}),
-                     decreasing = T))[1:n_genes]
+                     decreasing = T))
+  keep <- keep[1:min(length(keep),n_genes)]
   bin.maf <- bin.maf[,keep]
 
   p.corr <- GGally::ggcorr(dat = bin.maf, cor_matrix = stats::cor(bin.maf),limits = NULL)
@@ -286,7 +302,8 @@ ggcomut <- function(maf, n_genes = 10, ...) {
   bin.maf <- binmat(maf = maf,...)
   keep <- names(sort(apply(bin.maf,2,
                            function(x){sum(x)}),
-                     decreasing = T))[1:n_genes]
+                     decreasing = T))
+  keep <- keep[1:min(length(keep),n_genes)]
   bin.maf <- bin.maf[,keep]
 
   co.mut <- apply(bin.maf,2,function(x){
@@ -321,7 +338,7 @@ ggheatmap<-function(hmat, ...){
      sum(hmat==1, na.rm=T) +
      sum(is.na(hmat)) != (nrow(hmat) * ncol(hmat))) {
     stop("ggheatmap can only be plotted when binmat is binary, set cna.binary=TRUE")
-    }
+  }
 
   idx.amp = grep(".Amp", colnames(hmat))
   if(length(idx.amp)>0){

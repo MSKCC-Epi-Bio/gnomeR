@@ -176,6 +176,7 @@ a predefined list of patients (rows are patients and columns are genes)</p>
   oncokb <span class='op'>=</span> <span class='cn'>FALSE</span>,
   keep_onco <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"Oncogenic"</span>, <span class='st'>"Likely Oncogenic"</span>, <span class='st'>"Predicted Oncogenic"</span><span class='op'>)</span>,
   token <span class='op'>=</span> <span class='st'>""</span>,
+  sample_panels <span class='op'>=</span> <span class='cn'>NULL</span>,
   <span class='va'>...</span>
 <span class='op'>)</span></pre>
 
@@ -233,7 +234,7 @@ of patients that were not sequenced on that plaform. Default is TRUE.</p></td>
     <tr>
       <th>set.plat</th>
       <td><p>character argument specifying which IMPACT platform the data should be reduced to if specify.plat is set to TRUE.
-Options are "341" and "410". Default is NULL.</p></td>
+Options are "341", "410" and "468. Default is NULL.</p></td>
     </tr>
     <tr>
       <th>rm.empty</th>
@@ -269,6 +270,12 @@ Hugo_Symbol = NULL, Variant_Classification = NULL, Mutation_Status = NULL, Varia
       <td><p>the token affiliated to your oncoKB account.</p></td>
     </tr>
     <tr>
+      <th>sample_panels</th>
+      <td><p>A dataframe containing the sample ids corresponding to the patients argument in the first
+column and their corresponding genomic panel. At the moment gnomeR can handle panels from the following centers:
+MSKCC, DFCI, VICC and UHN. See objects impact_gene_info and panel_names for more information.</p></td>
+    </tr>
+    <tr>
       <th>...</th>
       <td><p>Further arguments passed to the oncokb() function such a token</p></td>
     </tr>
@@ -288,7 +295,47 @@ include.silent <span class='op'>=</span> <span class='cn'>FALSE</span>, specify.
 </div><div class='output co'>#&gt; <span class='warning'>Warning: MUTATION DATA: To ensure gene with multiple names/aliases are correctly grouped together, the</span>
 #&gt; <span class='warning'>      following genes in your maf dataframe have been recoded. You can supress this with recode.aliases = FALSE </span>
 #&gt; <span class='warning'> </span>
-#&gt; <span class='warning'>AMER1 recoded to FAM123B </span></div><div class='input'><span class='va'>bin.mut</span> <span class='op'>&lt;-</span> <span class='fu'>binmat</span><span class='op'>(</span>patients <span class='op'>=</span> <span class='va'>patients</span>,maf <span class='op'>=</span> <span class='va'>mut</span>,
+#&gt; <span class='warning'>MLL3 recoded to KMT2C </span>
+#&gt; <span class='warning'>MUTATION DATA: To ensure gene with multiple names/aliases are correctly grouped together, the</span>
+#&gt; <span class='warning'>      following genes in your maf dataframe have been recoded. You can supress this with recode.aliases = FALSE </span>
+#&gt; <span class='warning'> </span>
+#&gt; <span class='warning'>MLL2 recoded to KMT2D </span>
+#&gt; <span class='warning'>MUTATION DATA: To ensure gene with multiple names/aliases are correctly grouped together, the</span>
+#&gt; <span class='warning'>      following genes in your maf dataframe have been recoded. You can supress this with recode.aliases = FALSE </span>
+#&gt; <span class='warning'> </span>
+#&gt; <span class='warning'>MRE11A recoded to MRE11 </span>
+#&gt; <span class='warning'>MUTATION DATA: To ensure gene with multiple names/aliases are correctly grouped together, the</span>
+#&gt; <span class='warning'>      following genes in your maf dataframe have been recoded. You can supress this with recode.aliases = FALSE </span>
+#&gt; <span class='warning'> </span>
+#&gt; <span class='warning'>MLL recoded to KMT2A </span>
+#&gt; <span class='warning'>MUTATION DATA: To ensure gene with multiple names/aliases are correctly grouped together, the</span>
+#&gt; <span class='warning'>      following genes in your maf dataframe have been recoded. You can supress this with recode.aliases = FALSE </span>
+#&gt; <span class='warning'> </span>
+#&gt; <span class='warning'>PARK2 recoded to PRKN </span>
+#&gt; <span class='warning'>MUTATION DATA: To ensure gene with multiple names/aliases are correctly grouped together, the</span>
+#&gt; <span class='warning'>      following genes in your maf dataframe have been recoded. You can supress this with recode.aliases = FALSE </span>
+#&gt; <span class='warning'> </span>
+#&gt; <span class='warning'>RFWD2 recoded to COP1 </span>
+#&gt; <span class='warning'>MUTATION DATA: To ensure gene with multiple names/aliases are correctly grouped together, the</span>
+#&gt; <span class='warning'>      following genes in your maf dataframe have been recoded. You can supress this with recode.aliases = FALSE </span>
+#&gt; <span class='warning'> </span>
+#&gt; <span class='warning'>PAK7 recoded to PAK5 </span>
+#&gt; <span class='warning'>MUTATION DATA: To ensure gene with multiple names/aliases are correctly grouped together, the</span>
+#&gt; <span class='warning'>      following genes in your maf dataframe have been recoded. You can supress this with recode.aliases = FALSE </span>
+#&gt; <span class='warning'> </span>
+#&gt; <span class='warning'>FAM46C recoded to TENT5C </span>
+#&gt; <span class='warning'>MUTATION DATA: To ensure gene with multiple names/aliases are correctly grouped together, the</span>
+#&gt; <span class='warning'>      following genes in your maf dataframe have been recoded. You can supress this with recode.aliases = FALSE </span>
+#&gt; <span class='warning'> </span>
+#&gt; <span class='warning'>FAM175A recoded to ABRAXAS1 </span>
+#&gt; <span class='warning'>MUTATION DATA: To ensure gene with multiple names/aliases are correctly grouped together, the</span>
+#&gt; <span class='warning'>      following genes in your maf dataframe have been recoded. You can supress this with recode.aliases = FALSE </span>
+#&gt; <span class='warning'> </span>
+#&gt; <span class='warning'>MYCL1 recoded to MYCL </span>
+#&gt; <span class='warning'>MUTATION DATA: To ensure gene with multiple names/aliases are correctly grouped together, the</span>
+#&gt; <span class='warning'>      following genes in your maf dataframe have been recoded. You can supress this with recode.aliases = FALSE </span>
+#&gt; <span class='warning'> </span>
+#&gt; <span class='warning'>TCEB1 recoded to ELOC </span></div><div class='input'><span class='va'>bin.mut</span> <span class='op'>&lt;-</span> <span class='fu'>binmat</span><span class='op'>(</span>patients <span class='op'>=</span> <span class='va'>patients</span>,maf <span class='op'>=</span> <span class='va'>mut</span>,
 mut.type <span class='op'>=</span> <span class='st'>"SOMATIC"</span>,SNP.only <span class='op'>=</span> <span class='cn'>FALSE</span>,
 include.silent <span class='op'>=</span> <span class='cn'>FALSE</span>,
 cna.relax <span class='op'>=</span> <span class='cn'>TRUE</span>, specify.plat <span class='op'>=</span> <span class='cn'>FALSE</span>,
@@ -296,7 +343,47 @@ cna.relax <span class='op'>=</span> <span class='cn'>TRUE</span>, specify.plat <
 </div><div class='output co'>#&gt; <span class='warning'>Warning: MUTATION DATA: To ensure gene with multiple names/aliases are correctly grouped together, the</span>
 #&gt; <span class='warning'>      following genes in your maf dataframe have been recoded. You can supress this with recode.aliases = FALSE </span>
 #&gt; <span class='warning'> </span>
-#&gt; <span class='warning'>AMER1 recoded to FAM123B </span></div></pre>
+#&gt; <span class='warning'>MLL3 recoded to KMT2C </span>
+#&gt; <span class='warning'>MUTATION DATA: To ensure gene with multiple names/aliases are correctly grouped together, the</span>
+#&gt; <span class='warning'>      following genes in your maf dataframe have been recoded. You can supress this with recode.aliases = FALSE </span>
+#&gt; <span class='warning'> </span>
+#&gt; <span class='warning'>MLL2 recoded to KMT2D </span>
+#&gt; <span class='warning'>MUTATION DATA: To ensure gene with multiple names/aliases are correctly grouped together, the</span>
+#&gt; <span class='warning'>      following genes in your maf dataframe have been recoded. You can supress this with recode.aliases = FALSE </span>
+#&gt; <span class='warning'> </span>
+#&gt; <span class='warning'>MRE11A recoded to MRE11 </span>
+#&gt; <span class='warning'>MUTATION DATA: To ensure gene with multiple names/aliases are correctly grouped together, the</span>
+#&gt; <span class='warning'>      following genes in your maf dataframe have been recoded. You can supress this with recode.aliases = FALSE </span>
+#&gt; <span class='warning'> </span>
+#&gt; <span class='warning'>MLL recoded to KMT2A </span>
+#&gt; <span class='warning'>MUTATION DATA: To ensure gene with multiple names/aliases are correctly grouped together, the</span>
+#&gt; <span class='warning'>      following genes in your maf dataframe have been recoded. You can supress this with recode.aliases = FALSE </span>
+#&gt; <span class='warning'> </span>
+#&gt; <span class='warning'>PARK2 recoded to PRKN </span>
+#&gt; <span class='warning'>MUTATION DATA: To ensure gene with multiple names/aliases are correctly grouped together, the</span>
+#&gt; <span class='warning'>      following genes in your maf dataframe have been recoded. You can supress this with recode.aliases = FALSE </span>
+#&gt; <span class='warning'> </span>
+#&gt; <span class='warning'>RFWD2 recoded to COP1 </span>
+#&gt; <span class='warning'>MUTATION DATA: To ensure gene with multiple names/aliases are correctly grouped together, the</span>
+#&gt; <span class='warning'>      following genes in your maf dataframe have been recoded. You can supress this with recode.aliases = FALSE </span>
+#&gt; <span class='warning'> </span>
+#&gt; <span class='warning'>PAK7 recoded to PAK5 </span>
+#&gt; <span class='warning'>MUTATION DATA: To ensure gene with multiple names/aliases are correctly grouped together, the</span>
+#&gt; <span class='warning'>      following genes in your maf dataframe have been recoded. You can supress this with recode.aliases = FALSE </span>
+#&gt; <span class='warning'> </span>
+#&gt; <span class='warning'>FAM46C recoded to TENT5C </span>
+#&gt; <span class='warning'>MUTATION DATA: To ensure gene with multiple names/aliases are correctly grouped together, the</span>
+#&gt; <span class='warning'>      following genes in your maf dataframe have been recoded. You can supress this with recode.aliases = FALSE </span>
+#&gt; <span class='warning'> </span>
+#&gt; <span class='warning'>FAM175A recoded to ABRAXAS1 </span>
+#&gt; <span class='warning'>MUTATION DATA: To ensure gene with multiple names/aliases are correctly grouped together, the</span>
+#&gt; <span class='warning'>      following genes in your maf dataframe have been recoded. You can supress this with recode.aliases = FALSE </span>
+#&gt; <span class='warning'> </span>
+#&gt; <span class='warning'>MYCL1 recoded to MYCL </span>
+#&gt; <span class='warning'>MUTATION DATA: To ensure gene with multiple names/aliases are correctly grouped together, the</span>
+#&gt; <span class='warning'>      following genes in your maf dataframe have been recoded. You can supress this with recode.aliases = FALSE </span>
+#&gt; <span class='warning'> </span>
+#&gt; <span class='warning'>TCEB1 recoded to ELOC </span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

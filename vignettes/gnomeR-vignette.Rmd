@@ -127,12 +127,11 @@ maf_viz(maf = mut %>% filter(Tumor_Sample_Barcode %in% patients),
 
 ## Binary outcome
 
-The `gen.summary` function allows us to test for potential differences in genetic event frequencies using Fisher's exact test for unpaired data and the McNemar exact test for paired data. This function takes the following arguments:
+The `gen.summary` function allows us to test for potential differences in genetic event frequencies using Fisher's exact test for unpaired data. This function takes the following arguments:
 
 - gen.dat : a binary matrix of genetic events with patients as rows and columns as genes
 - outcome : a binary vector corresponding to the patients in the gen.dat argument
 - filter : a value in [0,1) that will remove all genes that have a frequency below that threshold. Default is 0, including all
-- paired : boolean specifying is the observations are paired. Default is false
 - cont : boolean specifying if the outcome is continuous. Default is false (see following section for an example)
 - rank : boolean specifying if the output table should be ranked by pvalue
 
@@ -141,7 +140,7 @@ outcome <- as.character(clin.sample$Sample.Type[match(patients,clin.sample$Sampl
 gen.dat <- bin.mut
 bin.test <- gen.summary(gen.dat = gen.dat,
         outcome = outcome,
-        filter = 0.05,paired = F,cont = F,rank = T)
+        filter = 0.05,cont = F,rank = T)
 kable(bin.test$fits,row.names = T)
 bin.test$forest.plot
 bin.test$vPlot
@@ -157,7 +156,7 @@ set.seed(1)
 outcome <-  rnorm(n = nrow(gen.dat))
 tab.out <- gen.summary(gen.dat = gen.dat,
         outcome = outcome,
-        filter = 0.05,paired = F,cont = T,rank = T)
+        filter = 0.05,cont = T,rank = T)
 kable(tab.out$fits,row.names = T)
 tab.out$vPlot
 ```

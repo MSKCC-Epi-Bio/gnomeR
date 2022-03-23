@@ -36,6 +36,6 @@ pathway <- as.data.frame(cbind(c("path1","path1","path2","path3"),c("PIK3CA","KR
 custom_pathway(mat = bin.mut, pathway = pathway)
 ### Considering CNA as well ###
 bin.mut <- binmat(patients = patients,maf = mut,cna = cna)
-pathway <- as.data.frame(cbind(c("path1","path1","path2","path3","path4"),c("PIK3CA","KRAS","TERT","TP53","TP53.Del")))
+pathway <- as.data.frame(cbind(c("path1","path1","path2","path3","path3"),c("PIK3CA","KRAS","TERT","TP53","TP53.Del")))
 custom_pathway(mat = bin.mut, pathway = pathway)
 }

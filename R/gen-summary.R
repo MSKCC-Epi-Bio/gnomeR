@@ -9,9 +9,10 @@
 #' @param filter a numeric value between 0 and 1 (1 not included) that is the lower bound for the proportion of patients
 #' having a genetic event (only for binary features). All features with an event rate lower than that value will be removed.
 #' Default is 0 (all features included).
-#' @param paired Boolean if the data are paired. Default is FALSE.
 #' @param cont Should the outcome be treated as a continuous value. Default is FALSE treated as categorical.
 #' @param rank Should the table returned be ordered by Pvalue. Boolean, default is T
+#' @param na.filt A numeric value between 0 and 1 (1 not included) that is the upper bound for the proportion of missing
+#' values in the features of the inputted gen.dat matrix. Variables that exceed this proportion of missing values will be removed.
 #' @return fits : a table of odds ratio and pvalues.
 #' @return forest.plot : A forest plot of the top 10 hits.
 #' @export
@@ -22,153 +23,157 @@
 #' gen.dat <- binmat(patients = patients,maf = mut)
 #' gen.summary(gen.dat = gen.dat,
 #'         outcome = outcome,
-#'         filter = 0.05,paired = FALSE,
+#'         filter = 0.05,
 #'         cont = FALSE,rank = TRUE)
 #' ## Continuous outcome ##
 #' set.seed(1)
 #' outcome <-  rnorm(n = nrow(gen.dat))
 #' tab.out <- gen.summary(gen.dat = gen.dat,
 #'                    outcome = outcome,
-#'                    filter = 0.05,paired = FALSE,
+#'                    filter = 0.05,
 #'                    cont = TRUE,rank = TRUE)
 #' tab.out$fits
 #' tab.out$vPlot
 #' @import
-#' ggrepel
-#' exact2x2
+#' dplyr
+#' tibble
 
-gen.summary <- function (gen.dat, outcome, filter = 0, paired = F, cont = F,
-                         rank = T)
-{
+
+gen.summary <- function (gen.dat, outcome, filter = 0, cont = F, rank = T, na.filt = 0){
+
+  # perform checks #
   if(filter < 0 || filter >= 1)
     stop("The filter should be between 0 and 1 (1 non included) to proceed.")
 
+  if(na.filt < 0 || na.filt >= 1)
+    stop("The filter for missing proportion should be between 0 and 1 (1 non included) to proceed.")
+
+  if (length(unique(outcome))/length(outcome) > 0.5 && cont == F){
+    warning("The outcome you provided had too many unique values, and will be considered continuous.")
+    cont = T
+    outcome <- as.numeric(as.character(outcome))
+  }
+  # check if there are any columns that are all NAs or have a single possible value #
   if (length(which(apply(gen.dat, 2, function(x) {
     length(unique(x[!is.na(x)])) <= 1
-  } || all(is.na(x))))) > 0)
+  } || all(is.na(x)) ))) > 0)
+    # if found then remove #
     gen.dat <- gen.dat[, -which(apply(gen.dat, 2, function(x) {
       length(unique(x[!is.na(x)])) <= 1 || all(is.na(x))
     }))]
+
+
+  # apply filter to remove rare events #
   if (filter > 0) {
 
+    # find those to remove #
     rm <- apply(gen.dat, 2, function(x) {
-      # if(is.numeric(x))
-      #   sum(x, na.rm = T)/length(x) < filter
-      # else
-      any(summary(as.factor(x[!is.na(x)]))/length(x[!is.na(x)]) < filter)
+      any(summary(as.factor(x[!is.na(x)]))/length(x) < filter) # length(x[!is.na(x)])
     })
     genes.rm <- names(rm[which(rm)])
-    length(genes.rm)
     gen.dat <- gen.dat %>% select(-one_of(genes.rm))
   }
+
+  # apply filter for missing values #
+  if(na.filt > 0){
+    rm <- apply(gen.dat, 2, function(x) {
+      sum(is.na(x))/length(x) > na.filt
+    })
+    genes.rm <- names(rm[which(rm)])
+    if(length(genes.rm) > 0)
+      gen.dat <- gen.dat %>% select(-one_of(genes.rm))
+  }
+
+  # check that some features are left after filtering #
   if (is.null(dim(gen.dat)) || dim(gen.dat)[2] == 0)
     stop("Only one or fewer genes are left after filtering. We need a minimum of two. Please relax the filter argument.")
+
+
+  # Categorical outcomes tests through fisher test #
   if (!cont) {
+    # make sure the outcome is a factor #
     if (!is.factor(outcome))
       outcome <- as.factor(outcome)
+    # counter <<- 0
 
-    fits <- lapply(gen.dat, function(x) {
+    fits <- lapply(gen.dat, function(x){
+      # counter <<- counter + 1
+      # print(counter)
+      # print(x)
+      # if a feature is continuous split it at the median #
       if (length(unique(x))/length(x) > 0.5) {
         x <- as.numeric(as.character(x))
         x <- ifelse(x > stats::median(x, na.rm = T), 1, 0)
       }
-      else if(length(unique(x[!is.na(x)])) > 2)
-        x <- factor(x,
-                    levels = c("0","-2","-1.5","2")[which(c(0,-2,-1.5,2) %in% as.numeric(as.character(x)))])
-      else if(length(unique(x[!is.na(x)])) == 2)
-        x <- as.numeric(as.character(x))
 
-      if (paired == F)
-        test <- stats::fisher.test(x, outcome)
-      if (paired == T) {
-        test <- mcnemar.exact(x = x[1:(length(x)/2)],
-                              y = x[(length(x)/2 + 1):length(x)])
-      }
-      if(length(unique(x[!is.na(x)])) == 2)
-        out <- c(sum(x, na.rm = T)/length(x))
-      else
-        out <- summary(x)/length(x)
-      for (i in 1:length(levels(outcome))) {
-        if(length(unique(x[!is.na(x)])) == 2)
-          out <- c(out, sum(x[which(outcome == levels(outcome)[i])],
-                            na.rm = T)/length(which(outcome == levels(outcome)[i])))
-        else
-          out <- cbind(out,summary(x[which(outcome == levels(outcome)[i])])/length(which(outcome == levels(outcome)[i])))
-      }
-      if(is.null(dim(out)))
-        out <- paste0(round(as.numeric(out) * 100, digits = 2),
-                      "%")
-      else
-        out <- apply(out,2, function(x){
-          paste0(round(as.numeric(x) * 100, digits = 2),
-                 "%")
-        })
-      if (!is.null(test$estimate)) {
-        out <- c(out, round(as.numeric(test$estimate),
-                            digits = 2),
-                 formatC(test$p.value, format = "e",
-                         digits = 2),
-                 formatC(stats::p.adjust(test$p.value, method ="fdr",n = ncol(gen.dat)), format = "e",
-                         digits = 2),
-                 round(as.numeric(test$conf.int),
-                       digits = 2))
+      # perform test #
+      test <- stats::fisher.test(x, outcome)
+      # print(is.numeric(x))
+      # for binary data #
+      if(is.numeric(x)){
+        out <- c(paste0(round(sum(x[!is.na(x)])/length(x)*100,3) ,"%"))
+        for(i in levels(outcome)){
+          out <- c(out,paste0(round(sum(x[!is.na(x) & outcome == i])/sum(outcome == i)*100,3) ,"%"))
+        }
+        out <- c(out,
+                 ifelse(!is.null(test$estimate),round(test$estimate,2), ""),
+                 ifelse(!is.null(test$p.value),formatC(test$p.value, format = "e",digits = 2), ""),
+                 ifelse(!is.null(test$conf.int[1]),round(test$conf.int[1], 2), ""),
+                 ifelse(!is.null(test$conf.int[2]),round(test$conf.int[2], 2), "")
+        )
         names(out) <- c("Overall", levels(outcome)[1:length(levels(outcome))],
-                        "OddsRatio", "Pvalue", "FDR", "Lower", "Upper")
+                        "OddsRatio","Pvalue", "Lower", "Upper")
       }
-      else {
-        if(length(unique(x[!is.na(x)])) == 2){
-          out <- c(out, "",
-                   formatC(test$p.value, format = "e",
-                           digits = 2),
-                   formatC(stats::p.adjust(test$p.value, method ="fdr",n = ncol(gen.dat)), format = "e",
-                           digits = 2),
-                   "","")
-          names(out) <- c("Overall", levels(outcome)[1:length(levels(outcome))],
-                          "OddsRatio", "Pvalue", "FDR", "Lower", "Upper")
+
+      # for categorical data #
+      if(is.factor(x)){
+        out <- as.data.frame(paste0(round(c(as.numeric(summary(x[!is.na(x)]))/length(x))*100,3) ,"%"))
+        colnames(out) <- "Overall"
+        rownames(out) <- levels(x)
+        for(i in levels(outcome)){
+          add.out <- c()
+          for(j in levels(x)){
+            add.out <- c(add.out,paste0(round(sum(x[outcome == i] == j,na.rm = T)/sum(outcome == i)*100,3),"%"))
+          }
+          out[,i] <- add.out
         }
-        else{
-          out <- cbind(out, rep("",nrow(out)),
-                       c(formatC(test$p.value, format = "e",
-                                 digits = 2),rep("",nrow(out)-1)),
-                       formatC(stats::p.adjust(test$p.value, method ="fdr",n = ncol(gen.dat)), format = "e",
-                               digits = 2),
-                       rep("",nrow(out)),rep("",nrow(out)))
-          colnames(out) <- c("Overall", levels(outcome)[1:length(levels(outcome))],
-                             "OddsRatio","Pvalue", "FDR", "Lower", "Upper")
-        }
+        out$OddsRatio <- c("",ifelse(!is.null(test$estimate),round(test$estimate,2), ""),
+                           rep("",nrow(out)-2))
+        out$Pvalue <- c("",ifelse(!is.null(test$p.value),formatC(test$p.value, format = "e",digits = 2), ""),
+                        rep("",nrow(out)-2))
+        out$Lower <- c("",ifelse(!is.null(test$conf.int[1]),round(test$conf.int[1], 2), ""),
+                       rep("",nrow(out)-2))
+        out$Upper <- c("",ifelse(!is.null(test$conf.int[2]),round(test$conf.int[2], 2), ""),
+                       rep("",nrow(out)-2))
+        out <- out[-1,]
+
       }
+
       return(out)
     })
 
-    if(rank){
-      ps <- c()
-      for(i in 1:length(fits)){
-        if(is.null(dim(fits[[i]])))
-          ps[i] <- fits[[i]][5]
-        else{
-          ps[i] <- fits[[i]][1,5]
-          rownames(fits[[i]]) <- c(names(fits)[[i]],rep("",nrow(fits[[i]])-1))
-        }
+    ps <- c()
+    for(i in 1:length(fits)){
+      if(is.null(dim(fits[[i]])))
+        ps[i] <- fits[[i]]["Pvalue"]
+      else{
+        ps[i] <- fits[[i]][1,"Pvalue"]
+        if(nrow(fits[[i]])==1)
+          names(fits)[[i]] <- paste0(names(fits)[[i]],".",rownames(fits[[i]]))
       }
-      fits <- do.call('rbind',fits[order(as.numeric(ps))])
     }
-    else{
-      for(i in 1:length(temp)){
-        if(!is.null(dim(temp[[i]])))
-          rownames(temp[[i]]) <- c(names(temp)[[i]],rep("",nrow(temp[[i]])-1))
-      }
-      fits <- do.call('rbind',fits)
-    }
+    if(rank)
+      fits <- as.data.frame(do.call('rbind',fits[order(as.numeric(ps))]))
+    else
+      fits <- as.data.frame(do.call('rbind',fits))
 
-    fits <- as.data.frame(cbind(rownames(fits),fits))
-    colnames(fits)[1] <- "Feature"
+    fits$Feature <- rownames(fits)
+    fits$FDR <- stats::p.adjust(p = as.numeric(fits$Pvalue), method = "fdr")
+    fits <- fits[,c("Feature","Overall", levels(outcome), "OddsRatio", "Lower",
+                    "Upper", "Pvalue", "FDR")]
     colnames(fits)[3:(length(levels(outcome)) + 2)] <- paste0(colnames(fits)[3:(length(levels(outcome)) +
                                                                                   2)], "(N=", as.numeric(summary(outcome)), ")")
-    fits$FDR <- formatC(stats::p.adjust(as.numeric(as.character(fits$Pvalue)),
-                                        method = "fdr"), format = "e", digits = 2)
-    if (rank)
-      fits <- fits[order(as.numeric(as.character(fits$Pvalue))),
-                   ]
+
     if (any(as.character(fits$OddsRatio) != "")) {
       f.dat <- fits
       f.dat <- f.dat %>%
@@ -201,17 +206,6 @@ gen.summary <- function (gen.dat, outcome, filter = 0, paired = F, cont = F,
                                      "</br> Odds Ratio :",
                                      round(.data$OddsRatio, digits = 2)), mode = "markers") %>%
         layout(title = "Volcano Plot")
-
-      # vplot <- fits  %>%
-      #   mutate(Pvalue = as.numeric(as.character(.data$Pvalue)),
-      #          OddsRatio = as.numeric(as.character(.data$OddsRatio)),
-      #          FDRsign = ifelse(as.numeric(as.character(.data$FDR)) <
-      #                             0.05, "Significant", "Non signifcant")) %>%
-      #   filter(!is.na(.data$Pvalue)) %>%
-      #   ggplot(aes(x = .data$OddsRatio, y = -log10(.data$Pvalue),
-      #              fill = .data$FDRsign, color = .data$FDRsign)) + geom_point() +
-      #   geom_label_repel(aes(label = ifelse(.data$FDRsign ==
-      #                                         "Significant", as.character(.data$Feature), "")), color = "white")
     }
     else {
       forest.plot <- NULL
@@ -220,73 +214,64 @@ gen.summary <- function (gen.dat, outcome, filter = 0, paired = F, cont = F,
 
     return(list(fits = fits, forest.plot = forest.plot, vPlot = vplot))
   }
+
+
   if (cont) {
-    fits <- as.data.frame(do.call("rbind", apply(gen.dat,
-                                                 2, function(x) {
-                                                   if (length(unique(x[!is.na(x)]))/length(x[!is.na(x)]) > 0.25 ||
-                                                       length(unique(x[!is.na(x)])) == 2) {
-                                                     x <- as.numeric(x)
-                                                     fit <- stats::lm(outcome ~ x)
-                                                     temp <- as.data.frame(summary(fit)$coefficient)
-                                                     colnames(temp) <- c("Estimate", "SD", "tvalue",
-                                                                         "Pvalue")
-                                                     if (is.numeric(x))
-                                                       temp$MutationFreq <- sum(x, na.rm = T)/length(x[!is.na(x)])
-                                                     else temp$MutationFreq <- 0
-                                                     out <- temp[2, c(1, 2, 4, 5)]
-                                                   }
-                                                   else {
-                                                     x <- factor(x,
-                                                                 levels = c("0","-2","-1.5","2")[which(c(0,-2,-1.5,2) %in%
-                                                                                                         as.numeric(as.character(x)))])
-                                                     fit <- stats::lm(outcome ~ x)
-                                                     temp <- as.data.frame(summary(fit)$coefficient)
-                                                     colnames(temp) <- c("Estimate", "SD", "tvalue",
-                                                                         "Pvalue")
-                                                     temp$MutationFreq <- summary(x)/length(x)
-                                                     out <- as.data.frame(temp[2:nrow(temp), c(1,
-                                                                                               2, 4, 5)])
 
-                                                     rownames(out) <- gsub("x", "",
-                                                                           rownames(out))
-                                                     # rownames(out) <- gsub("as.factor\\(x\\)", "",
-                                                     #                       rownames(out))
-                                                   }
-                                                   return(out)
-                                                 })))
+    fits <- lapply(gen.dat,function(x){
+      fit <- stats::lm(outcome ~ x)
+      temp <- as.data.frame(summary(fit)$coefficient)
+      colnames(temp) <- c("Estimate", "SD", "tvalue",
+                          "Pvalue")
+      temp$Lower <- round(temp$Estimate - 1.96*temp$SD,3)
+      temp$Upper <- round(temp$Estimate + 1.96*temp$SD,3)
+      if(is.numeric(x))
+        temp$EventFrequency <- round(sum(x[!is.na(x)])/length(x),digits = 3)
+      else
+        temp$EventFrequency <- round(summary(x[!is.na(x)])/length(x),digits = 3)
+      temp <- temp[-1,]
+      return(temp)
+    })
 
-    fits$Pvalue <- as.numeric(formatC(fits$Pvalue, format="e", digits=2))
-    fits <- fits %>% mutate(across(c("Estimate", "SD", "MutationFreq"), round, 2))
-    fits$FDR <- formatC(stats::p.adjust(fits$Pvalue, method = "fdr"), format="e", digits=2)
-
-    fits$GeneName <- rownames(fits)
-
-    if (all(apply(gen.dat, 2, is.numeric))) {
-
-      vPlot <- try(plot_ly(data = fits %>%
-                             mutate(FDRsign = ifelse(as.numeric(as.character(.data$FDR)) <
-                                                       0.05, "Significant", "Non signifcant")) %>%
-                             filter(!is.na(.data$Pvalue),
-                                    is.numeric(.data$Pvalue)), x = ~.data$Estimate,
-                           y = ~-log10(.data$Pvalue),color = ~FDRsign,
-                           text = ~paste("Gene :", GeneName, "</br> Estimate :",
-                                         round(.data$Estimate, digits = 2)), mode = "markers",
-                           size = ~.data$MutationFreq) %>%
-                     layout(title = "Volcano Plot"), silent = T)
+    if(rank){
+      ps <- c()
+      for(i in 1:length(fits)){
+        ps[i] <- min(fits[[i]]$Pvalue)
+        if(nrow(fits[[i]])==1)
+          names(fits)[[i]] <- paste0(names(fits)[[i]],".",rownames(fits[[i]]))
+      }
+      fits <- as.data.frame(do.call('rbind',fits[order(as.numeric(ps))]))
     }
-    else {
-      vPlot <- try(plot_ly(data = fits %>%
-                             mutate(FDRsign = ifelse(as.numeric(as.character(.data$FDR)) <
-                                                       0.05, "Significant", "Non signifcant")) %>%
-                             filter(!is.na(.data$Pvalue),
-                                    is.numeric(.data$Pvalue)), x = ~Estimate, y = ~-log10(.data$Pvalue),
-                           color = ~FDRsign,
-                           text = ~paste("Gene :", GeneName, "</br> Estimate :",
-                                         round(Estimate, digits = 2)), mode = "markers") %>%
-                     layout(title = "Volcano Plot"), silent = T)
-    }
-    if (rank)
-      fits <- fits[order(fits$Pvalue), -ncol(fits)]
+    else
+      fits <- as.data.frame(do.call('rbind',fits))
+
+    fits <- fits %>%
+      mutate(Feature = gsub("\\.","_",gsub("\\.x"," ",rownames(fits))),
+             FDR = formatC(stats::p.adjust(Pvalue, method = 'fdr'), format="e", digits=2),
+             Pvalue = formatC(Pvalue, format="e", digits=2),
+             Estimate = round(Estimate, 3),
+             SD = round(SD, 3)
+      ) %>%
+      select(Feature, EventFrequency, Estimate, SD, Lower, Upper, Pvalue, FDR)
+
+
+    vPlot <- plot_ly(data = fits %>%
+                       mutate(FDRsign = ifelse(as.numeric(as.character(.data$FDR)) <
+                                                 0.05, "Significant", "Non signifcant"),
+                              Pvalue = as.numeric(Pvalue)) %>%
+                       filter(!is.na(.data$Pvalue),
+                              is.numeric(.data$Pvalue)), x = ~.data$Estimate,
+                     y = ~-log10(.data$Pvalue),color = ~FDRsign,
+                     text = ~paste("Feature :", Feature, "</br> Estimate :",
+                                   round(.data$Estimate, digits = 2)), mode = "markers",
+                     size = ~.data$EventFrequency) %>%
+      layout(title = "Volcano Plot",
+             xaxis = list(title = "Estimate"),
+             yaxis = list(title = "-log10(Pvalue)"))
+
+
     return(list(fits = fits, vPlot = vPlot))
   }
 }
+
+
