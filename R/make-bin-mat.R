@@ -107,6 +107,13 @@ binmat <- function(patients=NULL, maf = NULL, mut.type = "SOMATIC",SNP.only = FA
     }
   }
 
+  # if keep_onco KB is populated, then oncokb should be set to TRUE
+  if (!missing(keep_onco) & (missing(oncokb) | oncokb == FALSE)){
+    warning("keep_onco is specified, but oncoKB annotation is not being
+            performed. If you wish to keep records on the basis of oncoKB
+            annotation, set the oncokb parameter to TRUE.")
+  }
+
   # make patients/samples list #
   if(is.null(patients)){
     patients <- c()
