@@ -1,4 +1,4 @@
-# gnomeR (development version)
+# gnomeR 1.1.0
 
 # gnomeR 0.0.0.9000
 
