@@ -70,6 +70,25 @@
 </h1></div>
 <!-- badges: start -->
 
+<!-- badges: end -->
+<p><font size="5"><span class="emoji" data-emoji="bangbang">‼️</span> <span class="emoji" data-emoji="warning">⚠️</span> <strong>NOTE: This package is currently under active development with a new stable release expected April 2022. For code written before 2022-03-23, please use the previous stable version (v1.1.0)</strong><span class="emoji" data-emoji="warning">⚠️</span><span class="emoji" data-emoji="bangbang">‼️</span> </font></p>
+<p>You can install the pre-2022-03-23 version with:</p>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">'AxelitoMartin/gnomeR@v1.1.0'</span><span class="op">)</span></code></pre></div>
+<div class="section level2">
+<h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
+</h2>
+<p>You can install the development version of <code>gnomeR</code> from <a href="https://github.com/" class="external-link">GitHub</a> with:</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># install.packages("devtools")</span>
+<span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"AxelitoMartin/gnomeR"</span><span class="op">)</span></code></pre></div>
+<p>Along with its companion package for cbioPortal data download:</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"karissawhiting/cbioportalr"</span><span class="op">)</span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
+</h2>
 <p>the <code>gnomeR</code> package provides a consistent framework for genetic data processing, visualization and analysis. This is primarily targeted to IMPACT datasets but can also be applied to any genomic data provided by CbioPortal.</p>
 <ul>
 <li>
@@ -81,19 +100,6 @@
 <li>
 <a href="https://axelitomartin.github.io/gnomeR/articles/Analizing-genomic-data.html" class="external-link"><strong>Analyzing the processed data</strong></a> for association with binary, continuous and survival outcome. Including further visualiztion to improve understanding of the results.</li>
 </ul>
-<div class="section level2">
-<h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
-</h2>
-<p>You can install <code>gnomeR</code> from <a href="https://github.com/" class="external-link">GitHub</a> with:</p>
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># install.packages("devtools")</span>
-<span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"AxelitoMartin/gnomeR"</span><span class="op">)</span></code></pre></div>
-<p>Similarly for those who wish to explore the development version of <code>gnomeR</code>:</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"AxelitoMartin/gnomeR"</span>, ref <span class="op">=</span> <span class="st">"development"</span><span class="op">)</span></code></pre></div>
-<p>Along with its companion package for cbioPortal data download:</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"karissawhiting/cbioportalr"</span><span class="op">)</span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="examples">Examples<a class="anchor" aria-label="anchor" href="#examples"></a>
@@ -109,7 +115,7 @@
 <code class="sourceCode R"><span class="va">CBIOPORTAL_TOKEN</span> <span class="op">=</span> <span class="st">'YOUR_TOKEN'</span></code></pre></div>
 <p>You can test your connection using:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">get_cbioportal_token</span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu">cbioportalr</span><span class="fu">::</span><span class="fu">get_cbioportal_token</span><span class="op">(</span><span class="op">)</span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="retrieving-data">Retrieving data<a class="anchor" aria-label="anchor" href="#retrieving-data"></a>
@@ -293,10 +299,10 @@
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">sum.plots</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/maf_viz.html">maf_viz</a></span><span class="op">(</span>maf <span class="op">=</span> <span class="va">mut</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/stats/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">Tumor_Sample_Barcode</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="va">patients</span><span class="op">)</span><span class="op">)</span>
 <span class="va">sum.plots</span><span class="op">$</span><span class="va">topgenes</span></code></pre></div>
-<p><img src="reference/figures/README-unnamed-chunk-8-1.png" width="100%"></p>
+<p><img src="reference/figures/README-unnamed-chunk-9-1.png" width="100%"></p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">sum.plots</span><span class="op">$</span><span class="va">genecomut</span></code></pre></div>
-<p><img src="reference/figures/README-unnamed-chunk-8-2.png" width="100%"></p>
+<p><img src="reference/figures/README-unnamed-chunk-9-2.png" width="100%"></p>
 </div>
 <div class="section level4">
 <h4 id="oncoprints">OncoPrints<a class="anchor" aria-label="anchor" href="#oncoprints"></a>
@@ -305,7 +311,7 @@
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">genes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"TP53"</span>,<span class="st">"PIK3CA"</span>,<span class="st">"KRAS"</span>,<span class="st">"TERT"</span>,<span class="st">"EGFR"</span>,<span class="st">"FAT"</span>,<span class="st">"ALK"</span>,<span class="st">"CDKN2A"</span>,<span class="st">"CDKN2B"</span><span class="op">)</span>
 <span class="fu"><a href="reference/plot_oncoPrint.html">plot_oncoPrint</a></span><span class="op">(</span>gen.dat <span class="op">=</span> <span class="va">gen.dat</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span> <span class="fu">select</span><span class="op">(</span><span class="fu">starts_with</span><span class="op">(</span><span class="va">genes</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<p><img src="reference/figures/README-unnamed-chunk-9-1.png" width="100%"></p>
+<p><img src="reference/figures/README-unnamed-chunk-10-1.png" width="100%"></p>
 </div>
 <div class="section level4">
 <h4 id="facets">FACETs<a class="anchor" aria-label="anchor" href="#facets"></a>
@@ -314,7 +320,7 @@
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">p.heat</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/facets.heatmap.html">facets.heatmap</a></span><span class="op">(</span>seg <span class="op">=</span> <span class="va">seg</span>, patients <span class="op">=</span> <span class="va">patients</span>, min.purity <span class="op">=</span> <span class="fl">0</span><span class="op">)</span>
 <span class="va">p.heat</span><span class="op">$</span><span class="va">p</span></code></pre></div>
-<p><img src="reference/figures/README-unnamed-chunk-10-1.png" width="100%"></p>
+<p><img src="reference/figures/README-unnamed-chunk-11-1.png" width="100%"></p>
 </div>
 </div>
 <div class="section level3">
@@ -329,155 +335,17 @@
 <li>binary (unpaired test using Fisher’s exact test and paired test using McNemmar’s exact test)</li>
 <li>continuous (using simple linear regression)</li>
 </ul>
-<!-- end list --><div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">outcome</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Binomial.html" class="external-link">rbinom</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">patients</span><span class="op">)</span>,size <span class="op">=</span> <span class="fl">1</span>,prob <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fl">2</span><span class="op">)</span>,levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"0"</span>,<span class="st">"1"</span><span class="op">)</span><span class="op">)</span>
-<span class="va">out</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/gen.summary.html">gen.summary</a></span><span class="op">(</span>gen.dat <span class="op">=</span> <span class="va">gen.dat</span>,outcome <span class="op">=</span> <span class="va">outcome</span>,filter <span class="op">=</span> <span class="fl">0.05</span><span class="op">)</span>
-<span class="fu">kable</span><span class="op">(</span><span class="va">out</span><span class="op">$</span><span class="va">fits</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span>,<span class="op">]</span>,row.names <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
-<table class="table">
-<thead><tr class="header">
-<th align="left"></th>
-<th align="left">Feature</th>
-<th align="left">Overall</th>
-<th align="left">0(N=50)</th>
-<th align="left">1(N=50)</th>
-<th align="left">OddsRatio</th>
-<th align="left">Pvalue</th>
-<th align="left">FDR</th>
-<th align="left">Lower</th>
-<th align="left">Upper</th>
-</tr></thead>
-<tbody>
-<tr class="odd">
-<td align="left">PIK3CA</td>
-<td align="left">PIK3CA</td>
-<td align="left">12%</td>
-<td align="left">8%</td>
-<td align="left">16%</td>
-<td align="left">2.17</td>
-<td align="left">3.57e-01</td>
-<td align="left">1.00e+00</td>
-<td align="left">0.53</td>
-<td align="left">10.6</td>
-</tr>
-<tr class="even">
-<td align="left">EPHA5</td>
-<td align="left">EPHA5</td>
-<td align="left">5%</td>
-<td align="left">8%</td>
-<td align="left">2%</td>
-<td align="left">0.24</td>
-<td align="left">3.62e-01</td>
-<td align="left">1.00e+00</td>
-<td align="left">0</td>
-<td align="left">2.52</td>
-</tr>
-<tr class="odd">
-<td align="left">FLT4</td>
-<td align="left">FLT4</td>
-<td align="left">5%</td>
-<td align="left">2%</td>
-<td align="left">8%</td>
-<td align="left">4.21</td>
-<td align="left">3.62e-01</td>
-<td align="left">1.00e+00</td>
-<td align="left">0.4</td>
-<td align="left">213.8</td>
-</tr>
-<tr class="even">
-<td align="left">DOT1L</td>
-<td align="left">DOT1L</td>
-<td align="left">5%</td>
-<td align="left">2%</td>
-<td align="left">8%</td>
-<td align="left">4.21</td>
-<td align="left">3.62e-01</td>
-<td align="left">1.00e+00</td>
-<td align="left">0.4</td>
-<td align="left">213.8</td>
-</tr>
-<tr class="odd">
-<td align="left">CDKN2B.Del</td>
-<td align="left">CDKN2B.Del</td>
-<td align="left">5%</td>
-<td align="left">2%</td>
-<td align="left">8%</td>
-<td align="left">4.21</td>
-<td align="left">3.62e-01</td>
-<td align="left">1.00e+00</td>
-<td align="left">0.4</td>
-<td align="left">213.8</td>
-</tr>
-<tr class="even">
-<td align="left">STK11</td>
-<td align="left">STK11</td>
-<td align="left">7%</td>
-<td align="left">10%</td>
-<td align="left">4%</td>
-<td align="left">0.38</td>
-<td align="left">4.36e-01</td>
-<td align="left">1.00e+00</td>
-<td align="left">0.03</td>
-<td align="left">2.46</td>
-</tr>
-<tr class="odd">
-<td align="left">APC</td>
-<td align="left">APC</td>
-<td align="left">7%</td>
-<td align="left">4%</td>
-<td align="left">10%</td>
-<td align="left">2.64</td>
-<td align="left">4.36e-01</td>
-<td align="left">1.00e+00</td>
-<td align="left">0.41</td>
-<td align="left">29.07</td>
-</tr>
-<tr class="even">
-<td align="left">MLL</td>
-<td align="left">MLL</td>
-<td align="left">9%</td>
-<td align="left">12%</td>
-<td align="left">6%</td>
-<td align="left">0.47</td>
-<td align="left">4.87e-01</td>
-<td align="left">1.00e+00</td>
-<td align="left">0.07</td>
-<td align="left">2.37</td>
-</tr>
-<tr class="odd">
-<td align="left">FAT1</td>
-<td align="left">FAT1</td>
-<td align="left">11%</td>
-<td align="left">14%</td>
-<td align="left">8%</td>
-<td align="left">0.54</td>
-<td align="left">5.25e-01</td>
-<td align="left">1.00e+00</td>
-<td align="left">0.11</td>
-<td align="left">2.29</td>
-</tr>
-<tr class="even">
-<td align="left">KRAS</td>
-<td align="left">KRAS</td>
-<td align="left">13%</td>
-<td align="left">16%</td>
-<td align="left">10%</td>
-<td align="left">0.59</td>
-<td align="left">5.54e-01</td>
-<td align="left">1.00e+00</td>
-<td align="left">0.14</td>
-<td align="left">2.22</td>
-</tr>
-</tbody>
-</table>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">out</span><span class="op">$</span><span class="va">forest.plot</span></code></pre></div>
-<p><img src="reference/figures/README-unnamed-chunk-11-1.png" width="100%"></p>
+<span class="co"># out &lt;- gen.summary(gen.dat = gen.dat,outcome = outcome,filter = 0.05)</span>
+<span class="co"># kable(out$fits[1:10,],row.names = TRUE)</span>
+<span class="co"># out$forest.plot</span></code></pre></div>
 </div>
 <div class="section level4">
 <h4 id="survival-analysis">Survival analysis<a class="anchor" aria-label="anchor" href="#survival-analysis"></a>
 </h4>
 <p>Similarly we include simple tools to perform univariate Cox’s proportional regression adjusted for false discovery rate in the <code><a href="reference/uni.cox.html">uni.cox()</a></code> function.</p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">time</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Exponential.html" class="external-link">rexp</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">patients</span><span class="op">)</span><span class="op">)</span>
 <span class="va">status</span> <span class="op">&lt;-</span> <span class="va">outcome</span>
 <span class="va">surv.dat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="va">time</span>,<span class="va">status</span><span class="op">)</span><span class="op">)</span>
@@ -586,9 +454,9 @@
 </tr>
 </tbody>
 </table>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">out</span><span class="op">$</span><span class="va">KM</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></code></pre></div>
-<p><img src="reference/figures/README-unnamed-chunk-12-1.png" width="100%"></p>
+<p><img src="reference/figures/README-unnamed-chunk-13-1.png" width="100%"></p>
 </div>
 </div>
 <div class="section level3">
@@ -638,9 +506,9 @@
 <div class="dev-status">
 <h2 data-toc-skip>Dev status</h2>
 <ul class="list-unstyled">
-<li><a href="https://travis-ci.org/AxelitoMartin/gnomeR" class="external-link"><img src="https://travis-ci.com/AxelitoMartin/gnomeR.svg?branch=development" alt="Travis build status"></a></li>
 <li><a href="https://codecov.io/gh/AxelitoMartin/gnomeR?branch=development" class="external-link"><img src="https://codecov.io/gh/AxelitoMartin/gnomeR/branch/development/graph/badge.svg" alt="Codecov test coverage"></a></li>
 <li><a href="https://doi.org/10.5281/zenodo.4171608" class="external-link"><img src="https://zenodo.org/badge/DOI/10.5281/zenodo.4171608.svg" alt="DOI"></a></li>
+<li><a href="https://github.com/AxelitoMartin/gnomeR/actions" class="external-link"><img src="https://github.com/AxelitoMartin/gnomeR/workflows/R-CMD-check/badge.svg" alt="R-CMD-check"></a></li>
 </ul>
 </div>
 
