@@ -1,10 +1,6 @@
 pandoc: 2.7.3
-pkgdown: 1.6.1
+pkgdown: 2.0.2
 pkgdown_sha: ~
-articles:
-  Analizing-genomic-data: Analizing-genomic-data.html
-  Data-processing: Data-processing.html
-  Visualizations: Visualizations.html
-  gnomeR-vignette: gnomeR-vignette.html
-last_built: 2020-10-21T20:56Z
+articles: {}
+last_built: 2022-03-24T01:59Z
 
