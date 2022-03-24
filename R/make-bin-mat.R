@@ -40,7 +40,7 @@
 #' @param ... Further arguments passed to the oncokb() function such a token
 #' @return mut : a binary matrix of mutation data
 #' @export
-#' @examples library(gnomeR)
+#' @examples
 #' # mut.only <- binmat(maf = mut)
 #' patients <- as.character(unique(mut$Tumor_Sample_Barcode))[1:200]
 #' bin.mut <- binmat(patients = patients,maf = mut,
@@ -69,7 +69,10 @@ binmat <- function(patients=NULL, maf = NULL, mut.type = "SOMATIC",SNP.only = FA
                    oncokb = FALSE, keep_onco = c("Oncogenic","Likely Oncogenic","Predicted Oncogenic"),
                    token = '', sample_panels = NULL,...){
 
+  genie_gene_info <- gnomeR::genie_gene_info
   impact_gene_info <- gnomeR::impact_gene_info
+  panel_names <- gnomeR::panel_names
+  pathways <- gnomeR::pathways
 
   if(is.null(maf) && is.null(fusion) && is.null(cna)) stop("You must provided one of the three following files: MAF, fusion or CNA.")
   # reformat columns #
@@ -351,15 +354,15 @@ binmat <- function(patients=NULL, maf = NULL, mut.type = "SOMATIC",SNP.only = FA
                     # need to change this to all genes that are not included! #
                     gene_to_NA <- setdiff(gsub(".fus|.Del|.Amp|.cna","",colnames(mut)) ,
                                           as.character(unlist(genie_gene_info %>%
-                                                                select(hugo_symbol,gsub("-","_",p_name)) %>%
+                                                                select(.data$hugo_symbol,gsub("-","_",p_name)) %>%
                                                                 filter(!!as.symbol(p_name) == "included") %>%
-                                                                select(hugo_symbol))))
+                                                                select(.data$hugo_symbol))))
 
                     missing <- c(gene_to_NA, paste0(gene_to_NA,".fus"),paste0(gene_to_NA,".Del"),
                                  paste0(gene_to_NA,".Amp"),paste0(gene_to_NA,".cna"))
 
                     mut_sub <- mut[samples_to_annotate,]
-                    mut_sub[,na.omit(match(missing,colnames(mut_sub)))] <- NA
+                    mut_sub[,stats::na.omit(match(missing,colnames(mut_sub)))] <- NA
                     return(mut_sub)
                   })
           )
@@ -378,15 +381,15 @@ binmat <- function(patients=NULL, maf = NULL, mut.type = "SOMATIC",SNP.only = FA
                   # need to change this to all genes that are not included! #
                   gene_to_NA <- setdiff(gsub(".fus|.Del|.Amp|.cna","",colnames(mut)) ,
                                         as.character(unlist(genie_gene_info %>%
-                                                              select(hugo_symbol,gsub("-","_",p_name)) %>%
+                                                              select(.data$hugo_symbol,gsub("-","_",p_name)) %>%
                                                               filter(!!as.symbol(p_name) == "included") %>%
-                                                              select(hugo_symbol))))
+                                                              select(.data$hugo_symbol))))
 
                   missing <- c(gene_to_NA, paste0(gene_to_NA,".fus"),paste0(gene_to_NA,".Del"),
                                paste0(gene_to_NA,".Amp"),paste0(gene_to_NA,".cna"))
 
                   mut_sub <- mut[samples_to_annotate,]
-                  mut_sub[,na.omit(match(missing,colnames(mut_sub)))] <- NA
+                  mut_sub[,stats::na.omit(match(missing,colnames(mut_sub)))] <- NA
                   return(mut_sub)
                 })
         )
@@ -591,7 +594,7 @@ createbin.fusion <- function(obj, patients, mut.type,cna.binary,
 
   # get table of gene aliases
   alias_table <- tidyr::unnest(impact_gene_info, cols = alias) %>%
-    select(hugo_symbol, alias)
+    select(.data$hugo_symbol, .data$alias)
 
   # recode aliases ---
   if(recode.aliases == TRUE) {
@@ -601,8 +604,8 @@ createbin.fusion <- function(obj, patients, mut.type,cna.binary,
                                                                             alias_table = alias_table))
 
     message <- fusion %>%
-      dplyr::filter(Hugo_Symbol_Old != Hugo_Symbol) %>%
-      dplyr::select(Hugo_Symbol_Old, Hugo_Symbol) %>%
+      dplyr::filter(.data$Hugo_Symbol_Old != Hugo_Symbol) %>%
+      dplyr::select(.data$Hugo_Symbol_Old, .data$Hugo_Symbol) %>%
       dplyr::distinct()
 
     if(nrow(message) > 0) {
@@ -649,7 +652,7 @@ createbin.cna <- function(obj, patients, mut.type,cna.binary,
 
   # get table of gene aliases
   alias_table <- tidyr::unnest(impact_gene_info, cols = alias) %>%
-    select(hugo_symbol, alias)
+    select(.data$hugo_symbol, .data$alias)
 
   # recode aliases ---
   if(recode.aliases == TRUE) {
@@ -659,8 +662,8 @@ createbin.cna <- function(obj, patients, mut.type,cna.binary,
                                                                       alias_table = alias_table))
 
     message <- cna %>%
-      dplyr::filter(Hugo_Symbol_Old != Hugo_Symbol) %>%
-      dplyr::select(Hugo_Symbol_Old, Hugo_Symbol) %>%
+      dplyr::filter(.data$Hugo_Symbol_Old != Hugo_Symbol) %>%
+      dplyr::select(.data$Hugo_Symbol_Old, .data$Hugo_Symbol) %>%
       dplyr::distinct()
 
     if(nrow(message) > 0) {
@@ -784,7 +787,7 @@ createbin.api <- function(obj, patients, mut.type,cna.binary,
 
   # get table of gene aliases
   alias_table <- tidyr::unnest(impact_gene_info, cols = alias) %>%
-    select(hugo_symbol, alias)
+    select(.data$hugo_symbol, .data$alias)
 
   # recode aliases
   # cna$Hugo_Symbol_Old <- cna$Hugo_Symbol

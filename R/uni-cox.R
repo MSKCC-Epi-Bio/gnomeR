@@ -152,22 +152,24 @@ uni.cox <- function(X,surv.dat,surv.formula,filter = 0,genes = NULL, na.filt = 0
 
   fits <- fits %>%
     mutate(Feature = gsub("\\.","_",gsub("\\.x"," ",rownames(fits))),
-           FDR = formatC(stats::p.adjust(Pvalue, method = 'fdr'), format="e", digits=2),
-           Pvalue = formatC(Pvalue, format="e", digits=2),
-           Estimate = round(Estimate, 3),
-           HR = round(HR, 3),
-           SD = round(SD, 3)
+           FDR = formatC(stats::p.adjust(.data$Pvalue, method = 'fdr'), format="e", digits=2),
+           Pvalue = formatC(.data$Pvalue, format="e", digits=2),
+           Estimate = round(.data$Estimate, 3),
+           HR = round(.data$HR, 3),
+           SD = round(.data$SD, 3)
     ) %>%
-    select(Feature, EventFrequency, Estimate, HR, SD, Lower, Upper, Pvalue, FDR)
+    select(.data$Feature, .data$EventFrequency, .data$Estimate,
+           .data$HR, .data$SD, .data$Lower, .data$Upper,
+           .data$Pvalue, .data$FDR)
 
   ### Volcano plot ###
   uniVolcano <- plot_ly(data = fits %>%
                           mutate(FDRsign = ifelse(as.numeric(as.character(.data$FDR)) <
                                                     0.05, "Significant", "Non signifcant"),
-                                 Pvalue = as.numeric(Pvalue)), x = ~Estimate, y = ~-log10(Pvalue),
-                        text = ~paste('Feature :',Feature,
-                                      '<br> Hazard Ratio :',HR,
-                                      '<br> Event Frequency :',EventFrequency),
+                                 Pvalue = as.numeric(.data$Pvalue)), x = ~.data$Estimate, y = ~-log10(.data$Pvalue),
+                        text = ~paste('Feature :',.data$Feature,
+                                      '<br> Hazard Ratio :',.data$HR,
+                                      '<br> Event Frequency :',.data$EventFrequency),
                         mode = "markers",color = ~ifelse(.data$FDRsign == "Significant","blue","red")) %>%
     layout(title ="Volcano Plot")
 

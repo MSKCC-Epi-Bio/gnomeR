@@ -6,10 +6,11 @@
 #' @export
 #'
 #' @examples
-#'
 #' check_maf_input(mut,recode.aliases = TRUE)
 #'
 check_maf_input <- function(maf, ...)  {
+
+  impact_gene_info <- gnomeR::impact_gene_info
 
   arguments <- list(...)
 
@@ -43,18 +44,18 @@ check_maf_input <- function(maf, ...)  {
             The variant type will be inferred (we recommend that the user fixes this).")
       maf <- maf %>%
         mutate(
-          Reference_Allele = as.character(Reference_Allele),
-          Tumor_Seq_Allele2 = as.character(Tumor_Seq_Allele2),
+          Reference_Allele = as.character(.data$Reference_Allele),
+          Tumor_Seq_Allele2 = as.character(.data$Tumor_Seq_Allele2),
           Variant_Type = case_when(
-            Reference_Allele %in% c("A","T","C","G") &
-              Tumor_Seq_Allele2 %in% c("A","T","C","G") ~ "SNP",
-            nchar(Tumor_Seq_Allele2) < nchar(Reference_Allele) |
-              Tumor_Seq_Allele2 == "-" ~ "DEL",
-            Reference_Allele == "-" |
-              nchar(Tumor_Seq_Allele2) > nchar(Reference_Allele) ~ "INS",
-            nchar(Reference_Allele) == 2 & nchar(Tumor_Seq_Allele2) == 2 ~ "DNP",
-            nchar(Reference_Allele) == 3 & nchar(Tumor_Seq_Allele2) == 3 ~ "TNP",
-            nchar(Reference_Allele) > 3 & nchar(Tumor_Seq_Allele2) == nchar(Reference_Allele) ~ "ONP",
+            .data$Reference_Allele %in% c("A","T","C","G") &
+              .data$Tumor_Seq_Allele2 %in% c("A","T","C","G") ~ "SNP",
+            nchar(.data$Tumor_Seq_Allele2) < nchar(.data$Reference_Allele) |
+              .data$Tumor_Seq_Allele2 == "-" ~ "DEL",
+            .data$Reference_Allele == "-" |
+              nchar(.data$Tumor_Seq_Allele2) > nchar(.data$Reference_Allele) ~ "INS",
+            nchar(.data$Reference_Allele) == 2 & nchar(.data$Tumor_Seq_Allele2) == 2 ~ "DNP",
+            nchar(.data$Reference_Allele) == 3 & nchar(.data$Tumor_Seq_Allele2) == 3 ~ "TNP",
+            nchar(.data$Reference_Allele) > 3 & nchar(.data$Tumor_Seq_Allele2) == nchar(.data$Reference_Allele) ~ "ONP",
             TRUE ~ "Undefined"
           ))
     }
@@ -68,8 +69,8 @@ check_maf_input <- function(maf, ...)  {
   if(arguments$recode.aliases == TRUE) {
 
   # get table of gene aliases
-    alias_table <- tidyr::unnest(impact_gene_info, cols = alias) %>%
-      dplyr::select(hugo_symbol, alias)
+    alias_table <- tidyr::unnest(impact_gene_info, cols = .data$alias) %>%
+      dplyr::select(.data$hugo_symbol, .data$alias)
 
     # recode aliases
     maf$Hugo_Symbol_Old <- maf$Hugo_Symbol
@@ -77,8 +78,8 @@ check_maf_input <- function(maf, ...)  {
                                                                       alias_table = alias_table))
 
     message <- maf %>%
-      dplyr::filter(Hugo_Symbol_Old != Hugo_Symbol) %>%
-      dplyr::select(Hugo_Symbol_Old, Hugo_Symbol) %>%
+      dplyr::filter(.data$Hugo_Symbol_Old != .data$Hugo_Symbol) %>%
+      dplyr::select(.data$Hugo_Symbol_Old, .data$Hugo_Symbol) %>%
       dplyr::distinct()
 
     if(nrow(message) > 0) {
@@ -148,8 +149,8 @@ resolve_alias <- function(gene_to_check, alias_table = all_alias_table) {
   if(gene_to_check %in% alias_table$alias) {
 
     alias_table %>%
-      filter(alias == gene_to_check) %>%
-      pull(hugo_symbol) %>%
+      filter(.data$alias == gene_to_check) %>%
+      pull(.data$hugo_symbol) %>%
       first()
 
   } else {

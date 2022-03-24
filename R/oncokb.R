@@ -64,7 +64,7 @@ oncokb <- function(maf = NULL, fusion = NULL, cna = NULL,
                 # select(Hugo_Symbol, Variant_Classification, Tumor_Sample_Barcode, HGVSp_Short, HGVSp)
                 file = "temp_maf.txt",quote = F, sep = '\t', row.names = FALSE)
   if(!is.null(fusion))
-    write.table(fusion, file = "temp_fusion.txt",quote = F, sep = '\t', row.names = FALSE)
+    utils::write.table(fusion, file = "temp_fusion.txt",quote = F, sep = '\t', row.names = FALSE)
   if(!is.null(cna)){
     if("api" %in% class(cna)){
       temp.cna <- as.data.frame(matrix(0L,
@@ -88,10 +88,10 @@ oncokb <- function(maf = NULL, fusion = NULL, cna = NULL,
       cna <- temp.cna
       temp.cna <- NULL
     }
-    write.table(cna, file = "temp_cna.txt",quote = F, sep = '\t', row.names = FALSE)
+    utils::write.table(cna, file = "temp_cna.txt",quote = F, sep = '\t', row.names = FALSE)
   }
   if(clin.file != ""){
-    write.table(clin.file, file = "temp_clin.txt",quote = F, sep = '\t', row.names = FALSE)
+    utils::write.table(clin.file, file = "temp_clin.txt",quote = F, sep = '\t', row.names = FALSE)
     clin.file = "temp_clin.txt"
   }
 
@@ -113,7 +113,7 @@ oncokb <- function(maf = NULL, fusion = NULL, cna = NULL,
                    token = token)
     # remove temp files and load oncokb annotated one #
     file.remove("temp_fusion.txt")
-    fusion_oncokb <- read.delim('temp_fusion_oncoKB.txt')
+    fusion_oncokb <- utils::read.delim('temp_fusion_oncoKB.txt')
     file.remove("temp_fusion_oncoKB.txt")
   }
 
@@ -125,7 +125,7 @@ oncokb <- function(maf = NULL, fusion = NULL, cna = NULL,
                 token = token)
     # remove temp files and load oncokb annotated one #
     file.remove("temp_cna.txt")
-    cna_oncokb <- read.delim('temp_cna_oncoKB.txt')
+    cna_oncokb <- utils::read.delim('temp_cna_oncoKB.txt')
     file.remove("temp_cna_oncoKB.txt")
   }
 

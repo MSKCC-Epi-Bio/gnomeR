@@ -38,10 +38,6 @@ patients <- as.character(unique(mut$Tumor_Sample_Barcode))
 ## binary outcome ##
 outcome <- as.character(clin.sample$Sample.Type[match(patients,clin.sample$Sample.Identifier)])
 gen.dat <- binmat(patients = patients,maf = mut)
-gen.summary(gen.dat = gen.dat,
-        outcome = outcome,
-        filter = 0.05,
-        cont = FALSE,rank = TRUE)
 ## Continuous outcome ##
 set.seed(1)
 outcome <-  rnorm(n = nrow(gen.dat))

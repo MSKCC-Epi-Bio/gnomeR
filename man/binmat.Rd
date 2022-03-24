@@ -98,7 +98,6 @@ Enables creation of a binary matrix from a maf file with
 a predefined list of patients (rows are patients and columns are genes)
 }
 \examples{
-library(gnomeR)
 # mut.only <- binmat(maf = mut)
 patients <- as.character(unique(mut$Tumor_Sample_Barcode))[1:200]
 bin.mut <- binmat(patients = patients,maf = mut,

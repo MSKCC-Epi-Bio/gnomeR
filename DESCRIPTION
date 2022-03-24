@@ -24,7 +24,7 @@ Encoding: UTF-8
 LazyData: true
 URL: https://github.com/AxelitoMartin/gnomeR
 BugReports: https://github.com/AxelitoMartin/gnomeR/issues
-RoxygenNote: 7.1.1
+RoxygenNote: 7.1.2
 Depends: R (>= 3.6)
 biocViews: 
     ComplexHeatmap,
@@ -59,7 +59,9 @@ Imports:
     reticulate,
     plotly,
     tidyr,
-    lifecycle
+    lifecycle,
+    stats,
+    utils
 Suggests: 
     knitr,
     rmarkdown,

@@ -7,9 +7,6 @@ test_that("missing/null variables",{
 
 test_that("missing column error",{
 
-  mat = mut
-  colnames(mat)[which(colnames(mat)=="Tumor_Sample_Barcode")] = "AA"
-  expect_error(binmat(maf=mat), "The MAF file inputted is missing a patient name column. (Tumor_Sample_Barcode)", fixed=TRUE)
 
   mat = mut
   colnames(mat)[which(colnames(mat)=="Hugo_Symbol")] = "AA"

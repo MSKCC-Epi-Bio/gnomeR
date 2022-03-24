@@ -43,18 +43,18 @@
 # # Get IMPACT genes -----------------------------------------------------------
 #
 # # *JJ files ---
-# jj_341 <- read.delim(here::here("data-raw", "data_gene_panel_impact341.txt"),
+# jj_341 <- utils::read.delim(here::here("data-raw", "data_gene_panel_impact341.txt"),
 #                                 header=F, skip=3) %>%
 #   pivot_longer(everything()) %>%
 #  transmute(gene = str_remove_all(value, "gene_list: "))
 #
-# jj_410 <- read.delim(here::here("data-raw", "data_gene_panel_impact410.txt"),
+# jj_410 <- utils::read.delim(here::here("data-raw", "data_gene_panel_impact410.txt"),
 #                                 header=F, skip=2) %>%
 #   pivot_longer(everything()) %>%
 #  transmute(gene = str_remove_all(value, "gene_list: "))
 #
 #
-# jj_468 <- read.delim(here::here("data-raw", "data_gene_panel_impact468.txt"),
+# jj_468 <- utils::read.delim(here::here("data-raw", "data_gene_panel_impact468.txt"),
 #                                 header=F, skip=3) %>%
 #   pivot_longer(everything()) %>%
 #  transmute(gene = str_remove_all(value, "gene_list: "))

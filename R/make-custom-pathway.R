@@ -12,11 +12,13 @@
 #' @examples library(gnomeR)
 #' patients <- as.character(unique(mut$Tumor_Sample_Barcode))[1:200]
 #' bin.mut <- binmat(patients = patients,maf = mut)
-#' pathway <- as.data.frame(cbind(c("path1","path1","path2","path3"),c("PIK3CA","KRAS","TERT","TP53")))
+#' pathway <- as.data.frame(cbind(c("path1","path1","path2","path3"),
+#' c("PIK3CA","KRAS","TERT","TP53")))
 #' custom_pathway(mat = bin.mut, pathway = pathway)
 #' ### Considering CNA as well ###
 #' bin.mut <- binmat(patients = patients,maf = mut,cna = cna)
-#' pathway <- as.data.frame(cbind(c("path1","path1","path2","path3","path3"),c("PIK3CA","KRAS","TERT","TP53","TP53.Del")))
+#' pathway <- as.data.frame(cbind(c("path1","path1","path2","path3","path3"),
+#' c("PIK3CA","KRAS","TERT","TP53","TP53.Del")))
 #' custom_pathway(mat = bin.mut, pathway = pathway)
 #' @import dplyr
 #' @import dtplyr
@@ -37,11 +39,11 @@ custom_pathway <- function(mat, pathway){
                                                       filter(.data$pathway == x) %>% select(.data$hugo_symbol))),","))#[[1]]
               if(all(is.na(match(genes,colnames(mat))))){
                 warning("None of the names specified in pathway: ",x," were found.")
-                return(rep(0, rnow(mat)))
+                return(rep(0, nrow(mat)))
               }
 
               as.numeric(apply(
-                as.data.frame(mat[,na.omit(match(genes,colnames(mat)))]),1,function(y){ #%>% select(starts_with(genes))
+                as.data.frame(mat[,stats::na.omit(match(genes,colnames(mat)))]),1,function(y){ #%>% select(starts_with(genes))
                 ifelse(sum(abs(as.numeric(as.character(y))),na.rm = T)>0, 1,0)
               }))
             })))

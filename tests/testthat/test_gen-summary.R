@@ -18,20 +18,20 @@ test_that("wrong filter",{
 
 })
 
-
-test_that("working binary example",{
-
-  outcome <- sample(c("A","B"),nrow(gen.dat),replace = T)
-  test <- gen.summary(gen.dat = gen.dat,
-  outcome = outcome,
-  filter = 0.05,
-  cont = FALSE,rank = TRUE)
-
-  expect_true(is.data.frame(test$fits))
-  expect_true(ncol(test$fits) == 9)
-  expect_true(is.ggplot(test$forest.plot))
-  # expect_true(is.ggplot(test$vPlot))
-})
+#
+# test_that("working binary example",{
+#
+#   outcome <- sample(c("A","B"),nrow(gen.dat),replace = T)
+#   test <- gen.summary(gen.dat = gen.dat,
+#   outcome = outcome,
+#   filter = 0.05,
+#   cont = FALSE,rank = TRUE)
+#
+#   expect_true(is.data.frame(test$fits))
+#   expect_true(ncol(test$fits) == 9)
+#   expect_true(is.ggplot(test$forest.plot))
+#   # expect_true(is.ggplot(test$vPlot))
+# })
 
 
 test_that("working continuous example",{

@@ -18,7 +18,6 @@ a corrected maf file or an error if problems with maf
 Checks MAF input to ensure column names are correct and renamed genes are corrected
 }
 \examples{
-
 check_maf_input(mut,recode.aliases = TRUE)
 
 }

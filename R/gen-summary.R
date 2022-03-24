@@ -21,10 +21,7 @@
 #' ## binary outcome ##
 #' outcome <- as.character(clin.sample$Sample.Type[match(patients,clin.sample$Sample.Identifier)])
 #' gen.dat <- binmat(patients = patients,maf = mut)
-#' gen.summary(gen.dat = gen.dat,
-#'         outcome = outcome,
-#'         filter = 0.05,
-#'         cont = FALSE,rank = TRUE)
+
 #' ## Continuous outcome ##
 #' set.seed(1)
 #' outcome <-  rnorm(n = nrow(gen.dat))
@@ -247,18 +244,19 @@ gen.summary <- function (gen.dat, outcome, filter = 0, cont = F, rank = T, na.fi
 
     fits <- fits %>%
       mutate(Feature = gsub("\\.","_",gsub("\\.x"," ",rownames(fits))),
-             FDR = formatC(stats::p.adjust(Pvalue, method = 'fdr'), format="e", digits=2),
-             Pvalue = formatC(Pvalue, format="e", digits=2),
-             Estimate = round(Estimate, 3),
-             SD = round(SD, 3)
+             FDR = formatC(stats::p.adjust(.data$Pvalue, method = 'fdr'), format="e", digits=2),
+             Pvalue = formatC(.data$Pvalue, format="e", digits=2),
+             Estimate = round(.data$Estimate, 3),
+             SD = round(.data$SD, 3)
       ) %>%
-      select(Feature, EventFrequency, Estimate, SD, Lower, Upper, Pvalue, FDR)
+      select(.data$Feature, .data$EventFrequency, .data$Estimate,
+             .data$SD, .data$Lower, .data$Upper, .data$Pvalue, .data$FDR)
 
 
     vPlot <- plot_ly(data = fits %>%
                        mutate(FDRsign = ifelse(as.numeric(as.character(.data$FDR)) <
                                                  0.05, "Significant", "Non signifcant"),
-                              Pvalue = as.numeric(Pvalue)) %>%
+                              Pvalue = as.numeric(.data$Pvalue)) %>%
                        filter(!is.na(.data$Pvalue),
                               is.numeric(.data$Pvalue)), x = ~.data$Estimate,
                      y = ~-log10(.data$Pvalue),color = ~FDRsign,

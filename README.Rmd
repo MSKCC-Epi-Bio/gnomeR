@@ -33,7 +33,9 @@ the `gnomeR` package provides a consistent framework for genetic data processing
   - [**Processing genomic data**](https://axelitomartin.github.io/gnomeR/articles/Data-processing.html) retrieved for mutations (MAF file), fusions (MAF file) and copy-number alterations (and when available segmentation files) into an analysis ready format. 
   - [**Visualization of the processed data**](https://axelitomartin.github.io/gnomeR/articles/Visualizations.html) provided through MAF file summaries, OncoPrints and heatmaps.
   - [**Analyzing the processed data**](https://axelitomartin.github.io/gnomeR/articles/Analizing-genomic-data.html) for association with binary, continuous and survival outcome. Including further visualiztion to improve understanding of the results. 
-  
+   
+`:warning:` `:bangbang:`
+
 ## Installation
 
 You can install `gnomeR` from [GitHub](https://github.com/) with:
