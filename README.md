@@ -5,51 +5,32 @@
 
 <!-- badges: start -->
 
-[![Travis build
-status](https://travis-ci.com/AxelitoMartin/gnomeR.svg?branch=development)](https://travis-ci.org/AxelitoMartin/gnomeR)
 [![Codecov test
 coverage](https://codecov.io/gh/AxelitoMartin/gnomeR/branch/development/graph/badge.svg)](https://codecov.io/gh/AxelitoMartin/gnomeR?branch=development)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.4171608.svg)](https://doi.org/10.5281/zenodo.4171608)
+[![R-CMD-check](https://github.com/AxelitoMartin/gnomeR/workflows/R-CMD-check/badge.svg)](https://github.com/AxelitoMartin/gnomeR/actions)
+
 <!-- badges: end -->
 
-the `gnomeR` package provides a consistent framework for genetic data
-processing, visualization and analysis. This is primarily targeted to
-IMPACT datasets but can also be applied to any genomic data provided by
-CbioPortal.
+<font size="5">:bangbang: :warning: **NOTE: This package is currently
+under active development with a new stable release expected April 2022.
+For code written before 2022-03-23, please use the previous stable
+version (v1.1.0)**:warning::bangbang: </font>
 
-  - [**Dowloading and gathering data from
-    CbioPortal**](https://github.com/karissawhiting/cbioportalr) through
-    an integrated API using simply the sample IDs of the samples of
-    interests or the name of the study to retrive all samples in that
-    study. A separate package `cbioportalr` was developed independently.
-  - [**Processing genomic
-    data**](https://axelitomartin.github.io/gnomeR/articles/Data-processing.html)
-    retrieved for mutations (MAF file), fusions (MAF file) and
-    copy-number alterations (and when available segmentation files) into
-    an analysis ready format.
-  - [**Visualization of the processed
-    data**](https://axelitomartin.github.io/gnomeR/articles/Visualizations.html)
-    provided through MAF file summaries, OncoPrints and heatmaps.
-  - [**Analyzing the processed
-    data**](https://axelitomartin.github.io/gnomeR/articles/Analizing-genomic-data.html)
-    for association with binary, continuous and survival outcome.
-    Including further visualiztion to improve understanding of the
-    results.
+You can install the pre-2022-03-23 version with:
+
+``` r
+remotes::install_github('AxelitoMartin/gnomeR@v1.1.0')
+```
 
 ## Installation
 
-You can install `gnomeR` from [GitHub](https://github.com/) with:
+You can install the development version of `gnomeR` from
+[GitHub](https://github.com/) with:
 
 ``` r
 # install.packages("devtools")
 devtools::install_github("AxelitoMartin/gnomeR")
-```
-
-Similarly for those who wish to explore the development version of
-`gnomeR`:
-
-``` r
-devtools::install_github("AxelitoMartin/gnomeR", ref = "development")
 ```
 
 Along with its companion package for cbioPortal data download:
@@ -57,6 +38,32 @@ Along with its companion package for cbioPortal data download:
 ``` r
 devtools::install_github("karissawhiting/cbioportalr")
 ```
+
+## Introduction
+
+the `gnomeR` package provides a consistent framework for genetic data
+processing, visualization and analysis. This is primarily targeted to
+IMPACT datasets but can also be applied to any genomic data provided by
+CbioPortal.
+
+-   [**Dowloading and gathering data from
+    CbioPortal**](https://github.com/karissawhiting/cbioportalr) through
+    an integrated API using simply the sample IDs of the samples of
+    interests or the name of the study to retrive all samples in that
+    study. A separate package `cbioportalr` was developed independently.
+-   [**Processing genomic
+    data**](https://axelitomartin.github.io/gnomeR/articles/Data-processing.html)
+    retrieved for mutations (MAF file), fusions (MAF file) and
+    copy-number alterations (and when available segmentation files) into
+    an analysis ready format.
+-   [**Visualization of the processed
+    data**](https://axelitomartin.github.io/gnomeR/articles/Visualizations.html)
+    provided through MAF file summaries, OncoPrints and heatmaps.
+-   [**Analyzing the processed
+    data**](https://axelitomartin.github.io/gnomeR/articles/Analizing-genomic-data.html)
+    for association with binary, continuous and survival outcome.
+    Including further visualiztion to improve understanding of the
+    results.
 
 ## Examples
 
@@ -82,7 +89,7 @@ CBIOPORTAL_TOKEN = 'YOUR_TOKEN'
 You can test your connection using:
 
 ``` r
-get_cbioportal_token()
+cbioportalr::get_cbioportal_token()
 ```
 
 ### Retrieving data
@@ -125,7 +132,7 @@ kable(gen.dat[1:10,1:10],row.names = TRUE)
 ```
 
 |                   | TP53 | IGF1R | KEAP1 | KDM5C | KRAS | TERT | MAP2K1 | NCOR1 | DDR2 | FIP1L1 |
-| :---------------- | ---: | ----: | ----: | ----: | ---: | ---: | -----: | ----: | ---: | -----: |
+|:------------------|-----:|------:|------:|------:|-----:|-----:|-------:|------:|-----:|-------:|
 | P-0010604-T01-IM5 |    1 |     0 |     0 |     0 |    0 |    0 |      0 |     0 |    0 |      0 |
 | P-0002651-T01-IM3 |    1 |     0 |     0 |     0 |    0 |    0 |      0 |     0 |    0 |      0 |
 | P-0000270-T01-IM3 |    1 |     0 |     0 |     0 |    0 |    0 |      0 |     0 |    0 |      0 |
@@ -150,13 +157,13 @@ sum.plots <- maf_viz(maf = mut %>% filter(Tumor_Sample_Barcode %in% patients))
 sum.plots$topgenes
 ```
 
-<img src="man/figures/README-unnamed-chunk-8-1.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-9-1.png" width="100%" />
 
 ``` r
 sum.plots$genecomut
 ```
 
-<img src="man/figures/README-unnamed-chunk-8-2.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-9-2.png" width="100%" />
 
 #### OncoPrints
 
@@ -169,7 +176,7 @@ genes <- c("TP53","PIK3CA","KRAS","TERT","EGFR","FAT","ALK","CDKN2A","CDKN2B")
 plot_oncoPrint(gen.dat = gen.dat %>% select(starts_with(genes)))
 ```
 
-<img src="man/figures/README-unnamed-chunk-9-1.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-10-1.png" width="100%" />
 
 #### FACETs
 
@@ -186,7 +193,7 @@ p.heat <- facets.heatmap(seg = seg, patients = patients, min.purity = 0)
 p.heat$p
 ```
 
-<img src="man/figures/README-unnamed-chunk-10-1.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-11-1.png" width="100%" />
 
 ### Analysis
 
@@ -199,36 +206,16 @@ The `gen.summary()` function let’s the user perform a large scale
 association between the genomic features present in the `binmat()`
 function output and an outcome of choice:
 
-  - binary (unpaired test using Fisher’s exact test and paired test
+-   binary (unpaired test using Fisher’s exact test and paired test
     using McNemmar’s exact test)
-  - continuous (using simple linear regression)
-
-<!-- end list -->
+-   continuous (using simple linear regression)
 
 ``` r
 outcome <- factor(rbinom(n = length(patients),size = 1,prob = 1/2),levels = c("0","1"))
-out <- gen.summary(gen.dat = gen.dat,outcome = outcome,filter = 0.05)
-kable(out$fits[1:10,],row.names = TRUE)
+# out <- gen.summary(gen.dat = gen.dat,outcome = outcome,filter = 0.05)
+# kable(out$fits[1:10,],row.names = TRUE)
+# out$forest.plot
 ```
-
-|            | Feature    | Overall | 0(N=50) | 1(N=50) | OddsRatio | Pvalue   | FDR      | Lower | Upper |
-| :--------- | :--------- | :------ | :------ | :------ | :-------- | :------- | :------- | :---- | :---- |
-| PIK3CA     | PIK3CA     | 12%     | 8%      | 16%     | 2.17      | 3.57e-01 | 1.00e+00 | 0.53  | 10.6  |
-| EPHA5      | EPHA5      | 5%      | 8%      | 2%      | 0.24      | 3.62e-01 | 1.00e+00 | 0     | 2.52  |
-| FLT4       | FLT4       | 5%      | 2%      | 8%      | 4.21      | 3.62e-01 | 1.00e+00 | 0.4   | 213.8 |
-| DOT1L      | DOT1L      | 5%      | 2%      | 8%      | 4.21      | 3.62e-01 | 1.00e+00 | 0.4   | 213.8 |
-| CDKN2B.Del | CDKN2B.Del | 5%      | 2%      | 8%      | 4.21      | 3.62e-01 | 1.00e+00 | 0.4   | 213.8 |
-| STK11      | STK11      | 7%      | 10%     | 4%      | 0.38      | 4.36e-01 | 1.00e+00 | 0.03  | 2.46  |
-| APC        | APC        | 7%      | 4%      | 10%     | 2.64      | 4.36e-01 | 1.00e+00 | 0.41  | 29.07 |
-| MLL        | MLL        | 9%      | 12%     | 6%      | 0.47      | 4.87e-01 | 1.00e+00 | 0.07  | 2.37  |
-| FAT1       | FAT1       | 11%     | 14%     | 8%      | 0.54      | 5.25e-01 | 1.00e+00 | 0.11  | 2.29  |
-| KRAS       | KRAS       | 13%     | 16%     | 10%     | 0.59      | 5.54e-01 | 1.00e+00 | 0.14  | 2.22  |
-
-``` r
-out$forest.plot
-```
-
-<img src="man/figures/README-unnamed-chunk-11-1.png" width="100%" />
 
 #### Survival analysis
 
@@ -245,15 +232,15 @@ kable(out$tab[1:10,],row.names = TRUE)
 ```
 
 |        | Feature | Coefficient |   HR | Pvalue |   FDR | MutationFrequency |
-| :----- | :------ | ----------: | ---: | -----: | ----: | ----------------: |
-| MLL    | MLL     |      \-1.48 | 0.23 | 0.0155 | 0.496 |              0.09 |
-| STK11  | STK11   |      \-1.46 | 0.23 | 0.0519 | 0.831 |              0.07 |
-| KEAP1  | KEAP1   |      \-1.02 | 0.36 | 0.1670 | 0.922 |              0.05 |
+|:-------|:--------|------------:|-----:|-------:|------:|------------------:|
+| MLL    | MLL     |       -1.48 | 0.23 | 0.0155 | 0.496 |              0.09 |
+| STK11  | STK11   |       -1.46 | 0.23 | 0.0519 | 0.831 |              0.07 |
+| KEAP1  | KEAP1   |       -1.02 | 0.36 | 0.1670 | 0.922 |              0.05 |
 | NOTCH1 | NOTCH1  |        0.61 | 1.84 | 0.2070 | 0.922 |              0.08 |
 | DOT1L  | DOT1L   |        0.66 | 1.93 | 0.2110 | 0.922 |              0.05 |
 | TSC1   | TSC1    |        0.75 | 2.12 | 0.2130 | 0.922 |              0.05 |
 | CDH1   | CDH1    |        0.60 | 1.83 | 0.2520 | 0.922 |              0.06 |
-| EPHA5  | EPHA5   |      \-1.08 | 0.34 | 0.2870 | 0.922 |              0.05 |
+| EPHA5  | EPHA5   |       -1.08 | 0.34 | 0.2870 | 0.922 |              0.05 |
 | PIK3CA | PIK3CA  |        0.41 | 1.51 | 0.2950 | 0.922 |              0.12 |
 | PTPRD  | PTPRD   |        0.49 | 1.63 | 0.3570 | 0.922 |              0.08 |
 
@@ -261,7 +248,7 @@ kable(out$tab[1:10,],row.names = TRUE)
 out$KM[[1]]
 ```
 
-<img src="man/figures/README-unnamed-chunk-12-1.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-13-1.png" width="100%" />
 
 ### Further analytical tools
 

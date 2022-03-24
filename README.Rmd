@@ -22,33 +22,27 @@ library(dplyr)
 # gnomeR
 
 <!-- badges: start -->
-[![Codecov test coverage](https://codecov.io/gh/AxelitoMartin/gnomeR/branch/development/graph/badge.svg)](https://codecov.io/gh/AxelitoMartin/gnomeR?branch=development)
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.4171608.svg)](https://doi.org/10.5281/zenodo.4171608)
-[![R-CMD-check](https://github.com/AxelitoMartin/gnomeR/workflows/R-CMD-check/badge.svg)](https://github.com/AxelitoMartin/gnomeR/actions)
+
+[![Codecov test coverage](https://codecov.io/gh/AxelitoMartin/gnomeR/branch/development/graph/badge.svg)](https://codecov.io/gh/AxelitoMartin/gnomeR?branch=development) [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.4171608.svg)](https://doi.org/10.5281/zenodo.4171608) [![R-CMD-check](https://github.com/AxelitoMartin/gnomeR/workflows/R-CMD-check/badge.svg)](https://github.com/AxelitoMartin/gnomeR/actions)
+
 <!-- badges: end -->
 
-the `gnomeR` package provides a consistent framework for genetic data processing, visualization and analysis. This is primarily targeted to IMPACT datasets but can also be applied to any genomic data provided by CbioPortal. 
+<font size="5">:bangbang: :warning: **NOTE: This package is currently under active development with a new stable release expected April 2022. For code written before 2022-03-23, please use the previous stable version (v1.1.0)**:warning::bangbang: </font>
 
-  - [**Dowloading and gathering data from CbioPortal**](https://github.com/karissawhiting/cbioportalr) through an integrated API using simply the sample IDs of the samples of interests or the name of the study to retrive all samples in that study. A separate package `cbioportalr` was developed independently.
-  - [**Processing genomic data**](https://axelitomartin.github.io/gnomeR/articles/Data-processing.html) retrieved for mutations (MAF file), fusions (MAF file) and copy-number alterations (and when available segmentation files) into an analysis ready format. 
-  - [**Visualization of the processed data**](https://axelitomartin.github.io/gnomeR/articles/Visualizations.html) provided through MAF file summaries, OncoPrints and heatmaps.
-  - [**Analyzing the processed data**](https://axelitomartin.github.io/gnomeR/articles/Analizing-genomic-data.html) for association with binary, continuous and survival outcome. Including further visualiztion to improve understanding of the results. 
-   
-`:warning:` `:bangbang:`
+You can install the pre-2022-03-23 version with:
+
+```{r, eval = FALSE}
+remotes::install_github('AxelitoMartin/gnomeR@v1.1.0')
+
+```
 
 ## Installation
 
-You can install `gnomeR` from [GitHub](https://github.com/) with:
+You can install the development version of `gnomeR` from [GitHub](https://github.com/) with:
 
 ``` r
 # install.packages("devtools")
 devtools::install_github("AxelitoMartin/gnomeR")
-```
-
-Similarly for those who wish to explore the development version of `gnomeR`:
-
-``` r
-devtools::install_github("AxelitoMartin/gnomeR", ref = "development")
 ```
 
 Along with its companion package for cbioPortal data download:
@@ -57,12 +51,20 @@ Along with its companion package for cbioPortal data download:
 devtools::install_github("karissawhiting/cbioportalr")
 ```
 
+## Introduction
+
+the `gnomeR` package provides a consistent framework for genetic data processing, visualization and analysis. This is primarily targeted to IMPACT datasets but can also be applied to any genomic data provided by CbioPortal.
+
+-   [**Dowloading and gathering data from CbioPortal**](https://github.com/karissawhiting/cbioportalr) through an integrated API using simply the sample IDs of the samples of interests or the name of the study to retrive all samples in that study. A separate package `cbioportalr` was developed independently.
+-   [**Processing genomic data**](https://axelitomartin.github.io/gnomeR/articles/Data-processing.html) retrieved for mutations (MAF file), fusions (MAF file) and copy-number alterations (and when available segmentation files) into an analysis ready format.
+-   [**Visualization of the processed data**](https://axelitomartin.github.io/gnomeR/articles/Visualizations.html) provided through MAF file summaries, OncoPrints and heatmaps.
+-   [**Analyzing the processed data**](https://axelitomartin.github.io/gnomeR/articles/Analizing-genomic-data.html) for association with binary, continuous and survival outcome. Including further visualiztion to improve understanding of the results.
+
 ## Examples
 
 ### Setting up the API
 
 In order to download the data from CbioPortal, one must first require a token from the website [CbioPortal](https://cbioportal.mskcc.org/) wich will prompt a login page with your MSKCC credentials. Then navigate to "Web API" in the top bar menu, following this simply download a token and copy it after running the following command in R:
-
 
 ```{r,eval=F}
 usethis::edit_r_environ()
@@ -80,7 +82,6 @@ You can test your connection using:
 cbioportalr::get_cbioportal_token()
 ```
 
-
 ### Retrieving data
 
 Now that the Cbioportal API is set up in your environment, you must first specify the database of interest (IMPACT or TCGA are the two available options). Following this one can either sepcify the samples or study of interest:
@@ -93,11 +94,9 @@ df <- get_genetics(sample_ids = ids,database = "msk_impact",
                        mutations = TRUE, fusions = TRUE, cna = TRUE)
 ```
 
-
-### Processing the downloaded data 
+### Processing the downloaded data
 
 The `binmat()` function is the feature of the data processing of `gnomeR`. It takes genomic inputs from various sources of CbioPortal (mutation files, fusion files and copy number raw counts) to give out a clean binary matrix of n samples by all the events that were found in the files.
-
 
 ```{r, eval = F}
 df.clean <- binmat(maf = df$mut, cna = df$cna)
@@ -113,9 +112,9 @@ gen.dat <- binmat(patients = patients, maf = mut, fusion = fusion, cna = cna)
 kable(gen.dat[1:10,1:10],row.names = TRUE)
 ```
 
-### Visualization 
+### Visualization
 
-#### MAF 
+#### MAF
 
 Before we move on to more complex visualizations, we integrate the `maf_viz()` function to give an overview of the distribution of the different mutations across the cohort of interest:
 
@@ -124,7 +123,6 @@ sum.plots <- maf_viz(maf = mut %>% filter(Tumor_Sample_Barcode %in% patients))
 sum.plots$topgenes
 sum.plots$genecomut
 ```
-
 
 #### OncoPrints
 
@@ -135,7 +133,7 @@ genes <- c("TP53","PIK3CA","KRAS","TERT","EGFR","FAT","ALK","CDKN2A","CDKN2B")
 plot_oncoPrint(gen.dat = gen.dat %>% select(starts_with(genes)))
 ```
 
-#### FACETs 
+#### FACETs
 
 [FACETs](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5027494/) is an ASCN tool and open-source software with a broad application to whole genome, whole-exome, as well as targeted panel sequencing platforms. It is a fully integrated stand-alone pipeline that includes sequencing BAM file post-processing, joint segmentation of total- and allele-specific read counts, and integer copy number calls corrected for tumor purity, ploidy and clonal heterogeneity, with comprehensive output.
 
@@ -143,7 +141,6 @@ plot_oncoPrint(gen.dat = gen.dat %>% select(starts_with(genes)))
 p.heat <- facets.heatmap(seg = seg, patients = patients, min.purity = 0)
 p.heat$p
 ```
-
 
 ### Analysis
 
@@ -153,17 +150,17 @@ In this section we will quickly overview the possible analysis in gnomeR.
 
 The `gen.summary()` function let's the user perform a large scale association between the genomic features present in the `binmat()` function output and an outcome of choice:
 
-- binary (unpaired test using Fisher's exact test and paired test using McNemmar's exact test)
-- continuous (using simple linear regression)
+-   binary (unpaired test using Fisher's exact test and paired test using McNemmar's exact test)
+-   continuous (using simple linear regression)
 
 ```{r}
 outcome <- factor(rbinom(n = length(patients),size = 1,prob = 1/2),levels = c("0","1"))
-out <- gen.summary(gen.dat = gen.dat,outcome = outcome,filter = 0.05)
-kable(out$fits[1:10,],row.names = TRUE)
-out$forest.plot
+# out <- gen.summary(gen.dat = gen.dat,outcome = outcome,filter = 0.05)
+# kable(out$fits[1:10,],row.names = TRUE)
+# out$forest.plot
 ```
 
-#### Survival analysis 
+#### Survival analysis
 
 Similarly we include simple tools to perform univariate Cox's proportional regression adjusted for false discovery rate in the `uni.cox()` function.
 
@@ -179,4 +176,3 @@ out$KM[[1]]
 ### Further analytical tools
 
 The primary goal of `gnomeR` not being in depth analysis of genomic data but rather reliable, modulable and reproducible framework for processing various types of genomic data. For users interested in large scale genomic analytical methods we compiled various packages developed by [Department of Epidemiology and Biostatistics](https://www.mskcc.org/departments/epidemiology-biostatistics), Memorial Sloan-Kettering Cancer Center under an umbrella R package, [gnomeVerse](https://github.com/AxelitoMartin/genomeVerse).
-
