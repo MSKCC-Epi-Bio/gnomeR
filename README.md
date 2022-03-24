@@ -20,7 +20,7 @@ version (v1.1.0)**:warning::bangbang: </font>
 You can install the pre-2022-03-23 version with:
 
 ``` r
-remotes::install_github('AxelitoMartin/gnomeR@v1.1.0')
+remotes::install_github('MSKCC-Epi-Bio/gnomeR@v1.1.0')
 ```
 
 ## Installation
