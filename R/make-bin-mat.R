@@ -56,119 +56,94 @@
 #' @import stringr
 
 
-###############################################
-###### MAIN FUNCTION GROUPING EVERYTHING ######
-###############################################
+binary_matrix <- function(patients=NULL,
 
-binmat <- function(patients=NULL, maf = NULL, mut.type = "SOMATIC",SNP.only = FALSE,include.silent = FALSE,
-                   fusion = NULL,cna = NULL,cna.binary = TRUE,cna.relax = FALSE, specify.plat = TRUE,
-                   set.plat = NULL,rm.empty = TRUE, pathway = FALSE,
-                   recode.aliases = TRUE,
+                          maf = NULL, mut.type = "SOMATIC",
+
+                          SNP.only = FALSE, include.silent = FALSE,
+
+                          fusion = NULL,
+                          cna = NULL, cna.binary = TRUE, cna.relax = FALSE,
+
+                          specify.plat = TRUE, set.plat = NULL,
+                          rm.empty = TRUE,
+                          pathway = FALSE,
+                          recode.aliases = TRUE,
+
                    col.names = c(Tumor_Sample_Barcode = NULL, Hugo_Symbol = NULL,
-                                 Variant_Classification = NULL, Mutation_Status = NULL, Variant_Type = NULL),
-                   oncokb = FALSE, keep_onco = c("Oncogenic","Likely Oncogenic","Predicted Oncogenic"),
-                   token = '', sample_panels = NULL,...){
+                                 Variant_Classification = NULL, Mutation_Status = NULL,
+                                 Variant_Type = NULL),
+
+                   oncokb = FALSE,
+                   keep_onco = c("Oncogenic","Likely Oncogenic","Predicted Oncogenic"),
+                   token = '',
+                   sample_panels = NULL,...){
 
   genie_gene_info <- gnomeR::genie_gene_info
   impact_gene_info <- gnomeR::impact_gene_info
   panel_names <- gnomeR::panel_names
   pathways <- gnomeR::pathways
 
-  if(is.null(maf) && is.null(fusion) && is.null(cna)) stop("You must provided one of the three following files: MAF, fusion or CNA.")
-  # reformat columns #
-  if(!is.null(maf)) {
-    if("api" %in% class(maf)) is.api = TRUE
-    maf <- as_tibble(maf) %>%
-      rename(col.names)
+  # Check Arguments ------------------------------------------------------------
+  if(is.null(maf) && is.null(fusion) && is.null(cna)) {
+    cli::cli_abort("You must provided one of the three following files: MAF, fusion or CNA.")
   }
+
+  # Check that maf, fusion, cna is data.frame
+  is_df <- map(
+    list(maf = maf, fusion = fusion, cna= cna),
+    ~case_when(
+      !is.null(.x) ~ "data.frame" %in% class(.x))
+    ) %>%
+    purrr::compact()
+
+  not_df <- names(is_df[which(is_df == FALSE)])
+
+  if(length(not_df) > 0) {
+    cli::cli_abort("{.code {not_df}} must be a data.frame")
+  }
+
+
+  # * Mutation MAF checks  ------------------------
+  if(!is.null(maf)) {
+    check_maf_input(maf, recode.aliases = recode.aliases)
+
+  }
+
+  # * Fusion checks  ------------------------
   if(!is.null(fusion)) fusion <- fusion %>%
       rename(col.names)
 
-  # check oncokb API #
-  if(oncokb)
-    if(token == '')
-      stop("If you want to OncoKB annotate your data you are required to have an API token.
-           See https://www.oncokb.org/.")
+  # * CNA checks  ------------------------
 
-  ## if data from API need to split mutations and fusions ##
-  if(!is.null(maf)){
-    if(is.na(match("Variant_Classification",colnames(maf))))
-      stop("The MAF file inputted is missing a variant classification column. (Variant_Classification)")
 
-    if(!is.null(maf) && is.null(fusion) &&
-       nrow(as_tibble(maf) %>%
-            filter(.data$Variant_Classification == "Fusion")) > 0){
-      fusion <- as_tibble(maf) %>%
-        filter(.data$Variant_Classification == "Fusion")
-      if(is.api)
-        fusion <- fusion %>%
-          mutate(Fusion = gsub("fusion","",.data$proteinChange))
+  #  Make Final Sample List --------
 
-      maf <- as_tibble(maf) %>%
-        filter(.data$Variant_Classification != "Fusion")
-      warning("Fusions were found in the maf file, they were removed and a fusion file was created.")
-    }
-  }
+  # If user doesn't pass a vector, use samples in files as final sample list
+    patients_final <- patients %||%
+      c(maf$Tumor_Sample_Barcode,
+        fusion$Tumor_Sample_Barcode,
+        cna$Tumor_Sample_Barcode) %>%
+      as.character() %>%
+      unique()
 
-  # if keep_onco KB is populated, then oncokb should be set to TRUE
-  if (!missing(keep_onco) & (missing(oncokb) | oncokb == FALSE)){
-    warning("keep_onco is specified, but oncoKB annotation is not being
-            performed. If you wish to keep records on the basis of oncoKB
-            annotation, set the oncokb parameter to TRUE.")
-  }
 
-  # make patients/samples list #
-  if(is.null(patients)){
-    patients <- c()
-    if(!is.null(maf))
-      patients <- unique(c(patients, as.character(unique(maf$Tumor_Sample_Barcode))))
-    if(!is.null(fusion))
-      patients <- unique(c(patients, as.character(unique(fusion$Tumor_Sample_Barcode))))
-    if(!is.null(cna))
-      if("api" %in% class(cna))
-        patients <- unique(c(patients, as.character(unique(cna$sampleId))))
-      else if(length(grep("oncogenic", colnames(cna), ignore.case = TRUE)) == 0)
-        patients <- unique(c(patients, as.character(unique(gsub("\\.","-",colnames(cna)[-1])))))
-      else if(length(grep("oncogenic", colnames(cna), ignore.case = TRUE)) > 0)
-        patients <- unique(c(patients, as.character(unique(cna$SAMPLE_ID))))
-  }
-  else
-    patients <- as.character(patients)
+
 
   mut <- NULL
 
   if(!is.null(maf)){
 
-    # quick data checks #
-    maf <- check_maf_input(maf, recode.aliases= recode.aliases)
-    # if(is.na(match("Tumor_Sample_Barcode",colnames(maf))))
-    #   stop("The MAF file inputted is missing a patient name column. (Tumor_Sample_Barcode)")
-    # if(is.na(match("Hugo_Symbol",colnames(maf))))
-    #   stop("The MAF file inputted is missing a gene name column. (Hugo_Symbol)")
-    # if(is.na(match("Variant_Classification",colnames(maf))))
-    #   stop("The MAF file inputted is missing a variant classification column. (Variant_Classification)")
-    # if(is.na(match("Mutation_Status",colnames(maf)))){
-    #   warning("The MAF file inputted is missing a mutation status column (Mutation_Status). It will be assumed that
-    #         all variants are of the same type (SOMATIC/GERMLINE).")
-    #   maf$Mutation_Status <- rep("SOMATIC",nrow(maf))
-    # }
-    # if(is.na(match("Variant_Type",colnames(maf)))){
-    #   warning("The MAF file inputted is missing a mutation status column (Variant_Type). It will be assumed that
-    #         all variants are of the same type (SNPs).")
-    #   maf$Variant_Type <- rep("SNPs",nrow(maf))
-    # }
-
-    # filter/define patients #
-    # if(!is.null(patients)) maf <- maf[maf$Tumor_Sample_Barcode %in% patients,]
-    # else patients <- as.character(unique(maf$Tumor_Sample_Barcode))
-    if(oncokb)
-      maf <- oncokb(maf = maf, fusion = NULL, cna = NULL, token = token,...)$maf_oncokb %>%
-        filter(.data$ONCOGENIC %in% keep_onco)
-    # set maf to maf class #
-    maf <- structure(maf,class = c("data.frame","maf"))
     # getting mutation binary matrix #
-    mut <- createbin(obj = maf, patients = patients, mut.type = mut.type, cna.binary = cna.binary,cna.relax = cna.relax,
-                     SNP.only = SNP.only, include.silent = include.silent, specify.plat = specify.plat, recode.aliases = recode.aliases)
+    mut <- createbin(obj = maf,
+                     patients = patients,
+                     mut.type = mut.type,
+                     cna.binary = cna.binary,
+                     cna.relax = cna.relax,
+                     SNP.only = SNP.only,
+                     include.silent = include.silent,
+                     specify.plat = specify.plat,
+                     recode.aliases = recode.aliases)
 
   }
 
@@ -183,7 +158,9 @@ binmat <- function(patients=NULL, maf = NULL, mut.type = "SOMATIC",SNP.only = FA
     # filter/define patients #
     # if(is.null(patients)) patients <- as.character(unique(fusion$Tumor_Sample_Barcode))
     fusion <- createbin(obj = fusion, patients = patients, mut.type = mut.type, cna.binary = cna.binary,
-                        SNP.only = SNP.only, include.silent = include.silent, specify.plat = specify.plat, recode.aliases = recode.aliases)
+                        SNP.only = SNP.only,
+                        include.silent = include.silent,
+                        specify.plat = specify.plat, recode.aliases = recode.aliases)
     if(!is.null(mut)){
       mut <- as.data.frame(cbind(mut,fusion))
       rownames(mut) <- patients}
@@ -329,7 +306,8 @@ binmat <- function(patients=NULL, maf = NULL, mut.type = "SOMATIC",SNP.only = FA
         mut_to_annotate <- mut[inds,]
         panels_to_use <- rownames(mut)[inds]
 
-        panels_to_use <- unique(sapply(strsplit(panels_to_use,"-IM|-IH"), FUN = function(x){x[2]}))
+        panels_to_use <- unique(sapply(strsplit(panels_to_use,"-IM|-IH"),
+                                       FUN = function(x){x[2]}))
 
         mut_annotated <- as.data.frame(
           do.call('rbind',
@@ -518,60 +496,54 @@ binmat <- function(patients=NULL, maf = NULL, mut.type = "SOMATIC",SNP.only = FA
 }
 
 
-##############################################
-###### CREATE BINARIES FOR DIFF CLASSES ######
-##############################################
+# Mutations Binary Matrix -----------------------------------------------------
+
+.binary_matrix_mutation <- function(obj,
+                                    patients = patients_final,
+                          mut.type, cna.binary,
+                          SNP.only, include.silent,
+                          cna.relax, specify.plat,
+                          recode.aliases = recode.aliases){
+
+  # apply filters --------------
+  maf <- maf %>%
+    purrr::when(
+      SNP.only ~ filter(., .data$Variant_Type == "SNP"),
+      ~ .) %>%
+
+    purrr::when(
+      !include.silent ~ filter(., .data$Variant_Classification != "Silent"),
+      ~ .) %>%
+
+    purrr::when(
+      tolower(mut.type) == "all" ~ .,
+      TRUE ~ filter(., .data$Mutation_Status %in% mut.type),
+      ~ .)
 
 
-createbin <- function(obj, patients, mut.type, cna.binary, SNP.only,include.silent, cna.relax, specify.plat, recode.aliases){
-  UseMethod("createbin")
-}
+  # create empty data.frame to hold results -----
+  mut <- as.data.frame(matrix(0L, nrow=length(patients_final),
+                              ncol=length(unique(maf$Hugo_Symbol))))
 
-createbin.default <- function(obj) {
-  cat("The data did not match any known data type. Please review it and make sure it is correctly specified.")
-}
-
-
-##############################################
-############# MUTATION MATRIX ################
-##############################################
-
-createbin.maf <- function(obj, patients, mut.type, cna.binary, SNP.only, include.silent, cna.relax, specify.plat, recode.aliases = recode.aliases){
-  maf <- as_tibble(obj)
-  maf$Hugo_Symbol <- as.character(maf$Hugo_Symbol)
-
-  # # clean gen dat #
-  if(SNP.only) SNP.filt = "SNP"
-  else SNP.filt = unique(maf$Variant_Type)
-
-  if(!include.silent) Variant.filt = "Silent"
-  else Variant.filt = ""
-
-  if(tolower(mut.type) == "all") Mut.filt = unique(maf$Mutation_Status)
-  else Mut.filt = mut.type
-
-  maf <- as_tibble(maf) %>%
-    filter(.data$Variant_Classification != Variant.filt,
-           .data$Variant_Type %in% SNP.filt,
-           tolower(.data$Mutation_Status) %in% tolower(Mut.filt))
-
-
-  #### out frame
-  mut <- as.data.frame(matrix(0L,nrow=length(patients),ncol=length(unique(maf$Hugo_Symbol))))
   colnames(mut) <- unique(maf$Hugo_Symbol)
-  rownames(mut) <- patients
+  rownames(mut) <- patients_final
 
-  for(i in patients){
+  # populate matrix
+  for(i in patients_final){
     genes <- maf$Hugo_Symbol[maf$Tumor_Sample_Barcode %in% i]
-    if(length(genes) != 0){mut[match(i,rownames(mut)),match(unique(as.character(genes)),colnames(mut))] <- 1}
+    if(length(genes) != 0) {
+      mut[match(i, rownames(mut)), match(unique(as.character(genes)), colnames(mut))] <- 1
+      }
   }
 
-  missing.mut <- apply(mut,1,function(x){sum(x)==0})
-  if(sum(missing.mut) > 0)
+  # HEREEE
+  zero_mutations <- apply(mut, 1, function(x){ sum(x)== 0 })
+
+  if(sum(zero_mutations) > 0)
     warning(paste0("Some patients did not have any mutations found in the MAF file. (",
-                   sum(missing.mut), ",",
-                   round(sum(missing.mut)/nrow(mut)*100, digits = 2),"%): ",
-                   paste0(rownames(mut)[missing.mut], collapse = ",")))
+                   sum(zero_mutations), ",",
+                   round(sum(zero_mutations)/nrow(mut)*100, digits = 2),"%): ",
+                   paste0(rownames(mut)[zero_mutations], collapse = ",")))
 
   return(mut)
 }

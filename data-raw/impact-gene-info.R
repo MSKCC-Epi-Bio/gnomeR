@@ -71,18 +71,18 @@
 #
 #
 # # *API Panel Files ---
-# get_cbioportal_db("cbioportal.mskcc.org")
+# set_cbioportal_db("msk")
 #
-# ti_341 <- get_panel(panel_id = "IMPACT341") %>%
-#   rename(gene = hugoGeneSymbol,
+# ti_341 <- get_gene_panel(panel_id = "IMPACT341") %>%
+#   transmute(gene = hugoGeneSymbol,
 #          entrez_id = entrezGeneId)
 #
 # ti_410 <- get_panel(panel_id = "IMPACT410") %>%
-#   rename(gene = hugoGeneSymbol,
+#   transmute(gene = hugoGeneSymbol,
 #          entrez_id = entrezGeneId)
 #
 # ti_468 <- get_panel(panel_id = "IMPACT468") %>%
-#   rename(gene = hugoGeneSymbol,
+#   transmute(gene = hugoGeneSymbol,
 #          entrez_id = entrezGeneId)
 #
 # l_api <- list("ti_341" = ti_341,
@@ -213,15 +213,15 @@
 #
 # impact_gene_info <- impact_genes_wide
 #
-# names(impact_gene_info) <- c("entrez_id",
-#                              "hugo_symbol",
+# names(impact_gene_info) <- c("hugo_symbol",
+#                              "entrez_id",
 #                              "platform_341",
 #                              "platform_410",
 #                              "platform_468",
 #                              "alias")
 #
 # usethis::use_data(impact_gene_info , overwrite = TRUE)
-#
-# # save(impact_gene_info, file = here::here("impact_gene_info.RData"))
+
+# save(impact_gene_info, file = here::here("impact_gene_info.RData"))
 
 

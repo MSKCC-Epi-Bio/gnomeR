@@ -61,7 +61,8 @@ Imports:
     tidyr,
     lifecycle,
     stats,
-    utils
+    utils,
+    cli
 Suggests: 
     knitr,
     rmarkdown,

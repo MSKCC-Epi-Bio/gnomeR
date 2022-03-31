@@ -11,70 +11,88 @@
 check_maf_input <- function(maf, ...)  {
 
   impact_gene_info <- gnomeR::impact_gene_info
-
   arguments <- list(...)
 
-  # data checks for maf files
-  if(is.na(match("Tumor_Sample_Barcode",colnames(maf))))
-    stop("The MAF file inputted is missing a patient name column. (Tumor_Sample_Barcode)")
 
-  if(is.na(match("Hugo_Symbol",colnames(maf))))
-    stop("The MAF file inputted is missing a gene name column. (Hugo_Symbol)")
+  # Check for Fusions-  Old API used to return fusions --------------
+  fusions_in_maf <- maf %>%
+    filter(.data$Variant_Classification %in% c("Fusion", "fusion"))
 
-  if(is.na(match("Variant_Classification",colnames(maf))))
-    stop("The MAF file inputted is missing a variant classification column. (Variant_Classification)")
+  if(nrow(fusions_in_maf) > 0) {
+    cli::cli_abort("It looks like you have fusions in your maf. These need to be passed to the `fusions` argument. ")
+  }
+  # Check required columns & data types ------------------------------------------
+  required_cols <- c("Tumor_Sample_Barcode", "Hugo_Symbol", "Variant_Classification")
+  column_names <- colnames(maf)
 
-  if(is.na(match("Mutation_Status",colnames(maf)))){
-    warning("The MAF file inputted is missing a mutation status column (Mutation_Status). It will be assumed that
-            all variants are of the same type (SOMATIC/GERMLINE).")
-    maf$Mutation_Status <- rep("SOMATIC",nrow(maf))
+  which_missing <- required_cols[which(!(required_cols %in% column_names))]
+
+  if(length(which_missing) > 0) {
+    cli::cli_abort("The following required columns are missing in your mutations data: {.field {which_missing}}")
   }
 
-  if(is.na(match("Variant_Type",colnames(maf)))){
+  # Make sure they are character
+  maf <- maf %>%
+    mutate(Tumor_Sample_Barcode = as.character(Tumor_Sample_Barcode),
+           Hugo_Symbol = as.character(Hugo_Symbol))
 
-    if(is.na(match("Reference_Allele",colnames(maf))) || is.na(match("Tumor_Seq_Allele2",colnames(maf)))){
-      warning("The MAF file inputted is missing a mutation status column (Variant_Type).
-            The variant type couldn't be inferred from the data (columns Reference_Allele and Tumor_Seq_Allele2 are required)
-              and it will be assumed that all variants are SNPs.")
-      maf$Variant_Type <- rep("SNPs",nrow(maf))
-    }
+  # * Check suggested columns --------
 
-    else{
-      warning("The MAF file inputted is missing a mutation status column (Variant_Type).
-            The variant type will be inferred (we recommend that the user fixes this).")
-      maf <- maf %>%
-        mutate(
-          Reference_Allele = as.character(.data$Reference_Allele),
-          Tumor_Seq_Allele2 = as.character(.data$Tumor_Seq_Allele2),
-          Variant_Type = case_when(
-            .data$Reference_Allele %in% c("A","T","C","G") &
-              .data$Tumor_Seq_Allele2 %in% c("A","T","C","G") ~ "SNP",
-            nchar(.data$Tumor_Seq_Allele2) < nchar(.data$Reference_Allele) |
-              .data$Tumor_Seq_Allele2 == "-" ~ "DEL",
-            .data$Reference_Allele == "-" |
-              nchar(.data$Tumor_Seq_Allele2) > nchar(.data$Reference_Allele) ~ "INS",
-            nchar(.data$Reference_Allele) == 2 & nchar(.data$Tumor_Seq_Allele2) == 2 ~ "DNP",
-            nchar(.data$Reference_Allele) == 3 & nchar(.data$Tumor_Seq_Allele2) == 3 ~ "TNP",
-            nchar(.data$Reference_Allele) > 3 & nchar(.data$Tumor_Seq_Allele2) == nchar(.data$Reference_Allele) ~ "ONP",
-            TRUE ~ "Undefined"
-          ))
-    }
+  # Mutation_Status ---
+  if(!("Mutation_Status" %in% column_names)) {
+    cli::cli_warn("The following columns are missing in your mutations data: {.field Mutation_Status}. It will be assumed that
+            all variants are {.val SOMATIC}.")
+
+    maf <- maf %>%
+      mutate(Mutation_Status = "SOMATIC")
   }
 
-  # recode gene names that have been changed between panel versions to make sure they are consistent and counted as the same gene
-  if(!is.character(maf$Hugo_Symbol)) maf$Hugo_Symbol <- as.character(maf$Hugo_Symbol)
-  if(!is.character(maf$Tumor_Sample_Barcode)) maf$Tumor_Sample_Barcode <-
-      as.character(maf$Tumor_Sample_Barcode)
+  # Variant_Type ---
+  if(!("Variant_Type" %in% column_names) ) {
+
+    maf <- maf %>%
+      purrr::when(
+        ("Reference_Allele" %in%  column_names) & ("Tumor_Seq_Allele2" %in% column_names) ~
+
+          maf %>%
+            mutate(
+              Reference_Allele = as.character(.data$Reference_Allele),
+              Tumor_Seq_Allele2 = as.character(.data$Tumor_Seq_Allele2),
+              Variant_Type = case_when(
+                .data$Reference_Allele %in% c("A","T","C","G") &
+                .data$Tumor_Seq_Allele2 %in% c("A","T","C","G") ~ "SNP",
+                nchar(.data$Tumor_Seq_Allele2) < nchar(.data$Reference_Allele) |
+                .data$Tumor_Seq_Allele2 == "-" ~ "DEL",
+                .data$Reference_Allele == "-" |
+                nchar(.data$Tumor_Seq_Allele2) > nchar(.data$Reference_Allele) ~ "INS",
+                nchar(.data$Reference_Allele) == 2 & nchar(.data$Tumor_Seq_Allele2) == 2 ~ "DNP",
+                nchar(.data$Reference_Allele) == 3 & nchar(.data$Tumor_Seq_Allele2) == 3 ~ "TNP",
+                nchar(.data$Reference_Allele) > 3 & nchar(.data$Tumor_Seq_Allele2) == nchar(.data$Reference_Allele) ~ "ONP",
+                TRUE ~ "Undefined")),
+
+        TRUE ~ cli::cli_abort("Column {.field Variant_Type} is missing from your data and {.field Reference_Allele} and {.field Tumor_Seq_Allele2}
+                              columns were not available from which to infer variant type.
+                              To proceed, add a column specifying {.field Variant_Type} (e.g. {.code mutate(<your-maf>, Variant_Type = 'SNP')}")
+      )
+
+
+    cli::cli_warn("Column {.field Variant_Type} is missing from your data. We inferred variant types using {.field Reference_Allele} and {.field Tumor_Seq_Allele2} columns")
+
+  }
+
+
+
+  # * Recode Gene Aliases---------------------
 
   if(arguments$recode.aliases == TRUE) {
 
-  # get table of gene aliases
+  # get table of gene aliases (internal data)
     alias_table <- tidyr::unnest(impact_gene_info, cols = .data$alias) %>%
       dplyr::select(.data$hugo_symbol, .data$alias)
 
     # recode aliases
     maf$Hugo_Symbol_Old <- maf$Hugo_Symbol
-    maf$Hugo_Symbol <- purrr::map_chr(maf$Hugo_Symbol, ~resolve_alias(.x,
+    maf$Hugo_Symbol <- purrr::map_chr(maf$Hugo_Symbol, ~resolve_alias(gene_to_check = .x,
                                                                       alias_table = alias_table))
 
     message <- maf %>%
@@ -82,35 +100,25 @@ check_maf_input <- function(maf, ...)  {
       dplyr::select(.data$Hugo_Symbol_Old, .data$Hugo_Symbol) %>%
       dplyr::distinct()
 
+
     if(nrow(message) > 0) {
-      warning(paste0("MUTATION DATA: To ensure gene with multiple names/aliases are correctly grouped together, the
-      following genes in your maf dataframe have been recoded. You can supress this with recode.aliases = FALSE \n \n",
-                     purrr::map2(message$Hugo_Symbol_Old,
+      vec_recode <- purrr::map2_chr(message$Hugo_Symbol_Old,
                                  message$Hugo_Symbol,
-                                 ~paste0(.x, " recoded to ", .y, " \n"))))
+                                 ~paste0(.x, " recoded to ", .y))
+
+      names(vec_recode) <- rep("!", times = length(vec_recode))
+
+      cli::cli_warn(c(
+      "To ensure gene with multiple names/aliases are correctly grouped together, the
+      following genes in your maf dataframe have been recoded (you can supress this with {.code recode.aliases = FALSE}):",
+      vec_recode))
+
     }
   }
 
   return(maf)
 }
 
-
-#' Check Columns of MAF
-#'
-#' @param maf Raw maf dataframe containing alteration data
-#' @param col_to_check Which column to check
-#'
-#' @return
-#' @export
-#'
-#' @examples
-#' check_maf_column(mut, "Variant_Classification")
-#'
-check_maf_column <- function(maf, col_to_check) {
-  if(!(col_to_check %in% colnames(maf))) {
-    stop(paste("The MAF file inputted is missing the following column:", col_to_check))
-  }
-}
 
 
 
@@ -151,9 +159,10 @@ resolve_alias <- function(gene_to_check, alias_table = all_alias_table) {
     alias_table %>%
       filter(.data$alias == gene_to_check) %>%
       pull(.data$hugo_symbol) %>%
-      first()
+      first() %>%
+      as.character()
 
   } else {
-    gene_to_check
+    as.character(gene_to_check)
   }
 }
