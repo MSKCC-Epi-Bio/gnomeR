@@ -8,7 +8,7 @@
 #' Default is NULL is which case all patients within the mutation, cna or fusions file will be used. If you specify
 #' a vector of patients that contain patients not in any of the passed genomic data frames, 0's (or NAs when appropriate if specifying a panel) will be
 #' returned for every column of that patient row.
-#' @param mutation A dataframe of mutations in the format of a maf.
+#' @param mutation A data frame of mutations in the format of a maf file.
 #' @param mut_type The mutation type to be used. Options are "SOMATIC", "GERMLINE" or "ALL". Note "ALL" will
 #' keep all mutations regardless of status (not recommended). Default is SOMATIC.
 #' @param snp_only Boolean to rather the genetics events to be kept only to be SNPs (insertions and deletions will be removed).
@@ -25,8 +25,6 @@
 #' @param specify_panel boolean specifying if specific IMPACT platforms should be considered. When TRUE NAs will fill the cells for genes
 #' of patients that were not sequenced on that plaform. Default is TRUE.
 #' @param rm_empty boolean specifying if columns with no events founds should be removed. Default is TRUE.
-#' @param pathway boolean specifying if pathway annotation should be applied. If TRUE, the function will return a supplementary binary
-#' dataframe with columns being each pathway and each row being a sample. Default is FALSE.
 #' @param recode_aliases bolean specifying if automated gene name alias matching should be done. Default is TRUE. When TRUE
 #' the function will check for genes that may have more than 1 name in your data using the aliases im gnomeR::impact_gene_info alias column
 #' @param col.names character vector of the necessary columns to be used. By default: col.names = c(Tumor_Sample_Barcode = NULL,
@@ -174,30 +172,18 @@ binary_matrix <- function(patients=NULL,
 
 
 
-  # Pathway Annotation ----------
-  if(pathway){
-
-    pathway_dat <- purrr::map2_dfc(pathways$pathway, pathways$genes, function(x, y) {
-
-      genes <- y[y %in% names(all_binary)]
-      res <- apply(mut %>% select(genes), 1,
-                   function(y){
-                     ifelse(sum(abs(as.numeric(as.character(y))),
-                                na.rm = T) > 0, 1, 0)}) %>%
-        as.numeric(.) %>%
-        as.data.frame()
-
-      names(res) <- x
-      return(res)
-    }
-    )
-
-    rownames(pathway_dat) <- rownames(mut)
-    all_binary <- list(all_binary = all_binary, pathway_dat = pathway_dat)
-  }
-
   return(all_binary)
 
+  # Remove Empty Columns ------
+  not_all_na <- which(
+      apply(all_binary, 2,
+                     function(x){
+                       length(unique(x[!is.na(x)]))
+                       })>1)
+
+  if(rm_empty)
+
+    mut <- mut[,which(apply(all_binary,2,function(x){length(unique(x[!is.na(x)]))})>1)]
 }
 
 

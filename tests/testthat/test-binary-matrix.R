@@ -2,7 +2,7 @@
 # Test Binary Matrix Arguments -----------------------------------------------------------
 
 # test patients argument ----
-# what happpens when you do specfy it and don't specify it (don't pass anything)?
+# what happens when you do specfy it and don't specify it (don't pass anything)?
 # what happens when you pass impact samples, non impact samples?
 
 
@@ -16,7 +16,7 @@ test_that("test", {
 # Functions should work with any one of the three passed
 # Does it return results as expected?
 # Trying with and without passing patients arg as well- does it return what you'd expect?
-
+# what if mut is passed but doesn't have any rows? no columns? no rows or cols?
 test_that("test", {
 
   #example test
@@ -73,6 +73,23 @@ test_that("test", {
 # test cna_relax arg----
 # add general tests
 # find an example of data to test this using the API {cbioportalR} that has both 1 and 2 values. Then make it smaller (just a few rows) and test using that
+test_that("test", {
+
+  #example test
+  expect_equal(TRUE, TRUE)
+})
+
+# test cna_relax arg----
+# add general tests
+# find an example of data to test this using the API {cbioportalR} that has both 1 and 2 values. Then make it smaller (just a few rows) and test using that
+test_that("test", {
+
+  #example test
+  expect_equal(TRUE, TRUE)
+})
+
+# test rm_empty arg----
+# add general tests
 test_that("test", {
 
   #example test
