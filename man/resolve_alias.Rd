@@ -4,7 +4,7 @@
 \alias{resolve_alias}
 \title{Resolve Hugo Symbol Names with Aliases}
 \usage{
-resolve_alias(gene_to_check, alias_table = all_alias_table)
+resolve_alias(gene_to_check, alias_table)
 }
 \arguments{
 \item{gene_to_check}{hugo_symbol to be check}

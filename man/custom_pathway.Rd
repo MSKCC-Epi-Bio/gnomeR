@@ -4,15 +4,15 @@
 \alias{custom_pathway}
 \title{custom_pathway
 \\%lifecycle{stable}
-Enables creation of a custom pathway binary matrix from a binmat() \code{object}. Similarly to the internal file 'pathways.csv', this function takes as input
+Enables creation of a custom pathway binary matrix from a binary_matrix() \code{object}. Similarly to the internal file 'pathways.csv', this function takes as input
 a data frame containing the name of the pathways of interest, and for each pathways a character vector of the genes of interest. Note that the different
-events to be considered in each pathways must be considered separetely. For example, if one wishes to consider TP53 deletions in a given pathway, one must
+events to be considered in each pathways must be considered separately. For example, if one wishes to consider TP53 deletions in a given pathway, one must
 specify "TP53.Del" in the character vector for that pathway.}
 \usage{
 custom_pathway(mat, pathway)
 }
 \arguments{
-\item{mat}{a binmat() binary matrix}
+\item{mat}{a binary_matrix() binary matrix}
 
 \item{pathway}{a dataframe/tibble with first column the name of the genes, and second column their corresponding
 pathway}
@@ -23,20 +23,20 @@ pathway_dat : a binary matrix of pathway level alterations
 \description{
 custom_pathway
 \\%lifecycle{stable}
-Enables creation of a custom pathway binary matrix from a binmat() \code{object}. Similarly to the internal file 'pathways.csv', this function takes as input
+Enables creation of a custom pathway binary matrix from a binary_matrix() \code{object}. Similarly to the internal file 'pathways.csv', this function takes as input
 a data frame containing the name of the pathways of interest, and for each pathways a character vector of the genes of interest. Note that the different
-events to be considered in each pathways must be considered separetely. For example, if one wishes to consider TP53 deletions in a given pathway, one must
+events to be considered in each pathways must be considered separately. For example, if one wishes to consider TP53 deletions in a given pathway, one must
 specify "TP53.Del" in the character vector for that pathway.
 }
 \examples{
 library(gnomeR)
 patients <- as.character(unique(mut$Tumor_Sample_Barcode))[1:200]
-bin.mut <- binmat(patients = patients,maf = mut)
+bin.mut <- binary_matrix(patients = patients,mutation = mut)
 pathway <- as.data.frame(cbind(c("path1","path1","path2","path3"),
 c("PIK3CA","KRAS","TERT","TP53")))
 custom_pathway(mat = bin.mut, pathway = pathway)
 ### Considering CNA as well ###
-bin.mut <- binmat(patients = patients,maf = mut,cna = cna)
+bin.mut <- binary_matrix(patients = patients,mutation = mut,cna = cna)
 pathway <- as.data.frame(cbind(c("path1","path1","path2","path3","path3"),
 c("PIK3CA","KRAS","TERT","TP53","TP53.Del")))
 custom_pathway(mat = bin.mut, pathway = pathway)

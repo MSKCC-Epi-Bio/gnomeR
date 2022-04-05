@@ -1,9 +1,38 @@
 
 # Test Binary Matrix Arguments -----------------------------------------------------------
 
+# General tests ---
+test_that("test binary_matrix with mutation runs with no errors", {
+
+  expect_error(binary_matrix(mutation = gnomeR::mut), NA)
+
+  res <- binary_matrix(mutation = gnomeR::mut)
+  expect_true(length(res) > 0)
+})
+
+# General tests ---
+test_that("test binary_matrix with cna runs with no errors", {
+
+  expect_error(binary_matrix(cna = gnomeR::cna), NA)
+
+  res <- binary_matrix(cna = gnomeR::cna)
+  expect_true(length(res) > 0)
+})
+
+# General tests ---
+test_that("test binary_matrix with fusions runs with no errors", {
+
+  expect_error(binary_matrix(fusion = gnomeR::fusion), NA)
+
+  res <- binary_matrix(fusion = gnomeR::fusion)
+  expect_true(length(res) > 0)
+})
+
+
+
 # test patients argument ----
-# what happens when you do specfy it and don't specify it (don't pass anything)?
-# what happens when you pass impact samples, non impact samples?
+# what happens when you pass a vector? What about if you don't specify it (don't pass anything)?
+# what happens when you pass impact samples (-IM5/IM6/IM7 etc)?  non impact samples? A mix?
 
 
 test_that("test", {
@@ -44,7 +73,7 @@ test_that("test", {
 
 # test include_silent arg----
 # add general tests
-# What happens  when Variant_Classification is NA? - Maybe need to add warning to tell user about NAs
+# What happens  when Variant_Classification is NA for some patients in passed data? - Maybe need to add warning to tell user about NAs
 test_that("test", {
 
   #example test
@@ -70,23 +99,7 @@ test_that("test", {
   expect_equal(TRUE, TRUE)
 })
 
-# test cna_relax arg----
-# add general tests
-# find an example of data to test this using the API {cbioportalR} that has both 1 and 2 values. Then make it smaller (just a few rows) and test using that
-test_that("test", {
 
-  #example test
-  expect_equal(TRUE, TRUE)
-})
-
-# test cna_relax arg----
-# add general tests
-# find an example of data to test this using the API {cbioportalR} that has both 1 and 2 values. Then make it smaller (just a few rows) and test using that
-test_that("test", {
-
-  #example test
-  expect_equal(TRUE, TRUE)
-})
 
 # test rm_empty arg----
 # add general tests

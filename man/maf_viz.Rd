@@ -9,7 +9,7 @@ maf_viz(maf, ...)
 \arguments{
 \item{maf}{Raw maf dataframe containing alteration data}
 
-\item{...}{any argument belonging to the binmat method}
+\item{...}{any argument belonging to the binary_matrix method}
 }
 \value{
 Returns a list of the following plots:

@@ -38,7 +38,7 @@ library(gnomeR)
 library(dplyr)
 library(dtplyr)
 patients <- as.character(unique(mut$Tumor_Sample_Barcode))[1:200]
-bin.mut <- binmat(patients = patients,maf = mut,
+bin.mut <- binary_matrix(patients = patients, mutation = mut,
 fusion = fusion, cna = cna,mut.type = "SOMATIC",
 SNP.only = FALSE,include.silent = FALSE, specify.plat = FALSE)
 gen.dat <- bin.mut[,

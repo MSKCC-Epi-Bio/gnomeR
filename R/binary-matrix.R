@@ -1,7 +1,5 @@
 # Main Binary Matrix Function ------------------
 
-#' binmat
-#' \%lifecycle{experimental}
 #' Enables creation of a binary matrix from a mutation file with
 #' a predefined list of patients (rows are patients and columns are genes)
 #' @param patients a character vector specifying which patients should be included in the resulting data frame.
@@ -14,43 +12,33 @@
 #' @param snp_only Boolean to rather the genetics events to be kept only to be SNPs (insertions and deletions will be removed).
 #' Default is FALSE.
 #' @param include_silent Boolean to keep or remove all silent mutations. TRUE keeps, FALSE removes. Default is FALSE.
-#' @param fusion An optional data frame of fusions. If not NULL the outcome will be added to the matrix with columns ending in ".fus".
+#' @param fusion A data frame of fusions. If not NULL the outcome will be added to the matrix with columns ending in ".fus".
 #' Default is NULL.
-#' @param cna An optional CNA data frame. If inputed the outcome will be added to the matrix with columns ending in ".del" and ".amp".
+#' @param cna A data frame of copy number alterations. If inputed the outcome will be added to the matrix with columns ending in ".del" and ".amp".
 #' Default is NULL.
 #' @param cna_binary A boolean argument specifying if the cna events should be enforced as binary. In which case separate columns for
 #' amplifications and deletions will be created.
-#' @param cna_relax By default this argument is set to FALSE, where only deep deletions (-2) and amplifications (2) will be annotated as events.
-#'  When set to FTRUE all deletions (-1 shallow and -2 deep) are counted as an event same for all gains (1 gain, 2 amplification) as an event.
+#' @param cna_relax By default this argument is set to FALSE, where only deep deletions (-2) and amplifications (2) will be annotated as events. When set to TRUE all deletions (-1 shallow and -2 deep) are counted as an event same for all gains (1 gain, 2 amplification) as an event.
 #' @param specify_panel boolean specifying if specific IMPACT platforms should be considered. When TRUE NAs will fill the cells for genes
 #' of patients that were not sequenced on that plaform. Default is TRUE.
 #' @param rm_empty boolean specifying if columns with no events founds should be removed. Default is TRUE.
-#' @param recode_aliases bolean specifying if automated gene name alias matching should be done. Default is TRUE. When TRUE
+#' @param recode_aliases boolean specifying if automated gene name alias matching should be done. Default is TRUE. When TRUE
 #' the function will check for genes that may have more than 1 name in your data using the aliases im gnomeR::impact_gene_info alias column
-#' @param col.names character vector of the necessary columns to be used. By default: col.names = c(Tumor_Sample_Barcode = NULL,
-#'  Hugo_Symbol = NULL, Variant_Classification = NULL, Mutation_Status = NULL, Variant_Type = NULL)
-#' @param oncokb boolean specfiying if mutation file should be oncokb annotated. Default is FALSE.
-#' @param keep_onco A character vector specifying which oncoKB annotated variants to keep. Options are
-#'  'Oncogenic', 'Likely Oncogenic', 'Predicted Oncogenic', 'Likely Neutral' and 'Inconclusive'. By default
-#'  'Oncogenic', 'Likely Oncogenic' and 'Predicted Oncogenic' variants will be kept (recommended).
-#' @param token the token affiliated to your oncoKB account.
-#' @param sample_panels A dataframe containing the sample ids corresponding to the patients argument in the first
-#' column and their corresponding genomic panel. At the moment gnomeR can handle panels from the following centers:
-#' MSKCC, DFCI, VICC and UHN. See objects impact_gene_info and panel_names for more information.
 #' @param ... Further arguments passed to the oncokb() function such a token
-#' @return mut : a binary matrix of mutation data
+#' @return a data frame with sample_id and alteration binary columns with values of 0/1
 #' @export
 #' @examples
-#' # mut.only <- binmat(mutation = mut)
+#' mut.only <- binary_matrix(mutation = mut)
+#'
 #' patients <- as.character(unique(mut$Tumor_Sample_Barcode))[1:200]
-#' bin.mut <- binmat(patients = patients,mutation = mut,
-#' mut_type = "SOMATIC",snp_only = FALSE,
-#' include_silent = FALSE, specify_platform = FALSE)
-#' bin.mut <- binmat(patients = patients, mutation = mut,
-#' mut_type = "SOMATIC",snp_only = FALSE,
+#'
+#' bin.mut <- binary_matrix(patients = patients, mutation = mut,
+#' mut_type = "SOMATIC" ,snp_only = FALSE,
+#' include_silent = FALSE)
+#' bin.mut <- binary_matrix(patients = patients, mutation = mut,
+#' mut_type = "SOMATIC", snp_only = FALSE,
 #' include_silent = FALSE,
-#' cna_relax = TRUE, specify_platform = FALSE,
-#'  set.plat = "410", rm_empty = FALSE)
+#' cna_relax = TRUE, specify_panel = "no", rm_empty = FALSE)
 #' @import dplyr
 #' @import dtplyr
 #' @import stringr
@@ -60,32 +48,22 @@ binary_matrix <- function(patients=NULL,
 
                           mutation = NULL,
                           mut_type = "SOMATIC",
-
                           snp_only = FALSE,
                           include_silent = FALSE,
 
                           fusion = NULL,
+
                           cna = NULL,
                           cna_binary = TRUE,
                           cna_relax = FALSE,
 
-                          specify_panel = "impact",
+                          specify_panel = "no",
                           rm_empty = TRUE,
-                          pathway = FALSE,
                           recode_aliases = TRUE,
-
-                   col.names = c(Tumor_Sample_Barcode = NULL, Hugo_Symbol = NULL,
-                                 Variant_Classification = NULL, Mutation_Status = NULL,
-                                 Variant_Type = NULL),
-
-                   oncokb = FALSE,
-                   keep_onco = c("Oncogenic","Likely Oncogenic","Predicted Oncogenic"),
-                   token = '',
-                   sample_panels = NULL,...){
+                          ...){
 
   genie_gene_info <- gnomeR::genie_gene_info
   impact_gene_info <- gnomeR::impact_gene_info
-  panel_names <- gnomeR::panel_names
   pathways <- gnomeR::pathways
 
   # Check Arguments ------------------------------------------------------------
@@ -111,7 +89,7 @@ binary_matrix <- function(patients=NULL,
 
   # * Mutation mutation checks  --------
   mutation <- switch(!is.null(mutation),
-                     check_mutation_input(maf = mutation))
+                     check_mutation_input(mutation = mutation))
 
   # * Fusion checks  ----------
   fusion <- switch(!is.null(fusion),
@@ -121,58 +99,60 @@ binary_matrix <- function(patients=NULL,
   cna <- switch(!is.null(cna),
                 check_cna_input(cna))
 
+  # ** This assumes regular cna format ()
+  # This may not work with research samples!
+  cna_patients <- names(cna)[-which(names(cna) =='Hugo_Symbol')] %>%
+    str_replace_all(fixed("."), "-")
 
   #  Make Final Sample List ----------------------------------------------------
 
+
   # If user doesn't pass a vector, use samples in files as final sample list
-    patients_final <- patients %||%
+    patients <- patients %||%
       c(mutation$Tumor_Sample_Barcode,
         fusion$Tumor_Sample_Barcode,
-        cna$Tumor_Sample_Barcode) %>%
+        cna_patients) %>%
       as.character() %>%
       unique()
 
     # Binary matrix for each data type ----------------------------------------------
     mutation_binary_df <- switch(!is.null(mutation),
                               .mutations_binary_matrix(mutation = mutation,
-                                                       patients = patients_final,
+                                                       patients = patients,
                                                        mut_type = mut_type,
                                                        snp_only = snp_only,
                                                        include_silent = include_silent,
-                                                       specify_platform = specify_platform,
+                                                       specify_panel = specify_panel,
                                                        recode_aliases = recode_aliases))
 
   # fusions
   fusion_binary_df <-  switch(!is.null(fusion),
                            .fusions_binary_matrix(fusion = fusion,
-                                                  patients = patients_final,
-                                                  specify_platform = specify_platform,
+                                                  patients = patients,
+                                                  specify_panel = specify_panel,
                                                   recode_aliases = recode_aliases))
 
 
   # cna
   cna_binary_df <- switch(!is.null(cna),
                        .cna_binary_matrix(cna = cna,
-                                          patients = patients_final,
+                                          patients = patients,
                                           cna_binary = cna_binary,
                                           cna_relax = cna_relax,
-                                          specify_platform = specify_platform,
+                                          specify_panel = specify_panel,
                                           recode_aliases = recode_aliases))
-
 
   all_binary <- bind_cols(list(mutation_binary_df,
                                fusion_binary_df,
                                cna_binary_df))
 
-  # Platform-specific Missingness Annotation ------
+  # Platform-specific NA Annotation ------
 
   all_binary <- switch(specify_panel,
                        "impact" = annotate_impact_missing(all_binary),
                        "no" = all_binary)
 
 
-
-  return(all_binary)
 
   # Remove Empty Columns ------
   not_all_na <- which(
@@ -181,20 +161,29 @@ binary_matrix <- function(patients=NULL,
                        length(unique(x[!is.na(x)]))
                        })>1)
 
-  if(rm_empty)
+  if(rm_empty) {
+    all_binary <- all_binary[, which(not_all_na > 1)]
+  }
 
-    mut <- mut[,which(apply(all_binary,2,function(x){length(unique(x[!is.na(x)]))})>1)]
+  return(all_binary)
 }
 
 
 # Mutations Binary Matrix -----------------------------------------------------
 
+#' Make Binary Matrix From Mutation data frame
+#'
+#' @inheritParams binary_matrix
+#'
+#' @return a data frame
+#' @export
+#'
 .mutations_binary_matrix <- function(mutation,
-                                     patients = patients_final,
+                                     patients = patients,
                                      mut_type,
                                      snp_only,
                                      include_silent,
-                                     specify_platform,
+                                     specify_panel,
                                      recode_aliases = recode_aliases){
 
   # apply filters --------------
@@ -246,13 +235,19 @@ binary_matrix <- function(patients=NULL,
 
 # Fusions Binary Matrix -----------------------------------------------------
 
+#' Make Binary Matrix From Fusion data frame
+#'
+#' @inheritParams binary_matrix
+#'
+#' @return a data frame
+#'
 .fusions_binary_matrix <- function(fusion,
-                                 patients = patients_final,
-                                 specify_platform,
+                                 patients = patients,
+                                 specify_panel,
                                  recode_aliases){
 
 
-  fusion <- as_tibble(fusion) %>%
+  fusion <- fusion %>%
     filter(.data$Tumor_Sample_Barcode %in% patients)
 
   # create empty data frame -----
@@ -280,11 +275,17 @@ binary_matrix <- function(patients=NULL,
 
 # CNA Binary Matrix -----------------------------------------------------
 
+#' Make Binary Matrix From CNA data frame
+#'
+#' @inheritParams binary_matrix
+#'
+#' @return a data frame
+#'
 .cna_binary_matrix <- function(cna,
-                               patients = patients_final,
+                               patients,
                                cna_binary,
                                cna_relax,
-                               specify_platform,
+                               specify_panel,
                                recode_aliases){
 
 

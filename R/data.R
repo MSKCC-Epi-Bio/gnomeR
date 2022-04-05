@@ -18,6 +18,19 @@
 #' @source \url{https://cbioportal.mskcc.org/}
 "impact_gene_info"
 
+#' Public Gene Panels on cBioPortal
+#'
+#' Data frame of all gene panels available in public cBioPortal
+#'
+#' @format A nested data frame
+#' \describe{
+#'   \item{gene_panels}{Gene panel ID}
+#'   \item{genes_in_panel}{List column of Hugo symbols of all genes in each panel}
+#'   \item{entrez_ids_in_panel}{List column of Entrez IDs of all genes in each panel}
+#' }
+#' @source \url{https://cbioportal.mskcc.org/}
+"gene_panels"
+
 #' GENIE consortium Gene Meta Data
 #'
 #' Dataframe labeling all genes found in the GENIE consortium along with their corresponding

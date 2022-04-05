@@ -40,7 +40,7 @@ library(gnomeR)
 library(dplyr)
 library(dtplyr)
 patients <- as.character(unique(mut$Tumor_Sample_Barcode))[1:200]
-gen.dat <- binmat(patients = patients,maf = mut)
+gen.dat <- binary_matrix(patients = patients, mutation = mut)
 surv.dat <- clin.patients \%>\%
 filter(X.Patient.Identifier \%in\%
 abbreviate(patients,strict = TRUE, minlength = 9)) \%>\%

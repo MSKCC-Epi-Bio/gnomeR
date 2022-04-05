@@ -2,25 +2,25 @@
 % Please edit documentation in R/maf-viz.R
 \name{ggheatmap}
 \alias{ggheatmap}
-\title{Heatmap of all events after binmat - using binary distance}
+\title{Heatmap of all events after binary_matrix - using binary distance}
 \usage{
 ggheatmap(hmat, ...)
 }
 \arguments{
-\item{hmat}{dataframe obtained after binamt}
+\item{hmat}{dataframe obtained after binary_matrix()}
 
 \item{...}{Further arguments as passed to ComplexHeatmap::Heatmap}
 }
 \value{
-heatmap of binmat events
+heatmap of binary_matrix events
 }
 \description{
-Heatmap of all events after binmat - using binary distance
+Heatmap of all events after binary_matrix - using binary distance
 }
 \examples{
 set.seed(123)
 patients <- as.character(unique(mut$Tumor_Sample_Barcode))[1:200]
-gen.dat <- binmat(patients=patients, maf=mut, cna=cna, fusion=fusion, set.plat=TRUE)
+gen.dat <- binary_matrix(patients=patients, maf=mut, cna=cna, fusion=fusion, set.plat=TRUE)
 ggheatmap(gen.dat, show_row_names=FALSE, show_column_names=FALSE)
 
 }

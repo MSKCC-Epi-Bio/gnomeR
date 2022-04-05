@@ -2,7 +2,7 @@
 % Please edit documentation in R/maf-viz.R
 \name{ggcomut}
 \alias{ggcomut}
-\title{Co-mutation Heatmap of the Top Altered Genes}
+\title{Comutation Heatmap of the Top Altered Genes}
 \usage{
 ggcomut(maf, n_genes = 10, ...)
 }
@@ -11,15 +11,15 @@ ggcomut(maf, n_genes = 10, ...)
 
 \item{n_genes}{Number of top genes to display in plot}
 
-\item{...}{Further binmat() arguments}
+\item{...}{Further binary_matrix() arguments}
 }
 \value{
 Comutation heatmap of the top genes
 }
 \description{
-Co-mutation Heatmap of the Top Altered Genes
+Comutation Heatmap of the Top Altered Genes
 }
 \examples{
-ggcomut(mut)
+ggcomut(gnomeR::mut)
 
 }

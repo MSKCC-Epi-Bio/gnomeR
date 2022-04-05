@@ -11,7 +11,7 @@ gggenecor(maf, n_genes = 10, ...)
 
 \item{n_genes}{Number of top genes to display in plot}
 
-\item{...}{Further binmat() arguments}
+\item{...}{Further binary_matrix() arguments}
 }
 \value{
 Correlation heatmap of the top altered genes

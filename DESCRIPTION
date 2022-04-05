@@ -66,9 +66,10 @@ Imports:
 Suggests: 
     knitr,
     rmarkdown,
-    testthat,
+    testthat (>= 3.0.0),
     spelling,
     covr
 VignetteBuilder: knitr
 Language: en-US
 Roxygen: list(markdown = TRUE)
+Config/testthat/edition: 3

@@ -3,7 +3,7 @@
 
 # gnomeR 1.1.0
 
-* Major changes to come. For code written pre 3/23/2022 use this releasse
+* Major changes to come. For code written pre 3/23/2022 use this release
 
 
 # gnomeR 0.0.0.9000

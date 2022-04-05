@@ -25,7 +25,8 @@ library(gnomeR)
 library(dplyr)
 library(dtplyr)
 patients <- as.character(unique(mut$Tumor_Sample_Barcode))
-bin.mut <- binmat(patients = patients,maf = mut,mut.type = "SOMATIC",
+bin.mut <- binary_matrix(patients = patients, mutation = mut,
+mut.type = "SOMATIC",
 SNP.only = FALSE,include.silent = FALSE, specify.plat = FALSE)
 gen.dat <- bin.mut[1:500,
 names(sort(apply(bin.mut,2, sum),decreasing = TRUE))[1:15]]

@@ -37,7 +37,7 @@ library(gnomeR)
 patients <- as.character(unique(mut$Tumor_Sample_Barcode))
 ## binary outcome ##
 outcome <- as.character(clin.sample$Sample.Type[match(patients,clin.sample$Sample.Identifier)])
-gen.dat <- binmat(patients = patients,maf = mut)
+gen.dat <- binary_matrix(patients = patients,mutation = mut)
 ## Continuous outcome ##
 set.seed(1)
 outcome <-  rnorm(n = nrow(gen.dat))

@@ -49,7 +49,7 @@ CbioPortal.
 -   [**Dowloading and gathering data from
     CbioPortal**](https://github.com/karissawhiting/cbioportalr) through
     an integrated API using simply the sample IDs of the samples of
-    interests or the name of the study to retrive all samples in that
+    interests or the name of the study to retrieve all samples in that
     study. A separate package `cbioportalr` was developed independently.
 -   [**Processing genomic
     data**](https://axelitomartin.github.io/gnomeR/articles/Data-processing.html)
@@ -62,7 +62,7 @@ CbioPortal.
 -   [**Analyzing the processed
     data**](https://axelitomartin.github.io/gnomeR/articles/Analizing-genomic-data.html)
     for association with binary, continuous and survival outcome.
-    Including further visualiztion to improve understanding of the
+    Including further visualization to improve understanding of the
     results.
 
 ## Examples
@@ -96,7 +96,7 @@ cbioportalr::get_cbioportal_token()
 
 Now that the Cbioportal API is set up in your environment, you must
 first specify the database of interest (IMPACT or TCGA are the two
-available options). Following this one can either sepcify the samples or
+available options). Following this one can either specify the samples or
 study of interest:
 
 ``` r
