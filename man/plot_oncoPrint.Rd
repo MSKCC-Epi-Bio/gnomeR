@@ -14,12 +14,12 @@ plot_oncoPrint(
 )
 }
 \arguments{
-\item{gen.dat}{A binary matrix or dataframe, with patients as rows and features as columns. Note that the names of the
+\item{gen.dat}{A binary matrix or dataframe, with samples as rows and features as columns. Note that the names of the
 columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see create.bin.matrix for more details on this format).}
 
 \item{clin.dat}{An optional clinical file, including only the features the user wishes to add to the plot. Default is NULL.}
 
-\item{ordered_samples}{An optional vector of length equal to the number of patients under consideration. Indicates the new order (from left to right)
+\item{ordered_samples}{An optional vector of length equal to the number of samples under consideration. Indicates the new order (from left to right)
 to be plotted.}
 
 \item{rank_genes}{Boolean argument specifying if the genes should be ranked by event frequency. Default is TRUE.}
@@ -37,8 +37,8 @@ Creates the OncoPrint corresponding to the inputted genetic data
 library(gnomeR)
 library(dplyr)
 library(dtplyr)
-patients <- as.character(unique(mut$Tumor_Sample_Barcode))[1:200]
-bin.mut <- binary_matrix(patients = patients, mutation = mut,
+samples <- as.character(unique(mut$Tumor_Sample_Barcode))[1:200]
+bin.mut <- binary_matrix(samples = samples, mutation = mut,
 fusion = fusion, cna = cna,mut.type = "SOMATIC",
 SNP.only = FALSE,include.silent = FALSE, specify.plat = FALSE)
 gen.dat <- bin.mut[,

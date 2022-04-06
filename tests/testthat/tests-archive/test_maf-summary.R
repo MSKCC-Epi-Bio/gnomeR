@@ -18,17 +18,17 @@
 #
 #   mat = mut
 #   colnames(mat)[which(colnames(mat)=="Mutation_Status")] = "AA"
-#   expect_warning(binmat(patients=patients, maf =mat ))
+#   expect_warning(binmat(samples=samples, maf =mat ))
 #
 #   mat = mut
 #   colnames(mat)[which(colnames(mat)=="Variant_Type")] = "AA"
-#   expect_warning(binmat(patients=patients, maf =mat ))
+#   expect_warning(binmat(samples=samples, maf =mat ))
 #
 # })
 #
-# # test_that("read in 1000 patients with specify.plat", {
+# # test_that("read in 1000 samples with specify.plat", {
 # #    mat <- mut %>%
-# #     filter(Tumor_Sample_Barcode %in% patients)
+# #     filter(Tumor_Sample_Barcode %in% samples)
 # #   plots <- maf.summary(maf = mat)
 # #   expect_true(is.ggplot(plots$p.class))
 # #   expect_true(is.ggplot(plots$p.type))
@@ -53,7 +53,7 @@
 # # test_that("missing column warning but still run",{
 # #
 # #    mat <- mut %>%
-# #     filter(Tumor_Sample_Barcode %in% patients) %>%
+# #     filter(Tumor_Sample_Barcode %in% samples) %>%
 # #     select(-one_of("Mutation_Status"))
 # #   expect_warning(plots <- maf.summary(maf = mat))
 # #   expect_true(is.ggplot(plots$p.class))
@@ -74,7 +74,7 @@
 # # test_that("Renaming genes",{
 # #
 # #   mat <- mut %>%
-# #     filter(Tumor_Sample_Barcode %in% patients) %>%
+# #     filter(Tumor_Sample_Barcode %in% samples) %>%
 # #     mutate(
 # #       Hugo_Symbol = as.character(Hugo_Symbol),
 # #       Hugo_Symbol = case_when(
@@ -101,7 +101,7 @@
 # # test_that("Using all mutation statuses",{
 # #
 # #   mat <- mut %>%
-# #     filter(Tumor_Sample_Barcode %in% patients)
+# #     filter(Tumor_Sample_Barcode %in% samples)
 # #   plots <- maf.summary(maf = mat,mut.type = "ALL")
 # #   expect_true(is.ggplot(plots$p.class))
 # #   expect_true(is.ggplot(plots$p.type))

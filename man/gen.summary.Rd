@@ -7,11 +7,11 @@
 gen.summary(gen.dat, outcome, filter = 0, cont = F, rank = T, na.filt = 0)
 }
 \arguments{
-\item{gen.dat}{A matrix or dataframe, with patients as rows and features as columns.}
+\item{gen.dat}{A matrix or dataframe, with samples as rows and features as columns.}
 
 \item{outcome}{A leveled vector of length equal to the number of rows in gen.dat.}
 
-\item{filter}{a numeric value between 0 and 1 (1 not included) that is the lower bound for the proportion of patients
+\item{filter}{a numeric value between 0 and 1 (1 not included) that is the lower bound for the proportion of samples
 having a genetic event (only for binary features). All features with an event rate lower than that value will be removed.
 Default is 0 (all features included).}
 
@@ -34,10 +34,10 @@ are dichotomized at their median.
 }
 \examples{
 library(gnomeR)
-patients <- as.character(unique(mut$Tumor_Sample_Barcode))
+samples <- as.character(unique(mut$Tumor_Sample_Barcode))
 ## binary outcome ##
-outcome <- as.character(clin.sample$Sample.Type[match(patients,clin.sample$Sample.Identifier)])
-gen.dat <- binary_matrix(patients = patients,mutation = mut)
+outcome <- as.character(clin.sample$Sample.Type[match(samples,clin.sample$Sample.Identifier)])
+gen.dat <- binary_matrix(samples = samples,mutation = mut)
 ## Continuous outcome ##
 set.seed(1)
 outcome <-  rnorm(n = nrow(gen.dat))

@@ -19,43 +19,43 @@
 #
 #   mat = mut
 #   colnames(mat)[which(colnames(mat)=="Mutation_Status")] = "AA"
-#   expect_warning(binmat(patients=patients, maf =mat ))
+#   expect_warning(binmat(samples=samples, maf =mat ))
 #
 #   mat = mut
 #   colnames(mat)[which(colnames(mat)=="Variant_Type")] = "AA"
-#   expect_warning(binmat(patients=patients, maf =mat ))
+#   expect_warning(binmat(samples=samples, maf =mat ))
 #
 # })
 #
-# #patients=NULL
+# #samples=NULL
 #
-# test_that("when patients is NULL", {
+# test_that("when samples is NULL", {
 #   mat = binmat(maf=mut)
 #   expect_equal(ncol(mat), 362)
 #   expect_equal(nrow(mat), 457)
 # })
 #
-# #specify.plat, also checks patients
-# test_that("read in patients with specify.plat", {
-#   bin.mut <- binmat(patients = patients,maf = mut,SNP.only = F,include.silent = F, specify.plat = T, rm.empty = FALSE)
+# #specify.plat, also checks samples
+# test_that("read in samples with specify.plat", {
+#   bin.mut <- binmat(samples = samples,maf = mut,SNP.only = F,include.silent = F, specify.plat = T, rm.empty = FALSE)
 #   expect_equal(names(table(colSums(is.na(bin.mut))))[2], "145")
 #   expect_equivalent(table(bin.mut[,"TP53"])[2], 124)
 # })
 #
-# #same patients but with different parameters of reading in binmat
+# #same samples but with different parameters of reading in binmat
 #
-# test_that("read in patients with SNP.only", {
+# test_that("read in samples with SNP.only", {
 #   #with SNP.only=T, some samples have no mutation. this generates a warning.
-#   expect_warning(bin.mut <- binmat(patients = patients,maf = mut,SNP.only = T,include.silent = F, specify.plat = T, rm.empty = FALSE))
+#   expect_warning(bin.mut <- binmat(samples = samples,maf = mut,SNP.only = T,include.silent = F, specify.plat = T, rm.empty = FALSE))
 #
 #   #this sample if set.seed is same has no mutations.
 #   expect_equal(names(table(t(bin.mut["P-0006282-T02-IM5",]))),"0")
 # })
 #
 #
-# test_that("read in 300 patients with rm.empty", {
+# test_that("read in 300 samples with rm.empty", {
 #   #with SNP.only=T, some samples have no mutation. this generates a warning.
-# bin.mut = binmat(patients = patients,maf = mut,SNP.only = T,include.silent = F, specify.plat = T, rm.empty = TRUE)
+# bin.mut = binmat(samples = samples,maf = mut,SNP.only = T,include.silent = F, specify.plat = T, rm.empty = TRUE)
 #   #this sample if set.seed is same has no mutations.
 #   #samples have changed, now there are 457 samples
 #  expect_equal(ncol(bin.mut),320)

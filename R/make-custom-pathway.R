@@ -10,13 +10,13 @@
 #' @return pathway_dat : a binary matrix of pathway level alterations
 #' @export
 #' @examples library(gnomeR)
-#' patients <- as.character(unique(mut$Tumor_Sample_Barcode))[1:200]
-#' bin.mut <- binary_matrix(patients = patients,mutation = mut)
+#' samples <- as.character(unique(mut$Tumor_Sample_Barcode))[1:200]
+#' bin.mut <- binary_matrix(samples = samples,mutation = mut)
 #' pathway <- as.data.frame(cbind(c("path1","path1","path2","path3"),
 #' c("PIK3CA","KRAS","TERT","TP53")))
 #' custom_pathway(mat = bin.mut, pathway = pathway)
 #' ### Considering CNA as well ###
-#' bin.mut <- binary_matrix(patients = patients,mutation = mut,cna = cna)
+#' bin.mut <- binary_matrix(samples = samples,mutation = mut,cna = cna)
 #' pathway <- as.data.frame(cbind(c("path1","path1","path2","path3","path3"),
 #' c("PIK3CA","KRAS","TERT","TP53","TP53.Del")))
 #' custom_pathway(mat = bin.mut, pathway = pathway)

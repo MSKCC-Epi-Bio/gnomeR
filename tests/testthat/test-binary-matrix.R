@@ -6,11 +6,11 @@ test_that("test binary_matrix with mutation runs with no errors", {
 
   expect_error(binary_matrix(mutation = gnomeR::mut), NA)
 
-  res <- binary_matrix(mutation = gnomeR::mut)
-  expect_true(length(res) > 0)
+  res_mut <- binary_matrix(mutation = gnomeR::mut)
+  expect_true(length(res_mut) > 0)
 })
 
-# General tests ---
+
 test_that("test binary_matrix with cna runs with no errors", {
 
   expect_error(binary_matrix(cna = gnomeR::cna), NA)
@@ -19,18 +19,37 @@ test_that("test binary_matrix with cna runs with no errors", {
   expect_true(length(res) > 0)
 })
 
-# General tests ---
+
 test_that("test binary_matrix with fusions runs with no errors", {
 
   expect_error(binary_matrix(fusion = gnomeR::fusion), NA)
 
-  res <- binary_matrix(fusion = gnomeR::fusion)
-  expect_true(length(res) > 0)
+  res_fusion <- binary_matrix(fusion = gnomeR::fusion)
+  expect_true(length(res_fusion) > 0)
+
+  length(unique(gnomeR::fusion))
 })
 
+test_that("check cna with no alterations are omitted from results", {
 
+  res <- binary_matrix(mutation = gnomeR::mut,
+                       cna = gnomeR::cna,
+                       fusion = gnomeR::fusion)
+  cna_ids <- names(gnomeR::cna)[-1] %>%
+    str_replace_all(fixed("."), "-")
 
-# test patients argument ----
+  omitted_ids <- setdiff(cna_ids, rownames(res))
+
+  omitted_ids <- omitted_ids %>%
+    str_replace_all(fixed("-"), fixed("."))
+
+  check_they_are_zero <- gnomeR::cna %>% select(all_of(omitted_ids)) %>%
+    purrr::map_dbl(., ~sum(.x))
+
+  expect_true(sum(check_they_are_zero) == 0)
+})
+
+# test samples argument ----
 # what happens when you pass a vector? What about if you don't specify it (don't pass anything)?
 # what happens when you pass impact samples (-IM5/IM6/IM7 etc)?  non impact samples? A mix?
 
@@ -44,7 +63,7 @@ test_that("test", {
 # test with and without mut/fusion/cna args passed ----
 # Functions should work with any one of the three passed
 # Does it return results as expected?
-# Trying with and without passing patients arg as well- does it return what you'd expect?
+# Trying with and without passing samples arg as well- does it return what you'd expect?
 # what if mut is passed but doesn't have any rows? no columns? no rows or cols?
 test_that("test", {
 
@@ -73,7 +92,7 @@ test_that("test", {
 
 # test include_silent arg----
 # add general tests
-# What happens  when Variant_Classification is NA for some patients in passed data? - Maybe need to add warning to tell user about NAs
+# What happens  when Variant_Classification is NA for some samples in passed data? - Maybe need to add warning to tell user about NAs
 test_that("test", {
 
   #example test

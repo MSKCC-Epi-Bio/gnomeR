@@ -4,9 +4,9 @@
 #' is tested using Fisher's exact test and further adjusted for multiple comparisons. Note that continuous genetic factors
 #' are dichotomized at their median.
 #'
-#' @param gen.dat A matrix or dataframe, with patients as rows and features as columns.
+#' @param gen.dat A matrix or dataframe, with samples as rows and features as columns.
 #' @param outcome A leveled vector of length equal to the number of rows in gen.dat.
-#' @param filter a numeric value between 0 and 1 (1 not included) that is the lower bound for the proportion of patients
+#' @param filter a numeric value between 0 and 1 (1 not included) that is the lower bound for the proportion of samples
 #' having a genetic event (only for binary features). All features with an event rate lower than that value will be removed.
 #' Default is 0 (all features included).
 #' @param cont Should the outcome be treated as a continuous value. Default is FALSE treated as categorical.
@@ -17,10 +17,10 @@
 #' @return forest.plot : A forest plot of the top 10 hits.
 #' @export
 #' @examples library(gnomeR)
-#' patients <- as.character(unique(mut$Tumor_Sample_Barcode))
+#' samples <- as.character(unique(mut$Tumor_Sample_Barcode))
 #' ## binary outcome ##
-#' outcome <- as.character(clin.sample$Sample.Type[match(patients,clin.sample$Sample.Identifier)])
-#' gen.dat <- binary_matrix(patients = patients,mutation = mut)
+#' outcome <- as.character(clin.sample$Sample.Type[match(samples,clin.sample$Sample.Identifier)])
+#' gen.dat <- binary_matrix(samples = samples,mutation = mut)
 
 #' ## Continuous outcome ##
 #' set.seed(1)

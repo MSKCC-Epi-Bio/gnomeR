@@ -8,7 +8,7 @@ facets.heatmap(
   seg = NULL,
   filenames = NULL,
   path = NULL,
-  patients = NULL,
+  samples = NULL,
   min.purity = 0.3,
   epsilon = 0.005,
   ordered = NULL,
@@ -17,19 +17,19 @@ facets.heatmap(
 )
 }
 \arguments{
-\item{seg}{a segmentation file containing the segmentation information of multiple patients}
+\item{seg}{a segmentation file containing the segmentation information of multiple samples}
 
 \item{filenames}{the names of the segment files to be loaded and processed (Note must end in ".Rdata").}
 
 \item{path}{the relative path to the files folder from your current directory}
 
-\item{patients}{the names of the patients of the respective filenames. Default simply 1 to number of files.}
+\item{samples}{the names of the samples of the respective filenames. Default simply 1 to number of files.}
 
 \item{min.purity}{the minimum purity of the sample required to be kept in the final dataset. Default is 0.3.}
 
 \item{epsilon}{level of unions when aggregating segments between}
 
-\item{ordered}{order in which patients should be printed. Default NUll leads to hierarchical clustering.}
+\item{ordered}{order in which samples should be printed. Default NUll leads to hierarchical clustering.}
 
 \item{outcome}{for seg file only, if outcome associated with study it will be printed along the x axis for each patient}
 
@@ -45,11 +45,11 @@ Creates a heatmap of copy number profiles from segment files.
 library(gnomeR)
 library(dplyr)
 library(dtplyr)
-patients <- as.character(unique(mut$Tumor_Sample_Barcode))[1:1000]
-patients.seg <- as.character(unlist(clin.sample \%>\%
-filter(Sample.Identifier \%in\% patients,
+samples <- as.character(unique(mut$Tumor_Sample_Barcode))[1:1000]
+samples.seg <- as.character(unlist(clin.sample \%>\%
+filter(Sample.Identifier \%in\% samples,
  as.numeric(as.character(Tumor.Purity)) > 30) \%>\%
  select(Sample.Identifier)))
-facet <- facets.heatmap(seg = seg, patients=patients.seg[0:100])
+facet <- facets.heatmap(seg = seg, samples=samples.seg[0:100])
 facet$p
 }

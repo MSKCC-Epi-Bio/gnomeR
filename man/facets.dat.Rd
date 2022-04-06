@@ -8,20 +8,20 @@ facets.dat(
   seg = NULL,
   filenames = NULL,
   path = NULL,
-  patients = NULL,
+  samples = NULL,
   min.purity = 0.3,
   epsilon = 0.005,
   adaptive = FALSE
 )
 }
 \arguments{
-\item{seg}{a segmentation file containing the segmentation information of multiple patients}
+\item{seg}{a segmentation file containing the segmentation information of multiple samples}
 
 \item{filenames}{the names of the segment files to be loaded and processed (Note must end in ".Rdata").}
 
 \item{path}{the relative path to the files folder from your current directory}
 
-\item{patients}{the names of the patients of the respective filenames. Default simply 1 to number of files.}
+\item{samples}{the names of the samples of the respective filenames. Default simply 1 to number of files.}
 
 \item{min.purity}{the minimum purity of the sample required to be kept in the final dataset. Default is 0.3.}
 
@@ -30,13 +30,13 @@ facets.dat(
 \item{adaptive}{CNregions option to create adaptive segments. Default is FALSE.}
 }
 \value{
-out.cn : a matrix of the union of all segment files with patients as rows and segments as columns
+out.cn : a matrix of the union of all segment files with samples as rows and segments as columns
 
-ploidy : a vector of the ploidy values for the patients in out.cn (as in facets output)
+ploidy : a vector of the ploidy values for the samples in out.cn (as in facets output)
 
-purity : a vector of the purity values for the patients in out.cn (as in facets output)
+purity : a vector of the purity values for the samples in out.cn (as in facets output)
 
-FGAs : a vector of the fragment of genome altered values for the patients in out.cn (only when tcn an lcn are available)
+FGAs : a vector of the fragment of genome altered values for the samples in out.cn (only when tcn an lcn are available)
 }
 \description{
 Creates a copy number alteration matrix from segment files.
@@ -45,10 +45,10 @@ Creates a copy number alteration matrix from segment files.
 library(gnomeR)
 library(dplyr)
 library(dtplyr)
-patients <- as.character(unique(mut$Tumor_Sample_Barcode))[1:1000]
-patients.seg <- as.character(unlist(clin.sample \%>\%
-filter(Sample.Identifier \%in\% patients,
+samples <- as.character(unique(mut$Tumor_Sample_Barcode))[1:1000]
+samples.seg <- as.character(unlist(clin.sample \%>\%
+filter(Sample.Identifier \%in\% samples,
 as.numeric(as.character(Tumor.Purity)) > 30) \%>\%
  select(Sample.Identifier)))
-facet <- facets.dat(seg = seg, patients=patients.seg[0:100])
+facet <- facets.dat(seg = seg, samples=samples.seg[0:100])
 }

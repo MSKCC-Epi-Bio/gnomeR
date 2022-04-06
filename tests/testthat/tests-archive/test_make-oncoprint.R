@@ -4,8 +4,8 @@
 # test_that("make data genetics only",{
 #
 #   set.seed(123)
-#   patients <- as.character(unique(mut$Tumor_Sample_Barcode))[1:200]
-#   bin.mut <- binmat(patients = patients,maf = mut, fusion = fusion,
+#   samples <- as.character(unique(mut$Tumor_Sample_Barcode))[1:200]
+#   bin.mut <- binmat(samples = samples,maf = mut, fusion = fusion,
 #                     cna = cna, mut.type = "SOMATIC",
 #                     SNP.only = FALSE,include.silent = FALSE, specify.plat = FALSE)
 #   gen.dat <- bin.mut[,
@@ -22,8 +22,8 @@
 # test_that("make data with clinical",{
 #
 #   set.seed(123)
-#   patients <- as.character(unique(mut$Tumor_Sample_Barcode))[1:200]
-#   bin.mut <- binmat(patients = patients,maf = mut, fusion = fusion,
+#   samples <- as.character(unique(mut$Tumor_Sample_Barcode))[1:200]
+#   bin.mut <- binmat(samples = samples,maf = mut, fusion = fusion,
 #                     cna = cna, mut.type = "SOMATIC",
 #                     SNP.only = FALSE,include.silent = FALSE, specify.plat = FALSE)
 #   gen.dat <- bin.mut[,
@@ -55,8 +55,8 @@
 # test_that("make data single clinical",{
 #
 #   set.seed(123)
-#   patients <- as.character(unique(mut$Tumor_Sample_Barcode))[1:200]
-#   bin.mut <- binmat(patients = patients,maf = mut, fusion = fusion,
+#   samples <- as.character(unique(mut$Tumor_Sample_Barcode))[1:200]
+#   bin.mut <- binmat(samples = samples,maf = mut, fusion = fusion,
 #                     cna = cna, mut.type = "SOMATIC",
 #                     SNP.only = FALSE,include.silent = FALSE, specify.plat = FALSE)
 #   gen.dat <- bin.mut[,
@@ -91,8 +91,8 @@
 # test_that("make data with cna non binary",{
 #
 #   set.seed(123)
-#   patients <- as.character(unique(mut$Tumor_Sample_Barcode))[1:200]
-#   bin.mut <- binmat(patients = patients,maf = mut,cna = cna, cna.binary = FALSE,
+#   samples <- as.character(unique(mut$Tumor_Sample_Barcode))[1:200]
+#   bin.mut <- binmat(samples = samples,maf = mut,cna = cna, cna.binary = FALSE,
 #                     mut.type = "SOMATIC",
 #                     SNP.only = FALSE,include.silent = FALSE, specify.plat = FALSE)
 #   keep <- c("TP53|PIK3CA|ALK")

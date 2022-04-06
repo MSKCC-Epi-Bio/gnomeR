@@ -4,12 +4,12 @@
 \alias{reformat_cna}
 \title{Reformat CNA from maf version to wide version}
 \usage{
-reformat_cna(cna, patients = patients)
+reformat_cna(cna, samples = samples)
 }
 \arguments{
 \item{cna}{a cna dataframe in maf format}
 
-\item{patients}{a list of patients to include}
+\item{samples}{a list of samples to include}
 }
 \value{
 a dataframe of reformatted CNA alteration

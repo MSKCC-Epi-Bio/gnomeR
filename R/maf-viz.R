@@ -12,10 +12,10 @@
 #' @examples library(gnomeR)
 #' library(dplyr)
 #' library(dtplyr)
-#' patients <- as.character(unique(mut$Tumor_Sample_Barcode))[1:200]
-#' all.plots <- maf_viz(maf=mut %>% filter(Tumor_Sample_Barcode %in% patients))
+#' samples <- as.character(unique(mut$Tumor_Sample_Barcode))[1:200]
+#' all.plots <- maf_viz(maf=mut %>% filter(Tumor_Sample_Barcode %in% samples))
 #' all.plots <- maf_viz(maf=mut %>%
-#' filter(Tumor_Sample_Barcode %in% patients),specify.plat = TRUE)
+#' filter(Tumor_Sample_Barcode %in% samples),specify.plat = TRUE)
 #' @import
 #' dplyr
 #' dtplyr
@@ -323,8 +323,8 @@ ggcomut <- function(maf, n_genes = 10, ...) {
 #'
 #' @examples
 #' set.seed(123)
-#' patients <- as.character(unique(mut$Tumor_Sample_Barcode))[1:200]
-#' gen.dat <- binary_matrix(patients=patients, maf=mut, cna=cna, fusion=fusion, set.plat=TRUE)
+#' samples <- as.character(unique(mut$Tumor_Sample_Barcode))[1:200]
+#' gen.dat <- binary_matrix(samples=samples, maf=mut, cna=cna, fusion=fusion, set.plat=TRUE)
 #' ggheatmap(gen.dat, show_row_names=FALSE, show_column_names=FALSE)
 #'
 

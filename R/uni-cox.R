@@ -4,7 +4,7 @@
 #' @param surv.dat a surv.dat frame containing the survival information. This can be made of 2 or 3 columns. 1 or 2 for time,
 #' and one for status (where 1 is event and 0 is no event).
 #' @param surv.formula a survival formula with names matching those in surv.dat eg: Surv(time,status)~.
-#' @param filter a numeric value between 0 and 1 (1 not included) that is the lower bound for the proportion of patients
+#' @param filter a numeric value between 0 and 1 (1 not included) that is the lower bound for the proportion of samples
 #' having a genetic event (only for binary features). All features with an event rate lower than that value will be removed.
 #' Default is 0 (all features included).
 #' @param genes a character vector of gene names that will be the only ones to be kept. Default is NULL, all genes are used.
@@ -17,11 +17,11 @@
 #' @examples library(gnomeR)
 #' library(dplyr)
 #' library(dtplyr)
-#' patients <- as.character(unique(mut$Tumor_Sample_Barcode))[1:200]
-#' gen.dat <- binary_matrix(patients = patients, mutation = mut)
+#' samples <- as.character(unique(mut$Tumor_Sample_Barcode))[1:200]
+#' gen.dat <- binary_matrix(samples = samples, mutation = mut)
 #' surv.dat <- clin.patients %>%
 #' filter(X.Patient.Identifier %in%
-#' abbreviate(patients,strict = TRUE, minlength = 9)) %>%
+#' abbreviate(samples,strict = TRUE, minlength = 9)) %>%
 #'   select(X.Patient.Identifier,Overall.Survival..Months.,
 #'    Overall.Survival.Status) %>%
 #'   rename(DMPID = X.Patient.Identifier,

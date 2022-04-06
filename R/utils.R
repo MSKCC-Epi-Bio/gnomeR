@@ -259,21 +259,21 @@ resolve_alias <- function(gene_to_check, alias_table) {
 #' Reformat CNA from maf version to wide version
 #'
 #' @param cna a cna dataframe in maf format
-#' @param patients a list of patients to include
+#' @param samples a list of samples to include
 #'
 #' @return a dataframe of reformatted CNA alteration
 #' @export
 #'
-reformat_cna <- function(cna, patients = patients) {
+reformat_cna <- function(cna, samples = samples) {
 
   # recreate original format
-  temp <- as.data.frame(matrix(0L ,ncol = length(patients)+1,
+  temp <- as.data.frame(matrix(0L ,ncol = length(samples)+1,
                                nrow = length(unique(cna$Hugo_Symbol))))
 
-  colnames(temp) <- c("Hugo_Symbol",patients)
+  colnames(temp) <- c("Hugo_Symbol",samples)
   temp[,1] <- unique(cna$Hugo_Symbol)
 
-  for(i in patients){
+  for(i in samples){
     temp[match(as.character(unlist(cna %>%
                                      filter(.data$sampleId %in% i) %>%
                                      select(.data$Hugo_Symbol))),temp[,1]),
@@ -286,7 +286,7 @@ reformat_cna <- function(cna, patients = patients) {
   rownames(cna) <- cna[,1]
   cna <- cna[,-1]
   cna <- as.data.frame(t(cna))
-  cna <- cna[rownames(cna) %in% patients,]
+  cna <- cna[rownames(cna) %in% samples,]
 
 
 
@@ -318,7 +318,7 @@ reformat_cna <- function(cna, patients = patients) {
 #' @export
 #'
 #'
-annotate_impact_missing <- function(binary_matrix) {
+specify_impact_panels <- function(binary_matrix) {
 
   gene_panels <- gnomeR::gene_panels
 
@@ -338,24 +338,48 @@ annotate_impact_missing <- function(binary_matrix) {
 
   # get which IMPACT panel
   sample_panel_pair <- sample_panel_pair %>%
-    mutate(gene_panel = case_when(
+    mutate(panel_id = case_when(
       stringr::str_detect(.data$sample_id, "-IM3") ~ "IMPACT341",
       stringr::str_detect(.data$sample_id, "-IM5") ~ "IMPACT410",
       stringr::str_detect(.data$sample_id, "-IM6") ~ "IMPACT468",
       stringr::str_detect(.data$sample_id, "-IM7") ~ "IMPACT505",
-      TRUE ~ "none"
+      TRUE ~ "no"
     ))
 
+  # couldn't detect panel
+  unk_impact_panel <- sample_panel_pair %>%
+    filter(.data$panel_id == "no")
+
+  if(nrow(unk_impact_panel) > 0) {
+    cli::cli_alert("Couldn't infer IMPACT panel version from these sample_ids, therefore no NA panel annotation will be done for these: {unk_impact_panel$sample_id}")
+  }
+
+  return(sample_panel_pair)
+}
+
+#' Annotate Missing Gene Values According to Specifi Panels
+#'
+#' @param sample_panel_pair a data frame of `sample_id`-`panel_id` pairs specifying panels to use for annotation of each sample
+#' @param binary_matrix a binary matrix of 0/1 indicating alteration yes/no for each sample
+#' @return a binary_matrix annotated for missingness
+#' @export
+
+annotate_any_panel <- function(sample_panel_pair, binary_matrix) {
+
+  # if all "no", leave function
+  switch(all(sample_panel_pair$panel_id == "no"),
+         return(binary_matrix))
+
   sample_panel_pair_nest <- sample_panel_pair %>%
-    group_by(.data$gene_panel) %>%
+    group_by(.data$panel_id) %>%
     summarise(samples_in_panel = list(.data$sample_id))
 
   # pull genes for given panels
-  panels_needed <- unique(sample_panel_pair_nest$gene_panel)
+  panels_needed <- unique(sample_panel_pair_nest$panel_id)
 
   # has sample IDs and genes for each panel
   sample_panel_pair_nest <- sample_panel_pair_nest %>%
-    left_join(gene_panels) %>%
+    left_join(gnomeR::gene_panels, by = c("panel_id" = "gene_panel")) %>%
     select(-.data$entrez_ids_in_panel)
 
   user_data_genes <- gsub(".fus|.Del|.Amp|.cna", "", colnames(binary_matrix))
@@ -374,7 +398,7 @@ annotate_impact_missing <- function(binary_matrix) {
 
 
   annotated_data <- purrr::pmap_df(sample_panel_pair_nest,
-                                   annotate_panel,
+                                   annotate_specific_panel,
                                    binary_matrix = binary_matrix)
 
   return(annotated_data)
@@ -384,7 +408,7 @@ annotate_impact_missing <- function(binary_matrix) {
 #' Utility function  to insert NA's According to Panel
 #'
 #' @param binary_matrix a processed binary matrix
-#' @param gene_panel name of gene panel
+#' @param panel_id name of gene panel
 #' @param samples_in_panel samples to be annotated for each panel
 #' @param na_genes genes to make NA
 #' @param ... other args passed
@@ -393,8 +417,8 @@ annotate_impact_missing <- function(binary_matrix) {
 #' @export
 #'
 #'
-annotate_panel <- function(binary_matrix,
-                           gene_panel,
+annotate_specific_panel <- function(binary_matrix,
+                           panel_id,
                            samples_in_panel,
                            na_genes, ...) {
 

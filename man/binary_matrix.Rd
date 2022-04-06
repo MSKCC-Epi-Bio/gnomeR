@@ -3,10 +3,10 @@
 \name{binary_matrix}
 \alias{binary_matrix}
 \title{Enables creation of a binary matrix from a mutation file with
-a predefined list of patients (rows are patients and columns are genes)}
+a predefined list of samples (rows are samples and columns are genes)}
 \usage{
 binary_matrix(
-  patients = NULL,
+  samples = NULL,
   mutation = NULL,
   mut_type = "SOMATIC",
   snp_only = FALSE,
@@ -16,15 +16,15 @@ binary_matrix(
   cna_binary = TRUE,
   cna_relax = FALSE,
   specify_panel = "no",
-  rm_empty = TRUE,
+  rm_empty = FALSE,
   recode_aliases = TRUE,
   ...
 )
 }
 \arguments{
-\item{patients}{a character vector specifying which patients should be included in the resulting data frame.
-Default is NULL is which case all patients within the mutation, cna or fusions file will be used. If you specify
-a vector of patients that contain patients not in any of the passed genomic data frames, 0's (or NAs when appropriate if specifying a panel) will be
+\item{samples}{a character vector specifying which samples should be included in the resulting data frame.
+Default is NULL is which case all samples with an alteration in the mutation, cna or fusions file will be used. If you specify
+a vector of samples that contain samples not in any of the passed genomic data frames, 0's (or NAs when appropriate if specifying a panel) will be
 returned for every column of that patient row.}
 
 \item{mutation}{A data frame of mutations in the format of a maf file.}
@@ -48,10 +48,16 @@ amplifications and deletions will be created.}
 
 \item{cna_relax}{By default this argument is set to FALSE, where only deep deletions (-2) and amplifications (2) will be annotated as events. When set to TRUE all deletions (-1 shallow and -2 deep) are counted as an event same for all gains (1 gain, 2 amplification) as an event.}
 
-\item{specify_panel}{boolean specifying if specific IMPACT platforms should be considered. When TRUE NAs will fill the cells for genes
-of patients that were not sequenced on that plaform. Default is TRUE.}
+\item{specify_panel}{a character vector of length 1 with panel id (see gnomeR::gene_panels for available panels), "impact", or "no", or a
+data frame of \code{sample_id}-\code{panel_id} pairs specifying panels for which to insert NAs indicating that gene was not tested.
+If a single panel id is passed, all genes that are not in that panel (see gnomeR::gene_panels) will be set to NA in results.
+If \code{"impact"} passed, impact panel version will be inferred based on each sample_id and NA's annotated accordingly for each sample
+If specific panel IDs passed, genes not tested in that panel will be should be considered. Default When TRUE NAs will fill the cells for genes
+Default is "no" which returns data as is with no NA annotation.
+If you wish to specify different panels for each sample, pass a data frame (with all samples included) with columns: \code{sample_id}, and \code{panel_id}. Each sample will be
+annotated with NAs according to that specific panel.}
 
-\item{rm_empty}{boolean specifying if columns with no events founds should be removed. Default is TRUE.}
+\item{rm_empty}{boolean specifying if alteration columns with no events founds should be removed. Default is FALSE}
 
 \item{recode_aliases}{boolean specifying if automated gene name alias matching should be done. Default is TRUE. When TRUE
 the function will check for genes that may have more than 1 name in your data using the aliases im gnomeR::impact_gene_info alias column}
@@ -63,17 +69,17 @@ a data frame with sample_id and alteration binary columns with values of 0/1
 }
 \description{
 Enables creation of a binary matrix from a mutation file with
-a predefined list of patients (rows are patients and columns are genes)
+a predefined list of samples (rows are samples and columns are genes)
 }
 \examples{
 mut.only <- binary_matrix(mutation = mut)
 
-patients <- as.character(unique(mut$Tumor_Sample_Barcode))[1:200]
+samples <- as.character(unique(mut$Tumor_Sample_Barcode))[1:200]
 
-bin.mut <- binary_matrix(patients = patients, mutation = mut,
+bin.mut <- binary_matrix(samples = samples, mutation = mut,
 mut_type = "SOMATIC" ,snp_only = FALSE,
 include_silent = FALSE)
-bin.mut <- binary_matrix(patients = patients, mutation = mut,
+bin.mut <- binary_matrix(samples = samples, mutation = mut,
 mut_type = "SOMATIC", snp_only = FALSE,
 include_silent = FALSE,
 cna_relax = TRUE, specify_panel = "no", rm_empty = FALSE)
