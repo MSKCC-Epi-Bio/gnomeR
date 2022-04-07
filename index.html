@@ -92,13 +92,13 @@
 <p>the <code>gnomeR</code> package provides a consistent framework for genetic data processing, visualization and analysis. This is primarily targeted to IMPACT datasets but can also be applied to any genomic data provided by CbioPortal.</p>
 <ul>
 <li>
-<a href="https://github.com/karissawhiting/cbioportalr" class="external-link"><strong>Dowloading and gathering data from CbioPortal</strong></a> through an integrated API using simply the sample IDs of the samples of interests or the name of the study to retrive all samples in that study. A separate package <code>cbioportalr</code> was developed independently.</li>
+<a href="https://github.com/karissawhiting/cbioportalr" class="external-link"><strong>Dowloading and gathering data from CbioPortal</strong></a> through an integrated API using simply the sample IDs of the samples of interests or the name of the study to retrieve all samples in that study. A separate package <code>cbioportalr</code> was developed independently.</li>
 <li>
 <a href="https://axelitomartin.github.io/gnomeR/articles/Data-processing.html" class="external-link"><strong>Processing genomic data</strong></a> retrieved for mutations (MAF file), fusions (MAF file) and copy-number alterations (and when available segmentation files) into an analysis ready format.</li>
 <li>
 <a href="https://axelitomartin.github.io/gnomeR/articles/Visualizations.html" class="external-link"><strong>Visualization of the processed data</strong></a> provided through MAF file summaries, OncoPrints and heatmaps.</li>
 <li>
-<a href="https://axelitomartin.github.io/gnomeR/articles/Analizing-genomic-data.html" class="external-link"><strong>Analyzing the processed data</strong></a> for association with binary, continuous and survival outcome. Including further visualiztion to improve understanding of the results.</li>
+<a href="https://axelitomartin.github.io/gnomeR/articles/Analizing-genomic-data.html" class="external-link"><strong>Analyzing the processed data</strong></a> for association with binary, continuous and survival outcome. Including further visualization to improve understanding of the results.</li>
 </ul>
 </div>
 <div class="section level2">
@@ -120,7 +120,7 @@
 <div class="section level3">
 <h3 id="retrieving-data">Retrieving data<a class="anchor" aria-label="anchor" href="#retrieving-data"></a>
 </h3>
-<p>Now that the Cbioportal API is set up in your environment, you must first specify the database of interest (IMPACT or TCGA are the two available options). Following this one can either sepcify the samples or study of interest:</p>
+<p>Now that the Cbioportal API is set up in your environment, you must first specify the database of interest (IMPACT or TCGA are the two available options). Following this one can either specify the samples or study of interest:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/AxelitoMartin/gnomeR" class="external-link">gnomeR</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">cbioportalr</span><span class="op">)</span>
@@ -131,15 +131,15 @@
 <div class="section level3">
 <h3 id="processing-the-downloaded-data">Processing the downloaded data<a class="anchor" aria-label="anchor" href="#processing-the-downloaded-data"></a>
 </h3>
-<p>The <code><a href="reference/binmat.html">binmat()</a></code> function is the feature of the data processing of <code>gnomeR</code>. It takes genomic inputs from various sources of CbioPortal (mutation files, fusion files and copy number raw counts) to give out a clean binary matrix of n samples by all the events that were found in the files.</p>
+<p>The <code>binmat()</code> function is the feature of the data processing of <code>gnomeR</code>. It takes genomic inputs from various sources of CbioPortal (mutation files, fusion files and copy number raw counts) to give out a clean binary matrix of n samples by all the events that were found in the files.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">df.clean</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/binmat.html">binmat</a></span><span class="op">(</span>maf <span class="op">=</span> <span class="va">df</span><span class="op">$</span><span class="va">mut</span>, cna <span class="op">=</span> <span class="va">df</span><span class="op">$</span><span class="va">cna</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="va">df.clean</span> <span class="op">&lt;-</span> <span class="fu">binmat</span><span class="op">(</span>maf <span class="op">=</span> <span class="va">df</span><span class="op">$</span><span class="va">mut</span>, cna <span class="op">=</span> <span class="va">df</span><span class="op">$</span><span class="va">cna</span><span class="op">)</span></code></pre></div>
 <p>We further included example datasets from the raw dowloaded files on CbioPortal (<code>mut</code>, <code>fusion</code>, <code>cna</code>) which we will use for the following examples.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span>
 <span class="va">patients</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">mut</span><span class="op">$</span><span class="va">Tumor_Sample_Barcode</span><span class="op">)</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">mut</span><span class="op">$</span><span class="va">Tumor_Sample_Barcode</span><span class="op">)</span><span class="op">)</span>, <span class="fl">100</span>, replace<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span><span class="op">]</span>
 
-<span class="va">gen.dat</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/binmat.html">binmat</a></span><span class="op">(</span>patients <span class="op">=</span> <span class="va">patients</span>, maf <span class="op">=</span> <span class="va">mut</span>, fusion <span class="op">=</span> <span class="va">fusion</span>, cna <span class="op">=</span> <span class="va">cna</span><span class="op">)</span>
+<span class="va">gen.dat</span> <span class="op">&lt;-</span> <span class="fu">binmat</span><span class="op">(</span>patients <span class="op">=</span> <span class="va">patients</span>, maf <span class="op">=</span> <span class="va">mut</span>, fusion <span class="op">=</span> <span class="va">fusion</span>, cna <span class="op">=</span> <span class="va">cna</span><span class="op">)</span>
 <span class="fu">kable</span><span class="op">(</span><span class="va">gen.dat</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">]</span>,row.names <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
 <table class="table">
 <thead><tr class="header">
@@ -318,7 +318,7 @@
 </h4>
 <p><a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5027494/" class="external-link">FACETs</a> is an ASCN tool and open-source software with a broad application to whole genome, whole-exome, as well as targeted panel sequencing platforms. It is a fully integrated stand-alone pipeline that includes sequencing BAM file post-processing, joint segmentation of total- and allele-specific read counts, and integer copy number calls corrected for tumor purity, ploidy and clonal heterogeneity, with comprehensive output.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">p.heat</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/facets.heatmap.html">facets.heatmap</a></span><span class="op">(</span>seg <span class="op">=</span> <span class="va">seg</span>, patients <span class="op">=</span> <span class="va">patients</span>, min.purity <span class="op">=</span> <span class="fl">0</span><span class="op">)</span>
+<code class="sourceCode R"><span class="va">p.heat</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/facets.heatmap.html">facets.heatmap</a></span><span class="op">(</span>seg <span class="op">=</span> <span class="va">seg</span>, patients <span class="op">=</span> <span class="va">patients</span>, min_purity <span class="op">=</span> <span class="fl">0</span><span class="op">)</span>
 <span class="va">p.heat</span><span class="op">$</span><span class="va">p</span></code></pre></div>
 <p><img src="reference/figures/README-unnamed-chunk-11-1.png" width="100%"></p>
 </div>
@@ -330,26 +330,26 @@
 <div class="section level4">
 <h4 id="binary-and-continuous-outcomes">Binary and continuous outcomes<a class="anchor" aria-label="anchor" href="#binary-and-continuous-outcomes"></a>
 </h4>
-<p>The <code><a href="reference/gen.summary.html">gen.summary()</a></code> function let’s the user perform a large scale association between the genomic features present in the <code><a href="reference/binmat.html">binmat()</a></code> function output and an outcome of choice:</p>
+<p>The <code><a href="reference/gen_summary.html">gen_summary()</a></code> function let’s the user perform a large scale association between the genomic features present in the <code>binmat()</code> function output and an outcome of choice:</p>
 <ul>
 <li>binary (unpaired test using Fisher’s exact test and paired test using McNemmar’s exact test)</li>
 <li>continuous (using simple linear regression)</li>
 </ul>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">outcome</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Binomial.html" class="external-link">rbinom</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">patients</span><span class="op">)</span>,size <span class="op">=</span> <span class="fl">1</span>,prob <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fl">2</span><span class="op">)</span>,levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"0"</span>,<span class="st">"1"</span><span class="op">)</span><span class="op">)</span>
-<span class="co"># out &lt;- gen.summary(gen.dat = gen.dat,outcome = outcome,filter = 0.05)</span>
+<span class="co"># out &lt;- gen_summary(gen.dat = gen.dat,outcome = outcome,filter = 0.05)</span>
 <span class="co"># kable(out$fits[1:10,],row.names = TRUE)</span>
 <span class="co"># out$forest.plot</span></code></pre></div>
 </div>
 <div class="section level4">
 <h4 id="survival-analysis">Survival analysis<a class="anchor" aria-label="anchor" href="#survival-analysis"></a>
 </h4>
-<p>Similarly we include simple tools to perform univariate Cox’s proportional regression adjusted for false discovery rate in the <code><a href="reference/uni.cox.html">uni.cox()</a></code> function.</p>
+<p>Similarly we include simple tools to perform univariate Cox’s proportional regression adjusted for false discovery rate in the <code><a href="reference/gen_uni_cox.html">gen_uni_cox()</a></code> function.</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">time</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Exponential.html" class="external-link">rexp</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">patients</span><span class="op">)</span><span class="op">)</span>
 <span class="va">status</span> <span class="op">&lt;-</span> <span class="va">outcome</span>
-<span class="va">surv.dat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="va">time</span>,<span class="va">status</span><span class="op">)</span><span class="op">)</span>
-<span class="va">out</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/uni.cox.html">uni.cox</a></span><span class="op">(</span>X <span class="op">=</span> <span class="va">gen.dat</span>, surv.dat <span class="op">=</span> <span class="va">surv.dat</span>, surv.formula <span class="op">=</span> <span class="fu">Surv</span><span class="op">(</span><span class="va">time</span>,<span class="va">status</span><span class="op">)</span><span class="op">~</span><span class="va">.</span>,filter <span class="op">=</span> <span class="fl">0.05</span><span class="op">)</span>
+<span class="va">surv_dat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="va">time</span>,<span class="va">status</span><span class="op">)</span><span class="op">)</span>
+<span class="va">out</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/gen_uni_cox.html">gen_uni_cox</a></span><span class="op">(</span>X <span class="op">=</span> <span class="va">gen.dat</span>, surv_dat <span class="op">=</span> <span class="va">surv_dat</span>, surv_formula <span class="op">=</span> <span class="fu">Surv</span><span class="op">(</span><span class="va">time</span>,<span class="va">status</span><span class="op">)</span><span class="op">~</span><span class="va">.</span>,filter <span class="op">=</span> <span class="fl">0.05</span><span class="op">)</span>
 <span class="fu">kable</span><span class="op">(</span><span class="va">out</span><span class="op">$</span><span class="va">tab</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span>,<span class="op">]</span>,row.names <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
 <table class="table">
 <thead><tr class="header">

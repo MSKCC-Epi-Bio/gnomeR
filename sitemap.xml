@@ -25,13 +25,22 @@
     <loc>/reference/add.perc.html</loc>
   </url>
   <url>
-    <loc>/reference/binmat.html</loc>
+    <loc>/reference/annotate_any_panel.html</loc>
   </url>
   <url>
-    <loc>/reference/check_maf_column.html</loc>
+    <loc>/reference/annotate_specific_panel.html</loc>
   </url>
   <url>
-    <loc>/reference/check_maf_input.html</loc>
+    <loc>/reference/binary_matrix.html</loc>
+  </url>
+  <url>
+    <loc>/reference/check_cna_input.html</loc>
+  </url>
+  <url>
+    <loc>/reference/check_fusion_input.html</loc>
+  </url>
+  <url>
+    <loc>/reference/check_mutation_input.html</loc>
   </url>
   <url>
     <loc>/reference/clin.patients.html</loc>
@@ -52,16 +61,31 @@
     <loc>/reference/dat.oncoPrint.html</loc>
   </url>
   <url>
-    <loc>/reference/facets.dat.html</loc>
+    <loc>/reference/dot-cna_binary_matrix.html</loc>
+  </url>
+  <url>
+    <loc>/reference/dot-fusions_binary_matrix.html</loc>
+  </url>
+  <url>
+    <loc>/reference/dot-mutations_binary_matrix.html</loc>
   </url>
   <url>
     <loc>/reference/facets.heatmap.html</loc>
   </url>
   <url>
+    <loc>/reference/facets_dat.html</loc>
+  </url>
+  <url>
     <loc>/reference/fusion.html</loc>
   </url>
   <url>
-    <loc>/reference/gen.summary.html</loc>
+    <loc>/reference/gen_summary.html</loc>
+  </url>
+  <url>
+    <loc>/reference/gen_uni_cox.html</loc>
+  </url>
+  <url>
+    <loc>/reference/gene_panels.html</loc>
   </url>
   <url>
     <loc>/reference/genie_gene_info.html</loc>
@@ -136,6 +160,12 @@
     <loc>/reference/plot_oncoPrint.html</loc>
   </url>
   <url>
+    <loc>/reference/recode_alias.html</loc>
+  </url>
+  <url>
+    <loc>/reference/reformat_cna.html</loc>
+  </url>
+  <url>
     <loc>/reference/resolve_alias.html</loc>
   </url>
   <url>
@@ -146,6 +176,9 @@
   </url>
   <url>
     <loc>/reference/seg.html</loc>
+  </url>
+  <url>
+    <loc>/reference/specify_impact_panels.html</loc>
   </url>
   <url>
     <loc>/reference/substrRight.html</loc>
@@ -164,8 +197,5 @@
   </url>
   <url>
     <loc>/reference/ti_468.html</loc>
-  </url>
-  <url>
-    <loc>/reference/uni.cox.html</loc>
   </url>
 </urlset>

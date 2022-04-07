@@ -63,7 +63,7 @@
 <dt>n_genes</dt>
 <dd><p>Number of top genes to display in plot</p></dd>
 <dt>...</dt>
-<dd><p>Further binmat() arguments</p></dd>
+<dd><p>Further binary_matrix() arguments</p></dd>
 </dl></div>
     <div id="value">
     <h2>Value</h2>
@@ -73,52 +73,7 @@
     <div id="ref-examples">
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu">gggenecor</span><span class="op">(</span><span class="va">mut</span><span class="op">)</span></span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>MUTATION DATA: To ensure gene with multiple names/aliases are correctly grouped together, the</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span>       following genes in your maf dataframe have been recoded. You can supress this with recode.aliases = FALSE </span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span>  </span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> MLL3 recoded to 58508 </span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> MUTATION DATA: To ensure gene with multiple names/aliases are correctly grouped together, the</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span>       following genes in your maf dataframe have been recoded. You can supress this with recode.aliases = FALSE </span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span>  </span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> MLL2 recoded to 8085 </span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> MUTATION DATA: To ensure gene with multiple names/aliases are correctly grouped together, the</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span>       following genes in your maf dataframe have been recoded. You can supress this with recode.aliases = FALSE </span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span>  </span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> MRE11A recoded to 4361 </span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> MUTATION DATA: To ensure gene with multiple names/aliases are correctly grouped together, the</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span>       following genes in your maf dataframe have been recoded. You can supress this with recode.aliases = FALSE </span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span>  </span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> MLL recoded to 4297 </span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> MUTATION DATA: To ensure gene with multiple names/aliases are correctly grouped together, the</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span>       following genes in your maf dataframe have been recoded. You can supress this with recode.aliases = FALSE </span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span>  </span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> PARK2 recoded to 5071 </span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> MUTATION DATA: To ensure gene with multiple names/aliases are correctly grouped together, the</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span>       following genes in your maf dataframe have been recoded. You can supress this with recode.aliases = FALSE </span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span>  </span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> RFWD2 recoded to 64326 </span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> MUTATION DATA: To ensure gene with multiple names/aliases are correctly grouped together, the</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span>       following genes in your maf dataframe have been recoded. You can supress this with recode.aliases = FALSE </span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span>  </span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> PAK7 recoded to 57144 </span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> MUTATION DATA: To ensure gene with multiple names/aliases are correctly grouped together, the</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span>       following genes in your maf dataframe have been recoded. You can supress this with recode.aliases = FALSE </span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span>  </span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> FAM46C recoded to 54855 </span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> MUTATION DATA: To ensure gene with multiple names/aliases are correctly grouped together, the</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span>       following genes in your maf dataframe have been recoded. You can supress this with recode.aliases = FALSE </span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span>  </span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> FAM175A recoded to 84142 </span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> MUTATION DATA: To ensure gene with multiple names/aliases are correctly grouped together, the</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span>       following genes in your maf dataframe have been recoded. You can supress this with recode.aliases = FALSE </span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span>  </span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> MYCL1 recoded to 4610 </span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> MUTATION DATA: To ensure gene with multiple names/aliases are correctly grouped together, the</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span>       following genes in your maf dataframe have been recoded. You can supress this with recode.aliases = FALSE </span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span>  </span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> TCEB1 recoded to 6921 </span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>When panels argument is NULL only IMPACT samples can be annotated for missingness.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span>           If you are using GENIE data, we recommend that you provide this argument.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> `samples` argument is `NULL`. We will infer your cohort inclusion and resulting data frame will include all samples with at least one alteration in <span style="color: #00BB00;">mutation</span>, <span style="color: #00BB00;">fusion</span> or <span style="color: #00BB00;">cna</span> data frames</span>
 <span class="r-plt img"><img src="gggenecor-1.png" alt="" width="700" height="433"></span>
 <span class="r-in"></span>
 </code></pre></div>

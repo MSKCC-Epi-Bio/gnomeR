@@ -60,18 +60,28 @@ Modified CNregions function from the facets package to handle small sample sizes
         </td>
         <td><p>Add a percentage to counts</p></td>
       </tr><tr><td>
-          <p><code><a href="binmat.html">binmat()</a></code> </p>
+          <p><code><a href="annotate_any_panel.html">annotate_any_panel()</a></code> </p>
         </td>
-        <td><p>binmat
-\<!-- %lifecycle{stable} -->
-Enables creation of a binary matrix from a maf file with
-a predefined list of patients (rows are patients and columns are genes)</p></td>
+        <td><p>Annotate Missing Gene Values According to Specifi Panels</p></td>
       </tr><tr><td>
-          <p><code><a href="check_maf_column.html">check_maf_column()</a></code> </p>
+          <p><code><a href="annotate_specific_panel.html">annotate_specific_panel()</a></code> </p>
         </td>
-        <td><p>Check Columns of MAF</p></td>
+        <td><p>Utility function  to insert NA's According to Panel</p></td>
       </tr><tr><td>
-          <p><code><a href="check_maf_input.html">check_maf_input()</a></code> </p>
+          <p><code><a href="binary_matrix.html">binary_matrix()</a></code> </p>
+        </td>
+        <td><p>Enables creation of a binary matrix from a mutation file with
+a predefined list of samples (rows are samples and columns are genes)</p></td>
+      </tr><tr><td>
+          <p><code><a href="check_cna_input.html">check_cna_input()</a></code> </p>
+        </td>
+        <td><p>Check CNA data frame to ensure columns are correct</p></td>
+      </tr><tr><td>
+          <p><code><a href="check_fusion_input.html">check_fusion_input()</a></code> </p>
+        </td>
+        <td><p>Check fusion data frame to ensure columns are correct</p></td>
+      </tr><tr><td>
+          <p><code><a href="check_mutation_input.html">check_mutation_input()</a></code> </p>
         </td>
         <td><p>Checks MAF input to ensure column names are correct and renamed genes are corrected</p></td>
       </tr><tr><td>
@@ -96,9 +106,9 @@ IMPACT cbioPortal dataset.</p></td>
         </td>
         <td><p>custom_pathway
 \<!-- %lifecycle{stable} -->
-Enables creation of a custom pathway binary matrix from a binmat() <code>object</code>. Similarly to the internal file 'pathways.csv', this function takes as input
+Enables creation of a custom pathway binary matrix from a binary_matrix() <code>object</code>. Similarly to the internal file 'pathways.csv', this function takes as input
 a data frame containing the name of the pathways of interest, and for each pathways a character vector of the genes of interest. Note that the different
-events to be considered in each pathways must be considered separetely. For example, if one wishes to consider TP53 deletions in a given pathway, one must
+events to be considered in each pathways must be considered separately. For example, if one wishes to consider TP53 deletions in a given pathway, one must
 specify "TP53.Del" in the character vector for that pathway.</p></td>
       </tr><tr><td>
           <p><code><a href="dat.oncoPrint.html">dat.oncoPrint()</a></code> </p>
@@ -106,21 +116,42 @@ specify "TP53.Del" in the character vector for that pathway.</p></td>
         <td><p>dat.oncoPrint
 Enables creation of a matrix used to generate an OncoPrint heatmap.</p></td>
       </tr><tr><td>
-          <p><code><a href="facets.dat.html">facets.dat()</a></code> </p>
+          <p><code><a href="dot-cna_binary_matrix.html">.cna_binary_matrix()</a></code> </p>
         </td>
-        <td><p>facets.dat</p></td>
+        <td><p>Make Binary Matrix From CNA data frame</p></td>
+      </tr><tr><td>
+          <p><code><a href="dot-fusions_binary_matrix.html">.fusions_binary_matrix()</a></code> </p>
+        </td>
+        <td><p>Make Binary Matrix From Fusion data frame</p></td>
+      </tr><tr><td>
+          <p><code><a href="dot-mutations_binary_matrix.html">.mutations_binary_matrix()</a></code> </p>
+        </td>
+        <td><p>Make Binary Matrix From Mutation data frame</p></td>
       </tr><tr><td>
           <p><code><a href="facets.heatmap.html">facets.heatmap()</a></code> </p>
         </td>
         <td><p>facets.heatmap</p></td>
       </tr><tr><td>
+          <p><code><a href="facets_dat.html">facets_dat()</a></code> </p>
+        </td>
+        <td><p>facets_dat</p></td>
+      </tr><tr><td>
           <p><code><a href="fusion.html">fusion</a></code> </p>
         </td>
         <td><p>An example of fusions calls file from IMPACT cbioPortal dataset</p></td>
       </tr><tr><td>
-          <p><code><a href="gen.summary.html">gen.summary()</a></code> </p>
+          <p><code><a href="gen_summary.html">gen_summary()</a></code> <code><a href="gen_summary.html">gen_summary()</a></code> </p>
         </td>
-        <td><p>gen.summary</p></td>
+        <td><p>gen_summary</p></td>
+      </tr><tr><td>
+          <p><code><a href="gen_uni_cox.html">gen_uni_cox()</a></code> </p>
+        </td>
+        <td><p>gen_uni_cox
+Performs univariate cox proportional hazard model on every feature</p></td>
+      </tr><tr><td>
+          <p><code><a href="gene_panels.html">gene_panels</a></code> </p>
+        </td>
+        <td><p>Public Gene Panels on cBioPortal</p></td>
       </tr><tr><td>
           <p><code><a href="genie_gene_info.html">genie_gene_info</a></code> </p>
         </td>
@@ -128,7 +159,7 @@ Enables creation of a matrix used to generate an OncoPrint heatmap.</p></td>
       </tr><tr><td>
           <p><code><a href="ggcomut.html">ggcomut()</a></code> </p>
         </td>
-        <td><p>Co-mutation Heatmap of the Top Altered Genes</p></td>
+        <td><p>Comutation Heatmap of the Top Altered Genes</p></td>
       </tr><tr><td>
           <p><code><a href="gggenecor.html">gggenecor()</a></code> </p>
         </td>
@@ -136,7 +167,7 @@ Enables creation of a matrix used to generate an OncoPrint heatmap.</p></td>
       </tr><tr><td>
           <p><code><a href="ggheatmap.html">ggheatmap()</a></code> </p>
         </td>
-        <td><p>Heatmap of all events after binmat - using binary distance</p></td>
+        <td><p>Heatmap of all events after binary_matrix - using binary distance</p></td>
       </tr><tr><td>
           <p><code><a href="ggsamplevar.html">ggsamplevar()</a></code> </p>
         </td>
@@ -210,6 +241,14 @@ See details there for file formats.</p></td>
         <td><p>plot_oncoPrint
 Creates the OncoPrint corresponding to the inputted genetic data</p></td>
       </tr><tr><td>
+          <p><code><a href="recode_alias.html">recode_alias()</a></code> </p>
+        </td>
+        <td><p>Recode Hugo Symbol Column</p></td>
+      </tr><tr><td>
+          <p><code><a href="reformat_cna.html">reformat_cna()</a></code> </p>
+        </td>
+        <td><p>Reformat CNA from maf version to wide version</p></td>
+      </tr><tr><td>
           <p><code><a href="resolve_alias.html">resolve_alias()</a></code> </p>
         </td>
         <td><p>Resolve Hugo Symbol Names with Aliases</p></td>
@@ -225,6 +264,10 @@ Creates the OncoPrint corresponding to the inputted genetic data</p></td>
           <p><code><a href="seg.html">seg</a></code> </p>
         </td>
         <td><p>A segmentation file from the cbioPortal datasets</p></td>
+      </tr><tr><td>
+          <p><code><a href="specify_impact_panels.html">specify_impact_panels()</a></code> </p>
+        </td>
+        <td><p>IMPACT Panel Annotation of NA's</p></td>
       </tr><tr><td>
           <p><code><a href="substrRight.html">substrRight()</a></code> </p>
         </td>
@@ -249,11 +292,6 @@ Creates the OncoPrint corresponding to the inputted genetic data</p></td>
           <p><code><a href="ti_468.html">ti_468</a></code> </p>
         </td>
         <td><p>Intervals sequenced in 468 panel</p></td>
-      </tr><tr><td>
-          <p><code><a href="uni.cox.html">uni.cox()</a></code> </p>
-        </td>
-        <td><p>uni.cox
-Performs univariate cox proportional hazard model on every feature</p></td>
       </tr></tbody></table></div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
