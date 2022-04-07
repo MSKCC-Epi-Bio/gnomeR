@@ -9,7 +9,6 @@
 #' @return p : an oncoprint object
 #' @export
 #' @examples library(gnomeR)
-
 #' @import
 #' ComplexHeatmap
 #' tibble
