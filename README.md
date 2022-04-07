@@ -127,8 +127,8 @@ examples.
 set.seed(123)
 patients <- as.character(unique(mut$Tumor_Sample_Barcode))[sample(1:length(unique(mut$Tumor_Sample_Barcode)), 100, replace=FALSE)]
 
-gen.dat <- binmat(patients = patients, maf = mut, fusion = fusion, cna = cna)
-kable(gen.dat[1:10,1:10],row.names = TRUE)
+gen_dat <- binmat(patients = patients, maf = mut, fusion = fusion, cna = cna)
+kable(gen_dat[1:10,1:10],row.names = TRUE)
 ```
 
 |                   | TP53 | IGF1R | KEAP1 | KDM5C | KRAS | TERT | MAP2K1 | NCOR1 | DDR2 | FIP1L1 |
@@ -173,7 +173,7 @@ genes that are under consideration.
 
 ``` r
 genes <- c("TP53","PIK3CA","KRAS","TERT","EGFR","FAT","ALK","CDKN2A","CDKN2B")
-plot_oncoPrint(gen.dat = gen.dat %>% select(starts_with(genes)))
+plot_oncoprint(gen_dat = gen_dat %>% select(starts_with(genes)))
 ```
 
 <img src="man/figures/README-unnamed-chunk-10-1.png" width="100%" />
@@ -189,7 +189,7 @@ read counts, and integer copy number calls corrected for tumor purity,
 ploidy and clonal heterogeneity, with comprehensive output.
 
 ``` r
-p.heat <- facets.heatmap(seg = seg, patients = patients, min_purity = 0)
+p.heat <- facets_heatmap(seg = seg, patients = patients, min_purity = 0)
 p.heat$p
 ```
 
@@ -212,7 +212,7 @@ function output and an outcome of choice:
 
 ``` r
 outcome <- factor(rbinom(n = length(patients),size = 1,prob = 1/2),levels = c("0","1"))
-# out <- gen_summary(gen.dat = gen.dat,outcome = outcome,filter = 0.05)
+# out <- gen_summary(gen_dat = gen_dat,outcome = outcome,filter = 0.05)
 # kable(out$fits[1:10,],row.names = TRUE)
 # out$forest.plot
 ```
@@ -227,7 +227,7 @@ proportional regression adjusted for false discovery rate in the
 time <- rexp(length(patients))
 status <- outcome
 surv_dat <- as.data.frame(cbind(time,status))
-out <- gen_uni_cox(X = gen.dat, surv_dat = surv_dat, surv_formula = Surv(time,status)~.,filter = 0.05)
+out <- gen_uni_cox(X = gen_dat, surv_dat = surv_dat, surv_formula = Surv(time,status)~.,filter = 0.05)
 kable(out$tab[1:10,],row.names = TRUE)
 ```
 

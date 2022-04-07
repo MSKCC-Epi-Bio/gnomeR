@@ -1,17 +1,17 @@
-#' custom_pathway
-#' \%lifecycle{stable}
+
 #' Enables creation of a custom pathway binary matrix from a binary_matrix() `object`. Similarly to the internal file 'pathways.csv', this function takes as input
 #' a data frame containing the name of the pathways of interest, and for each pathways a character vector of the genes of interest. Note that the different
 #' events to be considered in each pathways must be considered separately. For example, if one wishes to consider TP53 deletions in a given pathway, one must
 #' specify "TP53.Del" in the character vector for that pathway.
-#' @param mat a binary_matrix() binary matrix
+#' @param mat a binary matrix
 #' @param pathway a dataframe/tibble with first column the name of the genes, and second column their corresponding
 #' pathway
 #' @return pathway_dat : a binary matrix of pathway level alterations
 #' @export
-#' @examples library(gnomeR)
+#' @examples
+#' library(gnomeR)
 #' samples <- as.character(unique(mut$Tumor_Sample_Barcode))[1:200]
-#' bin.mut <- binary_matrix(samples = samples,mutation = mut)
+#' bin.mut <- binary_matrix(samples = samples ,mutation = mut)
 #' pathway <- as.data.frame(cbind(c("path1","path1","path2","path3"),
 #' c("PIK3CA","KRAS","TERT","TP53")))
 #' custom_pathway(mat = bin.mut, pathway = pathway)

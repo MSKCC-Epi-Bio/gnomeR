@@ -26,7 +26,7 @@
 #
 # })
 #
-# # test_that("read in 1000 samples with specify.plat", {
+# # test_that("read in 1000 samples with specify_panel", {
 # #    mat <- mut %>%
 # #     filter(Tumor_Sample_Barcode %in% samples)
 # #   plots <- maf.summary(maf = mat)
@@ -102,7 +102,7 @@
 # #
 # #   mat <- mut %>%
 # #     filter(Tumor_Sample_Barcode %in% samples)
-# #   plots <- maf.summary(maf = mat,mut.type = "ALL")
+# #   plots <- maf.summary(maf = mat,mut_type = "ALL")
 # #   expect_true(is.ggplot(plots$p.class))
 # #   expect_true(is.ggplot(plots$p.type))
 # #   expect_true(is.ggplot(plots$p.SNV))

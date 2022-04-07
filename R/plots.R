@@ -15,7 +15,7 @@
 #' samples <- as.character(unique(mut$Tumor_Sample_Barcode))[1:200]
 #' all.plots <- maf_viz(maf=mut %>% filter(Tumor_Sample_Barcode %in% samples))
 #' all.plots <- maf_viz(maf=mut %>%
-#' filter(Tumor_Sample_Barcode %in% samples),specify.plat = TRUE)
+#' filter(Tumor_Sample_Barcode %in% samples),specify_panel = TRUE)
 #' @import
 #' dplyr
 #' dtplyr

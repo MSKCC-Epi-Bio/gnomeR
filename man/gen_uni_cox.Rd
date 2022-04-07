@@ -22,7 +22,7 @@ Default is 0 (all features included).}
 \item{genes}{a character vector of gene names that will be the only ones to be kept. Default is NULL, all genes are used.}
 
 \item{na_filter}{A numeric value between 0 and 1 (1 not included) that is the upper bound for the proportion of missing
-values in the features of the inputted gen.dat matrix. Variables that exceed this proportion of missing values will be removed.}
+values in the features of the inputted gen_dat matrix. Variables that exceed this proportion of missing values will be removed.}
 }
 \value{
 tab A table of all the fits performed sorted by adjusted pvalues.
@@ -40,7 +40,7 @@ library(gnomeR)
 library(dplyr)
 library(dtplyr)
 samples <- as.character(unique(mut$Tumor_Sample_Barcode))[1:200]
-gen.dat <- binary_matrix(samples = samples, mutation = mut)
+gen_dat <- binary_matrix(samples = samples, mutation = mut)
 surv_dat <- clin.patients \%>\%
 filter(X.Patient.Identifier \%in\%
 abbreviate(samples,strict = TRUE, minlength = 9)) \%>\%
@@ -52,8 +52,8 @@ abbreviate(samples,strict = TRUE, minlength = 9)) \%>\%
   mutate(time = as.numeric(as.character(time)),
          status = ifelse(status == "LIVING",0,1)) \%>\%
   filter(!is.na(time))
-X <- gen.dat[match(surv_dat$DMPID,
-abbreviate(rownames(gen.dat),strict = TRUE, minlength = 9)),]
+X <- gen_dat[match(surv_dat$DMPID,
+abbreviate(rownames(gen_dat),strict = TRUE, minlength = 9)),]
 gen_uni_cox(X = X, surv_dat = surv_dat,
 surv_formula = Surv(time,status)~.,filter = 0.05)
 }

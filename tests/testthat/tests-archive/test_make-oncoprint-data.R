@@ -4,11 +4,11 @@
 #
 #   set.seed(123)
 #   samples <- as.character(unique(mut$Tumor_Sample_Barcode))[1:200]
-#   bin.mut <- binmat(samples = samples,maf = mut,mut.type = "SOMATIC",
-#   SNP.only = FALSE,include.silent = FALSE, specify.plat = FALSE)
+#   bin.mut <- binmat(samples = samples,maf = mut,mut_type = "SOMATIC",
+#   snp_only = FALSE,include_silent = FALSE, specify_panel = FALSE)
 #   gen_dat <- bin.mut[,
 #   names(sort(apply(bin.mut,2, sum),decreasing = TRUE))[1:15]]
-#   out <- dat.oncoPrint(gen_dat)
+#   out <- dat_oncoprint(gen_dat)
 #   expect_true(is.matrix(out))
 #   expect_true(all(dim(out) == c(15,200)))
 #
@@ -19,12 +19,12 @@
 #
 #   set.seed(123)
 #   samples <- as.character(unique(mut$Tumor_Sample_Barcode))[1:200]
-#   bin.mut <- binmat(samples = samples,maf = mut,mut.type = "SOMATIC",
-#                     SNP.only = FALSE,include.silent = FALSE, specify.plat = FALSE)
+#   bin.mut <- binmat(samples = samples,maf = mut,mut_type = "SOMATIC",
+#                     snp_only = FALSE,include_silent = FALSE, specify_panel = FALSE)
 #   gen_dat <- bin.mut[,
 #                      names(sort(apply(bin.mut,2, sum),decreasing = TRUE))[1:15]]
 #   gen_dat[,1] <- sample(c("A","B"), size = nrow(gen_dat), replace = TRUE)
-#   expect_warning(out <- dat.oncoPrint(gen_dat))
+#   expect_warning(out <- dat_oncoprint(gen_dat))
 #   expect_true(is.matrix(out))
 #   expect_true(all(dim(out) == c(15,200)))
 #
@@ -35,12 +35,12 @@
 #
 #   set.seed(123)
 #   samples <- as.character(unique(mut$Tumor_Sample_Barcode))[1:200]
-#   bin.mut <- binmat(samples = samples,maf = mut,mut.type = "SOMATIC",
-#                     SNP.only = FALSE,include.silent = FALSE, specify.plat = FALSE)
+#   bin.mut <- binmat(samples = samples,maf = mut,mut_type = "SOMATIC",
+#                     snp_only = FALSE,include_silent = FALSE, specify_panel = FALSE)
 #   gen_dat <- bin.mut[,
 #                      names(sort(apply(bin.mut,2, sum),decreasing = TRUE))[1:15]]
 #   gen_dat[,1] <- sample(c(0:2,NA), size = nrow(gen_dat), replace = TRUE)
-#   expect_warning(out <- dat.oncoPrint(gen_dat))
+#   expect_warning(out <- dat_oncoprint(gen_dat))
 #   expect_true(is.matrix(out))
 #   expect_true(all(dim(out) == c(14,200)))
 #
@@ -52,8 +52,8 @@
 #   set.seed(123)
 #   samples <- as.character(unique(mut$Tumor_Sample_Barcode))
 #   bin.mut <- binmat(samples = samples,maf = mut, fusion = fusion,
-#                     cna = cna, mut.type = "SOMATIC",
-#                     SNP.only = FALSE,include.silent = FALSE, specify.plat = FALSE)
+#                     cna = cna, mut_type = "SOMATIC",
+#                     snp_only = FALSE,include_silent = FALSE, specify_panel = FALSE)
 #   gen_dat <- bin.mut[,
 #                      c("TP53","CDKN2A","CDKN2A.Del","PIK3CA")]
 #   gen_dat$TP53 <- rbinom(nrow(gen_dat),1,1/2)
@@ -76,7 +76,7 @@
 #     select(-one_of("to_rm")) %>%
 #     tibble::column_to_rownames('DMPID')
 #   rownames(gen_dat) <- rownames(clin.patients.dat)
-#   out <- dat.oncoPrint(gen_dat,clin.patients.dat)
+#   out <- dat_oncoprint(gen_dat,clin.patients.dat)
 #   expect_true(is.matrix(out))
 #   expect_true(all(dim(out) == c(6,454)))
 #
@@ -88,11 +88,11 @@
 #   set.seed(123)
 #   samples <- as.character(unique(mut$Tumor_Sample_Barcode))[1:200]
 #   bin.mut <- binmat(samples = samples,maf = mut,cna = cna, cna.binary = FALSE,
-#                     mut.type = "SOMATIC",
-#                     SNP.only = FALSE,include.silent = FALSE, specify.plat = FALSE)
+#                     mut_type = "SOMATIC",
+#                     snp_only = FALSE,include_silent = FALSE, specify_panel = FALSE)
 #   keep <- c("TP53|PIK3CA|ALK")
 #   gen_dat <- bin.mut[,grep(keep,colnames(bin.mut))]
-#   expect_warning(out <- dat.oncoPrint(gen_dat))
+#   expect_warning(out <- dat_oncoprint(gen_dat))
 #   expect_true(is.matrix(out))
 #   expect_true(all(dim(out) == c(3,200)))
 #
