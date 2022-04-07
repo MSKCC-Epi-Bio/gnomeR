@@ -80,10 +80,31 @@ test_that("Check binary_matrix() provide specific sample data if pass a vector",
 # Does it return results as expected?
 # Trying with and without passing samples arg as well- does it return what you'd expect?
 # what if mut is passed but doesn't have any rows? no columns? no rows or cols?
-test_that("test", {
+test_that("test inputting mut/fusion/cna args can leads to a data.frame output", {
 
-  #example test
-  expect_equal(TRUE, TRUE)
+  #Can we obtaine correct result format when either mut/fusion/cna inputted
+  expect_error(binary_matrix())
+
+  expect_true( binary_matrix( mutation = gnomeR::mut) %>% is.data.frame())
+
+  expect_true( binary_matrix( fusion = gnomeR::fusion) %>% is.data.frame())
+
+  expect_true( binary_matrix( cna = gnomeR::cna) %>% is.data.frame())
+
+  #What if there is no row/col in the file passing to mutation
+
+  #note: there is no error message if a inputting mut data is 0 rows;
+  #      it only return a 0 row and 0 column result
+  expect_equal( gnomeR::mut %>%
+                  dplyr::filter(Hugo_Symbol=="XXXXXXXXX") %>%
+                  binary_matrix(mutation = .) %>%
+                  nrow(), 0)
+
+  expect_error( gnomeR::mut %>%
+                dplyr::select(NULL) %>%
+                binary_matrix(mutation = .))
+
+
 })
 
 # test mut_type argument ----
