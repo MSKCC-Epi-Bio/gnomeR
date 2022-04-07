@@ -1,5 +1,5 @@
 
-#' gnomeR_tbl_summary
+#' genomic_tbl_summary
 #'
 #' This function will select genes based on user inputs or on frequency counts and then
 #' will pass the data.frame to `gtsummary::tbl_summary()`. You can specify a `by` variable and other
@@ -19,10 +19,16 @@
 #' library(gnomeR)
 #' library(gtsummary)
 #' library(dplyr)
-#' tb1 <- gnome_tbl_summary(data = bin.mut,cutoff = .05)
-#' tb2 <- gnome_tbl_summary(data = bin.mut,gene_subset = c("KRAS", "TERT"))
+#' samples <- as.character(unique(mut$Tumor_Sample_Barcode))[1:200]
+#' bin.mut <- binary_matrix(samples = samples, mutation = mut,
+#'                         mut_type = "SOMATIC", snp_only = FALSE,
+#'                         include_silent = FALSE,
+#'                         cna_relax = TRUE, specify_panel = "no", rm_empty = FALSE)
 
-gnomeR_tbl_summary <- function(data, cutoff = 0, gene_subset = NULL, by = NULL, ...){
+#' tb1 <- genomic_tbl_summary(data = bin.mut,cutoff = .05)
+#' tb2 <- genomic_tbl_summary(data = bin.mut,gene_subset = c("KRAS", "TERT"))
+
+genomic_tbl_summary <- function(data, cutoff = 0, gene_subset = NULL, by = NULL, ...){
 
 
   if(!is.data.frame(data)){
@@ -33,7 +39,7 @@ gnomeR_tbl_summary <- function(data, cutoff = 0, gene_subset = NULL, by = NULL, 
     stop("Please select a cutoff value between 0 and 1.")
   }
 
-  if(!is.character(gene_subset)){
+  if(!is.character(gene_subset) && !is.null(gene_subset)){
     stop("Please supply a character vector.")
   }
 
@@ -51,38 +57,38 @@ gnomeR_tbl_summary <- function(data, cutoff = 0, gene_subset = NULL, by = NULL, 
     genes <- df  %>%
       select(-all_of(by)) %>%
       ungroup() %>%
-      pivot_longer(-sample_id) %>%
+      tidyr::pivot_longer(-.data$sample_id) %>%
       distinct() %>%
-      group_by(name) %>%
+      group_by(.data$name) %>%
       summarise(
-        sum = sum(value, na.rm = TRUE),
-        count = nrow(df) - sum(is.na(value)),
-        num_na = sum(is.na(value))
+        sum = sum(.data$value, na.rm = TRUE),
+        count = nrow(df) - sum(is.na(.data$value)),
+        num_na = sum(is.na(.data$value))
       ) %>%
-      mutate(perc = sum / count) %>%
-      filter(perc >= cutoff) %>%
-      pull(name)
+      mutate(perc = .data$sum / .data$count) %>%
+      filter(.data$perc >= cutoff) %>%
+      pull(.data$name)
   }
 
   # filter only those > cutoff %
   df <- df %>%
-    select(sample_id, all_of(by),
+    select(.data$sample_id, all_of(by),
            one_of(genes))
 
 
   if(is.null(by)){
     df %>%
-      select(-sample_id) %>%
-      tbl_summary() %>%
-      bold_labels()
+      select(-.data$sample_id) %>%
+      gtsummary::tbl_summary() %>%
+      gtsummary::bold_labels()
   }else{
     df %>%
-      select(-sample_id) %>%
-      tbl_summary(by = by) %>%
-      add_p() %>%
-      add_overall() %>%
-      bold_labels() %>%
-      sort_p()
+      select(-.data$sample_id) %>%
+      gtsummary::tbl_summary(by = by) %>%
+      gtsummary::add_p() %>%
+      gtsummary::add_overall() %>%
+      gtsummary::bold_labels() %>%
+      gtsummary::sort_p()
   }
 
 }
