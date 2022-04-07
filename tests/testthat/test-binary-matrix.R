@@ -75,6 +75,46 @@ test_that("Check binary_matrix() provide specific sample data if pass a vector",
 
 })
 
+test_that("Check binary_matrix() if sample entered in `sampl_id` with zero mutations/fusions/cna", {
+
+  #what happens when you pass a vector?
+  mut_valid_sample_ids<-binary_matrix( mutation= gnomeR::mut) %>%
+    rownames() %>%
+    head(n=10)
+
+  add_no_mut_sample <- c(mut_valid_sample_ids, "no_mutations_fake_sample")
+  binary_matrix_with_zero <-  binary_matrix(sample=add_no_mut_sample, mutation=gnomeR::mut)
+
+  sum(binary_matrix_with_zero[nrow(binary_matrix_with_zero), ])
+  expect_equal(
+    sum(binary_matrix_with_zero[nrow(binary_matrix_with_zero), ]), 0)
+
+  # should be one more obs in data frame with samples arg specified
+  expect_equal(nrow(binary_matrix_with_zero) -1, length(mut_valid_sample_ids))
+
+  # with no fusions in select sample---------
+  binary_matrix_with_zero <-  binary_matrix(samples=add_no_mut_sample,
+                                            mutation = gnomeR::mut,
+                                            cna = gnomeR::cna,
+                                            fusion = gnomeR::fusion)
+
+  expect_false(any(str_detect(names(binary_matrix_with_zero), ".fus")))
+  expect_equal(nrow(binary_matrix_with_zero), length(add_no_mut_sample))
+
+
+  # with no cna in select sample---------
+  cna_samp <- cna[, c(1, 100)]
+  binary_matrix_with_zero <-  binary_matrix(samples=add_no_mut_sample,
+                                            mutation = gnomeR::mut,
+                                            cna = cna_samp,
+                                            fusion = gnomeR::fusion)
+  expect_false(any(str_detect(names(binary_matrix_with_zero), ".Amp")))
+  expect_false(any(str_detect(names(binary_matrix_with_zero), "Del")))
+  expect_false(any(str_detect(names(binary_matrix_with_zero), ".cna")))
+  expect_equal(nrow(binary_matrix_with_zero), length(add_no_mut_sample))
+
+})
+
 # test with and without mut/fusion/cna args passed ----
 # Functions should work with any one of the three passed
 # Does it return results as expected?
@@ -91,7 +131,7 @@ test_that("test inputting mut/fusion/cna args can leads to a data.frame output",
 
   expect_true( binary_matrix( cna = gnomeR::cna) %>% is.data.frame())
 
-  #What if there is no row/col in the file passing to mutation
+  # What if there is no row/col in the file passing to mutation
 
   #note: there is no error message if a inputting mut data is 0 rows;
   #      it only return a 0 row and 0 column result
