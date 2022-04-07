@@ -54,10 +54,25 @@ test_that("check cna with no alterations are omitted from results", {
 # what happens when you pass impact samples (-IM5/IM6/IM7 etc)?  non impact samples? A mix?
 
 
-test_that("test", {
+test_that("Check binary_matrix() provide specific sample data if pass a vector", {
 
-  #example test
-  expect_equal(TRUE, TRUE)
+  #what happens when you pass a vector?
+  mut_valid_sample_ids<-binary_matrix( mutation= gnomeR::mut) %>%
+                     rownames() %>%
+                     head(n=10)
+
+  expect_equal(
+    binary_matrix(sample=mut_valid_sample_ids, mutation=gnomeR::mut) %>%
+      nrow(),
+    length(mut_valid_sample_ids))
+
+  #what about if you don't specify it (don't pass anything)?
+
+  expect_lte(
+    binary_matrix(mutation=gnomeR::mut) %>%
+      nrow(),
+    length(gnomeR::mut[['Tumor_Sample_Barcode']]))
+
 })
 
 # test with and without mut/fusion/cna args passed ----
