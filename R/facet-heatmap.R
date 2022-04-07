@@ -2,13 +2,13 @@
 #'
 #' Creates a heatmap of copy number profiles from segment files.
 #'
-#' @param seg a segmentation file containing the segmentation information of multiple patients
+#' @param seg a segmentation file containing the segmentation information of multiple samples
 #' @param filenames the names of the segment files to be loaded and processed (Note must end in ".Rdata").
 #' @param path the relative path to the files folder from your current directory
-#' @param patients the names of the patients of the respective filenames. Default simply 1 to number of files.
-#' @param min.purity the minimum purity of the sample required to be kept in the final dataset. Default is 0.3.
+#' @param samples the names of the samples of the respective filenames. Default simply 1 to number of files.
+#' @param min_purity the minimum purity of the sample required to be kept in the final dataset. Default is 0.3.
 #' @param epsilon level of unions when aggregating segments between
-#' @param ordered order in which patients should be printed. Default NUll leads to hierarchical clustering.
+#' @param ordered order in which samples should be printed. Default NUll leads to hierarchical clustering.
 #' @param outcome for seg file only, if outcome associated with study it will be printed along the x axis for each patient
 #' @param adaptive CNregions option to create adaptive segments
 #' @return p a heatmap corresponding to the segment files inputted
@@ -16,12 +16,12 @@
 #' @examples library(gnomeR)
 #' library(dplyr)
 #' library(dtplyr)
-#' patients <- as.character(unique(mut$Tumor_Sample_Barcode))[1:1000]
-#' patients.seg <- as.character(unlist(clin.sample %>%
-#' filter(Sample.Identifier %in% patients,
+#' samples <- as.character(unique(mut$Tumor_Sample_Barcode))[1:1000]
+#' samples.seg <- as.character(unlist(clin.sample %>%
+#' filter(Sample.Identifier %in% samples,
 #'  as.numeric(as.character(Tumor.Purity)) > 30) %>%
 #'  select(Sample.Identifier)))
-#' facet <- facets.heatmap(seg = seg, patients=patients.seg[0:100])
+#' facet <- facets.heatmap(seg = seg, samples=samples.seg[0:100])
 #' facet$p
 #' @import
 #' gplots
@@ -29,8 +29,8 @@
 #' tibble
 
 
-facets.heatmap <- function (seg = NULL, filenames = NULL, path = NULL, patients = NULL,
-                            min.purity = 0.3, epsilon = 0.005, ordered = NULL, outcome = NULL,
+facets.heatmap <- function (seg = NULL, filenames = NULL, path = NULL, samples = NULL,
+                            min_purity = 0.3, epsilon = 0.005, ordered = NULL, outcome = NULL,
                             adaptive = FALSE)
 {
   if (is.null(seg) && is.null(filenames))
@@ -38,8 +38,8 @@ facets.heatmap <- function (seg = NULL, filenames = NULL, path = NULL, patients 
   if (!is.null(seg) && !is.null(filenames))
     stop("Please provide either a complete segmentation file or a\n         list of segmentation files to be loaded")
   if (!is.null(filenames)) {
-    dat <- facets.dat(seg = NULL, filenames, path, patients,
-                      min.purity, epsilon, adaptive)
+    dat <- facets_dat(seg = NULL, filenames, path, samples,
+                      min_purity, epsilon, adaptive)
     reducedM <- dat$out.cn
     ploidy <- dat$ploidy
     purity <- dat$purity
@@ -117,13 +117,13 @@ facets.heatmap <- function (seg = NULL, filenames = NULL, path = NULL, patients 
   }
   if (!is.null(seg)) {
     if (!is.null(outcome))
-      names(outcome) <- patients
+      names(outcome) <- samples
     if (!is.null(ordered))
-      names(ordered) <- patients
-    dat <- facets.dat(seg, filenames, path, patients, min.purity,
+      names(ordered) <- samples
+    dat <- facets_dat(seg, filenames, path, samples, min_purity,
                       epsilon, adaptive)
     reducedM <- dat$out.cn
-    patients <- patients[match(rownames(reducedM), patients)]
+    samples <- samples[match(rownames(reducedM), samples)]
     if (!is.null(outcome))
       outcome <- outcome[match(rownames(reducedM), names(outcome))]
     if (!is.null(ordered) && !is.null(outcome))

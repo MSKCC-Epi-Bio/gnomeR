@@ -1,116 +1,212 @@
 #' Checks MAF input to ensure column names are correct and renamed genes are corrected
 #'
-#' @param maf Raw maf dataframe containing alteration data
-#' @param ... Further arguments parsed through binmat() (recode.aliases).
+#' @param mutation Raw maf dataframe containing alteration data
+#' @param ... other arguments passed from binary_matrix() (recode.aliases).
 #' @return a corrected maf file or an error if problems with maf
 #' @export
 #'
 #' @examples
-#' check_maf_input(mut,recode.aliases = TRUE)
+#' check_mutation_input(mutation = gnomeR::mut)
 #'
-check_maf_input <- function(maf, ...)  {
+check_mutation_input <- function(mutation, ...)  {
 
   impact_gene_info <- gnomeR::impact_gene_info
-
   arguments <- list(...)
 
-  # data checks for maf files
-  if(is.na(match("Tumor_Sample_Barcode",colnames(maf))))
-    stop("The MAF file inputted is missing a patient name column. (Tumor_Sample_Barcode)")
 
-  if(is.na(match("Hugo_Symbol",colnames(maf))))
-    stop("The MAF file inputted is missing a gene name column. (Hugo_Symbol)")
+  # Check for Fusions-  Old API used to return fusions --------------
+  fusions_in_maf <- mutation %>%
+    filter(.data$Variant_Classification %in% c("Fusion", "fusion"))
 
-  if(is.na(match("Variant_Classification",colnames(maf))))
-    stop("The MAF file inputted is missing a variant classification column. (Variant_Classification)")
-
-  if(is.na(match("Mutation_Status",colnames(maf)))){
-    warning("The MAF file inputted is missing a mutation status column (Mutation_Status). It will be assumed that
-            all variants are of the same type (SOMATIC/GERMLINE).")
-    maf$Mutation_Status <- rep("SOMATIC",nrow(maf))
+  if(nrow(fusions_in_maf) > 0) {
+    cli::cli_abort("It looks like you have fusions in your mutation data frame. These need to be passed to the `fusions` argument. ")
   }
 
-  if(is.na(match("Variant_Type",colnames(maf)))){
+  # Check required columns & data types ------------------------------------------
+  required_cols <- c("Tumor_Sample_Barcode", "Hugo_Symbol", "Variant_Classification")
+  column_names <- colnames(mutation)
 
-    if(is.na(match("Reference_Allele",colnames(maf))) || is.na(match("Tumor_Seq_Allele2",colnames(maf)))){
-      warning("The MAF file inputted is missing a mutation status column (Variant_Type).
-            The variant type couldn't be inferred from the data (columns Reference_Allele and Tumor_Seq_Allele2 are required)
-              and it will be assumed that all variants are SNPs.")
-      maf$Variant_Type <- rep("SNPs",nrow(maf))
-    }
+  which_missing <- required_cols[which(!(required_cols %in% column_names))]
 
-    else{
-      warning("The MAF file inputted is missing a mutation status column (Variant_Type).
-            The variant type will be inferred (we recommend that the user fixes this).")
-      maf <- maf %>%
-        mutate(
-          Reference_Allele = as.character(.data$Reference_Allele),
-          Tumor_Seq_Allele2 = as.character(.data$Tumor_Seq_Allele2),
-          Variant_Type = case_when(
-            .data$Reference_Allele %in% c("A","T","C","G") &
-              .data$Tumor_Seq_Allele2 %in% c("A","T","C","G") ~ "SNP",
-            nchar(.data$Tumor_Seq_Allele2) < nchar(.data$Reference_Allele) |
-              .data$Tumor_Seq_Allele2 == "-" ~ "DEL",
-            .data$Reference_Allele == "-" |
-              nchar(.data$Tumor_Seq_Allele2) > nchar(.data$Reference_Allele) ~ "INS",
-            nchar(.data$Reference_Allele) == 2 & nchar(.data$Tumor_Seq_Allele2) == 2 ~ "DNP",
-            nchar(.data$Reference_Allele) == 3 & nchar(.data$Tumor_Seq_Allele2) == 3 ~ "TNP",
-            nchar(.data$Reference_Allele) > 3 & nchar(.data$Tumor_Seq_Allele2) == nchar(.data$Reference_Allele) ~ "ONP",
-            TRUE ~ "Undefined"
-          ))
-    }
+  if(length(which_missing) > 0) {
+    cli::cli_abort("The following required columns are missing in your mutations data: {.field {which_missing}}")
   }
 
-  # recode gene names that have been changed between panel versions to make sure they are consistent and counted as the same gene
-  if(!is.character(maf$Hugo_Symbol)) maf$Hugo_Symbol <- as.character(maf$Hugo_Symbol)
-  if(!is.character(maf$Tumor_Sample_Barcode)) maf$Tumor_Sample_Barcode <-
-      as.character(maf$Tumor_Sample_Barcode)
+  # Make sure they are character
+  mutation <- mutation %>%
+    mutate(Tumor_Sample_Barcode = as.character(.data$Tumor_Sample_Barcode),
+           Hugo_Symbol = as.character(.data$Hugo_Symbol))
 
-  if(arguments$recode.aliases == TRUE) {
+  # * Check suggested columns --------
 
-  # get table of gene aliases
-    alias_table <- tidyr::unnest(impact_gene_info, cols = .data$alias) %>%
+  # Mutation_Status ---
+  if(!("Mutation_Status" %in% column_names)) {
+    cli::cli_warn("The following columns are missing in your mutations data: {.field Mutation_Status}. It will be assumed that
+            all variants are {.val SOMATIC}.")
+
+    mutation <- mutation %>%
+      mutate(Mutation_Status = "SOMATIC")
+  }
+
+  # Variant_Type ---
+  if(!("Variant_Type" %in% column_names) ) {
+
+    mutation <- mutation %>%
+      purrr::when(
+        ("Reference_Allele" %in%  column_names) & ("Tumor_Seq_Allele2" %in% column_names) ~
+
+          mutation %>%
+            mutate(
+              Reference_Allele = as.character(.data$Reference_Allele),
+              Tumor_Seq_Allele2 = as.character(.data$Tumor_Seq_Allele2),
+              Variant_Type = case_when(
+                .data$Reference_Allele %in% c("A","T","C","G") &
+                .data$Tumor_Seq_Allele2 %in% c("A","T","C","G") ~ "SNP",
+                nchar(.data$Tumor_Seq_Allele2) < nchar(.data$Reference_Allele) |
+                .data$Tumor_Seq_Allele2 == "-" ~ "DEL",
+                .data$Reference_Allele == "-" |
+                nchar(.data$Tumor_Seq_Allele2) > nchar(.data$Reference_Allele) ~ "INS",
+                nchar(.data$Reference_Allele) == 2 & nchar(.data$Tumor_Seq_Allele2) == 2 ~ "DNP",
+                nchar(.data$Reference_Allele) == 3 & nchar(.data$Tumor_Seq_Allele2) == 3 ~ "TNP",
+                nchar(.data$Reference_Allele) > 3 & nchar(.data$Tumor_Seq_Allele2) == nchar(.data$Reference_Allele) ~ "ONP",
+                TRUE ~ "Undefined")),
+
+        TRUE ~ cli::cli_abort("Column {.field Variant_Type} is missing from your data and {.field Reference_Allele} and {.field Tumor_Seq_Allele2}
+                              columns were not available from which to infer variant type.
+                              To proceed, add a column specifying {.field Variant_Type} (e.g. {.code mutate(<your-mutation-df>, Variant_Type = 'SNP')}")
+      )
+
+
+    cli::cli_warn("Column {.field Variant_Type} is missing from your data. We inferred variant types using {.field Reference_Allele} and {.field Tumor_Seq_Allele2} columns")
+
+  }
+  return(mutation)
+
+
+}
+
+
+#' Check fusion data frame to ensure columns are correct
+#'
+#' @param fusion a fusion data frame
+#' @param ... other arguments passed from binary_matrix()
+#'
+#' @return a checked data frame
+#' @export
+#'
+check_fusion_input <- function(fusion, ...)  {
+
+  impact_gene_info <- gnomeR::impact_gene_info
+  arguments <- list(...)
+
+
+  # Check required columns & data types ------------------------------------------
+  required_cols <- c("Tumor_Sample_Barcode", "Hugo_Symbol")
+  column_names <- colnames(fusion)
+
+  which_missing <- required_cols[which(!(required_cols %in% column_names))]
+
+  if(length(which_missing) > 0) {
+    cli::cli_abort("The following required columns are missing in your mutations data: {.field {which_missing}}")
+  }
+
+  # Make sure they are character
+  fusion <- fusion %>%
+    mutate(Tumor_Sample_Barcode = as.character(.data$Tumor_Sample_Barcode),
+           Hugo_Symbol = as.character(.data$Hugo_Symbol))
+
+  return(fusion)
+}
+
+
+
+#' Check CNA data frame to ensure columns are correct
+#'
+#' @param cna a cna data frame
+#' @param ... other arguments passed from binary_matrix()
+#'
+#' @return a checked data frame
+#' @export
+#'
+check_cna_input <- function(cna, ...)  {
+
+  impact_gene_info <- gnomeR::impact_gene_info
+  arguments <- list(...)
+
+  # Check required columns & data types ------------------------------------------
+  required_cols <- c("Hugo_Symbol")
+  column_names <- colnames(cna)
+
+  which_missing <- required_cols[which(!(required_cols %in% column_names))]
+
+  if(length(which_missing) > 0) {
+    cli::cli_abort("The following required columns are missing in your mutations data: {.field {which_missing}}")
+  }
+
+  # Check format of CNA
+  api_cols <- c("sampleId", "studyId", "patientId", "alteration")
+  in_data <- api_cols[api_cols %in% column_names]
+
+  if(length(in_data) > 0) {
+    cli::cli_abort("The following columns are not allowed in your cna data.frame {.field {in_data}}.
+                   Do you need to reformat? See {.code ?reformat_cna()}")
+  }
+
+  # Make sure Hugo is character
+  cna <- cna %>%
+    mutate(Hugo_Symbol = as.character(.data$Hugo_Symbol))
+
+
+  return(cna)
+}
+
+# Recode Gene Aliases---------------------
+
+#' Recode Hugo Symbol Column
+#'
+#' @param genomic_df a binary_matrix object
+#' @param ... Other things passed
+#'
+#' @return A dataframe with a recoded Hugo Symbol columns
+#' @export
+#'
+#' @examples
+#' recode_alias(gnomeR::mut)
+#'
+recode_alias <- function(genomic_df, ...) {
+
+  # get table of gene aliases (internal data)
+    alias_table <- tidyr::unnest(gnomeR::impact_gene_info, cols = .data$alias) %>%
       dplyr::select(.data$hugo_symbol, .data$alias)
 
     # recode aliases
-    maf$Hugo_Symbol_Old <- maf$Hugo_Symbol
-    maf$Hugo_Symbol <- purrr::map_chr(maf$Hugo_Symbol, ~resolve_alias(.x,
+    genomic_df$Hugo_Symbol_Old <- genomic_df$Hugo_Symbol
+    genomic_df$Hugo_Symbol <- purrr::map_chr(genomic_df$Hugo_Symbol, ~resolve_alias(gene_to_check = .x,
                                                                       alias_table = alias_table))
 
-    message <- maf %>%
+    message <- genomic_df %>%
       dplyr::filter(.data$Hugo_Symbol_Old != .data$Hugo_Symbol) %>%
       dplyr::select(.data$Hugo_Symbol_Old, .data$Hugo_Symbol) %>%
       dplyr::distinct()
 
+
     if(nrow(message) > 0) {
-      warning(paste0("MUTATION DATA: To ensure gene with multiple names/aliases are correctly grouped together, the
-      following genes in your maf dataframe have been recoded. You can supress this with recode.aliases = FALSE \n \n",
-                     purrr::map2(message$Hugo_Symbol_Old,
+      vec_recode <- purrr::map2_chr(message$Hugo_Symbol_Old,
                                  message$Hugo_Symbol,
-                                 ~paste0(.x, " recoded to ", .y, " \n"))))
-    }
+                                 ~paste0(.x, " recoded to ", .y))
+
+      names(vec_recode) <- rep("!", times = length(vec_recode))
+
+      cli::cli_warn(c(
+      "To ensure gene with multiple names/aliases are correctly grouped together, the
+      following genes in your dataframe have been recoded (you can supress this with {.code recode.aliases = FALSE}):",
+      vec_recode))
+
   }
 
-  return(maf)
+  return(genomic_df)
 }
 
-
-#' Check Columns of MAF
-#'
-#' @param maf Raw maf dataframe containing alteration data
-#' @param col_to_check Which column to check
-#'
-#' @return
-#' @export
-#'
-#' @examples
-#' check_maf_column(mut, "Variant_Classification")
-#'
-check_maf_column <- function(maf, col_to_check) {
-  if(!(col_to_check %in% colnames(maf))) {
-    stop(paste("The MAF file inputted is missing the following column:", col_to_check))
-  }
-}
 
 
 
@@ -144,16 +240,196 @@ substrRight <- function(x, n) {
 #' @examples
 #' resolve_alias("KMT2D", alias_table = tidyr::unnest(impact_gene_info, cols = alias))
 #'
-resolve_alias <- function(gene_to_check, alias_table = all_alias_table) {
+resolve_alias <- function(gene_to_check, alias_table) {
 
   if(gene_to_check %in% alias_table$alias) {
 
     alias_table %>%
       filter(.data$alias == gene_to_check) %>%
       pull(.data$hugo_symbol) %>%
-      first()
+      first() %>%
+      as.character()
 
   } else {
-    gene_to_check
+    as.character(gene_to_check)
   }
 }
+
+
+#' Reformat CNA from maf version to wide version
+#'
+#' @param cna a cna dataframe in maf format
+#' @param samples a list of samples to include
+#'
+#' @return a dataframe of reformatted CNA alteration
+#' @export
+#'
+reformat_cna <- function(cna, samples = samples) {
+
+  # recreate original format
+  temp <- as.data.frame(matrix(0L ,ncol = length(samples)+1,
+                               nrow = length(unique(cna$Hugo_Symbol))))
+
+  colnames(temp) <- c("Hugo_Symbol",samples)
+  temp[,1] <- unique(cna$Hugo_Symbol)
+
+  for(i in samples){
+    temp[match(as.character(unlist(cna %>%
+                                     filter(.data$sampleId %in% i) %>%
+                                     select(.data$Hugo_Symbol))),temp[,1]),
+         match(i, colnames(temp))] <- as.numeric(unlist(cna %>%
+                                                          filter(.data$sampleId %in% i) %>%
+                                                          select(.data$alteration)))
+  }
+
+  cna <- temp
+  rownames(cna) <- cna[,1]
+  cna <- cna[,-1]
+  cna <- as.data.frame(t(cna))
+  cna <- cna[rownames(cna) %in% samples,]
+
+
+
+
+  for(i in colnames(temp.cna)[-1]){
+    temp <- cna %>%
+      filter(.data$SAMPLE_ID %in% i) %>%
+      select(.data$SAMPLE_ID, .data$HUGO_SYMBOL, .data$ALTERATION)
+    if(nrow(temp)>0){
+      temp.cna[match(temp$HUGO_SYMBOL, temp.cna[,1]),match(i, colnames(temp.cna))] <- temp$ALTERATION
+    }
+  }
+  temp.cna[temp.cna == "Amplification"] <- 2
+  temp.cna[temp.cna == "Deletion"] <- -2
+
+  cna <- temp.cna
+  temp.cna <- NULL
+
+
+}
+
+
+
+#' IMPACT Panel Annotation of NA's
+#'
+#' @param binary_matrix a processed binary_matrix
+#'
+#' @return  a data frame iwth NAs inserted for genes not tested for given panel versions
+#' @export
+#'
+#'
+specify_impact_panels <- function(binary_matrix) {
+
+  gene_panels <- gnomeR::gene_panels
+
+  # create data frame of sample IDs
+  sample_panel_pair <- rownames(binary_matrix) %>%
+    as.data.frame() %>%
+    stats::setNames("sample_id")
+
+  any_impact <- sum(stringr::str_detect(sample_panel_pair$sample_id,
+                                        "-IM|-IH"))
+
+  # check if there are any impact (based on sample ID)
+  switch(any_impact == 0,
+         cli::cli_abort("There are no IMPACT samples recognized (based on sample_id). If you wish to annotate
+                   missingness based on a panel, please pass a data.frame of sample_ids and corresponding panels."))
+
+
+  # get which IMPACT panel
+  sample_panel_pair <- sample_panel_pair %>%
+    mutate(panel_id = case_when(
+      stringr::str_detect(.data$sample_id, "-IM3") ~ "IMPACT341",
+      stringr::str_detect(.data$sample_id, "-IM5") ~ "IMPACT410",
+      stringr::str_detect(.data$sample_id, "-IM6") ~ "IMPACT468",
+      stringr::str_detect(.data$sample_id, "-IM7") ~ "IMPACT505",
+      TRUE ~ "no"
+    ))
+
+  # couldn't detect panel
+  unk_impact_panel <- sample_panel_pair %>%
+    filter(.data$panel_id == "no")
+
+  if(nrow(unk_impact_panel) > 0) {
+    cli::cli_alert("Couldn't infer IMPACT panel version from these sample_ids, therefore no NA panel annotation will be done for these: {unk_impact_panel$sample_id}")
+  }
+
+  return(sample_panel_pair)
+}
+
+#' Annotate Missing Gene Values According to Specifi Panels
+#'
+#' @param sample_panel_pair a data frame of `sample_id`-`panel_id` pairs specifying panels to use for annotation of each sample
+#' @param binary_matrix a binary matrix of 0/1 indicating alteration yes/no for each sample
+#' @return a binary_matrix annotated for missingness
+#' @export
+
+annotate_any_panel <- function(sample_panel_pair, binary_matrix) {
+
+  # if all "no", leave function
+  switch(all(sample_panel_pair$panel_id == "no"),
+         return(binary_matrix))
+
+  sample_panel_pair_nest <- sample_panel_pair %>%
+    group_by(.data$panel_id) %>%
+    summarise(samples_in_panel = list(.data$sample_id))
+
+  # pull genes for given panels
+  panels_needed <- unique(sample_panel_pair_nest$panel_id)
+
+  # has sample IDs and genes for each panel
+  sample_panel_pair_nest <- sample_panel_pair_nest %>%
+    left_join(gnomeR::gene_panels, by = c("panel_id" = "gene_panel")) %>%
+    select(-.data$entrez_ids_in_panel)
+
+  user_data_genes <- gsub(".fus|.Del|.Amp|.cna", "", colnames(binary_matrix))
+
+  sample_panel_pair_nest <- sample_panel_pair_nest %>%
+    mutate(na_genes_raw = purrr::map(.data$genes_in_panel,
+                                 ~unique(setdiff(user_data_genes, .x)))) %>%
+    mutate(na_genes = purrr::map(.data$na_genes_raw,
+                                     ~c(
+                                       .x,
+                                       paste0(.x, ".fus"),
+                                       paste0(.x, ".Del"),
+                                       paste0(.x, ".Amp"),
+                                       paste0(.x, ".cna")
+                                     )))
+
+
+  annotated_data <- purrr::pmap_df(sample_panel_pair_nest,
+                                   annotate_specific_panel,
+                                   binary_matrix = binary_matrix)
+
+  return(annotated_data)
+}
+
+
+#' Utility function  to insert NA's According to Panel
+#'
+#' @param binary_matrix a processed binary matrix
+#' @param panel_id name of gene panel
+#' @param samples_in_panel samples to be annotated for each panel
+#' @param na_genes genes to make NA
+#' @param ... other args passed
+#'
+#' @return an annotated data frame
+#' @export
+#'
+#'
+annotate_specific_panel <- function(binary_matrix,
+                           panel_id,
+                           samples_in_panel,
+                           na_genes, ...) {
+
+  mut_sub <- binary_matrix[samples_in_panel, ]
+  mut_sub[,stats::na.omit(match(na_genes, colnames(mut_sub)))] <- NA
+
+  return(mut_sub)
+
+}
+
+
+
+
+

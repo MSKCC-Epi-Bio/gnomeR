@@ -1,6 +1,6 @@
 #' dat.oncoPrint
 #' Enables creation of a matrix used to generate an OncoPrint heatmap.
-#' @param gen.dat A binary matrix or dataframe, with patients as rows and features as columns. Note that the names of the
+#' @param gen.dat A binary matrix or dataframe, with samples as rows and features as columns. Note that the names of the
 #' columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see create.bin.matrix for more details on this format).
 #' @param clin.dat An optional clinical file, including only the features the user wishes to add to the plot. Default is NULL.
 #' @return mat : a matrix ready to be plotted using plot.Oncoprint().
@@ -9,8 +9,9 @@
 #' library(gnomeR)
 #' library(dplyr)
 #' library(dtplyr)
-#' patients <- as.character(unique(mut$Tumor_Sample_Barcode))
-#' bin.mut <- binmat(patients = patients,maf = mut,mut.type = "SOMATIC",
+#' samples <- as.character(unique(mut$Tumor_Sample_Barcode))
+#' bin.mut <- binary_matrix(samples = samples, mutation = mut,
+#' mut.type = "SOMATIC",
 #' SNP.only = FALSE,include.silent = FALSE, specify.plat = FALSE)
 #' gen.dat <- bin.mut[1:500,
 #' names(sort(apply(bin.mut,2, sum),decreasing = TRUE))[1:15]]

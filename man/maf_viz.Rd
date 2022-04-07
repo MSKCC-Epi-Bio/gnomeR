@@ -9,7 +9,7 @@ maf_viz(maf, ...)
 \arguments{
 \item{maf}{Raw maf dataframe containing alteration data}
 
-\item{...}{any argument belonging to the binmat method}
+\item{...}{any argument belonging to the binary_matrix method}
 }
 \value{
 Returns a list of the following plots:
@@ -33,8 +33,8 @@ Creates a set of plot summarising a maf file.
 library(gnomeR)
 library(dplyr)
 library(dtplyr)
-patients <- as.character(unique(mut$Tumor_Sample_Barcode))[1:200]
-all.plots <- maf_viz(maf=mut \%>\% filter(Tumor_Sample_Barcode \%in\% patients))
+samples <- as.character(unique(mut$Tumor_Sample_Barcode))[1:200]
+all.plots <- maf_viz(maf=mut \%>\% filter(Tumor_Sample_Barcode \%in\% samples))
 all.plots <- maf_viz(maf=mut \%>\%
-filter(Tumor_Sample_Barcode \%in\% patients),specify.plat = TRUE)
+filter(Tumor_Sample_Barcode \%in\% samples),specify.plat = TRUE)
 }

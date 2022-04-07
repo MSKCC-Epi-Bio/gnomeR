@@ -17,7 +17,7 @@ CNregions.mod(
 )
 }
 \arguments{
-\item{seg}{a segmentation file containing the segmentation information of multiple patients}
+\item{seg}{a segmentation file containing the segmentation information of multiple samples}
 
 \item{epsilon}{the maximum Euclidean distance between adjacent probes tolerated for denying a nonredundant region. epsilon=0 is equivalent to taking the union of all unique break points across the n samples.}
 

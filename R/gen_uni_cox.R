@@ -1,14 +1,14 @@
-#' uni.cox
+#' gen_uni_cox
 #' Performs univariate cox proportional hazard model on every feature
-#' @param X Matrix/surv.datframe of genomic features, continuous or binary (note cannot handle categorical surv.dat for the moment).
-#' @param surv.dat a surv.dat frame containing the survival information. This can be made of 2 or 3 columns. 1 or 2 for time,
+#' @param X Matrix/surv_datframe of genomic features, continuous or binary (note cannot handle categorical surv_dat for the moment).
+#' @param surv_dat a surv_dat frame containing the survival information. This can be made of 2 or 3 columns. 1 or 2 for time,
 #' and one for status (where 1 is event and 0 is no event).
-#' @param surv.formula a survival formula with names matching those in surv.dat eg: Surv(time,status)~.
-#' @param filter a numeric value between 0 and 1 (1 not included) that is the lower bound for the proportion of patients
+#' @param surv_formula a survival formula with names matching those in surv_dat eg: Surv(time,status)~.
+#' @param filter a numeric value between 0 and 1 (1 not included) that is the lower bound for the proportion of samples
 #' having a genetic event (only for binary features). All features with an event rate lower than that value will be removed.
 #' Default is 0 (all features included).
 #' @param genes a character vector of gene names that will be the only ones to be kept. Default is NULL, all genes are used.
-#' @param na.filt A numeric value between 0 and 1 (1 not included) that is the upper bound for the proportion of missing
+#' @param na_filter A numeric value between 0 and 1 (1 not included) that is the upper bound for the proportion of missing
 #' values in the features of the inputted gen.dat matrix. Variables that exceed this proportion of missing values will be removed.
 #' @return tab A table of all the fits performed sorted by adjusted pvalues.
 #' @return p An interactive plot of log(pvalue) by hazard ration.
@@ -17,11 +17,11 @@
 #' @examples library(gnomeR)
 #' library(dplyr)
 #' library(dtplyr)
-#' patients <- as.character(unique(mut$Tumor_Sample_Barcode))[1:200]
-#' gen.dat <- binmat(patients = patients,maf = mut)
-#' surv.dat <- clin.patients %>%
+#' samples <- as.character(unique(mut$Tumor_Sample_Barcode))[1:200]
+#' gen.dat <- binary_matrix(samples = samples, mutation = mut)
+#' surv_dat <- clin.patients %>%
 #' filter(X.Patient.Identifier %in%
-#' abbreviate(patients,strict = TRUE, minlength = 9)) %>%
+#' abbreviate(samples,strict = TRUE, minlength = 9)) %>%
 #'   select(X.Patient.Identifier,Overall.Survival..Months.,
 #'    Overall.Survival.Status) %>%
 #'   rename(DMPID = X.Patient.Identifier,
@@ -30,10 +30,10 @@
 #'   mutate(time = as.numeric(as.character(time)),
 #'          status = ifelse(status == "LIVING",0,1)) %>%
 #'   filter(!is.na(time))
-#' X <- gen.dat[match(surv.dat$DMPID,
+#' X <- gen.dat[match(surv_dat$DMPID,
 #' abbreviate(rownames(gen.dat),strict = TRUE, minlength = 9)),]
-#' uni.cox(X = X, surv.dat = surv.dat,
-#' surv.formula = Surv(time,status)~.,filter = 0.05)
+#' gen_uni_cox(X = X, surv_dat = surv_dat,
+#' surv_formula = Surv(time,status)~.,filter = 0.05)
 #' @import
 #' dplyr
 #' survival
@@ -41,12 +41,12 @@
 #' @importFrom plotly plot_ly layout
 
 
-uni.cox <- function(X,surv.dat,surv.formula,filter = 0,genes = NULL, na.filt = 0){
+gen_uni_cox <- function(X,surv_dat,surv_formula,filter = 0,genes = NULL, na_filter = 0){
 
   # filtering #
   if(!(filter >= 0 && filter < 1))
     stop("Please select a filter value between 0 and 1")
-  if(na.filt < 0 || na.filt >= 1)
+  if(na_filter < 0 || na_filter >= 1)
     stop("The filter for missing proportion should be between 0 and 1 (1 non included) to proceed.")
 
   if(!is.null(genes) && sum(colnames(X) %in% genes) == 0)
@@ -90,9 +90,9 @@ uni.cox <- function(X,surv.dat,surv.formula,filter = 0,genes = NULL, na.filt = 0
   }
 
   # apply filter for missing values #
-  if(na.filt > 0){
+  if(na_filter > 0){
     rm <- apply(X, 2, function(x) {
-      sum(is.na(x))/length(x) > na.filt
+      sum(is.na(x))/length(x) > na_filter
     })
     genes.rm <- names(rm[which(rm)])
     if(length(genes.rm) > 0)
@@ -103,28 +103,28 @@ uni.cox <- function(X,surv.dat,surv.formula,filter = 0,genes = NULL, na.filt = 0
     stop("Only one or fewer genes are left after filtering. We need a minimum of two. Please relax the filter argument.")
 
   # appropriate formula
-  survFormula <- stats::as.formula(surv.formula)
+  survFormula <- stats::as.formula(surv_formula)
   survResponse <- survFormula[[2]]
 
   if(!length(as.list(survResponse)) %in% c(3,4)){
     stop("ERROR : Response must be a 'survival' object with 'Surv(time, status)~.' or 'Surv(time1, time2, status)~.'.")
   }
-  ### reprocess surv.dat
+  ### reprocess surv_dat
   if(length(as.list(survResponse)) == 3){
-    colnames(surv.dat)[match(as.list(survResponse)[2:3],colnames(surv.dat))] <- c("time","status")
+    colnames(surv_dat)[match(as.list(survResponse)[2:3],colnames(surv_dat))] <- c("time","status")
     LT = FALSE
-    timevars <- match(c("time","status"),colnames(surv.dat))
-    surv.dat <- surv.dat[,c(timevars,
-                            c(1:ncol(surv.dat))[-timevars])]
-    datSurv <- with(surv.dat,Surv(time,status))
+    timevars <- match(c("time","status"),colnames(surv_dat))
+    surv_dat <- surv_dat[,c(timevars,
+                            c(1:ncol(surv_dat))[-timevars])]
+    datSurv <- with(surv_dat,Surv(time,status))
   }
   if(length(as.list(survResponse)) == 4){
-    colnames(surv.dat)[match(as.list(survResponse)[2:4],colnames(surv.dat))] <- c("time1","time2","status")
+    colnames(surv_dat)[match(as.list(survResponse)[2:4],colnames(surv_dat))] <- c("time1","time2","status")
     LT = TRUE
-    timevars <- match(c("time1","time2","status"),colnames(surv.dat))
-    surv.dat <- surv.dat[,c(timevars,
-                            c(1:ncol(surv.dat))[-timevars])]
-    datSurv <- with(surv.dat,Surv(time1,time2,status))
+    timevars <- match(c("time1","time2","status"),colnames(surv_dat))
+    surv_dat <- surv_dat[,c(timevars,
+                            c(1:ncol(surv_dat))[-timevars])]
+    datSurv <- with(surv_dat,Surv(time1,time2,status))
   }
 
 
@@ -195,7 +195,7 @@ uni.cox <- function(X,surv.dat,surv.formula,filter = 0,genes = NULL, na.filt = 0
     #   y <- factor(as.numeric(as.character(y)),
     #               levels = c("0","-2","-1.5","2")[which(c(0,-2,-1.5,2) %in% as.numeric(as.character(y)))])
 
-    temp <- as.data.frame(cbind(surv.dat,y))
+    temp <- as.data.frame(cbind(surv_dat,y))
     if(LT == FALSE) fit <- survfit(Surv(time,status)~y,data=temp)
     if(LT == TRUE) fit <- survfit(Surv(time1,time2,status)~y,data=temp)
 

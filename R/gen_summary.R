@@ -4,7 +4,7 @@
 #' is tested using Fisher's exact test and further adjusted for multiple comparisons. Note that continuous genetic factors
 #' are dichotomized at their median.
 #'
-#' @param gen_dat A matrix or data frame, with samples as rows and features as columns.
+#' @param gen_dat A matrix or dataframe, with samples as rows and features as columns.
 #' @param outcome A leveled vector of length equal to the number of rows in gen_dat.
 #' @param filter a numeric value between 0 and 1 (1 not included) that is the lower bound for the proportion of samples
 #' having a genetic event (only for binary features). All features with an event rate lower than that value will be removed.
@@ -36,7 +36,7 @@
 #' tibble
 
 
-gen_summary <- function (gen.dat, outcome, filter = 0, cont = F, rank = T, na_filter = 0){
+gen_summary <- function (gen_dat, outcome, filter = 0, cont = F, rank = T, na_filter = 0){
 
   # perform checks #
   if(filter < 0 || filter >= 1)
@@ -51,11 +51,11 @@ gen_summary <- function (gen.dat, outcome, filter = 0, cont = F, rank = T, na_fi
     outcome <- as.numeric(as.character(outcome))
   }
   # check if there are any columns that are all NAs or have a single possible value #
-  if (length(which(apply(gen.dat, 2, function(x) {
+  if (length(which(apply(gen_dat, 2, function(x) {
     length(unique(x[!is.na(x)])) <= 1
   } || all(is.na(x)) ))) > 0)
     # if found then remove #
-    gen.dat <- gen.dat[, -which(apply(gen.dat, 2, function(x) {
+    gen_dat <- gen_dat[, -which(apply(gen_dat, 2, function(x) {
       length(unique(x[!is.na(x)])) <= 1 || all(is.na(x))
     }))]
 
@@ -64,25 +64,25 @@ gen_summary <- function (gen.dat, outcome, filter = 0, cont = F, rank = T, na_fi
   if (filter > 0) {
 
     # find those to remove #
-    rm <- apply(gen.dat, 2, function(x) {
+    rm <- apply(gen_dat, 2, function(x) {
       any(summary(as.factor(x[!is.na(x)]))/length(x) < filter) # length(x[!is.na(x)])
     })
     genes.rm <- names(rm[which(rm)])
-    gen.dat <- gen.dat %>% select(-one_of(genes.rm))
+    gen_dat <- gen_dat %>% select(-one_of(genes.rm))
   }
 
   # apply filter for missing values #
   if(na_filter > 0){
-    rm <- apply(gen.dat, 2, function(x) {
+    rm <- apply(gen_dat, 2, function(x) {
       sum(is.na(x))/length(x) > na_filter
     })
     genes.rm <- names(rm[which(rm)])
     if(length(genes.rm) > 0)
-      gen.dat <- gen.dat %>% select(-one_of(genes.rm))
+      gen_dat <- gen_dat %>% select(-one_of(genes.rm))
   }
 
   # check that some features are left after filtering #
-  if (is.null(dim(gen.dat)) || dim(gen.dat)[2] == 0)
+  if (is.null(dim(gen_dat)) || dim(gen_dat)[2] == 0)
     stop("Only one or fewer genes are left after filtering. We need a minimum of two. Please relax the filter argument.")
 
 
@@ -93,7 +93,7 @@ gen_summary <- function (gen.dat, outcome, filter = 0, cont = F, rank = T, na_fi
       outcome <- as.factor(outcome)
     # counter <<- 0
 
-    fits <- lapply(gen.dat, function(x){
+    fits <- lapply(gen_dat, function(x){
       # counter <<- counter + 1
       # print(counter)
       # print(x)
@@ -215,7 +215,7 @@ gen_summary <- function (gen.dat, outcome, filter = 0, cont = F, rank = T, na_fi
 
   if (cont) {
 
-    fits <- lapply(gen.dat,function(x){
+    fits <- lapply(gen_dat,function(x){
       fit <- stats::lm(outcome ~ x)
       temp <- as.data.frame(summary(fit)$coefficient)
       colnames(temp) <- c("Estimate", "SD", "tvalue",
