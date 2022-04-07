@@ -1,3 +1,4 @@
+
 #' Creates the OncoPrint corresponding to the inputted genetic data
 #' @param gen_dat A binary matrix or dataframe, with samples as rows and features as columns. Note that the names of the
 #' columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see create.bin.matrix for more details on this format).
