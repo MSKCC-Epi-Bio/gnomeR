@@ -60,6 +60,8 @@ the `gnomeR` package provides a consistent framework for genetic data processing
 -   [**Visualization of the processed data**](https://axelitomartin.github.io/gnomeR/articles/Visualizations.html) provided through MAF file summaries, OncoPrints and heatmaps.
 -   [**Analyzing the processed data**](https://axelitomartin.github.io/gnomeR/articles/Analizing-genomic-data.html) for association with binary, continuous and survival outcome. Including further visualiztion to improve understanding of the results.
 
+KAW
+
 ## Examples
 
 ### Setting up the API
