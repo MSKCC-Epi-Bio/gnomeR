@@ -96,7 +96,7 @@ test_that("test inputting mut/fusion/cna args can leads to a data.frame output",
   #note: there is no error message if a inputting mut data is 0 rows;
   #      it only return a 0 row and 0 column result
   expect_equal( gnomeR::mut %>%
-                  dplyr::filter(Hugo_Symbol=="XXXXXXXXX") %>%
+                  dplyr::filter(.data$Hugo_Symbol=="XXXXXXXXX") %>%
                   binary_matrix(mutation = .) %>%
                   nrow(), 0)
 
@@ -119,10 +119,42 @@ test_that("test", {
 # test snp_only arg----
 # add general tests
 # What happpens  when Variant Type is NA? - Maybe need to add warning to tell user about NAs
-test_that("test", {
+test_that("test the snp_only arg", {
 
-  #example test
-  expect_equal(TRUE, TRUE)
+  #general tests: input T or F (default is F)
+  expect_error( binary_matrix(mutation=gnomeR::mut, snp_only = T), NA)
+
+  expect_warning( binary_matrix(mutation=gnomeR::mut, snp_only = T), NA)
+
+  #0 col return if 0 SNP been inputted or there is no SNP category in Variat Type been inputted
+  mut_snp_zero<- gnomeR::mut %>%
+                 dplyr::filter(.data$Variant_Type!="SNP")
+
+  mut_snp_na<-mut_snp_zero
+  mut_snp_na$Variant_Type<- droplevels(mut_snp_na$Variant_Type)
+
+  expect_equal( binary_matrix(mutation=mut_snp_zero, snp_only = T) %>%
+                ncol(),
+                0)
+
+  expect_equal( binary_matrix(mutation=mut_snp_na, snp_only = T) %>%
+                  ncol(),
+                0)
+
+  #What if NA for Variant Type?
+  # note: without Variant Type, the binary_matrix() still run without error
+  #       snp_only=F will provide full list results and snp_only=T will provide 0 col result
+
+  mut_vt_na<- gnomeR::mut %>%
+              dplyr::mutate(Variant_Type=NA)
+
+  expect_true( binary_matrix(mutation = mut_vt_na, snp_only = F) %>%
+               length() >0 )
+
+  expect_equal( binary_matrix(mutation = mut_vt_na, snp_only = T) %>%
+                 ncol(), 0 )
+
+
 })
 
 
