@@ -44,7 +44,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>facets_dat</h1>
-    <small class="dont-index">Source: <a href="https://github.com/AxelitoMartin/gnomeR/blob/HEAD/R/facets-dat.R" class="external-link"><code>R/facets-dat.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/AxelitoMartin/gnomeR/blob/HEAD/R/facets.R" class="external-link"><code>R/facets.R</code></a></small>
     <div class="hidden name"><code>facets_dat.Rd</code></div>
     </div>
 
@@ -99,7 +99,7 @@ FGAs : a vector of the fragment of genome altered values for the samples in out.
 <span class="r-in"><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">Sample.Identifier</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="va">samples</span>,</span>
 <span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character</a></span><span class="op">(</span><span class="va">Tumor.Purity</span><span class="op">)</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">30</span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span>
 <span class="r-in"> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">Sample.Identifier</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">facet</span> <span class="op">&lt;-</span> <span class="fu">facets_dat</span><span class="op">(</span>seg <span class="op">=</span> <span class="va">seg</span>, samples<span class="op">=</span><span class="va">samples.seg</span><span class="op">[</span><span class="fl">0</span><span class="op">:</span><span class="fl">100</span><span class="op">]</span><span class="op">)</span></span>
+<span class="r-in"><span class="va">facet</span> <span class="op">&lt;-</span> <span class="fu">facets_dat</span><span class="op">(</span>seg <span class="op">=</span> <span class="va">seg</span>, samples <span class="op">=</span> <span class="va">samples.seg</span><span class="op">[</span><span class="fl">0</span><span class="op">:</span><span class="fl">100</span><span class="op">]</span><span class="op">)</span></span>
 </code></pre></div>
     </div>
   </div>

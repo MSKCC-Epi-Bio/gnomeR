@@ -58,7 +58,7 @@
     <loc>/reference/custom_pathway.html</loc>
   </url>
   <url>
-    <loc>/reference/dat.oncoPrint.html</loc>
+    <loc>/reference/dat_oncoprint.html</loc>
   </url>
   <url>
     <loc>/reference/dot-cna_binary_matrix.html</loc>
@@ -70,10 +70,10 @@
     <loc>/reference/dot-mutations_binary_matrix.html</loc>
   </url>
   <url>
-    <loc>/reference/facets.heatmap.html</loc>
+    <loc>/reference/facets_dat.html</loc>
   </url>
   <url>
-    <loc>/reference/facets_dat.html</loc>
+    <loc>/reference/facets_heatmap.html</loc>
   </url>
   <url>
     <loc>/reference/fusion.html</loc>
