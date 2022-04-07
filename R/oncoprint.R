@@ -6,7 +6,7 @@
 #' to be plotted.
 #' @param rank_genes Boolean argument specifying if the genes should be ranked by event frequency. Default is TRUE.
 #' @param background_color Color name to be used to fill the background of the OncoPrint.
-#' @return p : an oncoprint object
+#' @return an oncoprint object
 #' @export
 #' @examples library(gnomeR)
 #' @import
