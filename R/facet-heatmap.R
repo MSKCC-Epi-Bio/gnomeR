@@ -6,7 +6,7 @@
 #' @param filenames the names of the segment files to be loaded and processed (Note must end in ".Rdata").
 #' @param path the relative path to the files folder from your current directory
 #' @param samples the names of the samples of the respective filenames. Default simply 1 to number of files.
-#' @param min.purity the minimum purity of the sample required to be kept in the final dataset. Default is 0.3.
+#' @param min_purity the minimum purity of the sample required to be kept in the final dataset. Default is 0.3.
 #' @param epsilon level of unions when aggregating segments between
 #' @param ordered order in which samples should be printed. Default NUll leads to hierarchical clustering.
 #' @param outcome for seg file only, if outcome associated with study it will be printed along the x axis for each patient
@@ -30,7 +30,7 @@
 
 
 facets.heatmap <- function (seg = NULL, filenames = NULL, path = NULL, samples = NULL,
-                            min.purity = 0.3, epsilon = 0.005, ordered = NULL, outcome = NULL,
+                            min_purity = 0.3, epsilon = 0.005, ordered = NULL, outcome = NULL,
                             adaptive = FALSE)
 {
   if (is.null(seg) && is.null(filenames))
@@ -38,8 +38,8 @@ facets.heatmap <- function (seg = NULL, filenames = NULL, path = NULL, samples =
   if (!is.null(seg) && !is.null(filenames))
     stop("Please provide either a complete segmentation file or a\n         list of segmentation files to be loaded")
   if (!is.null(filenames)) {
-    dat <- facets.dat(seg = NULL, filenames, path, samples,
-                      min.purity, epsilon, adaptive)
+    dat <- facets_dat(seg = NULL, filenames, path, samples,
+                      min_purity, epsilon, adaptive)
     reducedM <- dat$out.cn
     ploidy <- dat$ploidy
     purity <- dat$purity
@@ -120,7 +120,7 @@ facets.heatmap <- function (seg = NULL, filenames = NULL, path = NULL, samples =
       names(outcome) <- samples
     if (!is.null(ordered))
       names(ordered) <- samples
-    dat <- facets.dat(seg, filenames, path, samples, min.purity,
+    dat <- facets_dat(seg, filenames, path, samples, min_purity,
                       epsilon, adaptive)
     reducedM <- dat$out.cn
     samples <- samples[match(rownames(reducedM), samples)]

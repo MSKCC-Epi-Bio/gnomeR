@@ -20,7 +20,7 @@ Heatmap of all events after binary_matrix - using binary distance
 \examples{
 set.seed(123)
 samples <- as.character(unique(mut$Tumor_Sample_Barcode))[1:200]
-gen.dat <- binary_matrix(samples=samples, maf=mut, cna=cna, fusion=fusion, set.plat=TRUE)
-ggheatmap(gen.dat, show_row_names=FALSE, show_column_names=FALSE)
+gen_dat <- binary_matrix(samples=samples, maf=mut, cna=cna, fusion=fusion, set.plat=TRUE)
+ggheatmap(gen_dat, show_row_names=FALSE, show_column_names=FALSE)
 
 }

@@ -1,4 +1,4 @@
-#' facets.dat
+#' facets_dat
 #'
 #' Creates a copy number alteration matrix from segment files.
 #'
@@ -6,7 +6,7 @@
 #' @param filenames the names of the segment files to be loaded and processed (Note must end in ".Rdata").
 #' @param path the relative path to the files folder from your current directory
 #' @param samples the names of the samples of the respective filenames. Default simply 1 to number of files.
-#' @param min.purity the minimum purity of the sample required to be kept in the final dataset. Default is 0.3.
+#' @param min_purity the minimum purity of the sample required to be kept in the final dataset. Default is 0.3.
 #' @param epsilon level of unions when aggregating segments between. Default is 0.005.
 #' @param adaptive CNregions option to create adaptive segments. Default is FALSE.
 #' @return out.cn : a matrix of the union of all segment files with samples as rows and segments as columns
@@ -22,7 +22,7 @@
 #' filter(Sample.Identifier %in% samples,
 #' as.numeric(as.character(Tumor.Purity)) > 30) %>%
 #'  select(Sample.Identifier)))
-#' facet <- facets.dat(seg = seg, samples=samples.seg[0:100])
+#' facet <- facets_dat(seg = seg, samples=samples.seg[0:100])
 #' @import
 #' iClusterPlus
 #' dplyr
@@ -30,8 +30,8 @@
 #' tibble
 
 
-facets.dat <- function (seg = NULL, filenames = NULL, path = NULL, samples = NULL,
-                        min.purity = 0.3, epsilon = 0.005, adaptive = FALSE)
+facets_dat <- function (seg = NULL, filenames = NULL, path = NULL, samples = NULL,
+                        min_purity = 0.3, epsilon = 0.005, adaptive = FALSE)
 {
   if (is.null(seg) && is.null(filenames))
     stop("You must provide either a complete segmentation file\n         or a list of files to be loaded with their corresponding path")
@@ -45,7 +45,7 @@ facets.dat <- function (seg = NULL, filenames = NULL, path = NULL, samples = NUL
         stop("Length of samples differs from length of filenames")
     if (is.null(samples))
       samples <- as.character(abbreviate(filenames, minlength = 17))
-    if (min.purity < 0 || min.purity > 1)
+    if (min_purity < 0 || min_purity > 1)
       stop("Please select a purity between 0 and 1, included.")
     all.dat <- data.frame()
     FGAs <- c()
@@ -64,7 +64,7 @@ facets.dat <- function (seg = NULL, filenames = NULL, path = NULL, samples = NUL
         fit$ploidy <- 0
       }
       if (!is.null(fit) && !is.na(fit$purity) && fit$purity >=
-          min.purity) {
+          min_purity) {
         s <- s + 1
         dipLogR[s] <- fit$dipLogR
         ploidy[s] <- fit$ploidy
@@ -122,7 +122,7 @@ facets.dat <- function (seg = NULL, filenames = NULL, path = NULL, samples = NUL
     seg.filt <- seg %>% filter(.data$ID %in% samples)
     if (length(grep("purity", colnames(seg.filt))) > 0) {
       seg.filt <- seg.filt %>% filter(!is.na(purity), purity >=
-                                        min.purity)
+                                        min_purity)
     }
 
     #replace chrX as 22 and chrY as 23

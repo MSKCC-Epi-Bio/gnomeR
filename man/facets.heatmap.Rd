@@ -9,7 +9,7 @@ facets.heatmap(
   filenames = NULL,
   path = NULL,
   samples = NULL,
-  min.purity = 0.3,
+  min_purity = 0.3,
   epsilon = 0.005,
   ordered = NULL,
   outcome = NULL,
@@ -25,7 +25,7 @@ facets.heatmap(
 
 \item{samples}{the names of the samples of the respective filenames. Default simply 1 to number of files.}
 
-\item{min.purity}{the minimum purity of the sample required to be kept in the final dataset. Default is 0.3.}
+\item{min_purity}{the minimum purity of the sample required to be kept in the final dataset. Default is 0.3.}
 
 \item{epsilon}{level of unions when aggregating segments between}
 

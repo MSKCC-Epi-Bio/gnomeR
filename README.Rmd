@@ -138,7 +138,7 @@ plot_oncoPrint(gen.dat = gen.dat %>% select(starts_with(genes)))
 [FACETs](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5027494/) is an ASCN tool and open-source software with a broad application to whole genome, whole-exome, as well as targeted panel sequencing platforms. It is a fully integrated stand-alone pipeline that includes sequencing BAM file post-processing, joint segmentation of total- and allele-specific read counts, and integer copy number calls corrected for tumor purity, ploidy and clonal heterogeneity, with comprehensive output.
 
 ```{r}
-p.heat <- facets.heatmap(seg = seg, patients = patients, min.purity = 0)
+p.heat <- facets.heatmap(seg = seg, patients = patients, min_purity = 0)
 p.heat$p
 ```
 
@@ -148,27 +148,27 @@ In this section we will quickly overview the possible analysis in gnomeR.
 
 #### Binary and continuous outcomes
 
-The `gen.summary()` function let's the user perform a large scale association between the genomic features present in the `binmat()` function output and an outcome of choice:
+The `gen_summary()` function let's the user perform a large scale association between the genomic features present in the `binmat()` function output and an outcome of choice:
 
 -   binary (unpaired test using Fisher's exact test and paired test using McNemmar's exact test)
 -   continuous (using simple linear regression)
 
 ```{r}
 outcome <- factor(rbinom(n = length(patients),size = 1,prob = 1/2),levels = c("0","1"))
-# out <- gen.summary(gen.dat = gen.dat,outcome = outcome,filter = 0.05)
+# out <- gen_summary(gen.dat = gen.dat,outcome = outcome,filter = 0.05)
 # kable(out$fits[1:10,],row.names = TRUE)
 # out$forest.plot
 ```
 
 #### Survival analysis
 
-Similarly we include simple tools to perform univariate Cox's proportional regression adjusted for false discovery rate in the `uni.cox()` function.
+Similarly we include simple tools to perform univariate Cox's proportional regression adjusted for false discovery rate in the `gen_uni_cox()` function.
 
 ```{r}
 time <- rexp(length(patients))
 status <- outcome
-surv.dat <- as.data.frame(cbind(time,status))
-out <- uni.cox(X = gen.dat, surv.dat = surv.dat, surv.formula = Surv(time,status)~.,filter = 0.05)
+surv_dat <- as.data.frame(cbind(time,status))
+out <- gen_uni_cox(X = gen.dat, surv_dat = surv_dat, surv_formula = Surv(time,status)~.,filter = 0.05)
 kable(out$tab[1:10,],row.names = TRUE)
 out$KM[[1]]
 ```

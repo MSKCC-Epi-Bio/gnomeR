@@ -8,13 +8,13 @@
 #   bin.mut <- binmat(samples = samples,maf = mut, fusion = fusion,
 #                     cna = cna, mut.type = "SOMATIC",
 #                     SNP.only = FALSE,include.silent = FALSE, specify.plat = FALSE)
-#   gen.dat <- bin.mut[,
+#   gen_dat <- bin.mut[,
 #                      c("TP53","CDKN2A","CDKN2A.Del","PIK3CA")]
-#   gen.dat$TP53 <- rbinom(nrow(gen.dat),1,1/2)
-#   gen.dat$CDKN2A.Del <- rbinom(nrow(gen.dat),1,1/2)
-#   out <- plot_oncoPrint(gen.dat)
+#   gen_dat$TP53 <- rbinom(nrow(gen_dat),1,1/2)
+#   gen_dat$CDKN2A.Del <- rbinom(nrow(gen_dat),1,1/2)
+#   out <- plot_oncoPrint(gen_dat)
 #   expect_true(typeof(out) == "S4")
-#   out <- plot_oncoPrint(gen.dat,ordered_samples = 1:nrow(gen.dat))
+#   out <- plot_oncoPrint(gen_dat,ordered_samples = 1:nrow(gen_dat))
 #   expect_true(typeof(out) == "S4")
 #
 # })
@@ -26,12 +26,12 @@
 #   bin.mut <- binmat(samples = samples,maf = mut, fusion = fusion,
 #                     cna = cna, mut.type = "SOMATIC",
 #                     SNP.only = FALSE,include.silent = FALSE, specify.plat = FALSE)
-#   gen.dat <- bin.mut[,
+#   gen_dat <- bin.mut[,
 #                      c("TP53","CDKN2A","CDKN2A.Del","PIK3CA")]
-#   gen.dat$TP53 <- rbinom(nrow(gen.dat),1,1/2)
-#   gen.dat$CDKN2A.Del <- rbinom(nrow(gen.dat),1,1/2)
+#   gen_dat$TP53 <- rbinom(nrow(gen_dat),1,1/2)
+#   gen_dat$CDKN2A.Del <- rbinom(nrow(gen_dat),1,1/2)
 #   clin.patients.dat <-
-#     clin.patients[match(abbreviate(rownames(gen.dat),
+#     clin.patients[match(abbreviate(rownames(gen_dat),
 #                                    strict = TRUE, minlength = 9),
 #                         clin.patients$X.Patient.Identifier),] %>%
 #     dplyr::rename(DMPID = X.Patient.Identifier,
@@ -41,12 +41,12 @@
 #     dplyr::distinct(DMPID,.keep_all = TRUE) %>%
 #     dplyr::mutate(Smoker = ifelse(Smoker == "Unknown",NA, as.character(Smoker)))
 #   clin.patients.dat$ContFeature <- rnorm(n = nrow(clin.patients.dat))
-#   gen.dat <- gen.dat[match(clin.patients.dat$DMPID,
-#                            abbreviate(rownames(gen.dat),strict = TRUE, minlength = 9)),]
+#   gen_dat <- gen_dat[match(clin.patients.dat$DMPID,
+#                            abbreviate(rownames(gen_dat),strict = TRUE, minlength = 9)),]
 #   clin.patients.dat <- clin.patients.dat %>%
 #     tibble::column_to_rownames('DMPID')
-#   rownames(gen.dat) <- rownames(clin.patients.dat)
-#   out <- plot_oncoPrint(gen.dat,clin.patients.dat,ordered_samples = 1:nrow(gen.dat))
+#   rownames(gen_dat) <- rownames(clin.patients.dat)
+#   out <- plot_oncoPrint(gen_dat,clin.patients.dat,ordered_samples = 1:nrow(gen_dat))
 #   expect_true(typeof(out) == "S4")
 #
 # })
@@ -59,12 +59,12 @@
 #   bin.mut <- binmat(samples = samples,maf = mut, fusion = fusion,
 #                     cna = cna, mut.type = "SOMATIC",
 #                     SNP.only = FALSE,include.silent = FALSE, specify.plat = FALSE)
-#   gen.dat <- bin.mut[,
+#   gen_dat <- bin.mut[,
 #                      c("TP53","CDKN2A","CDKN2A.Del","PIK3CA")]
-#   gen.dat$TP53 <- rbinom(nrow(gen.dat),1,1/2)
-#   gen.dat$CDKN2A.Del <- rbinom(nrow(gen.dat),1,1/2)
+#   gen_dat$TP53 <- rbinom(nrow(gen_dat),1,1/2)
+#   gen_dat$CDKN2A.Del <- rbinom(nrow(gen_dat),1,1/2)
 #   clin.patients.dat <-
-#     clin.patients[match(abbreviate(rownames(gen.dat),
+#     clin.patients[match(abbreviate(rownames(gen_dat),
 #                                    strict = TRUE, minlength = 9),
 #                         clin.patients$X.Patient.Identifier),] %>%
 #     dplyr::rename(DMPID = X.Patient.Identifier,
@@ -77,12 +77,12 @@
 #   clin.patients.dat$ContFeature <- rnorm(n = nrow(clin.patients.dat))
 #   clin.patients.dat <- clin.patients.dat %>%
 #     dplyr::select(ContFeature,DMPID)
-#   gen.dat <- gen.dat[match(clin.patients.dat$DMPID,
-#                            abbreviate(rownames(gen.dat),strict = TRUE, minlength = 9)),]
+#   gen_dat <- gen_dat[match(clin.patients.dat$DMPID,
+#                            abbreviate(rownames(gen_dat),strict = TRUE, minlength = 9)),]
 #   clin.patients.dat <- clin.patients.dat %>%
 #     tibble::column_to_rownames('DMPID')
-#   rownames(gen.dat) <- rownames(clin.patients.dat)
-#   out <- plot_oncoPrint(gen.dat,clin.dat = clin.patients.dat)
+#   rownames(gen_dat) <- rownames(clin.patients.dat)
+#   out <- plot_oncoPrint(gen_dat,clin.dat = clin.patients.dat)
 #   expect_true(typeof(out) == "S4")
 #
 # })
@@ -96,8 +96,8 @@
 #                     mut.type = "SOMATIC",
 #                     SNP.only = FALSE,include.silent = FALSE, specify.plat = FALSE)
 #   keep <- c("TP53|PIK3CA|ALK")
-#   gen.dat <- bin.mut[,grep(keep,colnames(bin.mut))]
-#   expect_warning(out <- plot_oncoPrint(gen.dat))
+#   gen_dat <- bin.mut[,grep(keep,colnames(bin.mut))]
+#   expect_warning(out <- plot_oncoPrint(gen_dat))
 #   expect_true(typeof(out) == "S4")
 #
 # })
