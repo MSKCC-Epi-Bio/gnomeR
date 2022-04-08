@@ -218,7 +218,7 @@ test_that("test include_silent arg", {
 
   expect_equal( binary_matrix(mutation = mut_vc_na, include_silent = F) %>% ncol(), 0 )
 
-  expect_true( binary_matrix(mutation = mut_vt_na, include_silent = T) %>% ncol() > 0 )
+  expect_true( binary_matrix(mutation = mut_vc_na, include_silent = T) %>% ncol() > 0 )
 
 })
 
