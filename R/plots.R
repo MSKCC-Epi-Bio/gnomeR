@@ -26,30 +26,15 @@
 
 maf_viz <- function(maf, ...) {
 
-  if("api" %in% class(maf)){
-    maf <- as_tibble(maf) %>%
-      filter(.data$Variant_Classification != "Fusion")
-    all_plots <- list(
-      varclass = ggvarclass,
-      vartype = ggvartype,
-      samplevar = ggsamplevar,
-      topgenes = ggtopgenes
-#      genecor = gggenecor,
-#      genecomut = ggcomut
-) %>%
-      purrr::invoke_map(, maf)
-  }
 
-  else
     all_plots <- list(
       varclass = ggvarclass,
       vartype = ggvartype,
       snvclass = ggsnvclass,
       samplevar = ggsamplevar,
-      topgenes = ggtopgenes
-#      genecor = gggenecor,
-#      genecomut = ggcomut
-) %>%
+      topgenes = ggtopgenes,
+      genecor = gggenecor,
+      genecomut = ggcomut) %>%
       purrr::invoke_map(, maf)
 
   return(all_plots)
