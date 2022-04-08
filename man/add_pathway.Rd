@@ -19,7 +19,10 @@ add_pathway(
 a data frame: each sample is a row, columns are pathways, with values of 0/1 depending on pathway alteration status.
 }
 \description{
-Checks if certain oncogenic signaling pathways are altered.  Pathways were curated from \verb{https://pubmed.ncbi.nlm.nih.gov/29625050/}.  Please check for gene aliases before using.
+Checks if certain oncogenic signaling pathways are altered.  Pathways were curated from \href{https://pubmed.ncbi.nlm.nih.gov/29625050/}{this paper}.  Please check for gene aliases before using.
+}
+\details{
+Sanchez-Vega, F., Mina, M., Armenia, J., Chatila, W. K., Luna, A., La, K. C., Dimitriadoy, S., Liu, D. L., Kantheti, H. S., Saghafinia, S., Chakravarty, D., Daian, F., Gao, Q., Bailey, M. H., Liang, W. W., Foltz, S. M., Shmulevich, I., Ding, L., Heins, Z., Ochoa, A., … Schultz, N. (2018). Oncogenic Signaling Pathways in The Cancer Genome Atlas. Cell, 173(2), 321–337.e10. \url{https://doi.org/10.1016/j.cell.2018.03.035}
 }
 \examples{
 

@@ -1,6 +1,8 @@
 #' Pathway Alterations
 #'
-#' Checks if certain oncogenic signaling pathways are altered.  Pathways were curated from `https://pubmed.ncbi.nlm.nih.gov/29625050/`.  Please check for gene aliases before using.
+#' Checks if certain oncogenic signaling pathways are altered.  Pathways were curated from [this paper](https://pubmed.ncbi.nlm.nih.gov/29625050/).  Please check for gene aliases before using.
+#'
+#' Sanchez-Vega, F., Mina, M., Armenia, J., Chatila, W. K., Luna, A., La, K. C., Dimitriadoy, S., Liu, D. L., Kantheti, H. S., Saghafinia, S., Chakravarty, D., Daian, F., Gao, Q., Bailey, M. H., Liang, W. W., Foltz, S. M., Shmulevich, I., Ding, L., Heins, Z., Ochoa, A., … Schultz, N. (2018). Oncogenic Signaling Pathways in The Cancer Genome Atlas. Cell, 173(2), 321–337.e10. <https://doi.org/10.1016/j.cell.2018.03.035>
 #'
 #' @param bin_mat a binary matrix
 #' @param pathway The pathways to check.  The options are "RTK/RAS", "Nrf2", "PI3K", "TGFB", "p53", "Wnt", "Myc", "Cell cycle", "Hippo", "Notch", "all".
