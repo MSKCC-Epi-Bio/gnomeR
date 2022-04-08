@@ -7,8 +7,8 @@
 #' a vector of samples that contain samples not in any of the passed genomic data frames, 0's (or NAs when appropriate if specifying a panel) will be
 #' returned for every column of that patient row.
 #' @param mutation A data frame of mutations in the format of a maf file.
-#' @param mut_type The mutation type to be used. Options are "SOMATIC", "GERMLINE" or "ALL". Note "ALL" will
-#' keep all mutations regardless of status (not recommended). Default is SOMATIC.
+#' @param mut_type The mutation type to be used. Options are "NO_GERMLINE", "SOMATIC", "GERMLINE" or "ALL". Note "ALL" will
+#' keep all mutations regardless of status (not recommended). Default is NO_GERMLINE which includes all SOMATIC mutations, as well as any unknown mutation types (most of which are usually SOMATIC)
 #' @param snp_only Boolean to rather the genetics events to be kept only to be SNPs (insertions and deletions will be removed).
 #' Default is FALSE.
 #' @param include_silent Boolean to keep or remove all silent mutations. TRUE keeps, FALSE removes. Default is FALSE.
@@ -39,10 +39,10 @@
 #' samples <- as.character(unique(mut$Tumor_Sample_Barcode))[1:200]
 #'
 #' bin.mut <- binary_matrix(samples = samples, mutation = mut,
-#' mut_type = "SOMATIC" ,snp_only = FALSE,
+#' mut_type = "NO_GERMLINE" ,snp_only = FALSE,
 #' include_silent = FALSE)
 #' bin.mut <- binary_matrix(samples = samples, mutation = mut,
-#' mut_type = "SOMATIC", snp_only = FALSE,
+#' mut_type = "NO_GERMLINE", snp_only = FALSE,
 #' include_silent = FALSE,
 #' cna_relax = TRUE, specify_panel = "no", rm_empty = FALSE)
 #' @import dplyr
@@ -53,7 +53,7 @@
 binary_matrix <- function(samples=NULL,
 
                           mutation = NULL,
-                          mut_type = "SOMATIC",
+                          mut_type = "NO_GERMLINE",
                           snp_only = FALSE,
                           include_silent = FALSE,
 
@@ -289,8 +289,16 @@ binary_matrix <- function(samples=NULL,
 
     purrr::when(
       tolower(mut_type) == "all" ~ .,
+      tolower(mut_type) == "no_germline" ~ filter(., .data$Mutation_Status %in% c("SOMATIC", "", NA)),
       TRUE ~ filter(., .data$Mutation_Status %in% mut_type),
       ~ .)
+
+  blank_muts<- sum(is.na(mutation$Mutation_Status))
+  blank_muts = blank_muts + length(which(mutation$Mutation_Status == ""))
+  if((blank_muts>0 & mut_type=="NO_GERMLINE")){
+    cli::cli_warn("{(blank_muts)} mutations marked as blank were retained in the resulting binary matrix.")
+  }
+
 
 
   # create empty data.frame to hold results -----
@@ -481,3 +489,4 @@ binary_matrix <- function(samples=NULL,
 }
 
 #binary_matrix(mutation = gnomeR::mut, specify_panel = "no")
+

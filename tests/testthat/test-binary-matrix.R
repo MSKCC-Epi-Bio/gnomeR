@@ -79,6 +79,33 @@ test_that("test", {
   expect_equal(TRUE, TRUE)
 })
 
+test_that("test", {
+  mut2 = gnomeR::mut
+  mut2$Mutation_Status[1:10]<-NA
+  mut2$Mutation_Status[11:15]<-""
+  #example test
+  expect_warning(binary_matrix(mutation = mut2, specify_panel = "no"))
+})
+
+
+test_that("test", {
+  mut2 = gnomeR::mut
+  mut2$Mutation_Status[1:10]<-NA
+  mut2$Mutation_Status[11:15]<-""
+  #example test
+  see = binary_matrix(mutation = mut2, specify_panel = "no")
+  expect_equal(see$TP53[which(rownames(see)=="P-0000062-T01-IM3")],1)
+})
+
+test_that("test", {
+  mut2 = gnomeR::mut
+  mut2$Mutation_Status[1:10]<-NA
+  mut2$Mutation_Status[11:15]<-""
+  #example test
+  see = binary_matrix(mutation = mut2, mut_type = "SOMATIC", specify_panel = "no")
+  expect_equal(see$TP53[which(rownames(see)=="P-0000062-T01-IM3")],0)
+})
+
 
 # test snp_only arg----
 # add general tests
