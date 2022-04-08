@@ -1,0 +1,91 @@
+---
+title: "Import data from Cbioportal and process using gnomeR"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{vignette_imp_proc_data}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup, include= FALSE}
+library(gnomeR)
+```
+
+For details on how to connect and access cbioportalR, use the link below
+https://github.com/karissawhiting/cbioportalR
+
+You can install {cbioportalR} as shown below. 
+For every new R session, you need to set your database URL. The set_cbioportal_db() function will set an environmental variable for your session that tells the package which database to point to for all API calls. You can set it to point to the public database with db = 'www.cbioportal.org' or db = 'public'
+```c
+remotes::install_github("karissawhiting/cbioportalR")
+library(cbioportalR)
+
+set_cbioportal_db(db = "public")
+```
+
+You are now set up for the remainder of your session! API calls depend on your internet connection and possibly a VPN connection so you can use the following to check your connection at any time throughout your session:
+
+```c
+test_cbioportal_db()
+```
+This vignette will walk you through how to import data for a particular study from Cbioportal and process it using gnomeR functions.
+
+Once connected to Cbioportal, you can get the list of studies (limited to 10 here) by using - 
+```c
+available_studies() %>% head(n = 10)
+```
+In order to get information on a particular study (eg - acbc_mskcc_2015), use the code - 
+
+```c
+get_study_info("acbc_mskcc_2015") %>% t()
+```
+In order to get from a specific study, use the code - 
+
+```c
+df <- get_genetics_by_study(study_id = "acbc_mskcc_2015")
+```
+It creates a list of all the available dataframes for the study. For instance here, the study has 3 - one for each of mutation, fusion and cna. 
+
+Depending on the study, the number of variables in a particular dataframe might be different. Here, the mutations data has 30 variables.
+
+### There are some differences to note between the API data and the Cbioportal formats
+For instance, Mutation data - API data contains 45 variables and CBioportal studies have fewer (~30) variables.
+
+Create one dataset each for the 3 types using code below-
+```c
+study_mutation<-  as.data.frame(df$mutation)
+
+study_fusion<- as.data.frame(df$fusion)
+
+study_cna<- as.data.frame(df$cna)
+```
+
+### Mutation Data
+In the Cbioportal data, 
+
+    * Tumor_Sample_Barcode is called sampleId 
+    * The Hugo_symbol is embedded within the keyword variable 
+    * Variant_Classification is called mutationType
+    * HGVSp_Short is called proteinChange
+    * Chromosome is called 'chr'
+
+Some of the other variables are named differently as well in the two but those are more intuitive to map.  
+
+In order to process the data with gnomeR functions, you would need to update the variable names first
+```c
+study_mutation<- plyr::rename(study_mutation, c("sampleId" = "Tumor_Sample_Barcode", "chr" = "Chromosome", "variantType" = "Variant_Type", "mutationStatus" = "Mutation_Status", "entrezGeneId" = "Entrez_Gene_Id", "ncbiBuild" = "NCBI_Build", "mutationType" = "Variant_Classification", "proteinChange" = "HGVSp_Short"))
+```
+You can add more variables as needed to the above
+
+### CNA Data
+
+We will need to reformat the CNA data. The function reformat_cna (needs to be tested) can be used. It requires Hugo_Symbol variable (confirm with Karissa) so you would need to merge it first (or can we add it to the function)
+
+### Fusion Data
