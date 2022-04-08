@@ -15,6 +15,9 @@ test_that("function can be piped from binary_matrix()", {
 
 
 test_that("warning is printed when all is included with other pathways", {
+  binmat <- gnomeR::binary_matrix(mutation = gnomeR::mut,
+                                  cna = gnomeR::cna,
+                                  fusion = gnomeR::fusion)
   expect_warning(add_pathway(bin_mat = binmat, pathway = c("RTK/RAS", "Notch", "all")))
 })
 
