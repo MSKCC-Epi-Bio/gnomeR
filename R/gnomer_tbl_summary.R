@@ -53,12 +53,37 @@ genomic_tbl_summary <- function(data, cutoff = 0, gene_subset = NULL, by = NULL,
   if(!is.null(gene_subset)){
     cli::cli_alert("Note if you specify `gene_subset` the `cutoff` parameter will be ignored.")
     genes <- gene_subset
+
+    genes_df <- df %>%
+             select(.data$sample_id, contains(genes)) %>%
+             ungroup() %>%
+             tidyr::pivot_longer(-.data$sample_id) %>%
+             mutate(name = str_remove_all(.data$name, ".Amp|.fus|.Del")) %>%
+             group_by(.data$sample_id,.data$name) %>%
+             summarise(
+              value = max(.data$value, na.rm = TRUE)) %>%
+             ungroup() %>%
+              tidyr::pivot_wider(id_cols = .data$sample_id, names_from = .data$name,
+                                 values_from = .data$value)
+    if(is.null(by)){
+      df <- genes_df %>%
+            select(-.data$sample_id)
+    }else{
+      df <- left_join(genes_df, select(df, .data$sample_id, all_of(by) ),
+                      by = "sample_id") %>%
+              select(-.data$sample_id)
+    }
+
   }else{
     genes <- df  %>%
       select(-all_of(by)) %>%
       ungroup() %>%
       tidyr::pivot_longer(-.data$sample_id) %>%
+      mutate(name = str_remove_all(.data$name, ".Amp|.fus|.Del")) %>%
       distinct() %>%
+      group_by(.data$name, .data$sample_id) %>%
+      summarise(value = max(.data$value, na.rm = TRUE)) %>%
+      ungroup() %>%
       group_by(.data$name) %>%
       summarise(
         sum = sum(.data$value, na.rm = TRUE),
@@ -68,22 +93,48 @@ genomic_tbl_summary <- function(data, cutoff = 0, gene_subset = NULL, by = NULL,
       mutate(perc = .data$sum / .data$count) %>%
       filter(.data$perc >= cutoff) %>%
       pull(.data$name)
+
+    if(is.null(by)){
+      df <- df %>%
+        select(contains(genes), .data$sample_id) %>%
+        tidyr::pivot_longer(-.data$sample_id) %>%
+        mutate(name = str_remove_all(.data$name, ".Amp|.fus|.Del")) %>%
+        distinct() %>%
+        group_by(.data$name, .data$sample_id) %>%
+        summarise(value = max(.data$value, na.rm = TRUE)) %>%
+        ungroup() %>%
+        tidyr::pivot_wider(id_cols = .data$sample_id, names_from = .data$name,
+                           values_from = .data$value) %>%
+        select(-.data$sample_id)
+
+    }else{
+      df <- df %>%
+            select(contains(genes), all_of(by), .data$sample_id) %>%
+        tidyr::pivot_longer(c(-.data$sample_id, all_of(by))) %>%
+        mutate(name = str_remove_all(.data$name, ".Amp|.fus|.Del")) %>%
+        distinct() %>%
+        group_by(.data$name, .data$sample_id) %>%
+        summarise(value = max(.data$value, na.rm = TRUE)) %>%
+        ungroup() %>%
+        tidyr::pivot_wider(id_cols = c(.data$sample_id, all_of(by)),
+                           names_from = .data$name,
+                           values_from = .data$value) %>%
+        select(-.data$sample_id)
+    }
+
   }
 
   # filter only those > cutoff %
-  df <- df %>%
-    select(.data$sample_id, all_of(by),
-           one_of(genes))
 
 
   if(is.null(by)){
     df %>%
-      select(-.data$sample_id) %>%
+      #select(-.data$sample_id) %>%
       gtsummary::tbl_summary() %>%
       gtsummary::bold_labels()
   }else{
     df %>%
-      select(-.data$sample_id) %>%
+      #select(-.data$sample_id) %>%
       gtsummary::tbl_summary(by = by) %>%
       gtsummary::add_p() %>%
       gtsummary::add_overall() %>%
