@@ -61,7 +61,7 @@ a predefined list of samples (rows are samples and columns are genes)</p>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">binary_matrix</span><span class="op">(</span>
   samples <span class="op">=</span> <span class="cn">NULL</span>,
   mutation <span class="op">=</span> <span class="cn">NULL</span>,
-  mut_type <span class="op">=</span> <span class="st">"SOMATIC"</span>,
+  mut_type <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"omit_germline"</span>, <span class="st">"somatic_only"</span>, <span class="st">"germline_only"</span>, <span class="st">"all"</span><span class="op">)</span>,
   snp_only <span class="op">=</span> <span class="cn">FALSE</span>,
   include_silent <span class="op">=</span> <span class="cn">FALSE</span>,
   fusion <span class="op">=</span> <span class="cn">NULL</span>,
@@ -85,8 +85,8 @@ returned for every column of that patient row.</p></dd>
 <dt>mutation</dt>
 <dd><p>A data frame of mutations in the format of a maf file.</p></dd>
 <dt>mut_type</dt>
-<dd><p>The mutation type to be used. Options are "SOMATIC", "GERMLINE" or "ALL". Note "ALL" will
-keep all mutations regardless of status (not recommended). Default is SOMATIC.</p></dd>
+<dd><p>The mutation type to be used. Options are "omit_germline", "somatic_only", "germline_only" or "all". Note "all" will
+keep all mutations regardless of status (not recommended). Default is omit_germline which includes all somatic mutations, as well as any unknown mutation types (most of which are usually somatic)</p></dd>
 <dt>snp_only</dt>
 <dd><p>Boolean to rather the genetics events to be kept only to be SNPs (insertions and deletions will be removed).
 Default is FALSE.</p></dd>
@@ -133,10 +133,10 @@ the function will check for genes that may have more than 1 name in your data us
 <span class="r-in"><span class="va">samples</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">mut</span><span class="op">$</span><span class="va">Tumor_Sample_Barcode</span><span class="op">)</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">200</span><span class="op">]</span></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="va">bin.mut</span> <span class="op">&lt;-</span> <span class="fu">binary_matrix</span><span class="op">(</span>samples <span class="op">=</span> <span class="va">samples</span>, mutation <span class="op">=</span> <span class="va">mut</span>,</span>
-<span class="r-in">mut_type <span class="op">=</span> <span class="st">"SOMATIC"</span> ,snp_only <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span class="r-in">mut_type <span class="op">=</span> <span class="st">"omit_germline"</span> ,snp_only <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span class="r-in">include_silent <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span class="r-in"><span class="va">bin.mut</span> <span class="op">&lt;-</span> <span class="fu">binary_matrix</span><span class="op">(</span>samples <span class="op">=</span> <span class="va">samples</span>, mutation <span class="op">=</span> <span class="va">mut</span>,</span>
-<span class="r-in">mut_type <span class="op">=</span> <span class="st">"SOMATIC"</span>, snp_only <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span class="r-in">mut_type <span class="op">=</span> <span class="st">"omit_germline"</span>, snp_only <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span class="r-in">include_silent <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span class="r-in">cna_relax <span class="op">=</span> <span class="cn">TRUE</span>, specify_panel <span class="op">=</span> <span class="st">"no"</span>, rm_empty <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 </code></pre></div>
