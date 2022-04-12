@@ -26,7 +26,7 @@ to be plotted.}
 \item{background_color}{Color name to be used to fill the background of the OncoPrint.}
 }
 \value{
-p : an oncoprint object
+an oncoprint object
 }
 \description{
 Creates the OncoPrint corresponding to the inputted genetic data

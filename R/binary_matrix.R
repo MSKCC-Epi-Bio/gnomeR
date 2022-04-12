@@ -371,7 +371,9 @@ binary_matrix <- function(samples=NULL,
   }
 
   # add .fus suffix on columns
-  colnames(fusions_out) <- paste0(colnames(fusions_out),".fus")
+  if(ncol(fusions_out) > 0) {
+    colnames(fusions_out) <- paste0(colnames(fusions_out),".fus")
+  }
   return(fusions_out)
 }
 
@@ -494,9 +496,11 @@ binary_matrix <- function(samples=NULL,
 
 
     # add cna annotation
-    colnames(cna) <- paste0(colnames(cna),".cna")
-    rownames(cna) <- samples
+    if(ncol(cna) > 0) {
+      colnames(cna) <- paste0(colnames(cna),".cna")
+    }
 
+    rownames(cna) <- samples
     cna[is.na(cna)] <- "NEUTRAL"
   }
 

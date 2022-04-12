@@ -1,3 +1,4 @@
+
 #' Creates the OncoPrint corresponding to the inputted genetic data
 #' @param gen_dat A binary matrix or dataframe, with samples as rows and features as columns. Note that the names of the
 #' columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see create.bin.matrix for more details on this format).
@@ -6,7 +7,7 @@
 #' to be plotted.
 #' @param rank_genes Boolean argument specifying if the genes should be ranked by event frequency. Default is TRUE.
 #' @param background_color Color name to be used to fill the background of the OncoPrint.
-#' @return p : an oncoprint object
+#' @return an oncoprint object
 #' @export
 #' @examples library(gnomeR)
 #' @import
