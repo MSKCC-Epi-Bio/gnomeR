@@ -148,13 +148,59 @@ test_that("test inputting mut/fusion/cna args can leads to a data.frame output",
 })
 
 # test mut_type argument ----
-# NOTE - SEE EDIT NEEDED IN ISSUE 150 before testing: https://github.com/MSKCC-Epi-Bio/gnomeR/issues/150
-test_that("test", {
 
-  #example test
-  expect_equal(TRUE, TRUE)
+test_that("test incorrectly specified arg", {
+
+  expect_error(binary_matrix(mutation = mut2,mut_type = "somatic_only",
+                             specify_panel = "no"))
 })
 
+
+test_that("test inclusion of NAs in mut_type ", {
+  mut2 = gnomeR::mut
+  mut2$Mutation_Status[1:10]<-NA
+  mut2$Mutation_Status[11:15]<-""
+
+  #example test
+  expect_warning(binary_matrix(mutation = mut2, specify_panel = "no"), "15 mutations*")
+})
+
+
+
+test_that("test inclusion of NAs in mut_type ", {
+
+  mut2 = gnomeR::mut
+  mut2$Mutation_Status[1:10]<-NA
+  mut2$Mutation_Status[11:15]<-""
+
+  # NA included by default (germline_omitted)
+  expect_warning(see <- binary_matrix(mutation = mut2, specify_panel = "no"))
+  check <-see$TP53[which(rownames(see)=="P-0000062-T01-IM3")]
+  expect_equal(check, 1)
+
+})
+
+test_that("test inclusion of NAs in mut_type ", {
+  mut2 = gnomeR::mut
+  mut2$Mutation_Status[1:10]<-NA
+  mut2$Mutation_Status[11:15]<-""
+
+
+  # NA included with all
+  see = binary_matrix(mutation = mut2, specify_panel = "no", mut_type = "all")
+  expect_equal(see$TP53[which(rownames(see)=="P-0000062-T01-IM3")],1)
+
+
+  # NA no longer included with somatic_only
+  see = binary_matrix(mutation = mut2, mut_type = "somatic_only", specify_panel = "no")
+  expect_equal(see$TP53[which(rownames(see)=="P-0000062-T01-IM3")],0)
+
+  # NA no longer included with germline_only
+  see = binary_matrix(mutation = mut2, mut_type = "germline_only", specify_panel = "no")
+  expect_equal(ncol(see), 0)
+
+
+})
 
 # test snp_only arg----
 # add general tests

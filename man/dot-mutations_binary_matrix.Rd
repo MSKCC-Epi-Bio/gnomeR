@@ -22,8 +22,8 @@ Default is NULL is which case all samples with an alteration in the mutation, cn
 a vector of samples that contain samples not in any of the passed genomic data frames, 0's (or NAs when appropriate if specifying a panel) will be
 returned for every column of that patient row.}
 
-\item{mut_type}{The mutation type to be used. Options are "SOMATIC", "GERMLINE" or "ALL". Note "ALL" will
-keep all mutations regardless of status (not recommended). Default is SOMATIC.}
+\item{mut_type}{The mutation type to be used. Options are "omit_germline", "somatic_only", "germline_only" or "all". Note "all" will
+keep all mutations regardless of status (not recommended). Default is omit_germline which includes all somatic mutations, as well as any unknown mutation types (most of which are usually somatic)}
 
 \item{snp_only}{Boolean to rather the genetics events to be kept only to be SNPs (insertions and deletions will be removed).
 Default is FALSE.}

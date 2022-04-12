@@ -6,7 +6,7 @@
 #   set.seed(123)
 #   samples <- as.character(unique(mut$Tumor_Sample_Barcode))[1:200]
 #   bin.mut <- binmat(samples = samples,maf = mut, fusion = fusion,
-#                     cna = cna, mut_type = "SOMATIC",
+#                     cna = cna, mut_type = "somatic_only",
 #                     snp_only = FALSE,include_silent = FALSE, specify_panel = FALSE)
 #   gen_dat <- bin.mut[,
 #                      c("TP53","CDKN2A","CDKN2A.Del","PIK3CA")]
@@ -24,7 +24,7 @@
 #   set.seed(123)
 #   samples <- as.character(unique(mut$Tumor_Sample_Barcode))[1:200]
 #   bin.mut <- binmat(samples = samples,maf = mut, fusion = fusion,
-#                     cna = cna, mut_type = "SOMATIC",
+#                     cna = cna, mut_type = "somatic_only",
 #                     snp_only = FALSE,include_silent = FALSE, specify_panel = FALSE)
 #   gen_dat <- bin.mut[,
 #                      c("TP53","CDKN2A","CDKN2A.Del","PIK3CA")]
@@ -57,7 +57,7 @@
 #   set.seed(123)
 #   samples <- as.character(unique(mut$Tumor_Sample_Barcode))[1:200]
 #   bin.mut <- binmat(samples = samples,maf = mut, fusion = fusion,
-#                     cna = cna, mut_type = "SOMATIC",
+#                     cna = cna, mut_type = "somatic_only",
 #                     snp_only = FALSE,include_silent = FALSE, specify_panel = FALSE)
 #   gen_dat <- bin.mut[,
 #                      c("TP53","CDKN2A","CDKN2A.Del","PIK3CA")]
@@ -93,7 +93,7 @@
 #   set.seed(123)
 #   samples <- as.character(unique(mut$Tumor_Sample_Barcode))[1:200]
 #   bin.mut <- binmat(samples = samples,maf = mut,cna = cna, cna.binary = FALSE,
-#                     mut_type = "SOMATIC",
+#                     mut_type = "somatic_only",
 #                     snp_only = FALSE,include_silent = FALSE, specify_panel = FALSE)
 #   keep <- c("TP53|PIK3CA|ALK")
 #   gen_dat <- bin.mut[,grep(keep,colnames(bin.mut))]
