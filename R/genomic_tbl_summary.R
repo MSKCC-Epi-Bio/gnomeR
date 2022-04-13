@@ -5,7 +5,7 @@
 #' parameters that are accepted by `gtsummary::tbl_summary()`. Note the `by` variable must be merged on to
 #' onto the data before using the `by` parameter in the function.
 #'
-#' @param data data.frame of genetic samples
+#' @param binary_matrix data.frame of genetic samples
 #' @param freq_cutoff A number 0 to 1 representing the minimum percent frequency you are using to select gene's for analysis.
 #' Frequencies can be calculated at gene level, or alteration level (see `freq_cutoff_by_gene`).
 #' @param freq_cutoff_by_gene Logical indicating whether gene selection based on frequency % should
@@ -68,7 +68,7 @@ genomic_tbl_summary <- function(binary_matrix,
       !is.character(gene_subset) ~
         cli::cli_abort("Please supply a character vector for {.code gene_subset}"),
 
-      length(.[(. %in% colnames(data))]) == 0 ~
+      length(.[(. %in% colnames(binary_matrix))]) == 0 ~
         cli::cli_abort("No genes specified in {.code gene_subset} are in your binary_matrix"),
 
       str_detect(., ".Amp|.Del|.fus|.cna") ~
@@ -119,7 +119,7 @@ genomic_tbl_summary <- function(binary_matrix,
         ) %>%
         mutate(perc = .data$sum / .data$count) %>%
         filter(.data$perc >= freq_cutoff) %>%
-        arrange(desc(perc)) %>%
+        arrange(desc(.data$perc)) %>%
         pull(.data$name)
     }
 
@@ -128,13 +128,14 @@ genomic_tbl_summary <- function(binary_matrix,
   }
 
   # if freq cutoff by gene
-  gene_subset <- switch(freq_cutoff_by_gene,
-                                    c(gene_subset,
-                                      paste0(gene_subset, ".Amp"),
-                                      paste0(gene_subset, ".Del"),
-                                      paste0(gene_subset, ".fus"),
-                                      paste0(gene_subset, ".cna")),
-                                    gene_subset)
+  gene_subset <- gene_subset %>%
+    purrr::when(
+    freq_cutoff_by_gene ~ c(.,
+                            paste0(., ".Amp"),
+                            paste0(., ".Del"),
+                            paste0(., ".fus"),
+                            paste0(., ".cna")),
+    TRUE ~ .)
 
 
   # Select Genes and Make Table-----------------------------------------------

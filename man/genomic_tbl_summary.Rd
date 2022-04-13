@@ -14,7 +14,10 @@ genomic_tbl_summary(
 )
 }
 \arguments{
-\item{freq_cutoff}{A number 0 to 1 representing the minimum percent frequency you are using to select gene's for analysis}
+\item{binary_matrix}{data.frame of genetic samples}
+
+\item{freq_cutoff}{A number 0 to 1 representing the minimum percent frequency you are using to select gene's for analysis.
+Frequencies can be calculated at gene level, or alteration level (see \code{freq_cutoff_by_gene}).}
 
 \item{freq_cutoff_by_gene}{Logical indicating whether gene selection based on frequency \% should
 be calculated at the gene level, or the alteration level. Default is TRUE, indicating all
@@ -27,8 +30,6 @@ return all alterations associated with that gene (including mutations, CNA, fusi
 \item{by}{A variable to be passed to \code{gtsummary::tbl_summary()}'s by parameter}
 
 \item{...}{Additional parameters that can be passed to \code{gtsummary::tbl_summary()}}
-
-\item{data}{data.frame of genetic samples}
 }
 \value{
 A \code{tbl_summary()} object
