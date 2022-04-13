@@ -53,9 +53,21 @@ genomic_tbl_summary <- function(binary_matrix,
     cli::cli_abort("Please select a {.code freq_cutoff} value between {.code 0} and {.code 1}")
   }
 
-  # can by be string or bare variable?
-  if(length(by) >1){
-    stop("Please only supply 1 {.code by} variable.")
+  # if(!is.name(by)) {
+  #   if(length(by) > 1) {
+  #     cli::cli_abort("{.code by} must be length 1.")
+  #   }
+  # }
+
+  # can by be string or bare variable. can't figure out how to check for length.
+  by <- substitute(by) %>%
+    purrr::when(
+      is.name(.) ~ as.character(.),
+      is.character(.) ~ .,
+      TRUE ~ NULL)
+
+  if(!is.null(by) && !(by %in% names(binary_matrix))) {
+    cli::cli_abort("{by} is not a column in your data.")
   }
 
   # check & assign gene subset -------------------------------------------------
@@ -85,7 +97,7 @@ genomic_tbl_summary <- function(binary_matrix,
 
       # return only genes found in your data
       length(.[!(. %in% colnames(binary_matrix))]) > 0 ~
-        {cli::cli_warn("The following of {.code gene_subset} are not in your data: {.code {.[!(. %in% colnames(data))]}}")
+        {cli::cli_warn("The following of {.code gene_subset} are not in your data: {.code {.[!(. %in% colnames(binary_matrix))]}}")
         return(.[(. %in% colnames(binary_matrix))])},
       TRUE ~ .
     )
@@ -152,9 +164,7 @@ genomic_tbl_summary <- function(binary_matrix,
     purrr::when(
       !is.null(by) ~
         {
-          . %>%
-            gtsummary::add_p() %>%
-            gtsummary::add_overall()
+            gtsummary::add_overall(.)
 
         },
       TRUE ~ .

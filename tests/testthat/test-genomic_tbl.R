@@ -21,6 +21,43 @@ test_that("pass both gene subset and freq", {
                                    freq_cutoff = .1), "*")
 })
 
+test_that("test basic args", {
+
+  expect_error(genomic_tbl_summary(binary_matrix = c(1:10)))
+
+  samples <- mut$Tumor_Sample_Barcode[1:10]
+  binary_matrix <- binary_matrix(samples = samples,
+                                 mutation = mut,
+                                 cna = cna,
+                                 mut_type = "somatic_only",
+                                 snp_only = FALSE)  %>%
+    select(1:20)
+
+  expect_error(genomic_tbl_summary(
+    binary_matrix = binary_matrix,
+    freq_cutoff = 2
+    ), "Please select a `freq_cutoff`")
+
+  # expect_error(genomic_tbl_summary(
+  #   binary_matrix = binary_matrix,
+  #   by = c("TP53", "APC"),
+  #   freq_cutoff = 0
+  # ), "*")
+
+  expect_warning(genomic_tbl_summary(
+    binary_matrix = binary_matrix,
+    gene_subset = c("TP53", "not_in_data")
+  ), "*")
+
+  expect_error(genomic_tbl_summary(
+    binary_matrix = binary_matrix,
+    freq_cutoff = 1,
+    freq_cutoff_by_gene = FALSE
+  ), "No genes*")
+
+
+})
+
 
 # freq_cutoff -----------------------------------------------------------------
 test_that("check freq cutoff", {
@@ -53,7 +90,7 @@ test_that("check freq cutoff", {
 
   over_cut <- sums %>%
     tidyr::separate(col = name, into = c("name1", "name2"),
-                    remove =  FALSE) %>%
+                    remove =  FALSE, fill = "right") %>%
     group_by(name1) %>%
     mutate(s = sum(sum_g)) %>%
     filter(s >= .2) %>%
@@ -62,3 +99,42 @@ test_that("check freq cutoff", {
   expect_equal(sort(by_alt$table_body$variable), sort(over_cut))
 
 })
+
+# Test by variable in table ---------------------------------------------------
+test_that("test by variable not in data", {
+
+  samples <- as.character(unique(mut$Tumor_Sample_Barcode))[1:10]
+  binary_matrix <- binary_matrix(samples = samples, mutation = mut, cna = cna,
+                                 mut_type = "somatic_only",
+                                 snp_only = FALSE) %>%
+    select(TP53, TP53.Del, APC, RB1, RB1.Del)
+
+  expect_error(genomic_tbl_summary(binary_matrix = binary_matrix,
+                      freq_cutoff = .2,
+                      by = "nothing",
+                      freq_cutoff_by_gene = FALSE))
+})
+
+test_that("test by variable bare or string", {
+  samples <- as.character(unique(mut$Tumor_Sample_Barcode))[1:10]
+  binary_matrix <- binary_matrix(samples = samples, mutation = mut, cna = cna,
+                                 mut_type = "somatic_only",
+                                 snp_only = FALSE) %>%
+    select(TP53, TP53.Del, APC, RB1, RB1.Del)
+
+  binary_matrix <- binary_matrix %>%
+    mutate(sex = sample(x = c("M", "F"),
+                        size = nrow(binary_matrix), replace = TRUE))
+
+  expect_error(t1 <- genomic_tbl_summary(binary_matrix = binary_matrix,
+                      by = "sex",
+                      freq_cutoff = .2,
+                      freq_cutoff_by_gene = FALSE), NA)
+
+  expect_error(t2 <- genomic_tbl_summary(binary_matrix = binary_matrix,
+                      by = sex,
+                      freq_cutoff = .2,
+                      freq_cutoff_by_gene = FALSE), NA)
+
+  expect_equal(t1, t2)
+  })

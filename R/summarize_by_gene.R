@@ -43,6 +43,7 @@ summarize_by_gene <- function(binary_matrix) {
 
     mutate(simpl_val = case_when(
       count == num_na ~ NA_real_,
+      sum > 1 ~ 1,
       TRUE ~ .data$sum)) %>%
     select(.data$sample_id, .data$name2, .data$simpl_val) %>%
     distinct() %>%
