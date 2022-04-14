@@ -8,7 +8,7 @@ a predefined list of samples (rows are samples and columns are genes)}
 binary_matrix(
   samples = NULL,
   mutation = NULL,
-  mut_type = "SOMATIC",
+  mut_type = c("omit_germline", "somatic_only", "germline_only", "all"),
   snp_only = FALSE,
   include_silent = FALSE,
   fusion = NULL,
@@ -29,8 +29,8 @@ returned for every column of that patient row.}
 
 \item{mutation}{A data frame of mutations in the format of a maf file.}
 
-\item{mut_type}{The mutation type to be used. Options are "SOMATIC", "GERMLINE" or "ALL". Note "ALL" will
-keep all mutations regardless of status (not recommended). Default is SOMATIC.}
+\item{mut_type}{The mutation type to be used. Options are "omit_germline", "somatic_only", "germline_only" or "all". Note "all" will
+keep all mutations regardless of status (not recommended). Default is omit_germline which includes all somatic mutations, as well as any unknown mutation types (most of which are usually somatic)}
 
 \item{snp_only}{Boolean to rather the genetics events to be kept only to be SNPs (insertions and deletions will be removed).
 Default is FALSE.}
@@ -77,10 +77,10 @@ mut.only <- binary_matrix(mutation = mut)
 samples <- as.character(unique(mut$Tumor_Sample_Barcode))[1:200]
 
 bin.mut <- binary_matrix(samples = samples, mutation = mut,
-mut_type = "SOMATIC" ,snp_only = FALSE,
+mut_type = "omit_germline" ,snp_only = FALSE,
 include_silent = FALSE)
 bin.mut <- binary_matrix(samples = samples, mutation = mut,
-mut_type = "SOMATIC", snp_only = FALSE,
+mut_type = "omit_germline", snp_only = FALSE,
 include_silent = FALSE,
 cna_relax = TRUE, specify_panel = "no", rm_empty = FALSE)
 }
