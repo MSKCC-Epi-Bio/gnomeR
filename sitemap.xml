@@ -94,6 +94,9 @@
     <loc>/reference/genie_gene_info.html</loc>
   </url>
   <url>
+    <loc>/reference/genomic_tbl_summary.html</loc>
+  </url>
+  <url>
     <loc>/reference/ggcomut.html</loc>
   </url>
   <url>
@@ -185,6 +188,9 @@
   </url>
   <url>
     <loc>/reference/substrRight.html</loc>
+  </url>
+  <url>
+    <loc>/reference/summarize_by_gene.html</loc>
   </url>
   <url>
     <loc>/reference/tcga_genes.html</loc>
