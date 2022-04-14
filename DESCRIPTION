@@ -62,7 +62,8 @@ Imports:
     lifecycle,
     stats,
     utils,
-    cli
+    cli,
+    gtsummary
 Suggests: 
     knitr,
     rmarkdown,
