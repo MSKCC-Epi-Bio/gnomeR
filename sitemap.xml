@@ -4,6 +4,9 @@
     <loc>/404.html</loc>
   </url>
   <url>
+    <loc>/CODE_OF_CONDUCT.html</loc>
+  </url>
+  <url>
     <loc>/LICENSE-text.html</loc>
   </url>
   <url>
@@ -34,9 +37,6 @@
     <loc>/reference/annotate_specific_panel.html</loc>
   </url>
   <url>
-    <loc>/reference/binary_matrix.html</loc>
-  </url>
-  <url>
     <loc>/reference/check_cna_input.html</loc>
   </url>
   <url>
@@ -55,22 +55,22 @@
     <loc>/reference/cna.html</loc>
   </url>
   <url>
-    <loc>/reference/curated_genes.html</loc>
+    <loc>/reference/create_gene_binary.html</loc>
   </url>
   <url>
-    <loc>/reference/custom_pathway.html</loc>
+    <loc>/reference/curated_genes.html</loc>
   </url>
   <url>
     <loc>/reference/dat_oncoprint.html</loc>
   </url>
   <url>
-    <loc>/reference/dot-cna_binary_matrix.html</loc>
+    <loc>/reference/dot-cna_gene_binary.html</loc>
   </url>
   <url>
-    <loc>/reference/dot-fusions_binary_matrix.html</loc>
+    <loc>/reference/dot-fusions_gene_binary.html</loc>
   </url>
   <url>
-    <loc>/reference/dot-mutations_binary_matrix.html</loc>
+    <loc>/reference/dot-mutations_gene_binary.html</loc>
   </url>
   <url>
     <loc>/reference/dot-sum_alts_in_pathway.html</loc>
@@ -95,9 +95,6 @@
   </url>
   <url>
     <loc>/reference/genie_gene_info.html</loc>
-  </url>
-  <url>
-    <loc>/reference/genomic_tbl_summary.html</loc>
   </url>
   <url>
     <loc>/reference/ggcomut.html</loc>
@@ -148,10 +145,10 @@
     <loc>/reference/index.html</loc>
   </url>
   <url>
-    <loc>/reference/maf_viz.html</loc>
+    <loc>/reference/mut.html</loc>
   </url>
   <url>
-    <loc>/reference/mut.html</loc>
+    <loc>/reference/mutation_viz.html</loc>
   </url>
   <url>
     <loc>/reference/oncokb.html</loc>
@@ -194,6 +191,9 @@
   </url>
   <url>
     <loc>/reference/summarize_by_gene.html</loc>
+  </url>
+  <url>
+    <loc>/reference/tbl_genomic.html</loc>
   </url>
   <url>
     <loc>/reference/tcga_genes.html</loc>

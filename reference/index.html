@@ -72,11 +72,6 @@ Modified CNregions function from the facets package to handle small sample sizes
         </td>
         <td><p>Utility function  to insert NA's According to Panel</p></td>
       </tr><tr><td>
-          <p><code><a href="binary_matrix.html">binary_matrix()</a></code> </p>
-        </td>
-        <td><p>Enables creation of a binary matrix from a mutation file with
-a predefined list of samples (rows are samples and columns are genes)</p></td>
-      </tr><tr><td>
           <p><code><a href="check_cna_input.html">check_cna_input()</a></code> </p>
         </td>
         <td><p>Check CNA data frame to ensure columns are correct</p></td>
@@ -102,30 +97,28 @@ IMPACT cbioPortal dataset.</p></td>
         </td>
         <td><p>An example copy number alteration raw calls file from IMPACT cbioPortal dataset</p></td>
       </tr><tr><td>
+          <p><code><a href="create_gene_binary.html">create_gene_binary()</a></code> </p>
+        </td>
+        <td><p>Enables creation of a binary matrix from a mutation file with
+a predefined list of samples (rows are samples and columns are genes)</p></td>
+      </tr><tr><td>
           <p><code><a href="curated_genes.html">curated_genes</a></code> </p>
         </td>
         <td><p>List of curated genes for IMPACT oncoKB annotation.</p></td>
-      </tr><tr><td>
-          <p><code><a href="custom_pathway.html">custom_pathway()</a></code> </p>
-        </td>
-        <td><p>Enables creation of a custom pathway binary matrix from a binary_matrix() <code>object</code>. Similarly to the internal file 'pathways.csv', this function takes as input
-a data frame containing the name of the pathways of interest, and for each pathways a character vector of the genes of interest. Note that the different
-events to be considered in each pathways must be considered separately. For example, if one wishes to consider TP53 deletions in a given pathway, one must
-specify "TP53.Del" in the character vector for that pathway.</p></td>
       </tr><tr><td>
           <p><code><a href="dat_oncoprint.html">dat_oncoprint()</a></code> </p>
         </td>
         <td><p>Enables creation of a matrix used to generate an OncoPrint heatmap.</p></td>
       </tr><tr><td>
-          <p><code><a href="dot-cna_binary_matrix.html">.cna_binary_matrix()</a></code> </p>
+          <p><code><a href="dot-cna_gene_binary.html">.cna_gene_binary()</a></code> </p>
         </td>
         <td><p>Make Binary Matrix From CNA data frame</p></td>
       </tr><tr><td>
-          <p><code><a href="dot-fusions_binary_matrix.html">.fusions_binary_matrix()</a></code> </p>
+          <p><code><a href="dot-fusions_gene_binary.html">.fusions_gene_binary()</a></code> </p>
         </td>
         <td><p>Make Binary Matrix From Fusion data frame</p></td>
       </tr><tr><td>
-          <p><code><a href="dot-mutations_binary_matrix.html">.mutations_binary_matrix()</a></code> </p>
+          <p><code><a href="dot-mutations_gene_binary.html">.mutations_gene_binary()</a></code> </p>
         </td>
         <td><p>Make Binary Matrix From Mutation data frame</p></td>
       </tr><tr><td>
@@ -162,10 +155,6 @@ Performs univariate cox proportional hazard model on every feature</p></td>
         </td>
         <td><p>GENIE consortium Gene Meta Data</p></td>
       </tr><tr><td>
-          <p><code><a href="genomic_tbl_summary.html">genomic_tbl_summary()</a></code> </p>
-        </td>
-        <td><p>genomic_tbl_summary</p></td>
-      </tr><tr><td>
           <p><code><a href="ggcomut.html">ggcomut()</a></code> </p>
         </td>
         <td><p>Comutation Heatmap of the Top Altered Genes</p></td>
@@ -176,7 +165,7 @@ Performs univariate cox proportional hazard model on every feature</p></td>
       </tr><tr><td>
           <p><code><a href="ggheatmap.html">ggheatmap()</a></code> </p>
         </td>
-        <td><p>Heatmap of all events after binary_matrix - using binary distance</p></td>
+        <td><p>Heatmap of all events after gene_binary - using binary distance</p></td>
       </tr><tr><td>
           <p><code><a href="ggsamplevar.html">ggsamplevar()</a></code> </p>
         </td>
@@ -222,13 +211,13 @@ Performs univariate cox proportional hazard model on every feature</p></td>
         </td>
         <td><p>IMPACT Gene Meta Data</p></td>
       </tr><tr><td>
-          <p><code><a href="maf_viz.html">maf_viz()</a></code> </p>
-        </td>
-        <td><p>Creates a set of plot summarising a maf file.</p></td>
-      </tr><tr><td>
           <p><code><a href="mut.html">mut</a></code> </p>
         </td>
         <td><p>An example maf file from IMPACT cbioPortal dataset</p></td>
+      </tr><tr><td>
+          <p><code><a href="mutation_viz.html">mutation_viz()</a></code> </p>
+        </td>
+        <td><p>Creates a set of plot summarising a mutation file.</p></td>
       </tr><tr><td>
           <p><code><a href="oncokb.html">oncokb()</a></code> </p>
         </td>
@@ -284,6 +273,10 @@ See details there for file formats.</p></td>
           <p><code><a href="summarize_by_gene.html">summarize_by_gene()</a></code> </p>
         </td>
         <td><p>Simplify binary matrix to one column per gene that counts any alteration type as 1</p></td>
+      </tr><tr><td>
+          <p><code><a href="tbl_genomic.html">tbl_genomic()</a></code> </p>
+        </td>
+        <td><p>tbl_genomic</p></td>
       </tr><tr><td>
           <p><code><a href="tcga_genes.html">tcga_genes</a></code> </p>
         </td>

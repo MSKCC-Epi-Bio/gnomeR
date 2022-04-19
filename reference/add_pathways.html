@@ -54,7 +54,7 @@
 
     <div id="ref-usage">
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">add_pathways</span><span class="op">(</span>
-  <span class="va">binary_matrix</span>,
+  <span class="va">gene_binary</span>,
   pathways <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="fu">gnomeR</span><span class="fu">::</span><span class="va"><a href="pathways.html">pathways</a></span><span class="op">)</span><span class="op">)</span>,
   custom_pathways <span class="op">=</span> <span class="cn">NULL</span>,
   bind_pathways <span class="op">=</span> <span class="cn">TRUE</span>,
@@ -64,8 +64,8 @@
 
     <div id="arguments">
     <h2>Arguments</h2>
-    <dl><dt>binary_matrix</dt>
-<dd><p>a binary matrix from <code><a href="binary_matrix.html">binary_matrix()</a></code></p></dd>
+    <dl><dt>gene_binary</dt>
+<dd><p>a binary matrix from <code>gene_binary()</code></p></dd>
 <dt>pathways</dt>
 <dd><p>a vector of pathway names to annotate. The options are <code>names(gnomeR::pathways)</code> ("RTK/RAS", "Nrf2",
 "PI3K", "TGFB", "p53", "Wnt", "Myc", "Cell cycle", "Hippo", "Notch"). You can pass one pathway name, multiple pathway names, or <code>NULL</code>. By default, all
@@ -75,7 +75,7 @@ pathways you want as <code>custom_pathways</code></p></dd>
 <dt>custom_pathways</dt>
 <dd><p>a vector of alterations to annotate as a pathway, or a list of custom pathways (see <code><a href="pathways.html">gnomeR::pathways</a></code> as example)</p></dd>
 <dt>bind_pathways</dt>
-<dd><p>a logical indicating whether pathway columns should be joined to main binary_matrix or returned separately as a list item.
+<dd><p>a logical indicating whether pathway columns should be joined to main gene_binary or returned separately as a list item.
 Default is TRUE and function will <code><a href="https://dplyr.tidyverse.org/reference/bind.html" class="external-link">bind_cols()</a></code> and return a data.frame. If FALSE a list will be returned.</p></dd>
 <dt>count_pathways_by</dt>
 <dd><p>Must be one of the following: "alteration" (default), or "gene". This determines whether
@@ -95,9 +95,9 @@ custom pathway is passed with no suffix (e.g. <code>custom_pathway = 'TP53'</cod
     <div id="ref-examples">
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"></span>
-<span class="r-in"><span class="va">binary_matrix</span> <span class="op">&lt;-</span> <span class="fu"><a href="binary_matrix.html">binary_matrix</a></span><span class="op">(</span>mutation <span class="op">=</span> <span class="va">mut</span>, cna <span class="op">=</span> <span class="va">cna</span>, fusion <span class="op">=</span> <span class="va">fusion</span><span class="op">)</span></span>
+<span class="r-in"><span class="va">gene_binary</span> <span class="op">&lt;-</span> <span class="fu"><a href="create_gene_binary.html">create_gene_binary</a></span><span class="op">(</span>mutation <span class="op">=</span> <span class="va">mut</span>, cna <span class="op">=</span> <span class="va">cna</span>, fusion <span class="op">=</span> <span class="va">fusion</span><span class="op">)</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> `samples` argument is `NULL`. We will infer your cohort inclusion and resulting data frame will include all samples with at least one alteration in <span style="color: #00BB00;">mutation</span>, <span style="color: #00BB00;">fusion</span> or <span style="color: #00BB00;">cna</span> data frames</span>
-<span class="r-in"><span class="va">pathway_df</span> <span class="op">&lt;-</span> <span class="fu">add_pathways</span><span class="op">(</span><span class="va">binary_matrix</span>, pathways <span class="op">=</span> <span class="st">"Notch"</span><span class="op">)</span></span>
+<span class="r-in"><span class="va">pathway_df</span> <span class="op">&lt;-</span> <span class="fu">add_pathways</span><span class="op">(</span><span class="va">gene_binary</span>, pathways <span class="op">=</span> <span class="st">"Notch"</span><span class="op">)</span></span>
 <span class="r-in"></span>
 </code></pre></div>
     </div>
