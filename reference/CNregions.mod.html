@@ -110,24 +110,24 @@ Modified CNregions function from the facets package to handle small sample sizes
 <span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">mut</span><span class="op">$</span><span class="va">Tumor_Sample_Barcode</span><span class="op">)</span><span class="op">)</span><span class="op">[</span></span>
 <span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">mut</span><span class="op">$</span><span class="va">Tumor_Sample_Barcode</span><span class="op">)</span><span class="op">)</span>, <span class="fl">100</span>, replace<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span><span class="op">]</span></span>
 <span class="r-in"><span class="fu">CNregions.mod</span><span class="op">(</span><span class="va">seg</span> <span class="op"><a href="pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">ID</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="va">samples</span><span class="op">)</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                   chr1.2488138-9784407 chr1.9784407-11167550</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> P-0000062-T01-IM3              -0.2894               -0.2894</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> P-0000080-T01-IM3               0.1680                0.1680</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> P-0000113-T01-IM3               0.0939                0.0939</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> P-0000140-T01-IM3              -0.1550               -0.1550</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> P-0000157-T01-IM3               0.0431                0.0431</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                   chr1.11167550-14192672 chr1.14192672-16199471</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> P-0000062-T01-IM3                -0.2894                -0.2894</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> P-0000080-T01-IM3                 0.1680                 0.1680</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> P-0000113-T01-IM3                 0.0939                 0.0939</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> P-0000140-T01-IM3                -0.1550                 0.0092</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> P-0000157-T01-IM3                 0.0431                 0.0431</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                   chr1.16199471-17345415</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> P-0000062-T01-IM3                 0.2376</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> P-0000080-T01-IM3                 0.1680</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> P-0000113-T01-IM3                 0.0939</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> P-0000140-T01-IM3                 0.0092</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> P-0000157-T01-IM3                 0.0431</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                   chr1.2488138-9770584 chr1.9770584-9784407</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> P-0000145-T01-IM3              -0.0290              -0.0290</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> P-0000231-T01-IM3              -0.0391              -0.0391</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> P-0000281-T01-IM3              -0.0626              -0.0626</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> P-0000329-T01-IM3              -0.1930              -0.1930</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> P-0000336-T01-IM3              -0.2288              -0.2288</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                   chr1.9784407-11167550 chr1.11167550-11276248</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> P-0000145-T01-IM3               -0.0290                -0.0290</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> P-0000231-T01-IM3               -0.0391                -0.0391</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> P-0000281-T01-IM3               -0.0626                -0.0626</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> P-0000329-T01-IM3               -0.1930                -0.1930</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> P-0000336-T01-IM3               -0.2288                -0.2288</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                   chr1.11276248-14192672</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> P-0000145-T01-IM3                -0.0290</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> P-0000231-T01-IM3                -0.0391</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> P-0000281-T01-IM3                -0.0626</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> P-0000329-T01-IM3                -0.1930</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> P-0000336-T01-IM3                -0.2288</span>
 </code></pre></div>
     </div>
   </div>
