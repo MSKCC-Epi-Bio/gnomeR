@@ -7,7 +7,7 @@
 recode_alias(genomic_df, ...)
 }
 \arguments{
-\item{genomic_df}{a binary_matrix object}
+\item{genomic_df}{a gene_binary object}
 
 \item{...}{Other things passed}
 }

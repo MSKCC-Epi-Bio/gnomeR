@@ -4,10 +4,10 @@
 \alias{ggsamplevar}
 \title{Histogram of Variants Per Sample Colored By Variant Classification}
 \usage{
-ggsamplevar(maf)
+ggsamplevar(mutation)
 }
 \arguments{
-\item{maf}{Raw maf dataframe containing alteration data}
+\item{mutation}{Raw mutation dataframe containing alteration data}
 }
 \value{
 Histogram of counts of variants per tumor sample

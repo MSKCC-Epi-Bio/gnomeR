@@ -5,7 +5,7 @@
 test_that("test simplify marix with no errors", {
 
   samples <- as.character(unique(mut$Tumor_Sample_Barcode))[1:50]
-  gen_dat <- binary_matrix(samples = samples,mutation = mut,fusion = fusion, cna = cna)
+  gen_dat <- create_gene_binary(samples = samples,mutation = mut,fusion = fusion, cna = cna)
   gen_dat2 <- gnomeR::summarize_by_gene(gen_dat)
 
   tp53_1 <- gen_dat %>% select(contains("TP53"))
@@ -19,6 +19,6 @@ test_that("test simplify marix with no errors", {
 
 test_that("test simplify marix needs a data frame", {
 
-  expect_error(summarize_by_gene(binary_matrix = c(1:10)))
+  expect_error(summarize_by_gene(gene_binary = c(1:10)))
 
 })

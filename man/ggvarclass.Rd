@@ -4,10 +4,10 @@
 \alias{ggvarclass}
 \title{Barplot of Variant Classification Counts}
 \usage{
-ggvarclass(maf)
+ggvarclass(mutation)
 }
 \arguments{
-\item{maf}{Raw maf dataframe containing alteration data}
+\item{mutation}{Raw mutation dataframe containing alteration data}
 }
 \value{
 Barplot of counts of each variant classification

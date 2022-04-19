@@ -63,7 +63,8 @@ Imports:
     stats,
     utils,
     cli,
-    gtsummary
+    gtsummary,
+    broom.helpers
 Suggests: 
     knitr,
     rmarkdown,

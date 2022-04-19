@@ -2,25 +2,25 @@
 % Please edit documentation in R/plots.R
 \name{ggheatmap}
 \alias{ggheatmap}
-\title{Heatmap of all events after binary_matrix - using binary distance}
+\title{Heatmap of all events after gene_binary - using binary distance}
 \usage{
 ggheatmap(hmat, ...)
 }
 \arguments{
-\item{hmat}{dataframe obtained after binary_matrix()}
+\item{hmat}{dataframe obtained after create_gene_binary()}
 
 \item{...}{Further arguments as passed to ComplexHeatmap::Heatmap}
 }
 \value{
-heatmap of binary_matrix events
+heatmap of gene_binary events
 }
 \description{
-Heatmap of all events after binary_matrix - using binary distance
+Heatmap of all events after gene_binary - using binary distance
 }
 \examples{
 set.seed(123)
 samples <- as.character(unique(mut$Tumor_Sample_Barcode))[1:200]
-gen_dat <- binary_matrix(samples=samples, maf=mut, cna=cna, fusion=fusion, set.plat=TRUE)
+gen_dat <- create_gene_binary(samples=samples, mutation=mut, cna=cna, fusion=fusion, set.plat=TRUE)
 ggheatmap(gen_dat, show_row_names=FALSE, show_column_names=FALSE)
 
 }

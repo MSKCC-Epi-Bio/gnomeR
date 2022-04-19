@@ -4,10 +4,10 @@
 \alias{ggsnvclass}
 \title{Histogram of SNV class Counts}
 \usage{
-ggsnvclass(maf)
+ggsnvclass(mutation)
 }
 \arguments{
-\item{maf}{Raw maf dataframe containing alteration data}
+\item{mutation}{Raw mutation dataframe containing alteration data}
 }
 \value{
 Histogram of counts of each SNV class

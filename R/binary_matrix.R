@@ -34,14 +34,14 @@
 #' @return a data frame with sample_id and alteration binary columns with values of 0/1
 #' @export
 #' @examples
-#' mut.only <- binary_matrix(mutation = mut)
+#' mut.only <- create_gene_binary(mutation = mut)
 #'
 #' samples <- as.character(unique(mut$Tumor_Sample_Barcode))[1:200]
 #'
-#' bin.mut <- binary_matrix(samples = samples, mutation = mut,
+#' bin.mut <- create_gene_binary(samples = samples, mutation = mut,
 #' mut_type = "omit_germline" ,snp_only = FALSE,
 #' include_silent = FALSE)
-#' bin.mut <- binary_matrix(samples = samples, mutation = mut,
+#' bin.mut <- create_gene_binary(samples = samples, mutation = mut,
 #' mut_type = "omit_germline", snp_only = FALSE,
 #' include_silent = FALSE,
 #' cna_relax = TRUE, specify_panel = "no", rm_empty = FALSE)
@@ -50,7 +50,7 @@
 #' @import stringr
 
 
-binary_matrix <- function(samples=NULL,
+create_gene_binary <- function(samples=NULL,
 
                           mutation = NULL,
                           mut_type = c("omit_germline", "somatic_only", "germline_only", "all"),
@@ -178,7 +178,7 @@ binary_matrix <- function(samples=NULL,
 
     # Binary matrix for each data type ----------------------------------------------
     mutation_binary_df <- switch(!is.null(mutation),
-                              .mutations_binary_matrix(mutation = mutation,
+                              .mutations_gene_binary(mutation = mutation,
                                                        samples = samples_final,
                                                        mut_type = mut_type,
                                                        snp_only = snp_only,
@@ -189,7 +189,7 @@ binary_matrix <- function(samples=NULL,
 
   # fusions
   fusion_binary_df <-  switch(!is.null(fusion),
-                           .fusions_binary_matrix(fusion = fusion,
+                           .fusions_gene_binary(fusion = fusion,
                                                   samples = samples_final,
                                                   specify_panel = specify_panel,
                                                   recode_aliases = recode_aliases))
@@ -197,7 +197,7 @@ binary_matrix <- function(samples=NULL,
 
   # cna
   cna_binary_df <- switch(!is.null(cna),
-                       .cna_binary_matrix(cna = cna,
+                       .cna_gene_binary(cna = cna,
                                           samples = samples_final,
                                           cna_binary = cna_binary,
                                           cna_relax = cna_relax,
@@ -267,12 +267,12 @@ binary_matrix <- function(samples=NULL,
 
 #' Make Binary Matrix From Mutation data frame
 #'
-#' @inheritParams binary_matrix
+#' @inheritParams create_gene_binary
 #'
 #' @return a data frame
 #' @export
 #'
-.mutations_binary_matrix <- function(mutation,
+.mutations_gene_binary <- function(mutation,
                                      samples,
                                      mut_type,
                                      snp_only,
@@ -340,11 +340,11 @@ binary_matrix <- function(samples=NULL,
 
 #' Make Binary Matrix From Fusion data frame
 #'
-#' @inheritParams binary_matrix
+#' @inheritParams create_gene_binary
 #'
 #' @return a data frame
 #'
-.fusions_binary_matrix <- function(fusion,
+.fusions_gene_binary <- function(fusion,
                                  samples,
                                  specify_panel,
                                  recode_aliases){
@@ -382,11 +382,11 @@ binary_matrix <- function(samples=NULL,
 
 #' Make Binary Matrix From CNA data frame
 #'
-#' @inheritParams binary_matrix
+#' @inheritParams create_gene_binary
 #'
 #' @return a data frame
 #'
-.cna_binary_matrix <- function(cna,
+.cna_gene_binary <- function(cna,
                                samples,
                                cna_binary,
                                cna_relax,
@@ -507,5 +507,5 @@ binary_matrix <- function(samples=NULL,
   return(cna)
 }
 
-#binary_matrix(mutation = gnomeR::mut, specify_panel = "no")
+#create_gene_binary(mutation = gnomeR::mut, specify_panel = "no")
 
