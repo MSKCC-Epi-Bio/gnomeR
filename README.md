@@ -5,9 +5,10 @@
 
 <!-- badges: start -->
 
-[\[R-CMD-check\](https://github.com/MSKCC-Epi-Bio/gnomeR/workflows/R-CMD-check/badge.svg](https://github.com/MSKCC-Epi-Bio/gnomeR/actions)
+[![R-CMD-check](https://github.com/MSKCC-Epi-Bio/gnomeR/workflows/R-CMD-check/badge.svg)](https://github.com/MSKCC-Epi-Bio/gnomeR/actions)
 [![Codecov test
 coverage](https://codecov.io/gh/MSKCC-Epi-Bio/gnomeR/branch/main/graph/badge.svg)](https://app.codecov.io/gh/MSKCC-Epi-Bio/gnomeR?branch=main)
+
 <!-- badges: end -->
 
 <font size="5">:bangbang: :warning: **NOTE: This package is currently
