@@ -240,6 +240,8 @@ of
 Conduct](https://contributor-covenant.org/version/2/0/CODE_OF_CONDUCT.html).
 By contributing to this project, you agree to abide by its terms.
 
+Thank you to all contributors!
+
 [@akriti21](https://github.com/akriti21),
 [@arorarshi](https://github.com/arorarshi),
 [@AxelitoMartin](https://github.com/AxelitoMartin),

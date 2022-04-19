@@ -206,6 +206,8 @@ The primary goal of `gnomeR` not being in depth analysis of genomic data but rat
 
 Please note that the gnomeR project is released with a [Contributor Code of Conduct](https://contributor-covenant.org/version/2/0/CODE_OF_CONDUCT.html). By contributing to this project, you agree to abide by its terms.
 
+Thank you to all contributors!
+
 `r usethis::use_tidy_thanks("MSKCC-Epi-Bio/gnomeR", from = "2020-01-01") %>% {glue::glue("[&#x0040;{.}](https://github.com/{.})")} %>% glue::glue_collapse(sep = ", ", last = ", and ")`
 
 
