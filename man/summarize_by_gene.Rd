@@ -4,10 +4,10 @@
 \alias{summarize_by_gene}
 \title{Simplify binary matrix to one column per gene that counts any alteration type as 1}
 \usage{
-summarize_by_gene(binary_matrix)
+summarize_by_gene(gene_binary)
 }
 \arguments{
-\item{binary_matrix}{a 0/1 matrix of gene alterations}
+\item{gene_binary}{a 0/1 matrix of gene alterations}
 }
 \value{
 a binary matrix with a row for each sample and one column per gene
@@ -20,7 +20,7 @@ columns for mutation/cna/fusion.
 \examples{
 library(gnomeR)
 samples <- as.character(unique(mut$Tumor_Sample_Barcode))[1:200]
-binary_matrix <- binary_matrix(samples = samples, mutation = mut,cna = cna,
+gene_binary <- create_gene_binary(samples = samples, mutation = mut,cna = cna,
                         mut_type = "somatic_only", snp_only = FALSE,
                         include_silent = FALSE,
                         cna_relax = TRUE, specify_panel = "IMPACT341", rm_empty = FALSE) \%>\%

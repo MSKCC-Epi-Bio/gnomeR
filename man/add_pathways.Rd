@@ -5,7 +5,7 @@
 \title{Pathway Alterations}
 \usage{
 add_pathways(
-  binary_matrix,
+  gene_binary,
   pathways = c(names(gnomeR::pathways)),
   custom_pathways = NULL,
   bind_pathways = TRUE,
@@ -13,7 +13,7 @@ add_pathways(
 )
 }
 \arguments{
-\item{binary_matrix}{a binary matrix from \code{binary_matrix()}}
+\item{gene_binary}{a binary matrix from \code{gene_binary()}}
 
 \item{pathways}{a vector of pathway names to annotate. The options are \code{names(gnomeR::pathways)} ("RTK/RAS", "Nrf2",
 "PI3K", "TGFB", "p53", "Wnt", "Myc", "Cell cycle", "Hippo", "Notch"). You can pass one pathway name, multiple pathway names, or \code{NULL}. By default, all
@@ -23,7 +23,7 @@ pathways you want as \code{custom_pathways}}
 
 \item{custom_pathways}{a vector of alterations to annotate as a pathway, or a list of custom pathways (see \code{gnomeR::pathways} as example)}
 
-\item{bind_pathways}{a logical indicating whether pathway columns should be joined to main binary_matrix or returned separately as a list item.
+\item{bind_pathways}{a logical indicating whether pathway columns should be joined to main gene_binary or returned separately as a list item.
 Default is TRUE and function will \code{bind_cols()} and return a data.frame. If FALSE a list will be returned.}
 
 \item{count_pathways_by}{Must be one of the following: "alteration" (default), or "gene". This determines whether
@@ -42,7 +42,7 @@ Sanchez-Vega, F., Mina, M., Armenia, J., Chatila, W. K., Luna, A., La, K. C., Di
 }
 \examples{
 
-binary_matrix <- binary_matrix(mutation = mut, cna = cna, fusion = fusion)
-pathway_df <- add_pathways(binary_matrix, pathways = "Notch")
+gene_binary <- create_gene_binary(mutation = mut, cna = cna, fusion = fusion)
+pathway_df <- add_pathways(gene_binary, pathways = "Notch")
 
 }

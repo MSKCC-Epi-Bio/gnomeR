@@ -5,14 +5,14 @@
 \title{Title}
 \usage{
 .sum_alts_in_pathway(
-  binary_matrix,
+  gene_binary,
   pathway_list_item,
   pathway_name,
   count_pathways_by
 )
 }
 \arguments{
-\item{binary_matrix}{a binary matrix (see \code{binary_matrix()})}
+\item{gene_binary}{a binary matrix (see \code{gene_binary()})}
 
 \item{pathway_list_item}{a named list of length 1 with pathway name as name and vector of genes as first
 and only item in list}
@@ -28,9 +28,9 @@ a dataframe of 1 column of 0/1s indicating pathway activated yes/no
 Title
 }
 \examples{
-binary_matrix <- binary_matrix(mutation = mut, cna = cna,
+gene_binary <- create_gene_binary(mutation = mut, cna = cna,
 fusion = fusion)
-x <- .sum_alts_in_pathway(binary_matrix,
+x <- .sum_alts_in_pathway(gene_binary,
  pathway_list_item = gnomeR::pathways[1],
   pathway_name = names(gnomeR::pathways[1]),
     count_pathways_by = "alteration")

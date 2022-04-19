@@ -23,7 +23,7 @@ library(gnomeR)
 library(dplyr)
 library(dtplyr)
 samples <- as.character(unique(mut$Tumor_Sample_Barcode))
-bin.mut <- binary_matrix(samples = samples, mutation = mut,
+bin.mut <- create_gene_binary(samples = samples, mutation = mut,
 mut_type = "somatic_only",
 snp_only = FALSE, include_silent = FALSE, specify_panel = "no")
 gen_dat <- bin.mut[1:500,

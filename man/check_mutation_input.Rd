@@ -9,7 +9,7 @@ check_mutation_input(mutation, ...)
 \arguments{
 \item{mutation}{Raw maf dataframe containing alteration data}
 
-\item{...}{other arguments passed from binary_matrix() (recode.aliases).}
+\item{...}{other arguments passed from create_gene_binary() (recode.aliases).}
 }
 \value{
 a corrected maf file or an error if problems with maf

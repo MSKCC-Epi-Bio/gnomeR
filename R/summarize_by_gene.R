@@ -4,7 +4,7 @@
 #' resulting data frame will have only 1 col per gene, as opposed to separate
 #' columns for mutation/cna/fusion.
 #'
-#' @param binary_matrix a 0/1 matrix of gene alterations
+#' @param gene_binary a 0/1 matrix of gene alterations
 #'
 #' @return a binary matrix with a row for each sample and one column per gene
 #' @export
@@ -12,24 +12,24 @@
 #' @examples
 #' library(gnomeR)
 #' samples <- as.character(unique(mut$Tumor_Sample_Barcode))[1:200]
-#' binary_matrix <- binary_matrix(samples = samples, mutation = mut,cna = cna,
+#' gene_binary <- create_gene_binary(samples = samples, mutation = mut,cna = cna,
 #'                         mut_type = "somatic_only", snp_only = FALSE,
 #'                         include_silent = FALSE,
 #'                         cna_relax = TRUE, specify_panel = "IMPACT341", rm_empty = FALSE) %>%
 #'                  summarize_by_gene()
 #'
-summarize_by_gene <- function(binary_matrix) {
+summarize_by_gene <- function(gene_binary) {
 
-  if(!is.data.frame(binary_matrix)){
-    cli::cli_abort("{.code binary_matrix} must be a data.frame with sample ids as {.code rownames(binary_matrix)}")
+  if(!is.data.frame(gene_binary)){
+    cli::cli_abort("{.code gene_binary} must be a data.frame with sample ids as {.code rownames(gene_binary)}")
   }
 
-  if(!("sample_id" %in% names(binary_matrix))) {
-    binary_matrix <- rownames_to_column(binary_matrix, var = "sample_id")
+  if(!("sample_id" %in% names(gene_binary))) {
+    gene_binary <- rownames_to_column(gene_binary, var = "sample_id")
   }
 
 
-  simp_binary_matrix <- binary_matrix %>%
+  simp_gene_binary <- gene_binary %>%
     ungroup() %>%
     tidyr::pivot_longer(-.data$sample_id) %>%
     mutate(name2 = str_remove_all(.data$name, ".Amp|.fus|.Del|.cna")) %>%
@@ -52,6 +52,6 @@ summarize_by_gene <- function(binary_matrix) {
     tidyr::pivot_wider(id_cols = .data$sample_id, names_from = .data$name2,
                        values_from = .data$simpl_val)
 
-  simp_binary_matrix
+  simp_gene_binary
 
 }

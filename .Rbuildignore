@@ -10,3 +10,4 @@
 ^_pkgdown\.yml$
 ^\.github$
 ^data-raw$
+^CODE_OF_CONDUCT\.md$

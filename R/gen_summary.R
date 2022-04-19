@@ -20,7 +20,7 @@
 #' samples <- as.character(unique(mut$Tumor_Sample_Barcode))
 #' ## binary outcome ##
 #' outcome <- as.character(clin.sample$Sample.Type[match(samples,clin.sample$Sample.Identifier)])
-#' gen_dat <- binary_matrix(samples = samples,mutation = mut)
+#' gen_dat <- create_gene_binary(samples = samples,mutation = mut)
 
 #' ## Continuous outcome ##
 #' set.seed(1)

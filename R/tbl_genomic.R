@@ -1,11 +1,11 @@
-#' genomic_tbl_summary
+#' tbl_genomic
 #'
 #' This function will select genes based on user inputs or on frequency counts and then
 #' will pass the data.frame to `gtsummary::tbl_summary()`. You can specify a `by` variable and other
 #' parameters that are accepted by `gtsummary::tbl_summary()`. Note the `by` variable must be merged on to
 #' onto the data before using the `by` parameter in the function.
 #'
-#' @param binary_matrix data.frame of genetic samples
+#' @param gene_binary data.frame of genetic samples
 #' @param freq_cutoff A number 0 to 1 representing the minimum percent frequency you are using to select gene's for analysis.
 #' Frequencies can be calculated at gene level, or alteration level (see `freq_cutoff_by_gene`).
 #' @param freq_cutoff_by_gene Logical indicating whether gene selection based on frequency % should
@@ -25,15 +25,26 @@
 #' library(gtsummary)
 #' library(dplyr)
 #' samples <- as.character(unique(mut$Tumor_Sample_Barcode))[1:200]
-#' binary_matrix <- binary_matrix(samples = samples, mutation = mut, cna = cna,
+#' gene_binary <- create_gene_binary(samples = samples, mutation = mut, cna = cna,
 #'                         mut_type = "somatic_only", snp_only = FALSE,
 #'                         include_silent = FALSE,
 #'                         cna_relax = TRUE, specify_panel = "no", rm_empty = FALSE)
+#' tb1 <- tbl_genomic(gene_binary = gene_binary, freq_cutoff = .05)
+#' tb2 <- tbl_genomic(gene_binary = gene_binary, gene_subset = c("KRAS", "TERT"))
+#'
+#' gene_binary <- gene_binary %>%
+#'     mutate(sex = sample(x = c("M", "F"),
+#'      size = nrow(gene_binary), replace = TRUE))
+#'
+#' t1 <-tbl_genomic(gene_binary = gene_binary,
+#'     by = sex,
+#'     freq_cutoff = .2,
+#'     freq_cutoff_by_gene = FALSE) %>%
+#'     add_p()
+#'
 
-#' tb1 <- genomic_tbl_summary(binary_matrix = binary_matrix, freq_cutoff = .05)
-#' tb2 <- genomic_tbl_summary(binary_matrix = binary_matrix, gene_subset = c("KRAS", "TERT"))
 
-genomic_tbl_summary <- function(binary_matrix,
+tbl_genomic <- function(gene_binary,
                                 freq_cutoff = 0,
                                 freq_cutoff_by_gene = TRUE,
                                 gene_subset = NULL,
@@ -41,34 +52,22 @@ genomic_tbl_summary <- function(binary_matrix,
 
   # check arguments & prep data ------------------------------------------------
 
-  if(!is.data.frame(binary_matrix)){
-    cli::cli_abort("{.code binary_matrix} must be a data.frame")
+  if(!inherits(gene_binary, "data.frame")) {
+    stop("`gene_binary=` argument must be a tibble or data frame.", call. = FALSE)
   }
 
-  if(!("sample_id" %in% names(binary_matrix))) {
-    binary_matrix <- rownames_to_column(binary_matrix, var = "sample_id")
+  if(!("sample_id" %in% names(gene_binary))) {
+    gene_binary <- tibble::rownames_to_column(gene_binary, var = "sample_id")
   }
 
   if(freq_cutoff < 0 || freq_cutoff > 1){
     cli::cli_abort("Please select a {.code freq_cutoff} value between {.code 0} and {.code 1}")
   }
 
-  # if(!is.name(by)) {
-  #   if(length(by) > 1) {
-  #     cli::cli_abort("{.code by} must be length 1.")
-  #   }
-  # }
+  by <-
+    .select_to_varnames({{ by }}, data = gene_binary,
+                        arg_name = "by", select_single = TRUE)
 
-  # can by be string or bare variable. can't figure out how to check for length.
-  by <- substitute(by) %>%
-    purrr::when(
-      is.name(.) ~ as.character(.),
-      is.character(.) ~ .,
-      TRUE ~ NULL)
-
-  if(!is.null(by) && !(by %in% names(binary_matrix))) {
-    cli::cli_abort("{by} is not a column in your data.")
-  }
 
   # check & assign gene subset -------------------------------------------------
 
@@ -80,14 +79,14 @@ genomic_tbl_summary <- function(binary_matrix,
       !is.character(gene_subset) ~
         cli::cli_abort("Please supply a character vector for {.code gene_subset}"),
 
-      length(.[(. %in% colnames(binary_matrix))]) == 0 ~
-        cli::cli_abort("No genes specified in {.code gene_subset} are in your binary_matrix"),
+      length(.[(. %in% colnames(gene_binary))]) == 0 ~
+        cli::cli_abort("No genes specified in {.code gene_subset} are in your gene_binary"),
 
       str_detect(., ".Amp|.Del|.fus|.cna") ~
         cli::cli_abort(
           "Detected one of the following in {.code gene_subset}: {.code '.Amp|.Del|.fus|.cna'} You may
           only pass gene names (eg. 'TP53'). To only include specific alterations, consider {.code dplyr::select(df, <alterations>)}
-          before passing to {.code genomic_tbl_summary()}"),
+          before passing to {.code tbl_genomic()}"),
 
 
       freq_cutoff > 0 ~
@@ -96,9 +95,9 @@ genomic_tbl_summary <- function(binary_matrix,
           return(.)},
 
       # return only genes found in your data
-      length(.[!(. %in% colnames(binary_matrix))]) > 0 ~
-        {cli::cli_warn("The following of {.code gene_subset} are not in your data: {.code {.[!(. %in% colnames(binary_matrix))]}}")
-        return(.[(. %in% colnames(binary_matrix))])},
+      length(.[!(. %in% colnames(gene_binary))]) > 0 ~
+        {cli::cli_warn("The following of {.code gene_subset} are not in your data: {.code {.[!(. %in% colnames(gene_binary))]}}")
+        return(.[(. %in% colnames(gene_binary))])},
       TRUE ~ .
     )
 
@@ -112,10 +111,11 @@ genomic_tbl_summary <- function(binary_matrix,
   # Calc Gene Frequencies (if gene_subset is NULL) --------------------------
   gene_subset <- gene_subset %||%
     {
-      binary_matrix  %>%
+      gene_binary  %>%
         select(-all_of(by)) %>%
 
-        # if freq should be calc at gene level- simplofy matrix first
+        # if freq should be calc at gene level- simplify matrix first
+        # todo- if simplify matrix already called- avoid this!
         purrr::when(
           freq_cutoff_by_gene ~ summarize_by_gene(.),
                    TRUE ~ .) %>%
@@ -126,7 +126,7 @@ genomic_tbl_summary <- function(binary_matrix,
         group_by(.data$name) %>%
         summarise(
           sum = sum(.data$value, na.rm = TRUE),
-          count = nrow(binary_matrix) - sum(is.na(.data$value)),
+          count = nrow(gene_binary) - sum(is.na(.data$value)),
           num_na = sum(is.na(.data$value))
         ) %>%
         mutate(perc = .data$sum / .data$count) %>%
@@ -152,7 +152,7 @@ genomic_tbl_summary <- function(binary_matrix,
 
   # Select Genes and Make Table-----------------------------------------------
 
-  table_data <-  binary_matrix %>%
+  table_data <-  gene_binary %>%
     select(all_of(by),  any_of(c(gene_subset)))
 
 

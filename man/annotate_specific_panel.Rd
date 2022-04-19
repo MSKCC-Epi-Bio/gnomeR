@@ -4,16 +4,10 @@
 \alias{annotate_specific_panel}
 \title{Utility function  to insert NA's According to Panel}
 \usage{
-annotate_specific_panel(
-  binary_matrix,
-  panel_id,
-  samples_in_panel,
-  na_genes,
-  ...
-)
+annotate_specific_panel(gene_binary, panel_id, samples_in_panel, na_genes, ...)
 }
 \arguments{
-\item{binary_matrix}{a processed binary matrix}
+\item{gene_binary}{a processed binary matrix}
 
 \item{panel_id}{name of gene panel}
 

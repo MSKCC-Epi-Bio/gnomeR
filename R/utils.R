@@ -1,7 +1,7 @@
 #' Checks MAF input to ensure column names are correct and renamed genes are corrected
 #'
 #' @param mutation Raw maf dataframe containing alteration data
-#' @param ... other arguments passed from binary_matrix() (recode.aliases).
+#' @param ... other arguments passed from create_gene_binary() (recode.aliases).
 #' @return a corrected maf file or an error if problems with maf
 #' @export
 #'
@@ -89,7 +89,7 @@ check_mutation_input <- function(mutation, ...)  {
 #' Check fusion data frame to ensure columns are correct
 #'
 #' @param fusion a fusion data frame
-#' @param ... other arguments passed from binary_matrix()
+#' @param ... other arguments passed from create_gene_binary()
 #'
 #' @return a checked data frame
 #' @export
@@ -123,7 +123,7 @@ check_fusion_input <- function(fusion, ...)  {
 #' Check CNA data frame to ensure columns are correct
 #'
 #' @param cna a cna data frame
-#' @param ... other arguments passed from binary_matrix()
+#' @param ... other arguments passed from create_gene_binary()
 #'
 #' @return a checked data frame
 #' @export
@@ -164,7 +164,7 @@ check_cna_input <- function(cna, ...)  {
 
 #' Recode Hugo Symbol Column
 #'
-#' @param genomic_df a binary_matrix object
+#' @param genomic_df a gene_binary object
 #' @param ... Other things passed
 #'
 #' @return A dataframe with a recoded Hugo Symbol columns
@@ -312,18 +312,18 @@ reformat_cna <- function(cna, samples = samples) {
 
 #' IMPACT Panel Annotation of NA's
 #'
-#' @param binary_matrix a processed binary_matrix
+#' @param gene_binary a processed gene_binary
 #'
 #' @return  a data frame iwth NAs inserted for genes not tested for given panel versions
 #' @export
 #'
 #'
-specify_impact_panels <- function(binary_matrix) {
+specify_impact_panels <- function(gene_binary) {
 
   gene_panels <- gnomeR::gene_panels
 
   # create data frame of sample IDs
-  sample_panel_pair <- rownames(binary_matrix) %>%
+  sample_panel_pair <- rownames(gene_binary) %>%
     as.data.frame() %>%
     stats::setNames("sample_id")
 
@@ -360,15 +360,15 @@ specify_impact_panels <- function(binary_matrix) {
 #' Annotate Missing Gene Values According to Specifi Panels
 #'
 #' @param sample_panel_pair a data frame of `sample_id`-`panel_id` pairs specifying panels to use for annotation of each sample
-#' @param binary_matrix a binary matrix of 0/1 indicating alteration yes/no for each sample
-#' @return a binary_matrix annotated for missingness
+#' @param gene_binary a binary matrix of 0/1 indicating alteration yes/no for each sample
+#' @return a gene_binary annotated for missingness
 #' @export
 
-annotate_any_panel <- function(sample_panel_pair, binary_matrix) {
+annotate_any_panel <- function(sample_panel_pair, gene_binary) {
 
   # if all "no", leave function
   switch(all(sample_panel_pair$panel_id == "no"),
-         return(binary_matrix))
+         return(gene_binary))
 
   sample_panel_pair_nest <- sample_panel_pair %>%
     group_by(.data$panel_id) %>%
@@ -382,7 +382,7 @@ annotate_any_panel <- function(sample_panel_pair, binary_matrix) {
     left_join(gnomeR::gene_panels, by = c("panel_id" = "gene_panel")) %>%
     select(-.data$entrez_ids_in_panel)
 
-  user_data_genes <- gsub(".fus|.Del|.Amp|.cna", "", colnames(binary_matrix))
+  user_data_genes <- gsub(".fus|.Del|.Amp|.cna", "", colnames(gene_binary))
 
   sample_panel_pair_nest <- sample_panel_pair_nest %>%
     mutate(na_genes_raw = purrr::map(.data$genes_in_panel,
@@ -399,7 +399,7 @@ annotate_any_panel <- function(sample_panel_pair, binary_matrix) {
 
   annotated_data <- purrr::pmap_df(sample_panel_pair_nest,
                                    annotate_specific_panel,
-                                   binary_matrix = binary_matrix)
+                                   gene_binary = gene_binary)
 
   return(annotated_data)
 }
@@ -407,7 +407,7 @@ annotate_any_panel <- function(sample_panel_pair, binary_matrix) {
 
 #' Utility function  to insert NA's According to Panel
 #'
-#' @param binary_matrix a processed binary matrix
+#' @param gene_binary a processed binary matrix
 #' @param panel_id name of gene panel
 #' @param samples_in_panel samples to be annotated for each panel
 #' @param na_genes genes to make NA
@@ -417,12 +417,12 @@ annotate_any_panel <- function(sample_panel_pair, binary_matrix) {
 #' @export
 #'
 #'
-annotate_specific_panel <- function(binary_matrix,
+annotate_specific_panel <- function(gene_binary,
                            panel_id,
                            samples_in_panel,
                            na_genes, ...) {
 
-  mut_sub <- binary_matrix[samples_in_panel, ]
+  mut_sub <- gene_binary[samples_in_panel, ]
   mut_sub[,stats::na.omit(match(na_genes, colnames(mut_sub)))] <- NA
 
   return(mut_sub)

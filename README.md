@@ -5,16 +5,14 @@
 
 <!-- badges: start -->
 
+[\[R-CMD-check\](https://github.com/MSKCC-Epi-Bio/gnomeR/workflows/R-CMD-check/badge.svg](https://github.com/MSKCC-Epi-Bio/gnomeR/actions)
 [![Codecov test
-coverage](https://codecov.io/gh/AxelitoMartin/gnomeR/branch/development/graph/badge.svg)](https://codecov.io/gh/AxelitoMartin/gnomeR?branch=development)
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.4171608.svg)](https://doi.org/10.5281/zenodo.4171608)
-[![R-CMD-check](https://github.com/AxelitoMartin/gnomeR/workflows/R-CMD-check/badge.svg)](https://github.com/AxelitoMartin/gnomeR/actions)
-
+coverage](https://codecov.io/gh/MSKCC-Epi-Bio/gnomeR/branch/main/graph/badge.svg)](https://app.codecov.io/gh/MSKCC-Epi-Bio/gnomeR?branch=main)
 <!-- badges: end -->
 
 <font size="5">:bangbang: :warning: **NOTE: This package is currently
-under active development with a new stable release expected April 2022.
-For code written before 2022-03-23, please use the previous stable
+under active development with a new stable release expected April 30th,
+2022. For code written before 2022-03-23, please use the previous stable
 version (v1.1.0)**:warning::bangbang: </font>
 
 You can install the pre-2022-03-23 version with:
@@ -30,7 +28,7 @@ You can install the development version of `gnomeR` from
 
 ``` r
 # install.packages("devtools")
-devtools::install_github("AxelitoMartin/gnomeR")
+devtools::install_github("MSKCC-Epi-Bio/gnomeR")
 ```
 
 Along with its companion package for cbioPortal data download:
@@ -44,219 +42,1149 @@ devtools::install_github("karissawhiting/cbioportalr")
 the `gnomeR` package provides a consistent framework for genetic data
 processing, visualization and analysis. This is primarily targeted to
 IMPACT datasets but can also be applied to any genomic data provided by
-CbioPortal.
+CbioPortal. With {gnomeR} and {cbioportalR} you can:
 
--   [**Dowloading and gathering data from
-    CbioPortal**](https://github.com/karissawhiting/cbioportalr) through
-    an integrated API using simply the sample IDs of the samples of
-    interests or the name of the study to retrieve all samples in that
-    study. A separate package `cbioportalr` was developed independently.
--   [**Processing genomic
-    data**](https://axelitomartin.github.io/gnomeR/articles/Data-processing.html)
-    retrieved for mutations (MAF file), fusions (MAF file) and
-    copy-number alterations (and when available segmentation files) into
-    an analysis ready format.
--   [**Visualization of the processed
-    data**](https://axelitomartin.github.io/gnomeR/articles/Visualizations.html)
-    provided through MAF file summaries, OncoPrints and heatmaps.
--   [**Analyzing the processed
-    data**](https://axelitomartin.github.io/gnomeR/articles/Analizing-genomic-data.html)
-    for association with binary, continuous and survival outcome.
-    Including further visualization to improve understanding of the
-    results.
+-   [**Download and gather data from
+    CbioPortal**](https://github.com/karissawhiting/cbioportalR) - Pull
+    from cBioPortal data base by study ID or sample ID.
+-   **OncoKB annotate data** - Filter genomic data for known oncogenic
+    alterations.
+-   **Process genomic data** - Process retrieved mutation/maf, fusions,
+    copy-number alteration, and segmentation data (when available) into
+    an analysis-ready formats.
+-   **Visualize processed data** - Create OncoPrints, heatmaps and
+    summary plots from processed data.
+-   **Analyzing processed data**- Analyze associations between genomic
+    variables and clinical variables or outcomes with summary tables,
+    advanced visualizations, and univariate models.
 
-## Examples
+## Getting Set up
 
-### Setting up the API
+{gnomeR} works with any genomic data that follows cBioPortal guidelines
+for
+[mutation](https://docs.cbioportal.org/5.1-data-loading/data-loading/file-formats#data-file-5),
+[CNA](https://docs.cbioportal.org/5.1-data-loading/data-loading/file-formats#discrete-copy-number-data),
+or
+[fusion](https://docs.cbioportal.org/5.1-data-loading/data-loading/file-formats#structural-variant-data)
+data file formats.
 
-In order to download the data from CbioPortal, one must first require a
-token from the website [CbioPortal](https://cbioportal.mskcc.org/) wich
-will prompt a login page with your MSKCC credentials. Then navigate to
-“Web API” in the top bar menu, following this simply download a token
-and copy it after running the following command in R:
+If you wish to pull the data directly from CbioPortal, see how to get
+set up with credentials with the
+[{cBioPortalR}](https://karissawhiting.github.io/cbioportalR/) package.
 
-``` r
-usethis::edit_r_environ()
-```
+If you want to oncoKB annotate your data, you need to acquire
+credentials from the [oncoKB website](https://www.oncokb.org/apiAccess).
 
-And pasting the token you were given in the .Renviron file that was
-created and saving after pasting your token.
+## Processing Genomic Data
 
-``` r
-CBIOPORTAL_TOKEN = 'YOUR_TOKEN'
-```
-
-You can test your connection using:
-
-``` r
-cbioportalr::get_cbioportal_token()
-```
-
-### Retrieving data
-
-Now that the Cbioportal API is set up in your environment, you must
-first specify the database of interest (IMPACT or TCGA are the two
-available options). Following this one can either specify the samples or
-study of interest:
-
-``` r
-library(gnomeR)
-library(cbioportalr)
-ids <- as.character(unique(mut$Tumor_Sample_Barcode)[1:100])
-df <- get_genetics(sample_ids = ids,database = "msk_impact",
-                       mutations = TRUE, fusions = TRUE, cna = TRUE)
-```
-
-### Processing the downloaded data
-
-The `binmat()` function is the feature of the data processing of
-`gnomeR`. It takes genomic inputs from various sources of CbioPortal
-(mutation files, fusion files and copy number raw counts) to give out a
-clean binary matrix of n samples by all the events that were found in
-the files.
-
-``` r
-df.clean <- binmat(maf = df$mut, cna = df$cna)
-```
-
-We further included example datasets from the raw dowloaded files on
-CbioPortal (`mut`, `fusion`, `cna`) which we will use for the following
-examples.
+The below examples uses the data sets `mut`, `fusion`, `cna` which were
+pulled from cBioPortal and are included in the package as example data
+sets. We will sample 100 samples for examples:
 
 ``` r
 set.seed(123)
-patients <- as.character(unique(mut$Tumor_Sample_Barcode))[sample(1:length(unique(mut$Tumor_Sample_Barcode)), 100, replace=FALSE)]
 
-gen_dat <- binmat(patients = patients, maf = mut, fusion = fusion, cna = cna)
-kable(gen_dat[1:10,1:10],row.names = TRUE)
+mut <- gnomeR::mut
+cna <- gnomeR::cna
+fusion <- gnomeR::fusion
+
+un <-  unique(mut$Tumor_Sample_Barcode)
+sample_patients <- sample(un, size = 100, replace = FALSE)
 ```
 
-|                   | TP53 | IGF1R | KEAP1 | KDM5C | KRAS | TERT | MAP2K1 | NCOR1 | DDR2 | FIP1L1 |
-|:------------------|-----:|------:|------:|------:|-----:|-----:|-------:|------:|-----:|-------:|
-| P-0010604-T01-IM5 |    1 |     0 |     0 |     0 |    0 |    0 |      0 |     0 |    0 |      0 |
-| P-0002651-T01-IM3 |    1 |     0 |     0 |     0 |    0 |    0 |      0 |     0 |    0 |      0 |
-| P-0000270-T01-IM3 |    1 |     0 |     0 |     0 |    0 |    0 |      0 |     0 |    0 |      0 |
-| P-0002915-T01-IM3 |    0 |     0 |     0 |     0 |    0 |    0 |      0 |     0 |    0 |      0 |
-| P-0011099-T01-IM5 |    0 |     0 |     0 |     0 |    0 |    0 |      0 |     0 |    0 |      0 |
-| P-0000080-T01-IM3 |    1 |     0 |     0 |     0 |    0 |    0 |      0 |     0 |    0 |      0 |
-| P-0001741-T01-IM3 |    1 |     0 |     1 |     0 |    1 |    0 |      0 |     0 |    0 |      0 |
-| P-0003964-T01-IM3 |    0 |     0 |     1 |     0 |    1 |    0 |      0 |     0 |    0 |      0 |
-| P-0003842-T01-IM5 |    0 |     0 |     0 |     0 |    0 |    0 |      0 |     0 |    0 |      0 |
-| P-0002597-T02-IM5 |    0 |     0 |     0 |     0 |    0 |    0 |      0 |     0 |    0 |      0 |
-
-### Visualization
-
-#### MAF
-
-Before we move on to more complex visualizations, we integrate the
-`maf_viz()` function to give an overview of the distribution of the
-different mutations across the cohort of interest:
+The main data processing function is `gene_binary()` which takes
+mutation, CNA and fusion files as input, and outputs a binary matrix of
+N rows (number of samples) by M genes included in the data set. We can
+specify which patients are included which will force all patients in
+resulting dataframe, even if they have no alterations.
 
 ``` r
-sum.plots <- maf_viz(maf = mut %>% filter(Tumor_Sample_Barcode %in% patients))
-sum.plots$topgenes
+gen_dat <- create_gene_binary(samples = sample_patients,
+                         maf = mut,
+                         fusion = fusion,
+                         cna = cna, rm_empty = TRUE)
+
+kable(gen_dat[1:5,1:5], row.names = TRUE)
 ```
 
-<img src="man/figures/README-unnamed-chunk-9-1.png" width="100%" />
+|                   | OSBPL9.fus | ALK.fus | EML4.fus | MLL3.fus | BRCA2.fus |
+|:------------------|-----------:|--------:|---------:|---------:|----------:|
+| P-0010604-T01-IM5 |          0 |       0 |        0 |        1 |         0 |
+| P-0002651-T01-IM3 |          0 |       0 |        0 |        0 |         0 |
+| P-0000270-T01-IM3 |          0 |       0 |        0 |        0 |         0 |
+| P-0002915-T01-IM3 |          0 |       0 |        0 |        0 |         0 |
+| P-0011099-T01-IM5 |          0 |       0 |        0 |        0 |         0 |
+
+## Visualize
+
+You can visualize your processed and raw alteration data sets using
+{gnomeR}’s many data visualization functions.
+
+Quickly visualize mutation characteristics with `ggvarclass()`,
+`ggvartype()`, `ggsnvclass()`, `ggsamplevar()`, `ggtopgenes()`,
+`gggenecor()`, and `ggcomut()`.
 
 ``` r
-sum.plots$genecomut
+ggvarclass(mutation = mut)
 ```
 
-<img src="man/figures/README-unnamed-chunk-9-2.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-5-1.png" width="100%" />
 
-#### OncoPrints
-
-OncoPrints are a convenient way to display the overall genomic profiles
-of samples in the cohort of interest. This is best used for a subset of
-genes that are under consideration.
+The wrapper function `mutation_viz()` will generate a list with the most
+commonly used plot which you can pass into a plot assembly framework
+like {patchwork}:
 
 ``` r
-genes <- c("TP53","PIK3CA","KRAS","TERT","EGFR","FAT","ALK","CDKN2A","CDKN2B")
-plot_oncoprint(gen_dat = gen_dat %>% select(starts_with(genes)))
+list_of_plots <- mutation_viz(mutation = mut)
+
+patchwork::wrap_plots(list_of_plots, ncol = 2) & 
+  ggplot2::theme(text = ggplot2::element_text(size = 8))
 ```
 
-<img src="man/figures/README-unnamed-chunk-10-1.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-6-1.png" width="100%" />
 
-#### FACETs
+`ggheatmap()` allows you to visualize mutation, CNA and fusion data all
+in one heatmap:
 
+``` r
+# filter only those with alterations
+gen_dat <- gen_dat %>%
+  rowwise() %>% 
+  mutate(total_alterations = sum(c_across(everything()))) %>%
+  filter(total_alterations > 1) %>%
+  select(-total_alterations) %>%
+  ungroup()
+
+select_gen_dat <- gen_dat[, (purrr::map(gen_dat, ~sum(.x, na.rm = TRUE)) > 0)]
+
+ggheatmap(select_gen_dat)
+```
+
+<img src="man/figures/README-unnamed-chunk-7-1.png" width="100%" />
+
+## Summarize & Analyze
+
+You can tabulate summarize your genomic data frame using the
+`tbl_genomic()` function, a wrapper for `gtsummary::tbl_summary()`.
+
+``` r
+gen_dat <- gen_dat %>%
+  dplyr::mutate(trt_status = sample(x = c("pre-trt", "post-trt"),
+       size = nrow(gen_dat), replace = TRUE)) 
+
+gen_dat %>%
+  tbl_genomic(freq_cutoff = .1, by = trt_status) %>%
+  gtsummary::add_p() 
+```
+
+<div id="dlnsygvzig" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>html {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
+}
+
+#dlnsygvzig .gt_table {
+  display: table;
+  border-collapse: collapse;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#dlnsygvzig .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#dlnsygvzig .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#dlnsygvzig .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 0;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#dlnsygvzig .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#dlnsygvzig .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#dlnsygvzig .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#dlnsygvzig .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#dlnsygvzig .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#dlnsygvzig .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#dlnsygvzig .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#dlnsygvzig .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#dlnsygvzig .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#dlnsygvzig .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#dlnsygvzig .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#dlnsygvzig .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#dlnsygvzig .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#dlnsygvzig .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#dlnsygvzig .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#dlnsygvzig .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#dlnsygvzig .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#dlnsygvzig .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#dlnsygvzig .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#dlnsygvzig .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#dlnsygvzig .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#dlnsygvzig .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#dlnsygvzig .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#dlnsygvzig .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#dlnsygvzig .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-left: 4px;
+  padding-right: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#dlnsygvzig .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#dlnsygvzig .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#dlnsygvzig .gt_left {
+  text-align: left;
+}
+
+#dlnsygvzig .gt_center {
+  text-align: center;
+}
+
+#dlnsygvzig .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#dlnsygvzig .gt_font_normal {
+  font-weight: normal;
+}
+
+#dlnsygvzig .gt_font_bold {
+  font-weight: bold;
+}
+
+#dlnsygvzig .gt_font_italic {
+  font-style: italic;
+}
+
+#dlnsygvzig .gt_super {
+  font-size: 65%;
+}
+
+#dlnsygvzig .gt_footnote_marks {
+  font-style: italic;
+  font-weight: normal;
+  font-size: 75%;
+  vertical-align: 0.4em;
+}
+
+#dlnsygvzig .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#dlnsygvzig .gt_slash_mark {
+  font-size: 0.7em;
+  line-height: 0.7em;
+  vertical-align: 0.15em;
+}
+
+#dlnsygvzig .gt_fraction_numerator {
+  font-size: 0.6em;
+  line-height: 0.6em;
+  vertical-align: 0.45em;
+}
+
+#dlnsygvzig .gt_fraction_denominator {
+  font-size: 0.6em;
+  line-height: 0.6em;
+  vertical-align: -0.05em;
+}
+</style>
+<table class="gt_table">
+  
+  <thead class="gt_col_headings">
+    <tr>
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1"><strong>Characteristic</strong></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1"><strong>Overall</strong>, N = 49<sup class="gt_footnote_marks">1</sup></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1"><strong>post-trt</strong>, N = 27<sup class="gt_footnote_marks">1</sup></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1"><strong>pre-trt</strong>, N = 22<sup class="gt_footnote_marks">1</sup></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1"><strong>p-value</strong><sup class="gt_footnote_marks">2</sup></th>
+    </tr>
+  </thead>
+  <tbody class="gt_table_body">
+    <tr><td class="gt_row gt_left" style="font-weight: bold;">CDK12.Amp</td>
+<td class="gt_row gt_center">6 (12%)</td>
+<td class="gt_row gt_center">3 (11%)</td>
+<td class="gt_row gt_center">3 (14%)</td>
+<td class="gt_row gt_center">>0.9</td></tr>
+    <tr><td class="gt_row gt_left" style="font-weight: bold;">MCL1.Amp</td>
+<td class="gt_row gt_center">6 (12%)</td>
+<td class="gt_row gt_center">3 (11%)</td>
+<td class="gt_row gt_center">3 (14%)</td>
+<td class="gt_row gt_center">>0.9</td></tr>
+    <tr><td class="gt_row gt_left" style="font-weight: bold;">MYC.Amp</td>
+<td class="gt_row gt_center">6 (12%)</td>
+<td class="gt_row gt_center">4 (15%)</td>
+<td class="gt_row gt_center">2 (9.1%)</td>
+<td class="gt_row gt_center">0.7</td></tr>
+    <tr><td class="gt_row gt_left" style="font-weight: bold;">CCND1.Amp</td>
+<td class="gt_row gt_center">5 (10%)</td>
+<td class="gt_row gt_center">1 (3.7%)</td>
+<td class="gt_row gt_center">4 (18%)</td>
+<td class="gt_row gt_center">0.2</td></tr>
+    <tr><td class="gt_row gt_left" style="font-weight: bold;">ERBB2.Amp</td>
+<td class="gt_row gt_center">5 (10%)</td>
+<td class="gt_row gt_center">3 (11%)</td>
+<td class="gt_row gt_center">2 (9.1%)</td>
+<td class="gt_row gt_center">>0.9</td></tr>
+    <tr><td class="gt_row gt_left" style="font-weight: bold;">FGF19.Amp</td>
+<td class="gt_row gt_center">5 (10%)</td>
+<td class="gt_row gt_center">1 (3.7%)</td>
+<td class="gt_row gt_center">4 (18%)</td>
+<td class="gt_row gt_center">0.2</td></tr>
+    <tr><td class="gt_row gt_left" style="font-weight: bold;">CDKN2A.Del</td>
+<td class="gt_row gt_center">8 (16%)</td>
+<td class="gt_row gt_center">4 (15%)</td>
+<td class="gt_row gt_center">4 (18%)</td>
+<td class="gt_row gt_center">>0.9</td></tr>
+    <tr><td class="gt_row gt_left" style="font-weight: bold;">CDKN2B.Del</td>
+<td class="gt_row gt_center">6 (12%)</td>
+<td class="gt_row gt_center">3 (11%)</td>
+<td class="gt_row gt_center">3 (14%)</td>
+<td class="gt_row gt_center">>0.9</td></tr>
+    <tr><td class="gt_row gt_left" style="font-weight: bold;">PTEN.Del</td>
+<td class="gt_row gt_center">4 (8.2%)</td>
+<td class="gt_row gt_center">2 (7.4%)</td>
+<td class="gt_row gt_center">2 (9.1%)</td>
+<td class="gt_row gt_center">>0.9</td></tr>
+    <tr><td class="gt_row gt_left" style="font-weight: bold;">PTEN.fus</td>
+<td class="gt_row gt_center">1 (2.0%)</td>
+<td class="gt_row gt_center">1 (3.7%)</td>
+<td class="gt_row gt_center">0 (0%)</td>
+<td class="gt_row gt_center">>0.9</td></tr>
+  </tbody>
+  
+  <tfoot class="gt_footnotes">
+    <tr>
+      <td class="gt_footnote" colspan="5"><sup class="gt_footnote_marks">1</sup> n (%)</td>
+    </tr>
+    <tr>
+      <td class="gt_footnote" colspan="5"><sup class="gt_footnote_marks">2</sup> Fisher's exact test</td>
+    </tr>
+  </tfoot>
+</table>
+</div>
+
+Additionally, you can analyze custom pathways, or a set of default gene
+pathways using `add_pathways()`:
+
+``` r
+gen_dat %>%
+  add_pathways() %>%
+  select(trt_status, contains("pathway_")) %>%
+  tbl_genomic(by = trt_status) %>%
+  gtsummary::add_p()
+```
+
+<div id="bpmsxtogda" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>html {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
+}
+
+#bpmsxtogda .gt_table {
+  display: table;
+  border-collapse: collapse;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#bpmsxtogda .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#bpmsxtogda .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#bpmsxtogda .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 0;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#bpmsxtogda .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#bpmsxtogda .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#bpmsxtogda .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#bpmsxtogda .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#bpmsxtogda .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#bpmsxtogda .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#bpmsxtogda .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#bpmsxtogda .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#bpmsxtogda .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#bpmsxtogda .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#bpmsxtogda .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#bpmsxtogda .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#bpmsxtogda .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#bpmsxtogda .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#bpmsxtogda .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#bpmsxtogda .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#bpmsxtogda .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#bpmsxtogda .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#bpmsxtogda .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#bpmsxtogda .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#bpmsxtogda .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#bpmsxtogda .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#bpmsxtogda .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#bpmsxtogda .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#bpmsxtogda .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-left: 4px;
+  padding-right: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#bpmsxtogda .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#bpmsxtogda .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#bpmsxtogda .gt_left {
+  text-align: left;
+}
+
+#bpmsxtogda .gt_center {
+  text-align: center;
+}
+
+#bpmsxtogda .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#bpmsxtogda .gt_font_normal {
+  font-weight: normal;
+}
+
+#bpmsxtogda .gt_font_bold {
+  font-weight: bold;
+}
+
+#bpmsxtogda .gt_font_italic {
+  font-style: italic;
+}
+
+#bpmsxtogda .gt_super {
+  font-size: 65%;
+}
+
+#bpmsxtogda .gt_footnote_marks {
+  font-style: italic;
+  font-weight: normal;
+  font-size: 75%;
+  vertical-align: 0.4em;
+}
+
+#bpmsxtogda .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#bpmsxtogda .gt_slash_mark {
+  font-size: 0.7em;
+  line-height: 0.7em;
+  vertical-align: 0.15em;
+}
+
+#bpmsxtogda .gt_fraction_numerator {
+  font-size: 0.6em;
+  line-height: 0.6em;
+  vertical-align: 0.45em;
+}
+
+#bpmsxtogda .gt_fraction_denominator {
+  font-size: 0.6em;
+  line-height: 0.6em;
+  vertical-align: -0.05em;
+}
+</style>
+<table class="gt_table">
+  
+  <thead class="gt_col_headings">
+    <tr>
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1"><strong>Characteristic</strong></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1"><strong>Overall</strong>, N = 49<sup class="gt_footnote_marks">1</sup></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1"><strong>post-trt</strong>, N = 27<sup class="gt_footnote_marks">1</sup></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1"><strong>pre-trt</strong>, N = 22<sup class="gt_footnote_marks">1</sup></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1"><strong>p-value</strong><sup class="gt_footnote_marks">2</sup></th>
+    </tr>
+  </thead>
+  <tbody class="gt_table_body">
+    <tr><td class="gt_row gt_left" style="font-weight: bold;">pathway_Myc</td>
+<td class="gt_row gt_center">6 (12%)</td>
+<td class="gt_row gt_center">4 (15%)</td>
+<td class="gt_row gt_center">2 (9.1%)</td>
+<td class="gt_row gt_center">0.7</td></tr>
+    <tr><td class="gt_row gt_left" style="font-weight: bold;">pathway_PI3K</td>
+<td class="gt_row gt_center">4 (8.2%)</td>
+<td class="gt_row gt_center">2 (7.4%)</td>
+<td class="gt_row gt_center">2 (9.1%)</td>
+<td class="gt_row gt_center">>0.9</td></tr>
+    <tr><td class="gt_row gt_left" style="font-weight: bold;">pathway_RTK/RAS</td>
+<td class="gt_row gt_center">3 (6.1%)</td>
+<td class="gt_row gt_center">1 (3.7%)</td>
+<td class="gt_row gt_center">2 (9.1%)</td>
+<td class="gt_row gt_center">0.6</td></tr>
+    <tr><td class="gt_row gt_left" style="font-weight: bold;">pathway_Nrf2</td>
+<td class="gt_row gt_center">1 (2.0%)</td>
+<td class="gt_row gt_center">1 (3.7%)</td>
+<td class="gt_row gt_center">0 (0%)</td>
+<td class="gt_row gt_center">>0.9</td></tr>
+    <tr><td class="gt_row gt_left" style="font-weight: bold;">pathway_p53</td>
+<td class="gt_row gt_center">1 (2.0%)</td>
+<td class="gt_row gt_center">1 (3.7%)</td>
+<td class="gt_row gt_center">0 (0%)</td>
+<td class="gt_row gt_center">>0.9</td></tr>
+    <tr><td class="gt_row gt_left" style="font-weight: bold;">pathway_Cell cycle</td>
+<td class="gt_row gt_center">0 (0%)</td>
+<td class="gt_row gt_center">0 (0%)</td>
+<td class="gt_row gt_center">0 (0%)</td>
+<td class="gt_row gt_center"></td></tr>
+    <tr><td class="gt_row gt_left" style="font-weight: bold;">pathway_Hippo</td>
+<td class="gt_row gt_center">0 (0%)</td>
+<td class="gt_row gt_center">0 (0%)</td>
+<td class="gt_row gt_center">0 (0%)</td>
+<td class="gt_row gt_center"></td></tr>
+    <tr><td class="gt_row gt_left" style="font-weight: bold;">pathway_Notch</td>
+<td class="gt_row gt_center">0 (0%)</td>
+<td class="gt_row gt_center">0 (0%)</td>
+<td class="gt_row gt_center">0 (0%)</td>
+<td class="gt_row gt_center"></td></tr>
+    <tr><td class="gt_row gt_left" style="font-weight: bold;">pathway_TGFB</td>
+<td class="gt_row gt_center">0 (0%)</td>
+<td class="gt_row gt_center">0 (0%)</td>
+<td class="gt_row gt_center">0 (0%)</td>
+<td class="gt_row gt_center"></td></tr>
+    <tr><td class="gt_row gt_left" style="font-weight: bold;">pathway_Wnt</td>
+<td class="gt_row gt_center">0 (0%)</td>
+<td class="gt_row gt_center">0 (0%)</td>
+<td class="gt_row gt_center">0 (0%)</td>
+<td class="gt_row gt_center"></td></tr>
+  </tbody>
+  
+  <tfoot class="gt_footnotes">
+    <tr>
+      <td class="gt_footnote" colspan="5"><sup class="gt_footnote_marks">1</sup> n (%)</td>
+    </tr>
+    <tr>
+      <td class="gt_footnote" colspan="5"><sup class="gt_footnote_marks">2</sup> Fisher's exact test</td>
+    </tr>
+  </tfoot>
+</table>
+</div>
+
+## Further analytical tools
+
+Along with mutation, cna and fusion data, {gnomeR} also allows analysis
+and visualization of
+[FACETs](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5027494/) data.
 [FACETs](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5027494/) is an
-ASCN tool and open-source software with a broad application to whole
-genome, whole-exome, as well as targeted panel sequencing platforms. It
-is a fully integrated stand-alone pipeline that includes sequencing BAM
-file post-processing, joint segmentation of total- and allele-specific
-read counts, and integer copy number calls corrected for tumor purity,
-ploidy and clonal heterogeneity, with comprehensive output.
+allele-specific copy number tool and open-source software with a broad
+application to whole genome, whole-exome, as well as targeted panel
+sequencing platforms. It is a fully integrated stand-alone pipeline that
+includes sequencing BAM file post-processing, joint segmentation of
+total- and allele-specific read counts, and integer copy number calls
+corrected for tumor purity, ploidy and clonal heterogeneity, with
+comprehensive output.
+
+You can vizualize this data using `facets_heatmap()`
 
 ``` r
-p.heat <- facets_heatmap(seg = seg, patients = patients, min_purity = 0)
+select_samples <- sample(unique(seg$ID),  100)
+p.heat <- facets_heatmap(seg = seg, samples = select_samples, min_purity = 0)
 p.heat$p
 ```
 
-<img src="man/figures/README-unnamed-chunk-11-1.png" width="100%" />
-
-### Analysis
-
-In this section we will quickly overview the possible analysis in
-gnomeR.
-
-#### Binary and continuous outcomes
-
-The `gen_summary()` function let’s the user perform a large scale
-association between the genomic features present in the `binmat()`
-function output and an outcome of choice:
-
--   binary (unpaired test using Fisher’s exact test and paired test
-    using McNemmar’s exact test)
--   continuous (using simple linear regression)
-
-``` r
-outcome <- factor(rbinom(n = length(patients),size = 1,prob = 1/2),levels = c("0","1"))
-# out <- gen_summary(gen_dat = gen_dat,outcome = outcome,filter = 0.05)
-# kable(out$fits[1:10,],row.names = TRUE)
-# out$forest.plot
-```
-
-#### Survival analysis
-
-Similarly we include simple tools to perform univariate Cox’s
-proportional regression adjusted for false discovery rate in the
-`gen_uni_cox()` function.
-
-``` r
-time <- rexp(length(patients))
-status <- outcome
-surv_dat <- as.data.frame(cbind(time,status))
-out <- gen_uni_cox(X = gen_dat, surv_dat = surv_dat, surv_formula = Surv(time,status)~.,filter = 0.05)
-kable(out$tab[1:10,],row.names = TRUE)
-```
-
-|        | Feature | Coefficient |   HR | Pvalue |   FDR | MutationFrequency |
-|:-------|:--------|------------:|-----:|-------:|------:|------------------:|
-| MLL    | MLL     |       -1.48 | 0.23 | 0.0155 | 0.496 |              0.09 |
-| STK11  | STK11   |       -1.46 | 0.23 | 0.0519 | 0.831 |              0.07 |
-| KEAP1  | KEAP1   |       -1.02 | 0.36 | 0.1670 | 0.922 |              0.05 |
-| NOTCH1 | NOTCH1  |        0.61 | 1.84 | 0.2070 | 0.922 |              0.08 |
-| DOT1L  | DOT1L   |        0.66 | 1.93 | 0.2110 | 0.922 |              0.05 |
-| TSC1   | TSC1    |        0.75 | 2.12 | 0.2130 | 0.922 |              0.05 |
-| CDH1   | CDH1    |        0.60 | 1.83 | 0.2520 | 0.922 |              0.06 |
-| EPHA5  | EPHA5   |       -1.08 | 0.34 | 0.2870 | 0.922 |              0.05 |
-| PIK3CA | PIK3CA  |        0.41 | 1.51 | 0.2950 | 0.922 |              0.12 |
-| PTPRD  | PTPRD   |        0.49 | 1.63 | 0.3570 | 0.922 |              0.08 |
-
-``` r
-out$KM[[1]]
-```
-
-<img src="man/figures/README-unnamed-chunk-13-1.png" width="100%" />
-
-### Further analytical tools
-
 The primary goal of `gnomeR` not being in depth analysis of genomic data
-but rather reliable, modulable and reproducible framework for processing
+but rather reliable, modular and reproducible framework for processing
 various types of genomic data. For users interested in large scale
 genomic analytical methods we compiled various packages developed by
 [Department of Epidemiology and
 Biostatistics](https://www.mskcc.org/departments/epidemiology-biostatistics),
 Memorial Sloan-Kettering Cancer Center under an umbrella R package,
 [gnomeVerse](https://github.com/AxelitoMartin/genomeVerse).
+
+# Contributing
+
+Please note that the gnomeR project is released with a [Contributor Code
+of
+Conduct](https://contributor-covenant.org/version/2/0/CODE_OF_CONDUCT.html).
+By contributing to this project, you agree to abide by its terms.
+
+[@akriti21](https://github.com/akriti21),
+[@carokos](https://github.com/carokos),
+[@ChristineZ-msk](https://github.com/ChristineZ-msk),
+[@jflynn264](https://github.com/jflynn264),
+[@karissawhiting](https://github.com/karissawhiting), and
+[@michaelcurry1123](https://github.com/michaelcurry1123)

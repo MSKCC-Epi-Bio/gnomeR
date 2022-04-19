@@ -4,7 +4,7 @@
 #'
 #' Sanchez-Vega, F., Mina, M., Armenia, J., Chatila, W. K., Luna, A., La, K. C., Dimitriadoy, S., Liu, D. L., Kantheti, H. S., Saghafinia, S., Chakravarty, D., Daian, F., Gao, Q., Bailey, M. H., Liang, W. W., Foltz, S. M., Shmulevich, I., Ding, L., Heins, Z., Ochoa, A., … Schultz, N. (2018). Oncogenic Signaling Pathways in The Cancer Genome Atlas. Cell, 173(2), 321–337.e10. <https://doi.org/10.1016/j.cell.2018.03.035>
 #'
-#' @param binary_matrix a binary matrix from `binary_matrix()`
+#' @param gene_binary a binary matrix from `gene_binary()`
 #' @param pathways a vector of pathway names to annotate. The options are `names(gnomeR::pathways)` ("RTK/RAS", "Nrf2",
 #'  "PI3K", "TGFB", "p53", "Wnt", "Myc", "Cell cycle", "Hippo", "Notch"). You can pass one pathway name, multiple pathway names, or `NULL`. By default, all
 #'  pathways defined in `gnomeR::pathways` will be included. Included default pathways are alteration-specific meaning a specific type of alteration (mut/cna/fusion)
@@ -15,17 +15,17 @@
 #' any type of gene alteration should be counted towards a pathway ("gene") or only specific types of alterations should be counted towards a pathway ("alteration")
 #' By default, the function assumes alteration-specific pathway annotation and all default pathways are annotated this way. If a
 #' custom pathway is passed with no suffix (e.g. `custom_pathway = 'TP53'`) it will assume it is a mutation.
-#' @param bind_pathways a logical indicating whether pathway columns should be joined to main binary_matrix or returned separately as a list item.
+#' @param bind_pathways a logical indicating whether pathway columns should be joined to main gene_binary or returned separately as a list item.
 #' Default is TRUE and function will `bind_cols()` and return a data.frame. If FALSE a list will be returned.
 #' @return a data frame: each sample is a row, columns are pathways, with values of 0/1 depending on pathway alteration status.
 #' @export
 #'
 #' @examples
 #'
-#' binary_matrix <- binary_matrix(mutation = mut, cna = cna, fusion = fusion)
-#' pathway_df <- add_pathways(binary_matrix, pathways = "Notch")
+#' gene_binary <- create_gene_binary(mutation = mut, cna = cna, fusion = fusion)
+#' pathway_df <- add_pathways(gene_binary, pathways = "Notch")
 #'
-add_pathways <- function(binary_matrix,
+add_pathways <- function(gene_binary,
                          pathways = c(names(gnomeR::pathways)),
                          custom_pathways = NULL,
                          bind_pathways = TRUE,
@@ -39,8 +39,8 @@ add_pathways <- function(binary_matrix,
   switch(!(class(custom_pathways) %in% c("NULL", "character", "list")),
          cli::cli_abort("{.code custom_pathways} must be character vector, or list"))
 
-  # if(!("sample_id" %in% names(binary_matrix))) {
-  #   binary_matrix <- rownames_to_column(binary_matrix, var = "sample_id")
+  # if(!("sample_id" %in% names(gene_binary))) {
+  #   gene_binary <- rownames_to_column(gene_binary, var = "sample_id")
   # }
   pathways_input <- pathways
 
@@ -56,7 +56,7 @@ add_pathways <- function(binary_matrix,
 
   count_pathways_by <- match.arg(count_pathways_by, c("alteration", "gene"))
 
-  all_cols <- colnames(binary_matrix)
+  all_cols <- colnames(gene_binary)
   mut_cols <- !(str_detect(all_cols, ".Amp|.Del|.fus|.cna"))
 
 
@@ -67,7 +67,7 @@ add_pathways <- function(binary_matrix,
     if (is.atomic(custom_pathways)) {
       empt_list <- list()
       empt_list[[1]] <- custom_pathways
-      names(empt_list) <- "custom_pathway"
+      names(empt_list) <- "custom"
 
       custom_pathways <- empt_list
 
@@ -78,7 +78,7 @@ add_pathways <- function(binary_matrix,
       if (is.null(names(custom_pathways))) {
 
         names(custom_pathways) <-
-          paste0("custom_pathway_", 1:length(custom_pathways))
+          paste0("custom_", 1:length(custom_pathways))
       }
     }
 
@@ -137,11 +137,11 @@ add_pathways <- function(binary_matrix,
   # rename mut cols -assume all non CNA/Fusion are mutations
   if (any(mut_cols)) {
     all_cols[mut_cols] <- paste0(all_cols[mut_cols], ".mut")
-    colnames(binary_matrix) <- all_cols
+    colnames(gene_binary) <- all_cols
   }
 
   # process pathways ---------------------------------------------------------------
-  path_out <- purrr::imap_dfc(final_paths, ~ .sum_alts_in_pathway(binary_matrix,
+  path_out <- purrr::imap_dfc(final_paths, ~ .sum_alts_in_pathway(gene_binary,
                                                                  pathway_list_item = .x,
                                                                  pathway_name = .y,
                                                                  count_pathways_by = count_pathways_by))
@@ -151,13 +151,13 @@ add_pathways <- function(binary_matrix,
   # remove .mut that we added
   if (any(mut_cols)) {
     all_cols[mut_cols] <- str_remove(all_cols[mut_cols], ".mut")
-    colnames(binary_matrix) <- all_cols
+    colnames(gene_binary) <- all_cols
   }
 
   path_out <- path_out %>%
     purrr::when(
-      bind_pathways ~ bind_cols(binary_matrix, .),
-      TRUE ~ list("binary_matrix" = binary_matrix,
+      bind_pathways ~ bind_cols(gene_binary, .),
+      TRUE ~ list("gene_binary" = gene_binary,
                   "pathways" = path_out))
 
 
@@ -167,7 +167,7 @@ add_pathways <- function(binary_matrix,
 
 #' Title
 #'
-#' @param binary_matrix a binary matrix (see `binary_matrix()`)
+#' @param gene_binary a binary matrix (see `gene_binary()`)
 #' @param pathway_list_item a named list of length 1 with pathway name as name and vector of genes as first
 #' and only item in list
 #' @param pathway_name name of pathway
@@ -177,17 +177,17 @@ add_pathways <- function(binary_matrix,
 #' @export
 #'
 #' @examples
-#' binary_matrix <- binary_matrix(mutation = mut, cna = cna,
+#' gene_binary <- create_gene_binary(mutation = mut, cna = cna,
 #' fusion = fusion)
-#' x <- .sum_alts_in_pathway(binary_matrix,
+#' x <- .sum_alts_in_pathway(gene_binary,
 #'  pathway_list_item = gnomeR::pathways[1],
 #'   pathway_name = names(gnomeR::pathways[1]),
 #'     count_pathways_by = "alteration")
-.sum_alts_in_pathway <- function(binary_matrix, pathway_list_item,
+.sum_alts_in_pathway <- function(gene_binary, pathway_list_item,
                                  pathway_name,
                                  count_pathways_by) {
 
-  path_alt <- binary_matrix %>%
+  path_alt <- gene_binary %>%
     purrr::when(
       count_pathways_by == "alteration" ~
         select(., any_of(pathway_list_item[[1]])),
@@ -195,7 +195,7 @@ add_pathways <- function(binary_matrix,
         select(., contains(pathway_list_item[[1]]))
       ) %>%
     mutate(sum = rowSums(., na.rm = TRUE)) %>%
-    transmute('{pathway_name}' := if_else(sum >= 1, 1, 0))
+    transmute('pathway_{pathway_name}' := if_else(sum >= 1, 1, 0))
 
   return(path_alt)
 }
