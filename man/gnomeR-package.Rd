@@ -6,13 +6,13 @@
 \alias{gnomeR-package}
 \title{gnomeR: Wrangle and analyze IMPACT and TCGA mutation data}
 \description{
-Prepare raw IMPACT and TCGA mutation data for analysis. Annotate OncoKB, summarize maf files, visualize results and more.
+Prepare raw mutation, cna, and fusion data for analysis. Annotate OncoKB, summarize maf files, visualize results and more.
 }
 \seealso{
 Useful links:
 \itemize{
-  \item \url{https://github.com/AxelitoMartin/gnomeR}
-  \item Report bugs at \url{https://github.com/AxelitoMartin/gnomeR/issues}
+  \item \url{https://github.com/MSKCC-Epi-Bio/gnomeR}
+  \item Report bugs at \url{https://github.com/MSKCC-Epi-Bio/gnomeR/issues}
 }
 
 }
@@ -22,8 +22,6 @@ Useful links:
 Authors:
 \itemize{
   \item Arshi Arora
-  \item Karissa Whiting (\href{https://orcid.org/0000-0002-4683-1868}{ORCID})
-  \item Margie Hannum (\href{https://orcid.org/0000-0002-2953-0449}{ORCID})
 }
 
 }

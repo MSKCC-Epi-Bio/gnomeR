@@ -7,23 +7,20 @@ Authors@R:
            role = c("aut", "cre"),
            email = "axel.steph.martin@gmail.com",
            comment = c(ORCID = "YOUR-ORCID-ID")),
-      person(given = "Arshi",
-             family = "Arora",
-             role = "aut"),
       person(given = "Karissa",
              family = "Whiting",
-             role = "aut",
+             role = c("aut", "cre"),
+             email = "karissa.whiting@gmail.com",
              comment = c(ORCID = "0000-0002-4683-1868")),   
-      person(given = "Margie",
-             family = "Hannum",
-             role = "aut",
-             comment = c(ORCID = "0000-0002-2953-0449")))
-Description: Prepare raw IMPACT and TCGA mutation data for analysis. Annotate OncoKB, summarize maf files, visualize results and more. 
+      person(given = "Arshi",
+             family = "Arora",
+             role = "aut"))
+Description: Prepare raw mutation, cna, and fusion data for analysis. Annotate OncoKB, summarize maf files, visualize results and more. 
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
-URL: https://github.com/AxelitoMartin/gnomeR
-BugReports: https://github.com/AxelitoMartin/gnomeR/issues
+URL: https://github.com/MSKCC-Epi-Bio/gnomeR
+BugReports: https://github.com/MSKCC-Epi-Bio/gnomeR/issues
 RoxygenNote: 7.1.2
 Depends: R (>= 3.6)
 biocViews: 
