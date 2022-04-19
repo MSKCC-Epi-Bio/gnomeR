@@ -17,14 +17,15 @@ knitr::opts_chunk$set(
 library(gnomeR)
 library(knitr)
 library(dplyr)
+library(gtsummary)
 ```
 
 # gnomeR
 
 <!-- badges: start -->
-[![R-CMD-check](https://github.com/MSKCC-Epi-Bio/gnomeR/workflows/R-CMD-check/badge.svg](https://github.com/MSKCC-Epi-Bio/gnomeR/actions)
-
+[![R-CMD-check](https://github.com/MSKCC-Epi-Bio/gnomeR/workflows/R-CMD-check/badge.svg)](https://github.com/MSKCC-Epi-Bio/gnomeR/actions)
 [![Codecov test coverage](https://codecov.io/gh/MSKCC-Epi-Bio/gnomeR/branch/main/graph/badge.svg)](https://app.codecov.io/gh/MSKCC-Epi-Bio/gnomeR?branch=main)
+
 <!-- badges: end -->
 
 <font size="5">:bangbang: :warning: **NOTE: This package is currently under active development with a new stable release expected April 30th, 2022. For code written before 2022-03-23, please use the previous stable version (v1.1.0)**:warning::bangbang: </font>
@@ -97,6 +98,7 @@ gen_dat <- create_gene_binary(samples = sample_patients,
 kable(gen_dat[1:5,1:5], row.names = TRUE)
 ```
 
+
 ## Visualize
 
 You can visualize your processed and raw alteration data sets using {gnomeR}'s many data visualization functions. 
@@ -110,7 +112,7 @@ ggvarclass(mutation = mut)
 
 The wrapper function `mutation_viz()` will generate a list with the most commonly used plot which you can pass into a plot assembly framework like {patchwork}: 
 
-```{r}
+```{r, fig.height=9, fig.width=8}
 list_of_plots <- mutation_viz(mutation = mut)
 
 patchwork::wrap_plots(list_of_plots, ncol = 2) & 
@@ -120,7 +122,7 @@ patchwork::wrap_plots(list_of_plots, ncol = 2) &
 
 `ggheatmap()` allows you to visualize mutation, CNA and fusion data all in one heatmap:
 
-```{r}
+```{r, fig.height=8, fig.width=7}
 
 # filter only those with alterations
 gen_dat <- gen_dat %>%
@@ -132,33 +134,57 @@ gen_dat <- gen_dat %>%
 
 select_gen_dat <- gen_dat[, (purrr::map(gen_dat, ~sum(.x, na.rm = TRUE)) > 0)]
 
-ggheatmap(select_gen_dat)
+ggheatmap(select_gen_dat[, 1:50])
 ```
 
 ## Summarize & Analyze
 
 You can tabulate summarize your genomic data frame using the `tbl_genomic()` function, a wrapper for `gtsummary::tbl_summary()`. 
 
-```{r}
+```{r }
 
 gen_dat <- gen_dat %>%
   dplyr::mutate(trt_status = sample(x = c("pre-trt", "post-trt"),
        size = nrow(gen_dat), replace = TRUE)) 
+```
 
-gen_dat %>%
+
+```{r, eval=FALSE}
+
+gene_tbl_trt <-  gen_dat %>%
   tbl_genomic(freq_cutoff = .1, by = trt_status) %>%
   gtsummary::add_p() 
+
+gene_tbl_trt
 ```
+
+```{r, eval=FALSE, echo=FALSE}
+gt::gtsave(as_gt(gene_tbl_trt),
+           file = here::here("man", "figures", "gene_tbl_trt.png"))
+```
+
+
+<img src="man/figures/gene_tbl_trt.png" width="60%" />
 
 Additionally, you can analyze custom pathways, or a set of default gene pathways using `add_pathways()`:
 
-```{r}
-gen_dat %>%
+```{r, eval=FALSE}
+path_by_trt <- gen_dat %>%
   add_pathways() %>%
   select(trt_status, contains("pathway_")) %>%
   tbl_genomic(by = trt_status) %>%
-  gtsummary::add_p()
+  gtsummary::add_p() 
+
+
+path_by_trt
 ```
+
+```{r, eval=FALSE, echo=FALSE}
+gt::gtsave(as_gt(path_by_trt),
+           file = here::here("man", "figures", "path_by_trt.png"))
+```
+
+<img src="man/figures/path_by_trt.png" width="60%" />
 
 ## Further analytical tools
 
@@ -166,7 +192,8 @@ Along with mutation, cna and fusion data, {gnomeR} also allows analysis and visu
 
 You can vizualize this  data using `facets_heatmap()`
 
-```{r, eval = FALSE}
+```{r, warning=FALSE, message=FALSE}
+
 select_samples <- sample(unique(seg$ID),  100)
 p.heat <- facets_heatmap(seg = seg, samples = select_samples, min_purity = 0)
 p.heat$p
@@ -179,6 +206,6 @@ The primary goal of `gnomeR` not being in depth analysis of genomic data but rat
 
 Please note that the gnomeR project is released with a [Contributor Code of Conduct](https://contributor-covenant.org/version/2/0/CODE_OF_CONDUCT.html). By contributing to this project, you agree to abide by its terms.
 
-`r usethis::use_tidy_thanks("MSKCC-Epi-Bio/gnomeR", from = "2022-03-01") %>% {glue::glue("[&#x0040;{.}](https://github.com/{.})")} %>% glue::glue_collapse(sep = ", ", last = ", and ")`
+`r usethis::use_tidy_thanks("MSKCC-Epi-Bio/gnomeR", from = "2020-01-01") %>% {glue::glue("[&#x0040;{.}](https://github.com/{.})")} %>% glue::glue_collapse(sep = ", ", last = ", and ")`
 
 

@@ -141,7 +141,7 @@ add_pathways <- function(gene_binary,
   }
 
   # process pathways ---------------------------------------------------------------
-  path_out <- purrr::imap_dfc(final_paths, ~ .sum_alts_in_pathway(gene_binary,
+  path_out <- purrr::imap_dfc(final_paths, ~ .sum_alts_in_pathway(gene_binary = gene_binary,
                                                                  pathway_list_item = .x,
                                                                  pathway_name = .y,
                                                                  count_pathways_by = count_pathways_by))
@@ -186,14 +186,12 @@ add_pathways <- function(gene_binary,
 .sum_alts_in_pathway <- function(gene_binary, pathway_list_item,
                                  pathway_name,
                                  count_pathways_by) {
-
   path_alt <- gene_binary %>%
     purrr::when(
       count_pathways_by == "alteration" ~
-        select(., any_of(pathway_list_item[[1]])),
+        select(., any_of(unlist(pathway_list_item, use.names=FALSE))),
       count_pathways_by == "gene" ~
-        select(., contains(pathway_list_item[[1]]))
-      ) %>%
+        select(., contains(unlist(pathway_list_item, use.names=FALSE)))) %>%
     mutate(sum = rowSums(., na.rm = TRUE)) %>%
     transmute('pathway_{pathway_name}' := if_else(sum >= 1, 1, 0))
 
