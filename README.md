@@ -12,7 +12,7 @@ coverage](https://codecov.io/gh/MSKCC-Epi-Bio/gnomeR/branch/main/graph/badge.svg
 <!-- badges: end -->
 
 <font size="5">:bangbang: :warning: **NOTE: This package is currently
-under active development with a new stable release expected April 30th,
+under active development with a new stable release expected May 30th,
 2022. For code written before 2022-03-23, please use the previous stable
 version (v1.1.0)**:warning::bangbang: </font>
 
