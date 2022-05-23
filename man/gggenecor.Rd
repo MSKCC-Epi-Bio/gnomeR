@@ -4,14 +4,14 @@
 \alias{gggenecor}
 \title{Correlation Heatmap of the Top Altered Genes}
 \usage{
-gggenecor(maf, n_genes = 10, ...)
+gggenecor(mutation, n_genes = 10, ...)
 }
 \arguments{
-\item{maf}{Raw maf dataframe containing alteration data}
+\item{mutation}{Raw mutation dataframe containing alteration data}
 
 \item{n_genes}{Number of top genes to display in plot}
 
-\item{...}{Further binary_matrix() arguments}
+\item{...}{Further create_gene_binary() arguments}
 }
 \value{
 Correlation heatmap of the top altered genes

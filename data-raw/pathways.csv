@@ -1,13 +1,89 @@
-﻿pathway,genes,source
-RTK-RAS," EGFR, EGFR.fus, EGFR.Amp, ERBB2, ERBB2.Amp, ERBB2.fus, ERBB3,ERBB4, ERBB4.fus, MET, MET.Amp, PDGFRA, PDGFRA.Amp, FGFR1, FGFR1.fus, FGFR1.Amp, FGFR2, FGFR2.Amp, FGFR2.fus, FGFR3, FGFR4, IGF1R,RET,  ROS1, ALK, FLT3, NTRK1, NTRK2, NTRK3, JAK2, CBL, ERRFI1, ABL1, SOS1, NF1, NF1.fus, RASA1, RASA1.Del, PTPN11, KRAS, KRAS.Amp, HRAS, HRAS.Amp, NRAS, RIT1, RIT1.Amp, ARAF, ARAF.Amp, BRAF, BRAF.fus, BRAF.Amp, RAC1, RAC1.Amp, MAPK1, MAPK1.Amp, MAP2K1, MAP2K2", https://pubmed.ncbi.nlm.nih.gov/29625050/
-TGF-B," TGFBR1, TGFBR2, TGFBR2.fus, TGFBR2.Del, ACVR1, SMAD2, SMAD2.fus, SMAD2.Del, SMAD3, SMAD3.Del, SMAD3.fus, SMAD4, SMAD4.Del", https://pubmed.ncbi.nlm.nih.gov/29625050/
-c-MYC," EGFR.Amp, MYC.Amp",  https://pubmed.ncbi.nlm.nih.gov/30655893/
-chromosomal_Instability,"TP53, APC, KRAS",https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3983432/
-p53,"ATM.fus,ATM.Del, CHEK2, TP53.fus, TP53.Del, MDM2, CDKN2A.Del, MDM4, ATM, TP53, CDKN2A", https://pubmed.ncbi.nlm.nih.gov/29625050/
-WNT," APC, RNF43, RNF43.Del, TCF7L2, AMER1, AXIN1, AXIN2.Del, GSK3B, CTNNB1, AXIN2", https://pubmed.ncbi.nlm.nih.gov/29625050/
-Min1," TGFBR1, TGFBR2, BRAF, TP53, KRAS, SMAD4",  https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3983432/
-PI3K," PTEN, PTEN.Del, PIK3R2, INPP4B, INPP4B.Del, PIK3CA, PIK3CA.Amp, PIK3CB,PIK3CB.Amp, PIK3R1.Del, PIK3R1, AKT1, AKT3, AKT2, AKT2.Amp, PPP2R1A, STK11, STK11.Del, TSC1, TSC1.Del, TSC2, RHEB, RICTOR, RICTOR.Amp,MTOR, RPTOR, RPTOR.fus", https://pubmed.ncbi.nlm.nih.gov/29625050/
-cell_cycle," CDKN1A, CDKN1B, CDKN1B.Del, CCNE1.Amp, RB1, RB1, RB1.Del, RB1.fus, CCND1.Amp, CCND2, CCND2.Amp, CCND3.Amp, E2F3, CDK4.fus, CDK6, CDK6, CDK6.Amp", https://pubmed.ncbi.nlm.nih.gov/29625050/
-hippo," FAT1, FAT1.Del, FAT1.fus, NF2, LATS1, LATS1.fus, LATS2, YAP1.Amp", https://pubmed.ncbi.nlm.nih.gov/29625050/
-notch,"  FBXW7, NOTCH1, NOTCH2, NOTCH2.Del, NOTCH2.fus, NOTCH3, NOTCH4, 
-CREBBP, EP300, EP300.Del, NCOR1, KDM5A.Amp", https://pubmed.ncbi.nlm.nih.gov/29625050/
+RTK/RAS,Nrf2,PI3K,TGFB,p53,Wnt,Myc,Cell cycle,Hippo,Notch
+EGFR.Amp,KEAP1.Del,PTEN.Del,TGFBR1.Del,MDM2.Amp,WIF1.mut,MYC.Amp,CDKN1A.Del,DCHS1.mut,NOV.Del
+EGFR.mut,KEAP1.mut,PTEN.mut,TGFBR1.mut,MDM4.Amp,WIF1.fus,MYC.mut,CDKN1A.mut,DCHS1.fus,NOV.mut
+EGFR.fus,KEAP1.fus,PTEN.fus,TGFBR1.fus,CDKN2A.Del,SFRP1.Del,MYC.fus,CDKN1A.fus,DCHS2.mut,NOV.fus
+FGFR1.Amp,CUL3.Del,PTEN.meth,TGFBR1.meth,CDKN2A.mut,SFRP1.mut,MYCN.Amp,CDKN1A.meth,DCHS2.fus,NOV.meth
+FGFR1.mut,CUL3.mut,INPP4B.Del,TGFBR2.Del,CDKN2A.fus,SFRP1.fus,MYCN.mut,CDKN1B.Del,FAT1.Del,CNTN6.Del
+FGFR1.fus,CUL3.fus,INPP4B.mut,TGFBR2.mut,CDKN2A.meth,SFRP2.Del,MAX.mut,CDKN1B.mut,FAT1.mut,CNTN6.mut
+RET.mut,NFE2L2.Amp,INPP4B.fus,TGFBR2.fus,ATM.Del,SFRP2.mut,MAX.fus,CDKN1B.fus,FAT1.fus,CNTN6.fus
+RET.fus,NFE2L2.mut,PIK3CA.Amp,TGFBR2.meth,ATM.mut,SFRP2.fus,MGA.Del,CDKN1B.meth,FAT2.Del,JAG2.mut
+ERBB2.Amp,,PIK3CA.mut,ACVR2A.Del,ATM.fus,SFRP3.Del,MGA.mut,CDKN2A.Del,FAT2.mut,NOTCH1.Del
+ERBB2.mut,,PIK3CA.fus,ACVR2A.mut,CHEK2.mut,SFRP3.mut,MGA.fus,CDKN2A.mut,FAT2.fus,NOTCH1.mut
+FGFR2.Amp,,PIK3CB.Amp,ACVR2A.fus,CHEK2.fus,SFRP3.fus,MGA.meth,CDKN2A.fus,FAT3.Del,NOTCH1.fus
+FGFR2.mut,,PIK3CB.mut,ACVR2A.meth,RPS6KA3.mut,SFRP4.Del,MXI1.mut,CDKN2A.meth,FAT3.mut,NOTCH2.Del
+FGFR2.fus,,PIK3CB.fus,ACVR1B.Del,RPS6KA3.fus,SFRP4.mut,MXI1.fus,CDKN2B.Del,FAT3.fus,NOTCH2.mut
+ROS1.mut,,PIK3R2.Amp,ACVR1B.mut,TP53.Del,SFRP4.fus,MNT.mut,CDKN2B.mut,FAT4.Del,NOTCH2.fus
+ROS1.fus,,PIK3R2.mut,ACVR1B.fus,TP53.mut,SFRP5.Del,MLX.mut,CDKN2B.fus,FAT4.mut,NOTCH3.Del
+ERBB3.Amp,,PIK3R1.Del,ACVR1B.meth,TP53.fus,SFRP5.mut,,CDKN2B.meth,FAT4.fus,NOTCH3.mut
+ERBB3.mut,,PIK3R1.mut,SMAD2.Del,,SFRP5.fus,,CDKN2C.Del,TAOK1.mut,NOTCH3.fus
+FGFR3.Amp,,PIK3R1.fus,SMAD2.mut,,RNF43.Del,,CDKN2C.mut,TAOK1.fus,NOTCH4.Del
+FGFR3.mut,,PIK3R3.Del,SMAD2.fus,,RNF43.mut,,CDKN2C.fus,TAOK2.mut,NOTCH.mut
+FGFR3.fus,,PIK3R3.mut,SMAD3.Del,,RNF43.fus,,CDKN2C.meth,TAOK2.fus,NOTCH.fus
+ALK.mut,,PIK3R3.fus,SMAD3.mut,,ZNRF3.Del,,CCNE1.Amp,TAOK3.mut,ARRDC1.Amp
+ALK.fus,,AKT1.Amp,SMAD3.fus,,ZNRF3.mut,,CCND1.Amp,TAOK3.fus,DNER.mut
+ERBB4.mut,,AKT1.mut,SMAD3.meth,,ZNRF3.fus,,CCND1.mut,SAV1.Del,DNER.fus
+ERBB4.fus,,AKT1.fus,SMAD4.Del,,ZNRF3.meth,,CCND1.fus,SAV1.mut,PSEN2.Del
+FGFR4.Amp,,AKT2.Amp,SMAD4.mut,,LRP5.fus,,CCND2.Amp,SAV1.fus,PSEN2.mut
+FGFR4.mut,,AKT2.mut,SMAD4.fus,,FRP6.fus,,CCND2.mut,STK3.mut,FBXW7.Del
+FLT3.mut,,AKT2.fus,,,DKK1.Del,,CCND2.fus,STK3.fus,FBXW7.mut
+MET.Amp,,AKT3.Amp,,,DKK1.mut,,CCND3.Amp,STK4.mut,FBXW7.fus
+MET.mut,,AKT3.mut,,,DKK1.fus,,CCND3.mut,STK4.fus,CUL1.mut
+MET.fus,,AKT3.fus,,,DKK2.Del,,CCND3.fus,LATS1.Del,CUL1.fus
+KIT.Amp,,PPP2R1A.mut,,,DKK2.mut,,CDK2.Amp,LATS1.mut,MAML3.mut
+KIT.mut,,PPP2R1A.fus,,,DKK2.fus,,CDK2.mut,LATS1.fus,MAML3.fus
+NTRK1.mut,,STK11.Del,,,DKK3.Del,,CDK2.fus,LATS1.meth,KAT2B.Del
+NTRK2.mut,,STK11.mut,,,DKK3.mut,,CDK4.Amp,LATS2.Del,KAT2B.mut
+NTRK3.mut,,STK11.fus,,,DKK3.fus,,CDK4.mut,LATS2.mut,KAT2B.fus
+NTRK1.fus,,TSC1.Del,,,DKK4.Del,,CDK4.fus,LATS2.fus,CREBBP.Del
+NTRK2.fus,,TSC1.mut,,,DKK4.mut,,CDK6.Amp,LATS2.meth,CREBBP.mut
+NTRK3.fus,,TSC1.fus,,,DKK4.fus,,CDK6.mut,MOB1A.mut,CREBBP.fus
+PDGFRA.Amp,,TSC2.Del,,,GSK3B.mut,,CDK6.fus,MOB1A.fus,EP300.Del
+PDGFRA.mut,,TSC2.mut,,,GSK3B.fus,,RB1.Del,MOB1B.mut,EP300.mut
+PDGFRA.fus,,TSC2.fus,,,APC.Del,,RB1.mut,MOB1B.fus,EP300.fus
+IGF1R.Amp,,RHEB.Amp,,,APC.mut,,RB1.fus,NF2.Del,NCOR1.Del
+IGF1R.fus,,RHEB.mut,,,APC.fus,,E2F1.Amp,NF2.mut,NCOR1.mut
+JAK2.Amp,,RHEB.fus,,,CTNNB1.mut,,E2F3.Amp,NF2.fus,NCOR1.fus
+JAK2.mut,,RICTOR.Amp,,,AXIN1.Del,,,WWC1.mut,NCOR2.Del
+JAK2.fus,,RICTOR.mut,,,AXIN1.mut,,,WWC1.fus,NCOR2.mut
+CBL.Del,,MTOR.mut,,,AXIN1.fus,,,CRB1.mut,NCOR2.fus
+CBL.mut,,RPTOR.Amp,,,AXIN2.Del,,,CRB1.fus,SPEN.mut
+CBL.fus,,RPTOR.mut,,,AXIN2.mut,,,CRB2.mut,SPEN.fus
+ERRFI1.Del,,RPTOR.fus,,,AXIN2.fus,,,CRB2.fus,KDM5A.Amp
+ERRFI1.mut,,,,,AMER1.Del,,,YAP1.Amp,HES-X.Del
+ERRFI1.fus,,,,,AMER1.mut,,,YAP1.fus,HES-X.mut
+ABL1.mut,,,,,TCF7.mut,,,TEAD2.mut,HES-X.fus
+ABL1.fus,,,,,TCF7.meth,,,TEAD2.fus,HES-X.meth
+SOS1.mut,,,,,TCF7L1.Del,,,PTPN14.Del,HEY-X.Del
+NF1.Del,,,,,TCF7L1.mut,,,PTPN14.mut,HEY-X.mut
+NF1.mut,,,,,TCF7L1.fus,,,PTPN14.fus,HEY-X.fus
+NF1.fus,,,,,TCF7L1.meth,,,CSNK1E.mut,
+RASA1.Del,,,,,TCF7L2.Del,,,CSNK1E.fus,
+RASA1.mut,,,,,TCF7L2.mut,,,CSNK1D.mut,
+RASA1.fus,,,,,TCF7L2.fus,,,CSNK1D.fus,
+PTPN11.mut,,,,,TCF7L2.meth,,,,
+KRAS.Amp,,,,,TLE1.mut,,,,
+KRAS.mut,,,,,TLE1.fus,,,,
+HRAS.Amp,,,,,TLE1.meth,,,,
+HRAS.mut,,,,,TLE2.mut,,,,
+NRAS.mut,,,,,TLE2.fus,,,,
+RIT1.mut,,,,,TLE2.meth,,,,
+ARAF.mut,,,,,TLE3.mut,,,,
+BRAF.Amp,,,,,TLE3.fus,,,,
+BRAF.mut,,,,,TLE3.meth,,,,
+BRAF.fus,,,,,TLE4.mut,,,,
+RAF1.Amp,,,,,TLE4.fus,,,,
+RAF1.mut,,,,,TLE4.meth,,,,
+RAF1.fus,,,,,,,,,
+RAC1.Amp,,,,,,,,,
+RAC1.mut,,,,,,,,,
+MAPK1.Amp,,,,,,,,,
+MAPK1.mut,,,,,,,,,
+MAPK1.fus,,,,,,,,,
+MAP2K1.mut,,,,,,,,,
+MAP2K1.fus,,,,,,,,,
+MAP2K2.mut,,,,,,,,,
+,,,,,,,,,
+,,,,,,,,,
+,,,,,,,,,
+,,,,,,,,,
+,,,,,,,,,

@@ -9,7 +9,7 @@ check_fusion_input(fusion, ...)
 \arguments{
 \item{fusion}{a fusion data frame}
 
-\item{...}{other arguments passed from binary_matrix()}
+\item{...}{other arguments passed from create_gene_binary()}
 }
 \value{
 a checked data frame

@@ -4,10 +4,10 @@
 \alias{ggtopgenes}
 \title{Barplot of Most Frequently Altered Genes}
 \usage{
-ggtopgenes(maf, n_genes = 10)
+ggtopgenes(mutation, n_genes = 10)
 }
 \arguments{
-\item{maf}{Raw maf dataframe containing alteration data}
+\item{mutation}{Raw mutation dataframe containing alteration data}
 
 \item{n_genes}{Number of top genes to display in plot}
 }

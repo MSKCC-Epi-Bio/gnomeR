@@ -4,15 +4,15 @@
 \alias{annotate_any_panel}
 \title{Annotate Missing Gene Values According to Specifi Panels}
 \usage{
-annotate_any_panel(sample_panel_pair, binary_matrix)
+annotate_any_panel(sample_panel_pair, gene_binary)
 }
 \arguments{
 \item{sample_panel_pair}{a data frame of \code{sample_id}-\code{panel_id} pairs specifying panels to use for annotation of each sample}
 
-\item{binary_matrix}{a binary matrix of 0/1 indicating alteration yes/no for each sample}
+\item{gene_binary}{a binary matrix of 0/1 indicating alteration yes/no for each sample}
 }
 \value{
-a binary_matrix annotated for missingness
+a gene_binary annotated for missingness
 }
 \description{
 Annotate Missing Gene Values According to Specifi Panels

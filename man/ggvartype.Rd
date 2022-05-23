@@ -4,10 +4,10 @@
 \alias{ggvartype}
 \title{Barplot of Variant Type Counts}
 \usage{
-ggvartype(maf)
+ggvartype(mutation)
 }
 \arguments{
-\item{maf}{Raw maf dataframe containing alteration data}
+\item{mutation}{Raw mutation dataframe containing alteration data}
 }
 \value{
 Barplot of counts of each variant type

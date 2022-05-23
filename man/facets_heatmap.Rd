@@ -45,11 +45,13 @@ Creates a heatmap of copy number profiles from segment files.
 library(gnomeR)
 library(dplyr)
 library(dtplyr)
-samples <- as.character(unique(mut$Tumor_Sample_Barcode))[1:1000]
-samples.seg <- as.character(unlist(clin.sample \%>\%
-filter(Sample.Identifier \%in\% samples,
- as.numeric(as.character(Tumor.Purity)) > 30) \%>\%
- select(Sample.Identifier)))
-facet <- facets_heatmap(seg = seg, samples=samples.seg[0:100])
+   samples <- as.character(unique(mut$Tumor_Sample_Barcode))[1:1000]
+samples.seg <- clin.sample \%>\%
+  filter(Sample.Identifier \%in\% samples,
+         as.numeric(as.character(Tumor.Purity)) > 30) \%>\%
+  pull(Sample.Identifier)
+facet <- facets_heatmap(seg = seg,
+                        samples=samples.seg[0:100])
 facet$p
+
 }

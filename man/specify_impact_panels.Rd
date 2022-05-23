@@ -4,10 +4,10 @@
 \alias{specify_impact_panels}
 \title{IMPACT Panel Annotation of NA's}
 \usage{
-specify_impact_panels(binary_matrix)
+specify_impact_panels(gene_binary)
 }
 \arguments{
-\item{binary_matrix}{a processed binary_matrix}
+\item{gene_binary}{a processed gene_binary}
 }
 \value{
 a data frame iwth NAs inserted for genes not tested for given panel versions

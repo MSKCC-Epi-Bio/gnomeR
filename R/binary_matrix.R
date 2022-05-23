@@ -7,8 +7,8 @@
 #' a vector of samples that contain samples not in any of the passed genomic data frames, 0's (or NAs when appropriate if specifying a panel) will be
 #' returned for every column of that patient row.
 #' @param mutation A data frame of mutations in the format of a maf file.
-#' @param mut_type The mutation type to be used. Options are "SOMATIC", "GERMLINE" or "ALL". Note "ALL" will
-#' keep all mutations regardless of status (not recommended). Default is SOMATIC.
+#' @param mut_type The mutation type to be used. Options are "omit_germline", "somatic_only", "germline_only" or "all". Note "all" will
+#' keep all mutations regardless of status (not recommended). Default is omit_germline which includes all somatic mutations, as well as any unknown mutation types (most of which are usually somatic)
 #' @param snp_only Boolean to rather the genetics events to be kept only to be SNPs (insertions and deletions will be removed).
 #' Default is FALSE.
 #' @param include_silent Boolean to keep or remove all silent mutations. TRUE keeps, FALSE removes. Default is FALSE.
@@ -34,15 +34,15 @@
 #' @return a data frame with sample_id and alteration binary columns with values of 0/1
 #' @export
 #' @examples
-#' mut.only <- binary_matrix(mutation = mut)
+#' mut.only <- create_gene_binary(mutation = mut)
 #'
 #' samples <- as.character(unique(mut$Tumor_Sample_Barcode))[1:200]
 #'
-#' bin.mut <- binary_matrix(samples = samples, mutation = mut,
-#' mut_type = "SOMATIC" ,snp_only = FALSE,
+#' bin.mut <- create_gene_binary(samples = samples, mutation = mut,
+#' mut_type = "omit_germline" ,snp_only = FALSE,
 #' include_silent = FALSE)
-#' bin.mut <- binary_matrix(samples = samples, mutation = mut,
-#' mut_type = "SOMATIC", snp_only = FALSE,
+#' bin.mut <- create_gene_binary(samples = samples, mutation = mut,
+#' mut_type = "omit_germline", snp_only = FALSE,
 #' include_silent = FALSE,
 #' cna_relax = TRUE, specify_panel = "no", rm_empty = FALSE)
 #' @import dplyr
@@ -50,10 +50,10 @@
 #' @import stringr
 
 
-binary_matrix <- function(samples=NULL,
+create_gene_binary <- function(samples=NULL,
 
                           mutation = NULL,
-                          mut_type = "SOMATIC",
+                          mut_type = c("omit_germline", "somatic_only", "germline_only", "all"),
                           snp_only = FALSE,
                           include_silent = FALSE,
 
@@ -98,6 +98,9 @@ binary_matrix <- function(samples=NULL,
   switch(is.null(samples),
          cli::cli_alert_info("{.code samples} argument is {.code NULL}. We will infer your cohort inclusion and resulting data frame will include all samples with at least one alteration in {.field mutation}, {.field fusion} or {.field cna} data frames"))
 
+  # * mut_type-----
+  mut_type <- match.arg(mut_type)
+
   # * Specify_panel must be a known character or data frame with specified column-----
 
   # make tibbles into data.frames - idk if this is needed, could change switch to ifelse I think a alternative
@@ -125,7 +128,7 @@ binary_matrix <- function(samples=NULL,
          )
 
 
-  # * Mutation mutation checks  --------
+  # * Mutation  checks  --------
   mutation <- switch(!is.null(mutation),
                      check_mutation_input(mutation = mutation))
 
@@ -175,7 +178,7 @@ binary_matrix <- function(samples=NULL,
 
     # Binary matrix for each data type ----------------------------------------------
     mutation_binary_df <- switch(!is.null(mutation),
-                              .mutations_binary_matrix(mutation = mutation,
+                              .mutations_gene_binary(mutation = mutation,
                                                        samples = samples_final,
                                                        mut_type = mut_type,
                                                        snp_only = snp_only,
@@ -186,7 +189,7 @@ binary_matrix <- function(samples=NULL,
 
   # fusions
   fusion_binary_df <-  switch(!is.null(fusion),
-                           .fusions_binary_matrix(fusion = fusion,
+                           .fusions_gene_binary(fusion = fusion,
                                                   samples = samples_final,
                                                   specify_panel = specify_panel,
                                                   recode_aliases = recode_aliases))
@@ -194,7 +197,7 @@ binary_matrix <- function(samples=NULL,
 
   # cna
   cna_binary_df <- switch(!is.null(cna),
-                       .cna_binary_matrix(cna = cna,
+                       .cna_gene_binary(cna = cna,
                                           samples = samples_final,
                                           cna_binary = cna_binary,
                                           cna_relax = cna_relax,
@@ -264,12 +267,12 @@ binary_matrix <- function(samples=NULL,
 
 #' Make Binary Matrix From Mutation data frame
 #'
-#' @inheritParams binary_matrix
+#' @inheritParams create_gene_binary
 #'
 #' @return a data frame
 #' @export
 #'
-.mutations_binary_matrix <- function(mutation,
+.mutations_gene_binary <- function(mutation,
                                      samples,
                                      mut_type,
                                      snp_only,
@@ -278,19 +281,39 @@ binary_matrix <- function(samples=NULL,
                                      recode_aliases = recode_aliases){
 
   # apply filters --------------
-  mutation <- mutation %>%
-    purrr::when(
-      snp_only ~ filter(., .data$Variant_Type == "SNP"),
-      ~ .) %>%
+ mutation <- mutation %>%
+   purrr::when(
+     snp_only ~ filter(., .data$Variant_Type == "SNP"),
+     ~.
+   ) %>%
+   purrr::when(
+     !include_silent ~ filter(., .data$Variant_Classification != "Silent"),
+     ~.
+   ) %>%
+   purrr::when(
+     mut_type == "all" ~ .,
+     mut_type == "omit_germline" ~ {
+       filter(., .data$Mutation_Status != "GERMLINE" |
+         .data$Mutation_Status != "germline" | is.na(.data$Mutation_Status))
 
-    purrr::when(
-      !include_silent ~ filter(., .data$Variant_Classification != "Silent"),
-      ~ .) %>%
+       blank_muts <- mutation %>%
+         filter(is.na(.data$Mutation_Status) | .$Mutation_Status == "") %>%
+         nrow()
 
-    purrr::when(
-      tolower(mut_type) == "all" ~ .,
-      TRUE ~ filter(., .data$Mutation_Status %in% mut_type),
-      ~ .)
+       if ((blank_muts > 0)) {
+         cli::cli_warn("{(blank_muts)} mutations marked as blank were retained in the resulting binary matrix.")
+       }
+       return(.)
+     },
+     mut_type == "somatic_only" ~ filter(., .data$Mutation_Status == "SOMATIC" |
+       .data$Mutation_Status == "somatic"),
+     mut_type == "germline_only" ~ filter(., .data$Mutation_Status == "GERMLINE" |
+       .data$Mutation_Status == "germline"),
+     TRUE ~ .
+   )
+
+
+
 
 
   # create empty data.frame to hold results -----
@@ -317,11 +340,11 @@ binary_matrix <- function(samples=NULL,
 
 #' Make Binary Matrix From Fusion data frame
 #'
-#' @inheritParams binary_matrix
+#' @inheritParams create_gene_binary
 #'
 #' @return a data frame
 #'
-.fusions_binary_matrix <- function(fusion,
+.fusions_gene_binary <- function(fusion,
                                  samples,
                                  specify_panel,
                                  recode_aliases){
@@ -348,7 +371,9 @@ binary_matrix <- function(samples=NULL,
   }
 
   # add .fus suffix on columns
-  colnames(fusions_out) <- paste0(colnames(fusions_out),".fus")
+  if(ncol(fusions_out) > 0) {
+    colnames(fusions_out) <- paste0(colnames(fusions_out),".fus")
+  }
   return(fusions_out)
 }
 
@@ -357,11 +382,11 @@ binary_matrix <- function(samples=NULL,
 
 #' Make Binary Matrix From CNA data frame
 #'
-#' @inheritParams binary_matrix
+#' @inheritParams create_gene_binary
 #'
 #' @return a data frame
 #'
-.cna_binary_matrix <- function(cna,
+.cna_gene_binary <- function(cna,
                                samples,
                                cna_binary,
                                cna_relax,
@@ -471,13 +496,16 @@ binary_matrix <- function(samples=NULL,
 
 
     # add cna annotation
-    colnames(cna) <- paste0(colnames(cna),".cna")
-    rownames(cna) <- samples
+    if(ncol(cna) > 0) {
+      colnames(cna) <- paste0(colnames(cna),".cna")
+    }
 
+    rownames(cna) <- samples
     cna[is.na(cna)] <- "NEUTRAL"
   }
 
   return(cna)
 }
 
-#binary_matrix(mutation = gnomeR::mut, specify_panel = "no")
+#create_gene_binary(mutation = gnomeR::mut, specify_panel = "no")
+

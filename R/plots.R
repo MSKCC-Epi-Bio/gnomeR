@@ -1,6 +1,6 @@
-#' Creates a set of plot summarising a maf file.
-#' @param maf Raw maf dataframe containing alteration data
-#' @param ... any argument belonging to the binary_matrix method
+#' Creates a set of plot summarising a mutation file.
+#' @param mutation Raw mutation dataframe containing alteration data
+#' @param ... any argument belonging to the gene_binary method
 #' @return Returns a list of the following plots:
 #' @return varclass Barplot of counts of each variant classification
 #' @return vartype Barplot of counts of each variant type
@@ -13,8 +13,8 @@
 #' library(dplyr)
 #' library(dtplyr)
 #' samples <- as.character(unique(mut$Tumor_Sample_Barcode))[1:200]
-#' all.plots <- maf_viz(maf=mut %>% filter(Tumor_Sample_Barcode %in% samples))
-#' all.plots <- maf_viz(maf=mut %>%
+#' all.plots <- mutation_viz(mutation=mut %>% filter(Tumor_Sample_Barcode %in% samples))
+#' all.plots <- mutation_viz(mutation=mut %>%
 #' filter(Tumor_Sample_Barcode %in% samples),specify_panel = TRUE)
 #' @import
 #' dplyr
@@ -24,42 +24,28 @@
 #' GGally
 #' ComplexHeatmap
 
-maf_viz <- function(maf, ...) {
+mutation_viz <- function(mutation, ...) {
 
-  if("api" %in% class(maf)){
-    maf <- as_tibble(maf) %>%
-      filter(.data$Variant_Classification != "Fusion")
-    all_plots <- list(
-      varclass = ggvarclass,
-      vartype = ggvartype,
-      samplevar = ggsamplevar,
-      topgenes = ggtopgenes
-#      genecor = gggenecor,
-#      genecomut = ggcomut
-) %>%
-      purrr::invoke_map(, maf)
-  }
 
-  else
     all_plots <- list(
       varclass = ggvarclass,
       vartype = ggvartype,
       snvclass = ggsnvclass,
       samplevar = ggsamplevar,
-      topgenes = ggtopgenes
-#      genecor = gggenecor,
-#      genecomut = ggcomut
-) %>%
-      purrr::invoke_map(, maf)
+      topgenes = ggtopgenes,
+      genecor = gggenecor) %>%
+      purrr::invoke_map(, mutation)
 
   return(all_plots)
 }
 
+
+
 #' Add a percentage to counts
 #'
-#' @param x A barplot of the mafviz plot that follow barplot visualization
+#' @param x A barplot of the mutationviz plot that follow barplot visualization
 #' @param ... other arguments as passed to adjust the percentage label size
-#' @return mafviz Barplot The same barplot is now returned with percentages
+#' @return mutationviz Barplot The same barplot is now returned with percentages
 #' @export
 #'
 #' @examples
@@ -74,7 +60,7 @@ add.perc<-function(x,...){geom_text(
 
 #' Barplot of Variant Classification Counts
 #'
-#' @param maf Raw maf dataframe containing alteration data
+#' @param mutation Raw mutation dataframe containing alteration data
 #'
 #' @return Barplot of counts of each variant classification
 #' @export
@@ -82,18 +68,18 @@ add.perc<-function(x,...){geom_text(
 #' @examples
 #' ggvarclass(mut)
 #'
-ggvarclass <- function(maf) {
+ggvarclass <- function(mutation) {
 
 
   # relevel Variant Classification by frequency
-  maf <- maf %>%
+  mutation <- mutation %>%
     mutate(Variant_Classification =
              stringr::str_replace_all(.data$Variant_Classification, "_", " ")) %>%
     mutate(Variant_Classification = .data$Variant_Classification %>%
              forcats::fct_infreq() %>%
              forcats::fct_rev())
 
-  p.class <- maf %>%
+  p.class <- mutation %>%
     ggplot(aes(x = .data$Variant_Classification,
                fill = .data$Variant_Classification)) +
     geom_bar() +
@@ -107,7 +93,7 @@ ggvarclass <- function(maf) {
 
 #' Barplot of Variant Type Counts
 #'
-#' @param maf Raw maf dataframe containing alteration data
+#' @param mutation Raw mutation dataframe containing alteration data
 #'
 #' @return Barplot of counts of each variant type
 #' @export
@@ -115,15 +101,15 @@ ggvarclass <- function(maf) {
 #' @examples
 #' ggvartype(mut)
 #'
-ggvartype <- function(maf) {
+ggvartype <- function(mutation) {
 
   # relevel Variant Type by frequency
-  maf <- maf %>%
+  mutation <- mutation %>%
     mutate(Variant_Type = .data$Variant_Type %>%
              forcats::fct_infreq() %>%
              forcats::fct_rev())
 
-  p.type <- maf %>%
+  p.type <- mutation %>%
     ggplot(aes(x = .data$Variant_Type,
                color=.data$Variant_Type,
                fill = .data$Variant_Type)) +
@@ -140,7 +126,7 @@ ggvartype <- function(maf) {
 
 #' Histogram of SNV class Counts
 #'
-#' @param maf Raw maf dataframe containing alteration data
+#' @param mutation Raw mutation dataframe containing alteration data
 #'
 #' @return Histogram of counts of each SNV class
 #' @export
@@ -148,11 +134,11 @@ ggvartype <- function(maf) {
 #' @examples
 #' ggsnvclass(mut)
 #'
-ggsnvclass <- function(maf) {
+ggsnvclass <- function(mutation) {
 
 
   # filter only SNPs
-  maf <- maf %>%
+  mutation <- mutation %>%
     filter(
       .data$Variant_Type == "SNP",
       .data$HGVSc != ""
@@ -162,7 +148,7 @@ ggsnvclass <- function(maf) {
              forcats::fct_infreq() %>%
              forcats::fct_rev())
 
-  p.SNV <- maf %>%
+  p.SNV <- mutation %>%
     filter(!grepl("N", .data$SNV_Class)) %>%
     ggplot(aes(x = .data$SNV_Class, color = .data$SNV_Class,
                fill = .data$SNV_Class)) +
@@ -178,7 +164,7 @@ ggsnvclass <- function(maf) {
 
 #' Histogram of Variants Per Sample Colored By Variant Classification
 #'
-#' @param maf Raw maf dataframe containing alteration data
+#' @param mutation Raw mutation dataframe containing alteration data
 #'
 #' @return Histogram of counts of variants per tumor sample
 #' @export
@@ -186,9 +172,9 @@ ggsnvclass <- function(maf) {
 #' @examples
 #' ggsamplevar(mut)
 #'
-ggsamplevar <- function(maf) {
+ggsamplevar <- function(mutation) {
 
-  maf2 <- maf %>%
+  mutation2 <- mutation %>%
     group_by(.data$Tumor_Sample_Barcode) %>%
     mutate(n_alts = n()) %>%
     ungroup() %>%
@@ -196,7 +182,7 @@ ggsamplevar <- function(maf) {
              forcats::fct_infreq())
 
   # distribution of variant per sample
-  p.patient.variant <- maf2 %>%
+  p.patient.variant <- mutation2 %>%
     ggplot(aes(x = .data$Tumor_Sample_Barcode,
                fill = .data$Variant_Classification)) +
     geom_bar(position = "stack") +
@@ -212,7 +198,7 @@ ggsamplevar <- function(maf) {
 
 #' Barplot of Most Frequently Altered Genes
 #'
-#' @param maf Raw maf dataframe containing alteration data
+#' @param mutation Raw mutation dataframe containing alteration data
 #' @param n_genes Number of top genes to display in plot
 #' @return Barplot of counts of top variant genes
 #' @export
@@ -220,10 +206,10 @@ ggsamplevar <- function(maf) {
 #' @examples
 #' ggtopgenes(mut)
 #'
-ggtopgenes <- function(maf, n_genes = 10) {
+ggtopgenes <- function(mutation, n_genes = 10) {
 
 
-  top_genes <- maf %>%
+  top_genes <- mutation %>%
     group_by(.data$Hugo_Symbol) %>%
     summarise(N = n()) %>%
     arrange(-.data$N) %>%
@@ -233,7 +219,7 @@ ggtopgenes <- function(maf, n_genes = 10) {
   top_genes <- top_genes[1:min(length(top_genes),n_genes)] %>%
     as.character()
 
-  maf2 <- maf %>%
+  mutation2 <- mutation %>%
     filter(.data$Hugo_Symbol %in% top_genes) %>%
     ungroup() %>%
     mutate(Hugo_Symbol = .data$Hugo_Symbol %>%
@@ -241,7 +227,7 @@ ggtopgenes <- function(maf, n_genes = 10) {
              forcats::fct_infreq() %>%
              forcats::fct_rev())
 
-  p.genes <-  maf2 %>%
+  p.genes <-  mutation2 %>%
     ggplot(aes(x = .data$Hugo_Symbol,
                fill = .data$Variant_Classification)) +
     geom_bar(position = "stack") +
@@ -253,26 +239,26 @@ ggtopgenes <- function(maf, n_genes = 10) {
 
 #' Correlation Heatmap of the Top Altered Genes
 #'
-#' @param maf Raw maf dataframe containing alteration data
+#' @param mutation Raw mutation dataframe containing alteration data
 #' @param n_genes Number of top genes to display in plot
-#' @param ... Further binary_matrix() arguments
+#' @param ... Further create_gene_binary() arguments
 #' @return Correlation heatmap of the top altered genes
 #' @export
 #'
 #' @examples
 #' gggenecor(mut)
 #'
-gggenecor <- function(maf, n_genes = 10, ...) {
+gggenecor <- function(mutation, n_genes = 10, ...) {
 
-  bin.maf <- binary_matrix(mutation = maf,...)
+  bin.mutation <- create_gene_binary(mutation = mutation,...)
 
-  keep <- names(sort(apply(bin.maf,2,
+  keep <- names(sort(apply(bin.mutation,2,
                            function(x){sum(x)}),
                      decreasing = T))
   keep <- keep[1:min(length(keep),n_genes)]
-  bin.maf <- bin.maf[,keep]
+  bin.mutation <- bin.mutation[,keep]
 
-  p.corr <- GGally::ggcorr(dat = bin.maf, cor_matrix = stats::cor(bin.maf),limits = NULL)
+  p.corr <- GGally::ggcorr(dat = bin.mutation, cor_matrix = stats::cor(bin.mutation),limits = NULL)
 
   p.corr
 
@@ -285,56 +271,56 @@ gggenecor <- function(maf, n_genes = 10, ...) {
 #'
 #' Comutation Heatmap of the Top Altered Genes
 #'
-#' @param maf Raw maf dataframe containing alteration data
+#' @param mutation Raw mutation dataframe containing alteration data
 #' @param n_genes Number of top genes to display in plot
-#' @param ... Further binary_matrix() arguments
+#' @param ... Further create_gene_binary() arguments
 #' @return Comutation heatmap of the top genes
 #' @export
 #'
 #' @examples
 #' ggcomut(gnomeR::mut)
 #'
-ggcomut <- function(maf, n_genes = 10, ...) {
+ggcomut <- function(mutation, n_genes = 10, ...) {
 
-  bin.maf <- binary_matrix(mutation = maf,...)
-  keep <- names(sort(apply(bin.maf,2,
+  bin.mutation <- create_gene_binary(mutation = mutation,...)
+  keep <- names(sort(apply(bin.mutation,2,
                            function(x){sum(x)}),
                      decreasing = T))
   keep <- keep[1:min(length(keep),n_genes)]
-  bin.maf <- bin.maf[,keep]
+  bin.mutation <- bin.mutation[,keep]
 
-  co.mut <- apply(bin.maf,2,function(x){
-    apply(bin.maf,2,function(y){
+  co.mut <- apply(bin.mutation,2,function(x){
+    apply(bin.mutation,2,function(y){
       sum(y == 1 & x == 1,na.rm = T)/length(x)
     })
   })
 
-  p.comut <- GGally::ggcorr(dat = bin.maf, cor_matrix = co.mut, limits = NULL)
+  p.comut <- GGally::ggcorr(dat = bin.mutation, cor_matrix = co.mut, limits = NULL)
 
   p.comut
 }
 
-#' Heatmap of all events after binary_matrix - using binary distance
+#' Heatmap of all events after gene_binary - using binary distance
 #'
-#' @param hmat dataframe obtained after binary_matrix()
+#' @param hmat dataframe obtained after create_gene_binary()
 #' @param ... Further arguments as passed to ComplexHeatmap::Heatmap
-#' @return heatmap of binary_matrix events
+#' @return heatmap of gene_binary events
 #' @export
 #'
 #' @examples
 #' set.seed(123)
 #' samples <- as.character(unique(mut$Tumor_Sample_Barcode))[1:200]
-#' gen_dat <- binary_matrix(samples=samples, maf=mut, cna=cna, fusion=fusion, set.plat=TRUE)
+#' gen_dat <- create_gene_binary(samples=samples, mutation=mut, cna=cna, fusion=fusion, set.plat=TRUE)
 #' ggheatmap(gen_dat, show_row_names=FALSE, show_column_names=FALSE)
 #'
 
-ggheatmap<-function(hmat, ...){
+ggheatmap <- function(hmat, ...){
 
   #check if the matrix is not binary
   if(sum(hmat==0, na.rm=T) +
      sum(hmat==1, na.rm=T) +
      sum(is.na(hmat)) != (nrow(hmat) * ncol(hmat))) {
-    stop("ggheatmap can only be plotted when binary_matrix is binary, set cna.binary=TRUE")
+    stop("ggheatmap can only be plotted when gene_binary is binary, set cna.binary=TRUE")
   }
 
   idx.amp = grep(".Amp", colnames(hmat))

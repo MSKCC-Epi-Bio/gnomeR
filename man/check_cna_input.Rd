@@ -9,7 +9,7 @@ check_cna_input(cna, ...)
 \arguments{
 \item{cna}{a cna data frame}
 
-\item{...}{other arguments passed from binary_matrix()}
+\item{...}{other arguments passed from create_gene_binary()}
 }
 \value{
 a checked data frame
