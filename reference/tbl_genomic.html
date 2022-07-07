@@ -59,64 +59,77 @@ onto the data before using the <code>by</code> parameter in the function.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">tbl_genomic</span><span class="op">(</span>
-  <span class="va">gene_binary</span>,
-  freq_cutoff <span class="op">=</span> <span class="fl">0</span>,
-  freq_cutoff_by_gene <span class="op">=</span> <span class="cn">TRUE</span>,
-  gene_subset <span class="op">=</span> <span class="cn">NULL</span>,
-  by <span class="op">=</span> <span class="cn">NULL</span>,
-  <span class="va">...</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">tbl_genomic</span><span class="op">(</span></span>
+<span>  <span class="va">gene_binary</span>,</span>
+<span>  freq_cutoff <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>  freq_cutoff_by_gene <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  gene_subset <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  by <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>gene_binary</dt>
 <dd><p>data.frame of genetic samples</p></dd>
+
+
 <dt>freq_cutoff</dt>
 <dd><p>A number 0 to 1 representing the minimum percent frequency you are using to select gene's for analysis.
 Frequencies can be calculated at gene level, or alteration level (see <code>freq_cutoff_by_gene</code>).</p></dd>
+
+
 <dt>freq_cutoff_by_gene</dt>
 <dd><p>Logical indicating whether gene selection based on frequency % should
 be calculated at the gene level, or the alteration level. Default is TRUE, indicating all
 alterations (e.g. TP53/TP53.Del/TP53.Del/TP53.fus) will be aggregated at gene level to
 determine cutoff frequencies and all alteration types for top genes will be returned.</p></dd>
+
+
 <dt>gene_subset</dt>
 <dd><p>Specific genes you want to summarize. This takes precedent over the <code>freq_cutoff</code> parameter and will
 return all alterations associated with that gene (including mutations, CNA, fusions).</p></dd>
+
+
 <dt>by</dt>
 <dd><p>A variable to be passed to <code><a href="https://www.danieldsjoberg.com/gtsummary/reference/tbl_summary.html" class="external-link">gtsummary::tbl_summary()</a></code>'s by parameter</p></dd>
+
+
 <dt>...</dt>
 <dd><p>Additional parameters that can be passed to <code><a href="https://www.danieldsjoberg.com/gtsummary/reference/tbl_summary.html" class="external-link">gtsummary::tbl_summary()</a></code></p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A <code><a href="https://www.danieldsjoberg.com/gtsummary/reference/tbl_summary.html" class="external-link">tbl_summary()</a></code> object</p>
+    
+
+<p>A <code><a href="https://www.danieldsjoberg.com/gtsummary/reference/tbl_summary.html" class="external-link">tbl_summary()</a></code> object</p>
     </div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/MSKCC-Epi-Bio/gnomeR" class="external-link">gnomeR</a></span><span class="op">)</span></span>
-<span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/ddsjoberg/gtsummary" class="external-link">gtsummary</a></span><span class="op">)</span></span>
-<span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
-<span class="r-in"><span class="va">samples</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">mut</span><span class="op">$</span><span class="va">Tumor_Sample_Barcode</span><span class="op">)</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">200</span><span class="op">]</span></span>
-<span class="r-in"><span class="va">gene_binary</span> <span class="op">&lt;-</span> <span class="fu"><a href="create_gene_binary.html">create_gene_binary</a></span><span class="op">(</span>samples <span class="op">=</span> <span class="va">samples</span>, mutation <span class="op">=</span> <span class="va">mut</span>, cna <span class="op">=</span> <span class="va">cna</span>,</span>
-<span class="r-in">                        mut_type <span class="op">=</span> <span class="st">"somatic_only"</span>, snp_only <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span class="r-in">                        include_silent <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span class="r-in">                        cna_relax <span class="op">=</span> <span class="cn">TRUE</span>, specify_panel <span class="op">=</span> <span class="st">"no"</span>, rm_empty <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">tb1</span> <span class="op">&lt;-</span> <span class="fu">tbl_genomic</span><span class="op">(</span>gene_binary <span class="op">=</span> <span class="va">gene_binary</span>, freq_cutoff <span class="op">=</span> <span class="fl">.05</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">tb2</span> <span class="op">&lt;-</span> <span class="fu">tbl_genomic</span><span class="op">(</span>gene_binary <span class="op">=</span> <span class="va">gene_binary</span>, gene_subset <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"KRAS"</span>, <span class="st">"TERT"</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">gene_binary</span> <span class="op">&lt;-</span> <span class="va">gene_binary</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span>
-<span class="r-in">    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>sex <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"M"</span>, <span class="st">"F"</span><span class="op">)</span>,</span>
-<span class="r-in">     size <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">gene_binary</span><span class="op">)</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">t1</span> <span class="op">&lt;-</span><span class="fu">tbl_genomic</span><span class="op">(</span>gene_binary <span class="op">=</span> <span class="va">gene_binary</span>,</span>
-<span class="r-in">    by <span class="op">=</span> <span class="va">sex</span>,</span>
-<span class="r-in">    freq_cutoff <span class="op">=</span> <span class="fl">.2</span>,</span>
-<span class="r-in">    freq_cutoff_by_gene <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span>
-<span class="r-in">    <span class="fu"><a href="https://www.danieldsjoberg.com/gtsummary/reference/add_p.html" class="external-link">add_p</a></span><span class="op">(</span><span class="op">)</span></span>
-<span class="r-in"></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/MSKCC-Epi-Bio/gnomeR" class="external-link">gnomeR</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/ddsjoberg/gtsummary" class="external-link">gtsummary</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">samples</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">mut</span><span class="op">$</span><span class="va">Tumor_Sample_Barcode</span><span class="op">)</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">200</span><span class="op">]</span></span></span>
+<span class="r-in"><span><span class="va">gene_binary</span> <span class="op">&lt;-</span> <span class="fu"><a href="create_gene_binary.html">create_gene_binary</a></span><span class="op">(</span>samples <span class="op">=</span> <span class="va">samples</span>, mutation <span class="op">=</span> <span class="va">mut</span>, cna <span class="op">=</span> <span class="va">cna</span>,</span></span>
+<span class="r-in"><span>                        mut_type <span class="op">=</span> <span class="st">"somatic_only"</span>, snp_only <span class="op">=</span> <span class="cn">FALSE</span>,</span></span>
+<span class="r-in"><span>                        include_silent <span class="op">=</span> <span class="cn">FALSE</span>,</span></span>
+<span class="r-in"><span>                        cna_relax <span class="op">=</span> <span class="cn">TRUE</span>, specify_panel <span class="op">=</span> <span class="st">"no"</span>, rm_empty <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">tb1</span> <span class="op">&lt;-</span> <span class="fu">tbl_genomic</span><span class="op">(</span>gene_binary <span class="op">=</span> <span class="va">gene_binary</span>, freq_cutoff <span class="op">=</span> <span class="fl">.05</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">tb2</span> <span class="op">&lt;-</span> <span class="fu">tbl_genomic</span><span class="op">(</span>gene_binary <span class="op">=</span> <span class="va">gene_binary</span>, gene_subset <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"KRAS"</span>, <span class="st">"TERT"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">gene_binary</span> <span class="op">&lt;-</span> <span class="va">gene_binary</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span></span>
+<span class="r-in"><span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>sex <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"M"</span>, <span class="st">"F"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>     size <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">gene_binary</span><span class="op">)</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">t1</span> <span class="op">&lt;-</span><span class="fu">tbl_genomic</span><span class="op">(</span>gene_binary <span class="op">=</span> <span class="va">gene_binary</span>,</span></span>
+<span class="r-in"><span>    by <span class="op">=</span> <span class="va">sex</span>,</span></span>
+<span class="r-in"><span>    freq_cutoff <span class="op">=</span> <span class="fl">.2</span>,</span></span>
+<span class="r-in"><span>    freq_cutoff_by_gene <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span></span>
+<span class="r-in"><span>    <span class="fu"><a href="https://www.danieldsjoberg.com/gtsummary/reference/add_p.html" class="external-link">add_p</a></span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -131,7 +144,7 @@ return all alterations associated with that gene (including mutations, CNA, fusi
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>

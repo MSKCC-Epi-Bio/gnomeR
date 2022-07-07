@@ -58,46 +58,63 @@ Modified CNregions function from the facets package to handle small sample sizes
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">CNregions.mod</span><span class="op">(</span>
-  <span class="va">seg</span>,
-  epsilon <span class="op">=</span> <span class="fl">0.005</span>,
-  adaptive <span class="op">=</span> <span class="cn">FALSE</span>,
-  rmCNV <span class="op">=</span> <span class="cn">FALSE</span>,
-  cnv <span class="op">=</span> <span class="cn">NULL</span>,
-  frac.overlap <span class="op">=</span> <span class="fl">0.5</span>,
-  rmSmallseg <span class="op">=</span> <span class="cn">TRUE</span>,
-  nProbes <span class="op">=</span> <span class="fl">15</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">CNregions.mod</span><span class="op">(</span></span>
+<span>  <span class="va">seg</span>,</span>
+<span>  epsilon <span class="op">=</span> <span class="fl">0.005</span>,</span>
+<span>  adaptive <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  rmCNV <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  cnv <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  frac.overlap <span class="op">=</span> <span class="fl">0.5</span>,</span>
+<span>  rmSmallseg <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  nProbes <span class="op">=</span> <span class="fl">15</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>seg</dt>
 <dd><p>a segmentation file containing the segmentation information of multiple samples</p></dd>
+
+
 <dt>epsilon</dt>
 <dd><p>the maximum Euclidean distance between adjacent probes tolerated for denying a nonredundant region. epsilon=0 is equivalent to taking the union of all unique break points across the n samples.</p></dd>
+
+
 <dt>adaptive</dt>
 <dd><p>Vector of length-m lasso penalty terms.</p></dd>
+
+
 <dt>rmCNV</dt>
 <dd><p>If TRUE, remove germline CNV.</p></dd>
+
+
 <dt>cnv</dt>
 <dd><p>A data frame containing germline CNV data.</p></dd>
+
+
 <dt>frac.overlap</dt>
 <dd><p>A parameter needed to be explain.</p></dd>
+
+
 <dt>rmSmallseg</dt>
 <dd><p>If TRUE, remove small segment.</p></dd>
+
+
 <dt>nProbes</dt>
 <dd><p>The segment length threshold below which the segment will be removed if rmSmallseq = TRUE.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>reducedM : A matrix ready for plotting.</p>
+    
+
+<p>reducedM : A matrix ready for plotting.</p>
     </div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/MSKCC-Epi-Bio/gnomeR" class="external-link">gnomeR</a></span><span class="op">)</span></span>
-<span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/MSKCC-Epi-Bio/gnomeR" class="external-link">gnomeR</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Attaching package: ‘dplyr’</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> The following objects are masked from ‘package:stats’:</span>
@@ -106,28 +123,28 @@ Modified CNregions function from the facets package to handle small sample sizes
 <span class="r-msg co"><span class="r-pr">#&gt;</span> The following objects are masked from ‘package:base’:</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>     intersect, setdiff, setequal, union</span>
-<span class="r-in"><span class="va">samples</span> <span class="op">&lt;-</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">mut</span><span class="op">$</span><span class="va">Tumor_Sample_Barcode</span><span class="op">)</span><span class="op">)</span><span class="op">[</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">mut</span><span class="op">$</span><span class="va">Tumor_Sample_Barcode</span><span class="op">)</span><span class="op">)</span>, <span class="fl">100</span>, replace<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span><span class="op">]</span></span>
-<span class="r-in"><span class="fu">CNregions.mod</span><span class="op">(</span><span class="va">seg</span> <span class="op"><a href="pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">ID</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="va">samples</span><span class="op">)</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span></span>
+<span class="r-in"><span><span class="va">samples</span> <span class="op">&lt;-</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">mut</span><span class="op">$</span><span class="va">Tumor_Sample_Barcode</span><span class="op">)</span><span class="op">)</span><span class="op">[</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">mut</span><span class="op">$</span><span class="va">Tumor_Sample_Barcode</span><span class="op">)</span><span class="op">)</span>, <span class="fl">100</span>, replace<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span><span class="op">]</span></span></span>
+<span class="r-in"><span><span class="fu">CNregions.mod</span><span class="op">(</span><span class="va">seg</span> <span class="op"><a href="pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">ID</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="va">samples</span><span class="op">)</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                   chr1.2488138-9770584 chr1.9770584-9784407</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> P-0000062-T01-IM3              -0.2894              -0.2894</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> P-0000080-T01-IM3               0.1680               0.1680</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> P-0000185-T01-IM3               0.1126               0.1126</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> P-0000088-T01-IM3              -0.0198              -0.0198</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> P-0000193-T01-IM3              -0.4076              -0.4076</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> P-0000216-T02-IM3              -0.2137              -0.2137</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                   chr1.9784407-11167550 chr1.11167550-11168291</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> P-0000062-T01-IM3               -0.2894                -0.2894</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> P-0000080-T01-IM3                0.1680                 0.1680</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> P-0000185-T01-IM3                0.1126                 0.1126</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> P-0000193-T01-IM3               -0.4076                -0.4076</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> P-0000216-T02-IM3               -0.2137                -0.2137</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                   chr1.11168291-14192672</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> P-0000062-T01-IM3                -0.2894</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> P-0000080-T01-IM3                 0.1680</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> P-0000185-T01-IM3                 0.1126</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> P-0000193-T01-IM3                 0.0045</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> P-0000216-T02-IM3                -0.2137</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> P-0000270-T01-IM3              -0.0857              -0.0857</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> P-0000300-T01-IM3              -0.0210              -0.0210</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> P-0000340-T01-IM3               0.0347               0.0347</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                   chr1.9784407-11167550 chr1.11167550-14192672</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> P-0000088-T01-IM3               -0.0198                -0.0198</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> P-0000193-T01-IM3               -0.4076                -0.0501</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> P-0000270-T01-IM3               -0.0857                -0.0857</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> P-0000300-T01-IM3               -0.0210                -0.0210</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> P-0000340-T01-IM3                0.0347                 0.0347</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                   chr1.14192672-15296019</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> P-0000088-T01-IM3                -0.0198</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> P-0000193-T01-IM3                -0.0501</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> P-0000270-T01-IM3                -0.0857</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> P-0000300-T01-IM3                -0.0210</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> P-0000340-T01-IM3                 0.0347</span>
 </code></pre></div>
     </div>
   </div>
@@ -142,7 +159,7 @@ Modified CNregions function from the facets package to handle small sample sizes
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>

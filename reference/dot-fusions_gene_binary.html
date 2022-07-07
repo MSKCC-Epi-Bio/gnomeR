@@ -53,7 +53,7 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">.fusions_gene_binary</span><span class="op">(</span><span class="va">fusion</span>, <span class="va">samples</span>, <span class="va">specify_panel</span>, <span class="va">recode_aliases</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">.fusions_gene_binary</span><span class="op">(</span><span class="va">fusion</span>, <span class="va">samples</span>, <span class="va">specify_panel</span>, <span class="va">recode_aliases</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -61,11 +61,15 @@
     <dl><dt>fusion</dt>
 <dd><p>A data frame of fusions. If not NULL the outcome will be added to the matrix with columns ending in ".fus".
 Default is NULL.</p></dd>
+
+
 <dt>samples</dt>
 <dd><p>a character vector specifying which samples should be included in the resulting data frame.
 Default is NULL is which case all samples with an alteration in the mutation, cna or fusions file will be used. If you specify
 a vector of samples that contain samples not in any of the passed genomic data frames, 0's (or NAs when appropriate if specifying a panel) will be
 returned for every column of that patient row.</p></dd>
+
+
 <dt>specify_panel</dt>
 <dd><p>a character vector of length 1 with panel id (see gnomeR::gene_panels for available panels), "impact", or "no", or a
 data frame of <code>sample_id</code>-<code>panel_id</code> pairs specifying panels for which to insert NAs indicating that gene was not tested.
@@ -75,13 +79,18 @@ If specific panel IDs passed, genes not tested in that panel will be should be c
 Default is "no" which returns data as is with no NA annotation.
 If you wish to specify different panels for each sample, pass a data frame (with all samples included) with columns: <code>sample_id</code>, and <code>panel_id</code>. Each sample will be
 annotated with NAs according to that specific panel.</p></dd>
+
+
 <dt>recode_aliases</dt>
 <dd><p>boolean specifying if automated gene name alias matching should be done. Default is TRUE. When TRUE
 the function will check for genes that may have more than 1 name in your data using the aliases im gnomeR::impact_gene_info alias column</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>a data frame</p>
+    
+
+<p>a data frame</p>
     </div>
 
   </div>
@@ -96,7 +105,7 @@ the function will check for genes that may have more than 1 name in your data us
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>

@@ -58,21 +58,21 @@ a predefined list of samples (rows are samples and columns are genes)</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">create_gene_binary</span><span class="op">(</span>
-  samples <span class="op">=</span> <span class="cn">NULL</span>,
-  mutation <span class="op">=</span> <span class="cn">NULL</span>,
-  mut_type <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"omit_germline"</span>, <span class="st">"somatic_only"</span>, <span class="st">"germline_only"</span>, <span class="st">"all"</span><span class="op">)</span>,
-  snp_only <span class="op">=</span> <span class="cn">FALSE</span>,
-  include_silent <span class="op">=</span> <span class="cn">FALSE</span>,
-  fusion <span class="op">=</span> <span class="cn">NULL</span>,
-  cna <span class="op">=</span> <span class="cn">NULL</span>,
-  cna_binary <span class="op">=</span> <span class="cn">TRUE</span>,
-  cna_relax <span class="op">=</span> <span class="cn">FALSE</span>,
-  specify_panel <span class="op">=</span> <span class="st">"no"</span>,
-  rm_empty <span class="op">=</span> <span class="cn">FALSE</span>,
-  recode_aliases <span class="op">=</span> <span class="cn">TRUE</span>,
-  <span class="va">...</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">create_gene_binary</span><span class="op">(</span></span>
+<span>  samples <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  mutation <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  mut_type <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"omit_germline"</span>, <span class="st">"somatic_only"</span>, <span class="st">"germline_only"</span>, <span class="st">"all"</span><span class="op">)</span>,</span>
+<span>  snp_only <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  include_silent <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  fusion <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  cna <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  cna_binary <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  cna_relax <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  specify_panel <span class="op">=</span> <span class="st">"no"</span>,</span>
+<span>  rm_empty <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  recode_aliases <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -82,27 +82,45 @@ a predefined list of samples (rows are samples and columns are genes)</p>
 Default is NULL is which case all samples with an alteration in the mutation, cna or fusions file will be used. If you specify
 a vector of samples that contain samples not in any of the passed genomic data frames, 0's (or NAs when appropriate if specifying a panel) will be
 returned for every column of that patient row.</p></dd>
+
+
 <dt>mutation</dt>
 <dd><p>A data frame of mutations in the format of a maf file.</p></dd>
+
+
 <dt>mut_type</dt>
 <dd><p>The mutation type to be used. Options are "omit_germline", "somatic_only", "germline_only" or "all". Note "all" will
 keep all mutations regardless of status (not recommended). Default is omit_germline which includes all somatic mutations, as well as any unknown mutation types (most of which are usually somatic)</p></dd>
+
+
 <dt>snp_only</dt>
 <dd><p>Boolean to rather the genetics events to be kept only to be SNPs (insertions and deletions will be removed).
 Default is FALSE.</p></dd>
+
+
 <dt>include_silent</dt>
 <dd><p>Boolean to keep or remove all silent mutations. TRUE keeps, FALSE removes. Default is FALSE.</p></dd>
+
+
 <dt>fusion</dt>
 <dd><p>A data frame of fusions. If not NULL the outcome will be added to the matrix with columns ending in ".fus".
 Default is NULL.</p></dd>
+
+
 <dt>cna</dt>
 <dd><p>A data frame of copy number alterations. If inputed the outcome will be added to the matrix with columns ending in ".del" and ".amp".
 Default is NULL.</p></dd>
+
+
 <dt>cna_binary</dt>
 <dd><p>A boolean argument specifying if the cna events should be enforced as binary. In which case separate columns for
 amplifications and deletions will be created.</p></dd>
+
+
 <dt>cna_relax</dt>
 <dd><p>By default this argument is set to FALSE, where only deep deletions (-2) and amplifications (2) will be annotated as events. When set to TRUE all deletions (-1 shallow and -2 deep) are counted as an event same for all gains (1 gain, 2 amplification) as an event.</p></dd>
+
+
 <dt>specify_panel</dt>
 <dd><p>a character vector of length 1 with panel id (see gnomeR::gene_panels for available panels), "impact", or "no", or a
 data frame of <code>sample_id</code>-<code>panel_id</code> pairs specifying panels for which to insert NAs indicating that gene was not tested.
@@ -112,33 +130,42 @@ If specific panel IDs passed, genes not tested in that panel will be should be c
 Default is "no" which returns data as is with no NA annotation.
 If you wish to specify different panels for each sample, pass a data frame (with all samples included) with columns: <code>sample_id</code>, and <code>panel_id</code>. Each sample will be
 annotated with NAs according to that specific panel.</p></dd>
+
+
 <dt>rm_empty</dt>
 <dd><p>boolean specifying if alteration columns with no events founds should be removed. Default is FALSE</p></dd>
+
+
 <dt>recode_aliases</dt>
 <dd><p>boolean specifying if automated gene name alias matching should be done. Default is TRUE. When TRUE
 the function will check for genes that may have more than 1 name in your data using the aliases im gnomeR::impact_gene_info alias column</p></dd>
+
+
 <dt>...</dt>
 <dd><p>Further arguments passed to the oncokb() function such a token</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>a data frame with sample_id and alteration binary columns with values of 0/1</p>
+    
+
+<p>a data frame with sample_id and alteration binary columns with values of 0/1</p>
     </div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">mut.only</span> <span class="op">&lt;-</span> <span class="fu">create_gene_binary</span><span class="op">(</span>mutation <span class="op">=</span> <span class="va">mut</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">mut.only</span> <span class="op">&lt;-</span> <span class="fu">create_gene_binary</span><span class="op">(</span>mutation <span class="op">=</span> <span class="va">mut</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> `samples` argument is `NULL`. We will infer your cohort inclusion and resulting data frame will include all samples with at least one alteration in <span style="color: #00BB00;">mutation</span>, <span style="color: #00BB00;">fusion</span> or <span style="color: #00BB00;">cna</span> data frames</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">samples</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">mut</span><span class="op">$</span><span class="va">Tumor_Sample_Barcode</span><span class="op">)</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">200</span><span class="op">]</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">bin.mut</span> <span class="op">&lt;-</span> <span class="fu">create_gene_binary</span><span class="op">(</span>samples <span class="op">=</span> <span class="va">samples</span>, mutation <span class="op">=</span> <span class="va">mut</span>,</span>
-<span class="r-in">mut_type <span class="op">=</span> <span class="st">"omit_germline"</span> ,snp_only <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span class="r-in">include_silent <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">bin.mut</span> <span class="op">&lt;-</span> <span class="fu">create_gene_binary</span><span class="op">(</span>samples <span class="op">=</span> <span class="va">samples</span>, mutation <span class="op">=</span> <span class="va">mut</span>,</span>
-<span class="r-in">mut_type <span class="op">=</span> <span class="st">"omit_germline"</span>, snp_only <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span class="r-in">include_silent <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span class="r-in">cna_relax <span class="op">=</span> <span class="cn">TRUE</span>, specify_panel <span class="op">=</span> <span class="st">"no"</span>, rm_empty <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">samples</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">mut</span><span class="op">$</span><span class="va">Tumor_Sample_Barcode</span><span class="op">)</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">200</span><span class="op">]</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">bin.mut</span> <span class="op">&lt;-</span> <span class="fu">create_gene_binary</span><span class="op">(</span>samples <span class="op">=</span> <span class="va">samples</span>, mutation <span class="op">=</span> <span class="va">mut</span>,</span></span>
+<span class="r-in"><span>mut_type <span class="op">=</span> <span class="st">"omit_germline"</span> ,snp_only <span class="op">=</span> <span class="cn">FALSE</span>,</span></span>
+<span class="r-in"><span>include_silent <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">bin.mut</span> <span class="op">&lt;-</span> <span class="fu">create_gene_binary</span><span class="op">(</span>samples <span class="op">=</span> <span class="va">samples</span>, mutation <span class="op">=</span> <span class="va">mut</span>,</span></span>
+<span class="r-in"><span>mut_type <span class="op">=</span> <span class="st">"omit_germline"</span>, snp_only <span class="op">=</span> <span class="cn">FALSE</span>,</span></span>
+<span class="r-in"><span>include_silent <span class="op">=</span> <span class="cn">FALSE</span>,</span></span>
+<span class="r-in"><span>cna_relax <span class="op">=</span> <span class="cn">TRUE</span>, specify_panel <span class="op">=</span> <span class="st">"no"</span>, rm_empty <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -153,7 +180,7 @@ the function will check for genes that may have more than 1 name in your data us
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>

@@ -53,29 +53,34 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">ggheatmap</span><span class="op">(</span><span class="va">hmat</span>, <span class="va">...</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">ggheatmap</span><span class="op">(</span><span class="va">hmat</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>hmat</dt>
 <dd><p>dataframe obtained after create_gene_binary()</p></dd>
+
+
 <dt>...</dt>
 <dd><p>Further arguments as passed to ComplexHeatmap::Heatmap</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>heatmap of gene_binary events</p>
+    
+
+<p>heatmap of gene_binary events</p>
     </div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">samples</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">mut</span><span class="op">$</span><span class="va">Tumor_Sample_Barcode</span><span class="op">)</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">200</span><span class="op">]</span></span>
-<span class="r-in"><span class="va">gen_dat</span> <span class="op">&lt;-</span> <span class="fu"><a href="create_gene_binary.html">create_gene_binary</a></span><span class="op">(</span>samples<span class="op">=</span><span class="va">samples</span>, mutation<span class="op">=</span><span class="va">mut</span>, cna<span class="op">=</span><span class="va">cna</span>, fusion<span class="op">=</span><span class="va">fusion</span>, set.plat<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">ggheatmap</span><span class="op">(</span><span class="va">gen_dat</span>, show_row_names<span class="op">=</span><span class="cn">FALSE</span>, show_column_names<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">samples</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">mut</span><span class="op">$</span><span class="va">Tumor_Sample_Barcode</span><span class="op">)</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">200</span><span class="op">]</span></span></span>
+<span class="r-in"><span><span class="va">gen_dat</span> <span class="op">&lt;-</span> <span class="fu"><a href="create_gene_binary.html">create_gene_binary</a></span><span class="op">(</span>samples<span class="op">=</span><span class="va">samples</span>, mutation<span class="op">=</span><span class="va">mut</span>, cna<span class="op">=</span><span class="va">cna</span>, fusion<span class="op">=</span><span class="va">fusion</span>, set.plat<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">ggheatmap</span><span class="op">(</span><span class="va">gen_dat</span>, show_row_names<span class="op">=</span><span class="cn">FALSE</span>, show_column_names<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="ggheatmap-1.png" alt="" width="700" height="433"></span>
-<span class="r-in"></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -90,7 +95,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>
