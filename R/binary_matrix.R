@@ -280,6 +280,10 @@ create_gene_binary <- function(samples=NULL,
                                      specify_panel,
                                      recode_aliases = recode_aliases){
 
+  if(recode_aliases) {
+    mutation <- recode_alias(mutation)
+  }
+
   # apply filters --------------
  mutation <- mutation %>%
    purrr::when(
@@ -353,6 +357,10 @@ create_gene_binary <- function(samples=NULL,
   fusion <- fusion %>%
     filter(.data$Tumor_Sample_Barcode %in% samples)
 
+  if(recode_aliases) {
+    fusion <- recode_alias(fusion)
+  }
+
   # create empty data frame -----
   fusions_out <- as.data.frame(matrix(0L, nrow=length(samples),
                               ncol=length(unique(fusion$Hugo_Symbol))))
@@ -394,6 +402,9 @@ create_gene_binary <- function(samples=NULL,
                                recode_aliases){
 
 
+  if(recode_aliases) {
+    cna <- recode_alias(cna)
+  }
 
   # If more than 1 row per gene, combine rows
   dups <- cna$Hugo_Symbol[duplicated(cna$Hugo_Symbol)]

@@ -18,6 +18,6 @@ A dataframe with a recoded Hugo Symbol columns
 Recode Hugo Symbol Column
 }
 \examples{
-recode_alias(gnomeR::mut)
+recode_alias(genomic_df = gnomeR::mut)
 
 }

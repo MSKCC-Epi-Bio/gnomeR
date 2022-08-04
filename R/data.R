@@ -282,3 +282,16 @@
 #'     \item{V5}{Interval name}
 #'     }
 "ti_468"
+
+#' IMPACT Alias Tables
+#'
+#' Table of aliases for IMPACT panel genes
+#'
+#' @format A data frame with 2333 rows
+#' \describe{
+#'     \item{hugo_symbol}{}
+#'     \item{alias}{Start }
+#'     \item{entrez_id}{End }
+#'     \item{alias_entrez_id}{}
+#'     }
+"impact_alias_table"
