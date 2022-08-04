@@ -21,7 +21,7 @@ Encoding: UTF-8
 LazyData: true
 URL: https://github.com/MSKCC-Epi-Bio/gnomeR
 BugReports: https://github.com/MSKCC-Epi-Bio/gnomeR/issues
-RoxygenNote: 7.1.2
+RoxygenNote: 7.2.0
 Depends: R (>= 3.6)
 biocViews: 
     ComplexHeatmap,
@@ -61,7 +61,8 @@ Imports:
     utils,
     cli,
     gtsummary,
-    broom.helpers
+    broom.helpers,
+    janitor
 Suggests: 
     knitr,
     rmarkdown,

@@ -210,7 +210,9 @@ test_that("test the snp_only arg", {
   #general tests: input T or F (default is F)
   expect_error( create_gene_binary(mutation=gnomeR::mut, snp_only = T), NA)
 
-  expect_warning( create_gene_binary(mutation=gnomeR::mut, snp_only = T), NA)
+  expect_warning( create_gene_binary(mutation=gnomeR::mut,
+                                     snp_only = T,
+                                     recode_aliases = FALSE), NA)
 
   #0 col return if 0 SNP been inputted or there is no SNP category in Variat Type been inputted
   mut_snp_zero<- gnomeR::mut %>%
@@ -252,7 +254,8 @@ test_that("test include_silent arg", {
   #general tests: input T or F (default is F)
   expect_error( create_gene_binary(mutation=gnomeR::mut, include_silent = T), NA)
 
-  expect_warning( create_gene_binary(mutation=gnomeR::mut, include_silent =  T), NA)
+  expect_warning( create_gene_binary(mutation=gnomeR::mut,
+                                     include_silent =  T, recode_aliases = FALSE), NA)
 
 
   #What if NA for Variant_Classificaiton?

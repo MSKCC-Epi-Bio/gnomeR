@@ -171,18 +171,19 @@ check_cna_input <- function(cna, ...)  {
 #' @export
 #'
 #' @examples
-#' recode_alias(gnomeR::mut)
+#' recode_alias(genomic_df = gnomeR::mut)
 #'
 recode_alias <- function(genomic_df, ...) {
 
   # get table of gene aliases (internal data)
-    alias_table <- tidyr::unnest(gnomeR::impact_gene_info, cols = .data$alias) %>%
+    alias_table <- gnomeR::impact_alias_table %>%
       dplyr::select(.data$hugo_symbol, .data$alias)
 
     # recode aliases
     genomic_df$Hugo_Symbol_Old <- genomic_df$Hugo_Symbol
-    genomic_df$Hugo_Symbol <- purrr::map_chr(genomic_df$Hugo_Symbol, ~resolve_alias(gene_to_check = .x,
-                                                                      alias_table = alias_table))
+    genomic_df$Hugo_Symbol <- purrr::map_chr(genomic_df$Hugo_Symbol,
+                                             ~resolve_alias(gene_to_check = .x,
+                                                            alias_table = alias_table))
 
     message <- genomic_df %>%
       dplyr::filter(.data$Hugo_Symbol_Old != .data$Hugo_Symbol) %>%
@@ -199,10 +200,13 @@ recode_alias <- function(genomic_df, ...) {
 
       cli::cli_warn(c(
       "To ensure gene with multiple names/aliases are correctly grouped together, the
-      following genes in your dataframe have been recoded (you can supress this with {.code recode.aliases = FALSE}):",
+      following genes in your dataframe have been recoded (you can supress this with {.code recode_aliases = FALSE}):",
       vec_recode))
 
   }
+
+    genomic_df <- genomic_df %>%
+      select(-.data$Hugo_Symbol_Old)
 
   return(genomic_df)
 }
@@ -238,7 +242,7 @@ substrRight <- function(x, n) {
 #' @export
 #'
 #' @examples
-#' resolve_alias("KMT2D", alias_table = tidyr::unnest(impact_gene_info, cols = alias))
+#' resolve_alias("MLL4", alias_table = impact_alias_table)
 #'
 resolve_alias <- function(gene_to_check, alias_table) {
 
@@ -254,60 +258,6 @@ resolve_alias <- function(gene_to_check, alias_table) {
     as.character(gene_to_check)
   }
 }
-
-
-#' Reformat CNA from maf version to wide version
-#'
-#' @param cna a cna dataframe in maf format
-#' @param samples a list of samples to include
-#'
-#' @return a dataframe of reformatted CNA alteration
-#' @export
-#'
-reformat_cna <- function(cna, samples = samples) {
-
-  # recreate original format
-  temp <- as.data.frame(matrix(0L ,ncol = length(samples)+1,
-                               nrow = length(unique(cna$Hugo_Symbol))))
-
-  colnames(temp) <- c("Hugo_Symbol",samples)
-  temp[,1] <- unique(cna$Hugo_Symbol)
-
-  for(i in samples){
-    temp[match(as.character(unlist(cna %>%
-                                     filter(.data$sampleId %in% i) %>%
-                                     select(.data$Hugo_Symbol))),temp[,1]),
-         match(i, colnames(temp))] <- as.numeric(unlist(cna %>%
-                                                          filter(.data$sampleId %in% i) %>%
-                                                          select(.data$alteration)))
-  }
-
-  cna <- temp
-  rownames(cna) <- cna[,1]
-  cna <- cna[,-1]
-  cna <- as.data.frame(t(cna))
-  cna <- cna[rownames(cna) %in% samples,]
-
-
-
-
-  for(i in colnames(temp.cna)[-1]){
-    temp <- cna %>%
-      filter(.data$SAMPLE_ID %in% i) %>%
-      select(.data$SAMPLE_ID, .data$HUGO_SYMBOL, .data$ALTERATION)
-    if(nrow(temp)>0){
-      temp.cna[match(temp$HUGO_SYMBOL, temp.cna[,1]),match(i, colnames(temp.cna))] <- temp$ALTERATION
-    }
-  }
-  temp.cna[temp.cna == "Amplification"] <- 2
-  temp.cna[temp.cna == "Deletion"] <- -2
-
-  cna <- temp.cna
-  temp.cna <- NULL
-
-
-}
-
 
 
 #' IMPACT Panel Annotation of NA's

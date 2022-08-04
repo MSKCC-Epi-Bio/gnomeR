@@ -19,6 +19,6 @@ If an alias name is provided, the more common name/more up to date name is retur
 Resolve Hugo Symbol Names with Aliases
 }
 \examples{
-resolve_alias("KMT2D", alias_table = tidyr::unnest(impact_gene_info, cols = alias))
+resolve_alias("MLL4", alias_table = impact_alias_table)
 
 }
