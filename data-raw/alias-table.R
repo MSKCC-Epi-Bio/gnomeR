@@ -4,7 +4,7 @@ library(cbioportalR)
 library(tidyverse)
 library(gnomeR)
 
-set_cbioportal_db("msk")
+set_cbioportal_db("public")
 
 # Functions --------------------------------------------------------------------
 
@@ -52,9 +52,11 @@ l_api <- list("api_341" = api_341,
           "api_505" = api_505)
 
 # create data frame of genes
-impact_genes <- map2_df(l_api, names(l_api),
-                        ~clean_genes(impact_plat = .x,
-                                       name = .y))
+# impact_genes <- map2_df(l_api, names(l_api),
+#                         ~clean_genes(impact_plat = .x,
+#                                        name = .y))
+
+impact_genes <- l_api %>% bind_rows()
 
 impact_genes <- impact_genes %>%
   select(gene, entrez_id) %>%
@@ -91,6 +93,7 @@ impact_alias_table %>%
 impact_alias_table <- impact_alias_table %>%
   filter(gene != alias)
 
+# This may not be needed anymore, but leave for now
 impact_alias_table$gene[map_lgl(impact_alias_table$gene, ~.x %in%
                                   impact_alias_table$alias)] %>%
   unique()
