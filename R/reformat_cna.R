@@ -34,8 +34,10 @@ reformat_cna <- function(cna) {
 
   accepted_levels <- c("NEUTRAL","LOH", "GAIN", "AMPLIFICATION", "DELETION")
 
+  cna <- cna %>%
+    mutate(alteration = toupper(alteration))
 
-  levels_in_data <- toupper(unique(cna$alteration))
+  levels_in_data <- unique(cna$alteration)
 
   unrecognized_coding <- setdiff(levels_in_data, accepted_levels)
 
@@ -44,6 +46,7 @@ reformat_cna <- function(cna) {
 
   hugo_symbols <- unique(cna$hugo_symbol)
   samples <- unique(cna$sample_id)
+
 
   # Recode Alteration Data -----------------------------------------------------
   cna <- cna %>%
