@@ -29,7 +29,7 @@ reformat_cna <- function(cna) {
   missing_cols <-
     setdiff(c("sample_id", "hugo_symbol", "alteration"), names(cna))
 
-  switch(length(missing_cols) > 1,
+  switch(length(missing_cols) > 0,
          cli::cli_abort("Missing columns: {.field {missing_cols}}"))
 
   accepted_levels <- c("NEUTRAL","LOH", "GAIN", "AMPLIFICATION", "DELETION")
