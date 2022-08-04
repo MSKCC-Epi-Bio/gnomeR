@@ -23,8 +23,6 @@ reformat_cna <- function(cna) {
   cna <- cna %>%
     janitor::clean_names()
 
-  hugo_symbols <- unique(cna$hugo_symbol)
-  samples <- unique(cna$sample_id)
 
   # Check data -----------------------------------------------------------------
 
@@ -43,6 +41,9 @@ reformat_cna <- function(cna) {
 
   switch(length(unrecognized_coding > 0),
          cli::cli_abort("Unrecognized alteration types. Expecting {.val {accepted_levels}}"))
+
+  hugo_symbols <- unique(cna$hugo_symbol)
+  samples <- unique(cna$sample_id)
 
   # Recode Alteration Data -----------------------------------------------------
   cna <- cna %>%
