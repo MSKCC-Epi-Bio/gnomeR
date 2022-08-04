@@ -92,6 +92,39 @@ and only item in list</p></dd>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">gene_binary</span> <span class="op">&lt;-</span> <span class="fu"><a href="create_gene_binary.html">create_gene_binary</a></span><span class="op">(</span>mutation <span class="op">=</span> <span class="va">mut</span>, cna <span class="op">=</span> <span class="va">cna</span>,</span></span>
 <span class="r-in"><span>fusion <span class="op">=</span> <span class="va">fusion</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> `samples` argument is `NULL`. We will infer your cohort inclusion and resulting data frame will include all samples with at least one alteration in <span style="color: #00BB00;">mutation</span>, <span style="color: #00BB00;">fusion</span> or <span style="color: #00BB00;">cna</span> data frames</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>To ensure gene with multiple names/aliases are correctly grouped together, the</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> following genes in your dataframe have been recoded (you can supress this with</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> `recode_aliases = FALSE`):</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> MLL3 recoded to KMT2C</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> MLL2 recoded to KMT2D</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> MRE11A recoded to MRE11</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> MLL recoded to KMT2A</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> PARK2 recoded to PRKN</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> RFWD2 recoded to COP1</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> PAK7 recoded to PAK5</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> FAM46C recoded to TENT5C</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> FAM175A recoded to ABRAXAS1</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> MYCL1 recoded to MYCL</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> TCEB1 recoded to ELOC</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>To ensure gene with multiple names/aliases are correctly grouped together, the</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> following genes in your dataframe have been recoded (you can supress this with</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> `recode_aliases = FALSE`):</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> MLL3 recoded to KMT2C</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> MLL2 recoded to KMT2D</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>To ensure gene with multiple names/aliases are correctly grouped together, the</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> following genes in your dataframe have been recoded (you can supress this with</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> `recode_aliases = FALSE`):</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> FAM175A recoded to ABRAXAS1</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> FAM46C recoded to TENT5C</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> MLL recoded to KMT2A</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> MLL2 recoded to KMT2D</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> MLL3 recoded to KMT2C</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> MRE11A recoded to MRE11</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> MYCL1 recoded to MYCL</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> PAK7 recoded to PAK5</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> PARK2 recoded to PRKN</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> RFWD2 recoded to COP1</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> TCEB1 recoded to ELOC</span>
 <span class="r-in"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu">.sum_alts_in_pathway</span><span class="op">(</span><span class="va">gene_binary</span>,</span></span>
 <span class="r-in"><span> pathway_list_item <span class="op">=</span> <span class="fu">gnomeR</span><span class="fu">::</span><span class="va"><a href="pathways.html">pathways</a></span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>,</span></span>
 <span class="r-in"><span>  pathway_name <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="fu">gnomeR</span><span class="fu">::</span><span class="va"><a href="pathways.html">pathways</a></span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span>,</span></span>
@@ -110,7 +143,7 @@ and only item in list</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

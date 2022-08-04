@@ -156,16 +156,58 @@ the function will check for genes that may have more than 1 name in your data us
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">mut.only</span> <span class="op">&lt;-</span> <span class="fu">create_gene_binary</span><span class="op">(</span>mutation <span class="op">=</span> <span class="va">mut</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> `samples` argument is `NULL`. We will infer your cohort inclusion and resulting data frame will include all samples with at least one alteration in <span style="color: #00BB00;">mutation</span>, <span style="color: #00BB00;">fusion</span> or <span style="color: #00BB00;">cna</span> data frames</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>To ensure gene with multiple names/aliases are correctly grouped together, the</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> following genes in your dataframe have been recoded (you can supress this with</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> `recode_aliases = FALSE`):</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> MLL3 recoded to KMT2C</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> MLL2 recoded to KMT2D</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> MRE11A recoded to MRE11</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> MLL recoded to KMT2A</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> PARK2 recoded to PRKN</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> RFWD2 recoded to COP1</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> PAK7 recoded to PAK5</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> FAM46C recoded to TENT5C</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> FAM175A recoded to ABRAXAS1</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> MYCL1 recoded to MYCL</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> TCEB1 recoded to ELOC</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">samples</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">mut</span><span class="op">$</span><span class="va">Tumor_Sample_Barcode</span><span class="op">)</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">200</span><span class="op">]</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">bin.mut</span> <span class="op">&lt;-</span> <span class="fu">create_gene_binary</span><span class="op">(</span>samples <span class="op">=</span> <span class="va">samples</span>, mutation <span class="op">=</span> <span class="va">mut</span>,</span></span>
 <span class="r-in"><span>mut_type <span class="op">=</span> <span class="st">"omit_germline"</span> ,snp_only <span class="op">=</span> <span class="cn">FALSE</span>,</span></span>
 <span class="r-in"><span>include_silent <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>To ensure gene with multiple names/aliases are correctly grouped together, the</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> following genes in your dataframe have been recoded (you can supress this with</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> `recode_aliases = FALSE`):</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> MLL3 recoded to KMT2C</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> MLL2 recoded to KMT2D</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> MRE11A recoded to MRE11</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> MLL recoded to KMT2A</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> PARK2 recoded to PRKN</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> RFWD2 recoded to COP1</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> PAK7 recoded to PAK5</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> FAM46C recoded to TENT5C</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> FAM175A recoded to ABRAXAS1</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> MYCL1 recoded to MYCL</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> TCEB1 recoded to ELOC</span>
 <span class="r-in"><span><span class="va">bin.mut</span> <span class="op">&lt;-</span> <span class="fu">create_gene_binary</span><span class="op">(</span>samples <span class="op">=</span> <span class="va">samples</span>, mutation <span class="op">=</span> <span class="va">mut</span>,</span></span>
 <span class="r-in"><span>mut_type <span class="op">=</span> <span class="st">"omit_germline"</span>, snp_only <span class="op">=</span> <span class="cn">FALSE</span>,</span></span>
 <span class="r-in"><span>include_silent <span class="op">=</span> <span class="cn">FALSE</span>,</span></span>
 <span class="r-in"><span>cna_relax <span class="op">=</span> <span class="cn">TRUE</span>, specify_panel <span class="op">=</span> <span class="st">"no"</span>, rm_empty <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>To ensure gene with multiple names/aliases are correctly grouped together, the</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> following genes in your dataframe have been recoded (you can supress this with</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> `recode_aliases = FALSE`):</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> MLL3 recoded to KMT2C</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> MLL2 recoded to KMT2D</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> MRE11A recoded to MRE11</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> MLL recoded to KMT2A</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> PARK2 recoded to PRKN</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> RFWD2 recoded to COP1</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> PAK7 recoded to PAK5</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> FAM46C recoded to TENT5C</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> FAM175A recoded to ABRAXAS1</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> MYCL1 recoded to MYCL</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> TCEB1 recoded to ELOC</span>
 </code></pre></div>
     </div>
   </div>
@@ -180,7 +222,7 @@ the function will check for genes that may have more than 1 name in your data us
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>
