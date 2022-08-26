@@ -16,6 +16,15 @@
 #'
 #' cna <- reformat_cna(cna_long)
 #'
+#'  cna_long <- data.frame(
+#'     sampleId = c("P-0001276-T01-IM3","P-0001276-T01-IM3",
+#'                  "P-0005436-T01-IM3",
+#'                  "P-0001276-T01-IM3","P-0003333-T01-IM3"),
+#'     Hugo_Symbol = c("MLL2","KMT2D","HIST1H2BD",
+#'                     "HIST1H3B","KDR"),
+#'     alteration = c(2, 2, -1, 1, -2))
+#'
+#' cna <- reformat_cna(cna_long)
 #'
 
 reformat_cna <- function(cna) {
@@ -34,36 +43,41 @@ reformat_cna <- function(cna) {
 
   accepted_levels <- c("NEUTRAL","LOH", "GAIN", "AMPLIFICATION", "DELETION")
 
-  cna <- cna %>%
-    mutate(alteration = toupper(alteration))
+  if(is.character(cna$alteration)) {
+    cna <- cna %>%
+      mutate(alteration = toupper(alteration))
 
-  levels_in_data <- unique(cna$alteration)
+    levels_in_data <- unique(cna$alteration)
 
-  unrecognized_coding <- setdiff(levels_in_data, accepted_levels)
+    unrecognized_coding <- setdiff(levels_in_data, accepted_levels)
 
-  switch(length(unrecognized_coding > 0),
-         cli::cli_abort("Unrecognized alteration types. Expecting {.val {accepted_levels}}"))
+    switch(length(unrecognized_coding > 0),
+           cli::cli_abort("Unrecognized alteration types. Expecting {.val {accepted_levels}}"))
+
+    # Recode Alteration Data -----------------------------------------------------
+    cna <- cna %>%
+      mutate(alteration =
+               case_when(
+                 alteration == "NEUTRAL" ~ 0,
+                 alteration == "LOH" ~ -1,
+                 alteration == "GAIN" ~ 1,
+                 alteration == "AMPLIFICATION" ~ 2,
+                 alteration == "DELETION" ~ -2)
+      )
+
+
+  }
 
   hugo_symbols <- unique(cna$hugo_symbol)
   samples <- unique(cna$sample_id)
 
 
-  # Recode Alteration Data -----------------------------------------------------
-  cna <- cna %>%
-    mutate(alteration =
-             case_when(
-               alteration == "NEUTRAL" ~ 0,
-               alteration == "LOH" ~ -1,
-               alteration == "GAIN" ~ 1,
-               alteration == "AMPLIFICATION" ~ 2,
-               alteration == "DELETION" ~ -2)
-    )
 
   # Create Empty Dataframe & Fill ----------------------------------------------
 
   # create empty data frame of correct dimensions with 0's ---
   cna_out <- as.data.frame(matrix(0L, ncol = length(samples) + 1,
-                               nrow = length(hugo_symbols)))
+                                  nrow = length(hugo_symbols)))
 
   colnames(cna_out) <- c("Hugo_Symbol", samples)
   cna_out[,1] <- hugo_symbols
