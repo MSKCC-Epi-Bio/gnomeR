@@ -27,5 +27,14 @@ Reformat CNA from maf (long) version to wide version
 
 cna <- reformat_cna(cna_long)
 
+ cna_long <- data.frame(
+    sampleId = c("P-0001276-T01-IM3","P-0001276-T01-IM3",
+                 "P-0005436-T01-IM3",
+                 "P-0001276-T01-IM3","P-0003333-T01-IM3"),
+    Hugo_Symbol = c("MLL2","KMT2D","HIST1H2BD",
+                    "HIST1H3B","KDR"),
+    alteration = c(2, 2, -1, 1, -2))
+
+cna <- reformat_cna(cna_long)
 
 }

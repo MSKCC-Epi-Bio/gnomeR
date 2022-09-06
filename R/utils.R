@@ -160,6 +160,45 @@ check_cna_input <- function(cna, ...)  {
   return(cna)
 }
 
+#' Rename columns from API results to work with gnomeR functions
+#'
+#' @param mutations a mutations data frame from {cbioportalR}
+#'
+#' @return a renamed data frame
+#' @export
+#'
+rename_columns <- function(mutations) {
+
+  rename_df <- gnomeR::rename_df
+
+  vars_found_in_dictionary <- intersect(names(mutations),
+                                        unique(rename_df$api_col))
+
+  # create a temporary dictionary as a named vector
+  temp_dict <- rename_df %>%
+    dplyr::filter(api_col %in% vars_found_in_dictionary) %>%
+    tibble::deframe()
+
+  if(length(temp_dict) > 0) {
+
+    message <- purrr::map2_chr(names(temp_dict),
+                               temp_dict,
+                               ~paste0(.y, " renamed ", .x))
+
+    names(message) <- rep("!", times = length(message))
+
+
+    cli::cli_inform(message)
+
+    # rename those variables only
+    mutations %>%
+      dplyr::rename(!!temp_dict)
+  }
+}
+
+
+
+
 # Recode Gene Aliases---------------------
 
 #' Recode Hugo Symbol Column
