@@ -142,29 +142,7 @@ create_gene_binary <- function(samples=NULL,
   cna <- switch(!is.null(cna), {
     check_cna_input(cna)
 
-    # ** This could go in cna check function
-    # remove samples with zero events-  this makes CNA match the way mutation/fusion files include samples (which is samples with events only)
-
-    zero_cna <- cna %>%
-      purrr::map_at(., vars(-c("Hugo_Symbol")), ~all(.x == 0))
-
-    zero_cna$Hugo_Symbol <- FALSE
-
-    zero_cna <- unlist(zero_cna, use.names = TRUE)
-    zero_cna <- zero_cna[zero_cna]
-    cna <- cna %>%
-      select(-c(names(zero_cna)))
-
   })
-
-  # ** This assumes regular cna format
-  # ** This may not work with research samples!
-  cna_samples <- cna %>% purrr::when(!is.null(.) ~ {
-                         names(.)[-which(names(.) =='Hugo_Symbol')] %>%
-                           str_replace_all(fixed("."), "-")
-                         },
-                         TRUE ~ NULL)
-
 
 
   #  Make Final Sample List ----------------------------------------------------
@@ -521,4 +499,142 @@ create_gene_binary <- function(samples=NULL,
 }
 
 #create_gene_binary(mutation = gnomeR::mut, specify_panel = "no")
+
+
+
+
+# WIDE CNA Binary Matrix -----------------------------------------------------
+
+#' Make Binary Matrix From CNA data frame
+#'
+#' @inheritParams create_gene_binary
+#'
+#' @return a data frame
+#'
+.cna_gene_binary_wide <- function(cna,
+                                  samples,
+                                  cna_binary,
+                                  cna_relax,
+                                  specify_panel,
+                                  recode_aliases){
+
+
+  if(recode_aliases) {
+    cna <- recode_alias(cna)
+  }
+
+  # If more than 1 row per gene, combine rows
+  dups <- cna$Hugo_Symbol[duplicated(cna$Hugo_Symbol)]
+
+  if(length(dups) > 0){
+    for(i in dups){
+      temp <- cna[which(cna$Hugo_Symbol == i),] # grep(i, cna$Hugo_Symbol,fixed = TRUE)
+      temp2 <- as.character(unlist(apply(temp, 2, function(x){
+        if(all(is.na(x)))
+          out <- NA
+        else if(anyNA(x))
+          out <- x[!is.na(x)]
+        else if(length(unique(x)) > 1)
+          out <- x[which(x != 0)]
+        else
+          out <- x[1]
+        return(out)
+      })))
+      temp2[-1] <- as.numeric(temp2[-1])
+      cna <- rbind(cna[-which(cna$Hugo_Symbol == i),],
+                   temp2)
+    }
+  }
+
+  rownames(cna) <- cna$Hugo_Symbol
+  cna <- cna[,-1]
+
+  # flip
+  cna <- as.data.frame(t(cna))
+
+  # fix names
+  rownames(cna) <- gsub("\\.","-",rownames(cna))
+
+  # filter those in final samples list
+  cna <- cna[rownames(cna) %in% samples,]
+
+  # If cna binary
+  samples_temp <- rownames(cna)
+
+  if(cna_binary){
+    temp <- do.call("cbind",apply(cna,2,function(x){
+      if(cna_relax){
+        yA <- ifelse(as.numeric(x)>=0.9,1,0)
+        yD <- ifelse(as.numeric(x)<=-0.9,1,0)
+      }
+      if(!cna_relax){
+        yA <- ifelse(as.numeric(x)==2,1,0)
+        yD <- ifelse(as.numeric(x)<=-0.9,1,0) #==-2
+      }
+      out <- as.data.frame(cbind(yA,yD))
+      colnames(out) <- c("Amp","Del")
+      return(out)
+    }))
+
+    cna <- temp[,apply(temp,2,function(x){sum(x,na.rm=T) > 0})]
+    rownames(cna) <- samples_temp
+
+    # add missing
+    if(length(which(is.na(match(samples,rownames(cna))))) > 0){
+      missing <- samples[which(is.na(match(samples,rownames(cna))))]
+      add <- as.data.frame(matrix(0L,nrow = length(missing),ncol = ncol(cna)))
+      rownames(add )  <- missing
+      colnames(add) <- colnames(cna)
+      cna <- as.data.frame(rbind(cna,add))
+    }
+    cna <- cna[match(samples,rownames(cna)),]
+    cna[is.na(cna)] <- 0
+  }
+
+  if(!cna_binary){
+
+    # add missing
+    if(length(which(is.na(match(samples,rownames(cna))))) > 0){
+      missing <- samples[which(is.na(match(samples,rownames(cna))))]
+      add <- as.data.frame(matrix(0L,nrow = length(missing),ncol = ncol(cna)))
+      rownames(add )  <- missing
+      colnames(add) <- colnames(cna)
+      cna <- as.data.frame(rbind(cna,add))
+      cna <- cna[match(samples,rownames(cna)),]
+    }
+    cna <- cna[match(samples,rownames(cna)),]
+
+    cna <- cna %>%
+      mutate_all(~ as.numeric(gsub(" ","",as.character(.)))) %>%
+      mutate_all(
+        ~ case_when(
+          . == 0 ~ "NEUTRAL",
+          . %in% c(-1.5,-1) ~ "LOH",
+          . == 1 ~ "GAIN",
+          . == 2 ~ "AMPLIFICATION",
+          . == -2 ~ "DELETION",
+        )
+      ) %>%
+      mutate_all(
+        ~factor(.,
+                levels = c("NEUTRAL","DELETION","LOH","GAIN","AMPLIFICATION")[
+                  which(c("NEUTRAL","DELETION","LOH","GAIN","AMPLIFICATION") %in% .)
+                ])
+      )
+
+
+    # add cna annotation
+    if(ncol(cna) > 0) {
+      colnames(cna) <- paste0(colnames(cna),".cna")
+    }
+
+    rownames(cna) <- samples
+    cna[is.na(cna)] <- "NEUTRAL"
+  }
+
+  return(cna)
+}
+
+#create_gene_binary(mutation = gnomeR::mut, specify_panel = "no")
+
 

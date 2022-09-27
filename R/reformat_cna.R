@@ -105,3 +105,46 @@ reformat_cna <- function(cna) {
   return(cna_out)
 
 }
+
+#' Reformat Wide CNA Data to Long
+#'
+#' @param wide_cna a cna dataframe in wide format (e.g. gnomeR::cna)
+#' @param clean_sample_ids `TRUE` by default and function will clean
+#' `sample_id` field to replace "." with "-". If `FALSE`,
+#' no modification will be made to returned `sample_ids` field
+#'
+#' @return A long data frame of CNA events
+#' @export
+#'
+#' @examples
+#' cna <- pivot_cna_longer(wide_cna = gnomeR::cna)
+#'
+pivot_cna_longer <- function(wide_cna, clean_sample_ids = TRUE) {
+
+  cna <- rename_columns(wide_cna)
+
+  no_hugo <- select(cna, -hugo_symbol)
+
+  patient_sums <- apply(no_hugo, 2, sum, na.rm = TRUE)
+  patient_with_sv <- patient_sums[patient_sums > 0] %>%
+    names()
+
+  cna <-  cna %>%
+    select(.data$hugo_symbol, all_of(patient_with_sv))
+
+  cna_long <- cna %>%
+    tidyr::pivot_longer(-hugo_symbol,
+                        names_to = "sample_id", values_to = "alteration")
+
+  if(clean_sample_ids) {
+    cna_long <- cna_long %>%
+      mutate(name = str_replace_all(sample_id, fixed("."), "-"))
+
+    cli::cli_alert_warning("Replacing all {.code .} to {.code -} in {.field sample_id} field (e.g. {.code P.0001930.T01.IM3} -> {.code P-0001930-T01-IM3}).
+                   To supress this use argument {.code clean_sample_ids = FALSE}")
+  }
+
+  cna_long
+
+
+}

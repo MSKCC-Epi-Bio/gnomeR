@@ -16,7 +16,7 @@ sanitize_mutation_input <- function(mutation, ...)  {
   mutation <- rename_columns(mutation)
 
   # Check required columns & data types ------------------------------------------
-  required_cols <- c("sample_id", "hugo_symbol", "variant_classification")
+  required_cols <- c("sample_id", "hugo_symbol")
   column_names <- colnames(mutation)
 
   which_missing <- required_cols[which(!(required_cols %in% column_names))]
@@ -94,8 +94,10 @@ sanitize_mutation_input <- function(mutation, ...)  {
 #'
 #' @return a checked data frame
 #' @export
+#' @examples
+#' fus <- sanitize_fusion_input(fusion = gnomeR::fusion)
 #'
-check_fusion_input <- function(fusion, ...)  {
+sanitize_fusion_input <- function(fusion, ...)  {
 
   impact_gene_info <- gnomeR::impact_gene_info
   arguments <- list(...)
@@ -104,20 +106,28 @@ check_fusion_input <- function(fusion, ...)  {
 
   # Check required columns & data types ------------------------------------------
 
-  # check for hugo symbol OR
-  required_cols <- c("sample_id", "hugo_symbol", "variant_classification")
-  column_names <- colnames(mutation)
+  column_names <- colnames(fusion)
+  # check for hugo symbol
 
-  which_missing <- required_cols[which(!(required_cols %in% column_names))]
-
-  if(length(which_missing) > 0) {
-    cli::cli_abort("The following required columns are missing in your mutations data: {.field {which_missing}}")
+  if(!("sample_id" %in% column_names) > 0) {
+    cli::cli_abort("No sample ID column found.")
   }
+
+  if(!("hugo_symbol" %in% column_names |
+       "site_1_entrez_gene_id" %in% column_names)) {
+
+    cli::cli_abort("No hugo symbol column found. See `gnomeR::names_df` for accepted column names")
+  }
+
 
   # Make sure they are character
   fusion <- fusion %>%
-    mutate(Tumor_Sample_Barcode = as.character(.data$Tumor_Sample_Barcode),
-           Hugo_Symbol = as.character(.data$Hugo_Symbol))
+    mutate(sample_id = as.character(.data$sample_id)) %>%
+    purrr::when(
+      "hugo_symbol" %in% column_names ~
+        mutate(., "hugo_symbol" = as.character(.data$hugo_symbol)),
+      TRUE ~
+        mutate(., "site_1_entrez_gene_id" = as.character(.data$site_1_entrez_gene_id)))
 
   return(fusion)
 }
@@ -132,33 +142,26 @@ check_fusion_input <- function(fusion, ...)  {
 #' @return a checked data frame
 #' @export
 #'
-check_cna_input <- function(cna, ...)  {
+sanitize_cna_input <- function(cna, ...)  {
 
   impact_gene_info <- gnomeR::impact_gene_info
   arguments <- list(...)
 
   # Check required columns & data types ------------------------------------------
-  required_cols <- c("Hugo_Symbol")
+  required_cols <- c("hugo_symbol", "sample_id", "alteration")
   column_names <- colnames(cna)
 
   which_missing <- required_cols[which(!(required_cols %in% column_names))]
 
   if(length(which_missing) > 0) {
-    cli::cli_abort("The following required columns are missing in your mutations data: {.field {which_missing}}")
-  }
-
-  # Check format of CNA
-  api_cols <- c("sampleId", "studyId", "patientId", "alteration")
-  in_data <- api_cols[api_cols %in% column_names]
-
-  if(length(in_data) > 0) {
-    cli::cli_abort("The following columns are not allowed in your cna data.frame {.field {in_data}}.
-                   Do you need to reformat? See {.code ?reformat_cna()}")
+    cli::cli_abort("The following required columns are missing in your mutations data: {.field {which_missing}}.
+                   Is your data in long format? See {.code gnomeR::pivot_cna_long()} to reformat")
   }
 
   # Make sure Hugo is character
   cna <- cna %>%
-    mutate(Hugo_Symbol = as.character(.data$Hugo_Symbol))
+    mutate(hugo_symbol = as.character(.data$hugo_symbol))
+
 
 
   return(cna)
