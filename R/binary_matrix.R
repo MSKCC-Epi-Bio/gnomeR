@@ -129,8 +129,10 @@ create_gene_binary <- function(samples=NULL,
 
 
   # * Mutation  checks  --------
+
+  # standardize columns names
   mutation <- switch(!is.null(mutation),
-                     check_mutation_input(mutation = mutation))
+                     sanitize_mutation_input(mutation = mutation))
 
   # * Fusion checks  ----------
   fusion <- switch(!is.null(fusion),
