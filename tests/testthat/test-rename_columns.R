@@ -35,3 +35,13 @@ test_that("test colnames are renamed properly", {
 
 })
 
+#issue is that this is not title case
+test_that("binary matrix runs with renamed columns without error", {
+
+  expect_error(
+   gnomeR::create_gene_binary(samples = gnomeR::mut$Tumor_Sample_Barcode,
+                              mutation = rename_columns(gnomeR::mut)), NA)
+
+})
+
+
