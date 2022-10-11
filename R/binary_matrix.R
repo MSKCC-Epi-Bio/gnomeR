@@ -36,7 +36,7 @@
 #' @examples
 #' mut.only <- create_gene_binary(mutation = mut)
 #'
-#' samples <- as.character(unique(mut$Tumor_Sample_Barcode))[1:200]
+#' samples <- as.character(unique(mut$sample_id))[1:200]
 #'
 #' bin.mut <- create_gene_binary(samples = samples, mutation = mut,
 #' mut_type = "omit_germline" ,snp_only = FALSE,
@@ -150,8 +150,8 @@ create_gene_binary <- function(samples=NULL,
 
   # If user doesn't pass a vector, use samples in files as final sample list
     samples_final <- samples %||%
-      c(mutation$Tumor_Sample_Barcode,
-        fusion$Tumor_Sample_Barcode,
+      c(mutation$sample_id,
+        fusion$sample_id,
         cna_samples) %>%
       as.character() %>%
       unique()
@@ -267,21 +267,21 @@ create_gene_binary <- function(samples=NULL,
   # apply filters --------------
  mutation <- mutation %>%
    purrr::when(
-     snp_only ~ filter(., .data$Variant_Type == "SNP"),
+     snp_only ~ filter(., .data$variant_type == "SNP"),
      ~.
    ) %>%
    purrr::when(
-     !include_silent ~ filter(., .data$Variant_Classification != "Silent"),
+     !include_silent ~ filter(., .data$variant_classification != "Silent"),
      ~.
    ) %>%
    purrr::when(
      mut_type == "all" ~ .,
      mut_type == "omit_germline" ~ {
-       filter(., .data$Mutation_Status != "GERMLINE" |
-         .data$Mutation_Status != "germline" | is.na(.data$Mutation_Status))
+       filter(., .data$mutation_status != "GERMLINE" |
+         .data$mutation_status != "germline" | is.na(.data$mutation_status))
 
        blank_muts <- mutation %>%
-         filter(is.na(.data$Mutation_Status) | .$Mutation_Status == "") %>%
+         filter(is.na(.data$mutation_status) | .$mutation_status == "") %>%
          nrow()
 
        if ((blank_muts > 0)) {
@@ -289,10 +289,10 @@ create_gene_binary <- function(samples=NULL,
        }
        return(.)
      },
-     mut_type == "somatic_only" ~ filter(., .data$Mutation_Status == "SOMATIC" |
-       .data$Mutation_Status == "somatic"),
-     mut_type == "germline_only" ~ filter(., .data$Mutation_Status == "GERMLINE" |
-       .data$Mutation_Status == "germline"),
+     mut_type == "somatic_only" ~ filter(., .data$mutation_status == "SOMATIC" |
+       .data$mutation_status == "somatic"),
+     mut_type == "germline_only" ~ filter(., .data$mutation_status == "GERMLINE" |
+       .data$mutation_status == "germline"),
      TRUE ~ .
    )
 
@@ -302,14 +302,14 @@ create_gene_binary <- function(samples=NULL,
 
   # create empty data.frame to hold results -----
   mut <- as.data.frame(matrix(0L, nrow=length(samples),
-                              ncol=length(unique(mutation$Hugo_Symbol))))
+                              ncol=length(unique(mutation$hugo_symbol))))
 
-  colnames(mut) <- unique(mutation$Hugo_Symbol)
+  colnames(mut) <- unique(mutation$hugo_symbol)
   rownames(mut) <- samples
 
   # populate matrix
   for(i in samples){
-    genes <- mutation$Hugo_Symbol[mutation$Tumor_Sample_Barcode %in% i]
+    genes <- mutation$hugo_symbol[mutation$sample_id %in% i]
     if(length(genes) != 0) {
       mut[match(i, rownames(mut)), match(unique(as.character(genes)), colnames(mut))] <- 1
       }
@@ -335,7 +335,7 @@ create_gene_binary <- function(samples=NULL,
 
 
   fusion <- fusion %>%
-    filter(.data$Tumor_Sample_Barcode %in% samples)
+    filter(.data$sample_id %in% samples)
 
   if(recode_aliases) {
     fusion <- recode_alias(fusion)
@@ -343,15 +343,15 @@ create_gene_binary <- function(samples=NULL,
 
   # create empty data frame -----
   fusions_out <- as.data.frame(matrix(0L, nrow=length(samples),
-                              ncol=length(unique(fusion$Hugo_Symbol))))
+                              ncol=length(unique(fusion$hugo_symbol))))
 
 
-  colnames(fusions_out) <- unique(fusion$Hugo_Symbol)
+  colnames(fusions_out) <- unique(fusion$hugo_symbol)
   rownames(fusions_out) <- samples
 
   # populate matrix
   for(i in samples){
-    genes <- fusion$Hugo_Symbol[fusion$Tumor_Sample_Barcode %in% i]
+    genes <- fusion$hugo_symbol[fusion$sample_id %in% i]
     if(length(genes) != 0)
       fusions_out[match(i,rownames(fusions_out)),
                  match(unique(as.character(genes)),colnames(fusions_out))] <- 1
@@ -387,11 +387,11 @@ create_gene_binary <- function(samples=NULL,
   }
 
    # If more than 1 row per gene, combine rows
-  dups <- cna$Hugo_Symbol[duplicated(cna$Hugo_Symbol)]
+  dups <- cna$hugo_symbol[duplicated(cna$hugo_symbol)]
 
   if(length(dups) > 0){
     for(i in dups){
-      temp <- cna[which(cna$Hugo_Symbol == i),] # grep(i, cna$Hugo_Symbol,fixed = TRUE)
+      temp <- cna[which(cna$hugo_symbol == i),] # grep(i, cna$hugo_symbol,fixed = TRUE)
       temp2 <- as.character(unlist(apply(temp, 2, function(x){
         if(all(is.na(x)))
           out <- NA
@@ -404,12 +404,12 @@ create_gene_binary <- function(samples=NULL,
         return(out)
       })))
       temp2[-1] <- as.numeric(temp2[-1])
-      cna <- rbind(cna[-which(cna$Hugo_Symbol == i),],
+      cna <- rbind(cna[-which(cna$hugo_symbol == i),],
                    temp2)
     }
   }
 
-  rownames(cna) <- cna$Hugo_Symbol
+  rownames(cna) <- cna$hugo_symbol
   cna <- cna[,-1]
 
   # flip
@@ -526,11 +526,11 @@ create_gene_binary <- function(samples=NULL,
   }
 
   # If more than 1 row per gene, combine rows
-  dups <- cna$Hugo_Symbol[duplicated(cna$Hugo_Symbol)]
+  dups <- cna$hugo_symbol[duplicated(cna$hugo_symbol)]
 
   if(length(dups) > 0){
     for(i in dups){
-      temp <- cna[which(cna$Hugo_Symbol == i),] # grep(i, cna$Hugo_Symbol,fixed = TRUE)
+      temp <- cna[which(cna$hugo_symbol == i),] # grep(i, cna$hugo_symbol,fixed = TRUE)
       temp2 <- as.character(unlist(apply(temp, 2, function(x){
         if(all(is.na(x)))
           out <- NA
@@ -543,12 +543,12 @@ create_gene_binary <- function(samples=NULL,
         return(out)
       })))
       temp2[-1] <- as.numeric(temp2[-1])
-      cna <- rbind(cna[-which(cna$Hugo_Symbol == i),],
+      cna <- rbind(cna[-which(cna$hugo_symbol == i),],
                    temp2)
     }
   }
 
-  rownames(cna) <- cna$Hugo_Symbol
+  rownames(cna) <- cna$hugo_symbol
   cna <- cna[,-1]
 
   # flip
