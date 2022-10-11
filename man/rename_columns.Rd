@@ -4,7 +4,7 @@
 \alias{rename_columns}
 \title{Rename columns from API results to work with gnomeR functions}
 \usage{
-rename_columns(mutations)
+rename_columns(df_to_check)
 }
 \arguments{
 \item{mutations}{a mutations data frame from {cbioportalR}}

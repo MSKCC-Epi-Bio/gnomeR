@@ -141,11 +141,17 @@ sanitize_fusion_input <- function(fusion, ...)  {
 #'
 #' @return a checked data frame
 #' @export
+#' @examples
+#'
+#' cna <- pivot_cna_longer(gnomeR::cna)
+#' cna <- sanitize_cna_input(cna = cna)
 #'
 sanitize_cna_input <- function(cna, ...)  {
 
   impact_gene_info <- gnomeR::impact_gene_info
   arguments <- list(...)
+
+  cna <- rename_columns(cna)
 
   # Check required columns & data types ------------------------------------------
   required_cols <- c("hugo_symbol", "sample_id", "alteration")
@@ -155,14 +161,44 @@ sanitize_cna_input <- function(cna, ...)  {
 
   if(length(which_missing) > 0) {
     cli::cli_abort("The following required columns are missing in your mutations data: {.field {which_missing}}.
-                   Is your data in long format? See {.code gnomeR::pivot_cna_long()} to reformat")
+                   Is your data in wide format? If so, it must be long format. See {.code gnomeR::pivot_cna_long()} to reformat")
   }
 
-  # Make sure Hugo is character
+
+  # Make sure hugo & alteration is character
   cna <- cna %>%
-    mutate(hugo_symbol = as.character(.data$hugo_symbol))
+    mutate(hugo_symbol = as.character(.data$hugo_symbol)) %>%
+    mutate(alteration = tolower(str_trim(as.character(alteration))))
 
 
+
+  # check alteration column -----------------------------
+
+  levels_in_data <- names(table(cna$alteration))
+
+  allowed_chr_levels <- c(
+    "neutral" = "0",
+    "deletion" = "-2",
+    "loh" = "-1.5",
+    "loh" = "-1",
+    "gain" = "1",
+    "amplification" = "2"
+  )
+
+ all_allowed <- c(allowed_chr_levels, names(allowed_chr_levels))
+ not_allowed <- levels_in_data[!levels_in_data %in% all_allowed]
+
+  if(length(not_allowed) > 0) {
+    cli::cli_abort(c("Unknown values in {.field alteration} field: {.val {not_allowed}}",
+                   "Must be one of the following: {.val {all_allowed}}"))
+  }
+
+
+  # HERE ------
+ suppressWarnings(
+   cna <- cna %>%
+     mutate(alteration = fct_recode(alteration, !!!allowed_chr_levels))
+ )
 
   return(cna)
 }
@@ -225,7 +261,8 @@ rename_columns <- function(df_to_check) {
 #' @export
 #'
 #' @examples
-#' recode_alias(genomic_df = gnomeR::mut)
+#' mut <- rename_columns(gnomeR::mut)
+#' recode_alias(genomic_df = mut)
 #'
 recode_alias <- function(genomic_df, ...) {
 
@@ -234,33 +271,33 @@ recode_alias <- function(genomic_df, ...) {
       dplyr::select(.data$hugo_symbol, .data$alias)
 
     # recode aliases
-    genomic_df$Hugo_Symbol_Old <- genomic_df$Hugo_Symbol
-    genomic_df$Hugo_Symbol <- purrr::map_chr(genomic_df$Hugo_Symbol,
+    genomic_df$hugo_symbol_old <- genomic_df$hugo_symbol
+    genomic_df$hugo_symbol <- purrr::map_chr(genomic_df$hugo_symbol,
                                              ~resolve_alias(gene_to_check = .x,
                                                             alias_table = alias_table))
 
     message <- genomic_df %>%
-      dplyr::filter(.data$Hugo_Symbol_Old != .data$Hugo_Symbol) %>%
-      dplyr::select(.data$Hugo_Symbol_Old, .data$Hugo_Symbol) %>%
+      dplyr::filter(.data$hugo_symbol_old != .data$hugo_symbol) %>%
+      dplyr::select(.data$hugo_symbol_old, .data$hugo_symbol) %>%
       dplyr::distinct()
 
 
     if(nrow(message) > 0) {
-      vec_recode <- purrr::map2_chr(message$Hugo_Symbol_Old,
-                                 message$Hugo_Symbol,
+      vec_recode <- purrr::map2_chr(message$hugo_symbol_old,
+                                 message$hugo_symbol,
                                  ~paste0(.x, " recoded to ", .y))
 
       names(vec_recode) <- rep("!", times = length(vec_recode))
 
       cli::cli_warn(c(
       "To ensure gene with multiple names/aliases are correctly grouped together, the
-      following genes in your dataframe have been recoded (you can supress this with {.code recode_aliases = FALSE}):",
+      following genes in your dataframe have been recoded (you can prevent this with {.code recode_aliases = FALSE}):",
       vec_recode))
 
   }
 
     genomic_df <- genomic_df %>%
-      select(-.data$Hugo_Symbol_Old)
+      select(-.data$hugo_symbol_old)
 
   return(genomic_df)
 }

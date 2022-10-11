@@ -138,10 +138,10 @@ pivot_cna_longer <- function(wide_cna, clean_sample_ids = TRUE) {
 
   if(clean_sample_ids) {
     cna_long <- cna_long %>%
-      mutate(name = str_replace_all(sample_id, fixed("."), "-"))
+      mutate(sample_id = str_replace_all(sample_id, fixed("."), "-"))
 
     cli::cli_alert_warning("Replacing all {.code .} to {.code -} in {.field sample_id} field (e.g. {.code P.0001930.T01.IM3} -> {.code P-0001930-T01-IM3}).
-                   To supress this use argument {.code clean_sample_ids = FALSE}")
+                   To prevent this, use argument {.code clean_sample_ids = FALSE}")
   }
 
   cna_long
