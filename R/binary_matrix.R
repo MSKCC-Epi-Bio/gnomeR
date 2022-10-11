@@ -136,11 +136,11 @@ create_gene_binary <- function(samples=NULL,
 
   # * Fusion checks  ----------
   fusion <- switch(!is.null(fusion),
-                   check_fusion_input(fusion))
+                   sanitize_fusion_input(fusion))
 
   # * CNA checks  ------------
   cna <- switch(!is.null(cna), {
-    check_cna_input(cna)
+    sanitize_cna_input(cna)
 
   })
 
@@ -386,7 +386,7 @@ create_gene_binary <- function(samples=NULL,
     cna <- recode_alias(cna)
   }
 
-  # If more than 1 row per gene, combine rows
+   # If more than 1 row per gene, combine rows
   dups <- cna$Hugo_Symbol[duplicated(cna$Hugo_Symbol)]
 
   if(length(dups) > 0){
@@ -425,11 +425,12 @@ create_gene_binary <- function(samples=NULL,
   samples_temp <- rownames(cna)
 
   if(cna_binary){
-    temp <- do.call("cbind",apply(cna,2,function(x){
+    temp <- do.call("cbind", apply(cna,2,function(x){
       if(cna_relax){
         yA <- ifelse(as.numeric(x)>=0.9,1,0)
         yD <- ifelse(as.numeric(x)<=-0.9,1,0)
       }
+
       if(!cna_relax){
         yA <- ifelse(as.numeric(x)==2,1,0)
         yD <- ifelse(as.numeric(x)<=-0.9,1,0) #==-2
@@ -438,6 +439,7 @@ create_gene_binary <- function(samples=NULL,
       colnames(out) <- c("Amp","Del")
       return(out)
     }))
+
 
     cna <- temp[,apply(temp,2,function(x){sum(x,na.rm=T) > 0})]
     rownames(cna) <- samples_temp
