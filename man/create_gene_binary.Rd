@@ -74,7 +74,7 @@ a predefined list of samples (rows are samples and columns are genes)
 \examples{
 mut.only <- create_gene_binary(mutation = mut)
 
-samples <- as.character(unique(mut$Tumor_Sample_Barcode))[1:200]
+samples <- as.character(unique(mut$sample_id))[1:200]
 
 bin.mut <- create_gene_binary(samples = samples, mutation = mut,
 mut_type = "omit_germline" ,snp_only = FALSE,
