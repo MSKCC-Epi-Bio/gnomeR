@@ -268,7 +268,7 @@ recode_alias <- function(genomic_df, ...) {
 
   # get table of gene aliases (internal data)
     alias_table <- gnomeR::impact_alias_table %>%
-      dplyr::select(.data$hugo_symbol, .data$alias)
+      dplyr::select("hugo_symbol", "alias")
 
     # recode aliases
     genomic_df$hugo_symbol_old <- genomic_df$hugo_symbol
@@ -278,7 +278,7 @@ recode_alias <- function(genomic_df, ...) {
 
     message <- genomic_df %>%
       dplyr::filter(.data$hugo_symbol_old != .data$hugo_symbol) %>%
-      dplyr::select(.data$hugo_symbol_old, .data$hugo_symbol) %>%
+      dplyr::select("hugo_symbol_old", "hugo_symbol") %>%
       dplyr::distinct()
 
 
@@ -297,7 +297,7 @@ recode_alias <- function(genomic_df, ...) {
   }
 
     genomic_df <- genomic_df %>%
-      select(-.data$hugo_symbol_old)
+      select(-"hugo_symbol_old")
 
   return(genomic_df)
 }
@@ -341,7 +341,7 @@ resolve_alias <- function(gene_to_check, alias_table) {
 
     alias_table %>%
       filter(.data$alias == gene_to_check) %>%
-      pull(.data$hugo_symbol) %>%
+      pull("hugo_symbol") %>%
       first() %>%
       as.character()
 
@@ -421,7 +421,7 @@ annotate_any_panel <- function(sample_panel_pair, gene_binary) {
   # has sample IDs and genes for each panel
   sample_panel_pair_nest <- sample_panel_pair_nest %>%
     left_join(gnomeR::gene_panels, by = c("panel_id" = "gene_panel")) %>%
-    select(-.data$entrez_ids_in_panel)
+    select(-"entrez_ids_in_panel")
 
   user_data_genes <- gsub(".fus|.Del|.Amp|.cna", "", colnames(gene_binary))
 

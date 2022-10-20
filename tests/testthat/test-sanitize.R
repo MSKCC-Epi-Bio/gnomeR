@@ -1,4 +1,4 @@
-library(tidyverse)
+
 test_that("both sanitize functions run with no errors", {
   expect_error(sanitize_mutation_input(gnomeR::mut), NA)
   expect_error(sanitize_fusion_input(gnomeR::fusion), NA)

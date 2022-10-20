@@ -45,7 +45,7 @@ summarize_by_gene <- function(gene_binary) {
       count == num_na ~ NA_real_,
       sum > 1 ~ 1,
       TRUE ~ .data$sum)) %>%
-    select(.data$sample_id, .data$name2, .data$simpl_val) %>%
+    select("sample_id", "name2", "simpl_val") %>%
     distinct() %>%
 
     ungroup() %>%

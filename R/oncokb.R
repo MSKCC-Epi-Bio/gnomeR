@@ -61,7 +61,7 @@ oncokb <- function(maf = NULL, fusion = NULL, cna = NULL,
     utils::write.table(maf %>%
                   mutate(Protein_position =
                            ifelse(is.na(.data$Protein_position), "", .data$Protein_position)), #%>%
-                # select(Hugo_Symbol, Variant_Classification, Tumor_Sample_Barcode, HGVSp_Short, HGVSp)
+                # select("Hugo_Symbol", "Variant_Classification", "Tumor_Sample_Barcode", "HGVSp_Short", "HGVSp")
                 file = "temp_maf.txt",quote = F, sep = '\t', row.names = FALSE)
   if(!is.null(fusion))
     utils::write.table(fusion, file = "temp_fusion.txt",quote = F, sep = '\t', row.names = FALSE)
@@ -77,7 +77,7 @@ oncokb <- function(maf = NULL, fusion = NULL, cna = NULL,
       for(i in colnames(temp.cna)[-1]){
         temp <- as_tibble(cna) %>%
           filter(.data$sampleId %in% i) %>%
-          select(.data$sampleId, .data$Hugo_Symbol, .data$alteration)
+          select("sampleId", "Hugo_Symbol", "alteration")
         if(nrow(temp)>0){
           temp.cna[match(temp$Hugo_Symbol, temp.cna[,1]),match(i, colnames(temp.cna))] <- temp$alteration
         }

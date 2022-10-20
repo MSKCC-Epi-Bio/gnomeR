@@ -17,3 +17,9 @@ a checked data frame
 \description{
 Check CNA data frame to ensure columns are correct
 }
+\examples{
+
+cna <- pivot_cna_longer(gnomeR::cna)
+cna <- sanitize_cna_input(cna = cna)
+
+}

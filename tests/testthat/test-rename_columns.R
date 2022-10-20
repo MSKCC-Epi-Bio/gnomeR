@@ -6,12 +6,6 @@
 cbioportalR::set_cbioportal_db("public")
 
 
-api_mut <- gnomeR::mut %>%
-  mutate(
-
-  )
-
-
 test_that("test rename_columns runs with no errors", {
 
   expect_error(rename_columns(gnomeR::mut), NA)

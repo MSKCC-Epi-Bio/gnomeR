@@ -315,7 +315,7 @@ facets_dat <- function (seg = NULL,
                                          seg.sum = sum(.data$end - .data$start),
                                          FGA = sum(.data$numerator[!(.data$tcn.em ==
                                                                        2 & .data$lcn.em == 1)]) / .data$seg.sum) %>%
-                                       select(.data$FGA)))
+                                       select("FGA")))
 
         cncf$sample <- rep(samples[i], nrow(cncf))
         cncf$seg.mean <- log2(cncf$tcn.em / fit$ploidy +
@@ -384,7 +384,7 @@ facets_dat <- function (seg = NULL,
                                                                                                               start = as.numeric(as.character(.data$start)), end = as.numeric(as.character(.data$end)),
                                                                                                               num.mark = as.numeric(as.character(.data$num.mark)),
                                                                                                               seg.mean = as.numeric(as.character(.data$seg.mean))) %>%
-                                   select(.data$sample, .data$chrom, .data$start, .data$end, .data$num.mark, .data$seg.mean))
+                                   select("sample", "chrom", "start", "end", "num.mark", "seg.mean"))
       all.dat <- rbind(all.dat, cncf)
     }
     out.cn <- CNregions.mod(seg = all.dat, epsilon = epsilon,

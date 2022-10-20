@@ -87,7 +87,7 @@ reformat_cna <- function(cna) {
 
     alt_genes_this_sample <- cna %>%
       filter(.data$sample_id %in% i) %>%
-      select(.data$hugo_symbol) %>%
+      select("hugo_symbol") %>%
       unlist() %>%
       as.character()
 
@@ -97,7 +97,7 @@ reformat_cna <- function(cna) {
     cna_out[rows_to_fill, cols_to_fill] <-
       cna %>%
       filter(.data$sample_id %in% i) %>%
-      select(.data$alteration) %>%
+      select("alteration") %>%
       unlist() %>%
       as.numeric()
   }
@@ -130,7 +130,7 @@ pivot_cna_longer <- function(wide_cna, clean_sample_ids = TRUE) {
     names()
 
   cna <-  cna %>%
-    select(.data$hugo_symbol, all_of(patient_with_sv))
+    select("hugo_symbol", all_of(patient_with_sv))
 
   cna_long <- cna %>%
     tidyr::pivot_longer(-hugo_symbol,

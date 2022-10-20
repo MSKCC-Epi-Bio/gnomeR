@@ -132,7 +132,7 @@ tbl_genomic <- function(gene_binary,
         mutate(perc = .data$sum / .data$count) %>%
         filter(.data$perc >= freq_cutoff) %>%
         arrange(desc(.data$perc)) %>%
-        pull(.data$name)
+        pull("name")
     }
 
   if(length(gene_subset) < 1) {

@@ -213,8 +213,8 @@ ggtopgenes <- function(mutation, n_genes = 10) {
     group_by(.data$Hugo_Symbol) %>%
     summarise(N = n()) %>%
     arrange(-.data$N) %>%
-    select(.data$Hugo_Symbol) %>%
-    pull(.data$Hugo_Symbol)
+    select("Hugo_Symbol") %>%
+    pull("Hugo_Symbol")
 
   top_genes <- top_genes[1:min(length(top_genes),n_genes)] %>%
     as.character()
