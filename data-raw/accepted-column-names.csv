@@ -158,4 +158,4 @@ Event_Info,eventInfo,,yes,,,
 Fusion,,,yes,,old API names,
 Method,,,yes,,old API names,
 Frame,,,yes,,old API names,
-,alteration,,,yes,,can be present in long format
+Alteration,alteration,,,yes,,can be present in long format

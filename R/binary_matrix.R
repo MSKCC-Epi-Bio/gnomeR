@@ -386,38 +386,24 @@ create_gene_binary <- function(samples=NULL,
     cna <- recode_alias(cna)
   }
 
-   # If more than 1 row per gene, combine rows
-  dups <- cna$Hugo_Symbol[duplicated(cna$Hugo_Symbol)]
+  cna$hugo_symbol, cna$alteration
 
-  if(length(dups) > 0){
-    for(i in dups){
-      temp <- cna[which(cna$Hugo_Symbol == i),] # grep(i, cna$Hugo_Symbol,fixed = TRUE)
-      temp2 <- as.character(unlist(apply(temp, 2, function(x){
-        if(all(is.na(x)))
-          out <- NA
-        else if(anyNA(x))
-          out <- x[!is.na(x)]
-        else if(length(unique(x)) > 1)
-          out <- x[which(x != 0)]
-        else
-          out <- x[1]
-        return(out)
-      })))
-      temp2[-1] <- as.numeric(temp2[-1])
-      cna <- rbind(cna[-which(cna$Hugo_Symbol == i),],
-                   temp2)
+  # create empty data.frame to hold results -----
+  cna <- as.data.frame(matrix(0L, nrow=length(samples),
+                              ncol=length(unique(cna$Hugo_Symbol))))
+
+  colnames(mut) <- unique(cna$hugo_symbol)
+  rownames(mut) <- samples
+
+  # populate matrix
+  for(i in samples){
+    genes <- mutation$Hugo_Symbol[mutation$Tumor_Sample_Barcode %in% i]
+    if(length(genes) != 0) {
+      mut[match(i, rownames(mut)), match(unique(as.character(genes)), colnames(mut))] <- 1
     }
   }
 
-  rownames(cna) <- cna$Hugo_Symbol
-  cna <- cna[,-1]
-
-  # flip
-  cna <- as.data.frame(t(cna))
-
-  # fix names
-  rownames(cna) <- gsub("\\.","-",rownames(cna))
-
+  return(mut)
   # filter those in final samples list
   cna <- cna[rownames(cna) %in% samples,]
 
