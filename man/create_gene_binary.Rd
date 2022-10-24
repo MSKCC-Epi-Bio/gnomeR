@@ -72,7 +72,7 @@ Enables creation of a binary matrix from a mutation file with
 a predefined list of samples (rows are samples and columns are genes)
 }
 \examples{
-mut.only <- create_gene_binary(mutation = mut)
+mut.only <- create_gene_binary(mutation = gnomeR::mut)
 
 samples <- as.character(unique(mut$sample_id))[1:200]
 

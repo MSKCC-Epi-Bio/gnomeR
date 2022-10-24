@@ -10,7 +10,6 @@
 #'
 sanitize_mutation_input <- function(mutation, ...)  {
 
-  impact_gene_info <- gnomeR::impact_gene_info
   arguments <- list(...)
 
   mutation <- rename_columns(mutation)
@@ -99,7 +98,6 @@ sanitize_mutation_input <- function(mutation, ...)  {
 #'
 sanitize_fusion_input <- function(fusion, ...)  {
 
-  impact_gene_info <- gnomeR::impact_gene_info
   arguments <- list(...)
 
   fusion <- rename_columns(fusion)
@@ -148,7 +146,6 @@ sanitize_fusion_input <- function(fusion, ...)  {
 #'
 sanitize_cna_input <- function(cna, ...)  {
 
-  impact_gene_info <- gnomeR::impact_gene_info
   arguments <- list(...)
 
   cna <- rename_columns(cna)
