@@ -36,15 +36,12 @@
 #' @examples
 #' mut.only <- create_gene_binary(mutation = gnomeR::mut)
 #'
-#' samples <- as.character(unique(mut$sample_id))[1:200]
+#' samples <- as.character(unique(gnomeR::mut$Tumor_Sample_Barcode))[1:200]
 #'
-#' bin.mut <- create_gene_binary(samples = samples, mutation = mut,
-#' mut_type = "omit_germline" ,snp_only = FALSE,
-#' include_silent = FALSE)
-#' bin.mut <- create_gene_binary(samples = samples, mutation = mut,
+#' bin.mut <- create_gene_binary(samples = samples, mutation = gnomeR::mut,
 #' mut_type = "omit_germline", snp_only = FALSE,
-#' include_silent = FALSE,
-#' cna_relax = TRUE, specify_panel = "no", rm_empty = FALSE)
+#' include_silent = FALSE)
+#'
 #' @import dplyr
 #' @import dtplyr
 #' @import stringr
@@ -333,6 +330,11 @@ create_gene_binary <- function(samples=NULL,
                                  specify_panel,
                                  recode_aliases){
 
+  # CHECK HERE----
+  if("site_1_hugo_symbol" %in% colnames(fusion)) {
+    fusion <- rename(fusion, "hugo_symbol" = "site_1_hugo_symbol")
+  }
+
 
   fusion <- fusion %>%
     filter(.data$sample_id %in% samples)
@@ -389,53 +391,57 @@ create_gene_binary <- function(samples=NULL,
 
   # * deletions ----------
   cna_filt <- cna %>%
-    filter(alteration == "deletion")
+    filter(.data$alteration == "deletion")
 
   # create empty data.frame to hold results -
   cna_del <- as.data.frame(matrix(0L, nrow=length(samples),
                                   ncol=length(unique(cna_filt$hugo_symbol))))
 
-
   colnames(cna_del) <- unique(cna_filt$hugo_symbol)
-  rownames(cna_del) <- samples
+  rownames(cna_del) <- unique(samples)
 
-  # populate matrix
-  for(i in samples){
-    genes <- cna_filt$hugo_symbol[cna_filt$sample_id %in% i]
-    if(length(genes) != 0) {
-      cna_del[match(i, rownames(cna_del)), match(unique(as.character(genes)), colnames(cna_del))] <- 1
+  if(nrow(cna_filt) > 0) {
+
+    # populate matrix
+    for(i in samples){
+      genes <- cna_filt$hugo_symbol[cna_filt$sample_id %in% i]
+      if(length(genes) != 0) {
+        cna_del[match(i, rownames(cna_del)), match(unique(as.character(genes)), colnames(cna_del))] <- 1
+      }
     }
+
+    n # filter those in final samples list
+    cna_del <- cna_del[rownames(cna_del) %in% samples,]
+    names(cna_del) <- paste0(names(cna_del), ".Del")
+
   }
-
-  # filter those in final samples list
-  cna_del <- cna_del[rownames(cna_del) %in% samples,]
-  names(cna_del) <- paste0(names(cna_del), ".Del")
-
   # * amplifications ----------
+
   cna_filt <- cna %>%
-    filter(alteration == "amplification")
+    filter(.data$alteration == "amplification")
 
   # create empty data.frame to hold results
   cna_amp <- as.data.frame(matrix(0L, nrow=length(samples),
                                   ncol=length(unique(cna_filt$hugo_symbol))))
 
-
   colnames(cna_amp) <- unique(cna_filt$hugo_symbol)
   rownames(cna_amp) <- samples
 
-  # populate matrix
-  for(i in samples){
-    genes <- cna_filt$hugo_symbol[cna_filt$sample_id %in% i]
-    if(length(genes) != 0) {
-      cna_amp[match(i, rownames(cna_amp)), match(unique(as.character(genes)), colnames(cna_amp))] <- 1
+  if(nrow(cna_filt) > 0) {
+
+    # populate matrix
+    for(i in samples){
+      genes <- cna_filt$hugo_symbol[cna_filt$sample_id %in% i]
+      if(length(genes) != 0) {
+        cna_amp[match(i, rownames(cna_amp)), match(unique(as.character(genes)), colnames(cna_amp))] <- 1
+      }
     }
+
+    # filter those in final samples list
+    cna_amp <- cna_amp[rownames(cna_amp) %in% samples,]
+    names(cna_amp) <- paste0(names(cna_amp), ".Amp")
   }
 
-
-
-  # filter those in final samples list
-  cna_amp <- cna_amp[rownames(cna_amp) %in% samples,]
-  names(cna_amp) <- paste0(names(cna_amp), ".Amp")
 
   # * join deletions and amplifications -----
   cna_res <- bind_cols(cna_amp, cna_del)

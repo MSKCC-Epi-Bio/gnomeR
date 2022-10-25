@@ -165,7 +165,7 @@ sanitize_cna_input <- function(cna, ...)  {
   # Make sure hugo & alteration is character
   cna <- cna %>%
     mutate(hugo_symbol = as.character(.data$hugo_symbol)) %>%
-    mutate(alteration = tolower(str_trim(as.character(alteration))))
+    mutate(alteration = tolower(str_trim(as.character(.data$alteration))))
 
 
 
@@ -194,7 +194,7 @@ sanitize_cna_input <- function(cna, ...)  {
   # HERE ------
  suppressWarnings(
    cna <- cna %>%
-     mutate(alteration = fct_recode(alteration, !!!allowed_chr_levels))
+     mutate(alteration = forcats::fct_recode(.data$alteration, !!!allowed_chr_levels))
  )
 
   return(cna)
@@ -202,28 +202,28 @@ sanitize_cna_input <- function(cna, ...)  {
 
 #' Rename columns from API results to work with gnomeR functions
 #'
-#' @param mutations a mutations data frame from {cbioportalR}
+#' @param df_to_check a data frame to check and recode names as needed
 #'
 #' @return a renamed data frame
 #' @export
-#' @example
+#' @examples
 #'
 #' rename_columns(df_to_check = gnomeR::mut)
 #' rename_columns(df_to_check = gnomeR::fusion)
 #'
 rename_columns <- function(df_to_check) {
 
-  names_df_long <- names_df %>%
+  names_df_long <- gnomeR::names_df %>%
     select(contains("_column_name")) %>%
-    tidyr::pivot_longer(-internal_column_name)
+    tidyr::pivot_longer(-"internal_column_name")
 
 
   which_to_replace <- intersect(names(df_to_check), unique(names_df_long$value))
 
   # create a temporary dictionary as a named vector
   temp_dict <- names_df_long %>%
-    dplyr::filter(value %in% which_to_replace) %>%
-    select(internal_column_name,  value) %>%
+    dplyr::filter(.data$value %in% which_to_replace) %>%
+    select("internal_column_name",  "value") %>%
     dplyr::distinct() %>%
     tibble::deframe()
 

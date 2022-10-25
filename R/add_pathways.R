@@ -22,7 +22,9 @@
 #'
 #' @examples
 #'
-#' gene_binary <- create_gene_binary(mutation = mut, cna = cna, fusion = fusion)
+#' gene_binary <- create_gene_binary(mutation = gnomeR::cbp_mut,
+#'  cna = gnomeR::cbp_cna,
+#'  fusion = gnomeR::cbp_sv)
 #' pathway_df <- add_pathways(gene_binary, pathways = "Notch")
 #'
 add_pathways <- function(gene_binary,
@@ -177,12 +179,13 @@ add_pathways <- function(gene_binary,
 #' @export
 #'
 #' @examples
-#' gene_binary <- create_gene_binary(mutation = mut, cna = cna,
-#' fusion = fusion)
+#' gene_binary <- create_gene_binary(mutation = gnomeR::cbp_mut, cna = gnomeR::cbp_cna,
+#' fusion = gnomeR::cbp_sv)
 #' x <- .sum_alts_in_pathway(gene_binary,
 #'  pathway_list_item = gnomeR::pathways[1],
 #'   pathway_name = names(gnomeR::pathways[1]),
 #'     count_pathways_by = "alteration")
+#'
 .sum_alts_in_pathway <- function(gene_binary, pathway_list_item,
                                  pathway_name,
                                  count_pathways_by) {

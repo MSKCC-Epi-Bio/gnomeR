@@ -45,7 +45,7 @@ reformat_cna <- function(cna) {
 
   if(is.character(cna$alteration)) {
     cna <- cna %>%
-      mutate(alteration = toupper(alteration))
+      mutate(alteration = toupper(.data$alteration))
 
     levels_in_data <- unique(cna$alteration)
 
@@ -58,11 +58,11 @@ reformat_cna <- function(cna) {
     cna <- cna %>%
       mutate(alteration =
                case_when(
-                 alteration == "NEUTRAL" ~ 0,
-                 alteration == "LOH" ~ -1,
-                 alteration == "GAIN" ~ 1,
-                 alteration == "AMPLIFICATION" ~ 2,
-                 alteration == "DELETION" ~ -2)
+                 .data$alteration == "NEUTRAL" ~ 0,
+                 .data$alteration == "LOH" ~ -1,
+                 .data$alteration == "GAIN" ~ 1,
+                 .data$alteration == "AMPLIFICATION" ~ 2,
+                 .data$alteration == "DELETION" ~ -2)
       )
 
 
@@ -123,7 +123,7 @@ pivot_cna_longer <- function(wide_cna, clean_sample_ids = TRUE) {
 
   cna <- rename_columns(wide_cna)
 
-  no_hugo <- select(cna, -hugo_symbol)
+  no_hugo <- select(cna, -"hugo_symbol")
 
   patient_sums <- apply(no_hugo, 2, sum, na.rm = TRUE)
   patient_with_sv <- patient_sums[patient_sums > 0] %>%
@@ -133,16 +133,48 @@ pivot_cna_longer <- function(wide_cna, clean_sample_ids = TRUE) {
     select("hugo_symbol", all_of(patient_with_sv))
 
   cna_long <- cna %>%
-    tidyr::pivot_longer(-hugo_symbol,
+    tidyr::pivot_longer(-"hugo_symbol",
                         names_to = "sample_id", values_to = "alteration")
 
   if(clean_sample_ids) {
     cna_long <- cna_long %>%
-      mutate(sample_id = str_replace_all(sample_id, fixed("."), "-"))
+      mutate(sample_id = str_replace_all(.data$sample_id, fixed("."), "-"))
 
     cli::cli_alert_warning("Replacing all {.code .} to {.code -} in {.field sample_id} field (e.g. {.code P.0001930.T01.IM3} -> {.code P-0001930-T01-IM3}).
                    To prevent this, use argument {.code clean_sample_ids = FALSE}")
   }
+
+  # check alteration column -----------------------------
+
+  # Make sure hugo & alteration is character
+  cna_long <- cna_long %>%
+    mutate(hugo_symbol = as.character(.data$hugo_symbol)) %>%
+    mutate(alteration = tolower(str_trim(as.character(.data$alteration))))
+
+  levels_in_data <- names(table(cna_long$alteration))
+
+  allowed_chr_levels <- c(
+    "neutral" = "0",
+    "deletion" = "-2",
+    "loh" = "-1.5",
+    "loh" = "-1",
+    "gain" = "1",
+    "amplification" = "2"
+  )
+
+  all_allowed <- c(allowed_chr_levels, names(allowed_chr_levels))
+  not_allowed <- levels_in_data[!levels_in_data %in% all_allowed]
+
+  if(length(not_allowed) > 0) {
+    cli::cli_abort(c("Unknown values in {.field alteration} field: {.val {not_allowed}}",
+                     "Must be one of the following: {.val {all_allowed}}"))
+  }
+
+
+  suppressWarnings(
+    cna_long <- cna_long %>%
+      mutate(alteration = forcats::fct_recode(.data$alteration, !!!allowed_chr_levels))
+  )
 
   cna_long
 

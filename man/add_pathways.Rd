@@ -42,7 +42,9 @@ Sanchez-Vega, F., Mina, M., Armenia, J., Chatila, W. K., Luna, A., La, K. C., Di
 }
 \examples{
 
-gene_binary <- create_gene_binary(mutation = mut, cna = cna, fusion = fusion)
+gene_binary <- create_gene_binary(mutation = gnomeR::cbp_mut,
+ cna = gnomeR::cbp_cna,
+ fusion = gnomeR::cbp_sv)
 pathway_df <- add_pathways(gene_binary, pathways = "Notch")
 
 }

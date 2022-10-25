@@ -28,10 +28,11 @@ a dataframe of 1 column of 0/1s indicating pathway activated yes/no
 Title
 }
 \examples{
-gene_binary <- create_gene_binary(mutation = mut, cna = cna,
-fusion = fusion)
+gene_binary <- create_gene_binary(mutation = gnomeR::cbp_mut, cna = gnomeR::cbp_cna,
+fusion = gnomeR::cbp_sv)
 x <- .sum_alts_in_pathway(gene_binary,
  pathway_list_item = gnomeR::pathways[1],
   pathway_name = names(gnomeR::pathways[1]),
     count_pathways_by = "alteration")
+
 }

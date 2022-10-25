@@ -300,62 +300,64 @@ ggcomut <- function(mutation, n_genes = 10, ...) {
   p.comut
 }
 
-#' Heatmap of all events after gene_binary - using binary distance
 #'
-#' @param hmat dataframe obtained after create_gene_binary()
-#' @param ... Further arguments as passed to ComplexHeatmap::Heatmap
-#' @return heatmap of gene_binary events
-#' @export
+#' #' Heatmap of all events after gene_binary - using binary distance
+#' #'
+#' #' @param hmat dataframe obtained after create_gene_binary()
+#' #' @param ... Further arguments as passed to ComplexHeatmap::Heatmap
+#' #' @return heatmap of gene_binary events
+#' #' @export
+#' #'
+#' #' @examples
+#' #' set.seed(123)
+#' #' samples <- as.character(unique(gnomeR::cbp_mut$sampleId))[1:20]
+#' #' gen_dat <- create_gene_binary(samples=samples, mutation= gnomeR::cbp_mut,
+#' #'  cna = gnomeR::cbp_cna, fusion = gnomeR::cbp_sv)
+#' #' ggheatmap(gen_dat, show_row_names=FALSE, show_column_names=FALSE)
+#' #'
 #'
-#' @examples
-#' set.seed(123)
-#' samples <- as.character(unique(mut$Tumor_Sample_Barcode))[1:200]
-#' gen_dat <- create_gene_binary(samples=samples, mutation=mut, cna=cna, fusion=fusion, set.plat=TRUE)
-#' ggheatmap(gen_dat, show_row_names=FALSE, show_column_names=FALSE)
+#' ggheatmap <- function(hmat, ...){
 #'
-
-ggheatmap <- function(hmat, ...){
-
-  #check if the matrix is not binary
-  if(sum(hmat==0, na.rm=T) +
-     sum(hmat==1, na.rm=T) +
-     sum(is.na(hmat)) != (nrow(hmat) * ncol(hmat))) {
-    stop("ggheatmap can only be plotted when gene_binary is binary, set cna.binary=TRUE")
-  }
-
-  idx.amp = grep(".Amp", colnames(hmat))
-  if(length(idx.amp)>0){
-    tt<- hmat[,idx.amp]; tt[ tt==1 ] <- 2
-    hmat[,idx.amp]<-tt
-  }
-
-  idx.del = grep(".Del", colnames(hmat))
-  if(length(idx.del)>0){
-    tt<- hmat[,idx.del]; tt[tt==1] <- 3
-    hmat[,idx.del]<-tt
-  }
-
-
-  idx.fus = c(grep(".fus", colnames(hmat)))
-  if(length(idx.fus)>0){
-    tt<- hmat[,idx.fus]; tt[tt==1] <- 4
-    hmat[,idx.fus]<-tt
-  }
-
-
-  hmat.colors = structure(c("white","black", "coral","cadetblue", "forestgreen"),
-                          names=c("0","1","2","3","4"))
-
-  hmap.legend = list(
-    title = "Events",
-    at = c(0,1,2,3,4),
-    labels = c("WT", "Mut", "Amplification","Deletion", "Fusion")
-  )
-
-  ComplexHeatmap::Heatmap(t(hmat),col=hmat.colors , na_col="grey",
-                          clustering_distance_rows="binary",clustering_distance_columns="binary", heatmap_legend_param = hmap.legend, ...)
-
-}
-
+#'   #check if the matrix is not binary
+#'   if(sum(hmat==0, na.rm=T) +
+#'      sum(hmat==1, na.rm=T) +
+#'      sum(is.na(hmat)) != (nrow(hmat) * ncol(hmat))) {
+#'     stop("ggheatmap can only be plotted when gene_binary is binary, set cna.binary=TRUE")
+#'   }
+#'
+#'   idx.amp = grep(".Amp", colnames(hmat))
+#'   if(length(idx.amp)>0){
+#'     tt<- hmat[,idx.amp]; tt[ tt==1 ] <- 2
+#'     hmat[,idx.amp]<-tt
+#'   }
+#'
+#'   idx.del = grep(".Del", colnames(hmat))
+#'   if(length(idx.del)>0){
+#'     tt<- hmat[,idx.del]; tt[tt==1] <- 3
+#'     hmat[,idx.del]<-tt
+#'   }
+#'
+#'
+#'   idx.fus = c(grep(".fus", colnames(hmat)))
+#'   if(length(idx.fus)>0){
+#'     tt<- hmat[,idx.fus]; tt[tt==1] <- 4
+#'     hmat[,idx.fus]<-tt
+#'   }
+#'
+#'
+#'   hmat.colors = structure(c("white","black", "coral","cadetblue", "forestgreen"),
+#'                           names=c("0","1","2","3","4"))
+#'
+#'   hmap.legend = list(
+#'     title = "Events",
+#'     at = c(0,1,2,3,4),
+#'     labels = c("WT", "Mut", "Amplification","Deletion", "Fusion")
+#'   )
+#'
+#'   ComplexHeatmap::Heatmap(t(hmat),col=hmat.colors , na_col="grey",
+#'                           clustering_distance_rows="binary",clustering_distance_columns="binary", heatmap_legend_param = hmap.legend, ...)
+#'
+#' }
+#'
 
 

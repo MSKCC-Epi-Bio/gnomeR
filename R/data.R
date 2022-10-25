@@ -295,3 +295,59 @@
 #'     \item{alias_entrez_id}{}
 #'     }
 "impact_alias_table"
+
+
+
+#' Data Frame of Column Names
+#'
+#' Table of accepted data names
+#'
+#' @format A data frame with 2333 rows
+#' \describe{
+#'     \item{maf_column_name}{MAD columns}
+#'     \item{api_column_name}{API columns}
+#'     \item{mutation_input}{Mutation columns}
+#'     \item{fusion_input}{Fusion columns}
+#'     \item{cna_input}{CNA columns}
+#'     \item{definition}{Column Definition}
+#'     \item{notes}{data notes}
+#'     \item{sc_maf_column_name}{Snake case MAF name}
+#'     \item{sc_api_column_name}{Snake case API column name}
+#'     \item{internal_column_name}{Internally used data name}
+#'     }
+"names_df"
+
+
+
+#' Consequence Map
+#'
+#' Dataset of recoding values for consequence mutation data
+#'
+#' @format A data frame with 23878 rows of CNA data from
+"consequence_map"
+
+
+#' Consequence Map
+#'
+#' Dataset of recoding values for consequence mutation data
+#'
+#' @format A data frame with mutations from Baca et al. Cell 2013. Retrieved from cBioPortal.
+"cbp_mut"
+
+
+#' Consequence Map
+#'
+#' Dataset of recoding values for consequence mutation data
+#'
+#' @format A data frame with CNA from Baca et al. Cell 2013. Retrieved from cBioPortal.
+"cbp_cna"
+
+
+#' Consequence Map
+#'
+#' Dataset of recoding values for consequence mutation data
+#'
+#' @format A data frame with structural variants from Baca et al. Cell 2013. Retrieved from cBioPortal.
+"cbp_sv"
+
+
