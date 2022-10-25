@@ -1,6 +1,6 @@
 Package: gnomeR
 Title: Wrangle and analyze IMPACT and TCGA mutation data 
-Version: 1.1.0.9000
+Version: 1.1.1
 Authors@R: 
     c(person(given = "Axel",
            family = "Martin",
