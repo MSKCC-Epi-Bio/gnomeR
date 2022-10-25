@@ -1,7 +1,6 @@
 # gnomeR 1.1.1
 
-
-# gnomeR (development version)
+* Package overhauled including main binary matrix functions. This is a pre-v2 release made because internal workshop was taught using this version of functions. Final/stable versions of these functions will be available in v2.0.0.
 
 # gnomeR 1.1.0
 
