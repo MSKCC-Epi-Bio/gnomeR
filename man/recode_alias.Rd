@@ -18,7 +18,10 @@ A dataframe with a recoded Hugo Symbol columns
 Recode Hugo Symbol Column
 }
 \examples{
-mut <- rename_columns(gnomeR::mut)
-recode_alias(genomic_df = mut)
+mut <- rename_columns(gnomeR::mutations)
+
+colnames(mut)
+
+colnames(recode_alias(genomic_df = mut))
 
 }

@@ -144,50 +144,6 @@
 "clin.sample"
 
 
-#' An example copy number alteration raw calls file from IMPACT cbioPortal dataset
-#'
-#' This set contains the publicly available data from cbioPortal copy number alteration
-#' data. The file is organized with the first column being the gene name
-#' and all other columns being samples.
-#'
-#' @format A data frame with 410 observations with 501 variables
-#' \describe{
-#' }
-#' @source \url{https://cbioportal.mskcc.org/}
-"cna"
-
-#' An example of fusions calls file from IMPACT cbioPortal dataset
-#'
-#' This set contains the publicly available data from cbioPortal
-#' fusion data. The file is organized a classical MAF file.
-#'
-#' @format A data frame with 127 observations with 10 variables
-#' \describe{
-#'  \item{Hugo_Symbol}{Factor w/ 574 levels,
-#'    Column containing all HUGO symbols genes}
-#'  \item{Entrez_Gene_Id}{Entrez Gene ID (NA in this dataset)}
-#'  \item{Center}{Cancer Center ID. All are `MSKCC-DMP` in this dataset}
-#'  \item{Tumor_Sample_Barcode}{Factor, IMPACT sample ID}
-#'  \item{Fusion}{Factor, type of fusion}
-#'  \item{DNA_support}{Factor, all are `yes` in this data}
-#'  \item{RNA_support}{Factor, all are `unknown` in this data}
-#'  \item{Method}{All are NA in this data}
-#'  \item{Frame}{Factor, `in frame`, `out of frame` or `unknown`}
-#'  \item{Comments}{}
-#' }
-#' @source \url{https://cbioportal.mskcc.org/}
-"fusion"
-
-#' An example maf file from IMPACT cbioPortal dataset
-#'
-#' This set contains the publicly available data from cbioPortal mutation data.
-#' The file is organized a classical MAF file.
-#'
-#' @format A data frame with 457 observations with 45 variables
-#' \describe{
-#' }
-#' @source \url{https://cbioportal.mskcc.org/}
-"mut"
 
 
 #' A segmentation file from the cbioPortal datasets
@@ -327,27 +283,73 @@
 "consequence_map"
 
 
-#' Consequence Map
+#' An example IMPACT cBioPortal mutation data set in API format
 #'
-#' Dataset of recoding values for consequence mutation data
+#' This set contains a random sample of 200 patients from
+#' publicly available prostate cancer data from cBioPortal. The file
+#' is in API format.
 #'
-#' @format A data frame with mutations from Baca et al. Cell 2013. Retrieved from cBioPortal.
-"cbp_mut"
+#' @format A data frame with mutations from Abida et al. JCO Precis Oncol 2017.
+#' Retrieved from cBioPortal.There are 725 observations and 29 variables.
+#' \describe{
+#' \item{hugoGeneSymbol}{Character w/ 324 levels,
+#' Column containing all HUGO symbols genes}
+#' \item{entrezGeneId}{Entrez Gene ID}
+#' \item{sampleId}{MSKCC Sample ID}
+#' \item{patientId}{Patient ID}
+#' \item{studyID}{Indicator for Abida et al. 2017 study}
+#' \item{center}{Cancer Center ID}
+#' \item{mutationStatus}{Somatic or germ-line mutation status}
+#' \item{variantType}{Mutation variant type}
+#' \item{chr}{Chromosome mutation observed on}}
+#'
+#' @source \url{https://www.cbioportal.org/study/summary?id=prad_mskcc_2017}
+"mutations"
 
 
-#' Consequence Map
+#' An example IMPACT cBioPortal mutation data set in API format
 #'
-#' Dataset of recoding values for consequence mutation data
+#' This set was created from a random sample of 200 patients from
+#' publicly available prostate cancer data from cBioPortal. The file
+#' is in API format.
 #'
-#' @format A data frame with CNA from Baca et al. Cell 2013. Retrieved from cBioPortal.
-"cbp_cna"
+#' @format A data frame with copy number alterations (CNA) from Abida et al.
+#' JCO Precis Oncol 2017.Retrieved from cBioPortal.There are 475 observations
+#' and 29 variables.
+#' \describe{
+#' \item{hugoGeneSymbol}{Character w/ 324 levels,
+#' Column containing all HUGO symbols genes}
+#' \item{entrezGeneId}{Entrez Gene ID}
+#' \item{sampleId}{MSKCC Sample ID}
+#' \item{patientId}{Patient ID}
+#' \item{studyID}{Indicator for Abida et al. 2017 study}
+#' \item{alteration}{Factor, Type of CNA}}
+#'
+#' @source \url{https://www.cbioportal.org/study/summary?id=prad_mskcc_2017}
+"cna"
 
 
-#' Consequence Map
+#' An example IMPACT cBioPortal mutation data set in API format
 #'
-#' Dataset of recoding values for consequence mutation data
+#' This set was created from a random sample of 200 patients from
+#' publicly available prostate cancer data from cBioPortal. The file
+#' is in API format.
 #'
-#' @format A data frame with structural variants from Baca et al. Cell 2013. Retrieved from cBioPortal.
-"cbp_sv"
+#' @format A data frame with structural variants from Abida et al. JCO Precis Oncol 2017.
+#' Retrieved from cBioPortal.There are 94 observations and 29 variables.
+#' \describe{
+#'  \item{sampleId}{MSKCC Sample ID}
+#' \item{patientId}{Patient ID}
+#' \item{studyID}{Indicator for Abida et al. 2017 study}
+#' \item{site1HugoSymbol}{Character w/ 31 levels,
+#' Column containing HUGO symbols genes for first site of fusion}
+#' \item{site2HugoSymbol}{Character w/ 21 levels,
+#' Column containing all HUGO symbols genes for second site of fusion}
+#' \item{dnasupport}{Factor, all are `yes` in this data}
+#' \item{rnasupport}{Factor, all are `unknown` in this data}
+#'  }
+#'
+#' @source \url{https://www.cbioportal.org/study/summary?id=prad_mskcc_2017}
+"mutations"
 
 

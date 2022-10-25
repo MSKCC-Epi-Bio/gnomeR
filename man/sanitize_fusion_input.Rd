@@ -18,6 +18,6 @@ a checked data frame
 Check fusion data frame to ensure columns are correct
 }
 \examples{
-fus <- sanitize_fusion_input(fusion = gnomeR::fusion)
+fus <- sanitize_fusion_input(fusion = gnomeR::sv)
 
 }

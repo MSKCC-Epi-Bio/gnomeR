@@ -3,21 +3,14 @@
 \docType{data}
 \name{cna}
 \alias{cna}
-\title{An example copy number alteration raw calls file from IMPACT cbioPortal dataset}
+\title{Consequence Map}
 \format{
-A data frame with 410 observations with 501 variables
-\describe{
-}
-}
-\source{
-\url{https://cbioportal.mskcc.org/}
+A data frame with CNA from Baca et al. Cell 2013. Retrieved from cBioPortal.
 }
 \usage{
 cna
 }
 \description{
-This set contains the publicly available data from cbioPortal copy number alteration
-data. The file is organized with the first column being the gene name
-and all other columns being samples.
+Dataset of recoding values for consequence mutation data
 }
 \keyword{datasets}

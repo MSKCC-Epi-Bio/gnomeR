@@ -278,7 +278,7 @@ gggenecor <- function(mutation, n_genes = 10, ...) {
 #' @export
 #'
 #' @examples
-#' ggcomut(gnomeR::mut)
+#' ggcomut(gnomeR::mutations)
 #'
 ggcomut <- function(mutation, n_genes = 10, ...) {
 

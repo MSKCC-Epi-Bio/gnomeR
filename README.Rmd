@@ -77,11 +77,11 @@ The below examples uses the data sets `mut`, `fusion`, `cna` which were pulled f
 ```{r}
 set.seed(123)
 
-mut <- gnomeR::mut
+mut <- gnomeR::mutations
 cna <- gnomeR::cna
-fusion <- gnomeR::fusion
+sv <- gnomeR::sv
 
-un <-  unique(mut$Tumor_Sample_Barcode)
+un <-  unique(mut$SampleId)
 sample_patients <- sample(un, size = 100, replace = FALSE)
 
 ```
@@ -92,7 +92,7 @@ The main data processing function is `gene_binary()` which takes mutation, CNA a
 ```{r }
 gen_dat <- create_gene_binary(samples = sample_patients,
                          maf = mut,
-                         fusion = fusion,
+                         fusion = sv,
                          cna = cna, rm_empty = TRUE)
 
 kable(gen_dat[1:5,1:5], row.names = TRUE)

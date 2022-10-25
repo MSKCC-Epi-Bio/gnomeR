@@ -34,11 +34,11 @@
 #' @return a data frame with sample_id and alteration binary columns with values of 0/1
 #' @export
 #' @examples
-#' mut.only <- create_gene_binary(mutation = gnomeR::mut)
+#' mut.only <- create_gene_binary(mutation = gnomeR::mutations)
 #'
-#' samples <- as.character(unique(gnomeR::mut$Tumor_Sample_Barcode))[1:200]
+#' samples <- as.character(unique(gnomeR::mutations$SampleId))[1:200]
 #'
-#' bin.mut <- create_gene_binary(samples = samples, mutation = gnomeR::mut,
+#' bin.mut <- create_gene_binary(samples = samples, mutation = gnomeR::mutations,
 #' mut_type = "omit_germline", snp_only = FALSE,
 #' include_silent = FALSE)
 #'
@@ -584,6 +584,6 @@ create_gene_binary <- function(samples=NULL,
 #'   return(cna)
 #' }
 #'
-#' #create_gene_binary(mutation = gnomeR::mut, specify_panel = "no")
+#' #create_gene_binary(mutation = gnomeR::mutations, specify_panel = "no")
 #'
 

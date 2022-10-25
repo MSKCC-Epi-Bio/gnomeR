@@ -17,7 +17,7 @@ Rename columns from API results to work with gnomeR functions
 }
 \examples{
 
-rename_columns(df_to_check = gnomeR::mut)
-rename_columns(df_to_check = gnomeR::fusion)
+rename_columns(df_to_check = gnomeR::mutations)
+rename_columns(df_to_check = gnomeR::sv)
 
 }

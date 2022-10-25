@@ -78,18 +78,18 @@ credentials from the [oncoKB website](https://www.oncokb.org/apiAccess).
 
 ## Processing Genomic Data
 
-The below examples uses the data sets `mut`, `fusion`, `cna` which were
+The below examples uses the data sets `mutations`, `sv`, `cna` which were
 pulled from cBioPortal and are included in the package as example data
 sets. We will sample 100 samples for examples:
 
 ``` r
 set.seed(123)
 
-mut <- gnomeR::mut
+mut <- gnomeR::mutations
 cna <- gnomeR::cna
-fusion <- gnomeR::fusion
+fusion <- gnomeR::sv
 
-un <-  unique(mut$Tumor_Sample_Barcode)
+un <-  unique(mut$sampleId)
 sample_patients <- sample(un, size = 100, replace = FALSE)
 ```
 

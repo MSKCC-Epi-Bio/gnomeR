@@ -18,6 +18,6 @@ a corrected maf file or an error if problems with maf
 Checks MAF input to ensure column names are correct and renamed genes are corrected
 }
 \examples{
-sanitize_mutation_input(mutation = gnomeR::mut)
+sanitize_mutation_input(mutation = gnomeR::mutations)
 
 }

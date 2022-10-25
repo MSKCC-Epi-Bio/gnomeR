@@ -72,11 +72,11 @@ Enables creation of a binary matrix from a mutation file with
 a predefined list of samples (rows are samples and columns are genes)
 }
 \examples{
-mut.only <- create_gene_binary(mutation = gnomeR::mut)
+mut.only <- create_gene_binary(mutation = gnomeR::mutations)
 
-samples <- as.character(unique(gnomeR::mut$Tumor_Sample_Barcode))[1:200]
+samples <- as.character(unique(gnomeR::mutations$SampleId))[1:200]
 
-bin.mut <- create_gene_binary(samples = samples, mutation = gnomeR::mut,
+bin.mut <- create_gene_binary(samples = samples, mutation = gnomeR::mutations,
 mut_type = "omit_germline", snp_only = FALSE,
 include_silent = FALSE)
 

@@ -6,7 +6,7 @@
 #' @export
 #'
 #' @examples
-#' sanitize_mutation_input(mutation = gnomeR::mut)
+#' sanitize_mutation_input(mutation = gnomeR::mutations)
 #'
 sanitize_mutation_input <- function(mutation, ...)  {
 
@@ -94,7 +94,7 @@ sanitize_mutation_input <- function(mutation, ...)  {
 #' @return a checked data frame
 #' @export
 #' @examples
-#' fus <- sanitize_fusion_input(fusion = gnomeR::fusion)
+#' fus <- sanitize_fusion_input(fusion = gnomeR::sv)
 #'
 sanitize_fusion_input <- function(fusion, ...)  {
 
@@ -208,8 +208,8 @@ sanitize_cna_input <- function(cna, ...)  {
 #' @export
 #' @examples
 #'
-#' rename_columns(df_to_check = gnomeR::mut)
-#' rename_columns(df_to_check = gnomeR::fusion)
+#' rename_columns(df_to_check = gnomeR::mutations)
+#' rename_columns(df_to_check = gnomeR::sv)
 #'
 rename_columns <- function(df_to_check) {
 
@@ -258,8 +258,11 @@ rename_columns <- function(df_to_check) {
 #' @export
 #'
 #' @examples
-#' mut <- rename_columns(gnomeR::mut)
-#' recode_alias(genomic_df = mut)
+#' mut <- rename_columns(gnomeR::mutations)
+#'
+#' colnames(mut)
+#'
+#' colnames(recode_alias(genomic_df = mut))
 #'
 recode_alias <- function(genomic_df, ...) {
 
