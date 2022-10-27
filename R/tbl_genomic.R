@@ -165,7 +165,7 @@ tbl_genomic <- function(gene_binary,
 
 
    table_data %>%
-    gtsummary::tbl_summary(by = by)
+    gtsummary::tbl_summary(by = by,...)
 
   # should we split results by MUT/CNA/Fusion? if not at least have to fix arranging of  these
   # also its confusing when freq_by_gene is TRUE and you see low freq alts in table
