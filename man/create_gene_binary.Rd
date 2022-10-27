@@ -2,7 +2,7 @@
 % Please edit documentation in R/binary_matrix.R
 \name{create_gene_binary}
 \alias{create_gene_binary}
-\title{Enables creation of a binary matrix from a mutation file with
+\title{Enables creation of a binary matrix from a mutation, fusion or CNA file with
 a predefined list of samples (rows are samples and columns are genes)}
 \usage{
 create_gene_binary(
@@ -61,7 +61,7 @@ the function will check for genes that may have more than 1 name in your data us
 a data frame with sample_id and alteration binary columns with values of 0/1
 }
 \description{
-Enables creation of a binary matrix from a mutation file with
+Enables creation of a binary matrix from a mutation, fusion or CNA file with
 a predefined list of samples (rows are samples and columns are genes)
 }
 \examples{

@@ -1,0 +1,111 @@
+---
+title: "Data Processing Vignette"
+##author: "AM"
+date: "2022-10-27"
+output: html_document
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```c
+Make sure that gnomeR & cbioportal packages are installed & loaded
+install.packages("cbioportalR")
+library(cbioportalR)
+library(gnomeR)
+```
+
+```{r setup, include= FALSE}
+library(gnomeR)
+library(cbioportalR)
+```
+
+For details on how to connect and access cbioportalR, you can use the link 
+https://github.com/karissawhiting/cbioportalR or follow the steps below
+
+For every new R session, you need to set your database URL. The set_cbioportal_db() function will set an environmental variable for your session that tells the package which database to point to for all API calls. 
+You can set it to point to the public database with db = 'www.cbioportal.org' or db = 'public'
+
+
+```{r }
+set_cbioportal_db(db = "public")
+```
+
+You are now set up for the remainder of your session! API calls depend on your internet connection and possibly a VPN connection so you can use the following to check your connection at any time throughout your session:
+
+```{r}
+test_cbioportal_db()
+```
+This vignette will walk you through how to import data for a particular study from cbioportal and process it using some gnomeR functions.
+
+Once connected to cbioportal, you can get the list of studies (limited to 5 here) by using - 
+
+```{r } 
+available_studies() %>% head(n = 5)
+```
+To get information on a particular study (eg - acbc_mskcc_2015) - 
+
+```{r }
+get_study_info("acbc_mskcc_2015") %>% t()
+```
+To get data from a specific study - 
+
+```{r }
+df <- get_genetics_by_study(study_id = "acbc_mskcc_2015")
+```
+It creates a list of all the available dataframes for the study. For instance here, the study has 3 - one for each of Mutation, CNA and Structural Variants. 
+
+Depending on the study, the number of variables in a particular dataframe might be different. Here, the mutations data has 31 variables.
+
+### You can create one dataset each for the 3 types using-
+
+```{r , include = FALSE}
+study_mutation<-  as.data.frame(df$mutation)
+
+study_sv<- as.data.frame(df$structural_variant)
+
+study_cna<- as.data.frame(df$cna)
+```
+### Mutation Data
+If you download the raw data from cbioportal and compare with the study_mutation data imported above, you might notice some differences in the variables. For instance 
+
+    * Tumor_Sample_Barcode is called sampleId in the imported data
+    * The Hugo_symbol is embedded within the keyword variable 
+    * Variant_Classification is called mutationType
+    * HGVSp_Short is called proteinChange
+    * Chromosome is called 'chr'
+
+Some of the other variables are named differently as well in the raw data and the imported data but those differences are more intuitive to map the variables.  
+
+### CNA data formats
+CNA data can be received in a long or wide format.
+
+    * Long format -  When the rows contain data on one or more gene for a patient as shown below
+```{r }
+study_cna %>% head(n = 3)
+```
+    * Short format - When each column corresponds to data for a patient
+
+
+### Some useful functions to process the data
+#### create_gene_binary() function
+
+You can use the create_gene_binary() function to 
+
+    * Transpose the mutations data - By default, the mutations data has one or more rows for the patient. Each row is data on a gene. The data can be transposed to create one row per patient with each column as the gene ID. The cell value in the transposed data would flag whether a particular gene is mutated for that patient.
+
+```{r, include = FALSE}
+mut.only <- create_gene_binary(mutation = study_mutation)
+```
+
+    * The other datasets can be transposed similarly
+    * For the fusion data - if the gene is in the IMPACT dataset, then there will be a column for it.    
+
+You can also create one wide data with combined data from all the different datasets after transposing them.
+    
+    * The arguments mutation, fusion and cna can be used to specify the datasets you want to transpose. 
+    * If you are only interested in data for some sample IDs, you can mention those in the argument samples. 

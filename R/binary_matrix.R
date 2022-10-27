@@ -1,6 +1,6 @@
 # Main Binary Matrix Function ------------------
 
-#' Enables creation of a binary matrix from a mutation file with
+#' Enables creation of a binary matrix from a mutation, fusion or CNA file with
 #' a predefined list of samples (rows are samples and columns are genes)
 #' @param samples a character vector specifying which samples should be included in the resulting data frame.
 #' Default is NULL is which case all samples with an alteration in the mutation, cna or fusions file will be used. If you specify
