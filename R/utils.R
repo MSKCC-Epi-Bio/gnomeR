@@ -6,24 +6,16 @@
 #' @export
 #'
 #' @examples
-#' check_mutation_input(mutation = gnomeR::mut)
+#' sanitize_mutation_input(mutation = gnomeR::mutations)
 #'
-check_mutation_input <- function(mutation, ...)  {
+sanitize_mutation_input <- function(mutation, ...)  {
 
-  impact_gene_info <- gnomeR::impact_gene_info
   arguments <- list(...)
 
-
-  # Check for Fusions-  Old API used to return fusions --------------
-  fusions_in_maf <- mutation %>%
-    filter(.data$Variant_Classification %in% c("Fusion", "fusion"))
-
-  if(nrow(fusions_in_maf) > 0) {
-    cli::cli_abort("It looks like you have fusions in your mutation data frame. These need to be passed to the `fusions` argument. ")
-  }
+  mutation <- rename_columns(mutation)
 
   # Check required columns & data types ------------------------------------------
-  required_cols <- c("Tumor_Sample_Barcode", "Hugo_Symbol", "Variant_Classification")
+  required_cols <- c("sample_id", "hugo_symbol")
   column_names <- colnames(mutation)
 
   which_missing <- required_cols[which(!(required_cols %in% column_names))]
@@ -34,50 +26,58 @@ check_mutation_input <- function(mutation, ...)  {
 
   # Make sure they are character
   mutation <- mutation %>%
-    mutate(Tumor_Sample_Barcode = as.character(.data$Tumor_Sample_Barcode),
-           Hugo_Symbol = as.character(.data$Hugo_Symbol))
+    mutate(sample_id = as.character(.data$sample_id),
+           hugo_symbol = as.character(.data$hugo_symbol))
+
+  # Check for Fusions-  Old API used to return fusions --------------
+  fusions_in_maf <- mutation %>%
+    filter(.data$variant_classification %in% c("Fusion", "fusion"))
+
+  if(nrow(fusions_in_maf) > 0) {
+    cli::cli_abort("It looks like you have fusions in your mutation data frame. These need to be passed to the `fusions` argument. ")
+  }
 
   # * Check suggested columns --------
 
   # Mutation_Status ---
-  if(!("Mutation_Status" %in% column_names)) {
-    cli::cli_warn("The following columns are missing in your mutations data: {.field Mutation_Status}. It will be assumed that
-            all variants are {.val SOMATIC}.")
+  if(!("mutation_status" %in% column_names)) {
+    cli::cli_warn("A {.field mutation_status} column was not found. It will be assumed that
+            all variants are {.val SOMATIC}, or check your data follows naming guidelines in {.code gnomer::names_df}")
 
     mutation <- mutation %>%
-      mutate(Mutation_Status = "SOMATIC")
+      mutate(mutation_status = "SOMATIC")
   }
 
   # Variant_Type ---
-  if(!("Variant_Type" %in% column_names) ) {
+  if(!("variant_type" %in% column_names) ) {
 
     mutation <- mutation %>%
       purrr::when(
-        ("Reference_Allele" %in%  column_names) & ("Tumor_Seq_Allele2" %in% column_names) ~
+        ("reference_allele" %in%  column_names) & ("tumor_seq_allele2" %in% column_names) ~
 
           mutation %>%
             mutate(
-              Reference_Allele = as.character(.data$Reference_Allele),
-              Tumor_Seq_Allele2 = as.character(.data$Tumor_Seq_Allele2),
-              Variant_Type = case_when(
-                .data$Reference_Allele %in% c("A","T","C","G") &
-                .data$Tumor_Seq_Allele2 %in% c("A","T","C","G") ~ "SNP",
-                nchar(.data$Tumor_Seq_Allele2) < nchar(.data$Reference_Allele) |
-                .data$Tumor_Seq_Allele2 == "-" ~ "DEL",
-                .data$Reference_Allele == "-" |
-                nchar(.data$Tumor_Seq_Allele2) > nchar(.data$Reference_Allele) ~ "INS",
-                nchar(.data$Reference_Allele) == 2 & nchar(.data$Tumor_Seq_Allele2) == 2 ~ "DNP",
-                nchar(.data$Reference_Allele) == 3 & nchar(.data$Tumor_Seq_Allele2) == 3 ~ "TNP",
-                nchar(.data$Reference_Allele) > 3 & nchar(.data$Tumor_Seq_Allele2) == nchar(.data$Reference_Allele) ~ "ONP",
+              reference_allele = as.character(.data$reference_allele),
+              tumor_seq_allele2 = as.character(.data$tumor_seq_allele2),
+              variant_type = case_when(
+                .data$reference_allele %in% c("A","T","C","G") &
+                .data$tumor_seq_allele2 %in% c("A","T","C","G") ~ "SNP",
+                nchar(.data$tumor_seq_allele2) < nchar(.data$reference_allele) |
+                .data$tumor_seq_allele2 == "-" ~ "DEL",
+                .data$reference_allele == "-" |
+                nchar(.data$tumor_seq_allele2) > nchar(.data$reference_allele) ~ "INS",
+                nchar(.data$reference_allele) == 2 & nchar(.data$tumor_seq_allele2) == 2 ~ "DNP",
+                nchar(.data$reference_allele) == 3 & nchar(.data$tumor_seq_allele2) == 3 ~ "TNP",
+                nchar(.data$reference_allele) > 3 & nchar(.data$tumor_seq_allele2) == nchar(.data$reference_allele) ~ "ONP",
                 TRUE ~ "Undefined")),
 
-        TRUE ~ cli::cli_abort("Column {.field Variant_Type} is missing from your data and {.field Reference_Allele} and {.field Tumor_Seq_Allele2}
+        TRUE ~ cli::cli_abort("Column {.field variant_type} is missing from your data and {.field reference_allele} and {.field tumor_seq_allele2}
                               columns were not available from which to infer variant type.
-                              To proceed, add a column specifying {.field Variant_Type} (e.g. {.code mutate(<your-mutation-df>, Variant_Type = 'SNP')}")
+                              To proceed, add a column specifying {.field variant_type} (e.g. {.code mutate(<your-mutation-df>, variant_type = 'SNP')}")
       )
 
 
-    cli::cli_warn("Column {.field Variant_Type} is missing from your data. We inferred variant types using {.field Reference_Allele} and {.field Tumor_Seq_Allele2} columns")
+    cli::cli_warn("Column {.field variant_type} is missing from your data. We inferred variant types using {.field reference_allele} and {.field tumor_seq_allele2} columns")
 
   }
   return(mutation)
@@ -93,27 +93,39 @@ check_mutation_input <- function(mutation, ...)  {
 #'
 #' @return a checked data frame
 #' @export
+#' @examples
+#' fus <- sanitize_fusion_input(fusion = gnomeR::sv)
 #'
-check_fusion_input <- function(fusion, ...)  {
+sanitize_fusion_input <- function(fusion, ...)  {
 
-  impact_gene_info <- gnomeR::impact_gene_info
   arguments <- list(...)
 
+  fusion <- rename_columns(fusion)
 
   # Check required columns & data types ------------------------------------------
-  required_cols <- c("Tumor_Sample_Barcode", "Hugo_Symbol")
+
   column_names <- colnames(fusion)
+  # check for hugo symbol
 
-  which_missing <- required_cols[which(!(required_cols %in% column_names))]
-
-  if(length(which_missing) > 0) {
-    cli::cli_abort("The following required columns are missing in your mutations data: {.field {which_missing}}")
+  if(!("sample_id" %in% column_names) > 0) {
+    cli::cli_abort("No sample ID column found.")
   }
+
+  if(!("hugo_symbol" %in% column_names |
+       "site_1_entrez_gene_id" %in% column_names)) {
+
+    cli::cli_abort("No hugo symbol column found. See `gnomeR::names_df` for accepted column names")
+  }
+
 
   # Make sure they are character
   fusion <- fusion %>%
-    mutate(Tumor_Sample_Barcode = as.character(.data$Tumor_Sample_Barcode),
-           Hugo_Symbol = as.character(.data$Hugo_Symbol))
+    mutate(sample_id = as.character(.data$sample_id)) %>%
+    purrr::when(
+      "hugo_symbol" %in% column_names ~
+        mutate(., "hugo_symbol" = as.character(.data$hugo_symbol)),
+      TRUE ~
+        mutate(., "site_1_entrez_gene_id" = as.character(.data$site_1_entrez_gene_id)))
 
   return(fusion)
 }
@@ -127,60 +139,97 @@ check_fusion_input <- function(fusion, ...)  {
 #'
 #' @return a checked data frame
 #' @export
+#' @examples
 #'
-check_cna_input <- function(cna, ...)  {
+#' cna <- sanitize_cna_input(cna = cna)
+#'
+sanitize_cna_input <- function(cna, ...)  {
 
-  impact_gene_info <- gnomeR::impact_gene_info
   arguments <- list(...)
 
+  cna <- rename_columns(cna)
+
   # Check required columns & data types ------------------------------------------
-  required_cols <- c("Hugo_Symbol")
+  required_cols <- c("hugo_symbol", "sample_id", "alteration")
   column_names <- colnames(cna)
 
   which_missing <- required_cols[which(!(required_cols %in% column_names))]
 
   if(length(which_missing) > 0) {
-    cli::cli_abort("The following required columns are missing in your mutations data: {.field {which_missing}}")
+    cli::cli_abort("The following required columns are missing in your mutations data: {.field {which_missing}}.
+                   Is your data in wide format? If so, it must be long format. See {.code gnomeR::pivot_cna_long()} to reformat")
   }
 
-  # Check format of CNA
-  api_cols <- c("sampleId", "studyId", "patientId", "alteration")
-  in_data <- api_cols[api_cols %in% column_names]
 
-  if(length(in_data) > 0) {
-    cli::cli_abort("The following columns are not allowed in your cna data.frame {.field {in_data}}.
-                   Do you need to reformat? See {.code ?reformat_cna()}")
-  }
-
-  # Make sure Hugo is character
+  # Make sure hugo & alteration is character
   cna <- cna %>%
-    mutate(Hugo_Symbol = as.character(.data$Hugo_Symbol))
+    mutate(hugo_symbol = as.character(.data$hugo_symbol)) %>%
+    mutate(alteration = tolower(str_trim(as.character(.data$alteration))))
 
+
+
+  # check alteration column -----------------------------
+
+  levels_in_data <- names(table(cna$alteration))
+
+  allowed_chr_levels <- c(
+    "neutral" = "0",
+    "deletion" = "-2",
+    "loh" = "-1.5",
+    "loh" = "-1",
+    "gain" = "1",
+    "amplification" = "2"
+  )
+
+ all_allowed <- c(allowed_chr_levels, names(allowed_chr_levels))
+ not_allowed <- levels_in_data[!levels_in_data %in% all_allowed]
+
+  if(length(not_allowed) > 0) {
+    cli::cli_abort(c("Unknown values in {.field alteration} field: {.val {not_allowed}}",
+                   "Must be one of the following: {.val {all_allowed}}"))
+  }
+
+
+  # HERE ------
+ suppressWarnings(
+   cna <- cna %>%
+     mutate(alteration = forcats::fct_recode(.data$alteration, !!!allowed_chr_levels))
+ )
 
   return(cna)
 }
 
 #' Rename columns from API results to work with gnomeR functions
 #'
-#' @param mutations a mutations data frame from {cbioportalR}
+#' @param df_to_check a data frame to check and recode names as needed
 #'
 #' @return a renamed data frame
 #' @export
+#' @examples
 #'
-rename_columns <- function(mutations) {
+#' rename_columns(df_to_check = gnomeR::mutations)
+#' rename_columns(df_to_check = gnomeR::sv)
+#'
+rename_columns <- function(df_to_check) {
 
-  rename_df <- gnomeR::rename_df
+  names_df_long <- gnomeR::names_df %>%
+    select(contains("_column_name")) %>%
+    tidyr::pivot_longer(-"internal_column_name")
 
-  vars_found_in_dictionary <- intersect(names(mutations),
-                                        unique(rename_df$api_col))
+
+  which_to_replace <- intersect(names(df_to_check), unique(names_df_long$value))
 
   # create a temporary dictionary as a named vector
-  temp_dict <- rename_df %>%
-    dplyr::filter(api_col %in% vars_found_in_dictionary) %>%
+  temp_dict <- names_df_long %>%
+    dplyr::filter(.data$value %in% which_to_replace) %>%
+    select("internal_column_name",  "value") %>%
+    dplyr::distinct() %>%
     tibble::deframe()
+
 
   if(length(temp_dict) > 0) {
 
+    # store details on what has been changed.
     message <- purrr::map2_chr(names(temp_dict),
                                temp_dict,
                                ~paste0(.y, " renamed ", .x))
@@ -188,10 +237,8 @@ rename_columns <- function(mutations) {
     names(message) <- rep("!", times = length(message))
 
 
-    cli::cli_inform(message)
-
     # rename those variables only
-    mutations %>%
+    df_to_check %>%
       dplyr::rename(!!temp_dict)
   }
 }
@@ -210,42 +257,46 @@ rename_columns <- function(mutations) {
 #' @export
 #'
 #' @examples
-#' recode_alias(genomic_df = gnomeR::mut)
+#' mut <- rename_columns(gnomeR::mutations)
+#'
+#' colnames(mut)
+#'
+#' colnames(recode_alias(genomic_df = mut))
 #'
 recode_alias <- function(genomic_df, ...) {
 
   # get table of gene aliases (internal data)
     alias_table <- gnomeR::impact_alias_table %>%
-      dplyr::select(.data$hugo_symbol, .data$alias)
+      dplyr::select("hugo_symbol", "alias")
 
     # recode aliases
-    genomic_df$Hugo_Symbol_Old <- genomic_df$Hugo_Symbol
-    genomic_df$Hugo_Symbol <- purrr::map_chr(genomic_df$Hugo_Symbol,
+    genomic_df$hugo_symbol_old <- genomic_df$hugo_symbol
+    genomic_df$hugo_symbol <- purrr::map_chr(genomic_df$hugo_symbol,
                                              ~resolve_alias(gene_to_check = .x,
                                                             alias_table = alias_table))
 
     message <- genomic_df %>%
-      dplyr::filter(.data$Hugo_Symbol_Old != .data$Hugo_Symbol) %>%
-      dplyr::select(.data$Hugo_Symbol_Old, .data$Hugo_Symbol) %>%
+      dplyr::filter(.data$hugo_symbol_old != .data$hugo_symbol) %>%
+      dplyr::select("hugo_symbol_old", "hugo_symbol") %>%
       dplyr::distinct()
 
 
     if(nrow(message) > 0) {
-      vec_recode <- purrr::map2_chr(message$Hugo_Symbol_Old,
-                                 message$Hugo_Symbol,
+      vec_recode <- purrr::map2_chr(message$hugo_symbol_old,
+                                 message$hugo_symbol,
                                  ~paste0(.x, " recoded to ", .y))
 
       names(vec_recode) <- rep("!", times = length(vec_recode))
 
       cli::cli_warn(c(
       "To ensure gene with multiple names/aliases are correctly grouped together, the
-      following genes in your dataframe have been recoded (you can supress this with {.code recode_aliases = FALSE}):",
+      following genes in your dataframe have been recoded (you can prevent this with {.code recode_aliases = FALSE}):",
       vec_recode))
 
   }
 
     genomic_df <- genomic_df %>%
-      select(-.data$Hugo_Symbol_Old)
+      select(-"hugo_symbol_old")
 
   return(genomic_df)
 }
@@ -289,7 +340,7 @@ resolve_alias <- function(gene_to_check, alias_table) {
 
     alias_table %>%
       filter(.data$alias == gene_to_check) %>%
-      pull(.data$hugo_symbol) %>%
+      pull("hugo_symbol") %>%
       first() %>%
       as.character()
 
@@ -346,7 +397,7 @@ specify_impact_panels <- function(gene_binary) {
   return(sample_panel_pair)
 }
 
-#' Annotate Missing Gene Values According to Specifi Panels
+#' Annotate Missing Gene Values According to Specific Panels
 #'
 #' @param sample_panel_pair a data frame of `sample_id`-`panel_id` pairs specifying panels to use for annotation of each sample
 #' @param gene_binary a binary matrix of 0/1 indicating alteration yes/no for each sample
@@ -369,7 +420,7 @@ annotate_any_panel <- function(sample_panel_pair, gene_binary) {
   # has sample IDs and genes for each panel
   sample_panel_pair_nest <- sample_panel_pair_nest %>%
     left_join(gnomeR::gene_panels, by = c("panel_id" = "gene_panel")) %>%
-    select(-.data$entrez_ids_in_panel)
+    select(-"entrez_ids_in_panel")
 
   user_data_genes <- gsub(".fus|.Del|.Amp|.cna", "", colnames(gene_binary))
 

@@ -22,7 +22,9 @@
 #'
 #' @examples
 #'
-#' gene_binary <- create_gene_binary(mutation = mut, cna = cna, fusion = fusion)
+#' gene_binary <- create_gene_binary(mutation = gnomeR::mutations,
+#'  cna = gnomeR::cna,
+#'  fusion = gnomeR::sv)
 #' pathway_df <- add_pathways(gene_binary, pathways = "Notch")
 #'
 add_pathways <- function(gene_binary,
@@ -165,7 +167,7 @@ add_pathways <- function(gene_binary,
 }
 
 
-#' Title
+#' Sum Alterations in a Pathway
 #'
 #' @param gene_binary a binary matrix (see `gene_binary()`)
 #' @param pathway_list_item a named list of length 1 with pathway name as name and vector of genes as first
@@ -177,12 +179,13 @@ add_pathways <- function(gene_binary,
 #' @export
 #'
 #' @examples
-#' gene_binary <- create_gene_binary(mutation = mut, cna = cna,
-#' fusion = fusion)
+#' gene_binary <- create_gene_binary(mutation = gnomeR::mutations, cna = gnomeR::cna,
+#' fusion = gnomeR::sv)
 #' x <- .sum_alts_in_pathway(gene_binary,
 #'  pathway_list_item = gnomeR::pathways[1],
 #'   pathway_name = names(gnomeR::pathways[1]),
 #'     count_pathways_by = "alteration")
+#'
 .sum_alts_in_pathway <- function(gene_binary, pathway_list_item,
                                  pathway_name,
                                  count_pathways_by) {

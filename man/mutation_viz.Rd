@@ -30,11 +30,6 @@ genecor Correlation heatmap of the top 10 genes
 Creates a set of plot summarising a mutation file.
 }
 \examples{
-library(gnomeR)
-library(dplyr)
-library(dtplyr)
-samples <- as.character(unique(mut$Tumor_Sample_Barcode))[1:200]
-all.plots <- mutation_viz(mutation=mut \%>\% filter(Tumor_Sample_Barcode \%in\% samples))
-all.plots <- mutation_viz(mutation=mut \%>\%
-filter(Tumor_Sample_Barcode \%in\% samples),specify_panel = TRUE)
+mutation_viz(gnomeR::mutations)
+
 }

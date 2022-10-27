@@ -16,6 +16,6 @@ Barplot of counts of each variant type
 Barplot of Variant Type Counts
 }
 \examples{
-ggvartype(mut)
+ggvartype(gnomeR::mutations)
 
 }

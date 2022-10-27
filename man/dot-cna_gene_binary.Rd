@@ -4,14 +4,7 @@
 \alias{.cna_gene_binary}
 \title{Make Binary Matrix From CNA data frame}
 \usage{
-.cna_gene_binary(
-  cna,
-  samples,
-  cna_binary,
-  cna_relax,
-  specify_panel,
-  recode_aliases
-)
+.cna_gene_binary(cna, samples, specify_panel, recode_aliases)
 }
 \arguments{
 \item{cna}{A data frame of copy number alterations. If inputed the outcome will be added to the matrix with columns ending in ".del" and ".amp".
@@ -21,11 +14,6 @@ Default is NULL.}
 Default is NULL is which case all samples with an alteration in the mutation, cna or fusions file will be used. If you specify
 a vector of samples that contain samples not in any of the passed genomic data frames, 0's (or NAs when appropriate if specifying a panel) will be
 returned for every column of that patient row.}
-
-\item{cna_binary}{A boolean argument specifying if the cna events should be enforced as binary. In which case separate columns for
-amplifications and deletions will be created.}
-
-\item{cna_relax}{By default this argument is set to FALSE, where only deep deletions (-2) and amplifications (2) will be annotated as events. When set to TRUE all deletions (-1 shallow and -2 deep) are counted as an event same for all gains (1 gain, 2 amplification) as an event.}
 
 \item{specify_panel}{a character vector of length 1 with panel id (see gnomeR::gene_panels for available panels), "impact", or "no", or a
 data frame of \code{sample_id}-\code{panel_id} pairs specifying panels for which to insert NAs indicating that gene was not tested.

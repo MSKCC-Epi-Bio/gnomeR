@@ -13,16 +13,12 @@
 #' @param adaptive CNregions option to create adaptive segments
 #' @return p a heatmap corresponding to the segment files inputted
 #' @export
-#' @examples library(gnomeR)
-#' library(dplyr)
-#' library(dtplyr)
-#'    samples <- as.character(unique(mut$Tumor_Sample_Barcode))[1:1000]
-#' samples.seg <- clin.sample %>%
-#'   filter(Sample.Identifier %in% samples,
-#'          as.numeric(as.character(Tumor.Purity)) > 30) %>%
-#'   pull(Sample.Identifier)
+#' @examples
+#' seg <- gnomeR::seg
+#' samples <- unique(seg$ID)[1:100]
+#' seg <- seg[seg$ID %in% samples, ]
 #' facet <- facets_heatmap(seg = seg,
-#'                         samples=samples.seg[0:100])
+#'                         samples = samples)
 #' facet$p
 #'
 #' @import
@@ -68,7 +64,7 @@ facets_heatmap <- function (seg = NULL,
     imagedata[imagedata < -1.5] = -1.5
 
     if (is.null(ordered)) {
-      cl = stats::hclust(stats::dist(imagedata), method = "ward")
+      cl = stats::hclust(stats::dist(imagedata), method = "ward.D2")
       imagedata.ordered = imagedata[cl$order, ]
       imagedata.ordered = as.matrix(rev(as.data.frame(imagedata.ordered)))
     }
@@ -119,7 +115,7 @@ facets_heatmap <- function (seg = NULL,
                                                          chrom.mids), z = list())
     }
     my.panel = my.panel.levelplot.2
-    p = levelplot(imagedata.ordered, panel = my.panel, scales = scales,
+    p = lattice::levelplot(imagedata.ordered, panel = my.panel, scales = scales,
                   aspect = "fill", col.regions = bluered(256), xlab = "",
                   ylab = "", colorkey = colorkey)
     return(list(p = p, out.cn = as.data.frame(dat$out.cn),
@@ -144,7 +140,7 @@ facets_heatmap <- function (seg = NULL,
     imagedata[imagedata > 1.5] = 1.5
     imagedata[imagedata < -1.5] = -1.5
     if (is.null(ordered)) {
-      cl = stats::hclust(stats::dist(imagedata), method = "ward")
+      cl = stats::hclust(stats::dist(imagedata), method = "ward.D2")
       imagedata.ordered = imagedata[cl$order, ]
       imagedata.ordered = as.matrix(rev(as.data.frame(imagedata.ordered)))
     }
@@ -217,18 +213,13 @@ facets_heatmap <- function (seg = NULL,
 #' @return purity : a vector of the purity values for the samples in out.cn (as in facets output)
 #' @return FGAs : a vector of the fragment of genome altered values for the samples in out.cn (only when tcn an lcn are available)
 #' @export
-#' @examples library(gnomeR)
-#' library(dplyr)
-#' library(dtplyr)
-#' samples <- as.character(unique(mut$Tumor_Sample_Barcode))[1:1000]
-
-#' samples.seg <- clin.sample %>%
-#'   filter(Sample.Identifier %in% samples,
-#'          as.numeric(as.character(Tumor.Purity)) > 30) %>%
-#'   pull(Sample.Identifier)
-
-#' facets_dat(seg = gnomeR::seg,
-#'                             samples=samples.seg[0:10])
+#' @examples
+#' seg <- gnomeR::seg
+#' samples <- unique(seg$ID)[1:100]
+#' seg <- seg[seg$ID %in% samples, ]
+#' facet <- facets_heatmap(seg = seg,
+#'                         samples = samples)
+#' facets_dat(seg = seg, samples = samples)
 #' @import
 #' iClusterPlus
 #' dplyr
@@ -315,7 +306,7 @@ facets_dat <- function (seg = NULL,
                                          seg.sum = sum(.data$end - .data$start),
                                          FGA = sum(.data$numerator[!(.data$tcn.em ==
                                                                        2 & .data$lcn.em == 1)]) / .data$seg.sum) %>%
-                                       select(.data$FGA)))
+                                       select("FGA")))
 
         cncf$sample <- rep(samples[i], nrow(cncf))
         cncf$seg.mean <- log2(cncf$tcn.em / fit$ploidy +
@@ -384,7 +375,7 @@ facets_dat <- function (seg = NULL,
                                                                                                               start = as.numeric(as.character(.data$start)), end = as.numeric(as.character(.data$end)),
                                                                                                               num.mark = as.numeric(as.character(.data$num.mark)),
                                                                                                               seg.mean = as.numeric(as.character(.data$seg.mean))) %>%
-                                   select(.data$sample, .data$chrom, .data$start, .data$end, .data$num.mark, .data$seg.mean))
+                                   select("sample", "chrom", "start", "end", "num.mark", "seg.mean"))
       all.dat <- rbind(all.dat, cncf)
     }
     out.cn <- CNregions.mod(seg = all.dat, epsilon = epsilon,

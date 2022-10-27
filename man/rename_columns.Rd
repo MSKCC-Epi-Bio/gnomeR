@@ -4,14 +4,20 @@
 \alias{rename_columns}
 \title{Rename columns from API results to work with gnomeR functions}
 \usage{
-rename_columns(mutations)
+rename_columns(df_to_check)
 }
 \arguments{
-\item{mutations}{a mutations data frame from {cbioportalR}}
+\item{df_to_check}{a data frame to check and recode names as needed}
 }
 \value{
 a renamed data frame
 }
 \description{
 Rename columns from API results to work with gnomeR functions
+}
+\examples{
+
+rename_columns(df_to_check = gnomeR::mutations)
+rename_columns(df_to_check = gnomeR::sv)
+
 }

@@ -16,9 +16,6 @@
 #' Default is NULL.
 #' @param cna A data frame of copy number alterations. If inputed the outcome will be added to the matrix with columns ending in ".del" and ".amp".
 #' Default is NULL.
-#' @param cna_binary A boolean argument specifying if the cna events should be enforced as binary. In which case separate columns for
-#' amplifications and deletions will be created.
-#' @param cna_relax By default this argument is set to FALSE, where only deep deletions (-2) and amplifications (2) will be annotated as events. When set to TRUE all deletions (-1 shallow and -2 deep) are counted as an event same for all gains (1 gain, 2 amplification) as an event.
 #' @param specify_panel a character vector of length 1 with panel id (see gnomeR::gene_panels for available panels), "impact", or "no", or a
 #' data frame of `sample_id`-`panel_id` pairs specifying panels for which to insert NAs indicating that gene was not tested.
 #' If a single panel id is passed, all genes that are not in that panel (see gnomeR::gene_panels) will be set to NA in results.
@@ -34,21 +31,19 @@
 #' @return a data frame with sample_id and alteration binary columns with values of 0/1
 #' @export
 #' @examples
-#' mut.only <- create_gene_binary(mutation = mut)
+#' mut.only <- create_gene_binary(mutation = gnomeR::mutations)
 #'
-#' samples <- as.character(unique(mut$Tumor_Sample_Barcode))[1:200]
+#' samples <- gnomeR::mutations$sampleId
 #'
-#' bin.mut <- create_gene_binary(samples = samples, mutation = mut,
-#' mut_type = "omit_germline" ,snp_only = FALSE,
-#' include_silent = FALSE)
-#' bin.mut <- create_gene_binary(samples = samples, mutation = mut,
-#' mut_type = "omit_germline", snp_only = FALSE,
-#' include_silent = FALSE,
-#' cna_relax = TRUE, specify_panel = "no", rm_empty = FALSE)
+#' bin.mut <- create_gene_binary(
+#'   samples = samples, mutation = gnomeR::mutations,
+#'   mut_type = "omit_germline", snp_only = FALSE,
+#'   include_silent = FALSE
+#' )
+#'
 #' @import dplyr
 #' @import dtplyr
 #' @import stringr
-
 
 create_gene_binary <- function(samples=NULL,
 
@@ -60,8 +55,6 @@ create_gene_binary <- function(samples=NULL,
                           fusion = NULL,
 
                           cna = NULL,
-                          cna_binary = TRUE,
-                          cna_relax = FALSE,
 
                           specify_panel = "no",
                           rm_empty = FALSE,
@@ -129,40 +122,20 @@ create_gene_binary <- function(samples=NULL,
 
 
   # * Mutation  checks  --------
+
+  # standardize columns names
   mutation <- switch(!is.null(mutation),
-                     check_mutation_input(mutation = mutation))
+                     sanitize_mutation_input(mutation = mutation))
 
   # * Fusion checks  ----------
   fusion <- switch(!is.null(fusion),
-                   check_fusion_input(fusion))
+                   sanitize_fusion_input(fusion))
 
   # * CNA checks  ------------
   cna <- switch(!is.null(cna), {
-    check_cna_input(cna)
-
-    # ** This could go in cna check function
-    # remove samples with zero events-  this makes CNA match the way mutation/fusion files include samples (which is samples with events only)
-
-    zero_cna <- cna %>%
-      purrr::map_at(., vars(-c("Hugo_Symbol")), ~all(.x == 0))
-
-    zero_cna$Hugo_Symbol <- FALSE
-
-    zero_cna <- unlist(zero_cna, use.names = TRUE)
-    zero_cna <- zero_cna[zero_cna]
-    cna <- cna %>%
-      select(-c(names(zero_cna)))
+    sanitize_cna_input(cna)
 
   })
-
-  # ** This assumes regular cna format
-  # ** This may not work with research samples!
-  cna_samples <- cna %>% purrr::when(!is.null(.) ~ {
-                         names(.)[-which(names(.) =='Hugo_Symbol')] %>%
-                           str_replace_all(fixed("."), "-")
-                         },
-                         TRUE ~ NULL)
-
 
 
   #  Make Final Sample List ----------------------------------------------------
@@ -170,9 +143,9 @@ create_gene_binary <- function(samples=NULL,
 
   # If user doesn't pass a vector, use samples in files as final sample list
     samples_final <- samples %||%
-      c(mutation$Tumor_Sample_Barcode,
-        fusion$Tumor_Sample_Barcode,
-        cna_samples) %>%
+      c(mutation$sample_id,
+        fusion$sample_id,
+        cna$sample_id) %>%
       as.character() %>%
       unique()
 
@@ -199,8 +172,6 @@ create_gene_binary <- function(samples=NULL,
   cna_binary_df <- switch(!is.null(cna),
                        .cna_gene_binary(cna = cna,
                                           samples = samples_final,
-                                          cna_binary = cna_binary,
-                                          cna_relax = cna_relax,
                                           specify_panel = specify_panel,
                                           recode_aliases = recode_aliases))
 
@@ -287,21 +258,21 @@ create_gene_binary <- function(samples=NULL,
   # apply filters --------------
  mutation <- mutation %>%
    purrr::when(
-     snp_only ~ filter(., .data$Variant_Type == "SNP"),
+     snp_only ~ filter(., .data$variant_type == "SNP"),
      ~.
    ) %>%
    purrr::when(
-     !include_silent ~ filter(., .data$Variant_Classification != "Silent"),
+     !include_silent ~ filter(., .data$variant_classification != "Silent"),
      ~.
    ) %>%
    purrr::when(
      mut_type == "all" ~ .,
      mut_type == "omit_germline" ~ {
-       filter(., .data$Mutation_Status != "GERMLINE" |
-         .data$Mutation_Status != "germline" | is.na(.data$Mutation_Status))
+       filter(., .data$mutation_status != "GERMLINE" |
+         .data$mutation_status != "germline" | is.na(.data$mutation_status))
 
        blank_muts <- mutation %>%
-         filter(is.na(.data$Mutation_Status) | .$Mutation_Status == "") %>%
+         filter(is.na(.data$mutation_status) | .$mutation_status == "") %>%
          nrow()
 
        if ((blank_muts > 0)) {
@@ -309,10 +280,10 @@ create_gene_binary <- function(samples=NULL,
        }
        return(.)
      },
-     mut_type == "somatic_only" ~ filter(., .data$Mutation_Status == "SOMATIC" |
-       .data$Mutation_Status == "somatic"),
-     mut_type == "germline_only" ~ filter(., .data$Mutation_Status == "GERMLINE" |
-       .data$Mutation_Status == "germline"),
+     mut_type == "somatic_only" ~ filter(., .data$mutation_status == "SOMATIC" |
+       .data$mutation_status == "somatic"),
+     mut_type == "germline_only" ~ filter(., .data$mutation_status == "GERMLINE" |
+       .data$mutation_status == "germline"),
      TRUE ~ .
    )
 
@@ -322,14 +293,14 @@ create_gene_binary <- function(samples=NULL,
 
   # create empty data.frame to hold results -----
   mut <- as.data.frame(matrix(0L, nrow=length(samples),
-                              ncol=length(unique(mutation$Hugo_Symbol))))
+                              ncol=length(unique(mutation$hugo_symbol))))
 
-  colnames(mut) <- unique(mutation$Hugo_Symbol)
+  colnames(mut) <- unique(mutation$hugo_symbol)
   rownames(mut) <- samples
 
   # populate matrix
   for(i in samples){
-    genes <- mutation$Hugo_Symbol[mutation$Tumor_Sample_Barcode %in% i]
+    genes <- mutation$hugo_symbol[mutation$sample_id %in% i]
     if(length(genes) != 0) {
       mut[match(i, rownames(mut)), match(unique(as.character(genes)), colnames(mut))] <- 1
       }
@@ -353,9 +324,14 @@ create_gene_binary <- function(samples=NULL,
                                  specify_panel,
                                  recode_aliases){
 
+  # CHECK HERE----
+  if("site_1_hugo_symbol" %in% colnames(fusion)) {
+    fusion <- rename(fusion, "hugo_symbol" = "site_1_hugo_symbol")
+  }
+
 
   fusion <- fusion %>%
-    filter(.data$Tumor_Sample_Barcode %in% samples)
+    filter(.data$sample_id %in% samples)
 
   if(recode_aliases) {
     fusion <- recode_alias(fusion)
@@ -363,15 +339,15 @@ create_gene_binary <- function(samples=NULL,
 
   # create empty data frame -----
   fusions_out <- as.data.frame(matrix(0L, nrow=length(samples),
-                              ncol=length(unique(fusion$Hugo_Symbol))))
+                              ncol=length(unique(fusion$hugo_symbol))))
 
 
-  colnames(fusions_out) <- unique(fusion$Hugo_Symbol)
+  colnames(fusions_out) <- unique(fusion$hugo_symbol)
   rownames(fusions_out) <- samples
 
   # populate matrix
   for(i in samples){
-    genes <- fusion$Hugo_Symbol[fusion$Tumor_Sample_Barcode %in% i]
+    genes <- fusion$hugo_symbol[fusion$sample_id %in% i]
     if(length(genes) != 0)
       fusions_out[match(i,rownames(fusions_out)),
                  match(unique(as.character(genes)),colnames(fusions_out))] <- 1
@@ -396,8 +372,6 @@ create_gene_binary <- function(samples=NULL,
 #'
 .cna_gene_binary <- function(cna,
                                samples,
-                               cna_binary,
-                               cna_relax,
                                specify_panel,
                                recode_aliases){
 
@@ -406,117 +380,202 @@ create_gene_binary <- function(samples=NULL,
     cna <- recode_alias(cna)
   }
 
-  # If more than 1 row per gene, combine rows
-  dups <- cna$Hugo_Symbol[duplicated(cna$Hugo_Symbol)]
 
-  if(length(dups) > 0){
-    for(i in dups){
-      temp <- cna[which(cna$Hugo_Symbol == i),] # grep(i, cna$Hugo_Symbol,fixed = TRUE)
-      temp2 <- as.character(unlist(apply(temp, 2, function(x){
-        if(all(is.na(x)))
-          out <- NA
-        else if(anyNA(x))
-          out <- x[!is.na(x)]
-        else if(length(unique(x)) > 1)
-          out <- x[which(x != 0)]
-        else
-          out <- x[1]
-        return(out)
-      })))
-      temp2[-1] <- as.numeric(temp2[-1])
-      cna <- rbind(cna[-which(cna$Hugo_Symbol == i),],
-                   temp2)
-    }
-  }
+  # * deletions ----------
+  cna_filt <- cna %>%
+    filter(.data$alteration == "deletion")
 
-  rownames(cna) <- cna$Hugo_Symbol
-  cna <- cna[,-1]
+  # create empty data.frame to hold results -
+  cna_del <- as.data.frame(matrix(0L, nrow=length(samples),
+                                  ncol=length(unique(cna_filt$hugo_symbol))))
 
-  # flip
-  cna <- as.data.frame(t(cna))
+  colnames(cna_del) <- unique(cna_filt$hugo_symbol)
+  rownames(cna_del) <- unique(samples)
 
-  # fix names
-  rownames(cna) <- gsub("\\.","-",rownames(cna))
+  if(nrow(cna_filt) > 0) {
 
-  # filter those in final samples list
-  cna <- cna[rownames(cna) %in% samples,]
-
-  # If cna binary
-  samples_temp <- rownames(cna)
-
-  if(cna_binary){
-    temp <- do.call("cbind",apply(cna,2,function(x){
-      if(cna_relax){
-        yA <- ifelse(as.numeric(x)>=0.9,1,0)
-        yD <- ifelse(as.numeric(x)<=-0.9,1,0)
+    # populate matrix
+    for(i in samples){
+      genes <- cna_filt$hugo_symbol[cna_filt$sample_id %in% i]
+      if(length(genes) != 0) {
+        cna_del[match(i, rownames(cna_del)), match(unique(as.character(genes)), colnames(cna_del))] <- 1
       }
-      if(!cna_relax){
-        yA <- ifelse(as.numeric(x)==2,1,0)
-        yD <- ifelse(as.numeric(x)<=-0.9,1,0) #==-2
+    }
+
+    n # filter those in final samples list
+    cna_del <- cna_del[rownames(cna_del) %in% samples,]
+    names(cna_del) <- paste0(names(cna_del), ".Del")
+
+  }
+  # * amplifications ----------
+
+  cna_filt <- cna %>%
+    filter(.data$alteration == "amplification")
+
+  # create empty data.frame to hold results
+  cna_amp <- as.data.frame(matrix(0L, nrow=length(samples),
+                                  ncol=length(unique(cna_filt$hugo_symbol))))
+
+  colnames(cna_amp) <- unique(cna_filt$hugo_symbol)
+  rownames(cna_amp) <- samples
+
+  if(nrow(cna_filt) > 0) {
+
+    # populate matrix
+    for(i in samples){
+      genes <- cna_filt$hugo_symbol[cna_filt$sample_id %in% i]
+      if(length(genes) != 0) {
+        cna_amp[match(i, rownames(cna_amp)), match(unique(as.character(genes)), colnames(cna_amp))] <- 1
       }
-      out <- as.data.frame(cbind(yA,yD))
-      colnames(out) <- c("Amp","Del")
-      return(out)
-    }))
-
-    cna <- temp[,apply(temp,2,function(x){sum(x,na.rm=T) > 0})]
-    rownames(cna) <- samples_temp
-
-    # add missing
-    if(length(which(is.na(match(samples,rownames(cna))))) > 0){
-      missing <- samples[which(is.na(match(samples,rownames(cna))))]
-      add <- as.data.frame(matrix(0L,nrow = length(missing),ncol = ncol(cna)))
-      rownames(add )  <- missing
-      colnames(add) <- colnames(cna)
-      cna <- as.data.frame(rbind(cna,add))
     }
-    cna <- cna[match(samples,rownames(cna)),]
-    cna[is.na(cna)] <- 0
+
+    # filter those in final samples list
+    cna_amp <- cna_amp[rownames(cna_amp) %in% samples,]
+    names(cna_amp) <- paste0(names(cna_amp), ".Amp")
   }
 
-  if(!cna_binary){
 
-    # add missing
-    if(length(which(is.na(match(samples,rownames(cna))))) > 0){
-      missing <- samples[which(is.na(match(samples,rownames(cna))))]
-      add <- as.data.frame(matrix(0L,nrow = length(missing),ncol = ncol(cna)))
-      rownames(add )  <- missing
-      colnames(add) <- colnames(cna)
-      cna <- as.data.frame(rbind(cna,add))
-      cna <- cna[match(samples,rownames(cna)),]
-    }
-    cna <- cna[match(samples,rownames(cna)),]
+  # * join deletions and amplifications -----
+  cna_res <- bind_cols(cna_amp, cna_del)
 
-    cna <- cna %>%
-      mutate_all(~ as.numeric(gsub(" ","",as.character(.)))) %>%
-      mutate_all(
-        ~ case_when(
-          . == 0 ~ "NEUTRAL",
-          . %in% c(-1.5,-1) ~ "LOH",
-          . == 1 ~ "GAIN",
-          . == 2 ~ "AMPLIFICATION",
-          . == -2 ~ "DELETION",
-        )
-      ) %>%
-      mutate_all(
-        ~factor(.,
-                levels = c("NEUTRAL","DELETION","LOH","GAIN","AMPLIFICATION")[
-                  which(c("NEUTRAL","DELETION","LOH","GAIN","AMPLIFICATION") %in% .)
-                ])
-      )
-
-
-    # add cna annotation
-    if(ncol(cna) > 0) {
-      colnames(cna) <- paste0(colnames(cna),".cna")
-    }
-
-    rownames(cna) <- samples
-    cna[is.na(cna)] <- "NEUTRAL"
-  }
-
-  return(cna)
+  return(cna_res)
 }
 
-#create_gene_binary(mutation = gnomeR::mut, specify_panel = "no")
+
+
+
+# WIDE CNA Binary Matrix -----------------------------------------------------
+
+#' #' Make Binary Matrix From CNA data frame
+#' #'
+#' #' @inheritParams create_gene_binary
+#' #'
+#' #' @return a data frame
+#' #'
+#' .cna_gene_binary_wide <- function(cna,
+#'                                   samples,
+#'                                   cna_binary,
+#'                                   cna_relax,
+#'                                   specify_panel,
+#'                                   recode_aliases){
+#'
+#'
+#'   if(recode_aliases) {
+#'     cna <- recode_alias(cna)
+#'   }
+#'
+#'   # If more than 1 row per gene, combine rows
+#'   dups <- cna$hugo_symbol[duplicated(cna$hugo_symbol)]
+#'
+#'   if(length(dups) > 0){
+#'     for(i in dups){
+#'       temp <- cna[which(cna$hugo_symbol == i),] # grep(i, cna$hugo_symbol,fixed = TRUE)
+#'       temp2 <- as.character(unlist(apply(temp, 2, function(x){
+#'         if(all(is.na(x)))
+#'           out <- NA
+#'         else if(anyNA(x))
+#'           out <- x[!is.na(x)]
+#'         else if(length(unique(x)) > 1)
+#'           out <- x[which(x != 0)]
+#'         else
+#'           out <- x[1]
+#'         return(out)
+#'       })))
+#'       temp2[-1] <- as.numeric(temp2[-1])
+#'       cna <- rbind(cna[-which(cna$hugo_symbol == i),],
+#'                    temp2)
+#'     }
+#'   }
+#'
+#'   rownames(cna) <- cna$hugo_symbol
+#'   cna <- cna[,-1]
+#'
+#'   # flip
+#'   cna <- as.data.frame(t(cna))
+#'
+#'   # fix names
+#'   rownames(cna) <- gsub("\\.","-",rownames(cna))
+#'
+#'   # filter those in final samples list
+#'   cna <- cna[rownames(cna) %in% samples,]
+#'
+#'   # If cna binary
+#'   samples_temp <- rownames(cna)
+#'
+#'   if(cna_binary){
+#'     temp <- do.call("cbind",apply(cna,2,function(x){
+#'       if(cna_relax){
+#'         yA <- ifelse(as.numeric(x)>=0.9,1,0)
+#'         yD <- ifelse(as.numeric(x)<=-0.9,1,0)
+#'       }
+#'       if(!cna_relax){
+#'         yA <- ifelse(as.numeric(x)==2,1,0)
+#'         yD <- ifelse(as.numeric(x)<=-0.9,1,0) #==-2
+#'       }
+#'       out <- as.data.frame(cbind(yA,yD))
+#'       colnames(out) <- c("Amp","Del")
+#'       return(out)
+#'     }))
+#'
+#'     cna <- temp[,apply(temp,2,function(x){sum(x,na.rm=T) > 0})]
+#'     rownames(cna) <- samples_temp
+#'
+#'     # add missing
+#'     if(length(which(is.na(match(samples,rownames(cna))))) > 0){
+#'       missing <- samples[which(is.na(match(samples,rownames(cna))))]
+#'       add <- as.data.frame(matrix(0L,nrow = length(missing),ncol = ncol(cna)))
+#'       rownames(add )  <- missing
+#'       colnames(add) <- colnames(cna)
+#'       cna <- as.data.frame(rbind(cna,add))
+#'     }
+#'     cna <- cna[match(samples,rownames(cna)),]
+#'     cna[is.na(cna)] <- 0
+#'   }
+#'
+#'   if(!cna_binary){
+#'
+#'     # add missing
+#'     if(length(which(is.na(match(samples,rownames(cna))))) > 0){
+#'       missing <- samples[which(is.na(match(samples,rownames(cna))))]
+#'       add <- as.data.frame(matrix(0L,nrow = length(missing),ncol = ncol(cna)))
+#'       rownames(add )  <- missing
+#'       colnames(add) <- colnames(cna)
+#'       cna <- as.data.frame(rbind(cna,add))
+#'       cna <- cna[match(samples,rownames(cna)),]
+#'     }
+#'     cna <- cna[match(samples,rownames(cna)),]
+#'
+#'     cna <- cna %>%
+#'       mutate_all(~ as.numeric(gsub(" ","",as.character(.)))) %>%
+#'       mutate_all(
+#'         ~ case_when(
+#'           . == 0 ~ "NEUTRAL",
+#'           . %in% c(-1.5,-1) ~ "LOH",
+#'           . == 1 ~ "GAIN",
+#'           . == 2 ~ "AMPLIFICATION",
+#'           . == -2 ~ "DELETION",
+#'         )
+#'       ) %>%
+#'       mutate_all(
+#'         ~factor(.,
+#'                 levels = c("NEUTRAL","DELETION","LOH","GAIN","AMPLIFICATION")[
+#'                   which(c("NEUTRAL","DELETION","LOH","GAIN","AMPLIFICATION") %in% .)
+#'                 ])
+#'       )
+#'
+#'
+#'     # add cna annotation
+#'     if(ncol(cna) > 0) {
+#'       colnames(cna) <- paste0(colnames(cna),".cna")
+#'     }
+#'
+#'     rownames(cna) <- samples
+#'     cna[is.na(cna)] <- "NEUTRAL"
+#'   }
+#'
+#'   return(cna)
+#' }
+#'
+#' #create_gene_binary(mutation = gnomeR::mutations, specify_panel = "no")
+#'
 

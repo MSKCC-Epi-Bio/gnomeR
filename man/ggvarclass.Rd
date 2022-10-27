@@ -16,6 +16,6 @@ Barplot of counts of each variant classification
 Barplot of Variant Classification Counts
 }
 \examples{
-ggvarclass(mut)
+ggvarclass(gnomeR::mutations)
 
 }

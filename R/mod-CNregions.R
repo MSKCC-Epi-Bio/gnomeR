@@ -13,8 +13,8 @@
 #' @examples library(gnomeR)
 #' library(dplyr)
 #' samples <-
-#' as.character(unique(mut$Tumor_Sample_Barcode))[
-#' sample(1:length(unique(mut$Tumor_Sample_Barcode)), 100, replace=FALSE)]
+#' as.character(unique(mutations$sampleId))[
+#' sample(1:length(unique(mutations$sampleId)), 100, replace=FALSE)]
 #' CNregions.mod(seg %>% filter(ID %in% samples))[1:5,1:5]
 
 CNregions.mod <- function (seg, epsilon = 0.005, adaptive = FALSE, rmCNV = FALSE,

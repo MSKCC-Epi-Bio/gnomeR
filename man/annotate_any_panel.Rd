@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils.R
 \name{annotate_any_panel}
 \alias{annotate_any_panel}
-\title{Annotate Missing Gene Values According to Specifi Panels}
+\title{Annotate Missing Gene Values According to Specific Panels}
 \usage{
 annotate_any_panel(sample_panel_pair, gene_binary)
 }
@@ -15,5 +15,5 @@ annotate_any_panel(sample_panel_pair, gene_binary)
 a gene_binary annotated for missingness
 }
 \description{
-Annotate Missing Gene Values According to Specifi Panels
+Annotate Missing Gene Values According to Specific Panels
 }
