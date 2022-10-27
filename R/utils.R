@@ -136,14 +136,11 @@ sanitize_fusion_input <- function(fusion, ...)  {
 #' @param cna a maf (long) form data set of CNAs. Must include an alteration column.
 #'
 #' @return a recoded CNA data set with factor alteration values
-#' @export
 #'
-#' @examples
-#' cna_maf_form <- recode_cna_alterations(gnomeR::cna)
 #'
 
 
-recode_cna_alterations <- function(cna){
+.recode_cna_alterations <- function(cna){
 
 
   if(!("alteration" %in% colnames(cna))) {
@@ -218,7 +215,7 @@ sanitize_cna_input <- function(cna, ...)  {
                    Is your data in wide format? If so, it must be long format. See {.code gnomeR::pivot_cna_long()} to reformat")
   }
 
-  cna <- recode_cna_alterations(cna)
+  cna <- switch(!is.null(cna), .recode_cna_alterations(cna))
 
 
   return(cna)

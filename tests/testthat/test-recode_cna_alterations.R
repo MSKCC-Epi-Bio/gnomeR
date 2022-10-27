@@ -12,9 +12,9 @@ mixed_cna_labels <- cna %>%
 
 
 test_that("test no error thrown with example dataset", {
-  expect_error(recode_cna_alterations(cna), NA)
+  expect_error(.recode_cna_alterations(cna), NA)
 
-  alt_types <- names(table(recode_cna_alterations(cna)$alteration))
+  alt_types <- names(table(.recode_cna_alterations(cna)$alteration))
   expect_true("high level amplification" %in% alt_types)
   expect_true("homozygous deletion" %in% alt_types)
   expect_equal(length(alt_types), 2)
@@ -22,22 +22,22 @@ test_that("test no error thrown with example dataset", {
 
 
 test_that("test what happens when api (wide) cna given", {
-  expect_error(recode_cna_alterations(reformat_cna(cna)))
+  expect_error(.recode_cna_alterations(reformat_cna(cna)))
 })
 
 
 test_that("test that missing alteration throws error", {
-  expect_error(recode_cna_alterations(cna_no_alt_long))
+  expect_error(.recode_cna_alterations(cna_no_alt_long))
 })
 
 test_that("test that numbers < -2 or > 2 throw error", {
-  expect_error(recode_cna_alterations(not_allowed_nums))
+  expect_error(.recode_cna_alterations(not_allowed_nums))
 })
 
 test_that("allowed to have numbers and characters in alteration column", {
-  expect_error(recode_cna_alterations(mixed_cna_labels), NA)
+  expect_error(.recode_cna_alterations(mixed_cna_labels), NA)
 
-  mixed_cna_labels <- recode_cna_alterations(mixed_cna_labels)
+  mixed_cna_labels <- .recode_cna_alterations(mixed_cna_labels)
 
   count_alterations <- mixed_cna_labels %>%
     group_by(alteration)%>%

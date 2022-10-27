@@ -151,7 +151,7 @@ pivot_cna_longer <- function(wide_cna, clean_sample_ids = TRUE) {
   # check alteration column -----------------------------
 
   # Make sure hugo & alteration is character
-  cna_long <- recode_cna_alterations(cna_long)
+  cna_long <- switch(!is.null(cna_long), .recode_cna_alterations(cna_long))
 
   cna_long
 
