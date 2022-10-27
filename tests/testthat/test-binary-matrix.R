@@ -271,64 +271,6 @@
 #
 # })
 #
-# # test cna_binary arg----
-# # add general tests
-# # I don't have an example of data that has cna values that aren't just 1 or 2. It would be helpful to
-# # find an example of data to test this using the API {cbioportalR}. Then make it smaller (just a few rows) and test using that
-# test_that("test for cna_binary arg", {
-#
-#   # add general tests (default is T)
-#       ## If T, then the output should be all 0 or 1
-#   expect_identical(create_gene_binary(cna = gnomeR::cna) %>%
-#                      purrr::map_dbl(~any(!(.x %in% c(0,1))) ) %>%
-#                       sum(), 0)
-#      ## If F, each column will represent only one different gene
-#   res_cna<- names(create_gene_binary(cna = cna, cna_binary = F)) %>%
-#              stringr::str_replace(c(".cna"),"")
-#
-#   expect_equal(length( unique(res_cna)),  length(res_cna))
-#
-#   #example test
-#   expect_equal(TRUE, TRUE)
-# })
-#
-# # test cna_relax arg----
-# # add general tests
-# # find an example of data to test this using the API {cbioportalR} that has both 1 and 2 values. Then make it smaller (just a few rows) and test using that
-# test_that("test for cna_relax arg", {
-#
-#   # add general tests (default is F)
-#   expect_error(create_gene_binary(cna=cna, cna_relax = T), NA)
-#
-#   # Use a fake data to test if T then consider both 1 and -1 as 2 and -2
-#   cna_fake <- data.frame(gnomeR::cna[1:5,1],matrix(sample(seq(-2,2),5*20, replace=TRUE),nrow=5))
-#   names(cna_fake)<-names(gnomeR::cna)[1:21]
-#
-#   amp.del.ct<-function(input_vec, amp_val, del_val){
-#     amp_ct<-sapply(input_vec, function(x){ as.numeric( x %in% amp_val )}) %>% sum()
-#     del_ct<-sapply(input_vec, function(x){ as.numeric( x %in% del_val )}) %>% sum()
-#     return(c(amp_ct, del_ct))
-#   }
-#
-#   expect_equal( create_gene_binary(cna=cna_fake, cna_relax=T) %>%
-#                   sapply(sum) %>%
-#                     as.vector(),
-#                 apply(cna_fake[,-1], 1, amp.del.ct, amp_val=c(1,2), del_val=c(-1,-2) ) %>%
-#                         as.vector() )
-#
-#    ### Note: the cna_relax=F case not working for ".Del"
-#   # expect_equal( create_gene_binary(cna=cna_fake, cna_relax=F) %>%
-#   #                 sapply(sum) %>%
-#   #                 as.vector(),
-#   #               apply(cna_fake[,-1], 1, amp.del.ct, amp_val=c(2), del_val=c(-2) ) %>%
-#   #                 as.vector() )
-#
-#
-#
-#   #example test
-#   expect_equal(TRUE, TRUE)
-# })
-#
 #
 #
 # # test rm_empty arg----

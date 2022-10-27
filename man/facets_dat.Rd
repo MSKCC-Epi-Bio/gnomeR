@@ -42,14 +42,10 @@ FGAs : a vector of the fragment of genome altered values for the samples in out.
 Creates a copy number alteration matrix from segment files.
 }
 \examples{
-library(gnomeR)
-library(dplyr)
-library(dtplyr)
-samples <- as.character(unique(mut$Tumor_Sample_Barcode))[1:1000]
-samples.seg <- clin.sample \%>\%
-  filter(Sample.Identifier \%in\% samples,
-         as.numeric(as.character(Tumor.Purity)) > 30) \%>\%
-  pull(Sample.Identifier)
-facets_dat(seg = gnomeR::seg,
-                            samples=samples.seg[0:10])
+seg <- gnomeR::seg
+samples <- unique(seg$ID)[1:100]
+seg <- seg[seg$ID \%in\% samples, ]
+facet <- facets_heatmap(seg = seg,
+                        samples = samples)
+facets_dat(seg = seg, samples = samples)
 }

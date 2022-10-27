@@ -39,7 +39,6 @@ Imports:
     GenomicRanges,
     IRanges,
     cluster,
-    grid,
     GGally,
     gplots,
     lattice,

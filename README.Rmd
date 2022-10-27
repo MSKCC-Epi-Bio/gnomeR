@@ -14,10 +14,10 @@ knitr::opts_chunk$set(
   warning = FALSE,
   message = FALSE
 )
-library(gnomeR)
-library(knitr)
+
 library(dplyr)
 library(gtsummary)
+library(gnomeR)
 ```
 
 # gnomeR
@@ -54,9 +54,9 @@ devtools::install_github("karissawhiting/cbioportalr")
 
 ## Introduction
 
-the `gnomeR` package provides a consistent framework for genetic data processing, visualization and analysis. This is primarily targeted to IMPACT datasets but can also be applied to any genomic data provided by CbioPortal. With {gnomeR} and {cbioportalR} you can:
+the `gnomeR` package provides a consistent framework for genetic data processing, visualization and analysis. This is primarily targeted to IMPACT datasets but can also be applied to any genomic data provided by cBioPortal. With {gnomeR} and {cbioportalR} you can:
 
-- [**Download and gather data from CbioPortal**](https://github.com/karissawhiting/cbioportalR) - Pull from cBioPortal data base by study ID or sample ID. 
+- [**Download and gather data from CbioPortal**](https://www.karissawhiting.com/cbioportalR/) - Pull from cBioPortal data base by study ID or sample ID. 
 - **OncoKB annotate data** - Filter genomic data for known oncogenic alterations. 
 -  **Process genomic data** - Process retrieved mutation/maf, fusions, copy-number alteration, and segmentation data (when available) into an analysis-ready formats.
 - **Visualize processed data** - Create OncoPrints, heatmaps and summary plots from processed data. 
@@ -66,13 +66,11 @@ the `gnomeR` package provides a consistent framework for genetic data processing
 
 {gnomeR} works with any genomic data that follows cBioPortal guidelines for [mutation](https://docs.cbioportal.org/5.1-data-loading/data-loading/file-formats#data-file-5), [CNA](https://docs.cbioportal.org/5.1-data-loading/data-loading/file-formats#discrete-copy-number-data), or [fusion](https://docs.cbioportal.org/5.1-data-loading/data-loading/file-formats#structural-variant-data) data file formats.
 
-If you wish to pull the data directly from CbioPortal, see how to get set up with credentials with the [{cBioPortalR}](https://karissawhiting.github.io/cbioportalR/) package.
-
-If you want to oncoKB annotate your data, you need to acquire credentials from the [oncoKB website](https://www.oncokb.org/apiAccess).
+If you wish to pull the data directly from cBioPortal, see how to get set up with credentials with the [{cbioportalR}](https://karissawhiting.github.io/cbioportalR/) package.
 
 ## Processing Genomic Data
 
-The below examples uses the data sets `mut`, `fusion`, `cna` which were pulled from cBioPortal and are included in the package as example data sets. We will sample 100 samples for examples:
+The below examples uses the data sets `mutatations`, `sv`, `cna` which were pulled from cBioPortal and are included in the package as example data sets. We will sample 100 samples for examples:
 
 ```{r}
 set.seed(123)
@@ -81,21 +79,30 @@ mut <- gnomeR::mutations
 cna <- gnomeR::cna
 sv <- gnomeR::sv
 
-un <-  unique(mut$SampleId)
+un <-  unique(mut$sampleId)
 sample_patients <- sample(un, size = 100, replace = FALSE)
 
 ```
 
-The main data processing function is `gene_binary()` which takes mutation, CNA and fusion files as input, and outputs a binary matrix of N rows (number of samples) by M genes included in the data set. We can specify which patients are included which will force all patients in resulting dataframe, even if they have no alterations.
+The main data processing function is `create_gene_binary()` which takes mutation, CNA and fusion files as input, and outputs a binary matrix of N rows (number of samples) by M genes included in the data set. We can specify which patients are included which will force all patients in resulting dataframe, even if they have no alterations.
 
 
 ```{r }
 gen_dat <- create_gene_binary(samples = sample_patients,
                          maf = mut,
                          fusion = sv,
-                         cna = cna, rm_empty = TRUE)
+                         cna = cna)
 
-kable(gen_dat[1:5,1:5], row.names = TRUE)
+head(gen_dat[, 1:6])
+```
+
+By default, mutations, CNA and fusions will be returned in separate columns. You can combine these at teh gene level using the following:
+
+```{r}
+by_gene <- gen_dat %>% 
+  summarize_by_gene()
+
+head(by_gene[,1:6])
 ```
 
 
@@ -110,32 +117,6 @@ Quickly visualize mutation characteristics with `ggvarclass()`,
 ggvarclass(mutation = mut)
 ```
 
-The wrapper function `mutation_viz()` will generate a list with the most commonly used plot which you can pass into a plot assembly framework like {patchwork}: 
-
-```{r, fig.height=9, fig.width=8}
-list_of_plots <- mutation_viz(mutation = mut)
-
-patchwork::wrap_plots(list_of_plots, ncol = 2) & 
-  ggplot2::theme(text = ggplot2::element_text(size = 8))
-```
-
-
-`ggheatmap()` allows you to visualize mutation, CNA and fusion data all in one heatmap:
-
-```{r, fig.height=8, fig.width=7}
-
-# filter only those with alterations
-gen_dat <- gen_dat %>%
-  rowwise() %>% 
-  mutate(total_alterations = sum(c_across(everything()))) %>%
-  filter(total_alterations > 1) %>%
-  select(-total_alterations) %>%
-  ungroup()
-
-select_gen_dat <- gen_dat[, (purrr::map(gen_dat, ~sum(.x, na.rm = TRUE)) > 0)]
-
-ggheatmap(select_gen_dat[, 1:50])
-```
 
 ## Summarize & Analyze
 
@@ -149,7 +130,7 @@ gen_dat <- gen_dat %>%
 ```
 
 
-```{r, eval=FALSE}
+```{r }
 
 gene_tbl_trt <-  gen_dat %>%
   tbl_genomic(freq_cutoff = .1, by = trt_status) %>%
@@ -158,13 +139,6 @@ gene_tbl_trt <-  gen_dat %>%
 gene_tbl_trt
 ```
 
-```{r, eval=FALSE, echo=FALSE}
-gt::gtsave(as_gt(gene_tbl_trt),
-           file = here::here("man", "figures", "gene_tbl_trt.png"))
-```
-
-
-<img src="man/figures/gene_tbl_trt.png" width="60%" />
 
 Additionally, you can analyze custom pathways, or a set of default gene pathways using `add_pathways()`:
 
@@ -179,18 +153,12 @@ path_by_trt <- gen_dat %>%
 path_by_trt
 ```
 
-```{r, eval=FALSE, echo=FALSE}
-gt::gtsave(as_gt(path_by_trt),
-           file = here::here("man", "figures", "path_by_trt.png"))
-```
-
-<img src="man/figures/path_by_trt.png" width="60%" />
 
 ## Further analytical tools
 
 Along with mutation, cna and fusion data, {gnomeR} also allows analysis and visualization of [FACETs](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5027494/) data. [FACETs](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5027494/) is an allele-specific copy number tool and open-source software with a broad application to whole genome, whole-exome, as well as targeted panel sequencing platforms. It is a fully integrated stand-alone pipeline that includes sequencing BAM file post-processing, joint segmentation of total- and allele-specific read counts, and integer copy number calls corrected for tumor purity, ploidy and clonal heterogeneity, with comprehensive output.  
 
-You can vizualize this  data using `facets_heatmap()`
+You can visualize this  data using `facets_heatmap()`
 
 ```{r, warning=FALSE, message=FALSE}
 
@@ -199,8 +167,6 @@ p.heat <- facets_heatmap(seg = seg, samples = select_samples, min_purity = 0)
 p.heat$p
 ```
 
-
-The primary goal of `gnomeR` not being in depth analysis of genomic data but rather reliable, modular and reproducible framework for processing various types of genomic data. For users interested in large scale genomic analytical methods we compiled various packages developed by [Department of Epidemiology and Biostatistics](https://www.mskcc.org/departments/epidemiology-biostatistics), Memorial Sloan-Kettering Cancer Center under an umbrella R package, [gnomeVerse](https://github.com/AxelitoMartin/genomeVerse).
 
 # Contributing
 

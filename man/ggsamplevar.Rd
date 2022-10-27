@@ -16,6 +16,6 @@ Histogram of counts of variants per tumor sample
 Histogram of Variants Per Sample Colored By Variant Classification
 }
 \examples{
-ggsamplevar(mut)
+ggsamplevar(gnomeR::mutations)
 
 }

@@ -19,11 +19,13 @@ columns for mutation/cna/fusion.
 }
 \examples{
 library(gnomeR)
-samples <- as.character(unique(mut$Tumor_Sample_Barcode))[1:200]
-gene_binary <- create_gene_binary(samples = samples, mutation = mut,cna = cna,
-                        mut_type = "somatic_only", snp_only = FALSE,
-                        include_silent = FALSE,
-                        cna_relax = TRUE, specify_panel = "IMPACT341", rm_empty = FALSE) \%>\%
-                 summarize_by_gene()
+samples <- unique(mutations$sample_id)[1:10]
+gene_binary <- create_gene_binary(
+  samples = samples, mutation = mutations, cna = cna,
+  mut_type = "somatic_only",
+  include_silent = FALSE,
+  specify_panel = "IMPACT341"
+) \%>\%
+  summarize_by_gene()
 
 }

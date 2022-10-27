@@ -18,6 +18,6 @@ Barplot of counts of top variant genes
 Barplot of Most Frequently Altered Genes
 }
 \examples{
-ggtopgenes(mut)
+ggtopgenes(gnomeR::mutations)
 
 }

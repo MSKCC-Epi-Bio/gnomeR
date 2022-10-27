@@ -2,7 +2,7 @@
 % Please edit documentation in R/add_pathways.R
 \name{.sum_alts_in_pathway}
 \alias{.sum_alts_in_pathway}
-\title{Title}
+\title{Sum Alterations in a Pathway}
 \usage{
 .sum_alts_in_pathway(
   gene_binary,
@@ -25,11 +25,11 @@ and only item in list}
 a dataframe of 1 column of 0/1s indicating pathway activated yes/no
 }
 \description{
-Title
+Sum Alterations in a Pathway
 }
 \examples{
-gene_binary <- create_gene_binary(mutation = gnomeR::cbp_mut, cna = gnomeR::cbp_cna,
-fusion = gnomeR::cbp_sv)
+gene_binary <- create_gene_binary(mutation = gnomeR::mutations, cna = gnomeR::cna,
+fusion = gnomeR::sv)
 x <- .sum_alts_in_pathway(gene_binary,
  pathway_list_item = gnomeR::pathways[1],
   pathway_name = names(gnomeR::pathways[1]),

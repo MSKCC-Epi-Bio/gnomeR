@@ -20,6 +20,6 @@ Correlation heatmap of the top altered genes
 Correlation Heatmap of the Top Altered Genes
 }
 \examples{
-gggenecor(mut)
+gggenecor(gnomeR::mutations)
 
 }

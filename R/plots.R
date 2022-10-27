@@ -9,13 +9,9 @@
 #' @return topgenes Barplot of counts of top variant genes
 #' @return genecor Correlation heatmap of the top 10 genes
 #' @export
-#' @examples library(gnomeR)
-#' library(dplyr)
-#' library(dtplyr)
-#' samples <- as.character(unique(mut$Tumor_Sample_Barcode))[1:200]
-#' all.plots <- mutation_viz(mutation=mut %>% filter(Tumor_Sample_Barcode %in% samples))
-#' all.plots <- mutation_viz(mutation=mut %>%
-#' filter(Tumor_Sample_Barcode %in% samples),specify_panel = TRUE)
+#' @examples
+#' mutation_viz(gnomeR::mutations)
+#'
 #' @import
 #' dplyr
 #' dtplyr
@@ -30,7 +26,7 @@ mutation_viz <- function(mutation, ...) {
     all_plots <- list(
       varclass = ggvarclass,
       vartype = ggvartype,
-      snvclass = ggsnvclass,
+#      snvclass = ggsnvclass,
       samplevar = ggsamplevar,
       topgenes = ggtopgenes,
       genecor = gggenecor) %>%
@@ -49,7 +45,7 @@ mutation_viz <- function(mutation, ...) {
 #' @export
 #'
 #' @examples
-#' ggvarclass(mut) + add.perc()
+#' ggvarclass(gnomeR::mutations) + add.perc()
 #'
 
 add.perc<-function(x,...){geom_text(
@@ -66,22 +62,24 @@ add.perc<-function(x,...){geom_text(
 #' @export
 #'
 #' @examples
-#' ggvarclass(mut)
+#' ggvarclass(gnomeR::mutations)
 #'
 ggvarclass <- function(mutation) {
 
 
+  mutation <- rename_columns(mutation)
+
   # relevel Variant Classification by frequency
   mutation <- mutation %>%
     mutate(Variant_Classification =
-             stringr::str_replace_all(.data$Variant_Classification, "_", " ")) %>%
-    mutate(Variant_Classification = .data$Variant_Classification %>%
+             stringr::str_replace_all(.data$variant_classification, "_", " ")) %>%
+    mutate(Variant_Classification = .data$variant_classification %>%
              forcats::fct_infreq() %>%
              forcats::fct_rev())
 
   p.class <- mutation %>%
-    ggplot(aes(x = .data$Variant_Classification,
-               fill = .data$Variant_Classification)) +
+    ggplot(aes(x = .data$variant_classification,
+               fill = .data$variant_classification)) +
     geom_bar() +
     coord_flip() +
     theme(legend.position="none") +
@@ -99,20 +97,22 @@ ggvarclass <- function(mutation) {
 #' @export
 #'
 #' @examples
-#' ggvartype(mut)
+#' ggvartype(gnomeR::mutations)
 #'
 ggvartype <- function(mutation) {
 
+  mutation <- rename_columns(mutation)
+
   # relevel Variant Type by frequency
   mutation <- mutation %>%
-    mutate(Variant_Type = .data$Variant_Type %>%
+    mutate(Variant_Type = .data$variant_type %>%
              forcats::fct_infreq() %>%
              forcats::fct_rev())
 
   p.type <- mutation %>%
-    ggplot(aes(x = .data$Variant_Type,
-               color=.data$Variant_Type,
-               fill = .data$Variant_Type)) +
+    ggplot(aes(x = .data$variant_type,
+               color=.data$variant_type,
+               fill = .data$variant_type)) +
     geom_bar() +
     coord_flip() +
     theme_minimal() +
@@ -124,43 +124,35 @@ ggvartype <- function(mutation) {
 
 }
 
-#' Histogram of SNV class Counts
-#'
-#' @param mutation Raw mutation dataframe containing alteration data
-#'
-#' @return Histogram of counts of each SNV class
-#' @export
-#'
-#' @examples
-#' ggsnvclass(mut)
-#'
-ggsnvclass <- function(mutation) {
 
-
-  # filter only SNPs
-  mutation <- mutation %>%
-    filter(
-      .data$Variant_Type == "SNP",
-      .data$HGVSc != ""
-    ) %>%
-    mutate(SNV_Class = substrRight(.data$HGVSc, 3)) %>%
-    mutate(SNV_Class = .data$SNV_Class %>%
-             forcats::fct_infreq() %>%
-             forcats::fct_rev())
-
-  p.SNV <- mutation %>%
-    filter(!grepl("N", .data$SNV_Class)) %>%
-    ggplot(aes(x = .data$SNV_Class, color = .data$SNV_Class,
-               fill = .data$SNV_Class)) +
-    geom_bar() +
-    coord_flip() +
-    theme_minimal() +
-    theme(legend.position = "none") +
-    ggtitle("SNV Class Count") +
-    xlab("SNV Class")
-
-  p.SNV
-}
+# ggsnvclass <- function(mutation) {
+#
+#   mutation <- rename_columns(mutation)
+#
+#   # filter only SNPs
+#   mutation <- mutation %>%
+#     filter(
+#       .data$variant_type == "SNP",
+#       .data$hgv_sc != ""
+#     ) %>%
+#     mutate(SNV_Class = substrRight(.data$hgv_sc, 3)) %>%
+#     mutate(SNV_Class = .data$SNV_Class %>%
+#              forcats::fct_infreq() %>%
+#              forcats::fct_rev())
+#
+#   p.SNV <- mutation %>%
+#     filter(!grepl("N", .data$SNV_Class)) %>%
+#     ggplot(aes(x = .data$SNV_Class, color = .data$SNV_Class,
+#                fill = .data$SNV_Class)) +
+#     geom_bar() +
+#     coord_flip() +
+#     theme_minimal() +
+#     theme(legend.position = "none") +
+#     ggtitle("SNV Class Count") +
+#     xlab("SNV Class")
+#
+#   p.SNV
+# }
 
 #' Histogram of Variants Per Sample Colored By Variant Classification
 #'
@@ -170,21 +162,23 @@ ggsnvclass <- function(mutation) {
 #' @export
 #'
 #' @examples
-#' ggsamplevar(mut)
+#' ggsamplevar(gnomeR::mutations)
 #'
 ggsamplevar <- function(mutation) {
 
+  mutation <- rename_columns(mutation)
+
   mutation2 <- mutation %>%
-    group_by(.data$Tumor_Sample_Barcode) %>%
+    group_by(.data$sample_id) %>%
     mutate(n_alts = n()) %>%
     ungroup() %>%
-    mutate(Tumor_Sample_Barcode = .data$Tumor_Sample_Barcode %>%
+    mutate(Tumor_Sample_Barcode = .data$sample_id %>%
              forcats::fct_infreq())
 
   # distribution of variant per sample
   p.patient.variant <- mutation2 %>%
-    ggplot(aes(x = .data$Tumor_Sample_Barcode,
-               fill = .data$Variant_Classification)) +
+    ggplot(aes(x = .data$sample_id,
+               fill = .data$variant_classification)) +
     geom_bar(position = "stack") +
     ggtitle("Variants per sample") +
     ylab("Variant Count") +
@@ -204,32 +198,33 @@ ggsamplevar <- function(mutation) {
 #' @export
 #'
 #' @examples
-#' ggtopgenes(mut)
+#' ggtopgenes(gnomeR::mutations)
 #'
 ggtopgenes <- function(mutation, n_genes = 10) {
 
+  mutation <- rename_columns(mutation)
 
   top_genes <- mutation %>%
-    group_by(.data$Hugo_Symbol) %>%
+    group_by(.data$hugo_symbol) %>%
     summarise(N = n()) %>%
     arrange(-.data$N) %>%
-    select("Hugo_Symbol") %>%
-    pull("Hugo_Symbol")
+    select("hugo_symbol") %>%
+    pull("hugo_symbol")
 
   top_genes <- top_genes[1:min(length(top_genes),n_genes)] %>%
     as.character()
 
   mutation2 <- mutation %>%
-    filter(.data$Hugo_Symbol %in% top_genes) %>%
+    filter(.data$hugo_symbol %in% top_genes) %>%
     ungroup() %>%
-    mutate(Hugo_Symbol = .data$Hugo_Symbol %>%
+    mutate(Hugo_Symbol = .data$hugo_symbol %>%
              forcats::fct_drop() %>%
              forcats::fct_infreq() %>%
              forcats::fct_rev())
 
   p.genes <-  mutation2 %>%
-    ggplot(aes(x = .data$Hugo_Symbol,
-               fill = .data$Variant_Classification)) +
+    ggplot(aes(x = .data$hugo_symbol,
+               fill = .data$variant_classification)) +
     geom_bar(position = "stack") +
     coord_flip() +
     ggtitle("Top genes variants classification") + xlab("Gene Name")
@@ -246,9 +241,11 @@ ggtopgenes <- function(mutation, n_genes = 10) {
 #' @export
 #'
 #' @examples
-#' gggenecor(mut)
+#' gggenecor(gnomeR::mutations)
 #'
 gggenecor <- function(mutation, n_genes = 10, ...) {
+
+  mutation <- rename_columns(mutation)
 
   bin.mutation <- create_gene_binary(mutation = mutation,...)
 
@@ -258,7 +255,9 @@ gggenecor <- function(mutation, n_genes = 10, ...) {
   keep <- keep[1:min(length(keep),n_genes)]
   bin.mutation <- bin.mutation[,keep]
 
-  p.corr <- GGally::ggcorr(dat = bin.mutation, cor_matrix = stats::cor(bin.mutation),limits = NULL)
+  p.corr <- GGally::ggcorr(dat = bin.mutation,
+                           cor_matrix = stats::cor(bin.mutation),
+                           limits = NULL)
 
   p.corr
 

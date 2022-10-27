@@ -16,9 +16,6 @@
 #' Default is NULL.
 #' @param cna A data frame of copy number alterations. If inputed the outcome will be added to the matrix with columns ending in ".del" and ".amp".
 #' Default is NULL.
-#' @param cna_binary A boolean argument specifying if the cna events should be enforced as binary. In which case separate columns for
-#' amplifications and deletions will be created.
-#' @param cna_relax By default this argument is set to FALSE, where only deep deletions (-2) and amplifications (2) will be annotated as events. When set to TRUE all deletions (-1 shallow and -2 deep) are counted as an event same for all gains (1 gain, 2 amplification) as an event.
 #' @param specify_panel a character vector of length 1 with panel id (see gnomeR::gene_panels for available panels), "impact", or "no", or a
 #' data frame of `sample_id`-`panel_id` pairs specifying panels for which to insert NAs indicating that gene was not tested.
 #' If a single panel id is passed, all genes that are not in that panel (see gnomeR::gene_panels) will be set to NA in results.
@@ -36,16 +33,17 @@
 #' @examples
 #' mut.only <- create_gene_binary(mutation = gnomeR::mutations)
 #'
-#' samples <- as.character(unique(gnomeR::mutations$SampleId))[1:200]
+#' samples <- gnomeR::mutations$sampleId
 #'
-#' bin.mut <- create_gene_binary(samples = samples, mutation = gnomeR::mutations,
-#' mut_type = "omit_germline", snp_only = FALSE,
-#' include_silent = FALSE)
+#' bin.mut <- create_gene_binary(
+#'   samples = samples, mutation = gnomeR::mutations,
+#'   mut_type = "omit_germline", snp_only = FALSE,
+#'   include_silent = FALSE
+#' )
 #'
 #' @import dplyr
 #' @import dtplyr
 #' @import stringr
-
 
 create_gene_binary <- function(samples=NULL,
 
@@ -57,8 +55,6 @@ create_gene_binary <- function(samples=NULL,
                           fusion = NULL,
 
                           cna = NULL,
-                          cna_binary = TRUE,
-                          cna_relax = FALSE,
 
                           specify_panel = "no",
                           rm_empty = FALSE,
@@ -176,8 +172,6 @@ create_gene_binary <- function(samples=NULL,
   cna_binary_df <- switch(!is.null(cna),
                        .cna_gene_binary(cna = cna,
                                           samples = samples_final,
-                                          cna_binary = cna_binary,
-                                          cna_relax = cna_relax,
                                           specify_panel = specify_panel,
                                           recode_aliases = recode_aliases))
 
@@ -378,8 +372,6 @@ create_gene_binary <- function(samples=NULL,
 #'
 .cna_gene_binary <- function(cna,
                                samples,
-                               cna_binary,
-                               cna_relax,
                                specify_panel,
                                recode_aliases){
 

@@ -297,12 +297,31 @@
 #' \item{entrezGeneId}{Entrez Gene ID}
 #' \item{sampleId}{MSKCC Sample ID}
 #' \item{patientId}{Patient ID}
-#' \item{studyID}{Indicator for Abida et al. 2017 study}
+#' \item{studyId}{Indicator for Abida et al. 2017 study}
 #' \item{center}{Cancer Center ID}
 #' \item{mutationStatus}{Somatic or germ-line mutation status}
 #' \item{variantType}{Mutation variant type}
-#' \item{chr}{Chromosome mutation observed on}}
-#'
+#' \item{chr}{Chromosome mutation observed on}
+#' \item{endPosition}{End Position}
+#' \item{fisValue}{fisValue}
+#' \item{functionalImpactScore}{functionalImpactScore}
+#' \item{keyword}{keyword}
+#' \item{linkMsa}{linkMsa}
+#' \item{linkPdb}{linkPdb}
+#' \item{linkXvar}{linkXvar}
+#' \item{molecularProfileId}{molecularProfileId}
+#' \item{mutationType}{mutationType}
+#' \item{ncbiBuild}{ncbiBuild}
+#' \item{proteinChange}{proteinChange}
+#' \item{proteinPosEnd}{proteinPosEnd}
+#' \item{proteinPosStart}{proteinPosStart}
+#' \item{referenceAllele}{referenceAllele}
+#' \item{refseqMrnaId}{refseqMrnaId}
+#' \item{startPosition}{startPosition}
+#' \item{uniquePatientKey}{uniquePatientKey}
+#' \item{uniqueSampleKey}{uniqueSampleKey}
+#' \item{validationStatus}{validationStatus}
+#' \item{variantAllele}{variantAllele}}
 #' @source \url{https://www.cbioportal.org/study/summary?id=prad_mskcc_2017}
 "mutations"
 
@@ -320,10 +339,13 @@
 #' \item{hugoGeneSymbol}{Character w/ 324 levels,
 #' Column containing all HUGO symbols genes}
 #' \item{entrezGeneId}{Entrez Gene ID}
+#' \item{molecularProfileId}{Molecular Profile ID for data set}
 #' \item{sampleId}{MSKCC Sample ID}
 #' \item{patientId}{Patient ID}
-#' \item{studyID}{Indicator for Abida et al. 2017 study}
-#' \item{alteration}{Factor, Type of CNA}}
+#' \item{studyId}{Indicator for Abida et al. 2017 study}
+#' \item{alteration}{Factor, Type of CNA}
+#' \item{uniqueSampleKey}{character COLUMN_DESCRIPTION}
+#' \item{uniquePatientKey}{character COLUMN_DESCRIPTION}}
 #'
 #' @source \url{https://www.cbioportal.org/study/summary?id=prad_mskcc_2017}
 "cna"
@@ -337,19 +359,56 @@
 #'
 #' @format A data frame with structural variants from Abida et al. JCO Precis Oncol 2017.
 #' Retrieved from cBioPortal.There are 94 observations and 29 variables.
+#' @format A data frame with 94 rows and 44 variables:
 #' \describe{
-#'  \item{sampleId}{MSKCC Sample ID}
-#' \item{patientId}{Patient ID}
-#' \item{studyID}{Indicator for Abida et al. 2017 study}
-#' \item{site1HugoSymbol}{Character w/ 31 levels,
+#'   \item{\code{uniqueSampleKey}}{character COLUMN_DESCRIPTION}
+#'   \item{\code{uniquePatientKey}}{character COLUMN_DESCRIPTION}
+#'   \item{\code{molecularProfileId}}{character COLUMN_DESCRIPTION}
+#'   \item{\code{sampleId}}{MSKCC Sample ID}
+#'   \item{\code{patientId}}{Patient ID}
+#'   \item{\code{studyId}}{Indicator for Abida et al. 2017 study}
+#'   \item{\code{site1EntrezGeneId}}{integer COLUMN_DESCRIPTION}
+#'   \item{\code{site1HugoSymbol}}{Character w/ 31 levels,
 #' Column containing HUGO symbols genes for first site of fusion}
-#' \item{site2HugoSymbol}{Character w/ 21 levels,
+#'   \item{\code{site1EnsemblTranscriptId}}{character COLUMN_DESCRIPTION}
+#'   \item{\code{site1Chromosome}}{character COLUMN_DESCRIPTION}
+#'   \item{\code{site1Position}}{integer COLUMN_DESCRIPTION}
+#'   \item{\code{site1Contig}}{character COLUMN_DESCRIPTION}
+#'   \item{\code{site1Region}}{character COLUMN_DESCRIPTION}
+#'   \item{\code{site1RegionNumber}}{integer COLUMN_DESCRIPTION}
+#'   \item{\code{site1Description}}{character COLUMN_DESCRIPTION}
+#'   \item{\code{site2EntrezGeneId}}{integer COLUMN_DESCRIPTION}
+#'   \item{\code{site2HugoSymbol}}{Character w/ 21 levels,
 #' Column containing all HUGO symbols genes for second site of fusion}
-#' \item{dnasupport}{Factor, all are `yes` in this data}
-#' \item{rnasupport}{Factor, all are `unknown` in this data}
-#'  }
-#'
+#'   \item{\code{site2EnsemblTranscriptId}}{character COLUMN_DESCRIPTION}
+#'   \item{\code{site2Chromosome}}{character COLUMN_DESCRIPTION}
+#'   \item{\code{site2Position}}{integer COLUMN_DESCRIPTION}
+#'   \item{\code{site2Contig}}{character COLUMN_DESCRIPTION}
+#'   \item{\code{site2Region}}{character COLUMN_DESCRIPTION}
+#'   \item{\code{site2RegionNumber}}{integer COLUMN_DESCRIPTION}
+#'   \item{\code{site2Description}}{character COLUMN_DESCRIPTION}
+#'   \item{\code{site2EffectOnFrame}}{character COLUMN_DESCRIPTION}
+#'   \item{\code{ncbiBuild}}{character COLUMN_DESCRIPTION}
+#'   \item{\code{dnaSupport}}{Factor, all are `yes` in this data}
+#'   \item{\code{rnaSupport}}{Factor, all are `unknown` in this data}
+#'   \item{\code{normalReadCount}}{integer COLUMN_DESCRIPTION}
+#'   \item{\code{tumorReadCount}}{integer COLUMN_DESCRIPTION}
+#'   \item{\code{normalVariantCount}}{integer COLUMN_DESCRIPTION}
+#'   \item{\code{tumorVariantCount}}{integer COLUMN_DESCRIPTION}
+#'   \item{\code{normalPairedEndReadCount}}{integer COLUMN_DESCRIPTION}
+#'   \item{\code{tumorPairedEndReadCount}}{integer COLUMN_DESCRIPTION}
+#'   \item{\code{normalSplitReadCount}}{integer COLUMN_DESCRIPTION}
+#'   \item{\code{tumorSplitReadCount}}{integer COLUMN_DESCRIPTION}
+#'   \item{\code{annotation}}{character COLUMN_DESCRIPTION}
+#'   \item{\code{breakpointType}}{character COLUMN_DESCRIPTION}
+#'   \item{\code{connectionType}}{character COLUMN_DESCRIPTION}
+#'   \item{\code{eventInfo}}{character COLUMN_DESCRIPTION}
+#'   \item{\code{variantClass}}{character COLUMN_DESCRIPTION}
+#'   \item{\code{length}}{integer COLUMN_DESCRIPTION}
+#'   \item{\code{comments}}{character COLUMN_DESCRIPTION}
+#'   \item{\code{svStatus}}{character COLUMN_DESCRIPTION}
+#'}
 #' @source \url{https://www.cbioportal.org/study/summary?id=prad_mskcc_2017}
-"mutations"
+"sv"
 
 

@@ -18,6 +18,6 @@ mutationviz Barplot The same barplot is now returned with percentages
 Add a percentage to counts
 }
 \examples{
-ggvarclass(mut) + add.perc()
+ggvarclass(gnomeR::mutations) + add.perc()
 
 }

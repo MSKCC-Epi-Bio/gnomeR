@@ -13,8 +13,6 @@ create_gene_binary(
   include_silent = FALSE,
   fusion = NULL,
   cna = NULL,
-  cna_binary = TRUE,
-  cna_relax = FALSE,
   specify_panel = "no",
   rm_empty = FALSE,
   recode_aliases = TRUE,
@@ -43,11 +41,6 @@ Default is NULL.}
 \item{cna}{A data frame of copy number alterations. If inputed the outcome will be added to the matrix with columns ending in ".del" and ".amp".
 Default is NULL.}
 
-\item{cna_binary}{A boolean argument specifying if the cna events should be enforced as binary. In which case separate columns for
-amplifications and deletions will be created.}
-
-\item{cna_relax}{By default this argument is set to FALSE, where only deep deletions (-2) and amplifications (2) will be annotated as events. When set to TRUE all deletions (-1 shallow and -2 deep) are counted as an event same for all gains (1 gain, 2 amplification) as an event.}
-
 \item{specify_panel}{a character vector of length 1 with panel id (see gnomeR::gene_panels for available panels), "impact", or "no", or a
 data frame of \code{sample_id}-\code{panel_id} pairs specifying panels for which to insert NAs indicating that gene was not tested.
 If a single panel id is passed, all genes that are not in that panel (see gnomeR::gene_panels) will be set to NA in results.
@@ -74,10 +67,12 @@ a predefined list of samples (rows are samples and columns are genes)
 \examples{
 mut.only <- create_gene_binary(mutation = gnomeR::mutations)
 
-samples <- as.character(unique(gnomeR::mutations$SampleId))[1:200]
+samples <- gnomeR::mutations$sampleId
 
-bin.mut <- create_gene_binary(samples = samples, mutation = gnomeR::mutations,
-mut_type = "omit_germline", snp_only = FALSE,
-include_silent = FALSE)
+bin.mut <- create_gene_binary(
+  samples = samples, mutation = gnomeR::mutations,
+  mut_type = "omit_germline", snp_only = FALSE,
+  include_silent = FALSE
+)
 
 }

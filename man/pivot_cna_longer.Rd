@@ -20,6 +20,8 @@ A long data frame of CNA events
 Reformat Wide CNA Data to Long
 }
 \examples{
+\dontrun{
+# NEEDS TO BE UPDATED
 cna <- pivot_cna_longer(wide_cna = gnomeR::cna)
-
+}
 }

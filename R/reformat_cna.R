@@ -117,8 +117,10 @@ reformat_cna <- function(cna) {
 #' @export
 #'
 #' @examples
+#' \dontrun{
+#' # NEEDS TO BE UPDATED
 #' cna <- pivot_cna_longer(wide_cna = gnomeR::cna)
-#'
+#' }
 pivot_cna_longer <- function(wide_cna, clean_sample_ids = TRUE) {
 
   cna <- rename_columns(wide_cna)

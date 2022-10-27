@@ -141,7 +141,6 @@ sanitize_fusion_input <- function(fusion, ...)  {
 #' @export
 #' @examples
 #'
-#' cna <- pivot_cna_longer(gnomeR::cna)
 #' cna <- sanitize_cna_input(cna = cna)
 #'
 sanitize_cna_input <- function(cna, ...)  {
@@ -398,7 +397,7 @@ specify_impact_panels <- function(gene_binary) {
   return(sample_panel_pair)
 }
 
-#' Annotate Missing Gene Values According to Specifi Panels
+#' Annotate Missing Gene Values According to Specific Panels
 #'
 #' @param sample_panel_pair a data frame of `sample_id`-`panel_id` pairs specifying panels to use for annotation of each sample
 #' @param gene_binary a binary matrix of 0/1 indicating alteration yes/no for each sample
