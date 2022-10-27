@@ -15,14 +15,15 @@
 #' @param gene_subset Specific genes you want to summarize. This takes precedent over the `freq_cutoff` parameter and will
 #' return all alterations associated with that gene (including mutations, CNA, fusions).
 #' @param by A variable to be passed to `gtsummary::tbl_summary()`'s by parameter
-#' @param ... Additional parameters that can be passed to `gtsummary::tbl_summary()`
+#' @param ... Additional parameters that can be passed to `gtsummary::tbl_summary()`. To access the additional parameters you need to load `gtsummary`.
 #'
 #' @return A `tbl_summary()` object
 #' @export
 #'
 #' @examples
 #' library(dplyr)
-#' samples <- unique(mutations$sample_id)[1:10]
+#'
+#' samples <- unique(mutations$sampleId)[1:10]
 #'
 #' gene_binary <- create_gene_binary(
 #'   samples = samples,
@@ -39,12 +40,14 @@
 #'     x = c("M", "F"),
 #'     size = nrow(gene_binary), replace = TRUE
 #'   ))
+#' library(gtsummary) # Need to load gtsummary to access additional arguments in `...`
 #'
 #' t1 <- tbl_genomic(
 #'   gene_binary = gene_binary,
 #'   by = sex,
 #'   freq_cutoff = .2,
-#'   freq_cutoff_by_gene = FALSE
+#'   freq_cutoff_by_gene = FALSE,
+#'   statistic = list(all_categorical() ~"{n}")
 #' )
 #'
 tbl_genomic <- function(gene_binary,
