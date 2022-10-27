@@ -145,11 +145,10 @@ sanitize_fusion_input <- function(fusion, ...)  {
 
 recode_cna_alterations <- function(cna){
 
-  #check if alteration column exists
-  which_missing <- required_cols[which(!("alteration" %in% column_names))]
 
-  if(length(which_missing) > 0) {
-    cli::cli_abort("An alteration column is missing from your cna data. Use pivot_cna_longer() instead if dataset is in API format.")
+  if(!("alteration" %in% colnames(cna))) {
+    cli::cli_abort("An alteration column is missing from your cna data. Use pivot_cna_longer(),
+                   which will recode alterations, instead if dataset is in API format.")
   }
 
   # Make sure hugo & alteration is character
