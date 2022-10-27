@@ -66,23 +66,11 @@ Modified CNregions function from the facets package to handle small sample sizes
       </tr><tr><td>
           <p><code><a href="annotate_any_panel.html">annotate_any_panel()</a></code> </p>
         </td>
-        <td><p>Annotate Missing Gene Values According to Specifi Panels</p></td>
+        <td><p>Annotate Missing Gene Values According to Specific Panels</p></td>
       </tr><tr><td>
           <p><code><a href="annotate_specific_panel.html">annotate_specific_panel()</a></code> </p>
         </td>
         <td><p>Utility function  to insert NA's According to Panel</p></td>
-      </tr><tr><td>
-          <p><code><a href="check_cna_input.html">check_cna_input()</a></code> </p>
-        </td>
-        <td><p>Check CNA data frame to ensure columns are correct</p></td>
-      </tr><tr><td>
-          <p><code><a href="check_fusion_input.html">check_fusion_input()</a></code> </p>
-        </td>
-        <td><p>Check fusion data frame to ensure columns are correct</p></td>
-      </tr><tr><td>
-          <p><code><a href="check_mutation_input.html">check_mutation_input()</a></code> </p>
-        </td>
-        <td><p>Checks MAF input to ensure column names are correct and renamed genes are corrected</p></td>
       </tr><tr><td>
           <p><code><a href="clin.patients.html">clin.patients</a></code> </p>
         </td>
@@ -95,7 +83,11 @@ IMPACT cbioPortal dataset.</p></td>
       </tr><tr><td>
           <p><code><a href="cna.html">cna</a></code> </p>
         </td>
-        <td><p>An example copy number alteration raw calls file from IMPACT cbioPortal dataset</p></td>
+        <td><p>An example IMPACT cBioPortal mutation data set in API format</p></td>
+      </tr><tr><td>
+          <p><code><a href="consequence_map.html">consequence_map</a></code> </p>
+        </td>
+        <td><p>Consequence Map</p></td>
       </tr><tr><td>
           <p><code><a href="create_gene_binary.html">create_gene_binary()</a></code> </p>
         </td>
@@ -105,10 +97,6 @@ a predefined list of samples (rows are samples and columns are genes)</p></td>
           <p><code><a href="curated_genes.html">curated_genes</a></code> </p>
         </td>
         <td><p>List of curated genes for IMPACT oncoKB annotation.</p></td>
-      </tr><tr><td>
-          <p><code><a href="dat_oncoprint.html">dat_oncoprint()</a></code> </p>
-        </td>
-        <td><p>Enables creation of a matrix used to generate an OncoPrint heatmap.</p></td>
       </tr><tr><td>
           <p><code><a href="dot-cna_gene_binary.html">.cna_gene_binary()</a></code> </p>
         </td>
@@ -124,7 +112,7 @@ a predefined list of samples (rows are samples and columns are genes)</p></td>
       </tr><tr><td>
           <p><code><a href="dot-sum_alts_in_pathway.html">.sum_alts_in_pathway()</a></code> </p>
         </td>
-        <td><p>Title</p></td>
+        <td><p>Sum Alterations in a Pathway</p></td>
       </tr><tr><td>
           <p><code><a href="facets_dat.html">facets_dat()</a></code> </p>
         </td>
@@ -133,10 +121,6 @@ a predefined list of samples (rows are samples and columns are genes)</p></td>
           <p><code><a href="facets_heatmap.html">facets_heatmap()</a></code> </p>
         </td>
         <td><p>facets_heatmap</p></td>
-      </tr><tr><td>
-          <p><code><a href="fusion.html">fusion</a></code> </p>
-        </td>
-        <td><p>An example of fusions calls file from IMPACT cbioPortal dataset</p></td>
       </tr><tr><td>
           <p><code><a href="gene_panels.html">gene_panels</a></code> </p>
         </td>
@@ -154,17 +138,9 @@ a predefined list of samples (rows are samples and columns are genes)</p></td>
         </td>
         <td><p>Correlation Heatmap of the Top Altered Genes</p></td>
       </tr><tr><td>
-          <p><code><a href="ggheatmap.html">ggheatmap()</a></code> </p>
-        </td>
-        <td><p>Heatmap of all events after gene_binary - using binary distance</p></td>
-      </tr><tr><td>
           <p><code><a href="ggsamplevar.html">ggsamplevar()</a></code> </p>
         </td>
         <td><p>Histogram of Variants Per Sample Colored By Variant Classification</p></td>
-      </tr><tr><td>
-          <p><code><a href="ggsnvclass.html">ggsnvclass()</a></code> </p>
-        </td>
-        <td><p>Histogram of SNV class Counts</p></td>
       </tr><tr><td>
           <p><code><a href="ggtopgenes.html">ggtopgenes()</a></code> </p>
         </td>
@@ -206,20 +182,17 @@ a predefined list of samples (rows are samples and columns are genes)</p></td>
         </td>
         <td><p>IMPACT Gene Meta Data</p></td>
       </tr><tr><td>
-          <p><code><a href="mut.html">mut</a></code> </p>
-        </td>
-        <td><p>An example maf file from IMPACT cbioPortal dataset</p></td>
-      </tr><tr><td>
           <p><code><a href="mutation_viz.html">mutation_viz()</a></code> </p>
         </td>
         <td><p>Creates a set of plot summarising a mutation file.</p></td>
       </tr><tr><td>
-          <p><code><a href="oncokb.html">oncokb()</a></code> </p>
+          <p><code><a href="mutations.html">mutations</a></code> </p>
         </td>
-        <td><p>OncoKB annotate
-\<!-- %lifecycle{stable} -->
-Enables oncokb annotation of MAF, fusions and CNA files. This is performed using the OncoKB annotator found at https://github.com/oncokb/oncokb-annotator.
-See details there for file formats.</p></td>
+        <td><p>An example IMPACT cBioPortal mutation data set in API format</p></td>
+      </tr><tr><td>
+          <p><code><a href="names_df.html">names_df</a></code> </p>
+        </td>
+        <td><p>Data Frame of Column Names</p></td>
       </tr><tr><td>
           <p><code><a href="panel_names.html">panel_names</a></code> </p>
         </td>
@@ -229,9 +202,9 @@ See details there for file formats.</p></td>
         </td>
         <td><p>IMPACT Gene Pathways</p></td>
       </tr><tr><td>
-          <p><code><a href="plot_oncoprint.html">plot_oncoprint()</a></code> </p>
+          <p><code><a href="pivot_cna_longer.html">pivot_cna_longer()</a></code> </p>
         </td>
-        <td><p>Creates the OncoPrint corresponding to the inputted genetic data</p></td>
+        <td><p>Reformat Wide CNA Data to Long</p></td>
       </tr><tr><td>
           <p><code><a href="recode_alias.html">recode_alias()</a></code> </p>
         </td>
@@ -248,6 +221,18 @@ See details there for file formats.</p></td>
           <p><code><a href="resolve_alias.html">resolve_alias()</a></code> </p>
         </td>
         <td><p>Resolve Hugo Symbol Names with Aliases</p></td>
+      </tr><tr><td>
+          <p><code><a href="sanitize_cna_input.html">sanitize_cna_input()</a></code> </p>
+        </td>
+        <td><p>Check CNA data frame to ensure columns are correct</p></td>
+      </tr><tr><td>
+          <p><code><a href="sanitize_fusion_input.html">sanitize_fusion_input()</a></code> </p>
+        </td>
+        <td><p>Check fusion data frame to ensure columns are correct</p></td>
+      </tr><tr><td>
+          <p><code><a href="sanitize_mutation_input.html">sanitize_mutation_input()</a></code> </p>
+        </td>
+        <td><p>Checks MAF input to ensure column names are correct and renamed genes are corrected</p></td>
       </tr><tr><td>
           <p><code><a href="scale_color_pancan.html">scale_color_pancan()</a></code> </p>
         </td>
@@ -272,6 +257,10 @@ See details there for file formats.</p></td>
           <p><code><a href="summarize_by_gene.html">summarize_by_gene()</a></code> </p>
         </td>
         <td><p>Simplify binary matrix to one column per gene that counts any alteration type as 1</p></td>
+      </tr><tr><td>
+          <p><code><a href="sv.html">sv</a></code> </p>
+        </td>
+        <td><p>An example IMPACT cBioPortal mutation data set in API format</p></td>
       </tr><tr><td>
           <p><code><a href="tbl_genomic.html">tbl_genomic()</a></code> </p>
         </td>

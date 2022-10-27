@@ -70,7 +70,7 @@
 <div class="page-header"><h1 id="gnomer">gnomeR<a class="anchor" aria-label="anchor" href="#gnomer"></a>
 </h1></div>
 <!-- badges: start -->
-<!-- badges: end --><p><font size="5"><span class="emoji" data-emoji="bangbang">‼️</span> <span class="emoji" data-emoji="warning">⚠️</span> <strong>NOTE: This package is currently under active development with a new stable release expected November 1st, 2022. For code written before 2022-03-23, please use the previous stable version (v1.1.0)</strong><span class="emoji" data-emoji="warning">⚠️</span><span class="emoji" data-emoji="bangbang">‼️</span> </font></p>
+<!-- badges: end --><p><font size="5"><span class="emoji" data-emoji="bangbang">‼️</span> <span class="emoji" data-emoji="warning">⚠️</span> <strong>NOTE: This package is currently under active development with a new stable release expected November 15th, 2022. For code written before 2022-03-23, please use the previous stable version (v1.1.0)</strong><span class="emoji" data-emoji="warning">⚠️</span><span class="emoji" data-emoji="bangbang">‼️</span> </font></p>
 <p>You can install the pre-2022-03-23 version with:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">'MSKCC-Epi-Bio/gnomeR@v1.1.0'</span><span class="op">)</span></span></code></pre></div>
@@ -88,10 +88,10 @@
 <div class="section level2">
 <h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
-<p>the <code>gnomeR</code> package provides a consistent framework for genetic data processing, visualization and analysis. This is primarily targeted to IMPACT datasets but can also be applied to any genomic data provided by CbioPortal. With {gnomeR} and {cbioportalR} you can:</p>
+<p>the <code>gnomeR</code> package provides a consistent framework for genetic data processing, visualization and analysis. This is primarily targeted to IMPACT datasets but can also be applied to any genomic data provided by cBioPortal. With {gnomeR} and {cbioportalR} you can:</p>
 <ul>
 <li>
-<a href="https://github.com/karissawhiting/cbioportalR" class="external-link"><strong>Download and gather data from CbioPortal</strong></a> - Pull from cBioPortal data base by study ID or sample ID.</li>
+<a href="https://www.karissawhiting.com/cbioportalR/" class="external-link"><strong>Download and gather data from CbioPortal</strong></a> - Pull from cBioPortal data base by study ID or sample ID.</li>
 <li>
 <strong>OncoKB annotate data</strong> - Filter genomic data for known oncogenic alterations.</li>
 <li>
@@ -106,130 +106,552 @@
 <h2 id="getting-set-up">Getting Set up<a class="anchor" aria-label="anchor" href="#getting-set-up"></a>
 </h2>
 <p>{gnomeR} works with any genomic data that follows cBioPortal guidelines for <a href="https://docs.cbioportal.org/5.1-data-loading/data-loading/file-formats#data-file-5" class="external-link">mutation</a>, <a href="https://docs.cbioportal.org/5.1-data-loading/data-loading/file-formats#discrete-copy-number-data" class="external-link">CNA</a>, or <a href="https://docs.cbioportal.org/5.1-data-loading/data-loading/file-formats#structural-variant-data" class="external-link">fusion</a> data file formats.</p>
-<p>If you wish to pull the data directly from CbioPortal, see how to get set up with credentials with the <a href="https://karissawhiting.github.io/cbioportalR/" class="external-link">{cBioPortalR}</a> package.</p>
-<p>If you want to oncoKB annotate your data, you need to acquire credentials from the <a href="https://www.oncokb.org/apiAccess" class="external-link">oncoKB website</a>.</p>
+<p>If you wish to pull the data directly from cBioPortal, see how to get set up with credentials with the <a href="https://karissawhiting.github.io/cbioportalR/" class="external-link">{cbioportalR}</a> package.</p>
 </div>
 <div class="section level2">
 <h2 id="processing-genomic-data">Processing Genomic Data<a class="anchor" aria-label="anchor" href="#processing-genomic-data"></a>
 </h2>
-<p>The below examples uses the data sets <code>mut</code>, <code>fusion</code>, <code>cna</code> which were pulled from cBioPortal and are included in the package as example data sets. We will sample 100 samples for examples:</p>
+<p>The below examples uses the data sets <code>mutatations</code>, <code>sv</code>, <code>cna</code> which were pulled from cBioPortal and are included in the package as example data sets. We will sample 100 samples for examples:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">mut</span> <span class="op">&lt;-</span> <span class="fu">gnomeR</span><span class="fu">::</span><span class="va"><a href="reference/mut.html">mut</a></span></span>
+<span><span class="va">mut</span> <span class="op">&lt;-</span> <span class="fu">gnomeR</span><span class="fu">::</span><span class="va"><a href="reference/mutations.html">mutations</a></span></span>
 <span><span class="va">cna</span> <span class="op">&lt;-</span> <span class="fu">gnomeR</span><span class="fu">::</span><span class="va"><a href="reference/cna.html">cna</a></span></span>
-<span><span class="va">fusion</span> <span class="op">&lt;-</span> <span class="fu">gnomeR</span><span class="fu">::</span><span class="va"><a href="reference/fusion.html">fusion</a></span></span>
+<span><span class="va">sv</span> <span class="op">&lt;-</span> <span class="fu">gnomeR</span><span class="fu">::</span><span class="va"><a href="reference/sv.html">sv</a></span></span>
 <span></span>
-<span><span class="va">un</span> <span class="op">&lt;-</span>  <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">mut</span><span class="op">$</span><span class="va">Tumor_Sample_Barcode</span><span class="op">)</span></span>
+<span><span class="va">un</span> <span class="op">&lt;-</span>  <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">mut</span><span class="op">$</span><span class="va">sampleId</span><span class="op">)</span></span>
 <span><span class="va">sample_patients</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="va">un</span>, size <span class="op">=</span> <span class="fl">100</span>, replace <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
-<p>The main data processing function is <code>gene_binary()</code> which takes mutation, CNA and fusion files as input, and outputs a binary matrix of N rows (number of samples) by M genes included in the data set. We can specify which patients are included which will force all patients in resulting dataframe, even if they have no alterations.</p>
+<p>The main data processing function is <code><a href="reference/create_gene_binary.html">create_gene_binary()</a></code> which takes mutation, CNA and fusion files as input, and outputs a binary matrix of N rows (number of samples) by M genes included in the data set. We can specify which patients are included which will force all patients in resulting dataframe, even if they have no alterations.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">gen_dat</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/create_gene_binary.html">create_gene_binary</a></span><span class="op">(</span>samples <span class="op">=</span> <span class="va">sample_patients</span>,</span>
 <span>                         maf <span class="op">=</span> <span class="va">mut</span>,</span>
-<span>                         fusion <span class="op">=</span> <span class="va">fusion</span>,</span>
-<span>                         cna <span class="op">=</span> <span class="va">cna</span>, rm_empty <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span>                         fusion <span class="op">=</span> <span class="va">sv</span>,</span>
+<span>                         cna <span class="op">=</span> <span class="va">cna</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">kable</span><span class="op">(</span><span class="va">gen_dat</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span>, row.names <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
-<table class="table">
-<thead><tr class="header">
-<th align="left"></th>
-<th align="right">OSBPL9.fus</th>
-<th align="right">ALK.fus</th>
-<th align="right">EML4.fus</th>
-<th align="right">MLL3.fus</th>
-<th align="right">BRCA2.fus</th>
-</tr></thead>
-<tbody>
-<tr class="odd">
-<td align="left">P-0010604-T01-IM5</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">1</td>
-<td align="right">0</td>
-</tr>
-<tr class="even">
-<td align="left">P-0002651-T01-IM3</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-</tr>
-<tr class="odd">
-<td align="left">P-0000270-T01-IM3</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-</tr>
-<tr class="even">
-<td align="left">P-0002915-T01-IM3</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-</tr>
-<tr class="odd">
-<td align="left">P-0011099-T01-IM5</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-</tr>
-</tbody>
-</table>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">gen_dat</span><span class="op">[</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">6</span><span class="op">]</span><span class="op">)</span></span>
+<span><span class="co">#&gt;                   ERG.fus KDM5A.fus KDM5D.fus GSK3B.fus EGFR.fus PBRM1.fus</span></span>
+<span><span class="co">#&gt; P-0008869-T01-IM5       1         0         0         0        0         0</span></span>
+<span><span class="co">#&gt; P-0001242-T01-IM3       0         0         0         0        0         0</span></span>
+<span><span class="co">#&gt; P-0005806-T01-IM5       0         0         0         0        0         0</span></span>
+<span><span class="co">#&gt; P-0007346-T01-IM5       0         0         0         0        0         0</span></span>
+<span><span class="co">#&gt; P-0001861-T01-IM3       0         0         0         0        0         0</span></span>
+<span><span class="co">#&gt; P-0001202-T01-IM3       0         0         0         0        0         0</span></span></code></pre></div>
+<p>By default, mutations, CNA and fusions will be returned in separate columns. You can combine these at teh gene level using the following:</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">by_gene</span> <span class="op">&lt;-</span> <span class="va">gen_dat</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="reference/summarize_by_gene.html">summarize_by_gene</a></span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">by_gene</span><span class="op">[</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">6</span><span class="op">]</span><span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 6 × 6</span></span>
+<span><span class="co">#&gt;   sample_id           ERG KDM5A KDM5D GSK3B  EGFR</span></span>
+<span><span class="co">#&gt;   &lt;chr&gt;             &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; 1 P-0008869-T01-IM5     1     0     0     0     0</span></span>
+<span><span class="co">#&gt; 2 P-0001242-T01-IM3     0     0     0     0     0</span></span>
+<span><span class="co">#&gt; 3 P-0005806-T01-IM5     0     0     0     0     0</span></span>
+<span><span class="co">#&gt; 4 P-0007346-T01-IM5     0     0     0     0     0</span></span>
+<span><span class="co">#&gt; 5 P-0001861-T01-IM3     0     0     0     0     0</span></span>
+<span><span class="co">#&gt; 6 P-0001202-T01-IM3     0     0     0     0     0</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="visualize">Visualize<a class="anchor" aria-label="anchor" href="#visualize"></a>
 </h2>
 <p>You can visualize your processed and raw alteration data sets using {gnomeR}’s many data visualization functions.</p>
-<p>Quickly visualize mutation characteristics with <code><a href="reference/ggvarclass.html">ggvarclass()</a></code>, <code><a href="reference/ggvartype.html">ggvartype()</a></code>, <code><a href="reference/ggsnvclass.html">ggsnvclass()</a></code>, <code><a href="reference/ggsamplevar.html">ggsamplevar()</a></code>, <code><a href="reference/ggtopgenes.html">ggtopgenes()</a></code>, <code><a href="reference/gggenecor.html">gggenecor()</a></code>, and <code><a href="reference/ggcomut.html">ggcomut()</a></code>.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="reference/ggvarclass.html">ggvarclass</a></span><span class="op">(</span>mutation <span class="op">=</span> <span class="va">mut</span><span class="op">)</span></span></code></pre></div>
-<p><img src="reference/figures/README-unnamed-chunk-5-1.png" width="100%"></p>
-<p>The wrapper function <code><a href="reference/mutation_viz.html">mutation_viz()</a></code> will generate a list with the most commonly used plot which you can pass into a plot assembly framework like {patchwork}:</p>
+<p>Quickly visualize mutation characteristics with <code><a href="reference/ggvarclass.html">ggvarclass()</a></code>, <code><a href="reference/ggvartype.html">ggvartype()</a></code>, <code>ggsnvclass()</code>, <code><a href="reference/ggsamplevar.html">ggsamplevar()</a></code>, <code><a href="reference/ggtopgenes.html">ggtopgenes()</a></code>, <code><a href="reference/gggenecor.html">gggenecor()</a></code>, and <code><a href="reference/ggcomut.html">ggcomut()</a></code>.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">list_of_plots</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/mutation_viz.html">mutation_viz</a></span><span class="op">(</span>mutation <span class="op">=</span> <span class="va">mut</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu">patchwork</span><span class="fu">::</span><span class="fu">wrap_plots</span><span class="op">(</span><span class="va">list_of_plots</span>, ncol <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> <span class="op">&amp;</span> </span>
-<span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>text <span class="op">=</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">8</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="reference/ggvarclass.html">ggvarclass</a></span><span class="op">(</span>mutation <span class="op">=</span> <span class="va">mut</span><span class="op">)</span></span></code></pre></div>
 <p><img src="reference/figures/README-unnamed-chunk-6-1.png" width="100%"></p>
-<p><code><a href="reference/ggheatmap.html">ggheatmap()</a></code> allows you to visualize mutation, CNA and fusion data all in one heatmap:</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># filter only those with alterations</span></span>
-<span><span class="va">gen_dat</span> <span class="op">&lt;-</span> <span class="va">gen_dat</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu">rowwise</span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span> </span>
-<span>  <span class="fu">mutate</span><span class="op">(</span>total_alterations <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="fu">c_across</span><span class="op">(</span><span class="fu">everything</span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/stats/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">total_alterations</span> <span class="op">&gt;</span> <span class="fl">1</span><span class="op">)</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu">select</span><span class="op">(</span><span class="op">-</span><span class="va">total_alterations</span><span class="op">)</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu">ungroup</span><span class="op">(</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">select_gen_dat</span> <span class="op">&lt;-</span> <span class="va">gen_dat</span><span class="op">[</span>, <span class="op">(</span><span class="fu">purrr</span><span class="fu">::</span><span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html" class="external-link">map</a></span><span class="op">(</span><span class="va">gen_dat</span>, <span class="op">~</span><span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">.x</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">0</span><span class="op">)</span><span class="op">]</span></span>
-<span></span>
-<span><span class="fu"><a href="reference/ggheatmap.html">ggheatmap</a></span><span class="op">(</span><span class="va">select_gen_dat</span><span class="op">[</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">50</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
-<p><img src="reference/figures/README-unnamed-chunk-7-1.png" width="100%"></p>
 </div>
 <div class="section level2">
 <h2 id="summarize--analyze">Summarize &amp; Analyze<a class="anchor" aria-label="anchor" href="#summarize--analyze"></a>
 </h2>
 <p>You can tabulate summarize your genomic data frame using the <code><a href="reference/tbl_genomic.html">tbl_genomic()</a></code> function, a wrapper for <code><a href="https://www.danieldsjoberg.com/gtsummary/reference/tbl_summary.html" class="external-link">gtsummary::tbl_summary()</a></code>.</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">gen_dat</span> <span class="op">&lt;-</span> <span class="va">gen_dat</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span></span>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
+<span><span class="va">gen_dat</span> <span class="op">&lt;-</span> <span class="va">gen_dat</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>trt_status <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"pre-trt"</span>, <span class="st">"post-trt"</span><span class="op">)</span>,</span>
 <span>       size <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">gen_dat</span><span class="op">)</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> </span></code></pre></div>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">gene_tbl_trt</span> <span class="op">&lt;-</span>  <span class="va">gen_dat</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span></span>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
+<span><span class="va">gene_tbl_trt</span> <span class="op">&lt;-</span>  <span class="va">gen_dat</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="reference/tbl_genomic.html">tbl_genomic</a></span><span class="op">(</span>freq_cutoff <span class="op">=</span> <span class="fl">.1</span>, by <span class="op">=</span> <span class="va">trt_status</span><span class="op">)</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu">gtsummary</span><span class="fu">::</span><span class="fu"><a href="https://www.danieldsjoberg.com/gtsummary/reference/add_p.html" class="external-link">add_p</a></span><span class="op">(</span><span class="op">)</span> </span>
 <span></span>
 <span><span class="va">gene_tbl_trt</span></span></code></pre></div>
-<p><img src="reference/figures/gene_tbl_trt.png" width="60%"></p>
+<div id="zdmnupwahh" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>html {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
+}
+
+#zdmnupwahh .gt_table {
+  display: table;
+  border-collapse: collapse;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#zdmnupwahh .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#zdmnupwahh .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#zdmnupwahh .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 0;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#zdmnupwahh .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#zdmnupwahh .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#zdmnupwahh .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#zdmnupwahh .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#zdmnupwahh .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#zdmnupwahh .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#zdmnupwahh .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#zdmnupwahh .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#zdmnupwahh .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#zdmnupwahh .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#zdmnupwahh .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#zdmnupwahh .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#zdmnupwahh .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#zdmnupwahh .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#zdmnupwahh .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#zdmnupwahh .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#zdmnupwahh .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#zdmnupwahh .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#zdmnupwahh .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#zdmnupwahh .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#zdmnupwahh .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#zdmnupwahh .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#zdmnupwahh .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#zdmnupwahh .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#zdmnupwahh .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-left: 4px;
+  padding-right: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#zdmnupwahh .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#zdmnupwahh .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#zdmnupwahh .gt_left {
+  text-align: left;
+}
+
+#zdmnupwahh .gt_center {
+  text-align: center;
+}
+
+#zdmnupwahh .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#zdmnupwahh .gt_font_normal {
+  font-weight: normal;
+}
+
+#zdmnupwahh .gt_font_bold {
+  font-weight: bold;
+}
+
+#zdmnupwahh .gt_font_italic {
+  font-style: italic;
+}
+
+#zdmnupwahh .gt_super {
+  font-size: 65%;
+}
+
+#zdmnupwahh .gt_footnote_marks {
+  font-style: italic;
+  font-weight: normal;
+  font-size: 75%;
+  vertical-align: 0.4em;
+}
+
+#zdmnupwahh .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#zdmnupwahh .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#zdmnupwahh .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#zdmnupwahh .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#zdmnupwahh .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#zdmnupwahh .gt_indent_5 {
+  text-indent: 25px;
+}
+</style>
+<table class="table gt_table">
+<thead class="gt_col_headings"><tr>
+<th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col"><strong>Characteristic</strong></th>
+<th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col">
+<strong>Overall</strong>, N = 100<sup class="gt_footnote_marks">1</sup>
+</th>
+<th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col">
+<strong>post-trt</strong>, N = 56<sup class="gt_footnote_marks">1</sup>
+</th>
+<th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col">
+<strong>pre-trt</strong>, N = 44<sup class="gt_footnote_marks">1</sup>
+</th>
+<th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col">
+<strong>p-value</strong><sup class="gt_footnote_marks">2</sup>
+</th>
+</tr></thead>
+<tbody class="gt_table_body">
+<tr>
+<td class="gt_row gt_left" style="font-weight: bold;">ERG.Amp</td>
+<td class="gt_row gt_center">0 (0%)</td>
+<td class="gt_row gt_center">0 (0%)</td>
+<td class="gt_row gt_center">0 (0%)</td>
+<td class="gt_row gt_center"></td>
+</tr>
+<tr>
+<td class="gt_row gt_left" style="font-weight: bold;">AR.Amp</td>
+<td class="gt_row gt_center">14 (14%)</td>
+<td class="gt_row gt_center">6 (11%)</td>
+<td class="gt_row gt_center">8 (18%)</td>
+<td class="gt_row gt_center">0.3</td>
+</tr>
+<tr>
+<td class="gt_row gt_left" style="font-weight: bold;">AR.Del</td>
+<td class="gt_row gt_center">1 (1.0%)</td>
+<td class="gt_row gt_center">0 (0%)</td>
+<td class="gt_row gt_center">1 (2.3%)</td>
+<td class="gt_row gt_center">0.4</td>
+</tr>
+<tr>
+<td class="gt_row gt_left" style="font-weight: bold;">PTEN.Del</td>
+<td class="gt_row gt_center">12 (12%)</td>
+<td class="gt_row gt_center">4 (7.1%)</td>
+<td class="gt_row gt_center">8 (18%)</td>
+<td class="gt_row gt_center">0.092</td>
+</tr>
+<tr>
+<td class="gt_row gt_left" style="font-weight: bold;">ERG.fus</td>
+<td class="gt_row gt_center">27 (27%)</td>
+<td class="gt_row gt_center">13 (23%)</td>
+<td class="gt_row gt_center">14 (32%)</td>
+<td class="gt_row gt_center">0.3</td>
+</tr>
+<tr>
+<td class="gt_row gt_left" style="font-weight: bold;">PTEN.fus</td>
+<td class="gt_row gt_center">1 (1.0%)</td>
+<td class="gt_row gt_center">0 (0%)</td>
+<td class="gt_row gt_center">1 (2.3%)</td>
+<td class="gt_row gt_center">0.4</td>
+</tr>
+</tbody>
+<tfoot class="gt_footnotes">
+<tr><td class="gt_footnote" colspan="5">
+<sup class="gt_footnote_marks">1</sup> n (%)</td></tr>
+<tr><td class="gt_footnote" colspan="5">
+<sup class="gt_footnote_marks">2</sup> Pearson’s Chi-squared test; Fisher’s exact test</td></tr>
+</tfoot>
+</table>
+</div>
 <p>Additionally, you can analyze custom pathways, or a set of default gene pathways using <code><a href="reference/add_pathways.html">add_pathways()</a></code>:</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">path_by_trt</span> <span class="op">&lt;-</span> <span class="va">gen_dat</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="reference/add_pathways.html">add_pathways</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu">select</span><span class="op">(</span><span class="va">trt_status</span>, <span class="fu">contains</span><span class="op">(</span><span class="st">"pathway_"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span></span>
@@ -238,19 +660,18 @@
 <span></span>
 <span></span>
 <span><span class="va">path_by_trt</span></span></code></pre></div>
-<p><img src="reference/figures/path_by_trt.png" width="60%"></p>
 </div>
 <div class="section level2">
 <h2 id="further-analytical-tools">Further analytical tools<a class="anchor" aria-label="anchor" href="#further-analytical-tools"></a>
 </h2>
 <p>Along with mutation, cna and fusion data, {gnomeR} also allows analysis and visualization of <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5027494/" class="external-link">FACETs</a> data. <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5027494/" class="external-link">FACETs</a> is an allele-specific copy number tool and open-source software with a broad application to whole genome, whole-exome, as well as targeted panel sequencing platforms. It is a fully integrated stand-alone pipeline that includes sequencing BAM file post-processing, joint segmentation of total- and allele-specific read counts, and integer copy number calls corrected for tumor purity, ploidy and clonal heterogeneity, with comprehensive output.</p>
-<p>You can vizualize this data using <code><a href="reference/facets_heatmap.html">facets_heatmap()</a></code></p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">select_samples</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">seg</span><span class="op">$</span><span class="va">ID</span><span class="op">)</span>,  <span class="fl">100</span><span class="op">)</span></span>
+<p>You can visualize this data using <code><a href="reference/facets_heatmap.html">facets_heatmap()</a></code></p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
+<span><span class="va">select_samples</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">seg</span><span class="op">$</span><span class="va">ID</span><span class="op">)</span>,  <span class="fl">100</span><span class="op">)</span></span>
 <span><span class="va">p.heat</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/facets_heatmap.html">facets_heatmap</a></span><span class="op">(</span>seg <span class="op">=</span> <span class="va">seg</span>, samples <span class="op">=</span> <span class="va">select_samples</span>, min_purity <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span>
 <span><span class="va">p.heat</span><span class="op">$</span><span class="va">p</span></span></code></pre></div>
-<p><img src="reference/figures/README-unnamed-chunk-13-1.png" width="100%"></p>
-<p>The primary goal of <code>gnomeR</code> not being in depth analysis of genomic data but rather reliable, modular and reproducible framework for processing various types of genomic data. For users interested in large scale genomic analytical methods we compiled various packages developed by <a href="https://www.mskcc.org/departments/epidemiology-biostatistics" class="external-link">Department of Epidemiology and Biostatistics</a>, Memorial Sloan-Kettering Cancer Center under an umbrella R package, <a href="https://github.com/AxelitoMartin/genomeVerse" class="external-link">gnomeVerse</a>.</p>
+<p><img src="reference/figures/README-unnamed-chunk-10-1.png" width="100%"></p>
 </div>
 </div>
 <div class="section level1">
@@ -258,7 +679,7 @@
 </h1>
 <p>Please note that the gnomeR project is released with a <a href="https://contributor-covenant.org/version/2/0/CODE_OF_CONDUCT.html" class="external-link">Contributor Code of Conduct</a>. By contributing to this project, you agree to abide by its terms.</p>
 <p>Thank you to all contributors!</p>
-<p><a href="https://github.com/akriti21" class="external-link">@akriti21</a>, <a href="https://github.com/arorarshi" class="external-link">@arorarshi</a>, <a href="https://github.com/AxelitoMartin" class="external-link">@AxelitoMartin</a>, <a href="https://github.com/carokos" class="external-link">@carokos</a>, <a href="https://github.com/ChristineZ-msk" class="external-link">@ChristineZ-msk</a>, <a href="https://github.com/edrill" class="external-link">@edrill</a>, <a href="https://github.com/jalavery" class="external-link">@jalavery</a>, <a href="https://github.com/jflynn264" class="external-link">@jflynn264</a>, <a href="https://github.com/karissawhiting" class="external-link">@karissawhiting</a>, <a href="https://github.com/michaelcurry1123" class="external-link">@michaelcurry1123</a>, and <a href="https://github.com/mljaniczek" class="external-link">@mljaniczek</a></p>
+<p><a href="https://github.com/akriti21" class="external-link">@akriti21</a>, <a href="https://github.com/arorarshi" class="external-link">@arorarshi</a>, <a href="https://github.com/AxelitoMartin" class="external-link">@AxelitoMartin</a>, <a href="https://github.com/carokos" class="external-link">@carokos</a>, <a href="https://github.com/ChristineZ-msk" class="external-link">@ChristineZ-msk</a>, <a href="https://github.com/edrill" class="external-link">@edrill</a>, <a href="https://github.com/jalavery" class="external-link">@jalavery</a>, <a href="https://github.com/jflynn264" class="external-link">@jflynn264</a>, <a href="https://github.com/karissawhiting" class="external-link">@karissawhiting</a>, <a href="https://github.com/michaelcurry1123" class="external-link">@michaelcurry1123</a>, <a href="https://github.com/mljaniczek" class="external-link">@mljaniczek</a>, and <a href="https://github.com/slb2240" class="external-link">@slb2240</a></p>
 </div>
 
   </div>

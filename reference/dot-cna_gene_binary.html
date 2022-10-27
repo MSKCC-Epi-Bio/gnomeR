@@ -53,14 +53,7 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">.cna_gene_binary</span><span class="op">(</span></span>
-<span>  <span class="va">cna</span>,</span>
-<span>  <span class="va">samples</span>,</span>
-<span>  <span class="va">cna_binary</span>,</span>
-<span>  <span class="va">cna_relax</span>,</span>
-<span>  <span class="va">specify_panel</span>,</span>
-<span>  <span class="va">recode_aliases</span></span>
-<span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">.cna_gene_binary</span><span class="op">(</span><span class="va">cna</span>, <span class="va">samples</span>, <span class="va">specify_panel</span>, <span class="va">recode_aliases</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -75,15 +68,6 @@ Default is NULL.</p></dd>
 Default is NULL is which case all samples with an alteration in the mutation, cna or fusions file will be used. If you specify
 a vector of samples that contain samples not in any of the passed genomic data frames, 0's (or NAs when appropriate if specifying a panel) will be
 returned for every column of that patient row.</p></dd>
-
-
-<dt>cna_binary</dt>
-<dd><p>A boolean argument specifying if the cna events should be enforced as binary. In which case separate columns for
-amplifications and deletions will be created.</p></dd>
-
-
-<dt>cna_relax</dt>
-<dd><p>By default this argument is set to FALSE, where only deep deletions (-2) and amplifications (2) will be annotated as events. When set to TRUE all deletions (-1 shallow and -2 deep) are counted as an event same for all gains (1 gain, 2 amplification) as an event.</p></dd>
 
 
 <dt>specify_panel</dt>

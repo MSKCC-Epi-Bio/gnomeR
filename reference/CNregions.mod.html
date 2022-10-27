@@ -124,27 +124,10 @@ Modified CNregions function from the facets package to handle small sample sizes
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>     intersect, setdiff, setequal, union</span>
 <span class="r-in"><span><span class="va">samples</span> <span class="op">&lt;-</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">mut</span><span class="op">$</span><span class="va">Tumor_Sample_Barcode</span><span class="op">)</span><span class="op">)</span><span class="op">[</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">mut</span><span class="op">$</span><span class="va">Tumor_Sample_Barcode</span><span class="op">)</span><span class="op">)</span>, <span class="fl">100</span>, replace<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span><span class="op">]</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">mutations</span><span class="op">$</span><span class="va">sampleId</span><span class="op">)</span><span class="op">)</span><span class="op">[</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">mutations</span><span class="op">$</span><span class="va">sampleId</span><span class="op">)</span><span class="op">)</span>, <span class="fl">100</span>, replace<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span><span class="op">]</span></span></span>
 <span class="r-in"><span><span class="fu">CNregions.mod</span><span class="op">(</span><span class="va">seg</span> <span class="op"><a href="pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">ID</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="va">samples</span><span class="op">)</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                   chr1.2488138-9784407 chr1.9784407-11167550</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> P-0000140-T01-IM3              -0.1550               -0.1550</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> P-0000145-T01-IM3              -0.0290               -0.0290</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> P-0000216-T02-IM3              -0.2137               -0.2137</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> P-0000242-T01-IM3              -0.3706               -0.3706</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> P-0000270-T01-IM3              -0.0857               -0.0857</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                   chr1.11167550-14192672 chr1.14192672-16199471</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> P-0000140-T01-IM3                 0.0092                 0.0092</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> P-0000145-T01-IM3                -0.0290                -0.0290</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> P-0000216-T02-IM3                -0.2137                -0.2137</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> P-0000242-T01-IM3                 0.0444                 0.0444</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> P-0000270-T01-IM3                -0.0857                -0.0857</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                   chr1.16199471-16235896</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> P-0000140-T01-IM3                 0.0092</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> P-0000145-T01-IM3                -0.0290</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> P-0000216-T02-IM3                -0.2137</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> P-0000242-T01-IM3                 0.0444</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> P-0000270-T01-IM3                -0.0857</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in CNregions.mod(seg %&gt;% filter(ID %in% samples)):</span> Check parameter setting. Set lower epsilon value.</span>
 </code></pre></div>
     </div>
   </div>
