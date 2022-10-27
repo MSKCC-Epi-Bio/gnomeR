@@ -131,6 +131,65 @@ sanitize_fusion_input <- function(fusion, ...)  {
 }
 
 
+#' Internal function to recode numeric CNA alteration values to factor values
+#'
+#' @param cna a maf (long) form data set of CNAs. Must include an alteration column.
+#'
+#' @return a recoded CNA data set with factor alteration values
+#' @export
+#'
+#' @examples
+#' cna_maf_form <- recode_cna_alterations(gnomeR::cna)
+#'
+
+
+recode_cna_alterations <- function(cna){
+
+  #check if alteration column exists
+  which_missing <- required_cols[which(!("alteration" %in% column_names))]
+
+  if(length(which_missing) > 0) {
+    cli::cli_abort("An alteration column is missing from your cna data. Use pivot_cna_longer() instead if dataset is in API format.")
+  }
+
+  # Make sure hugo & alteration is character
+  cna <- cna %>%
+    mutate(hugo_symbol = as.character(.data$hugo_symbol)) %>%
+    mutate(alteration = tolower(str_trim(as.character(.data$alteration))))
+
+
+  #assess levels of alteration
+  levels_in_data <- names(table(cna$alteration))
+
+  allowed_chr_levels <- c(
+    "neutral" = "0",
+    "homozygous deletion" = "-2",
+    "loh" = "-1.5", #this is a placeholder until methods cleared up
+    "hemizygous deletion" = "-1",
+    "gain" = "1",
+    "high level amplification" = "2"
+  )
+
+  #pull any numbers not in allowed list out
+  all_allowed <- c(allowed_chr_levels, names(allowed_chr_levels))
+  not_allowed <- levels_in_data[!levels_in_data %in% all_allowed]
+
+  #abort if unknown values exist
+  if(length(not_allowed) > 0) {
+    cli::cli_abort(c("Unknown values in {.field alteration} field: {.val {not_allowed}}",
+                     "Must be one of the following: {.val {all_allowed}}"))
+  }
+
+  # recode the alteration varaible as factor with those levels
+  # and suppress warnings on this
+  suppressWarnings(
+    cna <- cna %>%
+      mutate(alteration = forcats::fct_recode(.data$alteration, !!!allowed_chr_levels))
+  )
+
+  return(cna)
+}
+
 
 #' Check CNA data frame to ensure columns are correct
 #'
@@ -160,41 +219,8 @@ sanitize_cna_input <- function(cna, ...)  {
                    Is your data in wide format? If so, it must be long format. See {.code gnomeR::pivot_cna_long()} to reformat")
   }
 
+  cna <- recode_cna_alterations(cna)
 
-  # Make sure hugo & alteration is character
-  cna <- cna %>%
-    mutate(hugo_symbol = as.character(.data$hugo_symbol)) %>%
-    mutate(alteration = tolower(str_trim(as.character(.data$alteration))))
-
-
-
-  # check alteration column -----------------------------
-
-  levels_in_data <- names(table(cna$alteration))
-
-  allowed_chr_levels <- c(
-    "neutral" = "0",
-    "deletion" = "-2",
-    "loh" = "-1.5",
-    "loh" = "-1",
-    "gain" = "1",
-    "amplification" = "2"
-  )
-
- all_allowed <- c(allowed_chr_levels, names(allowed_chr_levels))
- not_allowed <- levels_in_data[!levels_in_data %in% all_allowed]
-
-  if(length(not_allowed) > 0) {
-    cli::cli_abort(c("Unknown values in {.field alteration} field: {.val {not_allowed}}",
-                   "Must be one of the following: {.val {all_allowed}}"))
-  }
-
-
-  # HERE ------
- suppressWarnings(
-   cna <- cna %>%
-     mutate(alteration = forcats::fct_recode(.data$alteration, !!!allowed_chr_levels))
- )
 
   return(cna)
 }

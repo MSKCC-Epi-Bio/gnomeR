@@ -3,7 +3,7 @@ library(dplyr)
 
 set_cbioportal_db("public")
 #save <- available_studies()
-gen <- get_genetics_by_study("prad_mskcc_2017") # 51 patients
+gen <- get_genetics_by_study("prad_mskcc_2017")
 
 
 mutations <- gen$mutation
