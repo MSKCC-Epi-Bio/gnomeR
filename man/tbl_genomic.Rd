@@ -29,7 +29,7 @@ return all alterations associated with that gene (including mutations, CNA, fusi
 
 \item{by}{A variable to be passed to \code{gtsummary::tbl_summary()}'s by parameter}
 
-\item{...}{Additional parameters that can be passed to \code{gtsummary::tbl_summary()}}
+\item{...}{Additional parameters that can be passed to \code{gtsummary::tbl_summary()}. To access the additional parameters you need to load \code{gtsummary}}
 }
 \value{
 A \code{tbl_summary()} object
@@ -42,7 +42,8 @@ onto the data before using the \code{by} parameter in the function.
 }
 \examples{
 library(dplyr)
-samples <- unique(mutations$sample_id)[1:10]
+
+samples <- unique(mutations$sampleId)[1:10]
 
 gene_binary <- create_gene_binary(
   samples = samples,
@@ -59,12 +60,14 @@ gene_binary <- gene_binary \%>\%
     x = c("M", "F"),
     size = nrow(gene_binary), replace = TRUE
   ))
+library(gtsummary) # Need to load gtsummary to access additional arguments in `...`
 
 t1 <- tbl_genomic(
   gene_binary = gene_binary,
   by = sex,
   freq_cutoff = .2,
-  freq_cutoff_by_gene = FALSE
+  freq_cutoff_by_gene = FALSE,
+  statistic = list(all_categorical() ~"{n}")
 )
 
 }
