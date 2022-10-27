@@ -492,6 +492,144 @@ annotate_specific_panel <- function(gene_binary,
 }
 
 
+# create empty data.frame to hold results -----
+
+#' Create empty data.frame to hold results and fill with indicators
+#'
+#'
+
+
+
+
+
+.genbin_matrix <- function(data,
+                           type = c("reformat_cna", "mut", "cna", "sv")) {
+
+
+  # create vectors to hold import values
+  type_alt <- c("homozygous deletion", "hemizygous deletion", "high level amplification")
+  suffix <- c(".Del", ".Del", ".Amp", ".fus")
+  list_data <- list()
+  list_data_new <- list()
+  # here rows are hugo symbols and columns are sample_ids
+
+  if (type == "cna") {
+    i <- 1 # start counter
+  } else {
+    i <- length(type_alt) + 1
+    if ("site_1_hugo_symbol" %in% colnames(data)) {
+      data <- rename(data, "hugo_symbol" = "site_1_hugo_symbol")
+    }
+    list_data[[1]] <- data
+  }
+
+
+  # if we want cna, need a while loop, else skip by setting counter higher
+
+  while (i <= length(type_alt)) {
+    cna_data <- data %>%
+      filter(.data$alteration == type_alt[i]) # filter to one type of alt
+
+
+    list_data[[i]] <- cna_data
+    i <- i + 1
+  }
+
+  # should happen twice for cna and once for mut and sv
+  a <- 1 # set counter for number of datasets in list_data
+  for (x in list_data) {
+
+    # set unique vectors for each dataset in list
+    hugo_syms <- unique(x$hugo_symbol)
+    samples <- unique(x$sample_id)
+
+
+    if (type == "reformat_cna") {
+      data2 <- as.data.frame(matrix(0L,
+        ncol = length(samples) + 1, #+1 for extra col for hugo_symbol names
+        nrow = length(hugo_syms)
+      ))
+
+      colnames(data2) <- c("Hugo_Symbol", samples)
+      data2[, 1] <- hugo_syms
+      list_data[[1]] <- data2
+    } else {
+      data2 <- as.data.frame(matrix(0L,
+        nrow = length(samples),
+        ncol = length(hugo_syms)
+      ))
+      colnames(data2) <- hugo_syms
+      rownames(data2) <- samples
+    }
+
+
+
+    for (y in samples) {
+      genes <- x$hugo_symbol[x$sample_id %in% y]
+      if (length(genes) != 0) {
+
+        # populate matrix depending on type of data
+        if (type == "reformat_cna") {
+          # fill with any alteration number -2 to 2
+          rows_to_fill <- match(unique(as.character(genes)), data2[, 1])
+          cols_to_fill <- match(y, colnames(data2))
+
+          data2[rows_to_fill, cols_to_fill] <- x %>%
+            filter(.data$sample_id %in% y) %>%
+            select("alteration") %>%
+            unlist() %>%
+            as.numeric()
+        } else {
+          # fill with 1 if observed else 0
+          rows_to_fill <- match(unique(as.character(y)), rownames(data2))
+          cols_to_fill <- match(unique(as.character(genes)), colnames(data2))
+          data2[rows_to_fill, cols_to_fill] <- 1
+        }
+      }
+
+      if (length(list_data) > 1) {
+        list_data_new[[a]] <- data2 # store dataset for merging
+        colnames(list_data_new[[a]]) <- paste0(colnames(list_data_new[[a]]), suffix[a])
+      }else{
+        list_data_new[[1]] <- data2
+      }
+
+      }
+    a <- a + 1 # increase counter
+    }
+
+  #add fusion suffix
+  if (type == "sv"){
+    colnames(list_data_new[[1]]) <- paste0(colnames(list_data_new[[1]]), ".fus")
+  }
+
+
+
+
+
+  if (length(list_data_new) == 1) {
+    return(list_data_new[[1]])
+  } else {
+    i = 2
+    list_data_new <- purrr::compact(list_data_new)
+    genbin <- list_data_new[[1]]
+    while (i <= length(list_data_new)){
+      genbin <- list_data_new[[i]] %>% # join all the datasets together
+        cbind(genbin)
+      i = i + 1
+    }
+
+    return(genbin)
+  }
+
+}
+
+
+
+
+
+
+
 
 
 

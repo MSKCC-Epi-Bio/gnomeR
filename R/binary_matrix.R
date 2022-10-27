@@ -288,23 +288,8 @@ create_gene_binary <- function(samples=NULL,
    )
 
 
-
-
-
   # create empty data.frame to hold results -----
-  mut <- as.data.frame(matrix(0L, nrow=length(samples),
-                              ncol=length(unique(mutation$hugo_symbol))))
-
-  colnames(mut) <- unique(mutation$hugo_symbol)
-  rownames(mut) <- samples
-
-  # populate matrix
-  for(i in samples){
-    genes <- mutation$hugo_symbol[mutation$sample_id %in% i]
-    if(length(genes) != 0) {
-      mut[match(i, rownames(mut)), match(unique(as.character(genes)), colnames(mut))] <- 1
-      }
-  }
+  mut <- .genbin_matrix(mutation, type = "mut")
 
   return(mut)
 }
@@ -338,26 +323,8 @@ create_gene_binary <- function(samples=NULL,
   }
 
   # create empty data frame -----
-  fusions_out <- as.data.frame(matrix(0L, nrow=length(samples),
-                              ncol=length(unique(fusion$hugo_symbol))))
+  fusions_out <- .genbin_matrix(fusion, type = "sv")
 
-
-  colnames(fusions_out) <- unique(fusion$hugo_symbol)
-  rownames(fusions_out) <- samples
-
-  # populate matrix
-  for(i in samples){
-    genes <- fusion$hugo_symbol[fusion$sample_id %in% i]
-    if(length(genes) != 0)
-      fusions_out[match(i,rownames(fusions_out)),
-                 match(unique(as.character(genes)),colnames(fusions_out))] <- 1
-
-  }
-
-  # add .fus suffix on columns
-  if(ncol(fusions_out) > 0) {
-    colnames(fusions_out) <- paste0(colnames(fusions_out),".fus")
-  }
   return(fusions_out)
 }
 
@@ -383,7 +350,7 @@ create_gene_binary <- function(samples=NULL,
 
   # * deletions ----------
   cna_filt <- cna %>%
-    filter(.data$alteration == "deletion")
+    filter(.data$alteration == "deletion") #NEED TO SEE ABOUT METHODS FROM ESTHER & CBP IF THIS SHOULD BE -1 AND -2
 
   # create empty data.frame to hold results -
   cna_del <- as.data.frame(matrix(0L, nrow=length(samples),
@@ -410,7 +377,7 @@ create_gene_binary <- function(samples=NULL,
   # * amplifications ----------
 
   cna_filt <- cna %>%
-    filter(.data$alteration == "amplification")
+    filter(.data$alteration == "high level amplification") #NEED INFO FROM ESTHER & CBP IF THIS IS 1 and 2 or only 2
 
   # create empty data.frame to hold results
   cna_amp <- as.data.frame(matrix(0L, nrow=length(samples),
@@ -441,6 +408,13 @@ create_gene_binary <- function(samples=NULL,
   return(cna_res)
 }
 
+
+# internal binary matrix creation code for use in .XXX_gene_binary() functions
+
+#' Make a binary matrix from list of samples and genes
+#'
+#' @inheritParams
+#'
 
 
 

@@ -70,39 +70,8 @@ reformat_cna <- function(cna) {
 
   }
 
-  hugo_symbols <- unique(cna$hugo_symbol)
-  samples <- unique(cna$sample_id)
-
-
-
   # Create Empty Dataframe & Fill ----------------------------------------------
-
-  # create empty data frame of correct dimensions with 0's ---
-  cna_out <- as.data.frame(matrix(0L, ncol = length(samples) + 1,
-                                  nrow = length(hugo_symbols)))
-
-  colnames(cna_out) <- c("Hugo_Symbol", samples)
-  cna_out[,1] <- hugo_symbols
-
-  # fill in data frame ---
-  for (i in samples) {
-
-    alt_genes_this_sample <- cna %>%
-      filter(.data$sample_id %in% i) %>%
-      select("hugo_symbol") %>%
-      unlist() %>%
-      as.character()
-
-    rows_to_fill <- match(alt_genes_this_sample, cna_out[, 1])
-    cols_to_fill <- match(i, colnames(cna_out))
-
-    cna_out[rows_to_fill, cols_to_fill] <-
-      cna %>%
-      filter(.data$sample_id %in% i) %>%
-      select("alteration") %>%
-      unlist() %>%
-      as.numeric()
-  }
+  cna_out <- .genbin_matrix(cna, type = "reformat_cna")
 
   return(cna_out)
 
