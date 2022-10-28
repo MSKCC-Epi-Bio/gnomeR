@@ -274,7 +274,7 @@
 #' #' @param gen_dat A binary matrix or dataframe, with samples as rows and features as columns. Note that the names of the
 #' #' columns must end in ".Del" or ".Amp" to recognize copy number alterations. (see create.bin.matrix for more details on this format).
 #' #' @param clin_dat An optional clinical file, including only the features the user wishes to add to the plot. Default is NULL.
-#' #' @return mat : a matrix ready to be plotted using plot.Oncoprint().
+#' #' @return mat : a matrix ready to be plotted using plot.OncoPrint().
 #' #' @export
 #' #' @examples
 #' #' library(gnomeR)
