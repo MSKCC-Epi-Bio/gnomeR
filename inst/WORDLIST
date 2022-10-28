@@ -1,8 +1,5 @@
-ALK
 Abida
 BAM
-BRCA
-Biostatistics
 CMD
 CNA
 CNV
@@ -14,7 +11,6 @@ Codecov
 Comutation
 Daian
 Dimitriadoy
-EML
 Entrez
 EntrezIDs
 FACETs
@@ -23,13 +19,11 @@ Farber
 Foltz
 Gao
 Heins
-IM
 JCO
 Kantheti
 Liang
 Liu
 MAF
-MLL
 MSKCC
 Mina
 Myc
@@ -37,13 +31,10 @@ NA's
 NUll
 Nrf
 ORCID
-OSBPL
 OncoKB
-OncoPrint
 OncoPrints
 Oncogenic
 Oncol
-Oncoprint
 PanCan
 RAS
 RTK
@@ -61,7 +52,6 @@ al
 args
 bangbang
 cBioPortal
-cBioPortalR
 cbioPortal
 cbioportalR
 cn
@@ -78,7 +68,6 @@ fus
 genecor
 germline
 ggplot
-gnomeVerse
 gnomer
 grDevices
 gradientn
@@ -102,7 +91,6 @@ nonredundant
 oncoKB
 oncogenic
 oncokb
-oncoprint
 pancan
 ploidy
 pre
@@ -125,6 +113,7 @@ startPosition
 summarising
 tbl
 tcn
+teh
 th
 topgenes
 uniquePatientKey
@@ -133,5 +122,4 @@ validationStatus
 varclass
 variantAllele
 vartype
-vizualize
 ’s

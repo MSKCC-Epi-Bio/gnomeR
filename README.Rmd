@@ -5,7 +5,7 @@ always_allow_html: true
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-```{r, include = FALSE}
+```{r setup, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
@@ -130,19 +130,34 @@ gen_dat <- gen_dat %>%
 ```
 
 
-```{r }
+```{r, tbl_genomic }
 
 gene_tbl_trt <-  gen_dat %>%
   tbl_genomic(freq_cutoff = .1, by = trt_status) %>%
   gtsummary::add_p() 
 
-gene_tbl_trt
+
+```
+
+```{r tbl_genomic_print, include = FALSE}
+
+#gt::gtsave(as_gt(gene_tbl_trt), file = file.path(tempdir(), "temp.png"))
+
+gt::gtsave(as_gt(gene_tbl_trt), filename = here::here("man", "figures" , "README-tbl_genomic_print.png"))
+
 ```
 
 
+```{r out.width = "30%", echo = FALSE}
+
+knitr::include_graphics(here::here("man/figures/README-tbl_genomic_print.png"))
+
+```
+
 Additionally, you can analyze custom pathways, or a set of default gene pathways using `add_pathways()`:
 
-```{r, eval=FALSE}
+```{r}
+
 path_by_trt <- gen_dat %>%
   add_pathways() %>%
   select(trt_status, contains("pathway_")) %>%
@@ -150,7 +165,21 @@ path_by_trt <- gen_dat %>%
   gtsummary::add_p() 
 
 
-path_by_trt
+
+```
+
+
+```{r tbl_genomic_pathway, include = FALSE}
+
+gt::gtsave(as_gt(path_by_trt), filename = here::here("man", "figures" , "README-path_by_trt.png"))
+
+
+```
+
+```{r echo=FALSE, out.width="30%"}
+
+knitr::include_graphics(here::here("man/figures/README-path_by_trt.png"))
+
 ```
 
 
