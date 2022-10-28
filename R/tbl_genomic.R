@@ -51,7 +51,7 @@
 #' )
 #'
 tbl_genomic <- function(gene_binary,
-                        freq_cutoff = 0,
+                        freq_cutoff = NULL,
                         freq_cutoff_by_gene = TRUE,
                         gene_subset = NULL,
                         by = NULL, ...) {
@@ -66,8 +66,13 @@ tbl_genomic <- function(gene_binary,
     gene_binary <- tibble::rownames_to_column(gene_binary, var = "sample_id")
   }
 
-  if (freq_cutoff < 0 || freq_cutoff > 1) {
+  if (!is.null(freq_cutoff) && (freq_cutoff < 0 || freq_cutoff > 1)) {
     cli::cli_abort("Please select a {.code freq_cutoff} value between {.code 0} and {.code 1}")
+  }
+
+  if (is.null(freq_cutoff) & is.null(gene_subset)) {
+    cli::cli_alert("Please note neither {.code freq_cutoff} or {.code gene_subset} had inputs. By default {.code freq_cutoff} will be set to 0.1")
+    freq_cutoff <- .1
   }
 
   by <-
