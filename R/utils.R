@@ -494,15 +494,16 @@ annotate_specific_panel <- function(gene_binary,
 
 # create empty data.frame to hold results -----
 
-#' Create empty data.frame to hold results and fill with indicators
+#' Create binary matrices depending on type of mutation data
 #'
+#' @param data a dataset of alterations
+#' @param samples a vector of unique sample ids
+#' @param type a character indicator for which type of alteration the dataset contains
 #'
+#' @return a binary matrix of alterations
 
 
-
-
-
-.genbin_matrix <- function(data, samples_final,
+.genbin_matrix <- function(data, samples,
                            type = c("reformat_cna", "mut", "cna", "sv")) {
 
 
@@ -547,7 +548,7 @@ annotate_specific_panel <- function(gene_binary,
     # here rows are hugo symbols and columns are sample_ids
     if (type == "reformat_cna") {
       data2 <- as.data.frame(matrix(0L,
-        ncol = length(samples_final) + 1, #+1 for extra col for hugo_symbol names
+        ncol = length(samples) + 1, #+1 for extra col for hugo_symbol names
         nrow = length(hugo_syms)
       ))
 
@@ -556,16 +557,16 @@ annotate_specific_panel <- function(gene_binary,
       list_data[[1]] <- data2
     } else { # for all other types of data the HS is the col and samp = row
       data2 <- as.data.frame(matrix(0L,
-        nrow = length(samples_final),
+        nrow = length(samples),
         ncol = length(hugo_syms)
       ))
       colnames(data2) <- hugo_syms
-      rownames(data2) <- samples_final
+      rownames(data2) <- samples
     }
 
 
 
-    for (y in samples_final) {
+    for (y in samples) {
       genes <- x$hugo_symbol[x$sample_id %in% y]
       if (length(genes) != 0) {
 
@@ -616,7 +617,7 @@ annotate_specific_panel <- function(gene_binary,
     genbin <- list_data_new[[1]]
     while (i <= length(list_data_new)){
       genbin <- list_data_new[[i]] %>% # join all the datasets together
-        cbind(genbin)                  # issue here because they don't all have the same number of rows
+        cbind(genbin)
       i = i + 1
     }
 
@@ -632,5 +633,5 @@ annotate_specific_panel <- function(gene_binary,
 
 
 
-#
+
 
