@@ -2,51 +2,51 @@
 # # Test Binary Matrix Arguments -----------------------------------------------------------
 #
 # # General tests ---
-# test_that("test gene_binary with mutation runs with no errors", {
-#
-#   expect_error(create_gene_binary(mutation = gnomeR::cbp_mut, recode_aliases = FALSE), NA)
-#
-#   res_mut <- create_gene_binary(mutation = gnomeR::cbp_mut, recode_aliases = FALSE)
-#   expect_true(length(res_mut) > 0)
-# })
-#
-#
-# test_that("test gene_binary with cna runs with no errors", {
+ test_that("test gene_binary with mutation runs with no errors", {
+
+   expect_error(create_gene_binary(mutation = gnomeR::mutations, recode_aliases = FALSE), NA)
+
+   res_mut <- create_gene_binary(mutation = gnomeR::mutations, recode_aliases = FALSE)
+   expect_true(length(res_mut) > 0)
+ })
 #
 #
-#   expect_error(create_gene_binary(cna = gnomeR::cbp_cna, recode_aliases = FALSE), NA)
+ test_that("test gene_binary with cna runs with no errors", {
+
+
+   expect_error(create_gene_binary(cna = gnomeR::cna, recode_aliases = FALSE), NA)
+
+   res <- create_gene_binary(cna = gnomeR::cna, recode_aliases = FALSE)
+   expect_true(length(res) > 0)
+ })
 #
-#   res <- create_gene_binary(cna = gnomeR::cbp_cna, recode_aliases = FALSE)
-#   expect_true(length(res) > 0)
-# })
 #
+ test_that("test gene_binary with fusions runs with no errors", {
+
+   expect_error(create_gene_binary(fusion = gnomeR::sv, recode_aliases = FALSE), NA)
+
+   res_fusion <- create_gene_binary(fusion = gnomeR::sv, recode_aliases = FALSE)
+   expect_true(length(res_fusion) > 0)
+
+ })
 #
-# test_that("test gene_binary with fusions runs with no errors", {
-#
-#   expect_error(create_gene_binary(fusion = gnomeR::cbp_sv, recode_aliases = FALSE), NA)
-#
-#   res_fusion <- create_gene_binary(fusion = gnomeR::fusion, recode_aliases = FALSE)
-#   expect_true(length(res_fusion) > 0)
-#
-# })
-#
-# test_that("check cna with no alterations are omitted from results", {
-#
-#   res <- create_gene_binary(mutation = gnomeR::mut,
-#                        cna = gnomeR::cna,
-#                        fusion = gnomeR::fusion)
-#   cna_ids <- names(gnomeR::cna)[-1] %>%
-#     str_replace_all(fixed("."), "-")
-#
-#   omitted_ids <- setdiff(cna_ids, rownames(res))
-#
-#   omitted_ids <- omitted_ids %>%
-#     str_replace_all(fixed("-"), fixed("."))
-#
-#   check_they_are_zero <- gnomeR::cna %>% select(all_of(omitted_ids)) %>%
-#     purrr::map_dbl(., ~sum(.x))
-#
-#   expect_true(sum(check_they_are_zero) == 0)
+ # test_that("check cna with no alterations are omitted from results", {
+ #
+ # res <- create_gene_binary(mutation = gnomeR::mutations,
+ #                       cna = gnomeR::cna,
+ #                        fusion = gnomeR::sv)
+ #   cna_ids <- names(gnomeR::cna)[-1] %>%
+ #     str_replace_all(fixed("."), "-")
+ #
+ #   omitted_ids <- setdiff(cna_ids, rownames(res))
+ #
+ #   omitted_ids <- omitted_ids %>%
+ #     str_replace_all(fixed("-"), fixed("."))
+ #
+ #   check_they_are_zero <- gnomeR::cna %>% select(all_of(omitted_ids)) %>%
+ #     purrr::map_dbl(., ~sum(.x))
+ #
+ #   expect_true(sum(check_they_are_zero) == 0)
 # })
 #
 # # test samples argument ----
@@ -54,26 +54,26 @@
 # # what happens when you pass impact samples (-IM5/IM6/IM7 etc)?  non impact samples? A mix?
 #
 #
-# test_that("Check create_gene_binary() provide specific sample data if pass a vector", {
-#
-#   #what happens when you pass a vector?
-#   mut_valid_sample_ids<-create_gene_binary( mutation= gnomeR::mut) %>%
-#                      rownames() %>%
-#                      head(n=10)
-#
-#   expect_equal(
-#     create_gene_binary(sample=mut_valid_sample_ids, mutation=gnomeR::mut) %>%
-#       nrow(),
-#     length(mut_valid_sample_ids))
-#
-#   #what about if you don't specify it (don't pass anything)?
-#
+ test_that("Check create_gene_binary() provide specific sample data if pass a vector", {
+
+   #what happens when you pass a vector?
+   mut_valid_sample_ids<-create_gene_binary( mutation= gnomeR::mutations) %>%
+                      rownames() %>%
+                      head(n=10)
+
+   expect_equal(
+     create_gene_binary(sample=mut_valid_sample_ids, mutation=gnomeR::mutations) %>%
+       nrow(),
+     length(mut_valid_sample_ids))
+
+   #what about if you don't specify it (don't pass anything)?
+
 #   expect_lte(
-#     create_gene_binary(mutation=gnomeR::mut) %>%
+ #    create_gene_binary(mutation=gnomeR::mutations) %>%
 #       nrow(),
-#     length(gnomeR::mut[['Tumor_Sample_Barcode']]))
+#     length(gnomeR::mutations[['Tumor_Sample_Barcode']]))
 #
-# })
+ })
 #
 # test_that("Check create_gene_binary() if sample entered in `sampl_id` with zero mutations/fusions/cna", {
 #

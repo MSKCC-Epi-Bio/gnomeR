@@ -12,16 +12,20 @@ knitr::opts_chunk$set(
 )
 ```
 
+### <span style="color: slateblue;"> Setting up </span>
+
+Make sure that gnomeR & cbioportalR packages are installed & loaded
 ```c
-Make sure that gnomeR & cbioportal packages are installed & loaded
 install.packages("cbioportalR")
 library(cbioportalR)
+install.packages("gnomeR")
 library(gnomeR)
 ```
 
 ```{r setup, include= FALSE}
 library(gnomeR)
 library(cbioportalR)
+library(dplyr)
 ```
 
 For details on how to connect and access cbioportalR, you can use the link 
@@ -52,6 +56,10 @@ To get information on a particular study (eg - acbc_mskcc_2015) -
 ```{r }
 get_study_info("acbc_mskcc_2015") %>% t()
 ```
+
+
+### <span style="color: slateblue;"> Importing data in R </span>
+
 To get data from a specific study - 
 
 ```{r }
@@ -61,16 +69,18 @@ It creates a list of all the available dataframes for the study. For instance he
 
 Depending on the study, the number of variables in a particular dataframe might be different. Here, the mutations data has 31 variables.
 
-### You can create one dataset each for the 3 types using-
+You can create one dataset each for the 3 types using-
 
-```{r , include = FALSE}
-study_mutation<-  as.data.frame(df$mutation)
+```{r , include= TRUE}
+study_mutation<- as.data.frame(df$mutation)
 
 study_sv<- as.data.frame(df$structural_variant)
 
 study_cna<- as.data.frame(df$cna)
 ```
-### Mutation Data
+
+
+#### <span style="color: palevioletred;"> Mutation Data</span>
 If you download the raw data from cbioportal and compare with the study_mutation data imported above, you might notice some differences in the variables. For instance 
 
     * Tumor_Sample_Barcode is called sampleId in the imported data
@@ -81,31 +91,120 @@ If you download the raw data from cbioportal and compare with the study_mutation
 
 Some of the other variables are named differently as well in the raw data and the imported data but those differences are more intuitive to map the variables.  
 
-### CNA data formats
+#### <span style="color: palevioletred;"> CNA data formats </span>
 CNA data can be received in a long or wide format.
 
-    * Long format -  When the rows contain data on one or more gene for a patient as shown below
+    * Long format -  When each row contains data on a gene for a patient as shown below. 
+      Data is at the patient gene level.
 ```{r }
 study_cna %>% head(n = 3)
 ```
-    * Short format - When each column corresponds to data for a patient
+    * Wide format - When each column contains data for a unique patient. 
+      For example - Patient A's data is in the 1st column and Patient B's data is in the 2nd column.
 
+NOTE : ADD EXAMPLE WHEN KARISSA HAS DATA READY. 
 
-### Some useful functions to process the data
-#### create_gene_binary() function
+### <span style="color: slateblue;"> Some useful functions to process the data </span>
+
+#### <span style="color: palevioletred;"> create_gene_binary() function </span>
+ 
 
 You can use the create_gene_binary() function to 
 
-    * Transpose the mutations data - By default, the mutations data has one or more rows for the patient. Each row is data on a gene. The data can be transposed to create one row per patient with each column as the gene ID. The cell value in the transposed data would flag whether a particular gene is mutated for that patient.
+Transpose the mutations data - By default, the mutations data has one or more rows for each patient. Each row is data on a gene. The data can be transposed to create one row per patient with each column for a gene. The cell value in the transposed data would flag whether a particular gene has mutation for that patient.
 
-```{r, include = FALSE}
+```{r, include = TRUE}
 mut.only <- create_gene_binary(mutation = study_mutation)
 ```
 
-    * The other datasets can be transposed similarly
-    * For the fusion data - if the gene is in the IMPACT dataset, then there will be a column for it.    
+The other datasets can be transposed similarly.
 
-You can also create one wide data with combined data from all the different datasets after transposing them.
-    
+For the fusion data - if the gene is part of the IMPACT dataset, then there will be a column for it in the transposed data.    
+
+NOTE: ADD EXAMPLE WHEN KARISSA HAS CONFIRMED. AND UPDATE TEXT FOR WIDE FORMAT.
+
+You can also create one wide data with combined data from all the different datasets after transposing them. Here a dataset called all3 is created for ten samples
+```{r, include = TRUE}
+samples <- unique(study_mutation$sampleId)[1:10]
+all3 <- create_gene_binary(
+    samples = samples,
+    mutation = study_mutation,
+    cna = study_cna, fusion = study_sv,
+    mut_type = "somatic_only", snp_only = FALSE,
+    specify_panel = "no"
+)
+
+```
+
+Notes on some arguments:    
+
     * The arguments mutation, fusion and cna can be used to specify the datasets you want to transpose. 
     * If you are only interested in data for some sample IDs, you can mention those in the argument samples. 
+
+#### <span style="color: palevioletred;"> summarize_by_gene() function </span>
+
+You may notice some columns being repeated in the data when you create a combined dataset for the transposed datasets for Mutations, CNA and Fusion. 
+To keep only the unique columns for genes, you can use the summarize_by_gene() function as shown below
+
+```{r, include = TRUE}
+ sum_all3 <- summarize_by_gene(all3)
+```
+
+The data all3 has 1855 columns. And the data sum_all3 has 1836 variables as it only keeps the unique columns across the datasets.
+
+#### <span style="color: palevioletred;"> tbl_genomic() function </span>
+
+The function can be used to summarize data by gene. You can summarize data from one or more of the data types. 
+The gene_binary argument expects the binary matrix data as generated by the create_gene_binary function. Example below shows the summary using gene data for ten samples. 
+
+gene_subset argument can be used to specify the genes that you want to summarize the data for. 
+
+freq_cutoff argument shows the summarized data for the genes that meet the cutoff. In the example below for tb1 - if the percent gene (of the total samples) is at least 5%, the gene is included in the summary table.
+
+```{r, include = TRUE}
+samples <- unique(study_mutation$sampleId)[1:10]
+
+gene_binary <- create_gene_binary(
+  samples = samples,
+  mutation = study_mutation,
+  cna = study_cna,
+  mut_type = "somatic_only", snp_only = FALSE,
+  specify_panel = "no"
+)
+ tb1 <- tbl_genomic(gene_binary = gene_binary, freq_cutoff = .05)
+ tb2 <- tbl_genomic(gene_binary = gene_binary, gene_subset = c("BRCA1", "BRAF"))
+
+```
+
+#### <span style="color: palevioletred;"> add_pathways() function </span>
+
+This function is helpful if you are interested in looking at the data for the Oncogenic Signaling Pathways. 
+
+For the argument gene_binary - the function expects a binary matrix as obtained from the gene_binary() function. 
+
+Using the argument pathways - you can merge a column for the pathway(s).  
+
+The pathways available in gnomeR can be viewed using the code below.
+
+The merged column(s) gives a flag (1/0) depending on pathway alteration status. 
+
+```{r, include = TRUE}
+names(gnomeR::pathways)
+pathway_df <- add_pathways(gene_binary, pathways = "Notch")
+pathway_df %>% select (pathway_Notch)
+
+pathway_df <- add_pathways(gene_binary, pathways = c("Notch", "p53"))
+
+```
+ 
+### <span style="color: slateblue;"> Some plots to visualize the data </span>
+
+#### <span style="color: palevioletred;"> plots() function </span>
+
+The mutation_viz functions allows you to visualize data for the variables related to variant classification, variant type, SNV class as well as top variant genes.
+
+```{r, echo = TRUE, message = FALSE}
+mutation_viz(study_mutation)
+```
+
+
