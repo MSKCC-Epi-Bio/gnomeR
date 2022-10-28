@@ -289,7 +289,7 @@ create_gene_binary <- function(samples=NULL,
 
 
   # create empty data.frame to hold results -----
-  mut <- .genbin_matrix(mutation, type = "mut")
+  mut <- .genbin_matrix(mutation, samples, type = "mut")
 
   return(mut)
 }
@@ -323,7 +323,7 @@ create_gene_binary <- function(samples=NULL,
   }
 
   # create empty data frame -----
-  fusions_out <- .genbin_matrix(fusion, type = "sv")
+  fusions_out <- .genbin_matrix(fusion, samples, type = "sv")
 
   return(fusions_out)
 }
@@ -347,65 +347,10 @@ create_gene_binary <- function(samples=NULL,
     cna <- recode_alias(cna)
   }
 
-
-  # * deletions ----------
-  cna_filt <- cna %>%
-    filter(.data$alteration == "deletion") #NEED TO SEE ABOUT METHODS FROM ESTHER & CBP IF THIS SHOULD BE -1 AND -2
-
-  # create empty data.frame to hold results -
-  cna_del <- as.data.frame(matrix(0L, nrow=length(samples),
-                                  ncol=length(unique(cna_filt$hugo_symbol))))
-
-  colnames(cna_del) <- unique(cna_filt$hugo_symbol)
-  rownames(cna_del) <- unique(samples)
-
-  if(nrow(cna_filt) > 0) {
-
-    # populate matrix
-    for(i in samples){
-      genes <- cna_filt$hugo_symbol[cna_filt$sample_id %in% i]
-      if(length(genes) != 0) {
-        cna_del[match(i, rownames(cna_del)), match(unique(as.character(genes)), colnames(cna_del))] <- 1
-      }
-    }
-
-    n # filter those in final samples list
-    cna_del <- cna_del[rownames(cna_del) %in% samples,]
-    names(cna_del) <- paste0(names(cna_del), ".Del")
-
-  }
-  # * amplifications ----------
-
-  cna_filt <- cna %>%
-    filter(.data$alteration == "high level amplification") #NEED INFO FROM ESTHER & CBP IF THIS IS 1 and 2 or only 2
-
-  # create empty data.frame to hold results
-  cna_amp <- as.data.frame(matrix(0L, nrow=length(samples),
-                                  ncol=length(unique(cna_filt$hugo_symbol))))
-
-  colnames(cna_amp) <- unique(cna_filt$hugo_symbol)
-  rownames(cna_amp) <- samples
-
-  if(nrow(cna_filt) > 0) {
-
-    # populate matrix
-    for(i in samples){
-      genes <- cna_filt$hugo_symbol[cna_filt$sample_id %in% i]
-      if(length(genes) != 0) {
-        cna_amp[match(i, rownames(cna_amp)), match(unique(as.character(genes)), colnames(cna_amp))] <- 1
-      }
-    }
-
-    # filter those in final samples list
-    cna_amp <- cna_amp[rownames(cna_amp) %in% samples,]
-    names(cna_amp) <- paste0(names(cna_amp), ".Amp")
-  }
+  cna_bm <- .genbin_matrix(cna, samples, type = "cna")
 
 
-  # * join deletions and amplifications -----
-  cna_res <- bind_cols(cna_amp, cna_del)
-
-  return(cna_res)
+  return(cna_bm)
 }
 
 

@@ -502,7 +502,7 @@ annotate_specific_panel <- function(gene_binary,
 
 
 
-.genbin_matrix <- function(data,
+.genbin_matrix <- function(data, samples_final,
                            type = c("reformat_cna", "mut", "cna", "sv")) {
 
 
@@ -511,7 +511,8 @@ annotate_specific_panel <- function(gene_binary,
   suffix <- c(".Del", ".Del", ".Amp", ".fus")
   list_data <- list()
   list_data_new <- list()
-  # here rows are hugo symbols and columns are sample_ids
+
+  # set unique vectors for each dataset in list
 
   if (type == "cna") {
     i <- 1 # start counter
@@ -535,36 +536,36 @@ annotate_specific_panel <- function(gene_binary,
     i <- i + 1
   }
 
+
   # should happen twice for cna and once for mut and sv
   a <- 1 # set counter for number of datasets in list_data
   for (x in list_data) {
 
-    # set unique vectors for each dataset in list
+    #assign HS for each dataset, helps with cna more than others
     hugo_syms <- unique(x$hugo_symbol)
-    samples <- unique(x$sample_id)
 
-
+    # here rows are hugo symbols and columns are sample_ids
     if (type == "reformat_cna") {
       data2 <- as.data.frame(matrix(0L,
-        ncol = length(samples) + 1, #+1 for extra col for hugo_symbol names
+        ncol = length(samples_final) + 1, #+1 for extra col for hugo_symbol names
         nrow = length(hugo_syms)
       ))
 
       colnames(data2) <- c("Hugo_Symbol", samples)
       data2[, 1] <- hugo_syms
       list_data[[1]] <- data2
-    } else {
+    } else { # for all other types of data the HS is the col and samp = row
       data2 <- as.data.frame(matrix(0L,
-        nrow = length(samples),
+        nrow = length(samples_final),
         ncol = length(hugo_syms)
       ))
       colnames(data2) <- hugo_syms
-      rownames(data2) <- samples
+      rownames(data2) <- samples_final
     }
 
 
 
-    for (y in samples) {
+    for (y in samples_final) {
       genes <- x$hugo_symbol[x$sample_id %in% y]
       if (length(genes) != 0) {
 
@@ -589,7 +590,10 @@ annotate_specific_panel <- function(gene_binary,
 
       if (length(list_data) > 1) {
         list_data_new[[a]] <- data2 # store dataset for merging
-        colnames(list_data_new[[a]]) <- paste0(colnames(list_data_new[[a]]), suffix[a])
+        if(ncol(data2) > 0){
+          colnames(list_data_new[[a]]) <- paste0(colnames(list_data_new[[a]]), suffix[a])
+        }
+
       }else{
         list_data_new[[1]] <- data2
       }
@@ -604,18 +608,15 @@ annotate_specific_panel <- function(gene_binary,
   }
 
 
-
-
-
   if (length(list_data_new) == 1) {
     return(list_data_new[[1]])
   } else {
     i = 2
-    list_data_new <- purrr::compact(list_data_new)
+    list_data_new <- purrr::compact(list_data_new) #drop null datasets from list
     genbin <- list_data_new[[1]]
     while (i <= length(list_data_new)){
       genbin <- list_data_new[[i]] %>% # join all the datasets together
-        cbind(genbin)
+        cbind(genbin)                  # issue here because they don't all have the same number of rows
       i = i + 1
     }
 
@@ -631,5 +632,5 @@ annotate_specific_panel <- function(gene_binary,
 
 
 
-
+#
 
