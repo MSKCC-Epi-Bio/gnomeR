@@ -130,15 +130,27 @@ gen_dat <- gen_dat %>%
 ```
 
 
-```{r }
+```{r, tbl_genomic }
 
 gene_tbl_trt <-  gen_dat %>%
   tbl_genomic(freq_cutoff = .1, by = trt_status) %>%
   gtsummary::add_p() 
 
-gene_tbl_trt
+
 ```
 
+```{r tbl_genomic_print, include = FALSE}
+
+gt::gtsave(as_gt(gene_tbl_trt), file = file.path(tempdir(), "temp.png"))
+
+```
+
+
+```{r out.width = "30%", echo = FALSE}
+
+knitr::include_graphics("man/figures/README-tbl_genomic_print-1.png")
+
+```
 
 Additionally, you can analyze custom pathways, or a set of default gene pathways using `add_pathways()`:
 
@@ -150,7 +162,20 @@ path_by_trt <- gen_dat %>%
   gtsummary::add_p() 
 
 
-path_by_trt
+
+```
+
+
+```{r tbl_genomic_pathway, include = FALSE}
+
+gt::gtsave(as_gt(path_by_trt), file = file.path(tempdir(), "temp.png"))
+
+```
+
+```{r out.width = "30%", echo = FALSE}
+
+knitr::include_graphics("man/figures/README-tbl_genomic_pathway-1.png")
+
 ```
 
 
