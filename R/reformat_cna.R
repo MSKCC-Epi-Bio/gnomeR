@@ -6,22 +6,21 @@
 #' @export
 #' @examples
 #'    cna_long <- data.frame(
-#'     sample_id = c("P-0001276-T01-IM3","P-0001276-T01-IM3",
+#'     sampleId = c("P-0001276-T01-IM3","P-0001276-T01-IM3",
 #'                  "P-0005436-T01-IM3",
 #'                  "P-0001276-T01-IM3","P-0003333-T01-IM3"),
-#'     hugo_symbol = c("MLL2","KMT2D","HIST1H2BD",
+#'     Hugo_Symbol = c("MLL2","KMT2D","HIST1H2BD",
 #'                     "HIST1H3B","KDR"),
-#'     alteration = c("HIGH LEVEL AMPLIFICATION","HIGH LEVEL AMPLIFICATION",
-#'                    "HIGH LEVEL AMPLIFICATION","HIGH LEVEL AMPLIFICATION",
-#'                    "HOMOZYGOUS DELETION"))
+#'     alteration = c("AMPLIFICATION","AMPLIFICATION",
+#'                    "AMPLIFICATION","AMPLIFICATION","DELETION"))
 #'
 #' cna <- reformat_cna(cna_long)
 #'
 #'  cna_long <- data.frame(
-#'     sample_id = c("P-0001276-T01-IM3","P-0001276-T01-IM3",
+#'     sampleId = c("P-0001276-T01-IM3","P-0001276-T01-IM3",
 #'                  "P-0005436-T01-IM3",
 #'                  "P-0001276-T01-IM3","P-0003333-T01-IM3"),
-#'     hugo_symbol = c("MLL2","KMT2D","HIST1H2BD",
+#'     Hugo_Symbol = c("MLL2","KMT2D","HIST1H2BD",
 #'                     "HIST1H3B","KDR"),
 #'     alteration = c(2, 2, -1, 1, -2))
 #'
@@ -42,8 +41,7 @@ reformat_cna <- function(cna) {
   switch(length(missing_cols) > 0,
          cli::cli_abort("Missing columns: {.field {missing_cols}}"))
 
-  accepted_levels <- c("NEUTRAL","LOH", "GAIN", "HIGH LEVEL AMPLIFICATION",
-                       "HOMOZYGOUS DELETION", "HEMIZYGOUS DELETION")
+  accepted_levels <- c("NEUTRAL","LOH", "GAIN", "AMPLIFICATION", "DELETION")
 
   if(is.character(cna$alteration)) {
     cna <- cna %>%
@@ -61,17 +59,48 @@ reformat_cna <- function(cna) {
       mutate(alteration =
                case_when(
                  .data$alteration == "NEUTRAL" ~ 0,
-                 .data$alteration == "HEMIZYGOUS DELETION" ~ -1,
+                 .data$alteration == "LOH" ~ -1,
                  .data$alteration == "GAIN" ~ 1,
-                 .data$alteration == "HIGH LEVEL AMPLIFICATION" ~ 2,
-                 .data$alteration == "HOMOZYGOUS DELETION" ~ -2)
+                 .data$alteration == "AMPLIFICATION" ~ 2,
+                 .data$alteration == "DELETION" ~ -2)
       )
 
 
   }
 
+  hugo_symbols <- unique(cna$hugo_symbol)
+  samples <- unique(cna$sample_id)
+
+
+
   # Create Empty Dataframe & Fill ----------------------------------------------
-  cna_out <- .genbin_matrix(cna, type = "reformat_cna")
+
+  # create empty data frame of correct dimensions with 0's ---
+  cna_out <- as.data.frame(matrix(0L, ncol = length(samples) + 1,
+                                  nrow = length(hugo_symbols)))
+
+  colnames(cna_out) <- c("Hugo_Symbol", samples)
+  cna_out[,1] <- hugo_symbols
+
+  # fill in data frame ---
+  for (i in samples) {
+
+    alt_genes_this_sample <- cna %>%
+      filter(.data$sample_id %in% i) %>%
+      select("hugo_symbol") %>%
+      unlist() %>%
+      as.character()
+
+    rows_to_fill <- match(alt_genes_this_sample, cna_out[, 1])
+    cols_to_fill <- match(i, colnames(cna_out))
+
+    cna_out[rows_to_fill, cols_to_fill] <-
+      cna %>%
+      filter(.data$sample_id %in% i) %>%
+      select("alteration") %>%
+      unlist() %>%
+      as.numeric()
+  }
 
   return(cna_out)
 
@@ -120,7 +149,34 @@ pivot_cna_longer <- function(wide_cna, clean_sample_ids = TRUE) {
   # check alteration column -----------------------------
 
   # Make sure hugo & alteration is character
-  cna_long <- switch(!is.null(cna_long), .recode_cna_alterations(cna_long))
+  cna_long <- cna_long %>%
+    mutate(hugo_symbol = as.character(.data$hugo_symbol)) %>%
+    mutate(alteration = tolower(str_trim(as.character(.data$alteration))))
+
+  levels_in_data <- names(table(cna_long$alteration))
+
+  allowed_chr_levels <- c(
+    "neutral" = "0",
+    "deletion" = "-2",
+    "loh" = "-1.5",
+    "loh" = "-1",
+    "gain" = "1",
+    "amplification" = "2"
+  )
+
+  all_allowed <- c(allowed_chr_levels, names(allowed_chr_levels))
+  not_allowed <- levels_in_data[!levels_in_data %in% all_allowed]
+
+  if(length(not_allowed) > 0) {
+    cli::cli_abort(c("Unknown values in {.field alteration} field: {.val {not_allowed}}",
+                     "Must be one of the following: {.val {all_allowed}}"))
+  }
+
+
+  suppressWarnings(
+    cna_long <- cna_long %>%
+      mutate(alteration = forcats::fct_recode(.data$alteration, !!!allowed_chr_levels))
+  )
 
   cna_long
 
