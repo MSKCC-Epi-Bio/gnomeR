@@ -29,7 +29,7 @@ return all alterations associated with that gene (including mutations, CNA, fusi
 
 \item{by}{A variable to be passed to \code{gtsummary::tbl_summary()}'s by parameter}
 
-\item{...}{Additional parameters that can be passed to \code{gtsummary::tbl_summary()}. To access the additional parameters you need to load \code{gtsummary}}
+\item{...}{Additional parameters that can be passed to \code{gtsummary::tbl_summary()}. To access the additional parameters you need to load \code{gtsummary}.}
 }
 \value{
 A \code{tbl_summary()} object
