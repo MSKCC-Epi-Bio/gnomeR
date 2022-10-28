@@ -143,17 +143,6 @@ sanitize_fusion_input <- function(fusion, ...)  {
 .recode_cna_alterations <- function(cna){
 
 
-  if(!("alteration" %in% colnames(cna))) {
-    cli::cli_abort("An alteration column is missing from your cna data. Use pivot_cna_longer(),
-                   which will recode alterations, instead if dataset is in API format.")
-  }
-
-  # Make sure hugo & alteration is character
-  cna <- cna %>%
-    mutate(hugo_symbol = as.character(.data$hugo_symbol)) %>%
-    mutate(alteration = tolower(str_trim(as.character(.data$alteration))))
-
-
   #assess levels of alteration
   levels_in_data <- names(table(cna$alteration))
 
@@ -215,8 +204,11 @@ sanitize_cna_input <- function(cna, ...)  {
                    Is your data in wide format? If so, it must be long format. See {.code gnomeR::pivot_cna_long()} to reformat")
   }
 
-  cna <- switch(!is.null(cna), .recode_cna_alterations(cna))
+  cna <- cna %>%
+    mutate(hugo_symbol = as.character(.data$hugo_symbol)) %>%
+    mutate(alteration = tolower(str_trim(as.character(.data$alteration))))
 
+  cna <- switch(!is.null(cna), .recode_cna_alterations(cna))
 
   return(cna)
 }

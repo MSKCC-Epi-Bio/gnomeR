@@ -17,22 +17,21 @@ Reformat CNA from maf (long) version to wide version
 }
 \examples{
    cna_long <- data.frame(
-    sample_id = c("P-0001276-T01-IM3","P-0001276-T01-IM3",
+    sampleId = c("P-0001276-T01-IM3","P-0001276-T01-IM3",
                  "P-0005436-T01-IM3",
                  "P-0001276-T01-IM3","P-0003333-T01-IM3"),
-    hugo_symbol = c("MLL2","KMT2D","HIST1H2BD",
+    Hugo_Symbol = c("MLL2","KMT2D","HIST1H2BD",
                     "HIST1H3B","KDR"),
-    alteration = c("HIGH LEVEL AMPLIFICATION","HIGH LEVEL AMPLIFICATION",
-                   "HIGH LEVEL AMPLIFICATION","HIGH LEVEL AMPLIFICATION",
-                   "HOMOZYGOUS DELETION"))
+    alteration = c("AMPLIFICATION","AMPLIFICATION",
+                   "AMPLIFICATION","AMPLIFICATION","DELETION"))
 
 cna <- reformat_cna(cna_long)
 
  cna_long <- data.frame(
-    sample_id = c("P-0001276-T01-IM3","P-0001276-T01-IM3",
+    sampleId = c("P-0001276-T01-IM3","P-0001276-T01-IM3",
                  "P-0005436-T01-IM3",
                  "P-0001276-T01-IM3","P-0003333-T01-IM3"),
-    hugo_symbol = c("MLL2","KMT2D","HIST1H2BD",
+    Hugo_Symbol = c("MLL2","KMT2D","HIST1H2BD",
                     "HIST1H3B","KDR"),
     alteration = c(2, 2, -1, 1, -2))
 
