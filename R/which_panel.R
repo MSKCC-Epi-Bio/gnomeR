@@ -2,63 +2,45 @@
 
 #' provide a list of impact panels a provided gene is found within
 #'
-#' @param genomic_df a data frame containing at least one column with hugo_symbols
-#' @param impact_only indicator to only check IMPACT panels (default = T)
+#' @param hugo_symbol a vector of hugo symbols
 #'
-#' @return a data frame with two columns: 1) the original list of hugo_symbols (recoded as more common aliases)
-#' 2) a list of all the panels that hugo_symbol is found within
+#' @return a data frame with hugo symbols and the IMPACT panels on which they are
+#' included
 #'
 #' @examples
 #'
-#' #select first 6 unique hugo symbols from example dataset
-#' mut6 <- gnomeR::mutations %>%
-#'   rename_columns()%>%
-#'   select(hugo_symbol)%>%
-#'   unique()%>%
-#'   head()
+#' hugos <- unique(gnomeR::mutations$hugoGeneSymbol)[1:10]
 #'
-#' which_panel(mut6)
-#' which_panel(mut6, impact_only = F)
-#'
-#' #example with some uncommon hugo_symbols
-#' hugo_symbol <- c("ZNRF3", "MLL3")
-#' example <- as.data.frame(hugo_symbol)
-#'
-#' which_panel(example)
+#' which_impact_panel(hugos)
 #'
 #' @export
 
-which_panel <- function(genomic_df, impact_only = T) {
+which_impact_panel <- function(hugo_symbol) {
+
+  # get table of gene aliases (internal data)
+  alias_table <- gnomeR::impact_alias_table %>%
+    dplyr::select("hugo_symbol", "alias")
+
   # recode all genes to most common alias
-  genomic_df <- recode_alias(genomic_df)%>%
-    select("hugo_symbol")
+  hugo_symbol <- purrr::map_chr(hugo_symbol,
+                                ~resolve_alias(gene_to_check = .x,
+                                               alias_table = alias_table))
 
-  if (impact_only) {
-    gene_panels <- gnomeR::gene_panels %>%
-      filter(.data$gene_panel %in% c("IMPACT341", "IMPACT410", "IMPACT468", "IMPACT505"))
-  } else{
-    gene_panels <- gnomeR::gene_panels
-  }
+  gene_panels <- gnomeR::gene_panels %>%
+      filter(.data$gene_panel %in% c("IMPACT341", "IMPACT410", "IMPACT468", "IMPACT505")) %>%
+      select("gene_panel", "genes_in_panel") %>%
+      tidyr::unnest(cols = c("genes_in_panel"))
 
-  genomic_df <- genomic_df %>%
-    mutate(panels = NA)
 
-  # empty
-  vec_panels <- c()
+  impact_results <- gene_panels %>%
+    filter(.data$genes_in_panel %in% hugo_symbol) %>%
+    distinct() %>%
+    mutate(fill = "yes") %>%
+    tidyr::pivot_wider(
+      names_from = "gene_panel",
+      values_from = "fill",
+      values_fill = "no")
 
-  for (gene in genomic_df$hugo_symbol) {
-    for (panel_name in gene_panels$gene_panel) {
-      if (gene %in% gene_panels$genes_in_panel[gene_panels$gene_panel == panel_name][[1]]) {
-        vec_panels <- c(vec_panels, panel_name)
-      }
-    }
+  impact_results
 
-    if (length(vec_panels) > 0) {
-      genomic_df$panels[genomic_df$hugo_symbol == gene] <- list(vec_panels)
-    } else {
-      genomic_df$panels[genomic_df$hugo_symbol == gene] <- NA
-    }
-  }
-
-  return(genomic_df)
 }
