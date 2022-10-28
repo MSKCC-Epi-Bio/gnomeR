@@ -175,21 +175,15 @@
 <span><span class="va">gene_tbl_trt</span> <span class="op">&lt;-</span>  <span class="va">gen_dat</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="reference/tbl_genomic.html">tbl_genomic</a></span><span class="op">(</span>freq_cutoff <span class="op">=</span> <span class="fl">.1</span>, by <span class="op">=</span> <span class="va">trt_status</span><span class="op">)</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu">gtsummary</span><span class="fu">::</span><span class="fu"><a href="https://www.danieldsjoberg.com/gtsummary/reference/add_p.html" class="external-link">add_p</a></span><span class="op">(</span><span class="op">)</span> </span></code></pre></div>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
-<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html" class="external-link">include_graphics</a></span><span class="op">(</span><span class="fu">here</span><span class="fu">::</span><span class="fu"><a href="https://here.r-lib.org//reference/here.html" class="external-link">here</a></span><span class="op">(</span><span class="st">"man/figures/README-tbl_genomic_print.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="reference/figures/README-tbl_genomic_print.png" width="30%"></p>
 <p>Additionally, you can analyze custom pathways, or a set of default gene pathways using <code><a href="reference/add_pathways.html">add_pathways()</a></code>:</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="va">path_by_trt</span> <span class="op">&lt;-</span> <span class="va">gen_dat</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="reference/add_pathways.html">add_pathways</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu">select</span><span class="op">(</span><span class="va">trt_status</span>, <span class="fu">contains</span><span class="op">(</span><span class="st">"pathway_"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="reference/tbl_genomic.html">tbl_genomic</a></span><span class="op">(</span>by <span class="op">=</span> <span class="va">trt_status</span><span class="op">)</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu">gtsummary</span><span class="fu">::</span><span class="fu"><a href="https://www.danieldsjoberg.com/gtsummary/reference/add_p.html" class="external-link">add_p</a></span><span class="op">(</span><span class="op">)</span> </span></code></pre></div>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
-<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html" class="external-link">include_graphics</a></span><span class="op">(</span><span class="fu">here</span><span class="fu">::</span><span class="fu"><a href="https://here.r-lib.org//reference/here.html" class="external-link">here</a></span><span class="op">(</span><span class="st">"man/figures/README-path_by_trt.png"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="reference/figures/README-path_by_trt.png" width="30%"></p>
 </div>
 <div class="section level2">
@@ -197,7 +191,7 @@
 </h2>
 <p>Along with mutation, cna and fusion data, {gnomeR} also allows analysis and visualization of <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5027494/" class="external-link">FACETs</a> data. <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5027494/" class="external-link">FACETs</a> is an allele-specific copy number tool and open-source software with a broad application to whole genome, whole-exome, as well as targeted panel sequencing platforms. It is a fully integrated stand-alone pipeline that includes sequencing BAM file post-processing, joint segmentation of total- and allele-specific read counts, and integer copy number calls corrected for tumor purity, ploidy and clonal heterogeneity, with comprehensive output.</p>
 <p>You can visualize this data using <code><a href="reference/facets_heatmap.html">facets_heatmap()</a></code></p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="va">select_samples</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">seg</span><span class="op">$</span><span class="va">ID</span><span class="op">)</span>,  <span class="fl">100</span><span class="op">)</span></span>
 <span><span class="va">p.heat</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/facets_heatmap.html">facets_heatmap</a></span><span class="op">(</span>seg <span class="op">=</span> <span class="va">seg</span>, samples <span class="op">=</span> <span class="va">select_samples</span>, min_purity <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span>
