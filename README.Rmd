@@ -148,7 +148,7 @@ gt::gtsave(as_gt(gene_tbl_trt), filename = here::here("man", "figures" , "README
 ```
 
 
-```{r out.width = "30%"}
+```{r out.width = "30%", echo = FALSE}
 
 knitr::include_graphics(here::here("man/figures/README-tbl_genomic_print.png"))
 
@@ -176,7 +176,7 @@ gt::gtsave(as_gt(path_by_trt), filename = here::here("man", "figures" , "README-
 
 ```
 
-```{r out.width = "30%"}
+```{r echo=FALSE, out.width="30%"}
 
 knitr::include_graphics(here::here("man/figures/README-path_by_trt.png"))
 

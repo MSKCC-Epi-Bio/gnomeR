@@ -165,11 +165,6 @@ gene_tbl_trt <-  gen_dat %>%
   gtsummary::add_p() 
 ```
 
-``` r
-
-knitr::include_graphics(here::here("man/figures/README-tbl_genomic_print.png"))
-```
-
 <img src="man/figures/README-tbl_genomic_print.png" width="30%" />
 
 Additionally, you can analyze custom pathways, or a set of default gene
@@ -182,11 +177,6 @@ path_by_trt <- gen_dat %>%
   select(trt_status, contains("pathway_")) %>%
   tbl_genomic(by = trt_status) %>%
   gtsummary::add_p() 
-```
-
-``` r
-
-knitr::include_graphics(here::here("man/figures/README-path_by_trt.png"))
 ```
 
 <img src="man/figures/README-path_by_trt.png" width="30%" />
