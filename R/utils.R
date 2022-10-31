@@ -268,6 +268,143 @@ annotate_specific_panel <- function(gene_binary,
 
 }
 
+# create empty data.frame to hold results -----
+
+#' Create empty data.frame to hold results and fill with indicators
+#'
+#' @param data a dataset with a particular type of genomic event
+#' @param samples_final a list of sample IDs inherited from the dataset or specified
+#' @param type the types of genomic event in the data set, can be mut/cna/sv
+#'
+#' @export
+
+
+
+
+
+.genbin_matrix <- function(data, samples_final,
+                           type = c("reformat_cna", "mut", "cna", "sv")) {
+
+
+  # create vectors to hold import values
+  type_alt <- c("deletion", "amplification") #change here if .recode_cna... is accepted
+  suffix <- c(".Del", ".Amp", ".fus")
+  list_data <- list()
+  list_data_new <- list()
+
+  # set unique vectors for each dataset in list
+
+  if (type == "cna") {
+    i <- 1 # start counter
+  } else {
+    i <- length(type_alt) + 1
+    if ("site_1_hugo_symbol" %in% colnames(data)) {
+      data <- rename(data, "hugo_symbol" = "site_1_hugo_symbol")
+    }
+    list_data[[1]] <- data
+  }
+
+
+  # if we want cna, need a while loop, else skip by setting counter higher
+
+  while (i <= length(type_alt)) {
+    cna_data <- data %>%
+      filter(.data$alteration == type_alt[i]) # filter to one type of alt
+
+
+    list_data[[i]] <- cna_data
+    i <- i + 1
+  }
+
+  # should happen twice for cna and once for mut and sv
+  a <- 1 # set counter for number of datasets in list_data
+  for (x in list_data) {
+
+    # assign HS for each dataset, helps with fusion and cna suffixes
+    hugo_syms <- unique(x$hugo_symbol)
+
+
+    if (type == "reformat_cna") {
+      data2 <- as.data.frame(matrix(0L,
+                                    ncol = length(samples_final) + 1, #+1 for extra col for hugo_symbol names
+                                    nrow = length(hugo_syms)
+      ))
+
+      colnames(data2) <- c("Hugo_Symbol", samples)
+      data2[, 1] <- hugo_syms
+      list_data[[1]] <- data2
+    } else { #for all other types of data the HS is the co and samp = row
+      data2 <- as.data.frame(matrix(0L,
+                                    nrow = length(samples_final),
+                                    ncol = length(hugo_syms)
+      ))
+      colnames(data2) <- hugo_syms
+      rownames(data2) <- samples_final
+    }
+
+
+
+    for (y in samples_final) {
+      genes <- x$hugo_symbol[x$sample_id %in% y]
+      if (length(genes) != 0) {
+
+        # populate matrix depending on type of data
+        if (type == "reformat_cna") {
+          # fill with any alteration number -2 to 2
+          rows_to_fill <- match(unique(as.character(genes)), data2[, 1])
+          cols_to_fill <- match(y, colnames(data2))
+
+          data2[rows_to_fill, cols_to_fill] <- x %>%
+            filter(.data$sample_id %in% y) %>%
+            select("alteration") %>%
+            unlist() %>%
+            as.numeric()
+        } else {
+          # fill with 1 if observed else 0
+          rows_to_fill <- match(unique(as.character(y)), rownames(data2))
+          cols_to_fill <- match(unique(as.character(genes)), colnames(data2))
+          data2[rows_to_fill, cols_to_fill] <- 1
+        }
+      }
+
+      if (length(list_data) > 1) {
+        list_data_new[[a]] <- data2 #store dataset for merging
+        if(ncol(data2) > 0){
+          colnames(list_data_new[[a]]) <- paste0(colnames(list_data_new[[a]]), suffix[a])
+        }
+      }else{
+        list_data_new[[1]] <- data2
+      }
+
+    }
+    a <- a + 1 # increase counter
+  }
+
+  #add fusion suffix
+  if (type == "sv"){
+    colnames(list_data_new[[1]]) <- paste0(colnames(list_data_new[[1]]), suffix[i])
+  }
+
+
+
+
+
+  if (length(list_data_new) == 1) {
+    return(list_data_new[[1]])
+  } else {
+    i = 2
+    list_data_new <- purrr::compact(list_data_new) #drop null datasets from list
+    genbin <- list_data_new[[1]]
+    while (i <= length(list_data_new)){
+      genbin <- list_data_new[[i]] %>% # join all the datasets together
+        cbind(genbin)
+      i = i + 1
+    }
+
+    return(genbin)
+  }
+
+}
 
 
 
