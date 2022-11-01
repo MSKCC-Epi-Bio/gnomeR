@@ -46,6 +46,9 @@
     <loc>/reference/cna.html</loc>
   </url>
   <url>
+    <loc>/reference/cna_wide.html</loc>
+  </url>
+  <url>
     <loc>/reference/consequence_map.html</loc>
   </url>
   <url>
@@ -145,10 +148,10 @@
     <loc>/reference/pivot_cna_longer.html</loc>
   </url>
   <url>
-    <loc>/reference/recode_alias.html</loc>
+    <loc>/reference/pivot_cna_wider.html</loc>
   </url>
   <url>
-    <loc>/reference/reformat_cna.html</loc>
+    <loc>/reference/recode_alias.html</loc>
   </url>
   <url>
     <loc>/reference/rename_columns.html</loc>
