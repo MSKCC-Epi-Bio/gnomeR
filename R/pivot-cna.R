@@ -167,17 +167,17 @@ pivot_cna_longer <- function(wide_cna, clean_sample_ids = TRUE) {
   # Make sure hugo & alteration is character
   cna_long <- cna_long %>%
     mutate(hugo_symbol = as.character(.data$hugo_symbol)) %>%
-    mutate(alteration = tolower(str_trim(as.character(.data$alteration))))
+    mutate(alteration = toupper(str_trim(as.character(.data$alteration))))
 
   levels_in_data <- names(table(cna_long$alteration))
 
   allowed_chr_levels <- c(
-    "neutral" = "0",
-    "deletion" = "-2",
-    "loh" = "-1.5",
-    "loh" = "-1",
-    "gain" = "1",
-    "amplification" = "2"
+    "NEUTRAL" = "0",
+    "DELETION" = "-2",
+    "LOH" = "-1.5",
+    "LOH" = "-1",
+    "GAIN" = "1",
+    "AMPLIFICATION" = "2"
   )
 
   all_allowed <- c(allowed_chr_levels, names(allowed_chr_levels))

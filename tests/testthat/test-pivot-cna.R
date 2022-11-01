@@ -61,10 +61,6 @@ test_that("pivot CNA- check ampl/del vs with 2/-1 alteration coding", {
 
 })
 
-# INSERT TEST HERE
-# Check above but with -1/1 once we get that final coding!!
-
-
 test_that("pivot CNA- check when NAs", {
 
   cna_long_1 <- data.frame(
@@ -139,7 +135,7 @@ test_that("pivot CNA-  mixed coding in alteration column and 0/neutral", {
   expect_equal(wide_cna_1, wide_cna_2)
 
 })
-`
+
 
 test_that("pivot CNA- non standard sample IDs with periods", {
 
@@ -218,28 +214,5 @@ test_that("pivot CNA- test clean_sample_ids = FALSE", {
   )
 
   expect_no_message(long_cna_1 <- pivot_cna_longer(cna_wide, clean_sample_ids = FALSE))
-  expect_true(any(str_detect(long_cna_1$sample_id, fixed("."))))
+  expect_true(any(str_detect(long_cna_1$sample_id, fixed(".")))) })
 
-})
-
-test_that("pivot CNA- test clean_sample_ids = FALSE", {
-
-  cna_wide <- tibble::tribble(
-    ~Hugo_Symbol, ~P.0070637.T01.IM7, ~P.0042589.T01.IM6, ~P.0026544.T01.IM6, ~P.0032011.T01.IM6,
-    "CRKL",                 0L,                 0L,                 0L,                 -2L,
-    "SCG5",                 0L,                 0L,                 0L,                 0L,
-    "STK11",                 1L,                 0L,                 0L,                 0L,
-    "MEN1",                 0L,                 0L,                 0L,                 0L,
-    "B2M",                 0L,                 2L,                 0L,                 0L,
-    "TAP2",                 0L,                 0L,                 -1L,                 0L,
-    "PMAIP1",                 0L,                 0L,                 0L,                 0L,
-    "H3-3A",                 0L,                 0L,                 0L,                 0L,
-    "H3-3B",                 0L,                 0L,                 0L,                 0L,
-    "CDC73",                 0L,                 0L,                 0L,                 0L,
-    "PIK3CA",                 0L,                 0L,                 0L,                 -1L
-  )
-
-  expect_no_message(long_cna_1 <- pivot_cna_longer(cna_wide, clean_sample_ids = FALSE))
-  expect_true(any(str_detect(long_cna_1$sample_id, fixed("."))))
-
-})
