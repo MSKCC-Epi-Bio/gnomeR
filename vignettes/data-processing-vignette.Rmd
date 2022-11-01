@@ -168,31 +168,32 @@ x <- gnomeR::cna %>%
  
 ### Process Data with `create_gene_binary()`
 
-Often a first step to analyzing genomic data is organizing it in an event matrix. This matrix will have one row for each sample in your cohort and one column for each type of genomic event. The `create_gene_binary()` function helps you process your data into this format for use in downstream analysis. 
+Often a first step to analyzing genomic data is organizing it in an event matrix. This matrix will have one row for each sample in your cohort and one column for each type of genomic event. Each cell will take value of `0` (no event on that gene/sample), `1` (event on that gene/sample) or `NA` (missing data or gene not tested on panel). The `create_gene_binary()` function helps you process your data into this format for use in downstream analysis. 
 
-Transpose the mutations data - By default, the mutations data has one or more rows for each patient. Each row is data on a gene. The data can be transposed to create one row per patient with each column for a gene. The cell value in the transposed data would flag whether a particular gene has mutation for that patient.
+You can `create_gene_binary()` from any single type of data:
 
 ```{r, include = TRUE}
-mut.only <- create_gene_binary(mutation = study_mutation)
+mut_only <- create_gene_binary(mutation = gnomeR::mutations)
+
+head(mut_only)
 ```
 
-The other datasets can be transposed similarly.
 
-For the fusion data - if the gene is part of the IMPACT dataset, then there will be a column for it in the transposed data.    
-
-NOTE: ADD EXAMPLE WHEN KARISSA HAS CONFIRMED. AND UPDATE TEXT FOR WIDE FORMAT.
-
-You can also create one wide data with combined data from all the different datasets after transposing them. Here a dataset called all3 is created for ten samples
+Or from several types in one matrix. Here a dataset called `all_bin` created for ten samples that include mutation, CNA and structural variant events.
 
 ```{r, include = TRUE}
+
 samples <- unique(study_mutation$sampleId)[1:10]
-all3 <- create_gene_binary(
+
+all_bin <- create_gene_binary(
     samples = samples,
-    mutation = study_mutation,
-    cna = study_cna, fusion = study_sv,
-    mut_type = "somatic_only", snp_only = FALSE,
-    specify_panel = "no"
+    mutation = gnomeR::mutations,
+    cna = gnomeR::cna,
+    fusion = gnomeR::sv, 
+    rm_empty = FALSE
 )
+
+all_bin[1:10, 1:10] 
 
 ```
 
