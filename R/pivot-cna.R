@@ -1,11 +1,11 @@
 
-#' Reformat CNA from maf (long) version to wide version
+#' Pivot CNA from maf (long) version to wide version
 #'
 #' @param cna a cna dataframe in maf (long) format
 #' @return a dataframe of reformatted CNA alteration (in wide format)
 #' @export
 #' @examples
-#'    cna_long <- data.frame(
+#' cna_long <- data.frame(
 #'     sampleId = c("P-0001276-T01-IM3","P-0001276-T01-IM3",
 #'                  "P-0005436-T01-IM3",
 #'                  "P-0001276-T01-IM3","P-0003333-T01-IM3"),
@@ -14,7 +14,7 @@
 #'     alteration = c("AMPLIFICATION","AMPLIFICATION",
 #'                    "AMPLIFICATION","AMPLIFICATION","DELETION"))
 #'
-#' cna <- reformat_cna(cna_long)
+#' cna <- pivot_cna_wider(cna_long)
 #'
 #'  cna_long <- data.frame(
 #'     sampleId = c("P-0001276-T01-IM3","P-0001276-T01-IM3",
@@ -24,10 +24,10 @@
 #'                     "HIST1H3B","KDR"),
 #'     alteration = c(2, 2, -1, 1, -2))
 #'
-#' cna <- reformat_cna(cna_long)
+#' cna <- pivot_cna_wider(cna_long)
 #'
 
-reformat_cna <- function(cna) {
+pivot_cna_wider <- function(cna) {
 
   cna <- cna %>%
     janitor::clean_names()
@@ -41,30 +41,34 @@ reformat_cna <- function(cna) {
   switch(length(missing_cols) > 0,
          cli::cli_abort("Missing columns: {.field {missing_cols}}"))
 
-  accepted_levels <- c("NEUTRAL","LOH", "GAIN", "AMPLIFICATION", "DELETION")
+  cna <- cna %>%
+    mutate(alteration = as.character(.data$alteration)) %>%
+    mutate(alteration = toupper(.data$alteration))
 
-  if(is.character(cna$alteration)) {
-    cna <- cna %>%
-      mutate(alteration = toupper(.data$alteration))
+  accepted_levels <- c("NEUTRAL","LOH", "GAIN", "AMPLIFICATION", "DELETION",
+                       "-2", "-1", "0", "1", "2")
 
-    levels_in_data <- unique(cna$alteration)
+  levels_in_data <- unique(cna$alteration)
 
-    unrecognized_coding <- setdiff(levels_in_data, accepted_levels)
+  not_allowed <- stats::na.omit(setdiff(levels_in_data, accepted_levels))
 
-    switch(length(unrecognized_coding > 0),
-           cli::cli_abort("Unrecognized alteration types. Expecting {.val {accepted_levels}}"))
+  if(length(not_allowed) > 0) {
+    cli::cli_abort(c("Unknown values in {.field alteration} field: {.val {not_allowed}}",
+                     "Must be one of the following: {.val {accepted_levels}}"))
+  }
+
+  if(any(cna$alteration %in% c("NEUTRAL","LOH", "GAIN", "AMPLIFICATION", "DELETION"))) {
 
     # Recode Alteration Data -----------------------------------------------------
-    cna <- cna %>%
+    cna <- suppressWarnings(cna %>%
       mutate(alteration =
                case_when(
                  .data$alteration == "NEUTRAL" ~ 0,
                  .data$alteration == "LOH" ~ -1,
                  .data$alteration == "GAIN" ~ 1,
                  .data$alteration == "AMPLIFICATION" ~ 2,
-                 .data$alteration == "DELETION" ~ -2)
-      )
-
+                 .data$alteration == "DELETION" ~ -2,
+                 TRUE ~ as.numeric(.data$alteration))))
 
   }
 
@@ -117,22 +121,34 @@ reformat_cna <- function(cna) {
 #' @export
 #'
 #' @examples
-#' \dontrun{
-#' # NEEDS TO BE UPDATED
-#' cna <- pivot_cna_longer(wide_cna = gnomeR::cna)
-#' }
+#' cna <- pivot_cna_longer(wide_cna = gnomeR::cna_wide)
+
 pivot_cna_longer <- function(wide_cna, clean_sample_ids = TRUE) {
 
   cna <- rename_columns(wide_cna)
 
+  # Check data -----------------------------------------------------------------
+
+  missing_cols <-
+    setdiff(c("hugo_symbol"), names(cna))
+
+  switch(length(missing_cols) > 0,
+         cli::cli_abort("Missing columns: {.field {missing_cols}}"))
+
+
   no_hugo <- select(cna, -"hugo_symbol")
 
   patient_sums <- apply(no_hugo, 2, sum, na.rm = TRUE)
-  patient_with_sv <- patient_sums[patient_sums > 0] %>%
+
+  patient_with_cna <- patient_sums[patient_sums > 0] %>%
     names()
 
+  if(length(patient_with_cna) < 1) {
+    cli::cli_abort("There are no CNA events in the data set.")
+  }
+
   cna <-  cna %>%
-    select("hugo_symbol", all_of(patient_with_sv))
+    select("hugo_symbol", all_of(patient_with_cna))
 
   cna_long <- cna %>%
     tidyr::pivot_longer(-"hugo_symbol",
@@ -151,17 +167,17 @@ pivot_cna_longer <- function(wide_cna, clean_sample_ids = TRUE) {
   # Make sure hugo & alteration is character
   cna_long <- cna_long %>%
     mutate(hugo_symbol = as.character(.data$hugo_symbol)) %>%
-    mutate(alteration = tolower(str_trim(as.character(.data$alteration))))
+    mutate(alteration = toupper(str_trim(as.character(.data$alteration))))
 
   levels_in_data <- names(table(cna_long$alteration))
 
   allowed_chr_levels <- c(
-    "neutral" = "0",
-    "deletion" = "-2",
-    "loh" = "-1.5",
-    "loh" = "-1",
-    "gain" = "1",
-    "amplification" = "2"
+    "NEUTRAL" = "0",
+    "DELETION" = "-2",
+    "LOH" = "-1.5",
+    "LOH" = "-1",
+    "GAIN" = "1",
+    "AMPLIFICATION" = "2"
   )
 
   all_allowed <- c(allowed_chr_levels, names(allowed_chr_levels))
