@@ -6,7 +6,7 @@
 \usage{
 tbl_genomic(
   gene_binary,
-  freq_cutoff = 0,
+  freq_cutoff = NULL,
   freq_cutoff_by_gene = TRUE,
   gene_subset = NULL,
   by = NULL,
