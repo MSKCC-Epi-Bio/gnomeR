@@ -1,8 +1,11 @@
 ---
-title: "Data Processing Vignette"
-##author: "AM"
-date: "2022-10-27"
-output: html_document
+title: "Processing Data with {gnomeR}"
+output: rmarkdown::html_vignette
+author: Akriti Mishra, Karissa Whiting
+vignette: >
+  %\VignetteIndexEntry{test}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
 ---
 
 ```{r, include = FALSE}
@@ -12,19 +15,21 @@ knitr::opts_chunk$set(
 )
 ```
 
-### <span style="color: slateblue;"> Setting up </span>
+## Introduction
 
-Make sure that gnomeR & cbioportalR packages are installed & loaded
-```c
-install.packages("cbioportalR")
-library(cbioportalR)
-install.packages("gnomeR")
-library(gnomeR)
-```
+This this vignette we will walk through a data example to show available {gnomeR} data processing,
+visualization and analysis functions. We will also outline some common pitfalls and format inconsistencies you
+may encounter when working with mutation, CNA or structural variant data, and show some {gnomeR} helper functions that can help
+you manage these inconsistencies.
 
-```{r setup, include= FALSE}
-library(gnomeR)
+##  Setting up 
+
+Make sure that gnomeR & cbioportalR packages are installed & loaded. We will use dplyr for the purposes of this vignette as well. 
+
+```{r message = FALSE, warning=FALSE}
+
 library(cbioportalR)
+library(gnomeR)
 library(dplyr)
 ```
 
@@ -44,6 +49,7 @@ You are now set up for the remainder of your session! API calls depend on your i
 ```{r}
 test_cbioportal_db()
 ```
+
 This vignette will walk you through how to import data for a particular study from cbioportal and process it using some gnomeR functions.
 
 Once connected to cbioportal, you can get the list of studies (limited to 5 here) by using - 
@@ -51,6 +57,7 @@ Once connected to cbioportal, you can get the list of studies (limited to 5 here
 ```{r } 
 available_studies() %>% head(n = 5)
 ```
+
 To get information on a particular study (eg - acbc_mskcc_2015) - 
 
 ```{r }
@@ -58,13 +65,13 @@ get_study_info("acbc_mskcc_2015") %>% t()
 ```
 
 
-### <span style="color: slateblue;"> Importing data in R </span>
 
 To get data from a specific study - 
 
 ```{r }
 df <- get_genetics_by_study(study_id = "acbc_mskcc_2015")
 ```
+
 It creates a list of all the available dataframes for the study. For instance here, the study has 3 - one for each of Mutation, CNA and Structural Variants. 
 
 Depending on the study, the number of variables in a particular dataframe might be different. Here, the mutations data has 31 variables.
@@ -79,37 +86,89 @@ study_sv<- as.data.frame(df$structural_variant)
 study_cna<- as.data.frame(df$cna)
 ```
 
+## Data Formats
 
-#### <span style="color: palevioletred;"> Mutation Data</span>
-If you download the raw data from cbioportal and compare with the study_mutation data imported above, you might notice some differences in the variables. For instance 
+Mutation, CNA or fusion data may be formatting differently depending on where you source it. Below we outline some differences you may encounter when downloading data from the [cBioPortal website] (https://www.cbioportal.org/) versus pulling it via the [cBioPortal API](https://github.com/karissawhiting/cbioportalR), and review the important/required columns for each. Example data in this package was pulled using the API. 
 
-    * Tumor_Sample_Barcode is called sampleId in the imported data
-    * The Hugo_symbol is embedded within the keyword variable 
-    * Variant_Classification is called mutationType
-    * HGVSp_Short is called proteinChange
-    * Chromosome is called 'chr'
+See [cBioPortal documentation](https://docs.cbioportal.org/file-formats/) for more details on different file formats available supported on cBioPortal, and their data schema and coding. 
 
-Some of the other variables are named differently as well in the raw data and the imported data but those differences are more intuitive to map the variables.  
+### Mutation Data
 
-#### <span style="color: palevioletred;"> CNA data formats </span>
-CNA data can be received in a long or wide format.
+The most common mutation data format is the [Mutation Annotation Format (MAF)](https://docs.gdc.cancer.gov/Data/File_Formats/MAF_Format/) created as part of The Cancer Genome Atlas (TCGA) project. Each row in a maf file represents a mutation on a specific gene for a specific sample, therefore there are usually several rows per sample (one for each mutation). To use MAF files, you need at minimum a sample ID column and a hugo symbol column, though often additional information like mutation type or location are also often necessary. 
 
-    * Long format -  When each row contains data on a gene for a patient as shown below. 
-      Data is at the patient gene level.
-```{r }
-study_cna %>% head(n = 3)
+MAF formats are fairly consistent across sources, however if you download the raw data from a virtual study on the cBioPortal website using the download button and compare with the mutation data imported from the API, you might notice some differences in the variables names. For instance: 
+
+    * `Tumor_Sample_Barcode` is called `sampleId` in API data
+    * The `Hugo_symbol` is called `hugoGeneSymbol` 
+    * `Variant_Classification` is called `mutationType`
+    * `HGVSp_Short` is called `proteinChange`
+    * `Chromosome` is called 'chr'
+
+Some of the other variables are named differently as well but those differences are more intuitive to map the variables. You can
+refer to `gnomeR::names_df` for more information on MAF variables. 
+
+Luckily, most {gnomeR} functions use the data dictionary in `gnomeR::names_df` to automatically recognize the most common MAF variable names and turn them into clean, snakecase names in resulting dataframes. For example:
+
+```{r}
+gnomeR::mutations %>% names()
 ```
-    * Wide format - When each column contains data for a unique patient. 
-      For example - Patient A's data is in the 1st column and Patient B's data is in the 2nd column.
 
-NOTE : ADD EXAMPLE WHEN KARISSA HAS DATA READY. 
+```{r}
+rename_columns(gnomeR::mutations) %>% names()
+```
 
-### <span style="color: slateblue;"> Some useful functions to process the data </span>
+### CNA data
 
-#### <span style="color: palevioletred;"> create_gene_binary() function </span>
+The discrete copy number data from cBioPortal contains values that would be derived from copy-number analysis algorithms like GISTIC 2.0 or RAE. CNA data is often presented in a long or wide format:
+
+    * Long format - Each row is a CNA event for a given gene and sample, therefore samples often have multiple rows (one per gene CNA event). This is most common format you will receive when downloading data using the API.
+      
+```{r }
+gnomeR::cna[1:6, ]
+```
+  
+    * Wide format - One column per sample, one row per gene . Each row contains data on a specific gene CNA for a given sample as shown below. One sample can have several rows. This is most common format you will receive when downloading data from the cBioPortal web browser.  
+
+```{r}
+gnomeR::cna_wide[1:6, 1:6]
+```
+
+{gnomeR} features two helper functions to help you pivot from wide to long data. 
+
+```{r, eval=FALSE}
+pivot_cna_wider(gnomeR::cna)
+pivot_cna_longer(gnomeR::wide_cna)
+```
+
+There may also be differences in the way CNA events are coded. Most Events are coded in one of the following ways:
+
+```{r, results='hide', echo=FALSE}
+allowed_cna_levels <- tibble::tribble(
+               ~detailed_coding, ~numeric_coding,   ~simplified_coding,
+                      "neutral",             "0",       "neutral",
+          "homozygous deletion",            "-2",      "deletion",
+                          "loh",          "-1.5",      "deletion",
+          "hemizygous deletion",            "-1",      "deletion",
+                         "gain",             "1", "amplification",
+      "high level amplification",            "2", "amplification")
+
+allowed_cna_levels %>% knitr::kable()
+
+```
+
+{gnomeR} automatically checks CNA data labels and recodes as needed within functions. You can also use the `recode_cna()` function to do it yourself:
+
+```{r, eval=FALSE}
+x <- gnomeR::cna %>%
+  mutate(alteration_recoded = recode_cna(alteration))
+```
+
+
+## Preparing Data For Analysis
  
+### Process Data with `create_gene_binary()`
 
-You can use the create_gene_binary() function to 
+Often a first step to analyzing genomic data is organizing it in an event matrix. This matrix will have one row for each sample in your cohort and one column for each type of genomic event. The `create_gene_binary()` function helps you process your data into this format for use in downstream analysis. 
 
 Transpose the mutations data - By default, the mutations data has one or more rows for each patient. Each row is data on a gene. The data can be transposed to create one row per patient with each column for a gene. The cell value in the transposed data would flag whether a particular gene has mutation for that patient.
 
@@ -124,6 +183,7 @@ For the fusion data - if the gene is part of the IMPACT dataset, then there will
 NOTE: ADD EXAMPLE WHEN KARISSA HAS CONFIRMED. AND UPDATE TEXT FOR WIDE FORMAT.
 
 You can also create one wide data with combined data from all the different datasets after transposing them. Here a dataset called all3 is created for ten samples
+
 ```{r, include = TRUE}
 samples <- unique(study_mutation$sampleId)[1:10]
 all3 <- create_gene_binary(
@@ -141,7 +201,7 @@ Notes on some arguments:
     * The arguments mutation, fusion and cna can be used to specify the datasets you want to transpose. 
     * If you are only interested in data for some sample IDs, you can mention those in the argument samples. 
 
-#### <span style="color: palevioletred;"> summarize_by_gene() function </span>
+### Collpase Data with `summarize_by_gene()`
 
 You may notice some columns being repeated in the data when you create a combined dataset for the transposed datasets for Mutations, CNA and Fusion. 
 To keep only the unique columns for genes, you can use the summarize_by_gene() function as shown below
@@ -152,7 +212,9 @@ To keep only the unique columns for genes, you can use the summarize_by_gene() f
 
 The data all3 has 1855 columns. And the data sum_all3 has 1836 variables as it only keeps the unique columns across the datasets.
 
-#### <span style="color: palevioletred;"> tbl_genomic() function </span>
+## Analyzing Data
+
+### Summarize Alterations with `tbl_genomic()`
 
 The function can be used to summarize data by gene. You can summarize data from one or more of the data types. 
 The gene_binary argument expects the binary matrix data as generated by the create_gene_binary function. Example below shows the summary using gene data for ten samples. 
@@ -176,7 +238,7 @@ gene_binary <- create_gene_binary(
 
 ```
 
-#### <span style="color: palevioletred;"> add_pathways() function </span>
+### Annotate Gene Pathways with `add_pathways()` 
 
 This function is helpful if you are interested in looking at the data for the Oncogenic Signaling Pathways. 
 
@@ -197,9 +259,8 @@ pathway_df <- add_pathways(gene_binary, pathways = c("Notch", "p53"))
 
 ```
  
-### <span style="color: slateblue;"> Some plots to visualize the data </span>
+### Data Visualizations
 
-#### <span style="color: palevioletred;"> plots() function </span>
 
 The mutation_viz functions allows you to visualize data for the variables related to variant classification, variant type, SNV class as well as top variant genes.
 

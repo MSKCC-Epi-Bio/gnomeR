@@ -18,8 +18,7 @@ resulting data frame will have only 1 col per gene, as opposed to separate
 columns for mutation/cna/fusion.
 }
 \examples{
-library(gnomeR)
-samples <- unique(mutations$sample_id)[1:10]
+samples <- unique(gnomeR::mutations$sampleId)[1:10]
 gene_binary <- create_gene_binary(
   samples = samples, mutation = mutations, cna = cna,
   mut_type = "somatic_only",
