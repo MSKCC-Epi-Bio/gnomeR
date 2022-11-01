@@ -166,35 +166,9 @@ sanitize_cna_input <- function(cna, ...)  {
     mutate(hugo_symbol = as.character(.data$hugo_symbol)) %>%
     mutate(alteration = tolower(str_trim(as.character(.data$alteration))))
 
-
-
-  # check alteration column -----------------------------
-
-  levels_in_data <- names(table(cna$alteration))
-
-  allowed_chr_levels <- c(
-    "neutral" = "0",
-    "deletion" = "-2",
-    "loh" = "-1.5",
-    "loh" = "-1",
-    "gain" = "1",
-    "amplification" = "2"
-  )
-
-  all_allowed <- c(allowed_chr_levels, names(allowed_chr_levels))
-  not_allowed <- levels_in_data[!levels_in_data %in% all_allowed]
-
-  if(length(not_allowed) > 0) {
-    cli::cli_abort(c("Unknown values in {.field alteration} field: {.val {not_allowed}}",
-                     "Must be one of the following: {.val {all_allowed}}"))
-  }
-
-
-  # HERE ------
-  suppressWarnings(
-    cna <- cna %>%
-      mutate(alteration = forcats::fct_recode(.data$alteration, !!!allowed_chr_levels))
-  )
+  # recode alterations
+  cna <- cna %>%
+    mutate(alteration = recode_cna(.data$alteration))
 
   return(cna)
 }

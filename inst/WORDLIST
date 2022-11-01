@@ -71,6 +71,8 @@ ggplot
 gnomer
 grDevices
 gradientn
+hemizygous
+homozygous
 hugo
 im
 importFrom
@@ -80,6 +82,7 @@ lcn
 linkMsa
 linkPdb
 linkXvar
+loh
 maf
 molecularProfileId
 msk
