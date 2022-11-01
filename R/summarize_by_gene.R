@@ -10,8 +10,7 @@
 #' @export
 #'
 #' @examples
-#' library(gnomeR)
-#' samples <- unique(mutations$sampleId)[1:10]
+#' samples <- unique(gnomeR::mutations$sampleId)[1:10]
 #' gene_binary <- create_gene_binary(
 #'   samples = samples, mutation = mutations, cna = cna,
 #'   mut_type = "somatic_only",
