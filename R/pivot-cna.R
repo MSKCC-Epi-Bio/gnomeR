@@ -50,7 +50,7 @@ pivot_cna_wider <- function(cna) {
 
   levels_in_data <- unique(cna$alteration)
 
-  not_allowed <- na.omit(setdiff(levels_in_data, accepted_levels))
+  not_allowed <- stats::na.omit(setdiff(levels_in_data, accepted_levels))
 
   if(length(not_allowed) > 0) {
     cli::cli_abort(c("Unknown values in {.field alteration} field: {.val {not_allowed}}",
