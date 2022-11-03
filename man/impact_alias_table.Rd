@@ -5,7 +5,7 @@
 \alias{impact_alias_table}
 \title{IMPACT Alias Tables}
 \format{
-A data frame with 2333 rows
+A data frame with 1658 rows
 \describe{
 \item{hugo_symbol}{}
 \item{alias}{Start }

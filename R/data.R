@@ -243,7 +243,7 @@
 #'
 #' Table of aliases for IMPACT panel genes
 #'
-#' @format A data frame with 2333 rows
+#' @format A data frame with 1658 rows
 #' \describe{
 #'     \item{hugo_symbol}{}
 #'     \item{alias}{Start }
