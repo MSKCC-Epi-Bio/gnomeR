@@ -176,10 +176,13 @@ create_gene_binary <- function(samples=NULL,
                                           recode_aliases = recode_aliases))
 
   # put them all together
-  all_binary <- bind_cols(list(mutation_binary_df,
-                               fusion_binary_df,
-                               cna_binary_df))
 
+  df_list <- list(mutation_binary_df,fusion_binary_df,cna_binary_df)
+
+
+ all_binary <- purrr::reduce(df_list[!sapply(df_list, is.null)], #remove null if present
+                             full_join, by = "sample_id") %>%
+                mutate(across(setdiff(everything(),"sample_id"), .fns = function(x){ifelse(is.na(x),0,x)}))
   # Platform-specific NA Annotation ------
 
   # we've already checked the arg is valid
@@ -323,7 +326,7 @@ create_gene_binary <- function(samples=NULL,
   }
 
   # create empty data frame -----
-  fusions_out <- .genbin_matrix(fusion, samples, type = "sv")
+  fusions_out <- .genbin_matrix(fusion, samples, type = "fus")
 
   return(fusions_out)
 }
@@ -347,8 +350,11 @@ create_gene_binary <- function(samples=NULL,
     cna <- recode_alias(cna)
   }
 
-  cna_bm <- .genbin_matrix(cna, samples, type = "cna")
+  cna_del <- .genbin_matrix(cna, samples, type = "cna", delamp = "deletion")
+  cna_amp <- .genbin_matrix(cna, samples, type = "cna", delamp = "amplification")
 
+  cna_bm <- full_join(cna_del, cna_amp,by = "sample_id") %>%
+            mutate(across(setdiff(everything(),"sample_id"), .fns = function(x)ifelse(is.na(x),0,x ) ))
 
   return(cna_bm)
 }
