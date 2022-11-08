@@ -30,6 +30,18 @@ get_alias <- function(hugo_symbol) {
 
 # Get IMPACT genes -----------------------------------------------------------
 
+api_230 <- get_gene_panel(panel_id = "IMPACT230") %>%
+  transmute(gene = hugoGeneSymbol,
+            entrez_id = entrezGeneId)
+
+api_279 <- get_gene_panel(panel_id = "IMPACT279") %>%
+  transmute(gene = hugoGeneSymbol,
+            entrez_id = entrezGeneId)
+
+api_300 <- get_gene_panel(panel_id = "IMPACT300") %>%
+  transmute(gene = hugoGeneSymbol,
+            entrez_id = entrezGeneId)
+
 api_341 <- get_gene_panel(panel_id = "IMPACT341") %>%
   transmute(gene = hugoGeneSymbol,
          entrez_id = entrezGeneId)
@@ -46,7 +58,11 @@ api_505 <- get_gene_panel(panel_id = "IMPACT505") %>%
   transmute(gene = hugoGeneSymbol,
             entrez_id = entrezGeneId)
 
-l_api <- list("api_341" = api_341,
+l_api <- list(
+          "api_230" = api_230,
+          "api_279" = api_279,
+          "api_300" = api_300,
+          "api_341" = api_341,
           "api_410" = api_410,
           "api_468" = api_468,
           "api_505" = api_505)
@@ -133,5 +149,22 @@ impact_alias_table <- impact_alias_table %>%
 
 usethis::use_data(impact_alias_table , overwrite = TRUE)
 # save(impact_gene_info, file = here::here("impact_gene_info.RData"))
+
+
+# check against internal gene panels dataset ----------------------------------
+# x <- gnomeR::gene_panels %>%
+#   unnest(cols = genes_in_panel)
+#
+# im <- x %>% filter(gene_panel %in%
+#                      c("IMPACT230", "IMPACT279", "IMPACT300", "IMPACT341", "IMPACT410", "IMPACT468", "IMPACT505"))
+#
+# d <- setdiff(im$genes_in_panel, impact_alias_table$hugo_symbol)
+#
+# al <- map(d, ~get_alias(.x))
+#
+# names(al) <- d
+#
+# # should be zero
+# al <- compact(al)
 
 

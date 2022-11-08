@@ -243,7 +243,7 @@
 #'
 #' Table of aliases for IMPACT panel genes
 #'
-#' @format A data frame with 2333 rows
+#' @format A data frame with 1658 rows
 #' \describe{
 #'     \item{hugo_symbol}{}
 #'     \item{alias}{Start }
@@ -411,4 +411,12 @@
 #' @source \url{https://www.cbioportal.org/study/summary?id=prad_mskcc_2017}
 "sv"
 
+
+#' An example IMPACT cBioPortal CNA in wide format
+#'
+#' This set was created from a sample of 20 patients from
+#' publicly available prostate cancer data from cBioPortal (`study_id = "gbc_mskcc_2022"`).
+#'
+#' @format A data frame with copy number alterations (CNA) retrieved from cBioPortal.
+"cna_wide"
 

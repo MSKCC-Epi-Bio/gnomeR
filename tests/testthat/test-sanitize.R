@@ -17,3 +17,15 @@ test_that("test to see what happens if pass sanitize a vector", {
                                          select(-Hugo_Symbol)))
 })
 
+test_that("alterations properly recoded using internal func", {
+  cna <- gnomeR::cna[1:10,]%>%
+    sanitize_cna_input()
+
+  expect_true("amplification" %in% names(table(cna$alteration)))
+  expect_true("deletion" %in% names(table(cna$alteration)))
+
+  table <- as.data.frame(table(cna$alteration))
+
+  expect_equal(table$Freq[table$Var1 == "deletion"], 7)
+  expect_equal(table$Freq[table$Var1 == "amplification"], 3)
+})
