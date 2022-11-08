@@ -292,7 +292,7 @@ create_gene_binary <- function(samples=NULL,
 
 
   # create empty data.frame to hold results -----
-  mut <- .genbin_matrix(mutation, samples, type = "mut")
+  mut <- .process_binary(data = mutation, samples = samples, type = "mut")
 
   return(mut)
 }
@@ -326,7 +326,9 @@ create_gene_binary <- function(samples=NULL,
   }
 
   # create empty data frame -----
-  fusions_out <- .genbin_matrix(fusion, samples, type = "fus")
+  fusions_out <- .process_binary(data = fusion,
+                                 samples = samples,
+                                 type = "fus")
 
   return(fusions_out)
 }
@@ -350,11 +352,17 @@ create_gene_binary <- function(samples=NULL,
     cna <- recode_alias(cna)
   }
 
-  cna_del <- .genbin_matrix(cna, samples, type = "cna", delamp = "deletion")
-  cna_amp <- .genbin_matrix(cna, samples, type = "cna", delamp = "amplification")
+  cna_del <- .process_binary(data = cna,
+                             samples = samples,
+                             type = "del")
 
-  cna_bm <- full_join(cna_del, cna_amp,by = "sample_id") %>%
-            mutate(across(setdiff(everything(),"sample_id"), .fns = function(x)ifelse(is.na(x),0,x ) ))
+  cna_amp <- .process_binary(data = cna,
+                             samples = samples,
+                             type = "amp")
+
+  cna_bm <- full_join(cna_del, cna_amp, by = "sample_id") %>%
+            mutate(across(-c("sample_id"),
+                          .fns = function(x) ifelse(is.na(x), 0, x)))
 
   return(cna_bm)
 }

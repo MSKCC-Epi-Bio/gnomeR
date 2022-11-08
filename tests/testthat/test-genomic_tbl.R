@@ -4,21 +4,27 @@ test_that("works with basic input", {
   samples <- as.character(unique(mutations$sampleId))[1:10]
   gene_binary <- create_gene_binary(samples = samples, mutation = mutations, cna = cna,
                           mut_type = "somatic_only", snp_only = FALSE) %>%
-    select(TP53, TP53.Del, APC, RB1, RB1.Del)
+    select(FGFR1, FGFR1.Amp, SOX17, SOX17.Amp, SOX17)
 
-  expect_error(tbl_genomic(gene_binary = gene_binary), NA)
+  expect_no_error(tbl_genomic(gene_binary = gene_binary, freq_cutoff = 0))
 })
 
 test_that("pass both gene subset and freq", {
 
   samples <- as.character(unique(mutations$sampleId))[1:10]
-  gene_binary <- create_gene_binary(samples = samples, mutation = mutations, cna = cna,
+  gene_binary <- create_gene_binary(samples = samples,
+                                    mutation = gnomeR::mutations, cna = gnomeR::cna,
                                  mut_type = "somatic_only", snp_only = FALSE) %>%
-    select(TP53, TP53.Del, APC, RB1, RB1.Del)
+    select(FGFR1, FGFR1.Amp, SOX17, SOX17.Amp, SOX17)
 
   expect_message(tbl_genomic(gene_binary = gene_binary,
-                                   gene_subset = "TP53",
+                                   gene_subset = "FGFR1",
                                    freq_cutoff = .1), "*")
+
+
+  expect_no_error(tbl_genomic(gene_binary = gene_binary,
+                             gene_subset = "FGFR1",
+                             freq_cutoff = .1))
 })
 
 test_that("test basic args", {
@@ -64,13 +70,13 @@ test_that("check freq cutoff", {
 
   samples <- as.character(unique(mutations$sampleId))[1:10]
   gene_binary <- create_gene_binary(samples = samples, mutation = mutations, cna = cna,
-                                 mut_type = "somatic_only", snp_only = FALSE) %>%
-    select(TP53, TP53.Del, APC, RB1, RB1.Del)
+                                 mut_type = "somatic_only", snp_only = FALSE)  %>%
+    select(FGFR1, FGFR1.Amp, SOX17, SOX17.Amp, SOX17)
 
 
   # freq_cutoff_by_gene = FALSE
   expect_error(by_gene <- tbl_genomic(gene_binary = gene_binary,
-                                   freq_cutoff = .2,
+                                   freq_cutoff = .025,
                                    freq_cutoff_by_gene = FALSE), NA)
 
   sums <- gene_binary %>%
@@ -78,14 +84,14 @@ test_that("check freq cutoff", {
     group_by(name) %>%
     summarise(sum_g = sum(value, na.rm = TRUE)/nrow(gene_binary))
 
-  over_cut<- sums %>% filter(sum_g >= .2) %>%
+  over_cut<- sums %>% filter(sum_g >= .025) %>%
     pull(name)
 
   expect_equal(by_gene$table_body$variable, over_cut)
 
   # freq_cutoff_by_gene = TRUE
   expect_error(by_alt <- tbl_genomic(gene_binary = gene_binary,
-                                              freq_cutoff = .2,
+                                              freq_cutoff = .025,
                                               freq_cutoff_by_gene = TRUE), NA)
 
   over_cut <- sums %>%
@@ -93,7 +99,7 @@ test_that("check freq cutoff", {
                     remove =  FALSE, fill = "right") %>%
     group_by(name1) %>%
     mutate(s = sum(sum_g)) %>%
-    filter(s >= .2) %>%
+    filter(s >= .025) %>%
     pull(name) %>% unique()
 
   expect_equal(sort(by_alt$table_body$variable), sort(over_cut))
@@ -107,10 +113,10 @@ test_that("test by variable not in data", {
   gene_binary <- create_gene_binary(samples = samples, mutation = mutations, cna = cna,
                                  mut_type = "somatic_only",
                                  snp_only = FALSE) %>%
-    select(TP53, TP53.Del, APC, RB1, RB1.Del)
+    select(FGFR1, FGFR1.Amp, SOX17, SOX17.Amp, SOX17)
 
   expect_error(tbl_genomic(gene_binary = gene_binary,
-                      freq_cutoff = .2,
+                      freq_cutoff = .025,
                       by = "nothing",
                       freq_cutoff_by_gene = FALSE))
 })
@@ -120,7 +126,7 @@ test_that("test by variable bare or string", {
   gene_binary <- create_gene_binary(samples = samples, mutation = mutations, cna = cna,
                                  mut_type = "somatic_only",
                                  snp_only = FALSE) %>%
-    select(TP53, TP53.Del, APC, RB1, RB1.Del)
+    select(FGFR1, FGFR1.Amp, SOX17, SOX17.Amp, SOX17)
 
   gene_binary <- gene_binary %>%
     mutate(sex = sample(x = c("M", "F"),
@@ -128,12 +134,12 @@ test_that("test by variable bare or string", {
 
   expect_error(t1 <- tbl_genomic(gene_binary = gene_binary,
                       by = "sex",
-                      freq_cutoff = .2,
+                      freq_cutoff = .025,
                       freq_cutoff_by_gene = FALSE), NA)
 
   expect_error(t2 <- tbl_genomic(gene_binary = gene_binary,
                       by = sex,
-                      freq_cutoff = .2,
+                      freq_cutoff = .025,
                       freq_cutoff_by_gene = FALSE), NA)
 
   expect_equal(t1, t2)
@@ -144,8 +150,9 @@ test_that("test by variable bare or string", {
 test_that("test ... to tbl_summary", {
   samples <- as.character(unique(mutations$sampleId))[1:10]
   gene_binary <- create_gene_binary(samples = samples, mutation = mutations, cna = cna,
-                                    mut_type = "somatic_only", snp_only = FALSE) %>%
-    select(TP53, TP53.Del, APC, RB1, RB1.Del)
+                                    mut_type = "somatic_only",
+                                    snp_only = FALSE) %>%
+    select(FGFR1, FGFR1.Amp, SOX17, SOX17.Amp, SOX17)
 
   expect_error(tbl_genomic(gene_binary = gene_binary,
                            statistic = list(all_categorical() ~"{n}")), "*")
@@ -158,23 +165,27 @@ test_that("you need to load gtsummary for ...",{
   suppressWarnings(library(gtsummary))
   samples <- as.character(unique(mutations$sampleId))[1:10]
   gene_binary <- create_gene_binary(samples = samples, mutation = mutations, cna = cna,
-                                    mut_type = "somatic_only", snp_only = FALSE) %>%
-    select(TP53, TP53.Del, APC, RB1, RB1.Del)
+                                    mut_type = "somatic_only",
+                                    snp_only = FALSE) %>%
+    select(FGFR1, FGFR1.Amp, SOX17, SOX17.Amp, SOX17)
 
   #need to load package for `...`
   expect_no_error(tbl_genomic(gene_binary = gene_binary,
+                              freq_cutoff = .025,
                               statistic = list(all_categorical() ~"{n}")))
 
 })
 
 test_that("you can pass gtsummary functions to tbl_genomic()",{
+
   samples <- as.character(unique(mutations$sampleId))[1:10]
   gene_binary <- create_gene_binary(samples = samples, mutation = mutations, cna = cna,
                                     mut_type = "somatic_only", snp_only = FALSE) %>%
-    select(TP53, TP53.Del, APC, RB1, RB1.Del)
+    select(FGFR1, FGFR1.Amp, SOX17, SOX17.Amp, SOX17)
 
 
-  expect_no_error(tbl_genomic(gene_binary = gene_binary) %>%
+
+  expect_no_error(tbl_genomic(gene_binary = gene_binary, freq_cutoff = 0.025) %>%
                     bold_labels())
 
 })

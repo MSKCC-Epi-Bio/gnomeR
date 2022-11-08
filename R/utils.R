@@ -1,86 +1,3 @@
-#' Internal function to recode numeric CNA alteration values to factor values
-#'
-#' @param cna a maf (long) form data set of CNAs. Must include an alteration column.
-#'
-#' @return a recoded CNA data set with factor alteration values
-#'
-#'
-
-
-.recode_cna_alterations <- function(cna){
-
-
-  #assess levels of alteration
-  levels_in_data <- names(table(cna$alteration))
-
-  allowed_chr_levels <- c(
-    "neutral" = "0",
-    "homozygous deletion" = "-2",
-    "loh" = "-1.5", #this is a placeholder until methods cleared up
-    "hemizygous deletion" = "-1",
-    "gain" = "1",
-    "high level amplification" = "2"
-  )
-
-  #pull any numbers not in allowed list out
-  all_allowed <- c(allowed_chr_levels, names(allowed_chr_levels))
-  not_allowed <- levels_in_data[!levels_in_data %in% all_allowed]
-
-  #abort if unknown values exist
-  if(length(not_allowed) > 0) {
-    cli::cli_abort(c("Unknown values in {.field alteration} field: {.val {not_allowed}}",
-                     "Must be one of the following: {.val {all_allowed}}"))
-  }
-
-  # recode the alteration varaible as factor with those levels
-  # and suppress warnings on this
-  suppressWarnings(
-    cna <- cna %>%
-      mutate(alteration = forcats::fct_recode(.data$alteration, !!!allowed_chr_levels))
-  )
-
-  return(cna)
-}
-
-
-#' Check CNA data frame to ensure columns are correct
-#'
-#' @param cna a cna data frame
-#' @param ... other arguments passed from create_gene_binary()
-#'
-#' @return a checked data frame
-#' @export
-#' @examples
-#'
-#' cna <- sanitize_cna_input(cna = cna)
-#'
-sanitize_cna_input <- function(cna, ...)  {
-
-  arguments <- list(...)
-
-  cna <- rename_columns(cna)
-
-  # Check required columns & data types ------------------------------------------
-  required_cols <- c("hugo_symbol", "sample_id", "alteration")
-  column_names <- colnames(cna)
-
-  which_missing <- required_cols[which(!(required_cols %in% column_names))]
-
-  if(length(which_missing) > 0) {
-    cli::cli_abort("The following required columns are missing in your mutations data: {.field {which_missing}}.
-                   Is your data in wide format? If so, it must be long format. See {.code gnomeR::pivot_cna_long()} to reformat")
-  }
-
-  cna <- cna %>%
-    mutate(hugo_symbol = as.character(.data$hugo_symbol)) %>%
-    mutate(alteration = tolower(str_trim(as.character(.data$alteration))))
-
-  cna <- switch(!is.null(cna), .recode_cna_alterations(cna))
-
-  return(cna)
-}
-
-
 #' Rename columns from API results to work with gnomeR functions
 #'
 #' @param df_to_check a data frame to check and recode names as needed
@@ -222,8 +139,8 @@ recode_cna <- function(alteration_vector){
 
 
 .process_binary <- function(data,
-                           samples,
-                           type = c("mut", "del", "amp", "fus")){
+                            samples,
+                            type = c("mut", "del", "amp", "fus")){
 
 
   names_glue = switch(type,
@@ -237,10 +154,10 @@ recode_cna <- function(alteration_vector){
     filter(.data$sample_id %in% samples)
 
   data_out <- switch(type,
-          del = filter(data_out, .data$alteration %in% c("deletion","homozygous deletion","hemizygous deletion")),
-          amp = filter(data_out, .data$alteration %in% c("amplification","high level amplification")),
-          mut = data,
-          fus = data)
+                     del = filter(data_out, .data$alteration %in% c("deletion","homozygous deletion","hemizygous deletion")),
+                     amp = filter(data_out, .data$alteration %in% c("amplification","high level amplification")),
+                     mut = data,
+                     fus = data)
 
 
   data_out %>%
@@ -248,7 +165,7 @@ recode_cna <- function(alteration_vector){
     filter(row_number()==1) %>%
     mutate(fl = 1) %>%
     tidyr::pivot_wider(id_cols = "sample_id", names_from = "hugo_symbol", values_from  = "fl",
-                values_fill = 0, names_glue = rlang::eval_tidy(names_glue) ) %>%
+                       values_fill = 0, names_glue = rlang::eval_tidy(names_glue) ) %>%
     ungroup()
 }
 
