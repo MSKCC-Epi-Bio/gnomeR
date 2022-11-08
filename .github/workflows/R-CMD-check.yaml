@@ -41,7 +41,7 @@ jobs:
           
       - uses: grimbough/bioc-actions/setup-bioc@v1
         with:
-          bioc-version: devel
+          bioc-version: 3.15
           bioc-mirror: https://ftp.gwdg.de/pub/misc/bioconductor
             
       - uses: r-lib/actions/setup-r-dependencies@v2
