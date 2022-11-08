@@ -39,9 +39,10 @@ jobs:
           http-user-agent: ${{ matrix.config.http-user-agent }}
           use-public-rspm: true
           
-      -  uses: grimbough/bioc-actions/setup-bioc@v1
-         with:
+      - uses: grimbough/bioc-actions/setup-bioc@v1
+        with:
           bioc-version: devel
+          bioc-mirror: https://ftp.gwdg.de/pub/misc/bioconductor
             
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
