@@ -156,8 +156,8 @@ recode_cna <- function(alteration_vector){
   data_out <- switch(type,
                      del = filter(data_out, .data$alteration %in% c("deletion","homozygous deletion","hemizygous deletion")),
                      amp = filter(data_out, .data$alteration %in% c("amplification","high level amplification")),
-                     mut = data,
-                     fus = data)
+                     mut = data_out,
+                     fus = data_out)
 
 
   data_out %>%

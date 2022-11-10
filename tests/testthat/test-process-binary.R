@@ -160,3 +160,16 @@ test_that("no events in any samples", {
 
   })
 
+test_that("only specified list of samples", {
+  test_data <- rename_columns(gnomeR::mutations)
+  samp <- unique(gnomeR::mutations$sampleId)[1:10]
+
+  expect_no_error(proc <- .process_binary(data = test_data,
+                                          samples = samp,
+                                          type = "mut"))
+
+  # expect_equal(
+  #   create_gene_binary(sample=mut_valid_sample_ids, mutation=gnomeR::mutations) %>%
+  #     nrow(),
+  #   length(mut_valid_sample_ids))
+})

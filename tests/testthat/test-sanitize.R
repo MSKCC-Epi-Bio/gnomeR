@@ -29,3 +29,5 @@ test_that("alterations properly recoded using internal func", {
   expect_equal(table$Freq[table$Var1 == "deletion"], 7)
   expect_equal(table$Freq[table$Var1 == "amplification"], 3)
 })
+
+

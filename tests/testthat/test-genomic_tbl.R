@@ -4,7 +4,7 @@ test_that("works with basic input", {
   samples <- as.character(unique(mutations$sampleId))[1:10]
   gene_binary <- create_gene_binary(samples = samples, mutation = mutations, cna = cna,
                           mut_type = "somatic_only", snp_only = FALSE) %>%
-    select(FGFR1, FGFR1.Amp, SOX17, SOX17.Amp, SOX17)
+    select("FGFR1", "FGFR1.Amp", "SOX17", "SOX17.Amp", "SOX17")
 
   expect_no_error(tbl_genomic(gene_binary = gene_binary, freq_cutoff = 0))
 })
@@ -181,11 +181,11 @@ test_that("you can pass gtsummary functions to tbl_genomic()",{
   samples <- as.character(unique(mutations$sampleId))[1:10]
   gene_binary <- create_gene_binary(samples = samples, mutation = mutations, cna = cna,
                                     mut_type = "somatic_only", snp_only = FALSE) %>%
-    select(FGFR1, FGFR1.Amp, SOX17, SOX17.Amp, SOX17)
+    select(SMAD2, FGFR1.Amp, AKT1, SOX17.Amp, MYC, MYC.Amp)
 
 
 
   expect_no_error(tbl_genomic(gene_binary = gene_binary, freq_cutoff = 0.025) %>%
-                    bold_labels())
+                    gtsummary::bold_labels())
 
 })
