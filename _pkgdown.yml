@@ -2,3 +2,36 @@ url: https://mskcc-epi-bio.github.io/gnomeR/
 template:
   bootstrap: 5
 
+development:
+  mode: auto
+  version_label: default
+
+
+authors:
+  Karissa Whiting:
+    href: "https://www.karissawhiting.com/"
+  Mike Curry:
+  Hannah Fuchs:
+
+
+reference:
+  - subtitle: Processing Data
+  - contents:
+    - create_gene_binary
+    - summarize_by_gene
+    - pivot_cna_wider
+    - pivot_cna_longer
+    - add_pathways
+    - recode_alias
+  - subtitle: Analyzing Data
+    - tbl_genomic
+    - mutation_viz
+    - ggvarclass
+    - ggvartype
+    - ggsamplevar
+    - ggtopgene
+    - gggenecor
+    - ggcomut
+  - contents:
+  - subtitle: Helper Functions
+    - which_impact_panel
