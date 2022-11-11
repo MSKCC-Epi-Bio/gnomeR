@@ -11,7 +11,9 @@ authors:
   Karissa Whiting:
     href: "https://www.karissawhiting.com/"
   Mike Curry:
+    href: "https://github.com/michaelcurry1123/"
   Hannah Fuchs:
+    href: "https://github.com/hfuchs5/"
 
 
 reference:
@@ -24,6 +26,7 @@ reference:
     - add_pathways
     - recode_alias
   - subtitle: Analyzing Data
+  - contents:
     - tbl_genomic
     - mutation_viz
     - ggvarclass
@@ -32,6 +35,7 @@ reference:
     - ggtopgene
     - gggenecor
     - ggcomut
-  - contents:
   - subtitle: Helper Functions
+  - contents:
     - which_impact_panel
+
