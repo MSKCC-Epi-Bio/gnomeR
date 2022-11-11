@@ -12,3 +12,4 @@
 ^data-raw$
 ^CODE_OF_CONDUCT\.md$
 ^codemeta\.json$
+^pkgdown$
