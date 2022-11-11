@@ -12,6 +12,7 @@ Prepare raw mutation, cna, and fusion data for analysis. Annotate OncoKB, summar
 Useful links:
 \itemize{
   \item \url{https://github.com/MSKCC-Epi-Bio/gnomeR}
+  \item \url{https://mskcc-epi-bio.github.io/gnomeR/}
   \item Report bugs at \url{https://github.com/MSKCC-Epi-Bio/gnomeR/issues}
 }
 
