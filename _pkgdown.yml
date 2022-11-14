@@ -32,7 +32,7 @@ reference:
     - ggvarclass
     - ggvartype
     - ggsamplevar
-    - ggtopgene
+    - ggtopgenes
     - gggenecor
     - ggcomut
   - subtitle: Helper Functions
