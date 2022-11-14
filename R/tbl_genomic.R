@@ -33,7 +33,7 @@
 #'   specify_panel = "no"
 #' )
 #' tb1 <- tbl_genomic(gene_binary = gene_binary, freq_cutoff = .05)
-#' tb2 <- tbl_genomic(gene_binary = gene_binary, gene_subset = c("BRCA1", "FGFR2"))
+#' tb2 <- tbl_genomic(gene_binary = gene_binary, gene_subset = c("MYC", "TP53"))
 #'
 #' gene_binary <- gene_binary %>%
 #'   mutate(sex = sample(

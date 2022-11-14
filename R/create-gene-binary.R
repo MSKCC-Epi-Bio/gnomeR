@@ -176,10 +176,13 @@ create_gene_binary <- function(samples=NULL,
                                           recode_aliases = recode_aliases))
 
   # put them all together
-  all_binary <- bind_cols(list(mutation_binary_df,
-                               fusion_binary_df,
-                               cna_binary_df))
 
+  df_list <- list(mutation_binary_df,fusion_binary_df,cna_binary_df)
+
+
+ all_binary <- purrr::reduce(df_list[!sapply(df_list, is.null)], #remove null if present
+                             full_join, by = "sample_id") %>%
+                mutate(across(setdiff(everything(),"sample_id"), .fns = function(x){ifelse(is.na(x),0,x)}))
   # Platform-specific NA Annotation ------
 
   # we've already checked the arg is valid
@@ -288,23 +291,8 @@ create_gene_binary <- function(samples=NULL,
    )
 
 
-
-
-
   # create empty data.frame to hold results -----
-  mut <- as.data.frame(matrix(0L, nrow=length(samples),
-                              ncol=length(unique(mutation$hugo_symbol))))
-
-  colnames(mut) <- unique(mutation$hugo_symbol)
-  rownames(mut) <- samples
-
-  # populate matrix
-  for(i in samples){
-    genes <- mutation$hugo_symbol[mutation$sample_id %in% i]
-    if(length(genes) != 0) {
-      mut[match(i, rownames(mut)), match(unique(as.character(genes)), colnames(mut))] <- 1
-      }
-  }
+  mut <- .process_binary(data = mutation, samples = samples, type = "mut")
 
   return(mut)
 }
@@ -338,26 +326,10 @@ create_gene_binary <- function(samples=NULL,
   }
 
   # create empty data frame -----
-  fusions_out <- as.data.frame(matrix(0L, nrow=length(samples),
-                              ncol=length(unique(fusion$hugo_symbol))))
+  fusions_out <- .process_binary(data = fusion,
+                                 samples = samples,
+                                 type = "fus")
 
-
-  colnames(fusions_out) <- unique(fusion$hugo_symbol)
-  rownames(fusions_out) <- samples
-
-  # populate matrix
-  for(i in samples){
-    genes <- fusion$hugo_symbol[fusion$sample_id %in% i]
-    if(length(genes) != 0)
-      fusions_out[match(i,rownames(fusions_out)),
-                 match(unique(as.character(genes)),colnames(fusions_out))] <- 1
-
-  }
-
-  # add .fus suffix on columns
-  if(ncol(fusions_out) > 0) {
-    colnames(fusions_out) <- paste0(colnames(fusions_out),".fus")
-  }
   return(fusions_out)
 }
 
@@ -380,67 +352,28 @@ create_gene_binary <- function(samples=NULL,
     cna <- recode_alias(cna)
   }
 
+  cna_del <- .process_binary(data = cna,
+                             samples = samples,
+                             type = "del")
 
-  # * deletions ----------
-  cna_filt <- cna %>%
-    filter(.data$alteration == "deletion")
+  cna_amp <- .process_binary(data = cna,
+                             samples = samples,
+                             type = "amp")
 
-  # create empty data.frame to hold results -
-  cna_del <- as.data.frame(matrix(0L, nrow=length(samples),
-                                  ncol=length(unique(cna_filt$hugo_symbol))))
+  cna_bm <- full_join(cna_del, cna_amp, by = "sample_id") %>%
+            mutate(across(-c("sample_id"),
+                          .fns = function(x) ifelse(is.na(x), 0, x)))
 
-  colnames(cna_del) <- unique(cna_filt$hugo_symbol)
-  rownames(cna_del) <- unique(samples)
-
-  if(nrow(cna_filt) > 0) {
-
-    # populate matrix
-    for(i in samples){
-      genes <- cna_filt$hugo_symbol[cna_filt$sample_id %in% i]
-      if(length(genes) != 0) {
-        cna_del[match(i, rownames(cna_del)), match(unique(as.character(genes)), colnames(cna_del))] <- 1
-      }
-    }
-
-    n # filter those in final samples list
-    cna_del <- cna_del[rownames(cna_del) %in% samples,]
-    names(cna_del) <- paste0(names(cna_del), ".Del")
-
-  }
-  # * amplifications ----------
-
-  cna_filt <- cna %>%
-    filter(.data$alteration == "amplification")
-
-  # create empty data.frame to hold results
-  cna_amp <- as.data.frame(matrix(0L, nrow=length(samples),
-                                  ncol=length(unique(cna_filt$hugo_symbol))))
-
-  colnames(cna_amp) <- unique(cna_filt$hugo_symbol)
-  rownames(cna_amp) <- samples
-
-  if(nrow(cna_filt) > 0) {
-
-    # populate matrix
-    for(i in samples){
-      genes <- cna_filt$hugo_symbol[cna_filt$sample_id %in% i]
-      if(length(genes) != 0) {
-        cna_amp[match(i, rownames(cna_amp)), match(unique(as.character(genes)), colnames(cna_amp))] <- 1
-      }
-    }
-
-    # filter those in final samples list
-    cna_amp <- cna_amp[rownames(cna_amp) %in% samples,]
-    names(cna_amp) <- paste0(names(cna_amp), ".Amp")
-  }
-
-
-  # * join deletions and amplifications -----
-  cna_res <- bind_cols(cna_amp, cna_del)
-
-  return(cna_res)
+  return(cna_bm)
 }
 
+
+# internal binary matrix creation code for use in .XXX_gene_binary() functions
+
+#' Make a binary matrix from list of samples and genes
+#'
+#' @inheritParams
+#'
 
 
 

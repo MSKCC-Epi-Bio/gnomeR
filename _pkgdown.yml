@@ -16,26 +16,3 @@ authors:
     href: "https://github.com/hfuchs5/"
 
 
-reference:
-  - subtitle: Processing Data
-  - contents:
-    - create_gene_binary
-    - summarize_by_gene
-    - pivot_cna_wider
-    - pivot_cna_longer
-    - add_pathways
-    - recode_alias
-  - subtitle: Analyzing Data
-  - contents:
-    - tbl_genomic
-    - mutation_viz
-    - ggvarclass
-    - ggvartype
-    - ggsamplevar
-    - ggtopgene
-    - gggenecor
-    - ggcomut
-  - subtitle: Helper Functions
-  - contents:
-    - which_impact_panel
-

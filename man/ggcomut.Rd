@@ -20,6 +20,6 @@ Comutation heatmap of the top genes
 Comutation Heatmap of the Top Altered Genes
 }
 \examples{
-ggcomut(gnomeR::mutations)
+ggcomut(mutation = gnomeR::mutations)
 
 }
