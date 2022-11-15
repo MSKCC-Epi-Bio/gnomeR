@@ -275,13 +275,3 @@ test_that("test inclusion of NAs in mut_type ", {
 
 
 
-# test rm_empty arg----
-# add general tests
-# test_that("test rm_empty arg", {
-#
-#
-#   #example test
-#   expect_equal(TRUE, TRUE)
-# })
-
-

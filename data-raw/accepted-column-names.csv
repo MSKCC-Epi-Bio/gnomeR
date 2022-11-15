@@ -159,4 +159,5 @@ Fusion,,,yes,,old API names,
 Method,,,yes,,old API names,
 Frame,,,yes,,old API names,
 Alteration,alteration,,,yes,,can be present in long format
-,variantClass,,yes,,,fusion data structural variant type
+Class,variantClass,,yes,,,fusion data structural variant type
+HGVSg,,yes,,,,
