@@ -50,8 +50,7 @@ rename_columns <- function(df_to_check) {
 #' @param n number of characters from right
 #'
 #' @return string
-#' @export
-#'
+#' @noRd
 #' @examples
 #' substrRight("Hello", 2)
 #'
@@ -129,6 +128,46 @@ recode_cna <- function(alteration_vector){
 
 
 
+
+#' Create binary data.frames depending on type of mutation data
+#'
+#' @param data a dataset of alterations
+#' @param samples a vector of unique sample ids
+#' @param type a character indicator for which type of alteration the dataset contains
+#' @return a data.frame of alterations
+#' @keywords internal
+
+
+.process_binary <- function(data,
+                            samples,
+                            type = c("mut", "del", "amp", "fus")){
+
+
+  names_glue = switch(type,
+                      mut =  rlang::expr("{hugo_symbol}"),
+                      del = rlang::expr("{hugo_symbol}.Del"),
+                      amp = rlang::expr("{hugo_symbol}.Amp"),
+                      fus = rlang::expr("{hugo_symbol}.fus"))
+
+
+  data_out <- data %>%
+    filter(.data$sample_id %in% samples)
+
+  data_out <- switch(type,
+                     del = filter(data_out, .data$alteration %in% c("deletion","homozygous deletion","hemizygous deletion")),
+                     amp = filter(data_out, .data$alteration %in% c("amplification","high level amplification")),
+                     mut = data_out,
+                     fus = data_out)
+
+
+  data_out %>%
+    group_by(.data$sample_id,.data$hugo_symbol) %>%
+    filter(row_number()==1) %>%
+    mutate(fl = 1) %>%
+    tidyr::pivot_wider(id_cols = "sample_id", names_from = "hugo_symbol", values_from  = "fl",
+                       values_fill = 0, names_glue = rlang::eval_tidy(names_glue) ) %>%
+    ungroup()
+}
 
 
 

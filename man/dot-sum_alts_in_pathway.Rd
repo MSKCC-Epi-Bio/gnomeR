@@ -36,3 +36,4 @@ x <- .sum_alts_in_pathway(gene_binary,
     count_pathways_by = "alteration")
 
 }
+\keyword{internal}

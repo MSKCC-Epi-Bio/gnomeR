@@ -42,7 +42,7 @@ mutation_viz <- function(mutation, ...) {
 #' @param x A barplot of the mutationviz plot that follow barplot visualization
 #' @param ... other arguments as passed to adjust the percentage label size
 #' @return mutationviz Barplot The same barplot is now returned with percentages
-#' @export
+#' @noRd
 #'
 #' @examples
 #' ggvarclass(gnomeR::mutations) + add.perc()
@@ -247,7 +247,8 @@ gggenecor <- function(mutation, n_genes = 10, ...) {
 
   mutation <- rename_columns(mutation)
 
-  bin.mutation <- create_gene_binary(mutation = mutation,...)
+  bin.mutation <- create_gene_binary(mutation = mutation,...) %>%
+    select(-"sample_id")
 
   keep <- names(sort(apply(bin.mutation,2,
                            function(x){sum(x)}),
@@ -277,11 +278,12 @@ gggenecor <- function(mutation, n_genes = 10, ...) {
 #' @export
 #'
 #' @examples
-#' ggcomut(gnomeR::mutations)
+#' ggcomut(mutation = gnomeR::mutations)
 #'
 ggcomut <- function(mutation, n_genes = 10, ...) {
 
-  bin.mutation <- create_gene_binary(mutation = mutation,...)
+  bin.mutation <- create_gene_binary(mutation = mutation,...) %>%
+    select(-"sample_id")
   keep <- names(sort(apply(bin.mutation,2,
                            function(x){sum(x)}),
                      decreasing = T))

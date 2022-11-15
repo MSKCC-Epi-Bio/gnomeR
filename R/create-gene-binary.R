@@ -24,10 +24,8 @@
 #' Default is "no" which returns data as is with no NA annotation.
 #' If you wish to specify different panels for each sample, pass a data frame (with all samples included) with columns: `sample_id`, and `panel_id`. Each sample will be
 #' annotated with NAs according to that specific panel.
-#' @param rm_empty boolean specifying if alteration columns with no events founds should be removed. Default is FALSE
 #' @param recode_aliases boolean specifying if automated gene name alias matching should be done. Default is TRUE. When TRUE
 #' the function will check for genes that may have more than 1 name in your data using the aliases im gnomeR::impact_gene_info alias column
-#' @param ... Further arguments passed to the oncokb() function such a token
 #' @return a data frame with sample_id and alteration binary columns with values of 0/1
 #' @export
 #' @examples
@@ -46,7 +44,6 @@
 #' @import stringr
 
 create_gene_binary <- function(samples=NULL,
-
                           mutation = NULL,
                           mut_type = c("omit_germline", "somatic_only", "germline_only", "all"),
                           snp_only = FALSE,
@@ -57,9 +54,7 @@ create_gene_binary <- function(samples=NULL,
                           cna = NULL,
 
                           specify_panel = "no",
-                          rm_empty = FALSE,
-                          recode_aliases = TRUE,
-                          ...){
+                          recode_aliases = TRUE){
 
   genie_gene_info <- gnomeR::genie_gene_info
   impact_gene_info <- gnomeR::impact_gene_info
@@ -176,11 +171,15 @@ create_gene_binary <- function(samples=NULL,
                                           recode_aliases = recode_aliases))
 
   # put them all together
-  all_binary <- bind_cols(list(mutation_binary_df,
-                               fusion_binary_df,
-                               cna_binary_df))
 
-  # Platform-specific NA Annotation ------
+  df_list <- list(mutation_binary_df,fusion_binary_df,cna_binary_df)
+
+
+ all_binary <- purrr::reduce(df_list[!sapply(df_list, is.null)], #remove null if present
+                             full_join, by = "sample_id") %>%
+                mutate(across(setdiff(everything(),"sample_id"), .fns = function(x){ifelse(is.na(x),0,x)}))
+
+ # Platform-specific NA Annotation ------
 
   # we've already checked the arg is valid
   # If character, make into data frame sample-panel pair to input in function
@@ -189,15 +188,11 @@ create_gene_binary <- function(samples=NULL,
     sample_panel_pair <- switch(specify_panel,
       "impact" = specify_impact_panels(all_binary),
       "no" = {
-        rownames(all_binary) %>%
-          as.data.frame() %>%
-          stats::setNames("sample_id") %>%
+        all_binary['sample_id'] %>%
           mutate(panel_id = "no")
       },
 
-      rownames(all_binary) %>%
-        as.data.frame() %>%
-        stats::setNames("sample_id") %>%
+      all_binary['sample_id'] %>%
         mutate(panel_id = specify_panel)
     )
     # create data frame of sample IDs
@@ -206,19 +201,16 @@ create_gene_binary <- function(samples=NULL,
 
   all_binary <- annotate_any_panel(sample_panel_pair, all_binary)
 
-  # Remove Empty Columns ------
-  not_all_na <- which(
-      apply(all_binary, 2,
-                     function(x){
-                       length(unique(x[!is.na(x)]))
-                       }) > 1)
-
-  if(rm_empty) {
-    all_binary <- all_binary[, which(not_all_na > 1)]
-  }
 
   # Warnings and Attributes --------
 
+  # Throw Message About Empty Columns ------
+  all_column_is_na <- names(all_binary)[apply(all_binary, 2, function(x) sum(is.na(x))) == nrow(all_binary)]
+
+  if(length(all_column_is_na) > 0) {
+    cli::cli_alert_warning(c("{length(all_column_is_na)} columns have no non-missing values. This may occur when ",
+                           "there are genes in your data that are not in the specified panels (see `specify_panel` argument"))
+  }
   # return omitted zero  samples as warning/attribute
 
   # samples_omitted <- setdiff(samples, samples_final)
@@ -239,7 +231,7 @@ create_gene_binary <- function(samples=NULL,
 #' Make Binary Matrix From Mutation data frame
 #'
 #' @inheritParams create_gene_binary
-#'
+#' @keywords internal
 #' @return a data frame
 #' @export
 #'
@@ -288,25 +280,9 @@ create_gene_binary <- function(samples=NULL,
    )
 
 
+  mut_bm <- .process_binary(data = mutation, samples = samples, type = "mut")
 
-
-
-  # create empty data.frame to hold results -----
-  mut <- as.data.frame(matrix(0L, nrow=length(samples),
-                              ncol=length(unique(mutation$hugo_symbol))))
-
-  colnames(mut) <- unique(mutation$hugo_symbol)
-  rownames(mut) <- samples
-
-  # populate matrix
-  for(i in samples){
-    genes <- mutation$hugo_symbol[mutation$sample_id %in% i]
-    if(length(genes) != 0) {
-      mut[match(i, rownames(mut)), match(unique(as.character(genes)), colnames(mut))] <- 1
-      }
-  }
-
-  return(mut)
+  return(mut_bm)
 }
 
 
@@ -316,7 +292,7 @@ create_gene_binary <- function(samples=NULL,
 #' Make Binary Matrix From Fusion data frame
 #'
 #' @inheritParams create_gene_binary
-#'
+#' @keywords internal
 #' @return a data frame
 #'
 .fusions_gene_binary <- function(fusion,
@@ -324,41 +300,26 @@ create_gene_binary <- function(samples=NULL,
                                  specify_panel,
                                  recode_aliases){
 
-  # CHECK HERE----
-  if("site_1_hugo_symbol" %in% colnames(fusion)) {
-    fusion <- rename(fusion, "hugo_symbol" = "site_1_hugo_symbol")
-  }
 
-
-  fusion <- fusion %>%
-    filter(.data$sample_id %in% samples)
+  # create long version with event split by two involved genes
+  # events are no longer
+  fusion <- fusion %>% select("sample_id",
+                              "site_1_hugo_symbol",
+                              "site_2_hugo_symbol") %>%
+    tidyr::pivot_longer(-"sample_id", values_to = "hugo_symbol") %>%
+    select("sample_id", "hugo_symbol")
 
   if(recode_aliases) {
-    fusion <- recode_alias(fusion)
+    mutation <- recode_alias(fusion)
   }
 
-  # create empty data frame -----
-  fusions_out <- as.data.frame(matrix(0L, nrow=length(samples),
-                              ncol=length(unique(fusion$hugo_symbol))))
+  fusion <- fusion %>%
+    stats::na.omit() %>%
+    distinct()
 
+  fus_bm <- .process_binary(data = fusion, samples = samples, type = "fus")
 
-  colnames(fusions_out) <- unique(fusion$hugo_symbol)
-  rownames(fusions_out) <- samples
-
-  # populate matrix
-  for(i in samples){
-    genes <- fusion$hugo_symbol[fusion$sample_id %in% i]
-    if(length(genes) != 0)
-      fusions_out[match(i,rownames(fusions_out)),
-                 match(unique(as.character(genes)),colnames(fusions_out))] <- 1
-
-  }
-
-  # add .fus suffix on columns
-  if(ncol(fusions_out) > 0) {
-    colnames(fusions_out) <- paste0(colnames(fusions_out),".fus")
-  }
-  return(fusions_out)
+  return(fus_bm)
 }
 
 
@@ -367,7 +328,7 @@ create_gene_binary <- function(samples=NULL,
 #' Make Binary Matrix From CNA data frame
 #'
 #' @inheritParams create_gene_binary
-#'
+#' @keywords internal
 #' @return a data frame
 #'
 .cna_gene_binary <- function(cna,
@@ -380,67 +341,28 @@ create_gene_binary <- function(samples=NULL,
     cna <- recode_alias(cna)
   }
 
+  cna_del <- .process_binary(data = cna,
+                             samples = samples,
+                             type = "del")
 
-  # * deletions ----------
-  cna_filt <- cna %>%
-    filter(.data$alteration == "deletion")
+  cna_amp <- .process_binary(data = cna,
+                             samples = samples,
+                             type = "amp")
 
-  # create empty data.frame to hold results -
-  cna_del <- as.data.frame(matrix(0L, nrow=length(samples),
-                                  ncol=length(unique(cna_filt$hugo_symbol))))
+  cna_bm <- full_join(cna_del, cna_amp, by = "sample_id") %>%
+            mutate(across(-c("sample_id"),
+                          .fns = function(x) ifelse(is.na(x), 0, x)))
 
-  colnames(cna_del) <- unique(cna_filt$hugo_symbol)
-  rownames(cna_del) <- unique(samples)
-
-  if(nrow(cna_filt) > 0) {
-
-    # populate matrix
-    for(i in samples){
-      genes <- cna_filt$hugo_symbol[cna_filt$sample_id %in% i]
-      if(length(genes) != 0) {
-        cna_del[match(i, rownames(cna_del)), match(unique(as.character(genes)), colnames(cna_del))] <- 1
-      }
-    }
-
-    n # filter those in final samples list
-    cna_del <- cna_del[rownames(cna_del) %in% samples,]
-    names(cna_del) <- paste0(names(cna_del), ".Del")
-
-  }
-  # * amplifications ----------
-
-  cna_filt <- cna %>%
-    filter(.data$alteration == "amplification")
-
-  # create empty data.frame to hold results
-  cna_amp <- as.data.frame(matrix(0L, nrow=length(samples),
-                                  ncol=length(unique(cna_filt$hugo_symbol))))
-
-  colnames(cna_amp) <- unique(cna_filt$hugo_symbol)
-  rownames(cna_amp) <- samples
-
-  if(nrow(cna_filt) > 0) {
-
-    # populate matrix
-    for(i in samples){
-      genes <- cna_filt$hugo_symbol[cna_filt$sample_id %in% i]
-      if(length(genes) != 0) {
-        cna_amp[match(i, rownames(cna_amp)), match(unique(as.character(genes)), colnames(cna_amp))] <- 1
-      }
-    }
-
-    # filter those in final samples list
-    cna_amp <- cna_amp[rownames(cna_amp) %in% samples,]
-    names(cna_amp) <- paste0(names(cna_amp), ".Amp")
-  }
-
-
-  # * join deletions and amplifications -----
-  cna_res <- bind_cols(cna_amp, cna_del)
-
-  return(cna_res)
+  return(cna_bm)
 }
 
+
+# internal binary matrix creation code for use in .XXX_gene_binary() functions
+
+#' Make a binary matrix from list of samples and genes
+#'
+#' @inheritParams
+#'
 
 
 

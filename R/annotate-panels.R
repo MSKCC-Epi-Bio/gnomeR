@@ -3,7 +3,7 @@
 #' IMPACT Panel Annotation of NA's
 #'
 #' @param gene_binary a processed gene_binary
-#'
+#' @keywords internal
 #' @return  a data frame iwth NAs inserted for genes not tested for given panel versions
 #' @export
 #'
@@ -13,9 +13,7 @@ specify_impact_panels <- function(gene_binary) {
   gene_panels <- gnomeR::gene_panels
 
   # create data frame of sample IDs
-  sample_panel_pair <- rownames(gene_binary) %>%
-    as.data.frame() %>%
-    stats::setNames("sample_id")
+  sample_panel_pair <- gene_binary["sample_id"]
 
   any_impact <- sum(stringr::str_detect(sample_panel_pair$sample_id,
                                         "-IM|-IH"))
@@ -51,6 +49,7 @@ specify_impact_panels <- function(gene_binary) {
 #'
 #' @param sample_panel_pair a data frame of `sample_id`-`panel_id` pairs specifying panels to use for annotation of each sample
 #' @param gene_binary a binary matrix of 0/1 indicating alteration yes/no for each sample
+#' @keywords internal
 #' @return a gene_binary annotated for missingness
 #' @export
 
@@ -72,7 +71,10 @@ annotate_any_panel <- function(sample_panel_pair, gene_binary) {
     left_join(gnomeR::gene_panels, by = c("panel_id" = "gene_panel")) %>%
     select(-"entrez_ids_in_panel")
 
-  user_data_genes <- gsub(".fus|.Del|.Amp|.cna", "", colnames(gene_binary))
+  user_data_genes <- gene_binary %>%
+    select(-"sample_id") %>%
+    names() %>%
+    gsub(".fus|.Del|.Amp|.cna", "", .)
 
   sample_panel_pair_nest <- sample_panel_pair_nest %>%
     mutate(na_genes_raw = purrr::map(.data$genes_in_panel,
@@ -102,7 +104,7 @@ annotate_any_panel <- function(sample_panel_pair, gene_binary) {
 #' @param samples_in_panel samples to be annotated for each panel
 #' @param na_genes genes to make NA
 #' @param ... other args passed
-#'
+#' @keywords internal
 #' @return an annotated data frame
 #' @export
 #'
@@ -112,7 +114,7 @@ annotate_specific_panel <- function(gene_binary,
                                     samples_in_panel,
                                     na_genes, ...) {
 
-  mut_sub <- gene_binary[samples_in_panel, ]
+  mut_sub <- gene_binary[gene_binary$sample_id %in% samples_in_panel,]
   mut_sub[,stats::na.omit(match(na_genes, colnames(mut_sub)))] <- NA
 
   return(mut_sub)
@@ -128,7 +130,7 @@ annotate_specific_panel <- function(gene_binary,
 #'
 #' @return a data frame with hugo symbols and the IMPACT panels on which they are
 #' included
-#'
+#' @keywords internal
 #' @examples
 #'
 #' hugos <- unique(gnomeR::mutations$hugoGeneSymbol)[1:10]

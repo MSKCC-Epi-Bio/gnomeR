@@ -48,3 +48,4 @@ gene_binary <- create_gene_binary(mutation = gnomeR::mutations,
 pathway_df <- add_pathways(gene_binary, pathways = "Notch")
 
 }
+\keyword{internal}

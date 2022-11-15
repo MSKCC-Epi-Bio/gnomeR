@@ -8,14 +8,14 @@
 #
 # test_that("test rename_columns runs with no errors", {
 #
-#   expect_error(rename_columns(gnomeR::mut), NA)
+#   expect_error(rename_columns(gnomeR::muations), NA)
 #
 # })
 #
 # # do we want it to display what it changed? currently does not.
 # test_that("test rename_columns does not have messages", {
 #
-#   expect_message(rename_columns(gnomeR::mut), NA)
+#   expect_message(rename_columns(gnomeR::muations), NA)
 #
 # })
 #
@@ -23,8 +23,8 @@
 # test_that("test colnames are renamed properly", {
 #
 #   expect_snapshot(
-#     waldo::compare(colnames(gnomeR::mut),
-#                    colnames(rename_columns(gnomeR::mut)))
+#     waldo::compare(colnames(gnomeR::muations),
+#                    colnames(rename_columns(gnomeR::muations)))
 #   )
 #
 # })
@@ -33,8 +33,8 @@
 # test_that("binary matrix runs with renamed columns without error", {
 #
 #   expect_error(
-#    gnomeR::create_gene_binary(samples = gnomeR::mut$Tumor_Sample_Barcode,
-#                               mutation = rename_columns(gnomeR::mut)), NA)
+#    gnomeR::create_gene_binary(samples = gnomeR::muations$Tumor_Sample_Barcode,
+#                               mutation = rename_columns(gnomeR::muations)), NA)
 #
 # })
 #

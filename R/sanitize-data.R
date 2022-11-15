@@ -3,6 +3,7 @@
 #' @param mutation Raw maf dataframe containing alteration data
 #' @param ... other arguments passed from create_gene_binary() (recode.aliases).
 #' @return a corrected maf file or an error if problems with maf
+#' @keywords internal
 #' @export
 #'
 #' @examples
@@ -92,6 +93,7 @@ sanitize_mutation_input <- function(mutation, ...)  {
 #' @param ... other arguments passed from create_gene_binary()
 #'
 #' @return a checked data frame
+#' @keywords internal
 #' @export
 #' @examples
 #' fus <- sanitize_fusion_input(fusion = gnomeR::sv)
@@ -103,29 +105,21 @@ sanitize_fusion_input <- function(fusion, ...)  {
   fusion <- rename_columns(fusion)
 
   # Check required columns & data types ------------------------------------------
-
+  required_cols <- c("sample_id", "site_1_hugo_symbol", "site_2_hugo_symbol")
   column_names <- colnames(fusion)
-  # check for hugo symbol
 
-  if(!("sample_id" %in% column_names) > 0) {
-    cli::cli_abort("No sample ID column found.")
+  which_missing <- required_cols[which(!(required_cols %in% column_names))]
+
+  if(length(which_missing) > 0) {
+    cli::cli_abort("The following required columns are missing in your mutations data: {.field {which_missing}}")
   }
-
-  if(!("hugo_symbol" %in% column_names |
-       "site_1_entrez_gene_id" %in% column_names)) {
-
-    cli::cli_abort("No hugo symbol column found. See `gnomeR::names_df` for accepted column names")
-  }
-
 
   # Make sure they are character
   fusion <- fusion %>%
-    mutate(sample_id = as.character(.data$sample_id)) %>%
-    purrr::when(
-      "hugo_symbol" %in% column_names ~
-        mutate(., "hugo_symbol" = as.character(.data$hugo_symbol)),
-      TRUE ~
-        mutate(., "site_1_entrez_gene_id" = as.character(.data$site_1_entrez_gene_id)))
+    mutate(sample_id = as.character(.data$sample_id),
+           site_1_hugo_symbol = as.character(.data$site_1_hugo_symbol),
+           site_2_hugo_symbol = as.character(.data$site_2_hugo_symbol))
+
 
   return(fusion)
 }
@@ -138,6 +132,7 @@ sanitize_fusion_input <- function(fusion, ...)  {
 #' @param ... other arguments passed from create_gene_binary()
 #'
 #' @return a checked data frame
+#' @keywords internal
 #' @export
 #' @examples
 #'

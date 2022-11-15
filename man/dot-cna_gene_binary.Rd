@@ -33,3 +33,4 @@ a data frame
 \description{
 Make Binary Matrix From CNA data frame
 }
+\keyword{internal}

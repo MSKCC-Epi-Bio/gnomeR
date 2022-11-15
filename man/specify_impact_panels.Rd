@@ -15,3 +15,4 @@ a data frame iwth NAs inserted for genes not tested for given panel versions
 \description{
 IMPACT Panel Annotation of NA's
 }
+\keyword{internal}
