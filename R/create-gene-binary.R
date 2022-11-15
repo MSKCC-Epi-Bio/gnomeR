@@ -24,10 +24,8 @@
 #' Default is "no" which returns data as is with no NA annotation.
 #' If you wish to specify different panels for each sample, pass a data frame (with all samples included) with columns: `sample_id`, and `panel_id`. Each sample will be
 #' annotated with NAs according to that specific panel.
-#' @param rm_empty boolean specifying if alteration columns with no events founds should be removed. Default is FALSE
 #' @param recode_aliases boolean specifying if automated gene name alias matching should be done. Default is TRUE. When TRUE
 #' the function will check for genes that may have more than 1 name in your data using the aliases im gnomeR::impact_gene_info alias column
-#' @param ... Further arguments passed to the oncokb() function such a token
 #' @return a data frame with sample_id and alteration binary columns with values of 0/1
 #' @export
 #' @examples
@@ -46,7 +44,6 @@
 #' @import stringr
 
 create_gene_binary <- function(samples=NULL,
-
                           mutation = NULL,
                           mut_type = c("omit_germline", "somatic_only", "germline_only", "all"),
                           snp_only = FALSE,
@@ -57,9 +54,7 @@ create_gene_binary <- function(samples=NULL,
                           cna = NULL,
 
                           specify_panel = "no",
-                          rm_empty = FALSE,
-                          recode_aliases = TRUE,
-                          ...){
+                          recode_aliases = TRUE){
 
   genie_gene_info <- gnomeR::genie_gene_info
   impact_gene_info <- gnomeR::impact_gene_info
@@ -183,7 +178,8 @@ create_gene_binary <- function(samples=NULL,
  all_binary <- purrr::reduce(df_list[!sapply(df_list, is.null)], #remove null if present
                              full_join, by = "sample_id") %>%
                 mutate(across(setdiff(everything(),"sample_id"), .fns = function(x){ifelse(is.na(x),0,x)}))
-  # Platform-specific NA Annotation ------
+
+ # Platform-specific NA Annotation ------
 
   # we've already checked the arg is valid
   # If character, make into data frame sample-panel pair to input in function
@@ -192,15 +188,11 @@ create_gene_binary <- function(samples=NULL,
     sample_panel_pair <- switch(specify_panel,
       "impact" = specify_impact_panels(all_binary),
       "no" = {
-        rownames(all_binary) %>%
-          as.data.frame() %>%
-          stats::setNames("sample_id") %>%
+        all_binary['sample_id'] %>%
           mutate(panel_id = "no")
       },
 
-      rownames(all_binary) %>%
-        as.data.frame() %>%
-        stats::setNames("sample_id") %>%
+      all_binary['sample_id'] %>%
         mutate(panel_id = specify_panel)
     )
     # create data frame of sample IDs
@@ -209,19 +201,16 @@ create_gene_binary <- function(samples=NULL,
 
   all_binary <- annotate_any_panel(sample_panel_pair, all_binary)
 
-  # Remove Empty Columns ------
-  not_all_na <- which(
-      apply(all_binary, 2,
-                     function(x){
-                       length(unique(x[!is.na(x)]))
-                       }) > 1)
-
-  if(rm_empty) {
-    all_binary <- all_binary[, which(not_all_na > 1)]
-  }
 
   # Warnings and Attributes --------
 
+  # Throw Message About Empty Columns ------
+  all_column_is_na <- names(all_binary)[apply(all_binary, 2, function(x) sum(is.na(x))) == nrow(all_binary)]
+
+  if(length(all_column_is_na) > 0) {
+    cli::cli_alert_warning(c("{length(all_column_is_na)} columns have no non-missing values. This may occur when ",
+                           "there are genes in your data that are not in the specified panels (see `specify_panel` argument"))
+  }
   # return omitted zero  samples as warning/attribute
 
   # samples_omitted <- setdiff(samples, samples_final)
@@ -291,10 +280,9 @@ create_gene_binary <- function(samples=NULL,
    )
 
 
-  # create empty data.frame to hold results -----
-  mut <- .process_binary(data = mutation, samples = samples, type = "mut")
+  mut_bm <- .process_binary(data = mutation, samples = samples, type = "mut")
 
-  return(mut)
+  return(mut_bm)
 }
 
 
@@ -312,25 +300,26 @@ create_gene_binary <- function(samples=NULL,
                                  specify_panel,
                                  recode_aliases){
 
-  # CHECK HERE----
-  if("site_1_hugo_symbol" %in% colnames(fusion)) {
-    fusion <- rename(fusion, "hugo_symbol" = "site_1_hugo_symbol")
-  }
 
-
-  fusion <- fusion %>%
-    filter(.data$sample_id %in% samples)
+  # create long version with event split by two involved genes
+  # events are no longer
+  fusion <- fusion %>% select("sample_id",
+                              "site_1_hugo_symbol",
+                              "site_2_hugo_symbol") %>%
+    tidyr::pivot_longer(-"sample_id", values_to = "hugo_symbol") %>%
+    select("sample_id", "hugo_symbol")
 
   if(recode_aliases) {
-    fusion <- recode_alias(fusion)
+    mutation <- recode_alias(fusion)
   }
 
-  # create empty data frame -----
-  fusions_out <- .process_binary(data = fusion,
-                                 samples = samples,
-                                 type = "fus")
+  fusion <- fusion %>%
+    stats::na.omit() %>%
+    distinct()
 
-  return(fusions_out)
+  fus_bm <- .process_binary(data = fusion, samples = samples, type = "fus")
+
+  return(fus_bm)
 }
 
 

@@ -14,9 +14,7 @@ create_gene_binary(
   fusion = NULL,
   cna = NULL,
   specify_panel = "no",
-  rm_empty = FALSE,
-  recode_aliases = TRUE,
-  ...
+  recode_aliases = TRUE
 )
 }
 \arguments{
@@ -50,12 +48,8 @@ Default is "no" which returns data as is with no NA annotation.
 If you wish to specify different panels for each sample, pass a data frame (with all samples included) with columns: \code{sample_id}, and \code{panel_id}. Each sample will be
 annotated with NAs according to that specific panel.}
 
-\item{rm_empty}{boolean specifying if alteration columns with no events founds should be removed. Default is FALSE}
-
 \item{recode_aliases}{boolean specifying if automated gene name alias matching should be done. Default is TRUE. When TRUE
 the function will check for genes that may have more than 1 name in your data using the aliases im gnomeR::impact_gene_info alias column}
-
-\item{...}{Further arguments passed to the oncokb() function such a token}
 }
 \value{
 a data frame with sample_id and alteration binary columns with values of 0/1
