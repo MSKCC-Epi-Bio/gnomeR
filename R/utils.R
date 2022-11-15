@@ -50,7 +50,6 @@ rename_columns <- function(df_to_check) {
 #' @param n number of characters from right
 #'
 #' @return string
-#' @export
 #' @noRd
 #' @examples
 #' substrRight("Hello", 2)

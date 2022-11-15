@@ -126,7 +126,6 @@
 #'     \item{V4}{Strand}
 #'     \item{V5}{Interval name}
 #'     }
-#' @noRd
 "ti_341"
 
 #' Intervals sequenced in 410 panel
@@ -141,7 +140,6 @@
 #'     \item{V4}{Strand}
 #'     \item{V5}{Interval name}
 #'     }
-#' @noRd
 "ti_410"
 
 
@@ -156,7 +154,6 @@
 #'     \item{V4}{Strand}
 #'     \item{V5}{Interval name}
 #'     }
-#' @noRd
 "ti_468"
 
 #' IMPACT Alias Tables

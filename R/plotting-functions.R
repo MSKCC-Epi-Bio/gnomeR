@@ -43,7 +43,6 @@ mutation_viz <- function(mutation, ...) {
 #' @param ... other arguments as passed to adjust the percentage label size
 #' @return mutationviz Barplot The same barplot is now returned with percentages
 #' @noRd
-#' @export
 #'
 #' @examples
 #' ggvarclass(gnomeR::mutations) + add.perc()

@@ -65,4 +65,8 @@ reference:
     - pathways
     - impact_alias_table
     - impact_gene_info
+    - ti_341
+    - ti_410
+    - ti_468
+
 
