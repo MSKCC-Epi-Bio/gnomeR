@@ -1,6 +1,10 @@
 pandoc: 2.19.2
 pkgdown: 2.0.6
 pkgdown_sha: ~
-articles: {}
-last_built: 2022-11-08T19:32Z
+articles:
+  data-processing-vignette: data-processing-vignette.html
+last_built: 2022-11-15T20:25Z
+urls:
+  reference: https://mskcc-epi-bio.github.io/gnomeR/reference
+  article: https://mskcc-epi-bio.github.io/gnomeR/articles
 
