@@ -44,8 +44,8 @@
     </div>
 
     <div class="section level2">
-      <h2 id="all-functions">All functions<a class="anchor" aria-label="anchor" href="#all-functions"></a></h2>
       
+      <h3 id="processing-data">Processing Data<a class="anchor" aria-label="anchor" href="#processing-data"></a></h3>
       
 
       
@@ -56,15 +56,25 @@
 
       <dl><dt>
           
-          <code><a href="CNregions.mod.html">CNregions.mod()</a></code> 
+          <code><a href="create_gene_binary.html">create_gene_binary()</a></code> 
         </dt>
-        <dd>CNregions.mod
-Modified CNregions function from the facets package to handle small sample sizes.</dd>
+        <dd>Enables creation of a binary matrix from a mutation file with
+a predefined list of samples (rows are samples and columns are genes)</dd>
       </dl><dl><dt>
           
-          <code><a href="add.perc.html">add.perc()</a></code> 
+          <code><a href="summarize_by_gene.html">summarize_by_gene()</a></code> 
         </dt>
-        <dd>Add a percentage to counts</dd>
+        <dd>Simplify binary matrix to one column per gene that counts any alteration type as 1</dd>
+      </dl><dl><dt>
+          
+          <code><a href="pivot_cna_wider.html">pivot_cna_wider()</a></code> 
+        </dt>
+        <dd>Pivot CNA from maf (long) version to wide version</dd>
+      </dl><dl><dt>
+          
+          <code><a href="pivot_cna_longer.html">pivot_cna_longer()</a></code> 
+        </dt>
+        <dd>Reformat Wide CNA Data to Long</dd>
       </dl><dl><dt>
           
           <code><a href="add_pathways.html">add_pathways()</a></code> 
@@ -72,116 +82,30 @@ Modified CNregions function from the facets package to handle small sample sizes
         <dd>Pathway Alterations</dd>
       </dl><dl><dt>
           
-          <code><a href="annotate_any_panel.html">annotate_any_panel()</a></code> 
+          <code><a href="recode_alias.html">recode_alias()</a></code> 
         </dt>
-        <dd>Annotate Missing Gene Values According to Specific Panels</dd>
+        <dd>Recode Hugo Symbol Column</dd>
+      </dl></div><div class="section level2">
+      
+      <h3 id="analyzing-data">Analyzing Data<a class="anchor" aria-label="anchor" href="#analyzing-data"></a></h3>
+      
+
+      
+    </div><div id="" class="section level2">
+      
+      
+      
+
+      <dl><dt>
+          
+          <code><a href="tbl_genomic.html">tbl_genomic()</a></code> 
+        </dt>
+        <dd>tbl_genomic</dd>
       </dl><dl><dt>
           
-          <code><a href="annotate_specific_panel.html">annotate_specific_panel()</a></code> 
+          <code><a href="mutation_viz.html">mutation_viz()</a></code> 
         </dt>
-        <dd>Utility function  to insert NA's According to Panel</dd>
-      </dl><dl><dt>
-          
-          <code><a href="clin.patients.html">clin.patients</a></code> 
-        </dt>
-        <dd>An example of clinical patient level information file from
-IMPACT cbioPortal dataset.</dd>
-      </dl><dl><dt>
-          
-          <code><a href="clin.sample.html">clin.sample</a></code> 
-        </dt>
-        <dd>An example of clinical sample level information file from IMPACT cbioPortal dataset.</dd>
-      </dl><dl><dt>
-          
-          <code><a href="cna.html">cna</a></code> 
-        </dt>
-        <dd>An example IMPACT cBioPortal mutation data set in API format</dd>
-      </dl><dl><dt>
-          
-          <code><a href="cna_wide.html">cna_wide</a></code> 
-        </dt>
-        <dd>An example IMPACT cBioPortal CNA in wide format</dd>
-      </dl><dl><dt>
-          
-          <code><a href="consequence_map.html">consequence_map</a></code> 
-        </dt>
-        <dd>Consequence Map</dd>
-      </dl><dl><dt>
-          
-          <code><a href="create_gene_binary.html">create_gene_binary()</a></code> 
-        </dt>
-        <dd>Enables creation of a binary matrix from a mutation file with
-a predefined list of samples (rows are samples and columns are genes)</dd>
-      </dl><dl><dt>
-          
-          <code><a href="curated_genes.html">curated_genes</a></code> 
-        </dt>
-        <dd>List of curated genes for IMPACT oncoKB annotation.</dd>
-      </dl><dl><dt>
-          
-          <code><a href="dot-cna_gene_binary.html">.cna_gene_binary()</a></code> 
-        </dt>
-        <dd>Make Binary Matrix From CNA data frame</dd>
-      </dl><dl><dt>
-          
-          <code><a href="dot-fusions_gene_binary.html">.fusions_gene_binary()</a></code> 
-        </dt>
-        <dd>Make Binary Matrix From Fusion data frame</dd>
-      </dl><dl><dt>
-          
-          <code><a href="dot-mutations_gene_binary.html">.mutations_gene_binary()</a></code> 
-        </dt>
-        <dd>Make Binary Matrix From Mutation data frame</dd>
-      </dl><dl><dt>
-          
-          <code><a href="dot-process_binary.html">.process_binary()</a></code> 
-        </dt>
-        <dd>Create binary data.frames depending on type of mutation data</dd>
-      </dl><dl><dt>
-          
-          <code><a href="dot-sum_alts_in_pathway.html">.sum_alts_in_pathway()</a></code> 
-        </dt>
-        <dd>Sum Alterations in a Pathway</dd>
-      </dl><dl><dt>
-          
-          <code><a href="facets_dat.html">facets_dat()</a></code> 
-        </dt>
-        <dd>facets_dat</dd>
-      </dl><dl><dt>
-          
-          <code><a href="facets_heatmap.html">facets_heatmap()</a></code> 
-        </dt>
-        <dd>facets_heatmap</dd>
-      </dl><dl><dt>
-          
-          <code><a href="gene_panels.html">gene_panels</a></code> 
-        </dt>
-        <dd>Public Gene Panels on cBioPortal</dd>
-      </dl><dl><dt>
-          
-          <code><a href="genie_gene_info.html">genie_gene_info</a></code> 
-        </dt>
-        <dd>GENIE consortium Gene Meta Data</dd>
-      </dl><dl><dt>
-          
-          <code><a href="ggcomut.html">ggcomut()</a></code> 
-        </dt>
-        <dd>Comutation Heatmap of the Top Altered Genes</dd>
-      </dl><dl><dt>
-          
-          <code><a href="gggenecor.html">gggenecor()</a></code> 
-        </dt>
-        <dd>Correlation Heatmap of the Top Altered Genes</dd>
-      </dl><dl><dt>
-          
-          <code><a href="ggsamplevar.html">ggsamplevar()</a></code> 
-        </dt>
-        <dd>Histogram of Variants Per Sample Colored By Variant Classification</dd>
-      </dl><dl><dt>
-          
-          <code><a href="ggtopgenes.html">ggtopgenes()</a></code> 
-        </dt>
-        <dd>Barplot of Most Frequently Altered Genes</dd>
+        <dd>Creates a set of plot summarising a mutation file.</dd>
       </dl><dl><dt>
           
           <code><a href="ggvarclass.html">ggvarclass()</a></code> 
@@ -194,79 +118,40 @@ a predefined list of samples (rows are samples and columns are genes)</dd>
         <dd>Barplot of Variant Type Counts</dd>
       </dl><dl><dt>
           
-          <code><a href="gnomer_colors.html">gnomer_colors</a></code> 
+          <code><a href="ggsamplevar.html">ggsamplevar()</a></code> 
         </dt>
-        <dd>List of suggested color palettes for when you need a large palette</dd>
+        <dd>Histogram of Variants Per Sample Colored By Variant Classification</dd>
       </dl><dl><dt>
           
-          <code><a href="gnomer_cols.html">gnomer_cols()</a></code> 
+          <code><a href="ggtopgenes.html">ggtopgenes()</a></code> 
         </dt>
-        <dd>Function to extract colors from <code>gnomer_colors</code> as hex codes</dd>
+        <dd>Barplot of Most Frequently Altered Genes</dd>
       </dl><dl><dt>
           
-          <code><a href="gnomer_pal.html">gnomer_pal()</a></code> 
+          <code><a href="gggenecor.html">gggenecor()</a></code> 
         </dt>
-        <dd>Return function to interpolate a gnomeR color palette</dd>
+        <dd>Correlation Heatmap of the Top Altered Genes</dd>
       </dl><dl><dt>
           
-          <code><a href="gnomer_palette.html">gnomer_palette()</a></code> 
+          <code><a href="ggcomut.html">ggcomut()</a></code> 
         </dt>
-        <dd>Access the colors in a gnomeR color palette</dd>
-      </dl><dl><dt>
+        <dd>Comutation Heatmap of the Top Altered Genes</dd>
+      </dl></div><div class="section level2">
+      
+      <h3 id="helper-functions">Helper Functions<a class="anchor" aria-label="anchor" href="#helper-functions"></a></h3>
+      
+
+      
+    </div><div id="" class="section level2">
+      
+      
+      
+
+      <dl><dt>
           
-          <code><a href="gnomer_palettes.html">gnomer_palettes</a></code> 
+          <code><a href="which_impact_panel.html">which_impact_panel()</a></code> 
         </dt>
-        <dd>Complete list of gnomeR color palettes</dd>
-      </dl><dl><dt>
-          
-          <code><a href="impact_alias_table.html">impact_alias_table</a></code> 
-        </dt>
-        <dd>IMPACT Alias Tables</dd>
-      </dl><dl><dt>
-          
-          <code><a href="impact_gene_info.html">impact_gene_info</a></code> 
-        </dt>
-        <dd>IMPACT Gene Meta Data</dd>
-      </dl><dl><dt>
-          
-          <code><a href="mutation_viz.html">mutation_viz()</a></code> 
-        </dt>
-        <dd>Creates a set of plot summarising a mutation file.</dd>
-      </dl><dl><dt>
-          
-          <code><a href="mutations.html">mutations</a></code> 
-        </dt>
-        <dd>An example IMPACT cBioPortal mutation data set in API format</dd>
-      </dl><dl><dt>
-          
-          <code><a href="names_df.html">names_df</a></code> 
-        </dt>
-        <dd>Data Frame of Column Names</dd>
-      </dl><dl><dt>
-          
-          <code><a href="panel_names.html">panel_names</a></code> 
-        </dt>
-        <dd>GENIE panel names as found in synapse data</dd>
-      </dl><dl><dt>
-          
-          <code><a href="pathways.html">pathways</a></code> 
-        </dt>
-        <dd>IMPACT Gene Pathways</dd>
-      </dl><dl><dt>
-          
-          <code><a href="pivot_cna_longer.html">pivot_cna_longer()</a></code> 
-        </dt>
-        <dd>Reformat Wide CNA Data to Long</dd>
-      </dl><dl><dt>
-          
-          <code><a href="pivot_cna_wider.html">pivot_cna_wider()</a></code> 
-        </dt>
-        <dd>Pivot CNA from maf (long) version to wide version</dd>
-      </dl><dl><dt>
-          
-          <code><a href="recode_alias.html">recode_alias()</a></code> 
-        </dt>
-        <dd>Recode Hugo Symbol Column</dd>
+        <dd>provide a list of impact panels a provided gene is found within</dd>
       </dl><dl><dt>
           
           <code><a href="recode_cna.html">recode_cna()</a></code> 
@@ -282,21 +167,42 @@ a predefined list of samples (rows are samples and columns are genes)</dd>
           <code><a href="resolve_alias.html">resolve_alias()</a></code> 
         </dt>
         <dd>Resolve Hugo Symbol Names with Aliases</dd>
+      </dl></div><div class="section level2">
+      
+      <h3 id="color-palette">Color Palette<a class="anchor" aria-label="anchor" href="#color-palette"></a></h3>
+      
+
+      
+    </div><div id="" class="section level2">
+      
+      
+      
+
+      <dl><dt>
+          
+          <code><a href="gnomer_colors.html">gnomer_colors</a></code> 
+        </dt>
+        <dd>List of suggested color palettes for when you need a large palette</dd>
       </dl><dl><dt>
           
-          <code><a href="sanitize_cna_input.html">sanitize_cna_input()</a></code> 
+          <code><a href="gnomer_cols.html">gnomer_cols()</a></code> 
         </dt>
-        <dd>Check CNA data frame to ensure columns are correct</dd>
+        <dd>Function to extract colors from <code>gnomer_colors</code> as hex codes</dd>
       </dl><dl><dt>
           
-          <code><a href="sanitize_fusion_input.html">sanitize_fusion_input()</a></code> 
+          <code><a href="gnomer_palettes.html">gnomer_palettes</a></code> 
         </dt>
-        <dd>Check fusion data frame to ensure columns are correct</dd>
+        <dd>Complete list of gnomeR color palettes</dd>
       </dl><dl><dt>
           
-          <code><a href="sanitize_mutation_input.html">sanitize_mutation_input()</a></code> 
+          <code><a href="gnomer_palette.html">gnomer_palette()</a></code> 
         </dt>
-        <dd>Checks MAF input to ensure column names are correct and renamed genes are corrected</dd>
+        <dd>Access the colors in a gnomeR color palette</dd>
+      </dl><dl><dt>
+          
+          <code><a href="gnomer_pal.html">gnomer_pal()</a></code> 
+        </dt>
+        <dd>Return function to interpolate a gnomeR color palette</dd>
       </dl><dl><dt>
           
           <code><a href="scale_color_pancan.html">scale_color_pancan()</a></code> 
@@ -307,26 +213,27 @@ a predefined list of samples (rows are samples and columns are genes)</dd>
           <code><a href="scale_fill_pancan.html">scale_fill_pancan()</a></code> 
         </dt>
         <dd>Fill scale creator to add gnomeR colors in ggplot</dd>
+      </dl></div><div class="section level2">
+      
+      <h3 id="example-data-sets">Example Data Sets<a class="anchor" aria-label="anchor" href="#example-data-sets"></a></h3>
+      
+
+      
+    </div><div id="" class="section level2">
+      
+      
+      
+
+      <dl><dt>
+          
+          <code><a href="mutations.html">mutations</a></code> 
+        </dt>
+        <dd>An example IMPACT cBioPortal mutation data set in API format</dd>
       </dl><dl><dt>
           
-          <code><a href="seg.html">seg</a></code> 
+          <code><a href="cna.html">cna</a></code> 
         </dt>
-        <dd>A segmentation file from the cbioPortal datasets</dd>
-      </dl><dl><dt>
-          
-          <code><a href="specify_impact_panels.html">specify_impact_panels()</a></code> 
-        </dt>
-        <dd>IMPACT Panel Annotation of NA's</dd>
-      </dl><dl><dt>
-          
-          <code><a href="substrRight.html">substrRight()</a></code> 
-        </dt>
-        <dd>Utility Function to Extract SNV</dd>
-      </dl><dl><dt>
-          
-          <code><a href="summarize_by_gene.html">summarize_by_gene()</a></code> 
-        </dt>
-        <dd>Simplify binary matrix to one column per gene that counts any alteration type as 1</dd>
+        <dd>An example IMPACT cBioPortal mutation data set in API format</dd>
       </dl><dl><dt>
           
           <code><a href="sv.html">sv</a></code> 
@@ -334,19 +241,54 @@ a predefined list of samples (rows are samples and columns are genes)</dd>
         <dd>An example IMPACT cBioPortal mutation data set in API format</dd>
       </dl><dl><dt>
           
-          <code><a href="tbl_genomic.html">tbl_genomic()</a></code> 
+          <code><a href="seg.html">seg</a></code> 
         </dt>
-        <dd>tbl_genomic</dd>
+        <dd>A segmentation file from the cbioPortal datasets</dd>
       </dl><dl><dt>
           
-          <code><a href="tcga_genes.html">tcga_genes</a></code> 
+          <code><a href="cna_wide.html">cna_wide</a></code> 
         </dt>
-        <dd>A vector of 19441 hugo symbols in TCGA</dd>
+        <dd>An example IMPACT cBioPortal CNA in wide format</dd>
       </dl><dl><dt>
           
-          <code><a href="tcga_samples.html">tcga_samples</a></code> 
+          <code><a href="consequence_map.html">consequence_map</a></code> 
         </dt>
-        <dd>Data frame of all TCGA sample ids and their corresponding cancer type</dd>
+        <dd>Consequence Map</dd>
+      </dl><dl><dt>
+          
+          <code><a href="gene_panels.html">gene_panels</a></code> 
+        </dt>
+        <dd>Public Gene Panels on cBioPortal</dd>
+      </dl><dl><dt>
+          
+          <code><a href="panel_names.html">panel_names</a></code> 
+        </dt>
+        <dd>GENIE panel names as found in synapse data</dd>
+      </dl><dl><dt>
+          
+          <code><a href="genie_gene_info.html">genie_gene_info</a></code> 
+        </dt>
+        <dd>GENIE consortium Gene Meta Data</dd>
+      </dl><dl><dt>
+          
+          <code><a href="names_df.html">names_df</a></code> 
+        </dt>
+        <dd>Data Frame of Column Names</dd>
+      </dl><dl><dt>
+          
+          <code><a href="pathways.html">pathways</a></code> 
+        </dt>
+        <dd>IMPACT Gene Pathways</dd>
+      </dl><dl><dt>
+          
+          <code><a href="impact_alias_table.html">impact_alias_table</a></code> 
+        </dt>
+        <dd>IMPACT Alias Tables</dd>
+      </dl><dl><dt>
+          
+          <code><a href="impact_gene_info.html">impact_gene_info</a></code> 
+        </dt>
+        <dd>IMPACT Gene Meta Data</dd>
       </dl><dl><dt>
           
           <code><a href="ti_341.html">ti_341</a></code> 
@@ -362,13 +304,9 @@ a predefined list of samples (rows are samples and columns are genes)</dd>
           <code><a href="ti_468.html">ti_468</a></code> 
         </dt>
         <dd>Intervals sequenced in 468 panel</dd>
-      </dl><dl><dt>
-          
-          <code><a href="which_impact_panel.html">which_impact_panel()</a></code> 
-        </dt>
-        <dd>provide a list of impact panels a provided gene is found within</dd>
       </dl></div>
-  </main></div>
+  </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
+    </nav></aside></div>
 
 
     <footer><div class="pkgdown-footer-left">
