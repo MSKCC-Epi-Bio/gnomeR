@@ -192,14 +192,13 @@ your resulting data frame. Without specifying samples, if a sample has no altera
 
 ```{r, include = TRUE}
 
-samples <- unique(study_mutation$sampleId)[1:10]
+samples <- unique(gnomeR::mutations$sampleId)[1:10]
 
 all_bin <- create_gene_binary(
     samples = samples,
     mutation = gnomeR::mutations,
     cna = gnomeR::cna,
-    fusion = gnomeR::sv, 
-    rm_empty = FALSE
+    fusion = gnomeR::sv
 )
 
 all_bin[1:10, 1:10] 
