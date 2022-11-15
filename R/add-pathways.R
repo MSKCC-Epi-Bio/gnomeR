@@ -17,6 +17,7 @@
 #' custom pathway is passed with no suffix (e.g. `custom_pathway = 'TP53'`) it will assume it is a mutation.
 #' @param bind_pathways a logical indicating whether pathway columns should be joined to main gene_binary or returned separately as a list item.
 #' Default is TRUE and function will `bind_cols()` and return a data.frame. If FALSE a list will be returned.
+#' @keywords internal
 #' @return a data frame: each sample is a row, columns are pathways, with values of 0/1 depending on pathway alteration status.
 #' @export
 #'
@@ -176,6 +177,7 @@ add_pathways <- function(gene_binary,
 #' @param count_pathways_by passed from `add_pathways()`
 #'
 #' @return a dataframe of 1 column of 0/1s indicating pathway activated yes/no
+#' @keywords internal
 #' @export
 #'
 #' @examples

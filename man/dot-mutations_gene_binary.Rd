@@ -48,3 +48,4 @@ a data frame
 \description{
 Make Binary Matrix From Mutation data frame
 }
+\keyword{internal}

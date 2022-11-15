@@ -3,6 +3,7 @@
 #' @param mutation Raw maf dataframe containing alteration data
 #' @param ... other arguments passed from create_gene_binary() (recode.aliases).
 #' @return a corrected maf file or an error if problems with maf
+#' @keywords internal
 #' @export
 #'
 #' @examples
@@ -92,6 +93,7 @@ sanitize_mutation_input <- function(mutation, ...)  {
 #' @param ... other arguments passed from create_gene_binary()
 #'
 #' @return a checked data frame
+#' @keywords internal
 #' @export
 #' @examples
 #' fus <- sanitize_fusion_input(fusion = gnomeR::sv)
@@ -138,6 +140,7 @@ sanitize_fusion_input <- function(fusion, ...)  {
 #' @param ... other arguments passed from create_gene_binary()
 #'
 #' @return a checked data frame
+#' @keywords internal
 #' @export
 #' @examples
 #'

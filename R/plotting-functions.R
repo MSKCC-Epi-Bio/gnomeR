@@ -42,6 +42,7 @@ mutation_viz <- function(mutation, ...) {
 #' @param x A barplot of the mutationviz plot that follow barplot visualization
 #' @param ... other arguments as passed to adjust the percentage label size
 #' @return mutationviz Barplot The same barplot is now returned with percentages
+#' @noRd
 #' @export
 #'
 #' @examples

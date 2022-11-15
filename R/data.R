@@ -96,55 +96,6 @@
 "pathways"
 
 
-#' An example of clinical patient level information file from
-#' IMPACT cbioPortal dataset.
-#'
-#' This set contains the publicly available data from cbioPortal patient level
-#' clinical data. The file is organized with each line corresponding
-#' to the information of each patient.
-#'
-#' @format A data frame with 497 observations on the following 6 variables
-#' \describe{
-#'   \item{X.Patient.Identifier}{Factor, IMPACT patient ID}
-#'   \item{Sex}{Factor, Sex information: `Female`, `Male`}
-#'   \item{Patient.s.Vital.Status}{Factor, indicates whether the patient is alive or deceased}
-#'   \item{Smoking.History}{Factor, Indicates if person has a history of smoking}
-#'   \item{Overall.Survival..Months.}{Overall survival in months}
-#'   \item{Overall.Survival.Status}{Survival status}
-#' }
-#' @source \url{https://cbioportal.mskcc.org/}
-"clin.patients"
-
-#' An example of clinical sample level information file from IMPACT cbioPortal dataset.
-#'
-#' This set contains the publicly available data from cbioPortal sample level
-#' clinical data. The file is organized with each line corresponding
-#' to the information of each sample.
-#'
-#' @format A data frame with 500 observations on the following 16 variables
-#' \describe{
-#'   \item{X.Patient.Identifier}{Factor, IMPACT patient ID}
-#'   \item{Sample.Identifier}{Factor, IMPACT sample ID}
-#'   \item{Sample.Collection.Source}{Factor, was the sample collected in-house?}
-#'   \item{Specimen.Preservation.Type}{Factor, indicates whether the patient is alive or deceased}
-#'   \item{Specimen.Type}{Factor, Indicates if person has a history of smoking}
-#'   \item{DNA.Input}{}
-#'   \item{Sample.coverage}{}
-#'   \item{Tumor.Purity}{}
-#'   \item{Matched.Status}{Overall survival in months}
-#'   \item{Sample.Type}{Survival status}
-#'   \item{Primary.Tumor.Site}{Survival status}
-#'   \item{Metastatic.Site}{Survival status}
-#'   \item{Sample.Class}{Survival status}
-#'   \item{Oncotree.Code}{Survival status}
-#'   \item{Cancer.Type}{Survival status}
-#'   \item{Cancer.Type.Detailed}{Survival status}
-#' }
-#' @source \url{https://cbioportal.mskcc.org/}
-"clin.sample"
-
-
-
 
 #' A segmentation file from the cbioPortal datasets
 #'
@@ -162,44 +113,11 @@
 #' @source \url{https://cbioportal.mskcc.org/}
 "seg"
 
-#' List of curated genes for IMPACT oncoKB annotation.
-#'
-#' We include the curated genes for the IMPACT sequencing for the oncoKB annotation pipeline.
-#'
-#' @format A data frame with 417 observations on the following 2 variables.
-#' \describe{
-#'  \item{id}{}
-#'  \item{gene}{}
-#' }
-"curated_genes"
-
-
-#' A vector of 19441 hugo symbols in TCGA
-#'
-#'A vector of 19441 hugo symbols in TCGA
-#'
-#' @format A data frame with 19441 genes
-#' \describe{
-#'     }
-"tcga_genes"
-
-
-#' Data frame of all TCGA sample ids and their corresponding cancer type
-#'
-#' Data frame of all TCGA sample ids and their corresponding cancer type
-#'
-#' @format A data frame with 10275 samples
-#' \describe{
-#'     \item{patient_id}{Sample ID}
-#'     \item{Cancer_Code}{Cancer site following TCGA abbreviations}
-#'     }
-"tcga_samples"
 
 
 #' Intervals sequenced in 341 panel
 #'
 #' List of the genes and their corresponding positions sequenced in the targeted panel of IMPACT containing 341 genes.
-#'
 #' @format A data frame with 6360 lines
 #' \describe{
 #'     \item{V1}{Chromosome}
@@ -208,6 +126,7 @@
 #'     \item{V4}{Strand}
 #'     \item{V5}{Interval name}
 #'     }
+#' @noRd
 "ti_341"
 
 #' Intervals sequenced in 410 panel
@@ -222,13 +141,13 @@
 #'     \item{V4}{Strand}
 #'     \item{V5}{Interval name}
 #'     }
+#' @noRd
 "ti_410"
 
 
 #' Intervals sequenced in 468 panel
 #'
 #' List of the genes and their corresponding positions sequenced in the targeted panel of IMPACT containing 468 genes.
-#'
 #' @format A data frame with 7872 lines
 #' \describe{
 #'     \item{V1}{Chromosome}
@@ -237,6 +156,7 @@
 #'     \item{V4}{Strand}
 #'     \item{V5}{Interval name}
 #'     }
+#' @noRd
 "ti_468"
 
 #' IMPACT Alias Tables

@@ -21,3 +21,4 @@ Checks MAF input to ensure column names are correct and renamed genes are correc
 sanitize_mutation_input(mutation = gnomeR::mutations)
 
 }
+\keyword{internal}

@@ -33,3 +33,4 @@ a data frame
 \description{
 Make Binary Matrix From Fusion data frame
 }
+\keyword{internal}

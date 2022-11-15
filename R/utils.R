@@ -51,7 +51,7 @@ rename_columns <- function(df_to_check) {
 #'
 #' @return string
 #' @export
-#'
+#' @noRd
 #' @examples
 #' substrRight("Hello", 2)
 #'
@@ -136,6 +136,7 @@ recode_cna <- function(alteration_vector){
 #' @param samples a vector of unique sample ids
 #' @param type a character indicator for which type of alteration the dataset contains
 #' @return a data.frame of alterations
+#' @keywords internal
 
 
 .process_binary <- function(data,
