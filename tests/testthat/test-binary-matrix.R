@@ -2,92 +2,91 @@
 # Test Binary Matrix Arguments -----------------------------------------------------------
 
 
-test_that("check cna with no alterations are omitted from results", {
-
-  res <- create_gene_binary(mutation = gnomeR::mutations,
-                       cna = gnomeR::cna,
-                       fusion = gnomeR::sv)
-
-
-  cna_ids <- names(gnomeR::cna)[-1] %>%
-    str_replace_all(fixed("."), "-")
-
-  omitted_ids <- setdiff(cna_ids, rownames(res))
-
-  omitted_ids <- omitted_ids %>%
-    str_replace_all(fixed("-"), fixed("."))
-
-  check_they_are_zero <- gnomeR::cna %>% select(all_of(omitted_ids)) %>%
-    purrr::map_dbl(., ~sum(.x))
-
-  expect_true(sum(check_they_are_zero) == 0)
-})
-
 # test samples argument ----
 # what happens when you pass a vector? What about if you don't specify it (don't pass anything)?
 # what happens when you pass impact samples (-IM5/IM6/IM7 etc)?  non impact samples? A mix?
 
 
-test_that("Check create_gene_binary() provide specific sample data if pass a vector", {
+test_that("Check create_gene_binary() subsets based on sample data", {
 
-  #what happens when you pass a vector?
   mut_valid_sample_ids<-unique(gnomeR::mutations$sampleId)[1:10]
 
+  sub <- create_gene_binary(sample=mut_valid_sample_ids, mutation=gnomeR::mutations)
+  expect_message(all <- create_gene_binary(mutation=gnomeR::mutations), "*")
 
-  expect_equal(
-    create_gene_binary(sample=mut_valid_sample_ids, mutation=gnomeR::mutations) %>%
-      nrow(),
-    length(mut_valid_sample_ids))
+  expect_equal(nrow(sub), length(mut_valid_sample_ids))
 
-  #what about if you don't specify it (don't pass anything)?
-
-  expect_lte(
-    create_gene_binary(mutation=gnomeR::mutations) %>%
-      nrow(),
-    length(gnomeR::mutations[['sampleId']]))
+  expect_lte(nrow(sub), nrow(all))
 
 })
 
 
-# test_that("Check create_gene_binary() if sample entered in `sampl_id` with zero mutations/fusions/cna", {
-#
-#   #what happens when you pass a vector?
-#   mut_valid_sample_ids<-create_gene_binary( mutation= gnomeR::mutations) %>%
-#     rownames() %>%
-#     head(n=10)
-#
-#   add_no_mut_sample <- c(mut_valid_sample_ids, "no_mutations_fake_sample")
-#   gene_binary_with_zero <-  create_gene_binary(sample=add_no_mut_sample, mutation=gnomeR::mutations)
-#
-#   sum(gene_binary_with_zero[nrow(gene_binary_with_zero), ])
-#   expect_equal(
-#     sum(gene_binary_with_zero[nrow(gene_binary_with_zero), ]), 0)
-#
-#   # should be one more obs in data frame with samples arg specified
-#   expect_equal(nrow(gene_binary_with_zero) -1, length(mut_valid_sample_ids))
-#
-#   # with no fusions in select sample---------
-#   gene_binary_with_zero <-  create_gene_binary(samples=add_no_mut_sample,
-#                                             mutation = gnomeR::mutations,
-#                                             cna = gnomeR::cna,
-#                                             fusion = gnomeR::sv)
-#
-#   expect_false(any(str_detect(names(gene_binary_with_zero), ".fus")))
-#   expect_equal(nrow(gene_binary_with_zero), length(add_no_mut_sample))
-#
-#
-#   # with no cna in select sample---------
-#   cna_samp <- cna[, c(1, 100)]
-#   gene_binary_with_zero <-  create_gene_binary(samples=add_no_mut_sample,
-#                                             mutation = gnomeR::mutations,
-#                                             cna = cna_samp,
-#                                             fusion = gnomeR::sv)
-#   expect_false(any(str_detect(names(gene_binary_with_zero), ".Amp")))
-#   expect_false(any(str_detect(names(gene_binary_with_zero), "Del")))
-#   expect_false(any(str_detect(names(gene_binary_with_zero), ".cna")))
-#   expect_equal(nrow(gene_binary_with_zero), length(add_no_mut_sample))
+test_that("Check create_gene_binary() if sample entered in `sample_id` with zero mutations/fusions/cna", {
 
-# })
+  mut_valid_sample_ids <- unique(gnomeR::mutations$sampleId)[1:10]
+
+  add_no_mut_sample <- c(mut_valid_sample_ids[1:5], "no_mutations_fake_sample",
+                         mut_valid_sample_ids[6:10], "fake")
+
+  gene_binary_no_zero <-  create_gene_binary(sample = mut_valid_sample_ids, mutation = gnomeR::mutations)
+  gene_binary_with_zero <-  create_gene_binary(sample = add_no_mut_sample, mutation = gnomeR::mutations)
+
+
+  expect_equal(gene_binary_with_zero$sample_id, add_no_mut_sample)
+
+  # should be one more obs in data frame with samples arg specified
+  expect_equal(nrow(gene_binary_with_zero) -2, length(mut_valid_sample_ids))
+})
+
+test_that("samples selected with no fusions ",  {
+
+  samples <- setdiff(gnomeR::mutations$sampleId, gnomeR::sv$sampleId)[1:5]
+
+  # with no fusions in select sample---------
+  gene_binary_no_fusions <-  create_gene_binary(samples=samples,
+                                            mutation = gnomeR::mutations,
+                                            fusion = gnomeR::sv)
+
+  expect_false(any(str_detect(names(gene_binary_no_fusions), ".fus")))
+  expect_equal(nrow(gene_binary_no_fusions), length(samples))
+})
+
+
+test_that("samples selected with no CNA ", {
+
+  samples <- setdiff(gnomeR::mutations$sampleId, gnomeR::cna$sampleId)[1:5]
+
+  # with no fusions in select sample---------
+  gene_binary_no_cna<-  create_gene_binary(samples=samples,
+                                                mutation = gnomeR::mutations,
+                                                cna = gnomeR::cna)
+
+  expect_false(any(str_detect(names(gene_binary_no_cna), ".Del")))
+  expect_false(any(str_detect(names(gene_binary_no_cna), ".Amp")))
+
+  expect_equal(nrow(gene_binary_no_cna), length(samples))
+
+})
+
+test_that("samples selected with no mutations ", {
+
+  fake_mut <- gnomeR::mutations[1:10, ] %>%
+    mutate(sampleId = "a")
+
+  samples <- unique(gnomeR::sv$sampleId[1:5])
+
+  gene_binary_no_fusions <- create_gene_binary(samples = samples,
+                                           mutation = fake_mut,
+                                           fusion  = gnomeR::sv)
+
+  expect_true(all(str_detect(names(gene_binary_no_fusions)[-1], ".fus")))
+
+  expect_equal(nrow(gene_binary_no_fusions), length(samples))
+
+})
+
+
+# NON UNIQUE SAMPLES in samples ARGUMENT?
 
 # test with and without mut/fusion/cna args passed ----
 # Functions should work with any one of the three passed

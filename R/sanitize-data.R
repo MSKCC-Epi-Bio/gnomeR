@@ -30,12 +30,14 @@ sanitize_mutation_input <- function(mutation, ...)  {
     mutate(sample_id = as.character(.data$sample_id),
            hugo_symbol = as.character(.data$hugo_symbol))
 
+  if("variant_classification" %in% column_names) {
   # Check for Fusions-  Old API used to return fusions --------------
-  fusions_in_maf <- mutation %>%
-    filter(.data$variant_classification %in% c("Fusion", "fusion"))
+    fusions_in_maf <- mutation %>%
+      filter(.data$variant_classification %in% c("Fusion", "fusion"))
 
-  if(nrow(fusions_in_maf) > 0) {
-    cli::cli_abort("It looks like you have fusions in your mutation data frame. These need to be passed to the `fusions` argument. ")
+    if(nrow(fusions_in_maf) > 0) {
+      cli::cli_abort("It looks like you have fusions in your mutation data frame. These need to be passed to the `fusions` argument. ")
+    }
   }
 
   # * Check suggested columns --------

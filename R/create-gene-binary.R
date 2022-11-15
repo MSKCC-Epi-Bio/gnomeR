@@ -179,6 +179,23 @@ create_gene_binary <- function(samples=NULL,
                              full_join, by = "sample_id") %>%
                 mutate(across(setdiff(everything(),"sample_id"), .fns = function(x){ifelse(is.na(x),0,x)}))
 
+ # add in any samples with no mutations
+ if(!is.null(samples)) {
+   no_alt_samples <- setdiff(samples_final, all_binary$sample_id)
+
+   if(length(no_alt_samples) > 0) {
+     add_no_alt_samples <-
+       data.frame(matrix(0, ncol = ncol(all_binary), nrow = length(no_alt_samples)))
+
+     names(add_no_alt_samples) <- names(all_binary)
+     add_no_alt_samples$sample_id <- no_alt_samples
+
+     all_binary <- bind_rows(all_binary, add_no_alt_samples)
+     all_binary <- all_binary[match(samples_final, all_binary$sample_id), ]
+   }
+
+ }
+
  # Platform-specific NA Annotation ------
 
   # we've already checked the arg is valid
