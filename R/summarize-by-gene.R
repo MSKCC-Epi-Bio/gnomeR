@@ -26,7 +26,7 @@ summarize_by_gene <- function(gene_binary) {
   }
 
   if (!("sample_id" %in% names(gene_binary))) {
-    gene_binary <- rownames_to_column(gene_binary, var = "sample_id")
+    gene_binary <- tibble::rownames_to_column(gene_binary, var = "sample_id")
   }
 
 
