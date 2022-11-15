@@ -22,3 +22,4 @@ Check CNA data frame to ensure columns are correct
 cna <- sanitize_cna_input(cna = cna)
 
 }
+\keyword{internal}

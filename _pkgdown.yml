@@ -16,3 +16,57 @@ authors:
     href: "https://github.com/hfuchs5/"
 
 
+reference:
+  - subtitle: Processing Data
+  - contents:
+    - create_gene_binary
+    - summarize_by_gene
+    - pivot_cna_wider
+    - pivot_cna_longer
+    - add_pathways
+    - recode_alias
+  - subtitle: Analyzing Data
+  - contents:
+    - tbl_genomic
+    - mutation_viz
+    - ggvarclass
+    - ggvartype
+    - ggsamplevar
+    - ggtopgenes
+    - gggenecor
+    - ggcomut
+  - subtitle: Helper Functions
+  - contents:
+    - which_impact_panel
+    - recode_cna
+    - rename_columns
+    - resolve_alias
+  - subtitle: Color Palette
+  - contents:
+    - gnomer_colors
+    - gnomer_cols
+    - gnomer_palettes
+    - gnomer_palette
+    - gnomer_pal
+    - scale_color_pancan
+    - scale_fill_pancan
+  - subtitle: Example Data Sets
+  - contents:
+    - mutations
+    - cna
+    - sv
+    - seg
+    - cna_wide
+    - consequence_map
+    - gene_panels
+    - panel_names
+    - genie_gene_info
+    - names_df
+    - pathways
+    - impact_alias_table
+    - impact_gene_info
+    - ti_341
+    - ti_410
+    - ti_468
+
+

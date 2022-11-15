@@ -21,3 +21,4 @@ Check fusion data frame to ensure columns are correct
 fus <- sanitize_fusion_input(fusion = gnomeR::sv)
 
 }
+\keyword{internal}

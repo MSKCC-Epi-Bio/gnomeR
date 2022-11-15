@@ -23,3 +23,4 @@ hugos <- unique(gnomeR::mutations$hugoGeneSymbol)[1:10]
 which_impact_panel(hugos)
 
 }
+\keyword{internal}

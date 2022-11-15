@@ -231,7 +231,7 @@ create_gene_binary <- function(samples=NULL,
 #' Make Binary Matrix From Mutation data frame
 #'
 #' @inheritParams create_gene_binary
-#'
+#' @keywords internal
 #' @return a data frame
 #' @export
 #'
@@ -292,7 +292,7 @@ create_gene_binary <- function(samples=NULL,
 #' Make Binary Matrix From Fusion data frame
 #'
 #' @inheritParams create_gene_binary
-#'
+#' @keywords internal
 #' @return a data frame
 #'
 .fusions_gene_binary <- function(fusion,
@@ -328,7 +328,7 @@ create_gene_binary <- function(samples=NULL,
 #' Make Binary Matrix From CNA data frame
 #'
 #' @inheritParams create_gene_binary
-#'
+#' @keywords internal
 #' @return a data frame
 #'
 .cna_gene_binary <- function(cna,

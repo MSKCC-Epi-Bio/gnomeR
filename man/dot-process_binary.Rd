@@ -19,3 +19,4 @@ a data.frame of alterations
 \description{
 Create binary data.frames depending on type of mutation data
 }
+\keyword{internal}

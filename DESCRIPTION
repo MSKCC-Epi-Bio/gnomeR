@@ -34,9 +34,6 @@ RoxygenNote: 7.2.1
 Depends: R (>= 3.6)
 biocViews: 
     ComplexHeatmap,
-    iClusterPlus,
-    GenomicRanges,
-    IRanges
 Imports: 
     magrittr,
     dplyr,
@@ -44,13 +41,7 @@ Imports:
     tibble,
     dtplyr,
     ComplexHeatmap,
-    iClusterPlus,
-    GenomicRanges,
-    IRanges,
-    cluster,
     GGally,
-    gplots,
-    lattice,
     stringr,
     rlang,
     forcats,
