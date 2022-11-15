@@ -1,34 +1,6 @@
 
 # Test Binary Matrix Arguments -----------------------------------------------------------
 
-# General tests ---
-test_that("test gene_binary with mutation runs with no errors", {
-
-  expect_error(create_gene_binary(mutation = gnomeR::mutations, recode_aliases = FALSE), NA)
-
-  res_mut <- create_gene_binary(mutation = gnomeR::mutations, recode_aliases = FALSE)
-  expect_true(length(res_mut) > 0)
-})
-
-
-test_that("test gene_binary with cna runs with no errors", {
-
-
-  expect_error(create_gene_binary(cna = gnomeR::cna, recode_aliases = FALSE), NA)
-
-  res <- create_gene_binary(cna = gnomeR::cna, recode_aliases = FALSE)
-  expect_true(length(res) > 0)
-})
-
-
-test_that("test gene_binary with fusions runs with no errors", {
-
-  expect_error(create_gene_binary(fusion = gnomeR::sv, recode_aliases = FALSE), NA)
-
-  res_fusion <- create_gene_binary(fusion = gnomeR::sv, recode_aliases = FALSE)
-  expect_true(length(res_fusion) > 0)
-
-})
 
 # test_that("check cna with no alterations are omitted from results", {
 #
@@ -75,6 +47,7 @@ test_that("Check create_gene_binary() provide specific sample data if pass a vec
     length(gnomeR::mutations[['sampleId']]))
 
 })
+
 
 # test_that("Check create_gene_binary() if sample entered in `sampl_id` with zero mutations/fusions/cna", {
 #
