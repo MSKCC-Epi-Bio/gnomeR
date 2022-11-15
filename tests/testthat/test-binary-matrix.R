@@ -2,26 +2,26 @@
 # Test Binary Matrix Arguments -----------------------------------------------------------
 
 
-# test_that("check cna with no alterations are omitted from results", {
-#
-#   res <- create_gene_binary(mutation = gnomeR::mutations,
-#                        cna = gnomeR::cna,
-#                        fusion = gnomeR::sv)
-#
-#
-#   cna_ids <- names(gnomeR::cna)[-1] %>%
-#     str_replace_all(fixed("."), "-")
-#
-#   omitted_ids <- setdiff(cna_ids, rownames(res))
-#
-#   omitted_ids <- omitted_ids %>%
-#     str_replace_all(fixed("-"), fixed("."))
-#
-#   check_they_are_zero <- gnomeR::cna %>% select(all_of(omitted_ids)) %>%
-#     purrr::map_dbl(., ~sum(.x))
-#
-#   expect_true(sum(check_they_are_zero) == 0)
-# })
+test_that("check cna with no alterations are omitted from results", {
+
+  res <- create_gene_binary(mutation = gnomeR::mutations,
+                       cna = gnomeR::cna,
+                       fusion = gnomeR::sv)
+
+
+  cna_ids <- names(gnomeR::cna)[-1] %>%
+    str_replace_all(fixed("."), "-")
+
+  omitted_ids <- setdiff(cna_ids, rownames(res))
+
+  omitted_ids <- omitted_ids %>%
+    str_replace_all(fixed("-"), fixed("."))
+
+  check_they_are_zero <- gnomeR::cna %>% select(all_of(omitted_ids)) %>%
+    purrr::map_dbl(., ~sum(.x))
+
+  expect_true(sum(check_they_are_zero) == 0)
+})
 
 # test samples argument ----
 # what happens when you pass a vector? What about if you don't specify it (don't pass anything)?
