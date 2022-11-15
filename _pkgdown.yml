@@ -2,11 +2,6 @@ url: https://mskcc-epi-bio.github.io/gnomeR/
 template:
   bootstrap: 5
 
-development:
-  mode: auto
-  version_label: default
-
-
 authors:
   Karissa Whiting:
     href: "https://www.karissawhiting.com/"
