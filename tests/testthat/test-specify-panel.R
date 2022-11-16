@@ -93,8 +93,25 @@ test_that("gene binary with all three types of alt and impact only",{
                                    cna = gnomeR::cna,
                                    fusion = gnomeR::sv)
 
-  expect_true(ncol(bin_impact) > 0)
-  expect_true(nrow(bin_impact) > 1)
+  mut_test <- gnomeR::mutations %>%
+    filter(sampleId %in% samples)
+
+  cna_test <- gnomeR::cna %>%
+    filter(sampleId %in% samples)
+
+  sv_test <- gnomeR::sv %>%
+    filter(sampleId %in% samples)
+
+  mut_genes <- length(unique(mut_test$hugoGeneSymbol))
+  cna_genes <- length(unique(cna_test$hugoGeneSymbol))
+  sv_genes <- unique(c(sv_test$site1HugoSymbol,
+                              sv_test$site2HugoSymbol))%>%
+    na.omit() %>%
+    length()
+
+  expect_true(ncol(bin_impact) == 1 + mut_genes + cna_genes + sv_genes)
+
+  expect_true(nrow(bin_impact) == length(samples))
 
 
 })
