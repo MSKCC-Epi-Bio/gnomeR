@@ -141,6 +141,8 @@ annotate_specific_panel <- function(gene_binary,
 
 which_impact_panel <- function(hugo_symbol) {
 
+  im_panels <- c("IMPACT341", "IMPACT410", "IMPACT468", "IMPACT505")
+
   # get table of gene aliases (internal data)
   alias_table <- gnomeR::impact_alias_table %>%
     dplyr::select("hugo_symbol", "alias")
@@ -151,19 +153,31 @@ which_impact_panel <- function(hugo_symbol) {
                                                alias_table = alias_table))
 
   gene_panels <- gnomeR::gene_panels %>%
-    filter(.data$gene_panel %in% c("IMPACT341", "IMPACT410", "IMPACT468", "IMPACT505")) %>%
+    filter(.data$gene_panel %in% im_panels) %>%
     select("gene_panel", "genes_in_panel") %>%
     tidyr::unnest(cols = c("genes_in_panel"))
 
+  df_im_gene <- data.frame(gene_panel = NA,
+                           genes_in_panel = NA)
 
-  impact_results <- gene_panels %>%
+  for(x in hugo_symbol){
+    test <- data.frame(gene_panel = im_panels,
+                       genes_in_panel = rep(x, 4))
+
+    df_im_gene <- rbind(df_im_gene, test) %>% na.omit
+  }
+
+ impact_results <- gene_panels %>%
     filter(.data$genes_in_panel %in% hugo_symbol) %>%
     distinct() %>%
     mutate(fill = "yes") %>%
+    full_join(df_im_gene, by = c("gene_panel", "genes_in_panel"))%>%
+    mutate_all(~replace(., is.na(.), "no")) %>%
     tidyr::pivot_wider(
       names_from = "gene_panel",
-      values_from = "fill",
-      values_fill = "no")
+      values_from = "fill")%>%
+   relocate(genes_in_panel, IMPACT341, IMPACT410, IMPACT468, IMPACT505)
+
 
   impact_results
 
