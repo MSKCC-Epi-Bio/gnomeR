@@ -147,9 +147,6 @@ test_that("test 0 impact genes", {
 
 test_that("endings don't match impact list", {
   #removes true IM IH endings and adds IM11 which doesn't exist
-  mut_test <- gnomeR::mutations %>%
-    mutate(sampleId = paste0(patientId, "-T01-IM11"))%>%
-    head()
 
   cna_test <- gnomeR::cna %>%
     mutate(sampleId = paste0(patientId, "-T01-IM2"))%>%
@@ -158,6 +155,20 @@ test_that("endings don't match impact list", {
   sv_test <- gnomeR::sv %>%
     mutate(sampleId = paste0(patientId, "-T01-IMA"))%>%
     head()
+
+
+  patients <- unique(gnomeR::mutations$patientId)[1:10] #pick patient here because will mutate later
+  mut_test1 <- gnomeR::mutations %>%
+    filter(patientId %in% patients) %>%
+    mutate(hugoGeneSymbol = "XXXTEST")%>%
+    group_by(sampleId)%>%
+    filter(row_number()==1)%>%
+    mutate(sampleId = paste0(patientId, "-T01-IM11"))
+
+  mut_test <- gnomeR::mutations%>%
+    filter(patientId %in% patients)%>%
+    mutate(sampleId = paste0(patientId, "-T01-IM11"))%>%
+    rbind(mut_test1)
 
   samples <- unique(c(mut_test$sampleId, cna_test$sampleId,
                     sv_test$sampleId))
@@ -169,9 +180,22 @@ test_that("endings don't match impact list", {
                                                  specify_panel = "impact"),
                  "Couldn't infer IMPACT*")
 
+
   #table should still be created just no NAs filled in for non-IMPACT genes
+  mut_genes <- length(unique(mut_test$hugoGeneSymbol))
+  cna_genes <- length(unique(cna_test$hugoGeneSymbol))
+  sv_genes <- unique(c(sv_test$site1HugoSymbol,
+                       sv_test$site2HugoSymbol))%>%
+    na.omit() %>%
+    length()
 
+  expect_true(ncol(bin_impact) == 1 + mut_genes + cna_genes + sv_genes)
 
+  expect_true(nrow(bin_impact) == length(samples))
+
+  summary <- sum(bin_impact$XXXTEST)
+
+  expect_equal(summary, length(patients))
 })
 
 
