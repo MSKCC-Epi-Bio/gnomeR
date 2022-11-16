@@ -1,45 +1,160 @@
 # test specify_impact_panels() ----
 
 test_that("gene binary with muts with impact specified", {
-  samples <- gnomeR::cna$sampleId[1:10]
-  bin_impact<-  create_gene_binary(samples=samples,
-                                           mutation = gnomeR::mutations,
-                                           specify_panel = "impact")
-  expect_true(ncol(bin_impact) > 0)
-  expect_true(nrow(bin_impact) > 1)
+  samples <- unique(gnomeR::mutations$sampleId)[1:10]
+
+  test_gene <- gnomeR::mutations %>%
+    filter(sampleId %in% samples) %>%
+    mutate(hugoGeneSymbol = "XXXTEST")%>%
+    group_by(sampleId)%>%
+    filter(row_number()==1) #select only 1 of each sample
+
+  mut_test <- gnomeR::mutations %>%
+    filter(sampleId %in% samples)%>%
+    rbind(test_gene)
+
+  expect_message(bin_impact <-  create_gene_binary(samples=samples,
+                                           mutation = mut_test,
+                                           specify_panel = "impact"),
+                 "1 column*")
+
+
+  num_genes <- length(unique(c(mut_test$hugoGeneSymbol)))
+
+  expect_true(ncol(bin_impact) == 1 + num_genes)
+
+  expect_true(nrow(bin_impact) == length(samples))
+
+  expect_true("XXXTEST" %in% colnames(bin_impact))
+
+  expect_equal(class(bin_impact$XXXTEST), "logical")
+
+  testNA <- table(is.na(bin_impact$XXXTEST)) %>%
+    as.data.frame()%>%
+    filter(Var1 == "TRUE")
+
+  expect_equal(nrow(bin_impact), testNA$Freq)
 })
 
 test_that("gene binary test cna with impact specified", {
-  samples <- gnomeR::cna$sampleId[1:10]
-  bin_impact<-  create_gene_binary(samples=samples,
+  samples <- unique(gnomeR::cna$sampleId)[1:10]
+
+  bin_impact <-  create_gene_binary(samples=samples,
                                    cna = gnomeR::cna,
                                    specify_panel = "impact")
-  expect_true(ncol(bin_impact) > 0)
-  expect_true(nrow(bin_impact) > 1)
+
+
+  cna_test <- gnomeR::cna %>%
+    filter(sampleId %in% samples)
+
+  num_genes <- length(unique(c(cna_test$hugoGeneSymbol)))
+
+
+
+  expect_true(ncol(bin_impact) == 1 + num_genes)
+
+  expect_true(nrow(bin_impact) == length(samples))
+
+
 })
 
-# test_that("gene binary test fusion with impact specified", {
-#   samples <- gnomeR::sv$sampleId[20:30]
-#   bin_impact<-  create_gene_binary(samples=samples,
-#                                    fusion = gnomeR::sv,
-#                                    specify_panel = "impact")
-#   expect_true(ncol(bin_impact) > 0)
-#   expect_true(nrow(bin_impact) > 1)
-# })
+test_that("gene binary test fusion with impact specified", {
+  samples <- unique(gnomeR::sv$sampleId)[1:10]
+
+  expect_message(bin_impact <-  create_gene_binary(samples=samples,
+                                   fusion = gnomeR::sv,
+                                   specify_panel = "impact"),
+                 "* have all missing*")
+
+
+  sv_test <- gnomeR::sv %>%
+    filter(sampleId %in% samples)
+
+  #some fusions have NA listed in second site so drop from list
+  num_genes <- unique((c(sv_test$site1HugoSymbol, sv_test$site2HugoSymbol)))%>%
+    na.omit()%>%
+    length()
+
+  expect_true(ncol(bin_impact) == 1 + num_genes)
+
+  expect_true(nrow(bin_impact) == length(samples))
+
+  })
 
 test_that("gene binary with all three types of alt and impact only",{
+  #select samples that are in all three types of mutations
   samples <- gnomeR::mutations$sampleId[gnomeR::mutations$sampleId %in%
                        gnomeR::cna$sampleId]
   samples <-  samples[samples %in% gnomeR::sv$sampleId]
-  samples <- samples[1:5]
-  bin_impact<-  create_gene_binary(samples=samples,
+  samples <- unique(samples)[1:5]
+
+  bin_impact <-  create_gene_binary(samples=samples,
                                    mutation = gnomeR::mutations,
                                    cna = gnomeR::cna,
                                    fusion = gnomeR::sv)
+
   expect_true(ncol(bin_impact) > 0)
   expect_true(nrow(bin_impact) > 1)
+
+
 })
 
 test_that("test 0 impact genes", {
+
+
+  mut_test <- gnomeR::mutations %>%
+    mutate(sampleId = patientId) #removes IM IH endings
+
+  cna_test <- gnomeR::cna %>%
+    mutate(sampleId = patientId)
+
+  sv_test <- gnomeR::sv %>%
+    mutate(sampleId = patientId)
+
+
+  samples <- mut_test$sampleId[mut_test$sampleId %in%
+                                          cna_test$sampleId]
+  samples <-  samples[samples %in% sv_test$sampleId]
+  samples <- unique(samples)[1:5]
+
+  expect_error(bin_impact <-  create_gene_binary(samples=samples,
+                                   mutation = mut_test,
+                                   cna = cna_test,
+                                   fusion = sv_test,
+                                   specify_panel = "impact"),
+               "There are no IMPACT*")
+
+
+
 })
+
+test_that("endings don't match impact list", {
+  #removes true IM IH endings and adds IM11 which doesn't exist
+  mut_test <- gnomeR::mutations %>%
+    mutate(sampleId = paste0(patientId, "-T01-IM11"))%>%
+    head()
+
+  cna_test <- gnomeR::cna %>%
+    mutate(sampleId = paste0(patientId, "-T01-IM2"))%>%
+    head()
+
+  sv_test <- gnomeR::sv %>%
+    mutate(sampleId = paste0(patientId, "-T01-IMA"))%>%
+    head()
+
+  samples <- unique(c(mut_test$sampleId, cna_test$sampleId,
+                    sv_test$sampleId))
+
+  expect_message(bin_impact <-  create_gene_binary(samples=samples,
+                                                 mutation = mut_test,
+                                                 cna = cna_test,
+                                                 fusion = sv_test,
+                                                 specify_panel = "impact"),
+                 "Couldn't infer IMPACT*")
+
+  #table should still be created just no NAs filled in for non-IMPACT genes
+
+
+})
+
 

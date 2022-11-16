@@ -225,8 +225,13 @@ create_gene_binary <- function(samples=NULL,
   all_column_is_na <- names(all_binary)[apply(all_binary, 2, function(x) sum(is.na(x))) == nrow(all_binary)]
 
   if(length(all_column_is_na) > 0) {
-    cli::cli_alert_warning(c("{length(all_column_is_na)} columns have no non-missing values. This may occur when ",
-                           "there are genes in your data that are not in the specified panels (see `specify_panel` argument"))
+    if(length(all_column_is_na) == 1){
+      cli::cli_alert_warning(c("1 column has all missing values. This may occur when ",
+                               "there are genes in your data that are not in the specified panels (see `specify_panel` argument)"))
+    }else{
+      cli::cli_alert_warning(c("{length(all_column_is_na)} columns have all missing values. This may occur when ",
+                               "there are genes in your data that are not in the specified panels (see `specify_panel` argument)"))
+    }
   }
   # return omitted zero  samples as warning/attribute
 
