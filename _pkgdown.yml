@@ -1,11 +1,13 @@
 url: https://mskcc-epi-bio.github.io/gnomeR/
+
 template:
   bootstrap: 5
-
-development:
-  mode: auto
-  version_label: default
-
+  bootswatch: simplex
+  bslib:
+    primary: "#CC133C"
+    base_font: {google: "Atkinson Hyperlegible"}
+    heading_font: {google: "Atkinson Hyperlegible"}
+    text-muted: "#FFFFFF"
 
 authors:
   Karissa Whiting:
@@ -15,6 +17,11 @@ authors:
   Hannah Fuchs:
     href: "https://github.com/hfuchs5/"
 
+navbar:
+  bg: primary
+  structure:
+    left:  [reference, articles, news]
+    right: [search, github]
 
 reference:
   - subtitle: Processing Data
