@@ -152,9 +152,29 @@ differences are more intuitive to map the variables. You can refer to
 MAF variable names and turn them into clean, snakecase names in
 resulting dataframes. For example:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">gnomeR</span><span class="fu">::</span><span class="va"><a href="../reference/mutations.html">mutations</a></span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu">gnomeR</span><span class="fu">::</span><span class="va"><a href="../reference/mutations.html">mutations</a></span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#&gt;  [1] "hugoGeneSymbol"        "entrezGeneId"          "uniqueSampleKey"      </span></span>
+<span><span class="co">#&gt;  [4] "uniquePatientKey"      "molecularProfileId"    "sampleId"             </span></span>
+<span><span class="co">#&gt;  [7] "patientId"             "studyId"               "center"               </span></span>
+<span><span class="co">#&gt; [10] "mutationStatus"        "validationStatus"      "startPosition"        </span></span>
+<span><span class="co">#&gt; [13] "endPosition"           "referenceAllele"       "proteinChange"        </span></span>
+<span><span class="co">#&gt; [16] "mutationType"          "functionalImpactScore" "fisValue"             </span></span>
+<span><span class="co">#&gt; [19] "linkXvar"              "linkPdb"               "linkMsa"              </span></span>
+<span><span class="co">#&gt; [22] "ncbiBuild"             "variantType"           "keyword"              </span></span>
+<span><span class="co">#&gt; [25] "chr"                   "variantAllele"         "refseqMrnaId"         </span></span>
+<span><span class="co">#&gt; [28] "proteinPosStart"       "proteinPosEnd"</span></span></code></pre></div>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/rename_columns.html">rename_columns</a></span><span class="op">(</span><span class="fu">gnomeR</span><span class="fu">::</span><span class="va"><a href="../reference/mutations.html">mutations</a></span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/rename_columns.html">rename_columns</a></span><span class="op">(</span><span class="fu">gnomeR</span><span class="fu">::</span><span class="va"><a href="../reference/mutations.html">mutations</a></span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#&gt;  [1] "hugo_symbol"            "entrez_gene_id"         "uniqueSampleKey"       </span></span>
+<span><span class="co">#&gt;  [4] "uniquePatientKey"       "molecular_profile_id"   "sample_id"             </span></span>
+<span><span class="co">#&gt;  [7] "patient_id"             "study_id"               "center"                </span></span>
+<span><span class="co">#&gt; [10] "mutation_status"        "validation_status"      "start_position"        </span></span>
+<span><span class="co">#&gt; [13] "end_position"           "reference_allele"       "hgv_sp_short"          </span></span>
+<span><span class="co">#&gt; [16] "variant_classification" "functionalImpactScore"  "fisValue"              </span></span>
+<span><span class="co">#&gt; [19] "linkXvar"               "linkPdb"                "linkMsa"               </span></span>
+<span><span class="co">#&gt; [22] "ncbi_build"             "variant_type"           "keyword"               </span></span>
+<span><span class="co">#&gt; [25] "chromosome"             "allele"                 "refseqMrnaId"          </span></span>
+<span><span class="co">#&gt; [28] "protein_pos_start"      "protein_pos_end"</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="cna-data">CNA data<a class="anchor" aria-label="anchor" href="#cna-data"></a>
@@ -165,10 +185,35 @@ RAE. CNA data is often presented in a long or wide format:</p>
 <pre><code>* Long format - Each row is a CNA event for a given gene and sample, therefore samples often have multiple rows (one per gene CNA event). This is most common format you will receive when downloading data using the API.
   </code></pre>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">gnomeR</span><span class="fu">::</span><span class="va"><a href="../reference/cna.html">cna</a></span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">6</span>, <span class="op">]</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu">gnomeR</span><span class="fu">::</span><span class="va"><a href="../reference/cna.html">cna</a></span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">6</span>, <span class="op">]</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 6 × 9</span></span></span>
+<span><span class="co">#&gt;   hugoGeneSymbol entre…¹ uniqu…² uniqu…³ molec…⁴ sampl…⁵ patie…⁶ studyId alter…⁷</span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> PTPRS             <span style="text-decoration: underline;">5</span>802 UC0wMD… UC0wMD… prad_m… P-0001… P-0001… prad_m…      -<span style="color: #BB0000;">2</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> AR                 367 UC0wMD… UC0wMD… prad_m… P-0001… P-0001… prad_m…       2</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> PIK3R1            <span style="text-decoration: underline;">5</span>295 UC0wMD… UC0wMD… prad_m… P-0002… P-0002… prad_m…      -<span style="color: #BB0000;">2</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> AR                 367 UC0wMD… UC0wMD… prad_m… P-0003… P-0003… prad_m…       2</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> PTEN              <span style="text-decoration: underline;">5</span>728 UC0wMD… UC0wMD… prad_m… P-0000… P-0000… prad_m…      -<span style="color: #BB0000;">2</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> B2M                567 UC0wMD… UC0wMD… prad_m… P-0000… P-0000… prad_m…      -<span style="color: #BB0000;">2</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># … with abbreviated variable names ¹​entrezGeneId, ²​uniqueSampleKey,</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;">#   ³​uniquePatientKey, ⁴​molecularProfileId, ⁵​sampleId, ⁶​patientId, ⁷​alteration</span></span></span></code></pre></div>
 <pre><code>* Wide format - One column per sample, one row per gene . Each row contains data on a specific gene CNA for a given sample as shown below. One sample can have several rows. This is most common format you will receive when downloading data from the cBioPortal web browser.  </code></pre>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">gnomeR</span><span class="fu">::</span><span class="va"><a href="../reference/cna_wide.html">cna_wide</a></span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">6</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">6</span><span class="op">]</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu">gnomeR</span><span class="fu">::</span><span class="va"><a href="../reference/cna_wide.html">cna_wide</a></span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">6</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">6</span><span class="op">]</span></span>
+<span><span class="co">#&gt;   Hugo_Symbol P-0070637-T01-IM7 P-0042589-T01-IM6 P-0026544-T01-IM6</span></span>
+<span><span class="co">#&gt; 1       SMAD4                 0                 0                -2</span></span>
+<span><span class="co">#&gt; 2       CCND1                 0                 0                 0</span></span>
+<span><span class="co">#&gt; 3         MYC                 0                 0                 0</span></span>
+<span><span class="co">#&gt; 4        FGF4                 0                 0                 0</span></span>
+<span><span class="co">#&gt; 5        FGF3                 0                 0                 0</span></span>
+<span><span class="co">#&gt; 6       FGF19                 0                 0                 0</span></span>
+<span><span class="co">#&gt;   P-0032011-T01-IM6 P-0049337-T01-IM6</span></span>
+<span><span class="co">#&gt; 1                 0                 0</span></span>
+<span><span class="co">#&gt; 2                 0                 2</span></span>
+<span><span class="co">#&gt; 3                 0                 2</span></span>
+<span><span class="co">#&gt; 4                 0                 2</span></span>
+<span><span class="co">#&gt; 5                 0                 2</span></span>
+<span><span class="co">#&gt; 6                 0                 2</span></span></code></pre></div>
 <p>{gnomeR} features two helper functions to help you pivot from wide to
 long data.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
@@ -202,8 +247,25 @@ downstream analysis.</p>
 data (mutation, CNA or fusion):</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">mut_only</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/create_gene_binary.html">create_gene_binary</a></span><span class="op">(</span>mutation <span class="op">=</span> <span class="fu">gnomeR</span><span class="fu">::</span><span class="va"><a href="../reference/mutations.html">mutations</a></span><span class="op">)</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> `samples` argument is `NULL`. We will infer your cohort inclusion and resulting data frame will include all samples with at least one alteration in <span style="color: #00BB00;">mutation</span>, <span style="color: #00BB00;">fusion</span> or <span style="color: #00BB00;">cna</span> data frames</span></span>
 <span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">mut_only</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">mut_only</span><span class="op">)</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 6 × 228</span></span></span>
+<span><span class="co">#&gt;   sample_id    PARP1  AKT1   ALK   APC    AR  ARAF  RHOA ZFHX3   ATM   ATR  ATRX</span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> P-0001128-T…     1     1     0     0     0     0     0     0     0     0     0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> P-0001859-T…     1     0     0     1     0     0     0     0     0     0     0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> P-0001895-T…     1     0     1     0     0     0     0     0     0     0     0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> P-0001845-T…     0     1     0     0     0     0     0     0     0     0     0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> P-0005570-T…     0     1     0     0     0     0     0     0     0     0     0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> P-0001768-T…     0     0     1     0     0     0     0     0     0     0     0</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># … with 216 more variables: BARD1 &lt;dbl&gt;, CCND1 &lt;dbl&gt;, BCL6 &lt;dbl&gt;, PRDM1 &lt;dbl&gt;,</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;">#   BLM &lt;dbl&gt;, BMPR1A &lt;dbl&gt;, FOXL2 &lt;dbl&gt;, BRCA1 &lt;dbl&gt;, BRAF &lt;dbl&gt;, BRCA2 &lt;dbl&gt;,</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;">#   RUNX1 &lt;dbl&gt;, CBL &lt;dbl&gt;, CD79B &lt;dbl&gt;, CDH1 &lt;dbl&gt;, CDK4 &lt;dbl&gt;, CDK8 &lt;dbl&gt;,</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;">#   CDKN1A &lt;dbl&gt;, CDKN2C &lt;dbl&gt;, CREBBP &lt;dbl&gt;, CSF1R &lt;dbl&gt;, CSF3R &lt;dbl&gt;,</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;">#   CTLA4 &lt;dbl&gt;, CTNNB1 &lt;dbl&gt;, DAXX &lt;dbl&gt;, DNMT1 &lt;dbl&gt;, EGFR &lt;dbl&gt;,</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;">#   EP300 &lt;dbl&gt;, EPHA3 &lt;dbl&gt;, EPHA5 &lt;dbl&gt;, EPHB1 &lt;dbl&gt;, ERBB2 &lt;dbl&gt;,</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;">#   ERBB3 &lt;dbl&gt;, ERBB4 &lt;dbl&gt;, ERCC2 &lt;dbl&gt;, ERCC3 &lt;dbl&gt;, ERCC5 &lt;dbl&gt;, …</span></span></span></code></pre></div>
 <p>or you can process several types of alterations into a single matrix.
 Supported data types are:</p>
 <ul>
@@ -232,7 +294,20 @@ from the final matrix.</p>
 <span>    fusion <span class="op">=</span> <span class="fu">gnomeR</span><span class="fu">::</span><span class="va"><a href="../reference/sv.html">sv</a></span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">all_bin</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">]</span> </span></code></pre></div>
+<span><span class="va">all_bin</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">]</span> </span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 10 × 10</span></span></span>
+<span><span class="co">#&gt;    sample_id         PARP1  AKT1   ALK   APC BRCA2 CTNNB1 EPHB1  FAT1  JAK1</span></span>
+<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> P-0001128-T01-IM3     1     1     0     0     1      1     0     0     0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> P-0001859-T01-IM3     1     0     0     1     0      0     1     0     0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> P-0001895-T01-IM3     1     0     1     0     0      0     0     0     0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> P-0001845-T01-IM3     0     1     0     0     0      0     0     0     0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> P-0005570-T01-IM5     0     1     0     0     0      0     0     0     0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> P-0001768-T01-IM3     0     0     1     0     0      0     0     0     0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> P-0004508-T01-IM5     0     0     1     0     0      0     0     0     0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> P-0002984-T01-IM3     0     0     1     0     0      0     0     0     1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> P-0000964-T02-IM3     0     0     0     1     1      0     0     1     0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> P-0000964-T01-IM3     0     0     0     1     1      0     0     1     0</span></span></code></pre></div>
 <p><strong>Notes on some helpful <code><a href="../reference/create_gene_binary.html">create_gene_binary()</a></code>
 arguments:</strong></p>
 <ul>
@@ -323,6 +398,8 @@ be viewed using <code><a href="../reference/pathways.html">gnomeR::pathways</a><
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># available pathways</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="fu">gnomeR</span><span class="fu">::</span><span class="va"><a href="../reference/pathways.html">pathways</a></span><span class="op">)</span></span>
+<span><span class="co">#&gt;  [1] "RTK/RAS"    "Nrf2"       "PI3K"       "TGFB"       "p53"       </span></span>
+<span><span class="co">#&gt;  [6] "Wnt"        "Myc"        "Cell cycle" "Hippo"      "Notch"</span></span>
 <span></span>
 <span><span class="va">pathway_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/add_pathways.html">add_pathways</a></span><span class="op">(</span><span class="va">gene_binary</span>, pathways <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Notch"</span>, <span class="st">"p53"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 </div>
@@ -333,7 +410,21 @@ be viewed using <code><a href="../reference/pathways.html">gnomeR::pathways</a><
 variables related to variant classification, variant type, SNV class as
 well as top variant genes.</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/mutation_viz.html">mutation_viz</a></span><span class="op">(</span><span class="va">mutations</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/mutation_viz.html">mutation_viz</a></span><span class="op">(</span><span class="va">mutations</span><span class="op">)</span></span>
+<span><span class="co">#&gt; $varclass</span></span></code></pre></div>
+<p><img src="data-processing-vignette_files/figure-html/unnamed-chunk-15-1.png" width="700"></p>
+<pre><code><span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $vartype</span></span></code></pre>
+<p><img src="data-processing-vignette_files/figure-html/unnamed-chunk-15-2.png" width="700"></p>
+<pre><code><span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $samplevar</span></span></code></pre>
+<p><img src="data-processing-vignette_files/figure-html/unnamed-chunk-15-3.png" width="700"></p>
+<pre><code><span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $topgenes</span></span></code></pre>
+<p><img src="data-processing-vignette_files/figure-html/unnamed-chunk-15-4.png" width="700"></p>
+<pre><code><span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $genecor</span></span></code></pre>
+<p><img src="data-processing-vignette_files/figure-html/unnamed-chunk-15-5.png" width="700"></p>
 </div>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
