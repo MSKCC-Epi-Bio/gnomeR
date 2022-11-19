@@ -175,6 +175,11 @@ test_that("test inclusion of NAs in mut_type ", {
 
 })
 
+
+# test specify-panel arg with "impact"- see test_specify-panel.R file
+
+
+
 # test snp_only arg----
 # add general tests
 # What happpens  when Variant Type is NA? - Maybe need to add warning to tell user about NAs
