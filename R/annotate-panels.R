@@ -141,29 +141,48 @@ annotate_specific_panel <- function(gene_binary,
 
 which_impact_panel <- function(hugo_symbol) {
 
+  im_panels <- c("IMPACT341", "IMPACT410", "IMPACT468", "IMPACT505")
+
   # get table of gene aliases (internal data)
   alias_table <- gnomeR::impact_alias_table %>%
     dplyr::select("hugo_symbol", "alias")
 
   # recode all genes to most common alias
-  hugo_symbol <- purrr::map_chr(hugo_symbol,
-                                ~resolve_alias(gene_to_check = .x,
-                                               alias_table = alias_table))
+  hugo_symbol_recode <- purrr::map_chr(hugo_symbol,
+                                       ~resolve_alias(gene_to_check = .x,
+                                                      alias_table = alias_table))
+  x <- setdiff(hugo_symbol, hugo_symbol_recode)
+  y <- setdiff(hugo_symbol_recode, hugo_symbol)
+
+  if(length(x) > 0) {
+    vec_recode <- purrr::map2_chr(x, y,
+                                  ~paste0(.x, " recoded to ", .y))
+
+    names(vec_recode) <- rep("!", times = length(vec_recode))
+
+    cli::cli_inform(c(
+      "The following genes were recoded to their common alias for panel lookup:",
+      vec_recode))
+  }
 
   gene_panels <- gnomeR::gene_panels %>%
-    filter(.data$gene_panel %in% c("IMPACT341", "IMPACT410", "IMPACT468", "IMPACT505")) %>%
+    filter(.data$gene_panel %in% im_panels) %>%
     select("gene_panel", "genes_in_panel") %>%
     tidyr::unnest(cols = c("genes_in_panel"))
 
+  df_im_gene <- expand.grid(gene_panel = im_panels,
+                            genes_in_panel = hugo_symbol_recode)
 
-  impact_results <- gene_panels %>%
-    filter(.data$genes_in_panel %in% hugo_symbol) %>%
+ impact_results <- gene_panels %>%
+    filter(.data$genes_in_panel %in% hugo_symbol_recode) %>%
     distinct() %>%
     mutate(fill = "yes") %>%
+    full_join(df_im_gene, by = c("gene_panel", "genes_in_panel"))%>%
+    mutate(fill = replace(.data$fill, is.na(.data$fill), "no"))  %>%
     tidyr::pivot_wider(
       names_from = "gene_panel",
-      values_from = "fill",
-      values_fill = "no")
+      values_from = "fill")
+
 
   impact_results
 
