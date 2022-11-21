@@ -18,22 +18,19 @@ knitr::opts_chunk$set(
 
 ## Introduction
 
-This this vignette we will walk through a data example to show available {gnomeR} data processing,
-visualization and analysis functions. We will also outline some common pitfalls and format inconsistencies you
-may encounter when working with mutation, CNA or structural variant data, and show some {gnomeR} helper functions that can help
-you manage these inconsistencies.
+In this vignette we will walk through a data example to show available {gnomeR} data processing,
+visualization and analysis functions. We will also outline some {gnomeR} helper functions to use when you encounter common pitfalls and format inconsistencies when working with mutation, CNA or structural variant data.
 
 ##  Setting up 
 
 Make sure {gnomeR} is installed & loaded. We will use dplyr for the purposes of this vignette as well. 
 
 ```{r message = FALSE, warning=FALSE}
-
 library(gnomeR)
 library(dplyr)
 ```
 
-To demonstrate {gnomeR} functions, we will be using a random sample of 200 patients from a publicly available prostate cancer data pulled from cBioPortal. Data on mutations, CNA and structural variants for these patients are available in the gnomeR package (`gnomeR::mutations`, `gnomeR::cna`, `gnomeR::sv`). 
+To demonstrate {gnomeR} functions, we will be using a random sample of 200 patients from a publicly available prostate cancer study retrieved from cBioPortal. Data on mutations, CNA, and structural variants for these patients are available in the gnomeR package (`gnomeR::mutations`, `gnomeR::cna`, `gnomeR::sv`). 
 
 Note: To access data from cBioPortal, you can use the {cbioportalR} package: 
 https://github.com/karissawhiting/cbioportalR. 
@@ -41,24 +38,24 @@ https://github.com/karissawhiting/cbioportalR.
 
 ## Data Formats
 
-Mutation, CNA or fusion data may be formatting differently depending on where you source it. Below we outline some differences you may encounter when downloading data from the [cBioPortal website] (https://www.cbioportal.org/) versus pulling it via the [cBioPortal API](https://github.com/karissawhiting/cbioportalR), and review the important/required columns for each. Example data in this package was pulled using the API. 
+Mutation, CNA, or structural variant (also called fusion) data may be formatted differently depending on where you source it. Below we outline some differences you may encounter when downloading data from the [cBioPortal website] (https://www.cbioportal.org/) versus pulling it via the [cBioPortal API](https://github.com/karissawhiting/cbioportalR), and review the important/required columns for each. Example data in this package was pulled using the API. 
 
-See [cBioPortal documentation](https://docs.cbioportal.org/file-formats/) for more details on different file formats available supported on cBioPortal, and their data schema and coding. 
+See [cBioPortal documentation](https://docs.cbioportal.org/file-formats/) for more details on different file formats supported on cBioPortal, and their data schema and coding. 
 
 ### Mutation Data
 
-The most common mutation data format is the [Mutation Annotation Format (MAF)](https://docs.gdc.cancer.gov/Data/File_Formats/MAF_Format/) created as part of The Cancer Genome Atlas (TCGA) project. Each row in a maf file represents a mutation on a specific gene for a specific sample, therefore there are usually several rows per sample (one for each mutation). To use MAF files, you need at minimum a sample ID column and a hugo symbol column, though often additional information like mutation type or location are also often necessary. 
+The most common mutation data format is the [Mutation Annotation Format (MAF)](https://docs.gdc.cancer.gov/Data/File_Formats/MAF_Format/) created as part of The Cancer Genome Atlas (TCGA) project. Each row in a MAF file represents a unique gene for a specified sample, therefore there are usually several rows per sample. To use MAF files, you need at minimum a sample ID column and a hugo symbol column, though often additional information like mutation type or location are also necessary. 
 
-MAF formats are fairly consistent across sources, however if you download the raw data from a virtual study on the cBioPortal website using the download button and compare with the mutation data imported from the API, you might notice some differences in the variables names. For instance: 
+MAF formats are fairly consistent across sources, however if you download the raw data from a study on cBioPortal using the interactive download button you might notice some differences in the variables names in comparison to data imported from the API. For instance, below web-downloaded MAF names are on the left and API-downloaded MAF names are on the right: 
 
-    * `Tumor_Sample_Barcode` is called `sampleId` in API data
-    * The `Hugo_symbol` is called `hugoGeneSymbol` 
+    * `Tumor_Sample_Barcode` is called `sampleId` 
+    * `Hugo_symbol` is called `hugoGeneSymbol` 
     * `Variant_Classification` is called `mutationType`
     * `HGVSp_Short` is called `proteinChange`
     * `Chromosome` is called 'chr'
 
-Some of the other variables are named differently as well but those differences are more intuitive to map the variables. You can
-refer to `gnomeR::names_df` for more information on MAF variables. 
+Some of the other variables are named differently as well but those differences are more intuitive. You can
+refer to `gnomeR::names_df` for more information on possible MAF variable names. 
 
 Luckily, most {gnomeR} functions use the data dictionary in `gnomeR::names_df` to automatically recognize the most common MAF variable names and turn them into clean, snakecase names in resulting dataframes. For example:
 
@@ -70,32 +67,33 @@ gnomeR::mutations %>% names()
 rename_columns(gnomeR::mutations) %>% names()
 ```
 
+As you can see, some variables such as `linkMsa` was not transformed because it is not used in {gnomeR} functions. 
+
 ### CNA data
 
 The discrete copy number data from cBioPortal contains values that would be derived from copy-number analysis algorithms like GISTIC 2.0 or RAE. CNA data is often presented in a long or wide format:
 
-    * Long format - Each row is a CNA event for a given gene and sample, therefore samples often have multiple rows (one per gene CNA event). This is most common format you will receive when downloading data using the API.
-      
+    * Long-format - Each row is a CNA event for a given gene and sample, therefore samples often have multiple rows. This is most common format you will receive when downloading data using the API.
 ```{r }
 gnomeR::cna[1:6, ]
 ```
   
-    * Wide format - One column per sample, one row per gene . Each row contains data on a specific gene CNA for a given sample as shown below. One sample can have several rows. This is most common format you will receive when downloading data from the cBioPortal web browser.  
+    * Wide-format - Organized such that there is one column per sample and one row per gene. Thus, each sample's events are contained within one column. This is most common format you will receive when downloading data from the cBioPortal web browser.  
 
 ```{r}
 gnomeR::cna_wide[1:6, 1:6]
 ```
 
-{gnomeR} features two helper functions to help you pivot from wide to long data. 
+{gnomeR} features two helper functions to easily pivot from wide- to long-format and vice-versa. 
 
 ```{r, eval=FALSE}
-pivot_cna_wider(gnomeR::cna)
-pivot_cna_longer(gnomeR::wide_cna)
+pivot_cna_wider(rename_columns(gnomeR::cna))
+pivot_cna_longer(gnomeR::cna_wide)
 ```
 
-There may also be differences in the way CNA events are coded. Most Events are coded in one of the following ways:
+These functions will also relabel CNA levels (numeric values) to characters as shown below:
 
-```{r, results='hide', echo=FALSE}
+```{r, echo=FALSE}
 allowed_cna_levels <- tibble::tribble(
                ~detailed_coding, ~numeric_coding,   ~simplified_coding,
                       "neutral",             "0",       "neutral",
@@ -109,11 +107,14 @@ allowed_cna_levels %>% knitr::kable()
 
 ```
 
-{gnomeR} automatically checks CNA data labels and recodes as needed within functions. You can also use the `recode_cna()` function to do it yourself:
+{gnomeR} automatically checks CNA data labels and recodes as needed within functions. You can also use the `recode_cna()` function to do it yourself if pivoting was unnecessary:
 
+
+# LEFT OFF HERE
 ```{r, eval=FALSE}
-x <- gnomeR::cna %>%
-  mutate(alteration_recoded = recode_cna(alteration))
+gnomeR::cna %>%
+  mutate(alteration_recoded = recode_cna(alteration))%>%
+  head()
 ```
 
 
