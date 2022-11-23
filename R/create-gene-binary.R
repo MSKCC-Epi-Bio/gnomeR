@@ -108,8 +108,9 @@ create_gene_binary <- function(samples=NULL,
 
            specify_panel %>%
              purrr::when(
-               length(setdiff(c(specify_panel$gene_panel), gene_panels$gene_panel)) > 0 ~
-                           cli::cli_abort("Panels not known: {.val {setdiff(c(specify_panel$gene_panel), gene_panels$gene_panel)}}. See {.code  gnomeR::gene_panels} for known panels, or skip annotation with {.code specify_panel = 'no'} or indicating {.code 'no'} for those samples in {.field panel_id} column of sample_id-panel_id pair data frame"),
+               any(is.na(specify_panel$panel_id)) ~ cli::cli_abort("Some {.field panel_id} values in {.code sample_panel_pair} df are {.code NA}. Please explicitely indicate {.code no} for those samples instead if you wish to skip annotating these."),
+               length(setdiff(c(specify_panel$panel_id), c(gene_panels$gene_panel, "no"))) > 0 ~
+                           cli::cli_abort("Panels not known: {.val {setdiff(c(specify_panel$panel_id), c(gene_panels$gene_panel, 'no'))}}. See {.code  gnomeR::gene_panels} for known panels, or skip annotation with {.code specify_panel = 'no'} or indicating {.code 'no'} for those samples in {.field panel_id} column of sample_id-panel_id pair data frame"),
                          TRUE ~ .)},
 
            cli::cli_abort("{.code specify_panel} must be a character vector of length 1 or a data frame.")
@@ -214,6 +215,8 @@ create_gene_binary <- function(samples=NULL,
     )
     # create data frame of sample IDs
 
+  } else {
+    sample_panel_pair = specify_panel
   }
 
   all_binary <- annotate_any_panel(sample_panel_pair, all_binary)
