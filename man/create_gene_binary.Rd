@@ -13,6 +13,7 @@ create_gene_binary(
   include_silent = FALSE,
   fusion = NULL,
   cna = NULL,
+  high_level_cna_only = FALSE,
   specify_panel = "no",
   recode_aliases = TRUE
 )
@@ -38,6 +39,9 @@ Default is NULL.}
 
 \item{cna}{A data frame of copy number alterations. If inputed the outcome will be added to the matrix with columns ending in ".del" and ".amp".
 Default is NULL.}
+
+\item{high_level_cna_only}{If TRUE, only deep deletions (-2, -1.5) or high level amplifications (2) will be counted as events
+in the binary matrix. Gains (1) and losses (1) will be ignored. Default is \code{FALSE} where all CNA events are counted.}
 
 \item{specify_panel}{a character vector of length 1 with panel id (see gnomeR::gene_panels for available panels), "impact", or "no", or a
 data frame of \code{sample_id}-\code{panel_id} pairs specifying panels for which to insert NAs indicating that gene was not tested.

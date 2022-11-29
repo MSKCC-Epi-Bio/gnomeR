@@ -4,7 +4,13 @@
 \alias{.cna_gene_binary}
 \title{Make Binary Matrix From CNA data frame}
 \usage{
-.cna_gene_binary(cna, samples, specify_panel, recode_aliases)
+.cna_gene_binary(
+  cna,
+  samples,
+  specify_panel,
+  recode_aliases,
+  high_level_cna_only
+)
 }
 \arguments{
 \item{cna}{A data frame of copy number alterations. If inputed the outcome will be added to the matrix with columns ending in ".del" and ".amp".
@@ -26,6 +32,9 @@ annotated with NAs according to that specific panel.}
 
 \item{recode_aliases}{boolean specifying if automated gene name alias matching should be done. Default is TRUE. When TRUE
 the function will check for genes that may have more than 1 name in your data using the aliases im gnomeR::impact_gene_info alias column}
+
+\item{high_level_cna_only}{If TRUE, only deep deletions (-2, -1.5) or high level amplifications (2) will be counted as events
+in the binary matrix. Gains (1) and losses (1) will be ignored. Default is \code{FALSE} where all CNA events are counted.}
 }
 \value{
 a data frame

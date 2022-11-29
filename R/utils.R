@@ -62,7 +62,7 @@ substrRight <- function(x, n) {
 #' Internal function to recode numeric CNA alteration values to factor values
 #'
 #' @param alteration_vector a vector of CNA alterations coded with any of the
-#' following levels: neutral, deletion, amplification, homozygous deletion,
+#' following levels: neutral, deletion, amplification, gain, loss, homozygous deletion,
 #' hemizygous deletion, loh, gain, high level amplification, 0, -1, -1.5, -2, 1, 2.
 #'
 #' @return a recoded CNA data set with factor alteration values. See details for code dictionary
@@ -94,18 +94,18 @@ recode_cna <- function(alteration_vector){
   levels_in_data <- tolower(names(table(alteration_vector)))
 
   # source: https://docs.cbioportal.org/file-formats/#data-file-1
-  # python annotator ref: https://github.com/oncokb/oncokb-annotator/blob/47e4a158ee843ead75445982532eb149db7f3106/AnnotatorCore.py#L158
+  # python annotator ref with codes: https://github.com/oncokb/oncokb-annotator/blob/47e4a158ee843ead75445982532eb149db7f3106/AnnotatorCore.py#L158
    allowed_cna_levels <- tibble::tribble(
                ~detailed_coding, ~numeric_coding,   ~final_coding,
-                      "neutral",             "0",       "neutral",
-          "homozygous deletion",            "-2",      "deletion",
-                          "loh",          "-1.5",      "deletion",
-          "hemizygous deletion",            "-1",      "deletion",
-                         "gain",             "1", "amplification",
-      "high level amplification",            "2", "amplification")
+                      "neutral",          "0",        "neutral",
+                    "deep loss",          "-2",      "deletion",
+                    "deep loss",          "-1.5",    "deletion",
+          "hemizygous deletion",          "-1",       "loss",
+                         "gain",          "1",        "gain",
+     "high level amplification",          "2",   "amplification")
 
 
-  # throw error if any values not in allowed list
+
   all_allowed <- unlist(allowed_cna_levels)
   not_allowed <- levels_in_data[!levels_in_data %in% all_allowed]
 
@@ -121,7 +121,9 @@ recode_cna <- function(alteration_vector){
   names(recode_values) <- c(allowed_cna_levels$final_coding, allowed_cna_levels$final_coding)
 
   recoded_alterations <- suppressWarnings(
-    forcats::fct_recode(alteration_vector, !!!recode_values))
+    forcats::fct_recode(alteration_vector, !!!recode_values)
+    )
+
 
     return(recoded_alterations)
   }
@@ -154,8 +156,8 @@ recode_cna <- function(alteration_vector){
     filter(.data$sample_id %in% samples)
 
   data_out <- switch(type,
-                     del = filter(data_out, .data$alteration %in% c("deletion","homozygous deletion","hemizygous deletion")),
-                     amp = filter(data_out, .data$alteration %in% c("amplification","high level amplification")),
+                     del = filter(data_out, .data$alteration %in% c("deletion")),
+                     amp = filter(data_out, .data$alteration %in% c("amplification")),
                      mut = data_out,
                      fus = data_out)
 

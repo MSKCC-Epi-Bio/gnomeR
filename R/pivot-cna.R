@@ -112,6 +112,11 @@ pivot_cna_wider <- function(cna) {
 
 #' Reformat Wide CNA Data to Long
 #'
+#' Takes a numeric vector of CNA data in wide format where each column is a sample
+#' and each row is a hugo symbol. Function will return a long format CNA data set
+#' of just events (neutral/diploid instances are filtered out) and will recode events from
+#' numeric to descriptive (-2/-1/-1.5 is deletion, 2/1 is amplification).
+#'
 #' @param wide_cna a cna dataframe in wide format (e.g. gnomeR::cna)
 #' @param clean_sample_ids `TRUE` by default and function will clean
 #' `sample_id` field to replace "." with "-". If `FALSE`,
@@ -136,9 +141,10 @@ pivot_cna_longer <- function(wide_cna, clean_sample_ids = TRUE) {
          cli::cli_abort("Missing columns: {.field {missing_cols}}"))
 
 
+  # Remove Patients with no CNA ------------------------------------------------
   no_hugo <- select(cna, -"hugo_symbol")
 
-  patient_sums <- apply(no_hugo, 2, sum, na.rm = TRUE)
+  patient_sums <- apply(no_hugo, 2, function(x) sum(abs(x), na.rm = TRUE))
 
   patient_with_cna <- patient_sums[patient_sums > 0] %>%
     names()
@@ -147,6 +153,7 @@ pivot_cna_longer <- function(wide_cna, clean_sample_ids = TRUE) {
     cli::cli_abort("There are no CNA events in the data set.")
   }
 
+  # Pivot Longer ---------------------------------------------------------------
   cna <-  cna %>%
     select("hugo_symbol", all_of(patient_with_cna))
 
@@ -154,6 +161,11 @@ pivot_cna_longer <- function(wide_cna, clean_sample_ids = TRUE) {
     tidyr::pivot_longer(-"hugo_symbol",
                         names_to = "sample_id", values_to = "alteration")
 
+  # remove neutral events (pre-filtered above for speed but may not need this)
+  cna_long <- cna_long %>%
+    filter(.data$alteration != 0)
+
+  # clean Names  ---------------------------------------------------------------
   if(clean_sample_ids) {
     cna_long <- cna_long %>%
       mutate(sample_id = str_replace_all(.data$sample_id, fixed("."), "-"))
@@ -162,39 +174,18 @@ pivot_cna_longer <- function(wide_cna, clean_sample_ids = TRUE) {
                    To prevent this, use argument {.code clean_sample_ids = FALSE}")
   }
 
-  # check alteration column -----------------------------
+  # Recode Alteration ---------------------------------------------------------
 
   # Make sure hugo & alteration is character
   cna_long <- cna_long %>%
     mutate(hugo_symbol = as.character(.data$hugo_symbol)) %>%
-    mutate(alteration = toupper(str_trim(as.character(.data$alteration))))
+    mutate(alteration = tolower(str_trim(as.character(.data$alteration))))
 
-  levels_in_data <- names(table(cna_long$alteration))
+  # recode alterations
+  cna_long <- cna_long %>%
+    mutate(alteration = recode_cna(.data$alteration))
 
-  allowed_chr_levels <- c(
-    "NEUTRAL" = "0",
-    "DELETION" = "-2",
-    "LOH" = "-1.5",
-    "LOH" = "-1",
-    "GAIN" = "1",
-    "AMPLIFICATION" = "2"
-  )
-
-  all_allowed <- c(allowed_chr_levels, names(allowed_chr_levels))
-  not_allowed <- levels_in_data[!levels_in_data %in% all_allowed]
-
-  if(length(not_allowed) > 0) {
-    cli::cli_abort(c("Unknown values in {.field alteration} field: {.val {not_allowed}}",
-                     "Must be one of the following: {.val {all_allowed}}"))
-  }
-
-
-  suppressWarnings(
-    cna_long <- cna_long %>%
-      mutate(alteration = forcats::fct_recode(.data$alteration, !!!allowed_chr_levels))
-  )
-
-  cna_long
+  return(cna_long)
 
 
 }

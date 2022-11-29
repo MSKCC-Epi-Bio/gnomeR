@@ -16,6 +16,8 @@
 #' Default is NULL.
 #' @param cna A data frame of copy number alterations. If inputed the outcome will be added to the matrix with columns ending in ".del" and ".amp".
 #' Default is NULL.
+#' @param high_level_cna_only If TRUE, only deep deletions (-2, -1.5) or high level amplifications (2) will be counted as events
+#' in the binary matrix. Gains (1) and losses (1) will be ignored. Default is `FALSE` where all CNA events are counted.
 #' @param specify_panel a character vector of length 1 with panel id (see gnomeR::gene_panels for available panels), "impact", or "no", or a
 #' data frame of `sample_id`-`panel_id` pairs specifying panels for which to insert NAs indicating that gene was not tested.
 #' If a single panel id is passed, all genes that are not in that panel (see gnomeR::gene_panels) will be set to NA in results.
@@ -52,6 +54,7 @@ create_gene_binary <- function(samples=NULL,
                           fusion = NULL,
 
                           cna = NULL,
+                          high_level_cna_only = FALSE,
 
                           specify_panel = "no",
                           recode_aliases = TRUE){
@@ -169,7 +172,8 @@ create_gene_binary <- function(samples=NULL,
                        .cna_gene_binary(cna = cna,
                                           samples = samples_final,
                                           specify_panel = specify_panel,
-                                          recode_aliases = recode_aliases))
+                                          recode_aliases = recode_aliases,
+                                          high_level_cna_only = high_level_cna_only))
 
   # put them all together
 
@@ -355,12 +359,27 @@ create_gene_binary <- function(samples=NULL,
 .cna_gene_binary <- function(cna,
                                samples,
                                specify_panel,
-                               recode_aliases){
+                               recode_aliases,
+                                high_level_cna_only){
 
 
   if(recode_aliases) {
     cna <- recode_alias(cna)
   }
+
+  # * Remove lower level CNA if specified ----
+  if(high_level_cna_only) {
+    cna2 <- cna %>%
+      filter(!(.data$alteration %in% c("loss", "gain") |
+               is.na(.data$alteration)))
+  } else {
+    cna <- cna %>%
+      mutate(alteration =
+               dplyr::case_when(.data$alteration == "gain" ~ "amplification",
+                         .data$alteration == "loss" ~ "deletion",
+                         TRUE ~ as.character(.data$alteration)))
+  }
+
 
   cna_del <- .process_binary(data = cna,
                              samples = samples,
