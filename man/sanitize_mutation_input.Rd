@@ -4,10 +4,12 @@
 \alias{sanitize_mutation_input}
 \title{Checks MAF input to ensure column names are correct and renamed genes are corrected}
 \usage{
-sanitize_mutation_input(mutation, ...)
+sanitize_mutation_input(mutation, include_silent, ...)
 }
 \arguments{
 \item{mutation}{Raw maf dataframe containing alteration data}
+
+\item{include_silent}{Silent mutations will be removed if FALSE (default). Variant classification column is needed.}
 
 \item{...}{other arguments passed from create_gene_binary() (recode.aliases).}
 }
@@ -18,7 +20,7 @@ a corrected maf file or an error if problems with maf
 Checks MAF input to ensure column names are correct and renamed genes are corrected
 }
 \examples{
-sanitize_mutation_input(mutation = gnomeR::mutations)
+sanitize_mutation_input(mutation = gnomeR::mutations, include_silent = FALSE)
 
 }
 \keyword{internal}

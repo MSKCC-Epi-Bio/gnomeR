@@ -8,7 +8,7 @@
 #' @export
 #'
 #' @examples
-#' sanitize_mutation_input(mutation = gnomeR::mutations)
+#' sanitize_mutation_input(mutation = gnomeR::mutations, include_silent = FALSE)
 #'
 sanitize_mutation_input <- function(mutation, include_silent, ...)  {
 
