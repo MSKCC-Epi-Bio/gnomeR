@@ -1,6 +1,7 @@
 #' Checks MAF input to ensure column names are correct and renamed genes are corrected
 #'
 #' @param mutation Raw maf dataframe containing alteration data
+#' @param include_silent Silent mutations will be removed if FALSE (default). Variant classification column is needed.
 #' @param ... other arguments passed from create_gene_binary() (recode.aliases).
 #' @return a corrected maf file or an error if problems with maf
 #' @keywords internal
@@ -9,7 +10,7 @@
 #' @examples
 #' sanitize_mutation_input(mutation = gnomeR::mutations)
 #'
-sanitize_mutation_input <- function(mutation, ...)  {
+sanitize_mutation_input <- function(mutation, include_silent, ...)  {
 
   arguments <- list(...)
 
@@ -29,6 +30,14 @@ sanitize_mutation_input <- function(mutation, ...)  {
   mutation <- mutation %>%
     mutate(sample_id = as.character(.data$sample_id),
            hugo_symbol = as.character(.data$hugo_symbol))
+
+  # if include_silent FALSE, check for variant classification column
+  if(!include_silent & !("variant_classification" %in% names(mutation))) {
+    cli::cli_abort("No {.var variant_classification} column found therefore
+                   silent mutations can't be removed. Please set {.code include_silent = TRUE}
+                   or add a {.var variant_classification} column.")
+  }
+
 
   if("variant_classification" %in% column_names) {
   # Check for Fusions-  Old API used to return fusions --------------

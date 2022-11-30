@@ -176,8 +176,183 @@ test_that("test inclusion of NAs in mut_type ", {
 })
 
 
-# test specify-panel arg with "impact"- see test_specify-panel.R file
 
+# Test high_level_cna_only  ----------------------------------------------------
+
+test_that("test deletions with -1 and -2 events", {
+
+  test_cna <- tibble::tribble(
+    ~hugo_symbol, ~sample_id, ~alteration,
+    "TP53",        "samp1",     1,
+    "ALK3",        "samp2",     -1,
+    "FGFR3",       "samp3",      2,
+    "FGFR3",       "samp4",      0,
+    "TP53",        "samp2",      1
+  )
+
+  test_mut <- tibble::tribble(
+    ~hugo_symbol, ~sample_id,  ~variant_type,
+    "TP53",        "samp1",     "SNP",
+    "ALK3",        "samp2",     "SNP",
+    "FGFR3",       "samp3",     "SNP",
+    "FGFR3",       "samp4",     "SNP",
+    "TP53",        "samp2",     "SNP"
+  )
+
+  test_fus <- tibble::tribble(
+    ~site_1_hugo_symbol, ~site_2_hugo_symbol, ~sample_id,
+    "TP53",               "ALK3",             "samp1",
+    "ALK3",               "APC",              "samp2",
+    "FGFR3",              "TP53",             "samp3",
+    "FGFR3",              "KMT2D",            "samp4",
+    "TP53",               NA,                 "samp2"
+  )
+
+  proc <- create_gene_binary(
+    mutation = test_mut,
+    cna = test_cna,
+    fusion = test_fus)
+
+
+
+
+
+  test_data <- test_data %>%
+    mutate(alteration = recode_cna(alteration))
+
+  expect_no_error()
+  x <- test_data %>%
+    filter(alteration == "deletion") %>%
+    select(sample_id, hugo_symbol) %>% distinct()
+
+  # check results
+  expect_equal(nrow(proc), length(unique(x$sample_id)))
+  expect_equal(ncol(proc)-1, length(unique(x$hugo_symbol)))
+
+
+  res_tab <- paste0(x$hugo_symbol, ".Del") %>% table() %>% c()
+  res_func <- purrr::map_dbl(proc[, -1], ~sum(.x))
+  res_tab <- res_tab[names(res_func)]
+
+  expect_equal(res_tab, res_func)
+
+})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# test include_silent arg----
+
+test_that("test include_silent default when no variant class col", {
+
+  test_cna <- tibble::tribble(
+    ~hugo_symbol, ~sample_id, ~alteration,
+    "TP53",        "samp1",     1,
+    "ALK3",        "samp2",     -1,
+    "FGFR3",       "samp3",      2,
+    "FGFR3",       "samp4",      0,
+    "TP53",        "samp2",      1
+  )
+
+  test_mut <- tibble::tribble(
+    ~hugo_symbol, ~sample_id,  ~variant_type,  ~mutation_status,
+    "TP53",        "samp1",     "SNP",          "Somatic",
+    "ALK3",        "samp2",     "SNP",          "Somatic",
+    "FGFR3",       "samp3",     "SNP",          "Somatic",
+    "FGFR3",       "samp4",     "SNP",          "Somatic",
+    "TP53",        "samp2",     "SNP",          "Somatic"
+  )
+
+  test_fus <- tibble::tribble(
+    ~site_1_hugo_symbol, ~site_2_hugo_symbol, ~sample_id,
+    "TP53",               "ALK3",             "samp1",
+    "ALK3",               "APC",              "samp2",
+    "FGFR3",              "TP53",             "samp3",
+    "FGFR3",              "KMT2D",            "samp4",
+    "TP53",               NA,                 "samp2"
+  )
+
+  expect_error(
+    proc <- create_gene_binary(
+      mutation = test_mut,
+      cna = test_cna,
+      fusion = test_fus))
+
+  expect_no_error(
+    proc <- create_gene_binary(
+      mutation = test_mut,
+      cna = test_cna,
+      fusion = test_fus,
+      include_silent = TRUE,
+      recode_aliases = FALSE))
+
+})
+
+test_that("test include_silent silent are removed when variant class col", {
+
+  test_cna <- tibble::tribble(
+    ~hugo_symbol, ~sample_id, ~alteration,
+    "TP53",        "samp1",     1,
+    "BMPR1A",      "samp2",     -1,
+    "FGFR3",       "samp3",      2,
+    "FGFR3",       "samp4",      0,
+    "TP53",        "samp2",      1
+  )
+
+  test_mut <- tibble::tribble(
+    ~hugo_symbol, ~sample_id,  ~variant_type,  ~mutation_status,   ~variant_classification,
+    "TP53",        "samp1",     "SNP",          "Somatic",          "Silent",
+    "BMPR1A",      "samp2",     "SNP",          "Somatic",           NA,
+    "FGFR3",       "samp3",     "SNP",          "Somatic",           NA,
+    "FGFR3",       "samp4",     "SNP",          "Somatic",           NA,
+    "TP53",        "samp2",     "SNP",          "Somatic",           NA
+  )
+
+  test_fus <- tibble::tribble(
+    ~site_1_hugo_symbol, ~site_2_hugo_symbol, ~sample_id,
+    "TP53",               "BMPR1A",             "samp1",
+    "BMPR1A",             "APC",              "samp2",
+    "FGFR3",              "TP53",             "samp3",
+    "FGFR3",              "KMT2D",            "samp4",
+    "TP53",               NA,                 "samp2"
+  )
+
+  proc_remove_silent1 <- create_gene_binary(
+      mutation = test_mut,
+      cna = test_cna,
+      fusion = test_fus)
+
+
+  proc_remove_silent2 <- create_gene_binary(
+    mutation = test_mut,
+    cna = test_cna,
+    include_silent = FALSE,
+    fusion = test_fus)
+
+  expect_equal(proc_remove_silent1, proc_remove_silent2)
+
+  proc_keep_silent <-
+    create_gene_binary(
+      mutation = test_mut,
+      cna = test_cna,
+      include_silent = TRUE,
+      fusion = test_fus)
+
+  expect_lt(sum(proc_remove_silent1$TP53), sum(proc_keep_silent$TP53))
+
+})
 
 
 # test snp_only arg----
@@ -226,6 +401,10 @@ test_that("test inclusion of NAs in mut_type ", {
 
 
 # test include_silent arg----
+
+
+
+
 # add general tests
 # What happens  when Variant_Classification is NA for some samples in passed data? - Maybe need to add warning to tell user about NAs
 # test_that("test include_silent arg", {

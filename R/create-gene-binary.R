@@ -85,10 +85,6 @@ create_gene_binary <- function(samples=NULL,
   }
 
 
-  # if samples not passed we will infer it from data frames
-  switch(is.null(samples),
-         cli::cli_alert_info("{.code samples} argument is {.code NULL}. We will infer your cohort inclusion and resulting data frame will include all samples with at least one alteration in {.field mutation}, {.field fusion} or {.field cna} data frames"))
-
   # * mut_type-----
   mut_type <- match.arg(mut_type)
 
@@ -124,7 +120,8 @@ create_gene_binary <- function(samples=NULL,
 
   # standardize columns names
   mutation <- switch(!is.null(mutation),
-                     sanitize_mutation_input(mutation = mutation))
+                     sanitize_mutation_input(mutation = mutation,
+                                             include_silent = include_silent))
 
   # * Fusion checks  ----------
   fusion <- switch(!is.null(fusion),
@@ -139,6 +136,10 @@ create_gene_binary <- function(samples=NULL,
 
   #  Make Final Sample List ----------------------------------------------------
 
+
+  # if samples not passed we will infer it from data frames
+  switch(is.null(samples),
+         cli::cli_alert_info("{.code samples} argument is {.code NULL}. We will infer your cohort inclusion and resulting data frame will include all samples with at least one alteration in {.field mutation}, {.field fusion} or {.field cna} data frames"))
 
   # If user doesn't pass a vector, use samples in files as final sample list
     samples_final <- samples %||%
@@ -272,6 +273,7 @@ create_gene_binary <- function(samples=NULL,
     mutation <- recode_alias(mutation)
   }
 
+
   # apply filters --------------
  mutation <- mutation %>%
    purrr::when(
@@ -279,7 +281,8 @@ create_gene_binary <- function(samples=NULL,
      ~.
    ) %>%
    purrr::when(
-     !include_silent ~ filter(., .data$variant_classification != "Silent"),
+     !include_silent ~ {filter(., .data$variant_classification != "Silent" |
+                                is.na(.data$variant_classification))},
      ~.
    ) %>%
    purrr::when(

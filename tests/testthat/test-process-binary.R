@@ -1,6 +1,9 @@
 
 
 
+# Test mutations ----------------------------------------------------------
+
+
 test_that("check results for mutations", {
 
   samp <- unique(gnomeR::mutations$sampleId)
@@ -24,6 +27,9 @@ test_that("check results for mutations", {
   expect_equal(res_tab, res_func)
 
 })
+
+
+# Test Fusions ------------------------------------------------------------
 
 
 
@@ -53,6 +59,8 @@ test_that("check results for fusions", {
 })
 
 
+# Test CNA ----------------------------------------------------------------
+
 test_that("check results for deletions", {
 
   samp <- unique(gnomeR::cna$sampleId)
@@ -78,6 +86,8 @@ test_that("check results for deletions", {
   expect_equal(res_tab, res_func)
 
 })
+
+
 
 test_that("check results for amplifications", {
 
@@ -105,6 +115,9 @@ test_that("check results for amplifications", {
 
 })
 
+
+
+# Misc --------------------------------------------------------------------
 
 
 test_that("sample passed that has events", {
