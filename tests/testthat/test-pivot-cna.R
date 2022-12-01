@@ -321,3 +321,53 @@ test_that("pivot CNA- test with NA data", {
                pivot_cna_longer(cna_wide_na, clean_sample_ids = FALSE))
 
 })
+
+
+test_that("pivot CNA- test with character columns", {
+
+  cna_wide_na <- tibble::tribble(
+    ~Hugo_Symbol, ~P.0070637.T01.IM7, ~P.0042589.T01.IM6, ~P.0026544.T01.IM6, ~P.0032011.T01.IM6,
+    "CRKL",                 0L,                 NA,                 0L,                 -2L,
+    "SCG5",                 0L,                 0L,                 0L,                 0L,
+    "STK11",                 1L,                 0L,                 0L,                 0L,
+    "MEN1",                 0L,                 0L,                 0L,                 0L,
+    "B2M",                 0L,                 2L,                 0L,                 0L,
+    "TAP2",                 NA,                 0L,                 0L,                 0L,
+    "PMAIP1",                 0L,                 0L,                 0L,                 0L,
+    "H3-3A",                 0L,                 0L,                 0L,                 0L,
+    "H3-3B",                 0L,                 0L,                 NA,                 0L,
+    "CDC73",                 0L,                 0L,                 0L,                 0L,
+    "PIK3CA",                 0L,                 0L,                 0L,                 -1L
+  )
+
+  cna_wide_chr <- cna_wide_na %>%
+    mutate(across(.cols = c(everything(), -Hugo_Symbol), ~ as.character(.x)))
+
+  expect_error(pivot_cna_longer(cna_wide_chr, clean_sample_ids = FALSE))
+
+})
+
+
+test_that("pivot CNA- test with some character, some numeric columns", {
+
+  cna_wide_na <- tibble::tribble(
+    ~Hugo_Symbol, ~P.0070637.T01.IM7, ~P.0042589.T01.IM6, ~P.0026544.T01.IM6, ~P.0032011.T01.IM6,
+    "CRKL",                 0L,                 NA,                 0L,                 -2L,
+    "SCG5",                 0L,                 0L,                 0L,                 0L,
+    "STK11",                 1L,                 0L,                 0L,                 0L,
+    "MEN1",                 0L,                 0L,                 0L,                 0L,
+    "B2M",                 0L,                 2L,                 0L,                 0L,
+    "TAP2",                 NA,                 0L,                 0L,                 0L,
+    "PMAIP1",                 0L,                 0L,                 0L,                 0L,
+    "H3-3A",                 0L,                 0L,                 0L,                 0L,
+    "H3-3B",                 0L,                 0L,                 NA,                 0L,
+    "CDC73",                 0L,                 0L,                 0L,                 0L,
+    "PIK3CA",                 0L,                 0L,                 0L,                 -1L
+  )
+
+  cna_wide_chr <- cna_wide_na %>%
+    mutate(across(.cols = c(`P.0070637.T01.IM7`), ~ as.character(.x)))
+
+  expect_error(pivot_cna_longer(cna_wide_chr, clean_sample_ids = FALSE))
+
+})

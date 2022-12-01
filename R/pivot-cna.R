@@ -140,9 +140,15 @@ pivot_cna_longer <- function(wide_cna, clean_sample_ids = TRUE) {
   switch(length(missing_cols) > 0,
          cli::cli_abort("Missing columns: {.field {missing_cols}}"))
 
+  no_hugo <- select(cna, -"hugo_symbol")
+
+  switch(any(purrr::map_lgl(no_hugo, ~!is.numeric(.x))),
+         cli::cli_abort(c("All CNA columns must be numeric. Do you need to convert to numeric? Eg. ",
+         "{.code mutate(data, across(.cols = c(everything(), -Hugo_Symbol), ~ as.numeric(.x)))} ?"))
+  )
 
   # Remove Patients with no CNA ------------------------------------------------
-  no_hugo <- select(cna, -"hugo_symbol")
+
 
   patient_sums <- apply(no_hugo, 2, function(x) sum(abs(x), na.rm = TRUE))
 

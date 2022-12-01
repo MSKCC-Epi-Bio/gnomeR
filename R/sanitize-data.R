@@ -122,7 +122,7 @@ sanitize_fusion_input <- function(fusion, ...)  {
   which_missing <- required_cols[which(!(required_cols %in% column_names))]
 
   if(length(which_missing) > 0) {
-    cli::cli_abort("The following required columns are missing in your mutations data: {.field {which_missing}}")
+    cli::cli_abort("The following required columns are missing in your fusions data: {.field {which_missing}}")
   }
 
   # Make sure they are character
@@ -162,7 +162,7 @@ sanitize_cna_input <- function(cna, ...)  {
   which_missing <- required_cols[which(!(required_cols %in% column_names))]
 
   if(length(which_missing) > 0) {
-    cli::cli_abort("The following required columns are missing in your mutations data: {.field {which_missing}}.
+    cli::cli_abort("The following required columns are missing in your CNA data: {.field {which_missing}}.
                    Is your data in wide format? If so, it must be long format. See {.code gnomeR::pivot_cna_long()} to reformat")
   }
 
