@@ -169,7 +169,7 @@ gnomer_palettes <- list(
 #'
 
 gnomer_palette <- function(name = "pancan", n, type = c("discrete", "continuous"),
-                           plot_col = FALSE) {
+                           plot_col = FALSE, reverse = FALSE,...) {
   type <- match.arg(type)
 
   # since the palettes in msk_palettes are named vectors, ggplot will try to match the names to levels of the variables in the data, which is not what we want. Rather we just want to use them in order, so we need to use unname() here
@@ -187,8 +187,10 @@ gnomer_palette <- function(name = "pancan", n, type = c("discrete", "continuous"
     stop("Number of requested colors greater than what palette can offer")
   }
 
+  if (reverse) { pal <- rev(pal)}
+
   pal_swatch <- switch(type,
-         continuous = grDevices::colorRampPalette(pal)(n),
+         continuous = grDevices::colorRampPalette(pal,...)(n),
          discrete = pal[1:n])
 
   if(plot_col == FALSE){
@@ -196,7 +198,6 @@ gnomer_palette <- function(name = "pancan", n, type = c("discrete", "continuous"
   }else{
     return(unlist(list(pal_swatch, scales::show_col(pal_swatch))))
   }
-
 }
 
 #
@@ -217,22 +218,22 @@ gnomer_palette <- function(name = "pancan", n, type = c("discrete", "continuous"
 #   text((n + 1) / 2, 1, labels = attr(x, "name"), cex = 1, family = "serif")
 # }
 
-#' Return function to interpolate a gnomeR color palette
-#'
-#' @param palette Character name of palette in gnomer_palettes.
-#' Options include "main", "pancan", "sunset"
-#' @param reverse Boolean indicating whether the palette should be reversed.
-#' Default to FALSE.
-#' @param ... Additional arguments to pass to colorRampPalette()
-#' @export
-
-gnomer_pal <- function(palette = "pancan", reverse = FALSE, ...) {
-  pal <- gnomer_palettes[[palette]]
-
-  if (reverse) pal <- rev(pal)
-
-  grDevices::colorRampPalette(pal, ...)
-}
+# #' Return function to interpolate a gnomeR color palette
+# #'
+# #' @param palette Character name of palette in gnomer_palettes.
+# #' Options include "main", "pancan", "sunset"
+# #' @param reverse Boolean indicating whether the palette should be reversed.
+# #' Default to FALSE.
+# #' @param ... Additional arguments to pass to colorRampPalette()
+# #' @export
+#
+# gnomer_pal <- function(palette = "pancan", reverse = FALSE, ...) {
+#   pal <- gnomer_palettes[[palette]]
+#
+#   if (reverse) pal <- rev(pal)
+#
+#   grDevices::colorRampPalette(pal, ...)
+# }
 
 
 #' Color scale creator to add gnomeR colors in ggplot
