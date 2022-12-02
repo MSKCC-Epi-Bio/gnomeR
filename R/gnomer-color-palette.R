@@ -82,22 +82,22 @@ gnomer_colors <- c(
 
 
 
-
-#' Function to extract colors from \code{gnomer_colors} as hex codes
-#'
-#' @param ... Character names of gnomer_colors
-#' @export
-
-gnomer_cols <- function(...) {
-  cols <- c(...)
-
-  if (is.null(cols)) {
-    return(gnomer_colors)
-  }
-
-  unname(gnomer_colors[cols])
-}
-
+#
+# #' Function to extract colors from \code{gnomer_colors} as hex codes
+# #'
+# #' @param ... Character names of gnomer_colors
+# #' @export
+#
+# gnomer_cols <- function(...) {
+#   cols <- c(...)
+#
+#   if (is.null(cols)) {
+#     return(gnomer_colors)
+#   }
+#
+#   unname(gnomer_colors[cols])
+# }
+#
 
 #' Complete list of gnomeR color palettes
 #'
