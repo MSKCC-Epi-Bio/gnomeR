@@ -168,7 +168,8 @@ gnomer_palettes <- list(
 #' scale_fill_manual(values = gnomer_palette("pancan"))
 #'
 
-gnomer_palette <- function(name = "pancan", n, type = c("discrete", "continuous")) {
+gnomer_palette <- function(name = "pancan", n, type = c("discrete", "continuous"),
+                           plot_col = FALSE) {
   type <- match.arg(type)
 
   # since the palettes in msk_palettes are named vectors, ggplot will try to match the names to levels of the variables in the data, which is not what we want. Rather we just want to use them in order, so we need to use unname() here
@@ -186,31 +187,35 @@ gnomer_palette <- function(name = "pancan", n, type = c("discrete", "continuous"
     stop("Number of requested colors greater than what palette can offer")
   }
 
-  out <- switch(type,
-                continuous = grDevices::colorRampPalette(pal)(n),
-                discrete = pal[1:n]
-  )
-  structure(out, class = "palette", name = name)
+  pal_swatch <- switch(type,
+         continuous = grDevices::colorRampPalette(pal)(n),
+         discrete = pal[1:n])
+
+  if(plot_col == FALSE){
+    pal_swatch
+  }else{
+    return(unlist(list(pal_swatch, scales::show_col(pal_swatch))))
+  }
+
 }
 
-
-#' @importFrom graphics rect par image text
-#' @importFrom grDevices rgb
-#' @export
-print.palette <- function(x, ...) {
-  n <- length(x)
-  old <- par(mar = c(0.5, 0.5, 0.5, 0.5))
-  on.exit(par(old))
-
-  image(1:n, 1, as.matrix(1:n),
-        col = x,
-        ylab = "", xaxt = "n", yaxt = "n", bty = "n"
-  )
-
-  rect(0, 0.9, n + 1, 1.1, col = rgb(1, 1, 1, 0.8), border = NA)
-  text((n + 1) / 2, 1, labels = attr(x, "name"), cex = 1, family = "serif")
-}
-
+#
+# #' @importFrom graphics rect par image text
+# #' @importFrom grDevices rgb
+# #' @export
+# print.palette <- function(x, ...) {
+#   n <- length(x)
+#   old <- par(mar = c(0.5, 0.5, 0.5, 0.5))
+#   on.exit(par(old))
+#
+#   image(1:n, 1, as.matrix(1:n),
+#         col = x,
+#         ylab = "", xaxt = "n", yaxt = "n", bty = "n"
+#   )
+#
+#   rect(0, 0.9, n + 1, 1.1, col = rgb(1, 1, 1, 0.8), border = NA)
+#   text((n + 1) / 2, 1, labels = attr(x, "name"), cex = 1, family = "serif")
+# }
 
 #' Return function to interpolate a gnomeR color palette
 #'
