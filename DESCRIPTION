@@ -53,7 +53,8 @@ Imports:
     gtsummary,
     broom.helpers,
     janitor,
-    withr
+    withr,
+    scales
 Suggests: 
     knitr,
     rmarkdown,

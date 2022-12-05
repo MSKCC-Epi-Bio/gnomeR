@@ -53,8 +53,6 @@ reference:
     - gnomer_colors
     - gnomer_palettes
     - gnomer_palette
-    - scale_color_pancan
-    - scale_fill_pancan
     - set_gnomer_palette
   - subtitle: Example Data Sets
   - contents:

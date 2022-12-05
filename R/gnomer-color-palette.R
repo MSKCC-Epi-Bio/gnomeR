@@ -135,6 +135,10 @@ gnomer_palettes <- list(
 #' or the needed number of colors if less than the total.
 #' @param type Either "continuous" or "discrete". Use continuous if you want
 #' to automatically interpolate between colours.
+#' @param plot_col Boolean value weather to plot the palette labeled with their hex codes. Defalut is FALSE.
+#' @param reverse Boolean indicating whether the palette should be reversed.
+#' Default is FALSE.
+#' @param ... Additional parameters to pass too `grDevices::colorRampPalette`
 #'   @importFrom graphics rgb rect par image text
 #'   @importFrom grDevices colorRampPalette
 #' @return A vector of colours.
@@ -236,82 +240,82 @@ gnomer_palette <- function(name = "pancan", n, type = c("discrete", "continuous"
 # }
 
 
-#' Color scale creator to add gnomeR colors in ggplot
-#'
-#' @description This color scale generator will interpolate between colors,
-#' even when discrete scales are provided.
-#' To use exact discrete colors, see examples in \code{gnomer_palette}
-#'
-#' @param palette Character name of palette in msk_palettes, supplied in quotes.
-#' Options include "main" (default), "pancan", "sunset".
-#' @param discrete Boolean indicating whether color aesthetic is discrete.
-#' Default is TRUE.
-#' @param reverse Boolean indicating whether the palette should be reversed.
-#' Default is FALSE.
-#' @param ... Additional arguments passed to discrete_scale() or
-#'            scale_color_gradientn(), used respectively when discrete is TRUE or FALSE
-#'
-#' @export
-#'
-#' @examples
-#'
-#' library(ggplot2)
-#'
-#' # use a discrete color scale
-#' ggplot(iris, aes(Sepal.Width, Sepal.Length, color = Species)) +
-#' geom_point(size = 4) +
-#' scale_color_pancan("pancan")
-#'
-#' # use a continuous color scale
-#' ggplot(iris, aes(Sepal.Width, Sepal.Length, color = Sepal.Length)) +
-#' geom_point(size = 4, alpha = .6) +
-#' scale_color_pancan(palette = "sunset", discrete = FALSE)
+# #' Color scale creator to add gnomeR colors in ggplot
+# #'
+# #' @description This color scale generator will interpolate between colors,
+# #' even when discrete scales are provided.
+# #' To use exact discrete colors, see examples in \code{gnomer_palette}
+# #'
+# #' @param palette Character name of palette in msk_palettes, supplied in quotes.
+# #' Options include "main" (default), "pancan", "sunset".
+# #' @param discrete Boolean indicating whether color aesthetic is discrete.
+# #' Default is TRUE.
+# #' @param reverse Boolean indicating whether the palette should be reversed.
+# #' Default is FALSE.
+# #' @param ... Additional arguments passed to discrete_scale() or
+# #'            scale_color_gradientn(), used respectively when discrete is TRUE or FALSE
+# #'
+# #' @export
+# #'
+# #' @examples
+# #'
+# #' library(ggplot2)
+# #'
+# #' # use a discrete color scale
+# #' ggplot(iris, aes(Sepal.Width, Sepal.Length, color = Species)) +
+# #' geom_point(size = 4) +
+# #' scale_color_pancan("main")
+# #'
+# #' # use a continuous color scale
+# #' ggplot(iris, aes(Sepal.Width, Sepal.Length, color = Sepal.Length)) +
+# #' geom_point(size = 4, alpha = .6) +
+# #' scale_color_pancan(palette = "sunset", discrete = FALSE)
 
-scale_color_pancan <- function(palette = "main", discrete = TRUE, reverse = FALSE, ...) {
-  pal <- gnomer_palette(palette = palette, reverse = reverse)
+# scale_color_pancan <- function(palette = "main", discrete = TRUE, reverse = FALSE, ...) {
+#   pal <- gnomer_palette(palette = palette, reverse = reverse)
+#
+#   if (discrete) {
+#     ggplot2::discrete_scale("colour", paste0("gnomer_", palette), palette = pal, ...)
+#   } else {
+#     ggplot2::scale_color_gradientn(colours = pal(256), ...)
+#   }
+# }
 
-  if (discrete) {
-    ggplot2::discrete_scale("colour", paste0("gnomer_", palette), palette = pal, ...)
-  } else {
-    ggplot2::scale_color_gradientn(colours = pal(256), ...)
-  }
-}
 
+# #' Fill scale creator to add gnomeR colors in ggplot
+# #'
+# #' @description This fill scale generator will interpolate between the colors
+# #' in the palette provided
+# #'
+# #' @param palette Character name of palette in msk_palettes, supplied in quotes.
+# #' Options include "main", "pancan", "sunset" (default).
+# #' @param discrete Boolean indicating whether color aesthetic is discrete or not.
+# #' Default is TRUE.
+# #' @param reverse Boolean indicating whether the palette should be reversed.
+# #' Default is FALSE.
+# #' @param ... Additional arguments passed to discrete_scale() or
+# #'            scale_color_gradientn(), used respectively when discrete is TRUE or FALSE
+# #' @export
+# #'
+# #' @examples
+# #'
+# #' library(ggplot2)
+# #'
+# #' # use a fill color
+# #' # alternative use that involves interpolation
+# #' ggplot(iris, aes(x = Sepal.Length, fill = Species)) +
+# #' geom_histogram(bins = 20, position = "dodge") +
+# #' scale_fill_pancan()
 
-#' Fill scale creator to add gnomeR colors in ggplot
-#'
-#' @description This fill scale generator will interpolate between the colors
-#' in the palette provided
-#'
-#' @param palette Character name of palette in msk_palettes, supplied in quotes.
-#' Options include "main", "pancan", "sunset" (default).
-#' @param discrete Boolean indicating whether color aesthetic is discrete or not.
-#' Default is TRUE.
-#' @param reverse Boolean indicating whether the palette should be reversed.
-#' Default is FALSE.
-#' @param ... Additional arguments passed to discrete_scale() or
-#'            scale_color_gradientn(), used respectively when discrete is TRUE or FALSE
-#' @export
-#'
-#' @examples
-#'
-#' library(ggplot2)
-#'
-#' # use a fill color
-#' # alternative use that involves interpolation
-#' ggplot(iris, aes(x = Sepal.Length, fill = Species)) +
-#' geom_histogram(bins = 20, position = "dodge") +
-#' scale_fill_pancan()
-
-scale_fill_pancan <- function(palette = "sunset", discrete = TRUE, reverse = FALSE, ...) {
-  pal <- gnomer_palette(palette = palette, reverse = reverse)
-
-  if (discrete) {
-    ggplot2::discrete_scale("fill", paste0("gnomer_", palette), palette = pal, ...)
-  } else {
-    ggplot2::scale_fill_gradientn(colours = pal(256), ...)
-  }
-}
+# scale_fill_pancan <- function(palette = "sunset", discrete = TRUE, reverse = FALSE, ...) {
+#   pal <- gnomer_palette(palette = palette, reverse = reverse)
+#
+#   if (discrete) {
+#     ggplot2::discrete_scale("fill", paste0("gnomer_", palette), palette = pal, ...)
+#   } else {
+#     ggplot2::scale_fill_gradientn(colours = pal(256), ...)
+#   }
+# }
 
 
 
