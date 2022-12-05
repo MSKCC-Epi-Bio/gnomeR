@@ -53,7 +53,6 @@ reference:
     - gnomer_colors
     - gnomer_palettes
     - gnomer_palette
-    - gnomer_pal
     - scale_color_pancan
     - scale_fill_pancan
     - set_gnomer_palette
