@@ -17,6 +17,6 @@ A data frame with 1658 rows
 impact_alias_table
 }
 \description{
-Table of aliases for IMPACT panel genes
+Table of aliases for IMPACT panel genes used for gene name resolution functionality.
 }
 \keyword{datasets}

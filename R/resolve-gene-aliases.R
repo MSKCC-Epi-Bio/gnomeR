@@ -3,6 +3,13 @@
 
 #' Recode Hugo Symbol Column
 #'
+#'
+#' Searches the Hugo Symbol column in a genomic dataframe to look for
+#' any genes that have common gene name aliases,
+#' and replaces those aliases with the accepted (most recent) gene name.
+#' Function uses `gnomeR::impact_alias_table` by default as reference for
+#' which aliases to replace and supports IMPACT panel alias replacement only at this time.
+#'
 #' @param genomic_df a gene_binary object
 #' @param ... Other things passed
 #'
