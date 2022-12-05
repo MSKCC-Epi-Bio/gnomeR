@@ -24,7 +24,6 @@ Options include \verb{"pancan", "main", "sunset"}. Default is \code{"pancan"}.}
 \item{env}{environment in which palette will take effect. Default is \code{rlang::caller_env()}.}
 }
 \description{
-\lifecycle{experimental}
 This function sets the gnomeR color palette as the default palette for all
 ggplot2 objects. It does so by overriding the following four functions from
 the ggplot2 package: \code{scale_color_discrete()},

@@ -51,12 +51,12 @@ reference:
   - subtitle: Color Palette
   - contents:
     - gnomer_colors
-    - gnomer_cols
     - gnomer_palettes
     - gnomer_palette
     - gnomer_pal
     - scale_color_pancan
     - scale_fill_pancan
+    - set_gnomer_palette
   - subtitle: Example Data Sets
   - contents:
     - mutations
