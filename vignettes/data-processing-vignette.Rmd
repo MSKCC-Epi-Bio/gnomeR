@@ -67,7 +67,7 @@ gnomeR::mutations %>% names()
 rename_columns(gnomeR::mutations) %>% names()
 ```
 
-As you can see, some variables such as `linkMsa` was not transformed because it is not used in {gnomeR} functions. 
+As you can see, some variables, such as `linkMsa`, were not transformed because they are not used in {gnomeR} functions. 
 
 ### CNA data
 
@@ -127,9 +127,7 @@ Often the first step to analyzing genomic data is organizing it in an event matr
 You can `create_gene_binary()` from any single type of data (mutation, CNA or fusion):
 
 ```{r, include = TRUE}
-mut_only <- create_gene_binary(mutation = gnomeR::mutations)
-
-head(mut_only)
+create_gene_binary(mutation = gnomeR::mutations)[1:6, 1:6]
 ```
 
 or you can process several types of alterations into a single matrix. Supported data types are:
@@ -138,6 +136,11 @@ or you can process several types of alterations into a single matrix. Supported 
 - copy number amplifications
 - copy number deletions
 - gene fusions
+
+<div class="alert alert-danger" role="alert">
+  All datasets should be in long-format.
+</div>
+
 
 When processing multiple types of alteration data, by default there will be a separate column for each type of alteration on that gene. For example, if the TP53 gene could have up to 4 columns: `TP53` (mutation), `TP53.Amp` (amplification), `TP53.Del` (deletion), and `TP53.fus` (structural variant). Further, if no events are observed within the data set for a type of alteration (let's say no TP53 mutations but some TP53 amplifications), columns with all zeros will be excluded. For example, in `colnames(all_bin)` below, there is at least one `ERG.fus` event, but no `ERG` mutation events. 
 
@@ -155,7 +158,7 @@ all_bin <- create_gene_binary(
     fusion = gnomeR::sv
 )
 
-all_bin 
+all_bin[1:6, 1:6]
 
 colnames(all_bin)
 
@@ -164,7 +167,7 @@ colnames(all_bin)
 **Notes on some helpful `create_gene_binary()` arguments:**
 
 - `mut_type`- by default, any germline mutations will be omitted because data is often incomplete, but you can choose to leave them in if needed.
-- `specify_panel`- If you are working across a set of samples that was sequenced on several different gene panels, this argument will insert NAs for the genes that weren't tested for any given sample. You can pass a string `"impact"` indicating automatically guessing panels and processsing IMPACT samples based on ID, or you can pass a dataframe of sample IDs and panel IDs for more fine grained control of NA annotation. 
+- `specify_panel`- If you are working across a set of samples that was sequenced on several different gene panels, this argument will insert NAs for the genes that weren't tested for any given sample. You can pass a string `"impact"` indicating automatically guessing panels and processsing IMPACT samples based on ID, or you can pass a data frame with columns sample_id and gene_panel for more fine grained control of NA annotation. 
 - `recode_aliases` - Sometimes genes have several accepted names or change names over time. This can be an issue if genes are coded under multiple names in studies, or if you are working across studies. By default, this function will search for aliases for genes in your data set and resolved them to their current most common name. 
 
 ### Collapse Data with `summarize_by_gene()`
@@ -178,7 +181,7 @@ dim(all_bin)
 all_bin_summary <- all_bin %>% 
   summarize_by_gene()
 
-all_bin_summary
+all_bin_summary[1:6, 1:6]
  
 colnames(all_bin_summary)
 ```
@@ -222,15 +225,17 @@ The `add_pathways()` function allows you add columns to your gene binary matrix 
 
 The function expects a binary matrix as obtained from the `gene_binary()` function and will return a gene binary with additional columns added for specified pathways.
 
-There are a set of default pathways available in the package that can be viewed using `gnomeR::pathways`.
+There are a set of default pathways available in the package that can be viewed using `gnomeR::pathways`. This new data frame will include columns for mutations, CNAs, structural variants, and pathways. You can subset to only the pathways if you choose.
 
 
 ```{r, include = TRUE}
 # available pathways
 names(gnomeR::pathways)
 
-add_pathways(gene_binary, pathways = c("Notch", "p53")) %>%
-  select(sample_id, pathway_Notch, pathway_p53)
+pathways <- add_pathways(gene_binary, pathways = c("Notch", "p53"))%>%
+  relocate(c(pathway_Notch, pathway_p53), .after = "sample_id")
+
+pathways[1:6, 1:3]
 
 ```
  
