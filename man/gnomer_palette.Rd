@@ -4,7 +4,14 @@
 \alias{gnomer_palette}
 \title{Access the colors in a gnomeR color palette}
 \usage{
-gnomer_palette(name = "pancan", n, type = c("discrete", "continuous"))
+gnomer_palette(
+  name = "pancan",
+  n,
+  type = c("discrete", "continuous"),
+  plot_col = FALSE,
+  reverse = FALSE,
+  ...
+)
 }
 \arguments{
 \item{name}{Name of desired palette, supplied in quotes. Choices are:

@@ -52,7 +52,8 @@ Imports:
     cli,
     gtsummary,
     broom.helpers,
-    janitor
+    janitor,
+    withr
 Suggests: 
     knitr,
     rmarkdown,
