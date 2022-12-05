@@ -17,7 +17,10 @@ no modification will be made to returned \code{sample_ids} field}
 A long data frame of CNA events
 }
 \description{
-Reformat Wide CNA Data to Long
+Takes a numeric vector of CNA data in wide format where each column is a sample
+and each row is a hugo symbol. Function will return a long format CNA data set
+of just events (neutral/diploid instances are filtered out) and will recode events from
+numeric to descriptive (-2/-1/-1.5 is deletion, 2/1 is amplification).
 }
 \examples{
 cna <- pivot_cna_longer(wide_cna = gnomeR::cna_wide)

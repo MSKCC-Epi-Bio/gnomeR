@@ -158,7 +158,7 @@
 
 #' IMPACT Alias Tables
 #'
-#' Table of aliases for IMPACT panel genes
+#' Table of aliases for IMPACT panel genes used for gene name resolution functionality.
 #'
 #' @format A data frame with 1658 rows
 #' \describe{
