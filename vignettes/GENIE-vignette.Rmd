@@ -1,0 +1,26 @@
+---
+title: "GENIE-vignette"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{GENIE-vignette}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(gnomeR)
+library(tidyverse)
+library(genieBPC)
+```
+
+
+
+Documentation on AACR Project GENIE can be found ___________here__________. For the purposes of this vignette, we will be using a subset of the publicly-accessible non-small cell lung cancer version 2.0. See this vignette ___________here__________ from the {genieBPC} package for more information on how to retrieve additional data sets. 
+

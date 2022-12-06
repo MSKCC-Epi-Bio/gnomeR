@@ -337,3 +337,28 @@
 #' @format A data frame with copy number alterations (CNA) retrieved from cBioPortal.
 "cna_wide"
 
+
+
+#' An example GENIE BPC mutations data set
+#'
+#' This set was created from a sample of 100 patients from the non-small cell
+#' lung cancer v.2.0-public data set. If a row exists for a given hugo symbol
+#' and tumor-sample-barcode, then the mutation was observed.
+#'
+#' @format A data frame with mutations retrieved using {genieBPC} package
+#' \describe{
+#' \item{Hugo_Symbol}
+#' \item{Entrez_Gene_Id}
+#' \item{Center}
+#' \item{NCBI_Build}
+#' \item{Chromosome}
+#' \item{Start_Position}
+#' \item{End_Position}
+#' \item{Strand}
+#' \item{Consequence}
+#' \item{Variant_Classification}
+#' \item{Variant_Type}
+#' \
+#' }
+#'
+
