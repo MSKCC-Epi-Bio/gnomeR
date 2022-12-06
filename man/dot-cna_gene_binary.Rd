@@ -21,14 +21,8 @@ Default is NULL is which case all samples with an alteration in the mutation, cn
 a vector of samples that contain samples not in any of the passed genomic data frames, 0's (or NAs when appropriate if specifying a panel) will be
 returned for every column of that patient row.}
 
-\item{specify_panel}{a character vector of length 1 with panel id (see gnomeR::gene_panels for available panels), "impact", or "no", or a
-data frame of \code{sample_id}-\code{panel_id} pairs specifying panels for which to insert NAs indicating that gene was not tested.
-If a single panel id is passed, all genes that are not in that panel (see gnomeR::gene_panels) will be set to NA in results.
-If \code{"impact"} passed, impact panel version will be inferred based on each sample_id and NA's annotated accordingly for each sample
-If specific panel IDs passed, genes not tested in that panel will be should be considered. Default When TRUE NAs will fill the cells for genes
-Default is "no" which returns data as is with no NA annotation.
-If you wish to specify different panels for each sample, pass a data frame (with all samples included) with columns: \code{sample_id}, and \code{panel_id}. Each sample will be
-annotated with NAs according to that specific panel.}
+\item{specify_panel}{a character vector of length 1 with panel id (see gnomeR::gene_panels for available panels), "impact", or "no". Alternatively,
+you may pass a data frame of \code{sample_id}-\code{panel_id} pairs specifying panels for each sample for which to insert NAs indicating genes not tested. See below for details.}
 
 \item{recode_aliases}{boolean specifying if automated gene name alias matching should be done. Default is TRUE. When TRUE
 the function will check for genes that may have more than 1 name in your data using the aliases im gnomeR::impact_gene_info alias column}
