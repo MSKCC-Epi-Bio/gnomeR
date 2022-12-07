@@ -1,7 +1,7 @@
 ---
 title: "Processing Data with {gnomeR}"
 output: rmarkdown::html_vignette
-author: Akriti Mishra, Karissa Whiting
+author: Akriti Mishra, Karissa Whiting, Hannah Fuchs
 vignette: >
   %\VignetteIndexEntry{test}
   %\VignetteEngine{knitr::rmarkdown}
