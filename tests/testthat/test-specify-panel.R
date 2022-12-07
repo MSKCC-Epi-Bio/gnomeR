@@ -91,7 +91,8 @@ test_that("gene binary with all three types of alt and impact only",{
   bin_impact <-  create_gene_binary(samples=samples,
                                    mutation = gnomeR::mutations,
                                    cna = gnomeR::cna,
-                                   fusion = gnomeR::sv)
+                                   fusion = gnomeR::sv,
+                                   specify_panel = "impact")
 
   mut_test <- gnomeR::mutations %>%
     filter(sampleId %in% samples)
@@ -211,7 +212,6 @@ test_that("check df for specify panel has correct names",{
 
   mut <- gnomeR::mutations %>%
     filter(sampleId %in% samples)
-  mut[1, 1] <- "ZZZZ"
 
   expect_error(bin_impact <-  create_gene_binary(samples=samples,
                                     mutation = mut,
