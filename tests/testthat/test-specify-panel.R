@@ -282,11 +282,11 @@ test_that("check specify_panel with dataframe that doesn't have all samples",{
 
   sp <- head(sp, 1)
 
-  expect_message(bin_impact <-  create_gene_binary(samples=samples,
+  expect_no_message(bin_impact <-  create_gene_binary(samples=samples,
                                                    mutation = mut,
                                                    cna = gnomeR::cna,
                                                    fusion = gnomeR::sv,
-                                                   specify_panel = sp), "*")
+                                                   specify_panel = sp))
 
   expect_equal(sum(apply(bin_impact, 1, function(x) sum(is.na(x))) > 0), 1)
 

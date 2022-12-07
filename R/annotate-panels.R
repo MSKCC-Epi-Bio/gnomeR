@@ -79,10 +79,6 @@ annotate_any_panel <- function(sample_panel_pair, gene_binary) {
     names() %>%
     gsub(".fus|.Del|.Amp|.cna", "", .)
 
-  # sample_panel_pair_nest <- sample_panel_pair_nest %>%
-  #   mutate(genes_in_panel =
-  #            case_when(panel_id == "no" ~ list(user_data_genes)))
-
   sample_panel_pair_nest <- sample_panel_pair_nest %>%
     mutate(na_genes_raw = purrr::map(.data$genes_in_panel,
                                      ~unique(setdiff(user_data_genes, .x)))) %>%
@@ -103,9 +99,6 @@ annotate_any_panel <- function(sample_panel_pair, gene_binary) {
              case_when(.data$panel_id == "no" ~ list(NULL),
                        TRUE ~ .data$na_genes_raw))
 
-
-  # sample_panel_pair_nest <- sample_panel_pair_nest %>%
-  #   filter(panel_id != "no")
 
   annotated_data <- purrr::pmap_df(sample_panel_pair_nest,
                                    annotate_specific_panel,
