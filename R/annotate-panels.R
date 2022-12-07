@@ -66,9 +66,12 @@ annotate_any_panel <- function(sample_panel_pair, gene_binary) {
   # pull genes for given panels
   panels_needed <- unique(sample_panel_pair_nest$panel_id)
 
+  gnomeR::gene_panels %>%
+    filter(.data$gene_panel %in% panels_needed)
+
   # has sample IDs and genes for each panel
   sample_panel_pair_nest <- sample_panel_pair_nest %>%
-    left_join(gnomeR::gene_panels, by = c("panel_id" = "gene_panel")) %>%
+    left_join(., gnomeR::gene_panels, by = c("panel_id" = "gene_panel")) %>%
     select(-"entrez_ids_in_panel")
 
   user_data_genes <- gene_binary %>%
@@ -86,7 +89,15 @@ annotate_any_panel <- function(sample_panel_pair, gene_binary) {
                                    paste0(.x, ".Del"),
                                    paste0(.x, ".Amp"),
                                    paste0(.x, ".cna")
-                                 )))
+                                 ))) %>%
+
+    # TODO is there a better way to do this?
+    mutate(na_genes =
+             case_when(.data$panel_id == "no" ~ list(NULL),
+                       TRUE ~ .data$na_genes)) %>%
+    mutate(na_genes_raw =
+             case_when(.data$panel_id == "no" ~ list(NULL),
+                       TRUE ~ .data$na_genes_raw))
 
 
   annotated_data <- purrr::pmap_df(sample_panel_pair_nest,

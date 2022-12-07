@@ -133,7 +133,7 @@ tbl_genomic <- function(gene_binary,
         TRUE ~ .
       ) %>%
       ungroup() %>%
-      tidyr::pivot_longer(-.data$sample_id) %>%
+      tidyr::pivot_longer(-"sample_id") %>%
       distinct() %>%
       group_by(.data$name) %>%
       summarise(
