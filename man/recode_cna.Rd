@@ -8,7 +8,7 @@ recode_cna(alteration_vector)
 }
 \arguments{
 \item{alteration_vector}{a vector of CNA alterations coded with any of the
-following levels: neutral, deletion, amplification, homozygous deletion,
+following levels: neutral, deletion, amplification, gain, loss, homozygous deletion,
 hemizygous deletion, loh, gain, high level amplification, 0, -1, -1.5, -2, 1, 2.}
 }
 \value{

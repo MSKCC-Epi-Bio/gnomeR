@@ -1,8 +1,8 @@
 
-# Test Binary Matrix Arguments -----------------------------------------------------------
+# Test Binary Matrix  -----------------------------------------------------------
 
 
-# test samples argument ----
+# Test samples argument ----
 # what happens when you pass a vector? What about if you don't specify it (don't pass anything)?
 # what happens when you pass impact samples (-IM5/IM6/IM7 etc)?  non impact samples? A mix?
 
@@ -42,7 +42,7 @@ test_that("samples selected with no fusions ",  {
 
   samples <- setdiff(gnomeR::mutations$sampleId, gnomeR::sv$sampleId)[1:5]
 
-  # with no fusions in select sample---------
+  # with no fusions in select sample
   gene_binary_no_fusions <-  create_gene_binary(samples=samples,
                                             mutation = gnomeR::mutations,
                                             fusion = gnomeR::sv)
@@ -56,7 +56,7 @@ test_that("samples selected with no CNA ", {
 
   samples <- setdiff(gnomeR::mutations$sampleId, gnomeR::cna$sampleId)[1:5]
 
-  # with no fusions in select sample---------
+  # with no fusions in select sample
   gene_binary_no_cna<-  create_gene_binary(samples=samples,
                                                 mutation = gnomeR::mutations,
                                                 cna = gnomeR::cna)
@@ -88,11 +88,11 @@ test_that("samples selected with no mutations ", {
 
 # NON UNIQUE SAMPLES in samples ARGUMENT?
 
-# test with and without mut/fusion/cna args passed ----
+# Test data type arguments ------------------------------------------------
+
+# test with and without mut/fusion/cna args passed
+
 # Functions should work with any one of the three passed
-# Does it return results as expected?
-# Trying with and without passing samples arg as well- does it return what you'd expect?
-# what if mut is passed but doesn't have any rows? no columns? no rows or cols?
 test_that("test inputting mut/fusion/cna args can leads to a data.frame output", {
 
   #Can we obtaine correct result format when either mut/fusion/cna inputted
@@ -120,7 +120,8 @@ test_that("test inputting mut/fusion/cna args can leads to a data.frame output",
 
 })
 
-# test mut_type argument ----
+
+# Test mut_type argument --------------------------------------------------
 
 test_that("test incorrectly specified arg", {
 
@@ -175,7 +176,198 @@ test_that("test inclusion of NAs in mut_type ", {
 
 })
 
-# test snp_only arg----
+
+
+# Test high_level_cna_only argument --------------------------------------------
+
+test_that("test deletions with -1 and -2 events", {
+
+  test_cna <- tibble::tribble(
+    ~hugo_symbol, ~sample_id, ~alteration,
+    "TP53",        "samp1",     1,
+    "BMPR1A",      "samp2",     -1,
+    "CDKN2A",      "samp2",     -1.5,
+    "FGFR3",       "samp3",      2,
+    "FGFR3",       "samp4",      0,
+    "TP53",        "samp2",      -2
+  )
+
+  test_mut <- tibble::tribble(
+    ~hugo_symbol, ~sample_id,  ~variant_type,  ~mutation_status,   ~variant_classification,
+    "TP53",        "samp1",     "SNP",          "Somatic",          "Silent",
+    "BMPR1A",      "samp2",     "SNP",          "Somatic",           NA,
+    "FGFR3",       "samp3",     "SNP",          "Somatic",           NA,
+    "FGFR3",       "samp4",     "SNP",          "Somatic",           NA,
+    "TP53",        "samp2",     "SNP",          "Somatic",           NA
+  )
+
+  test_fus <- tibble::tribble(
+    ~site_1_hugo_symbol, ~site_2_hugo_symbol, ~sample_id,
+    "TP53",               "BMPR1A",           "samp1",
+    "BMPR1A",              "APC",             "samp2",
+    "FGFR3",              "TP53",             "samp3",
+    "FGFR3",              "KMT2D",            "samp4",
+    "TP53",               NA,                 "samp2"
+  )
+
+  samples <- c(test_mut$sample_id,
+               test_cna$sample_id,
+               test_fus$sample_id) %>% unique()
+
+  proc_all_cna <- create_gene_binary(
+    samples = samples,
+    mutation = test_mut,
+    cna = test_cna,
+    fusion = test_fus,
+    include_silent = TRUE,
+    high_level_cna_only = FALSE)
+
+  proc_hl_cna <- create_gene_binary(
+    samples = samples,
+    mutation = test_mut,
+    cna = test_cna,
+    fusion = test_fus,
+    include_silent = TRUE,
+    high_level_cna_only = TRUE)
+
+
+  ll_genes <- test_cna %>% filter(alteration == 1 |
+                        alteration == -1) %>%
+    pull(hugo_symbol)
+
+  diff_gene <- str_remove(
+    setdiff(names(proc_all_cna), names(proc_hl_cna)), ".Amp|.Del")
+
+  expect_equal(sort(ll_genes), sort(diff_gene))
+
+})
+
+
+
+# Test include_silent argument --------------------------------------------
+
+test_that("test include_silent default when no variant class col", {
+
+  test_cna <- tibble::tribble(
+    ~hugo_symbol, ~sample_id, ~alteration,
+    "TP53",        "samp1",     1,
+    "ALK3",        "samp2",     -1,
+    "FGFR3",       "samp3",      2,
+    "FGFR3",       "samp4",      0,
+    "TP53",        "samp2",      1
+  )
+
+  test_mut <- tibble::tribble(
+    ~hugo_symbol, ~sample_id,  ~variant_type,  ~mutation_status,
+    "TP53",        "samp1",     "SNP",          "Somatic",
+    "ALK3",        "samp2",     "SNP",          "Somatic",
+    "FGFR3",       "samp3",     "SNP",          "Somatic",
+    "FGFR3",       "samp4",     "SNP",          "Somatic",
+    "TP53",        "samp2",     "SNP",          "Somatic"
+  )
+
+  test_fus <- tibble::tribble(
+    ~site_1_hugo_symbol, ~site_2_hugo_symbol, ~sample_id,
+    "TP53",               "ALK3",             "samp1",
+    "ALK3",               "APC",              "samp2",
+    "FGFR3",              "TP53",             "samp3",
+    "FGFR3",              "KMT2D",            "samp4",
+    "TP53",               NA,                 "samp2"
+  )
+
+
+  samples <- c(test_mut$sample_id,
+               test_cna$sample_id,
+               test_fus$sample_id) %>% unique()
+
+  expect_error(
+    proc <- create_gene_binary(
+      samples = samples,
+      mutation = test_mut,
+      cna = test_cna,
+      fusion = test_fus))
+
+  expect_no_error(
+    proc <- create_gene_binary(
+      mutation = test_mut,
+      samples = samples,
+      cna = test_cna,
+      fusion = test_fus,
+      include_silent = TRUE,
+      recode_aliases = FALSE))
+
+})
+
+test_that("test include_silent silent are removed when variant class col", {
+
+  test_cna <- tibble::tribble(
+    ~hugo_symbol, ~sample_id, ~alteration,
+    "TP53",        "samp1",     1,
+    "BMPR1A",      "samp2",     -1,
+    "FGFR3",       "samp3",      2,
+    "FGFR3",       "samp4",      0,
+    "TP53",        "samp2",      1
+  )
+
+  test_mut <- tibble::tribble(
+    ~hugo_symbol, ~sample_id,  ~variant_type,  ~mutation_status,   ~variant_classification,
+    "TP53",        "samp1",     "SNP",          "Somatic",          "Silent",
+    "BMPR1A",      "samp2",     "SNP",          "Somatic",           NA,
+    "FGFR3",       "samp3",     "SNP",          "Somatic",           "Other",
+    "FGFR3",       "samp4",     "SNP",          "Somatic",           NA,
+    "TP53",        "samp2",     "SNP",          "Somatic",           NA
+  )
+
+  test_fus <- tibble::tribble(
+    ~site_1_hugo_symbol, ~site_2_hugo_symbol, ~sample_id,
+    "TP53",               "BMPR1A",             "samp1",
+    "BMPR1A",             "APC",              "samp2",
+    "FGFR3",              "TP53",             "samp3",
+    "FGFR3",              "KMT2D",            "samp4",
+    "TP53",               NA,                 "samp2"
+  )
+
+
+  samples <- c(test_mut$sample_id,
+               test_cna$sample_id,
+               test_fus$sample_id) %>% unique()
+
+
+  proc_remove_silent1 <- create_gene_binary(
+      samples = samples,
+      mutation = test_mut,
+      cna = test_cna,
+      fusion = test_fus)
+
+
+  proc_remove_silent2 <- create_gene_binary(
+    samples = samples,
+    mutation = test_mut,
+    cna = test_cna,
+    include_silent = FALSE,
+    fusion = test_fus)
+
+  expect_equal(proc_remove_silent1, proc_remove_silent2)
+
+  proc_keep_silent <-
+    create_gene_binary(
+      samples = samples,
+      mutation = test_mut,
+      cna = test_cna,
+      include_silent = TRUE,
+      fusion = test_fus)
+
+  expect_lt(sum(proc_remove_silent1$TP53), sum(proc_keep_silent$TP53))
+
+  # make sure FGFGR "Other" type was still included in results
+  expect_equal(sum(proc_remove_silent1$FGFR3), sum(proc_keep_silent$FGFR3))
+
+})
+
+
+
+# Test snp_only argument --------------------------------------------------
+
 # add general tests
 # What happpens  when Variant Type is NA? - Maybe need to add warning to tell user about NAs
 # test_that("test the snp_only arg", {
@@ -220,30 +412,7 @@ test_that("test inclusion of NAs in mut_type ", {
 # })
 
 
-# test include_silent arg----
-# add general tests
-# What happens  when Variant_Classification is NA for some samples in passed data? - Maybe need to add warning to tell user about NAs
-# test_that("test include_silent arg", {
-#
-#   #general tests: input T or F (default is F)
-#   expect_error( create_gene_binary(mutation=gnomeR::mutations, include_silent = T), NA)
-#
-#   expect_warning( create_gene_binary(mutation=gnomeR::mutations,
-#                                      include_silent =  T, recode_aliases = FALSE), NA)
-#
-#
-#   #What if NA for variantType?
-#   # note: without Variant Type, the create_gene_binary() still run without error
-#   #       snp_only=F will provide full list results and snp_only=T will provide 0 col result
-#
-#   mut_vc_na<- gnomeR::mutations %>%
-#     dplyr::mutate(variantType=NA)
-#
-#   expect_equal( create_gene_binary(mutation = mut_vc_na, include_silent = F) %>% ncol(), 0 )
-#
-#   expect_true( create_gene_binary(mutation = mut_vc_na, include_silent = T) %>% ncol() > 0 )
-#
-# })
 
+# Other Misc Tests --------------------------------------------------------
 
 

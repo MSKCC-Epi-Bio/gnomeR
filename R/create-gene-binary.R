@@ -16,16 +16,22 @@
 #' Default is NULL.
 #' @param cna A data frame of copy number alterations. If inputed the outcome will be added to the matrix with columns ending in ".del" and ".amp".
 #' Default is NULL.
-#' @param specify_panel a character vector of length 1 with panel id (see gnomeR::gene_panels for available panels), "impact", or "no", or a
-#' data frame of `sample_id`-`panel_id` pairs specifying panels for which to insert NAs indicating that gene was not tested.
-#' If a single panel id is passed, all genes that are not in that panel (see gnomeR::gene_panels) will be set to NA in results.
-#' If `"impact"` passed, impact panel version will be inferred based on each sample_id and NA's annotated accordingly for each sample
-#' If specific panel IDs passed, genes not tested in that panel will be should be considered. Default When TRUE NAs will fill the cells for genes
-#' Default is "no" which returns data as is with no NA annotation.
-#' If you wish to specify different panels for each sample, pass a data frame (with all samples included) with columns: `sample_id`, and `panel_id`. Each sample will be
-#' annotated with NAs according to that specific panel.
+#' @param high_level_cna_only If TRUE, only deep deletions (-2, -1.5) or high level amplifications (2) will be counted as events
+#' in the binary matrix. Gains (1) and losses (1) will be ignored. Default is `FALSE` where all CNA events are counted.
+#' @param specify_panel a character vector of length 1 with panel id (see gnomeR::gene_panels for available panels), "impact", or "no". Alternatively,
+#' you may pass a data frame of `sample_id`-`panel_id` pairs specifying panels for each sample for which to insert NAs indicating genes not tested. See below for details.
 #' @param recode_aliases boolean specifying if automated gene name alias matching should be done. Default is TRUE. When TRUE
 #' the function will check for genes that may have more than 1 name in your data using the aliases im gnomeR::impact_gene_info alias column
+#'
+#' @section specify_panel argument:
+#'    - If a single panel id is passed (e.g. `specify_panel = "IMPACT468"`), all genes in your data that are not tested on that panel will be set to
+#' `NA` in results for all samples (see gnomeR::gene_panels to see which genes are on each supported panels).
+#'    - If `specify_panel = "impact"` is passed, impact panel version will be inferred based on each sample_id (based on `IMX` nomenclature) and NA's will be
+#' annotated accordingly for each sample/panel pair.
+#'    - If `specify_panel = "no"` is passed (default) data will be returned as is without any additional NA annotations.
+#'    - If you wish to specify different panels for each sample, pass a data frame (with all samples included) with columns: `sample_id`, and `panel_id`. Each sample will be
+#' annotated with NAs according to that specific panel. If a sample in your data is missing from the `sample_id` column in the
+#' `specify_panel` dataframe, it will be returned with no annotation (equivalent of setting it to "no").
 #' @return a data frame with sample_id and alteration binary columns with values of 0/1
 #' @export
 #' @examples
@@ -52,6 +58,7 @@ create_gene_binary <- function(samples=NULL,
                           fusion = NULL,
 
                           cna = NULL,
+                          high_level_cna_only = FALSE,
 
                           specify_panel = "no",
                           recode_aliases = TRUE){
@@ -82,10 +89,6 @@ create_gene_binary <- function(samples=NULL,
   }
 
 
-  # if samples not passed we will infer it from data frames
-  switch(is.null(samples),
-         cli::cli_alert_info("{.code samples} argument is {.code NULL}. We will infer your cohort inclusion and resulting data frame will include all samples with at least one alteration in {.field mutation}, {.field fusion} or {.field cna} data frames"))
-
   # * mut_type-----
   mut_type <- match.arg(mut_type)
 
@@ -106,11 +109,20 @@ create_gene_binary <- function(samples=NULL,
 
          "data.frame" = {
 
+           # check for correct column names
+           if(!("sample_id" %in% names(specify_panel)) | !("panel_id" %in% names(specify_panel))) {
+
+              cli::cli_abort(c("Dataframe passed to {.var specify_panel} must have columns for ",
+              "{.code sample_id} and {.code panel_id}."))
+           }
+
            specify_panel %>%
              purrr::when(
-               length(setdiff(c(specify_panel$gene_panel), gene_panels$gene_panel)) > 0 ~
-                           cli::cli_abort("Panels not known: {.val {setdiff(c(specify_panel$gene_panel), gene_panels$gene_panel)}}. See {.code  gnomeR::gene_panels} for known panels, or skip annotation with {.code specify_panel = 'no'} or indicating {.code 'no'} for those samples in {.field panel_id} column of sample_id-panel_id pair data frame"),
-                         TRUE ~ .)},
+               any(is.na(specify_panel$panel_id)) ~ cli::cli_abort("Some {.field panel_id} values in {.code sample_panel_pair} df are {.code NA}. Please explicitely indicate {.code no} for those samples instead if you wish to skip annotating these."),
+               length(setdiff(c(specify_panel$panel_id), c(gene_panels$gene_panel, "no"))) > 0 ~
+                           cli::cli_abort("Panels not known: {.val {setdiff(c(specify_panel$panel_id), c(gene_panels$gene_panel, 'no'))}}. See {.code  gnomeR::gene_panels} for known panels, or skip annotation with {.code specify_panel = 'no'} or indicating {.code 'no'} for those samples in {.field panel_id} column of sample_id-panel_id pair data frame"),
+                         TRUE ~ .)
+           },
 
            cli::cli_abort("{.code specify_panel} must be a character vector of length 1 or a data frame.")
          )
@@ -120,7 +132,8 @@ create_gene_binary <- function(samples=NULL,
 
   # standardize columns names
   mutation <- switch(!is.null(mutation),
-                     sanitize_mutation_input(mutation = mutation))
+                     sanitize_mutation_input(mutation = mutation,
+                                             include_silent = include_silent))
 
   # * Fusion checks  ----------
   fusion <- switch(!is.null(fusion),
@@ -135,6 +148,10 @@ create_gene_binary <- function(samples=NULL,
 
   #  Make Final Sample List ----------------------------------------------------
 
+
+  # if samples not passed we will infer it from data frames
+  switch(is.null(samples),
+         cli::cli_alert_info("{.code samples} argument is {.code NULL}. We will infer your cohort inclusion and resulting data frame will include all samples with at least one alteration in {.field mutation}, {.field fusion} or {.field cna} data frames"))
 
   # If user doesn't pass a vector, use samples in files as final sample list
     samples_final <- samples %||%
@@ -168,7 +185,8 @@ create_gene_binary <- function(samples=NULL,
                        .cna_gene_binary(cna = cna,
                                           samples = samples_final,
                                           specify_panel = specify_panel,
-                                          recode_aliases = recode_aliases))
+                                          recode_aliases = recode_aliases,
+                                          high_level_cna_only = high_level_cna_only))
 
   # put them all together
 
@@ -214,6 +232,23 @@ create_gene_binary <- function(samples=NULL,
     )
     # create data frame of sample IDs
 
+  } else {
+    specify_panel <- specify_panel %>%
+      select("sample_id", "panel_id")
+
+    diff_samp <- setdiff(samples_final, specify_panel$sample_id)
+
+    if(length(diff_samp) > 0) {
+
+      # If some samples are not in the specify_panel df, add them as no annotation.
+      # TODO Should we add warning?
+      add_on <- cbind.data.frame("sample_id" = diff_samp, "panel_id" = rep("no", length(diff)))
+
+      specify_panel <- rbind.data.frame(specify_panel, add_on)
+    }
+
+    sample_panel_pair = specify_panel
+
   }
 
   all_binary <- annotate_any_panel(sample_panel_pair, all_binary)
@@ -225,9 +260,10 @@ create_gene_binary <- function(samples=NULL,
   all_column_is_na <- names(all_binary)[apply(all_binary, 2, function(x) sum(is.na(x))) == nrow(all_binary)]
 
   if(length(all_column_is_na) > 0) {
-    cli::cli_alert_warning(c("{length(all_column_is_na)} columns have no non-missing values. This may occur when ",
-                           "there are genes in your data that are not in the specified panels (see `specify_panel` argument"))
-  }
+      cli::cli_alert_warning(c("{length(all_column_is_na)} column{?s} {?has/have} all missing values. This may occur when ",
+                               "there are genes in your data that are not in the specified panels (see `specify_panel` argument)"))
+     }
+
   # return omitted zero  samples as warning/attribute
 
   # samples_omitted <- setdiff(samples, samples_final)
@@ -264,6 +300,7 @@ create_gene_binary <- function(samples=NULL,
     mutation <- recode_alias(mutation)
   }
 
+
   # apply filters --------------
  mutation <- mutation %>%
    purrr::when(
@@ -271,7 +308,8 @@ create_gene_binary <- function(samples=NULL,
      ~.
    ) %>%
    purrr::when(
-     !include_silent ~ filter(., .data$variant_classification != "Silent"),
+     !include_silent ~ {filter(., .data$variant_classification != "Silent" |
+                                is.na(.data$variant_classification))},
      ~.
    ) %>%
    purrr::when(
@@ -351,12 +389,27 @@ create_gene_binary <- function(samples=NULL,
 .cna_gene_binary <- function(cna,
                                samples,
                                specify_panel,
-                               recode_aliases){
+                               recode_aliases,
+                                high_level_cna_only){
 
 
   if(recode_aliases) {
     cna <- recode_alias(cna)
   }
+
+  # * Remove lower level CNA if specified ----
+  if(high_level_cna_only) {
+    cna2 <- cna %>%
+      filter(!(.data$alteration %in% c("loss", "gain") |
+               is.na(.data$alteration)))
+  } else {
+    cna <- cna %>%
+      mutate(alteration =
+               dplyr::case_when(.data$alteration == "gain" ~ "amplification",
+                         .data$alteration == "loss" ~ "deletion",
+                         TRUE ~ as.character(.data$alteration)))
+  }
+
 
   cna_del <- .process_binary(data = cna,
                              samples = samples,
