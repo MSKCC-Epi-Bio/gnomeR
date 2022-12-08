@@ -54,6 +54,7 @@ reference:
     - gnomer_palettes
     - gnomer_palette
     - set_gnomer_palette
+    - reset_gnomer_palette
   - subtitle: Example Data Sets
   - contents:
     - mutations
