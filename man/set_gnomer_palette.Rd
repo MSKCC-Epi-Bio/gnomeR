@@ -30,7 +30,7 @@ the ggplot2 package: \code{scale_color_discrete()},
 \code{scale_fill_discrete()}, \code{scale_color_continuous()}, and
 \code{scale_fill_continuous()}, and places them in the specified environment.
 A typical workflow would include this function at the top of a script,
-and subsequent calls to \code{ggplot()} will utilize the MSK color palette.
+and subsequent calls to \code{ggplot()} will utilize the gnomeR color palette.
 }
 \examples{
 library(ggplot2)
@@ -40,7 +40,7 @@ set_gnomer_palette()
 ggplot(mtcars, aes(wt, mpg, color = factor(cyl))) +
   geom_point()
 
-# setting other MSK palettes
+# setting other gnomeR palettes
 set_gnomer_palette(palette = "main", gradient = "sunset")
 
 ggplot(mtcars, aes(wt, mpg, color = factor(cyl))) +

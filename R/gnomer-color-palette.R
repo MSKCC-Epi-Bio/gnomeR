@@ -202,7 +202,7 @@ gnomer_palette <- function(name = "pancan", n, type = c("discrete", "continuous"
 #' \code{scale_fill_discrete()}, \code{scale_color_continuous()}, and
 #' \code{scale_fill_continuous()}, and places them in the specified environment.
 #' A typical workflow would include this function at the top of a script,
-#' and subsequent calls to `ggplot()` will utilize the MSK color palette.
+#' and subsequent calls to `ggplot()` will utilize the gnomeR color palette.
 #'
 #' @param palette name of palette in gnomer_palettes, supplied in quotes.
 #' Options include `"pancan", "main", "sunset"`.
@@ -220,7 +220,7 @@ gnomer_palette <- function(name = "pancan", n, type = c("discrete", "continuous"
 #' ggplot(mtcars, aes(wt, mpg, color = factor(cyl))) +
 #'   geom_point()
 #'
-#' # setting other MSK palettes
+#' # setting other gnomeR palettes
 #' set_gnomer_palette(palette = "main", gradient = "sunset")
 #'
 #' ggplot(mtcars, aes(wt, mpg, color = factor(cyl))) +
@@ -234,7 +234,7 @@ set_gnomer_palette <- function(palette = c("pancan", "main", "sunset"),
                                gradient = c("pancan", "main", "sunset"),
                                reverse = FALSE,
                                env = rlang::caller_env()) {
-  # choosing the MSK palette
+  # choosing the gnomeR palette
   palette <- gnomer_palettes[[match.arg(palette)]]
   gradient <- gnomer_palettes[[match.arg(gradient)]]
 
@@ -292,3 +292,48 @@ set_gnomer_palette <- function(palette = c("pancan", "main", "sunset"),
     }
   )
 }
+
+
+
+#' Reset gnomeR color palette
+#'
+#' This function resets the gnomeR color palette back to the ggplot2 default palette for all
+#' ggplot2 objects. A typical workflow would include this after a call to `set_gnomer_palette()`
+#' function is no longer needed,
+#' and subsequent calls to `ggplot()` will utilize the default color palette from ggplot2.
+#'
+#'
+#' @param env environment in which palette will take effect. Default is `rlang::caller_env()`.
+#' @author Michael Curry
+#' @examples
+#' library(ggplot2)
+#'
+#' set_gnomer_palette()
+#'
+#' ggplot(mtcars, aes(wt, mpg, color = factor(cyl))) +
+#'   geom_point()
+#'
+#' reset_gnomer_palette()
+#' #default reset
+#' ggplot(mtcars, aes(wt, mpg, color = factor(cyl))) +
+#'   geom_point()
+#'
+#' @export
+
+
+reset_gnomer_palette <- function(env = rlang::caller_env()) {
+
+  # setting options for ggplot colors
+  withr::with_environment(
+    env = env,
+    code = {
+      options("ggplot2.discrete.colour" = NULL)
+      options("ggplot2.discrete.fill" = NULL)
+      options("ggplot2.continuous.colour" = NULL)
+      options("ggplot2.continuous.fill" = NULL)
+      options("ggplot2.binned.colour" = NULL)
+      options("ggplot2.binned.fill" = NULL)
+    }
+  )
+}
+

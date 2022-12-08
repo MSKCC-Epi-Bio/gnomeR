@@ -314,3 +314,17 @@ ggplot(mtcars, aes(wt, mpg, color = cyl)) +
   geom_point()
 
 ```
+
+
+### reset_gnomer_palette
+
+If you do not want to use the palettes from `set_gnomer_palette()` anymore you can reset the palettes back to ggplots color palettes with `reset_gnomer_palette()`. This function only has one argument and you will rarely have to change it. 
+
+```{r}
+reset_gnomer_palette()
+
+
+ggplot(mtcars, aes(wt, mpg, color = cyl)) +
+  geom_point()
+
+```
