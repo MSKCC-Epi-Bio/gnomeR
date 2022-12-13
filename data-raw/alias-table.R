@@ -148,8 +148,6 @@ impact_alias_table <- impact_alias_table %>%
 
 
 usethis::use_data(impact_alias_table , overwrite = TRUE)
-# save(impact_gene_info, file = here::here("impact_gene_info.RData"))
-
 
 # check against internal gene panels dataset ----------------------------------
 # x <- gnomeR::gene_panels %>%

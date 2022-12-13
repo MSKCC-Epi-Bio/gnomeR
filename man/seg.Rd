@@ -8,11 +8,11 @@
 A data frame with 30240 observations with 6 variables
 \describe{
 \item{ID}{Factor, IMPACT sample ID}
-\item{chrom}{}
-\item{loc.start}{}
-\item{loc.end}{}
-\item{num.mark}{}
-\item{seg.mean}{}
+\item{chrom}{chromosome}
+\item{loc.start}{start location}
+\item{loc.end}{end location}
+\item{num.mark}{number of probes or bins covered by the segment}
+\item{seg.mean}{segment mean value, usually in log2 scale}
 }
 }
 \source{

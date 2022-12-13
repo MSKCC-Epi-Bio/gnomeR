@@ -5,24 +5,26 @@
 \alias{names_df}
 \title{Data Frame of Column Names}
 \format{
-A data frame with 2333 rows
+A data frame
 \describe{
-\item{maf_column_name}{MAD columns}
-\item{api_column_name}{API columns}
-\item{mutation_input}{Mutation columns}
-\item{fusion_input}{Fusion columns}
-\item{cna_input}{CNA columns}
-\item{definition}{Column Definition}
+\item{maf_column_name}{data field names as they appear in common MAF file}
+\item{api_column_name}{data field names as they appear in common cBioPortal API retrieved files}
+\item{mutation_input}{does this field appear in mutation files?}
+\item{fusion_input}{does this field appear in mutation/sv files?}
+\item{cna_input}{does this field appear in CNA files?}
+\item{definition}{variable definition}
 \item{notes}{data notes}
-\item{sc_maf_column_name}{Snake case MAF name}
-\item{sc_api_column_name}{Snake case API column name}
-\item{internal_column_name}{Internally used data name}
+\item{sc_maf_column_name}{snake case version of \code{maf_column_name}}
+\item{sc_api_column_name}{snake case version of \code{api_column_name}}
+\item{internal_column_name}{name used for each field for all internal processing functions}
 }
 }
 \usage{
 names_df
 }
 \description{
-Table of accepted data names
+Data frame of accepted data names for standard genomic files. This serves as a
+dictionary to help disambiguate raw column names from user entered mutation,
+CNA or structural variant data
 }
 \keyword{datasets}
