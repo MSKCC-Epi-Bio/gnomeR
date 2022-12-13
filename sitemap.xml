@@ -67,9 +67,6 @@
     <loc>https://mskcc-epi-bio.github.io/gnomeR/reference/gene_panels.html</loc>
   </url>
   <url>
-    <loc>https://mskcc-epi-bio.github.io/gnomeR/reference/genie_gene_info.html</loc>
-  </url>
-  <url>
     <loc>https://mskcc-epi-bio.github.io/gnomeR/reference/ggcomut.html</loc>
   </url>
   <url>
@@ -103,9 +100,6 @@
     <loc>https://mskcc-epi-bio.github.io/gnomeR/reference/impact_alias_table.html</loc>
   </url>
   <url>
-    <loc>https://mskcc-epi-bio.github.io/gnomeR/reference/impact_gene_info.html</loc>
-  </url>
-  <url>
     <loc>https://mskcc-epi-bio.github.io/gnomeR/reference/index.html</loc>
   </url>
   <url>
@@ -116,9 +110,6 @@
   </url>
   <url>
     <loc>https://mskcc-epi-bio.github.io/gnomeR/reference/names_df.html</loc>
-  </url>
-  <url>
-    <loc>https://mskcc-epi-bio.github.io/gnomeR/reference/panel_names.html</loc>
   </url>
   <url>
     <loc>https://mskcc-epi-bio.github.io/gnomeR/reference/pathways.html</loc>
@@ -173,15 +164,6 @@
   </url>
   <url>
     <loc>https://mskcc-epi-bio.github.io/gnomeR/reference/tbl_genomic.html</loc>
-  </url>
-  <url>
-    <loc>https://mskcc-epi-bio.github.io/gnomeR/reference/ti_341.html</loc>
-  </url>
-  <url>
-    <loc>https://mskcc-epi-bio.github.io/gnomeR/reference/ti_410.html</loc>
-  </url>
-  <url>
-    <loc>https://mskcc-epi-bio.github.io/gnomeR/reference/ti_468.html</loc>
   </url>
   <url>
     <loc>https://mskcc-epi-bio.github.io/gnomeR/reference/which_impact_panel.html</loc>
