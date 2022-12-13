@@ -248,14 +248,14 @@ mutation_viz(mutations)
 
 #### Customizing your colors 
 
-{gnomeR} comes with 3 distinct palettes that can be useful for plotting high dimenstional genomic data: `pancan`, `main`, and `sunset`. `pancan` and `main` offer a wide range of colors that can be useful to map to discrete scales. `sunset` has fewer colors but offers a color spectrum useful for interpolation for continuous variables. You can view hex codes of all colors with `gnomer_colors`, and the 3 distinct palettes with `gnomer_palettes$pancan`, `gnomer_palettes$main`, `gnomer_palettes$sunset`. The `gnomer_palette()` is used to set/subset specific palettes, create a continuous palette, and/or plot palettes to show the user the specific colors they chose. 
+{gnomeR} comes with 3 distinct palettes that can be useful for plotting high dimensional genomic data: `pancan`, `main`, and `sunset`. `pancan` and `main` offer a wide range of colors that can be useful to map to discrete scales. `sunset` has fewer colors but offers a color spectrum useful for interpolation for continuous variables. You can view hex codes of all colors with `gnomer_colors`, and the 3 distinct palettes with `gnomer_palettes$pancan`, `gnomer_palettes$main`, `gnomer_palettes$sunset`. The `gnomer_palette()` is used to set/subset specific palettes, create a continuous palette, and/or plot palettes to show the user the specific colors they chose. 
 
-The code below will show the first 4 colors from the pancan palette for a discrete palette.
+The code below will show the first 4 colors from the `pancan` palette for a discrete palette.
 
 ```{r}
 gnomer_palette(
   name = "pancan",
-  n =4,
+  n = 4,
   type = "discrete",
   plot_col = TRUE,
   reverse = FALSE
@@ -268,7 +268,7 @@ If you wanted to make a continuous palette you can change the `type=` option and
 
 gnomer_palette(
   name = "sunset",
-  n =20,
+  n = 20,
   type = "continuous",
   plot_col = TRUE,
   reverse = FALSE
@@ -297,7 +297,7 @@ ggplot(iris, aes(Sepal.Width, Sepal.Length, color = Sepal.Length)) +
 
 #### Set Color Palettes Globally
 
-If you do not want to constantly have to set the palette for each plot you can set a palette theme globally for your entire session using `set_gnomer_palette()`. Additionally, you can set the discrete and gradient palette independently. With the examples below you can see the default colors change for each plot without having to call a `scale_*` function.
+If you do not want to constantly have to set the palette for each plot you can set a palette theme globally for your entire session using `set_gnomer_palette()`. Additionally, you can set the discrete and gradient (appropriate for continuous variables) palette independently. With the examples below you can see the default colors change for each plot without having to call a `scale_*` function.
 
 ```{r}
 
