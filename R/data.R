@@ -1,6 +1,6 @@
 #' Public Gene Panels on cBioPortal
 #'
-#' Data frame of all gene panels available in public cBioPortal
+#' Data frame of cBioPortal gene panels sourced from both public and GENIE cBioPortal instances.
 #'
 #' @format A nested data frame
 #' \describe{
@@ -12,18 +12,6 @@
 "gene_panels"
 
 
-#' GENIE panel names as found in synapse data
-#'
-#' Dataframe labeling all panels in the GENIE data and their corresponding names.
-#'
-#' @format A data frame with 469 observations and 5 variables
-#' \describe{
-#'   \item{Sequence.Assay.ID}{Column containing all panel names as found in GENIE data}
-#'   \item{Panel}{Character, indicates corresponding names in gnomeR.}
-#' }
-#' @source \url{https://cbioportal.mskcc.org/}
-"panel_names"
-
 #' IMPACT Gene Pathways
 #'
 #' Dataframe labeling all genes found in IMPACT along with their corresponding
@@ -32,7 +20,7 @@
 #' @format A data frame of impact genes
 #' \describe{
 #'   \item{pathway}{name of pathway}
-#'   \item{genes}{vectors of genes in each pathways}
+#'   \item{genes}{vector of gene alterations in each pathways}
 #' }
 #' @source \url{https://cbioportal.mskcc.org/}
 "pathways"
@@ -45,11 +33,11 @@
 #' @format A data frame with 30240 observations with 6 variables
 #' \describe{
 #'  \item{ID}{Factor, IMPACT sample ID}
-#'  \item{chrom}{}
-#'  \item{loc.start}{}
-#'  \item{loc.end}{}
-#'  \item{num.mark}{}
-#'  \item{seg.mean}{}
+#'  \item{chrom}{chromosome}
+#'  \item{loc.start}{start location}
+#'  \item{loc.end}{end location}
+#'  \item{num.mark}{number of probes or bins covered by the segment}
+#'  \item{seg.mean}{segment mean value, usually in log2 scale}
 #' }
 #' @source \url{https://cbioportal.mskcc.org/}
 "seg"
@@ -57,35 +45,37 @@
 
 #' IMPACT Alias Tables
 #'
-#' Table of aliases for IMPACT panel genes used for gene name resolution functionality.
+#' Data frame of genes and their aliases for
+#' IMPACT panel genes. This is used for gene name resolution functionality.
 #'
 #' @format A data frame with 1658 rows
 #' \describe{
-#'     \item{hugo_symbol}{}
-#'     \item{alias}{Start }
-#'     \item{entrez_id}{End }
-#'     \item{alias_entrez_id}{}
+#'     \item{hugo_symbol}{gene Hugo Symbol}
+#'     \item{alias}{Alias of Hugo Symbol in `hugo_symbol` column}
+#'     \item{entrez_id}{entrez ID of gene in `hugo_symbol`}
+#'     \item{alias_entrez_id}{entrez ID of `alias` gene}
 #'     }
 "impact_alias_table"
 
 
-
 #' Data Frame of Column Names
 #'
-#' Table of accepted data names
+#' Data frame of accepted data names for standard genomic files. This serves as a
+#' dictionary to help disambiguate raw column names from user entered mutation,
+#' CNA or structural variant data
 #'
-#' @format A data frame with 2333 rows
+#' @format A data frame
 #' \describe{
-#'     \item{maf_column_name}{MAD columns}
-#'     \item{api_column_name}{API columns}
-#'     \item{mutation_input}{Mutation columns}
-#'     \item{fusion_input}{Fusion columns}
-#'     \item{cna_input}{CNA columns}
-#'     \item{definition}{Column Definition}
+#'     \item{maf_column_name}{data field names as they appear in common MAF file}
+#'     \item{api_column_name}{data field names as they appear in common cBioPortal API retrieved files}
+#'     \item{mutation_input}{does this field appear in mutation files?}
+#'     \item{fusion_input}{does this field appear in mutation/sv files?}
+#'     \item{cna_input}{does this field appear in CNA files?}
+#'     \item{definition}{variable definition}
 #'     \item{notes}{data notes}
-#'     \item{sc_maf_column_name}{Snake case MAF name}
-#'     \item{sc_api_column_name}{Snake case API column name}
-#'     \item{internal_column_name}{Internally used data name}
+#'     \item{sc_maf_column_name}{snake case version of `maf_column_name`}
+#'     \item{sc_api_column_name}{snake case version of `api_column_name`}
+#'     \item{internal_column_name}{name used for each field for all internal processing functions}
 #'     }
 "names_df"
 
@@ -93,9 +83,17 @@
 
 #' Consequence Map
 #'
-#' Dataset of recoding values for consequence mutation data
+#' Data frame used as a data dictionary to recode common variant classification types
+#' to standardized types that can be used in oncoKB annotation.
 #'
-#' @format A data frame with 23878 rows of CNA data from
+#' @format A data frame
+#' \describe{
+#'     \item{variant_classification}{character indicating type of mutation/variant classification as it appears in common mutation files}
+#'     \item{consequence_final_coding}{final value to recode `variant_classification` column to}
+#'     \item{consequence_final_coding_2}{final value to recode `variant_classification` column to}
+#'     \item{consequence_final_coding_3}{final value to recode `variant_classification` column to}
+#'     }
+#'     @source \url{https://github.com/oncokb/oncokb-annotator/blob/a80ef0ce937c287778c36d45bf1cc8397539910c/AnnotatorCore.py#L118}
 "consequence_map"
 
 

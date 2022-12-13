@@ -19,6 +19,6 @@ A nested data frame
 gene_panels
 }
 \description{
-Data frame of all gene panels available in public cBioPortal
+Data frame of cBioPortal gene panels sourced from both public and GENIE cBioPortal instances.
 }
 \keyword{datasets}
