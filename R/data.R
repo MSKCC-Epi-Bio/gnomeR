@@ -1,23 +1,3 @@
-#' IMPACT Gene Meta Data
-#'
-#' Dataframe labeling all genes found in IMPACT along with their corresponding
-#' platform and Entrez ID.
-#'
-#' @format A data frame with 469 observations and 5 variables
-#' \describe{
-#'   \item{hugo_symbol}{Column containing all HUGO symbols genes included in IMPACT}
-#'   \item{platform_341}{Character, indicates whether each gene was included in
-#'   IMPACT platform 341. Options are `included` and `not included`}
-#'   \item{platform_410}{Character, indicates whether each gene was included in
-#'   IMPACT platform 410. Options are `included` and `not included`}
-#'   \item{platform_468}{Character, indicates whether each gene was included in
-#'   IMPACT platform 468. Options are `included` and `not included`}
-#'   \item{alias}{List of EntrezIDs corresponding to the value in the hugo_symbol column and alias list.}
-#'   \item{entrez_id}{List of known aliases corresponding to the value in the hugo_symbol column.}
-#' }
-#' @source \url{https://cbioportal.mskcc.org/}
-"impact_gene_info"
-
 #' Public Gene Panels on cBioPortal
 #'
 #' Data frame of all gene panels available in public cBioPortal
@@ -30,44 +10,6 @@
 #' }
 #' @source \url{https://cbioportal.mskcc.org/}
 "gene_panels"
-
-#' GENIE consortium Gene Meta Data
-#'
-#' Dataframe labeling all genes found in the GENIE consortium along with their corresponding
-#' platform and Entrez ID.
-#'
-#' @format A data frame with 469 observations and 5 variables
-#' \describe{
-#'   \item{hugo_symbol}{Column containing all HUGO symbols genes included in IMPACT}
-#'   \item{MSK_341}{Character, indicates whether each gene was included in
-#'   IMPACT platform 341. Options are `included` and `not included`}
-#'   \item{MSK_410}{Character, indicates whether each gene was included in
-#'   IMPACT platform 410. Options are `included` and `not included`}
-#'   \item{MSK_468}{Character, indicates whether each gene was included in
-#'   IMPACT platform 468. Options are `included` and `not included`}
-#'   \item{DFCI_1}{Character, indicates whether each gene was included in
-#'   the original Dana Farber Cancer Institute sequencing panel. Options are `included` and `not included`}
-#'   \item{DFCI_2}{Character, indicates whether each gene was included in
-#'   the second Dana Farber Cancer Institute sequencing panel. Options are `included` and `not included`}
-#'   \item{DFCI_3}{Character, indicates whether each gene was included in
-#'   the third Dana Farber Cancer Institute sequencing panel. Options are `included` and `not included`}
-#'   \item{DFCI_3.1}{Character, indicates whether each gene was included in
-#'   the updated third Dana Farber Cancer Institute sequencing panel. Options are `included` and `not included`}
-#'   \item{UHN_48}{Character, indicates whether each gene was included in
-#'   the first 48 genes sequencing panel of the University Health Network. Options are `included` and `not included`}
-#'   \item{UHN_50}{Character, indicates whether each gene was included in
-#'   the 50 genes sequencing panel of the University Health Network. Options are `included` and `not included`}
-#'   \item{VICC_1_SOLIDTUMOR}{Character, indicates whether each gene was included in
-#'   the sequencing panel of the Vanderbilt-Ingram Cancer Center. Options are `included` and `not included`}
-#'   \item{VICC_1_T7}{Character, indicates whether each gene was included in
-#'   the sequencing panel of the Vanderbilt-Ingram Cancer Center. Options are `included` and `not included`}
-#'   \item{VICC_1_T5A}{Character, indicates whether each gene was included in
-#'   the sequencing panel of the Vanderbilt-Ingram Cancer Center. Options are `included` and `not included`}
-#'   \item{alias}{List of EntrezIDs corresponding to the value in the hugo_symbol column and alias list.}
-#'   \item{entrez_id}{List of known aliases corresponding to the value in the hugo_symbol column.}
-#' }
-#' @source \url{https://cbioportal.mskcc.org/}
-"genie_gene_info"
 
 
 #' GENIE panel names as found in synapse data
@@ -96,7 +38,6 @@
 "pathways"
 
 
-
 #' A segmentation file from the cbioPortal datasets
 #'
 #' Segmentation file provided by the processing of IMPACT sequencing using FACETS
@@ -113,48 +54,6 @@
 #' @source \url{https://cbioportal.mskcc.org/}
 "seg"
 
-
-
-#' Intervals sequenced in 341 panel
-#'
-#' List of the genes and their corresponding positions sequenced in the targeted panel of IMPACT containing 341 genes.
-#' @format A data frame with 6360 lines
-#' \describe{
-#'     \item{V1}{Chromosome}
-#'     \item{V2}{Start position}
-#'     \item{V3}{End position}
-#'     \item{V4}{Strand}
-#'     \item{V5}{Interval name}
-#'     }
-"ti_341"
-
-#' Intervals sequenced in 410 panel
-#'
-#' List of the genes and their corresponding positions sequenced in the targeted panel of IMPACT containing 410 genes.
-#'
-#' @format A data frame with 7016 lines
-#' \describe{
-#'     \item{V1}{Chromosome}
-#'     \item{V2}{Start position}
-#'     \item{V3}{End position}
-#'     \item{V4}{Strand}
-#'     \item{V5}{Interval name}
-#'     }
-"ti_410"
-
-
-#' Intervals sequenced in 468 panel
-#'
-#' List of the genes and their corresponding positions sequenced in the targeted panel of IMPACT containing 468 genes.
-#' @format A data frame with 7872 lines
-#' \describe{
-#'     \item{V1}{Chromosome}
-#'     \item{V2}{Start position}
-#'     \item{V3}{End position}
-#'     \item{V4}{Strand}
-#'     \item{V5}{Interval name}
-#'     }
-"ti_468"
 
 #' IMPACT Alias Tables
 #'

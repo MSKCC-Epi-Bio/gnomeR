@@ -25,7 +25,7 @@ returned for every column of that patient row.}
 you may pass a data frame of \code{sample_id}-\code{panel_id} pairs specifying panels for each sample for which to insert NAs indicating genes not tested. See below for details.}
 
 \item{recode_aliases}{boolean specifying if automated gene name alias matching should be done. Default is TRUE. When TRUE
-the function will check for genes that may have more than 1 name in your data using the aliases im gnomeR::impact_gene_info alias column}
+the function will check for genes that may have more than 1 name in your data using the aliases im gnomeR::impact_alias_table alias column}
 
 \item{high_level_cna_only}{If TRUE, only deep deletions (-2, -1.5) or high level amplifications (2) will be counted as events
 in the binary matrix. Gains (1) and losses (1) will be ignored. Default is \code{FALSE} where all CNA events are counted.}

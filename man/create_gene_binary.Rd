@@ -47,7 +47,7 @@ in the binary matrix. Gains (1) and losses (1) will be ignored. Default is \code
 you may pass a data frame of \code{sample_id}-\code{panel_id} pairs specifying panels for each sample for which to insert NAs indicating genes not tested. See below for details.}
 
 \item{recode_aliases}{boolean specifying if automated gene name alias matching should be done. Default is TRUE. When TRUE
-the function will check for genes that may have more than 1 name in your data using the aliases im gnomeR::impact_gene_info alias column}
+the function will check for genes that may have more than 1 name in your data using the aliases im gnomeR::impact_alias_table alias column}
 }
 \value{
 a data frame with sample_id and alteration binary columns with values of 0/1

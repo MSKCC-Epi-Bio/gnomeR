@@ -67,13 +67,8 @@ reference:
     - consequence_map
     - gene_panels
     - panel_names
-    - genie_gene_info
     - names_df
     - pathways
     - impact_alias_table
-    - impact_gene_info
-    - ti_341
-    - ti_410
-    - ti_468
 
 

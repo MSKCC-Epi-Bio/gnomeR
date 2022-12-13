@@ -21,7 +21,7 @@
 #' @param specify_panel a character vector of length 1 with panel id (see gnomeR::gene_panels for available panels), "impact", or "no". Alternatively,
 #' you may pass a data frame of `sample_id`-`panel_id` pairs specifying panels for each sample for which to insert NAs indicating genes not tested. See below for details.
 #' @param recode_aliases boolean specifying if automated gene name alias matching should be done. Default is TRUE. When TRUE
-#' the function will check for genes that may have more than 1 name in your data using the aliases im gnomeR::impact_gene_info alias column
+#' the function will check for genes that may have more than 1 name in your data using the aliases im gnomeR::impact_alias_table alias column
 #'
 #' @section specify_panel argument:
 #'    - If a single panel id is passed (e.g. `specify_panel = "IMPACT468"`), all genes in your data that are not tested on that panel will be set to
@@ -63,8 +63,6 @@ create_gene_binary <- function(samples=NULL,
                           specify_panel = "no",
                           recode_aliases = TRUE){
 
-  genie_gene_info <- gnomeR::genie_gene_info
-  impact_gene_info <- gnomeR::impact_gene_info
   pathways <- gnomeR::pathways
   gene_panels <- gnomeR::gene_panels
 
