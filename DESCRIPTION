@@ -52,7 +52,9 @@ Imports:
     cli,
     gtsummary,
     broom.helpers,
-    janitor
+    janitor,
+    withr,
+    scales
 Suggests: 
     knitr,
     rmarkdown,

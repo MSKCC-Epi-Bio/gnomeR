@@ -4,7 +4,14 @@
 \alias{gnomer_palette}
 \title{Access the colors in a gnomeR color palette}
 \usage{
-gnomer_palette(name = "pancan", n, type = c("discrete", "continuous"))
+gnomer_palette(
+  name = "pancan",
+  n,
+  type = c("discrete", "continuous"),
+  plot_col = FALSE,
+  reverse = FALSE,
+  ...
+)
 }
 \arguments{
 \item{name}{Name of desired palette, supplied in quotes. Choices are:
@@ -14,7 +21,14 @@ gnomer_palette(name = "pancan", n, type = c("discrete", "continuous"))
 or the needed number of colors if less than the total.}
 
 \item{type}{Either "continuous" or "discrete". Use continuous if you want
-to automatically interpolate between colours.
+to automatically interpolate between colours.}
+
+\item{plot_col}{Boolean value weather to plot the palette labeled with their hex codes. Default is FALSE.}
+
+\item{reverse}{Boolean indicating whether the palette should be reversed.
+Default is FALSE.}
+
+\item{...}{Additional parameters to pass too \code{grDevices::colorRampPalette}
 @importFrom graphics rgb rect par image text
 @importFrom grDevices colorRampPalette}
 }

@@ -3,7 +3,7 @@ title: "Processing Data with {gnomeR}"
 output: rmarkdown::html_vignette
 author: Akriti Mishra, Karissa Whiting, Hannah Fuchs
 vignette: >
-  %\VignetteIndexEntry{test}
+  %\VignetteIndexEntry{Processing Data with {gnomeR}}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -246,4 +246,77 @@ The mutation_viz functions allows you to visualize data for the variables relate
 mutation_viz(mutations)
 ```
 
+#### Customizing your colors 
 
+{gnomeR} comes with 3 distinct palettes that can be useful for plotting high dimensional genomic data: `pancan`, `main`, and `sunset`. `pancan` and `main` offer a wide range of colors that can be useful to map to discrete scales. `sunset` has fewer colors but offers a color spectrum useful for interpolation for continuous variables. You can view hex codes of all colors with `gnomer_colors`, and the 3 distinct palettes with `gnomer_palettes$pancan`, `gnomer_palettes$main`, `gnomer_palettes$sunset`. The `gnomer_palette()` is used to set/subset specific palettes, create a continuous palette, and/or plot palettes to show the user the specific colors they chose. 
+
+The code below will show the first 4 colors from the `pancan` palette for a discrete palette.
+
+```{r}
+gnomer_palette(
+  name = "pancan",
+  n = 4,
+  type = "discrete",
+  plot_col = TRUE,
+  reverse = FALSE
+)
+```
+
+If you wanted to make a continuous palette you can change the `type=` option and specify how many colors your want to use to create a gradient palette. `type = continuous` uses `grDevices::colorRampPalette()` as the engine to create the gradient palette. Additionally, `gnomer_palette()` accepts additional arguments to be passed to `colorRampPalette()` with the parameter `...`. The example below uses 20 colors.
+
+```{r}
+
+gnomer_palette(
+  name = "sunset",
+  n = 20,
+  type = "continuous",
+  plot_col = TRUE,
+  reverse = FALSE
+)
+```
+
+Examples how to use `gnomer_palette()`:
+
+```{r}
+
+library(ggplot2)
+
+ggplot(iris, aes(Sepal.Width, Sepal.Length, color = Species)) +
+  geom_point(size = 4) +
+  scale_color_manual(values = gnomer_palette("pancan"))
+```
+
+```{r }
+# use a continuous color scale - interpolates between colors
+ggplot(iris, aes(Sepal.Width, Sepal.Length, color = Sepal.Length)) +
+  geom_point(size = 4, alpha = .6) +
+  scale_color_gradientn(colors = 
+                          gnomer_palette("sunset", type = "continuous"))
+
+```
+
+#### Set Color Palettes Globally
+
+If you do not want to constantly have to set the palette for each plot you can set a palette theme globally for your entire session using `set_gnomer_palette()`. Additionally, you can set the discrete and gradient (appropriate for continuous variables) palette independently. With the examples below you can see the default colors change for each plot without having to call a `scale_*` function.
+
+```{r}
+
+set_gnomer_palette(palette = "main", gradient = "sunset")
+
+ggplot(mtcars, aes(wt, mpg, color = factor(cyl))) +
+  geom_point()
+
+ggplot(mtcars, aes(wt, mpg, color = cyl)) +
+  geom_point()
+
+```
+
+You can reset the palettes back to default ggplot color palettes with `reset_gnomer_palette()`. 
+
+```{r}
+reset_gnomer_palette()
+
+ggplot(mtcars, aes(wt, mpg, color = cyl)) +
+  geom_point()
+
+```
