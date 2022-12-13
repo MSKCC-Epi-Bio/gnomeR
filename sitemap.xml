@@ -94,12 +94,6 @@
     <loc>https://mskcc-epi-bio.github.io/gnomeR/reference/gnomer_colors.html</loc>
   </url>
   <url>
-    <loc>https://mskcc-epi-bio.github.io/gnomeR/reference/gnomer_cols.html</loc>
-  </url>
-  <url>
-    <loc>https://mskcc-epi-bio.github.io/gnomeR/reference/gnomer_pal.html</loc>
-  </url>
-  <url>
     <loc>https://mskcc-epi-bio.github.io/gnomeR/reference/gnomer_palette.html</loc>
   </url>
   <url>
@@ -148,6 +142,9 @@
     <loc>https://mskcc-epi-bio.github.io/gnomeR/reference/rename_columns.html</loc>
   </url>
   <url>
+    <loc>https://mskcc-epi-bio.github.io/gnomeR/reference/reset_gnomer_palette.html</loc>
+  </url>
+  <url>
     <loc>https://mskcc-epi-bio.github.io/gnomeR/reference/resolve_alias.html</loc>
   </url>
   <url>
@@ -160,13 +157,10 @@
     <loc>https://mskcc-epi-bio.github.io/gnomeR/reference/sanitize_mutation_input.html</loc>
   </url>
   <url>
-    <loc>https://mskcc-epi-bio.github.io/gnomeR/reference/scale_color_pancan.html</loc>
-  </url>
-  <url>
-    <loc>https://mskcc-epi-bio.github.io/gnomeR/reference/scale_fill_pancan.html</loc>
-  </url>
-  <url>
     <loc>https://mskcc-epi-bio.github.io/gnomeR/reference/seg.html</loc>
+  </url>
+  <url>
+    <loc>https://mskcc-epi-bio.github.io/gnomeR/reference/set_gnomer_palette.html</loc>
   </url>
   <url>
     <loc>https://mskcc-epi-bio.github.io/gnomeR/reference/specify_impact_panels.html</loc>
