@@ -3,7 +3,7 @@ title: "Processing Data with {gnomeR}"
 output: rmarkdown::html_vignette
 author: Akriti Mishra, Karissa Whiting, Hannah Fuchs
 vignette: >
-  %\VignetteIndexEntry{test}
+  %\VignetteIndexEntry{Processing Data with {gnomeR}}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -246,15 +246,11 @@ The mutation_viz functions allows you to visualize data for the variables relate
 mutation_viz(mutations)
 ```
 
-### Customizing your colors 
+#### Customizing your colors 
 
-gnomeR comes with 66 different color options broken into 3 distinct palettes, pancan, main, and sunset. Typically pancan and main are discrete color palettes where sunset is a continuous color palette. You can see all colors with `gnomer_colors`, and the 3 distinct palettes with `gnomer_palettes$pancan`, `gnomer_palettes$main`, `gnomer_palettes$sunset`. 
+{gnomeR} comes with 3 distinct palettes that can be useful for plotting high dimenstional genomic data: `pancan`, `main`, and `sunset`. `pancan` and `main` offer a wide range of colors that can be useful to map to discrete scales. `sunset` has fewer colors but offers a color spectrum useful for interpolation for continuous variables. You can view hex codes of all colors with `gnomer_colors`, and the 3 distinct palettes with `gnomer_palettes$pancan`, `gnomer_palettes$main`, `gnomer_palettes$sunset`. The `gnomer_palette()` is used to set/subset specific palettes, create a continuous palette, and/or plot palettes to show the user the specific colors they chose. 
 
-### `gnomer_palette()`
-
-`gnomer_palette()` is used to set/subset specific palettes, create a continuous palette, and/or plot palettes to show the user the specific colors they chose. 
-
-The code below will pick the first 4 colors from the pancan palette for a discrete palette.
+The code below will show the first 4 colors from the pancan palette for a discrete palette.
 
 ```{r}
 gnomer_palette(
@@ -279,29 +275,29 @@ gnomer_palette(
 )
 ```
 
-Examples how to use `gnomer_palette()`
-
+Examples how to use `gnomer_palette()`:
 
 ```{r}
 
 library(ggplot2)
 
 ggplot(iris, aes(Sepal.Width, Sepal.Length, color = Species)) +
-geom_point(size = 4) +
-scale_color_manual(values = gnomer_palette("pancan"))
-
-# use a continuous color scale - interpolates between colors
-ggplot(iris, aes(Sepal.Width, Sepal.Length, color = Sepal.Length)) +
-geom_point(size = 4, alpha = .6) +
-scale_color_gradientn(colors = gnomer_palette("sunset", type = "continuous"))
-
-# you can store the palette as a vector and call the colors later 
-example_pal <-  gnomer_palette("pancan")
+  geom_point(size = 4) +
+  scale_color_manual(values = gnomer_palette("pancan"))
 ```
 
-### `set_gnomer_palette()`
+```{r }
+# use a continuous color scale - interpolates between colors
+ggplot(iris, aes(Sepal.Width, Sepal.Length, color = Sepal.Length)) +
+  geom_point(size = 4, alpha = .6) +
+  scale_color_gradientn(colors = 
+                          gnomer_palette("sunset", type = "continuous"))
 
-If you do not want to constantly have to set the palette for each plot you can set a palette theme for your entire session and do not need to call `gnomer_palette()` every time. `set_gnomer_palette` allows you to choose from one of the 3 palettes in `gnomer_palettes`. You can set the discrete and gradient palette independently. With the examples below you can see the default colors change for each plot without having to call a `scale_*` function.
+```
+
+#### Set Color Palettes Globally
+
+If you do not want to constantly have to set the palette for each plot you can set a palette theme globally for your entire session using `set_gnomer_palette()`. Additionally, you can set the discrete and gradient palette independently. With the examples below you can see the default colors change for each plot without having to call a `scale_*` function.
 
 ```{r}
 
@@ -315,14 +311,10 @@ ggplot(mtcars, aes(wt, mpg, color = cyl)) +
 
 ```
 
-
-### reset_gnomer_palette
-
-If you do not want to use the palettes from `set_gnomer_palette()` anymore you can reset the palettes back to ggplots color palettes with `reset_gnomer_palette()`. This function only has one argument and you will rarely have to change it. 
+You can reset the palettes back to default ggplot color palettes with `reset_gnomer_palette()`. 
 
 ```{r}
 reset_gnomer_palette()
-
 
 ggplot(mtcars, aes(wt, mpg, color = cyl)) +
   geom_point()
