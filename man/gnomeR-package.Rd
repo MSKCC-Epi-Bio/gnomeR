@@ -12,15 +12,19 @@ Prepare raw mutation, cna, and fusion data for analysis. Annotate OncoKB, summar
 Useful links:
 \itemize{
   \item \url{https://github.com/MSKCC-Epi-Bio/gnomeR}
+  \item \url{https://mskcc-epi-bio.github.io/gnomeR/}
   \item Report bugs at \url{https://github.com/MSKCC-Epi-Bio/gnomeR/issues}
 }
 
 }
 \author{
-\strong{Maintainer}: Axel Martin \email{axel.steph.martin@gmail.com} (\href{https://orcid.org/YOUR-ORCID-ID}{ORCID})
+\strong{Maintainer}: Karissa Whiting \email{karissa.whiting@gmail.com} (\href{https://orcid.org/0000-0002-4683-1868}{ORCID})
 
 Authors:
 \itemize{
+  \item Michael Curry (\href{https://orcid.org/0000-0002-0261-4044}{ORCID})
+  \item Hannah Fuchs (\href{https://orcid.org/0000-0003-2426-0096}{ORCID})
+  \item Axel Martin \email{axel.steph.martin@gmail.com} (\href{https://orcid.org/YOUR-ORCID-ID}{ORCID})
   \item Arshi Arora
 }
 

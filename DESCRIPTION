@@ -1,17 +1,25 @@
 Package: gnomeR
 Title: Wrangle and analyze IMPACT and TCGA mutation data 
-Version: 1.1.0.9000
+Version: 1.1.1.9001
 Authors@R: 
-    c(person(given = "Axel",
+    c(person(given = "Karissa",
+             family = "Whiting",
+             role = c("aut", "cre"),
+             email = "karissa.whiting@gmail.com",
+             comment = c(ORCID = "0000-0002-4683-1868")), 
+     person(given = "Michael",
+             family = "Curry",
+             role = "aut",
+             comment = c(ORCID = "0000-0002-0261-4044")), 
+     person(given = "Hannah",
+             family = "Fuchs",
+             role = "aut",
+             comment = c(ORCID = "0000-0003-2426-0096")), 
+      person(given = "Axel",
            family = "Martin",
            role = c("aut"),
            email = "axel.steph.martin@gmail.com",
            comment = c(ORCID = "YOUR-ORCID-ID")),
-      person(given = "Karissa",
-             family = "Whiting",
-             role = c("aut", "cre"),
-             email = "karissa.whiting@gmail.com",
-             comment = c(ORCID = "0000-0002-4683-1868")),   
       person(given = "Arshi",
              family = "Arora",
              role = "aut"))
@@ -19,49 +27,34 @@ Description: Prepare raw mutation, cna, and fusion data for analysis. Annotate O
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
-URL: https://github.com/MSKCC-Epi-Bio/gnomeR
+URL: https://github.com/MSKCC-Epi-Bio/gnomeR,
+    https://mskcc-epi-bio.github.io/gnomeR/
 BugReports: https://github.com/MSKCC-Epi-Bio/gnomeR/issues
-RoxygenNote: 7.1.2
+RoxygenNote: 7.2.2
 Depends: R (>= 3.6)
 biocViews: 
     ComplexHeatmap,
-    iClusterPlus,
-    GenomicRanges,
-    IRanges
 Imports: 
     magrittr,
     dplyr,
     ggplot2,
-    exact2x2,
     tibble,
     dtplyr,
-    ggrepel,
     ComplexHeatmap,
-    iClusterPlus,
-    GenomicRanges,
-    IRanges,
-    cluster,
-    grid,
-    survminer,
     GGally,
-    RColorBrewer,
-    gplots,
-    lattice,
-    reshape2,
     stringr,
-    survival,
     rlang,
     forcats,
     purrr,
-    reticulate,
-    plotly,
     tidyr,
-    lifecycle,
     stats,
     utils,
     cli,
     gtsummary,
-    broom.helpers
+    broom.helpers,
+    janitor,
+    withr,
+    scales
 Suggests: 
     knitr,
     rmarkdown,

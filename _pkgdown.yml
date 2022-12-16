@@ -1,0 +1,71 @@
+url: https://mskcc-epi-bio.github.io/gnomeR/
+
+template:
+  bootstrap: 5
+  bootswatch: simplex
+  bslib:
+    primary: "#CC133C"
+    base_font: {google: "Atkinson Hyperlegible"}
+    heading_font: {google: "Atkinson Hyperlegible"}
+    text-muted: "#FFFFFF"
+
+authors:
+  Karissa Whiting:
+    href: "https://www.karissawhiting.com/"
+  Mike Curry:
+    href: "https://github.com/michaelcurry1123/"
+  Hannah Fuchs:
+    href: "https://github.com/hfuchs5/"
+
+navbar:
+  bg: primary
+  structure:
+    left:  [reference, articles, news]
+    right: [search, github]
+
+reference:
+  - subtitle: Processing Data
+  - contents:
+    - create_gene_binary
+    - summarize_by_gene
+    - pivot_cna_wider
+    - pivot_cna_longer
+    - add_pathways
+    - recode_alias
+  - subtitle: Analyzing Data
+  - contents:
+    - tbl_genomic
+    - mutation_viz
+    - ggvarclass
+    - ggvartype
+    - ggsamplevar
+    - ggtopgenes
+    - gggenecor
+    - ggcomut
+  - subtitle: Helper Functions
+  - contents:
+    - which_impact_panel
+    - recode_cna
+    - rename_columns
+    - resolve_alias
+  - subtitle: Color Palette
+  - contents:
+    - gnomer_colors
+    - gnomer_palettes
+    - gnomer_palette
+    - set_gnomer_palette
+    - reset_gnomer_palette
+  - subtitle: Example Data Sets
+  - contents:
+    - mutations
+    - cna
+    - sv
+    - seg
+    - cna_wide
+    - consequence_map
+    - gene_panels
+    - names_df
+    - pathways
+    - impact_alias_table
+
+

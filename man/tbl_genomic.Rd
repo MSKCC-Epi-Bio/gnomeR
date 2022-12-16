@@ -6,7 +6,7 @@
 \usage{
 tbl_genomic(
   gene_binary,
-  freq_cutoff = 0,
+  freq_cutoff = NULL,
   freq_cutoff_by_gene = TRUE,
   gene_subset = NULL,
   by = NULL,
@@ -29,7 +29,7 @@ return all alterations associated with that gene (including mutations, CNA, fusi
 
 \item{by}{A variable to be passed to \code{gtsummary::tbl_summary()}'s by parameter}
 
-\item{...}{Additional parameters that can be passed to \code{gtsummary::tbl_summary()}}
+\item{...}{Additional parameters that can be passed to \code{gtsummary::tbl_summary()}. To access the additional parameters you need to load \code{gtsummary}.}
 }
 \value{
 A \code{tbl_summary()} object
@@ -41,25 +41,33 @@ parameters that are accepted by \code{gtsummary::tbl_summary()}. Note the \code{
 onto the data before using the \code{by} parameter in the function.
 }
 \examples{
-library(gnomeR)
-library(gtsummary)
 library(dplyr)
-samples <- as.character(unique(mut$Tumor_Sample_Barcode))[1:200]
-gene_binary <- create_gene_binary(samples = samples, mutation = mut, cna = cna,
-                        mut_type = "somatic_only", snp_only = FALSE,
-                        include_silent = FALSE,
-                        cna_relax = TRUE, specify_panel = "no", rm_empty = FALSE)
+
+samples <- unique(mutations$sampleId)[1:10]
+
+gene_binary <- create_gene_binary(
+  samples = samples,
+  mutation = gnomeR::mutations,
+  cna = gnomeR::cna,
+  mut_type = "somatic_only", snp_only = FALSE,
+  specify_panel = "no"
+)
 tb1 <- tbl_genomic(gene_binary = gene_binary, freq_cutoff = .05)
-tb2 <- tbl_genomic(gene_binary = gene_binary, gene_subset = c("KRAS", "TERT"))
+tb2 <- tbl_genomic(gene_binary = gene_binary, gene_subset = c("MYC", "TP53"))
 
 gene_binary <- gene_binary \%>\%
-    mutate(sex = sample(x = c("M", "F"),
-     size = nrow(gene_binary), replace = TRUE))
+  mutate(sex = sample(
+    x = c("M", "F"),
+    size = nrow(gene_binary), replace = TRUE
+  ))
+library(gtsummary) # Need to load gtsummary to access additional arguments in `...`
 
-t1 <-tbl_genomic(gene_binary = gene_binary,
-    by = sex,
-    freq_cutoff = .2,
-    freq_cutoff_by_gene = FALSE) \%>\%
-    add_p()
+t1 <- tbl_genomic(
+  gene_binary = gene_binary,
+  by = sex,
+  freq_cutoff = .2,
+  freq_cutoff_by_gene = FALSE,
+  statistic = list(all_categorical() ~"{n}")
+)
 
 }

@@ -1,26 +1,6 @@
-#' IMPACT Gene Meta Data
-#'
-#' Dataframe labeling all genes found in IMPACT along with their corresponding
-#' platform and Entrez ID.
-#'
-#' @format A data frame with 469 observations and 5 variables
-#' \describe{
-#'   \item{hugo_symbol}{Column containing all HUGO symbols genes included in IMPACT}
-#'   \item{platform_341}{Character, indicates whether each gene was included in
-#'   IMPACT platform 341. Options are `included` and `not included`}
-#'   \item{platform_410}{Character, indicates whether each gene was included in
-#'   IMPACT platform 410. Options are `included` and `not included`}
-#'   \item{platform_468}{Character, indicates whether each gene was included in
-#'   IMPACT platform 468. Options are `included` and `not included`}
-#'   \item{alias}{List of EntrezIDs corresponding to the value in the hugo_symbol column and alias list.}
-#'   \item{entrez_id}{List of known aliases corresponding to the value in the hugo_symbol column.}
-#' }
-#' @source \url{https://cbioportal.mskcc.org/}
-"impact_gene_info"
-
 #' Public Gene Panels on cBioPortal
 #'
-#' Data frame of all gene panels available in public cBioPortal
+#' Data frame of cBioPortal gene panels sourced from both public and GENIE cBioPortal instances.
 #'
 #' @format A nested data frame
 #' \describe{
@@ -31,56 +11,6 @@
 #' @source \url{https://cbioportal.mskcc.org/}
 "gene_panels"
 
-#' GENIE consortium Gene Meta Data
-#'
-#' Dataframe labeling all genes found in the GENIE consortium along with their corresponding
-#' platform and Entrez ID.
-#'
-#' @format A data frame with 469 observations and 5 variables
-#' \describe{
-#'   \item{hugo_symbol}{Column containing all HUGO symbols genes included in IMPACT}
-#'   \item{MSK_341}{Character, indicates whether each gene was included in
-#'   IMPACT platform 341. Options are `included` and `not included`}
-#'   \item{MSK_410}{Character, indicates whether each gene was included in
-#'   IMPACT platform 410. Options are `included` and `not included`}
-#'   \item{MSK_468}{Character, indicates whether each gene was included in
-#'   IMPACT platform 468. Options are `included` and `not included`}
-#'   \item{DFCI_1}{Character, indicates whether each gene was included in
-#'   the original Dana Farber Cancer Institute sequencing panel. Options are `included` and `not included`}
-#'   \item{DFCI_2}{Character, indicates whether each gene was included in
-#'   the second Dana Farber Cancer Institute sequencing panel. Options are `included` and `not included`}
-#'   \item{DFCI_3}{Character, indicates whether each gene was included in
-#'   the third Dana Farber Cancer Institute sequencing panel. Options are `included` and `not included`}
-#'   \item{DFCI_3.1}{Character, indicates whether each gene was included in
-#'   the updated third Dana Farber Cancer Institute sequencing panel. Options are `included` and `not included`}
-#'   \item{UHN_48}{Character, indicates whether each gene was included in
-#'   the first 48 genes sequencing panel of the University Health Network. Options are `included` and `not included`}
-#'   \item{UHN_50}{Character, indicates whether each gene was included in
-#'   the 50 genes sequencing panel of the University Health Network. Options are `included` and `not included`}
-#'   \item{VICC_1_SOLIDTUMOR}{Character, indicates whether each gene was included in
-#'   the sequencing panel of the Vanderbilt-Ingram Cancer Center. Options are `included` and `not included`}
-#'   \item{VICC_1_T7}{Character, indicates whether each gene was included in
-#'   the sequencing panel of the Vanderbilt-Ingram Cancer Center. Options are `included` and `not included`}
-#'   \item{VICC_1_T5A}{Character, indicates whether each gene was included in
-#'   the sequencing panel of the Vanderbilt-Ingram Cancer Center. Options are `included` and `not included`}
-#'   \item{alias}{List of EntrezIDs corresponding to the value in the hugo_symbol column and alias list.}
-#'   \item{entrez_id}{List of known aliases corresponding to the value in the hugo_symbol column.}
-#' }
-#' @source \url{https://cbioportal.mskcc.org/}
-"genie_gene_info"
-
-
-#' GENIE panel names as found in synapse data
-#'
-#' Dataframe labeling all panels in the GENIE data and their corresponding names.
-#'
-#' @format A data frame with 469 observations and 5 variables
-#' \describe{
-#'   \item{Sequence.Assay.ID}{Column containing all panel names as found in GENIE data}
-#'   \item{Panel}{Character, indicates corresponding names in gnomeR.}
-#' }
-#' @source \url{https://cbioportal.mskcc.org/}
-"panel_names"
 
 #' IMPACT Gene Pathways
 #'
@@ -90,104 +20,10 @@
 #' @format A data frame of impact genes
 #' \describe{
 #'   \item{pathway}{name of pathway}
-#'   \item{genes}{vectors of genes in each pathways}
+#'   \item{genes}{vector of gene alterations in each pathways}
 #' }
 #' @source \url{https://cbioportal.mskcc.org/}
 "pathways"
-
-
-#' An example of clinical patient level information file from
-#' IMPACT cbioPortal dataset.
-#'
-#' This set contains the publicly available data from cbioPortal patient level
-#' clinical data. The file is organized with each line corresponding
-#' to the information of each patient.
-#'
-#' @format A data frame with 497 observations on the following 6 variables
-#' \describe{
-#'   \item{X.Patient.Identifier}{Factor, IMPACT patient ID}
-#'   \item{Sex}{Factor, Sex information: `Female`, `Male`}
-#'   \item{Patient.s.Vital.Status}{Factor, indicates whether the patient is alive or deceased}
-#'   \item{Smoking.History}{Factor, Indicates if person has a history of smoking}
-#'   \item{Overall.Survival..Months.}{Overall survival in months}
-#'   \item{Overall.Survival.Status}{Survival status}
-#' }
-#' @source \url{https://cbioportal.mskcc.org/}
-"clin.patients"
-
-#' An example of clinical sample level information file from IMPACT cbioPortal dataset.
-#'
-#' This set contains the publicly available data from cbioPortal sample level
-#' clinical data. The file is organized with each line corresponding
-#' to the information of each sample.
-#'
-#' @format A data frame with 500 observations on the following 16 variables
-#' \describe{
-#'   \item{X.Patient.Identifier}{Factor, IMPACT patient ID}
-#'   \item{Sample.Identifier}{Factor, IMPACT sample ID}
-#'   \item{Sample.Collection.Source}{Factor, was the sample collected in-house?}
-#'   \item{Specimen.Preservation.Type}{Factor, indicates whether the patient is alive or deceased}
-#'   \item{Specimen.Type}{Factor, Indicates if person has a history of smoking}
-#'   \item{DNA.Input}{}
-#'   \item{Sample.coverage}{}
-#'   \item{Tumor.Purity}{}
-#'   \item{Matched.Status}{Overall survival in months}
-#'   \item{Sample.Type}{Survival status}
-#'   \item{Primary.Tumor.Site}{Survival status}
-#'   \item{Metastatic.Site}{Survival status}
-#'   \item{Sample.Class}{Survival status}
-#'   \item{Oncotree.Code}{Survival status}
-#'   \item{Cancer.Type}{Survival status}
-#'   \item{Cancer.Type.Detailed}{Survival status}
-#' }
-#' @source \url{https://cbioportal.mskcc.org/}
-"clin.sample"
-
-
-#' An example copy number alteration raw calls file from IMPACT cbioPortal dataset
-#'
-#' This set contains the publicly available data from cbioPortal copy number alteration
-#' data. The file is organized with the first column being the gene name
-#' and all other columns being samples.
-#'
-#' @format A data frame with 410 observations with 501 variables
-#' \describe{
-#' }
-#' @source \url{https://cbioportal.mskcc.org/}
-"cna"
-
-#' An example of fusions calls file from IMPACT cbioPortal dataset
-#'
-#' This set contains the publicly available data from cbioPortal
-#' fusion data. The file is organized a classical MAF file.
-#'
-#' @format A data frame with 127 observations with 10 variables
-#' \describe{
-#'  \item{Hugo_Symbol}{Factor w/ 574 levels,
-#'    Column containing all HUGO symbols genes}
-#'  \item{Entrez_Gene_Id}{Entrez Gene ID (NA in this dataset)}
-#'  \item{Center}{Cancer Center ID. All are `MSKCC-DMP` in this dataset}
-#'  \item{Tumor_Sample_Barcode}{Factor, IMPACT sample ID}
-#'  \item{Fusion}{Factor, type of fusion}
-#'  \item{DNA_support}{Factor, all are `yes` in this data}
-#'  \item{RNA_support}{Factor, all are `unknown` in this data}
-#'  \item{Method}{All are NA in this data}
-#'  \item{Frame}{Factor, `in frame`, `out of frame` or `unknown`}
-#'  \item{Comments}{}
-#' }
-#' @source \url{https://cbioportal.mskcc.org/}
-"fusion"
-
-#' An example maf file from IMPACT cbioPortal dataset
-#'
-#' This set contains the publicly available data from cbioPortal mutation data.
-#' The file is organized a classical MAF file.
-#'
-#' @format A data frame with 457 observations with 45 variables
-#' \describe{
-#' }
-#' @source \url{https://cbioportal.mskcc.org/}
-"mut"
 
 
 #' A segmentation file from the cbioPortal datasets
@@ -197,88 +33,204 @@
 #' @format A data frame with 30240 observations with 6 variables
 #' \describe{
 #'  \item{ID}{Factor, IMPACT sample ID}
-#'  \item{chrom}{}
-#'  \item{loc.start}{}
-#'  \item{loc.end}{}
-#'  \item{num.mark}{}
-#'  \item{seg.mean}{}
+#'  \item{chrom}{chromosome}
+#'  \item{loc.start}{start location}
+#'  \item{loc.end}{end location}
+#'  \item{num.mark}{number of probes or bins covered by the segment}
+#'  \item{seg.mean}{segment mean value, usually in log2 scale}
 #' }
 #' @source \url{https://cbioportal.mskcc.org/}
 "seg"
 
-#' List of curated genes for IMPACT oncoKB annotation.
-#'
-#' We include the curated genes for the IMPACT sequencing for the oncoKB annotation pipeline.
-#'
-#' @format A data frame with 417 observations on the following 2 variables.
-#' \describe{
-#'  \item{id}{}
-#'  \item{gene}{}
-#' }
-"curated_genes"
 
-
-#' A vector of 19441 hugo symbols in TCGA
+#' IMPACT Alias Tables
 #'
-#'A vector of 19441 hugo symbols in TCGA
+#' Data frame of genes and their aliases for
+#' IMPACT panel genes. This is used for gene name resolution functionality.
 #'
-#' @format A data frame with 19441 genes
+#' @format A data frame with 1658 rows
 #' \describe{
+#'     \item{hugo_symbol}{gene Hugo Symbol}
+#'     \item{alias}{Alias of Hugo Symbol in `hugo_symbol` column}
+#'     \item{entrez_id}{entrez ID of gene in `hugo_symbol`}
+#'     \item{alias_entrez_id}{entrez ID of `alias` gene}
 #'     }
-"tcga_genes"
+"impact_alias_table"
 
 
-#' Data frame of all TCGA sample ids and their corresponding cancer type
+#' Data Frame of Column Names
 #'
-#' Data frame of all TCGA sample ids and their corresponding cancer type
+#' Data frame of accepted data names for standard genomic files. This serves as a
+#' dictionary to help disambiguate raw column names from user entered mutation,
+#' CNA or structural variant data
 #'
-#' @format A data frame with 10275 samples
+#' @format A data frame
 #' \describe{
-#'     \item{patient_id}{Sample ID}
-#'     \item{Cancer_Code}{Cancer site following TCGA abbreviations}
+#'     \item{maf_column_name}{data field names as they appear in common MAF file}
+#'     \item{api_column_name}{data field names as they appear in common cBioPortal API retrieved files}
+#'     \item{mutation_input}{does this field appear in mutation files?}
+#'     \item{fusion_input}{does this field appear in mutation/sv files?}
+#'     \item{cna_input}{does this field appear in CNA files?}
+#'     \item{definition}{variable definition}
+#'     \item{notes}{data notes}
+#'     \item{sc_maf_column_name}{snake case version of `maf_column_name`}
+#'     \item{sc_api_column_name}{snake case version of `api_column_name`}
+#'     \item{internal_column_name}{name used for each field for all internal processing functions}
 #'     }
-"tcga_samples"
+"names_df"
 
 
-#' Intervals sequenced in 341 panel
+
+#' Consequence Map
 #'
-#' List of the genes and their corresponding positions sequenced in the targeted panel of IMPACT containing 341 genes.
+#' Data frame used as a data dictionary to recode common variant classification types
+#' to standardized types that can be used in oncoKB annotation.
 #'
-#' @format A data frame with 6360 lines
+#' @format A data frame
 #' \describe{
-#'     \item{V1}{Chromosome}
-#'     \item{V2}{Start position}
-#'     \item{V3}{End position}
-#'     \item{V4}{Strand}
-#'     \item{V5}{Interval name}
+#'     \item{variant_classification}{character indicating type of mutation/variant classification as it appears in common mutation files}
+#'     \item{consequence_final_coding}{final value to recode `variant_classification` column to}
+#'     \item{consequence_final_coding_2}{final value to recode `variant_classification` column to}
+#'     \item{consequence_final_coding_3}{final value to recode `variant_classification` column to}
 #'     }
-"ti_341"
+#'     @source \url{https://github.com/oncokb/oncokb-annotator/blob/a80ef0ce937c287778c36d45bf1cc8397539910c/AnnotatorCore.py#L118}
+"consequence_map"
 
-#' Intervals sequenced in 410 panel
+
+#' An example IMPACT cBioPortal mutation data set in API format
 #'
-#' List of the genes and their corresponding positions sequenced in the targeted panel of IMPACT containing 410 genes.
+#' This set contains a random sample of 200 patients from
+#' publicly available prostate cancer data from cBioPortal. The file
+#' is in API format.
 #'
-#' @format A data frame with 7016 lines
+#' @format A data frame with mutations from Abida et al. JCO Precis Oncol 2017.
+#' Retrieved from cBioPortal.There are 725 observations and 29 variables.
 #' \describe{
-#'     \item{V1}{Chromosome}
-#'     \item{V2}{Start position}
-#'     \item{V3}{End position}
-#'     \item{V4}{Strand}
-#'     \item{V5}{Interval name}
-#'     }
-"ti_410"
+#' \item{hugoGeneSymbol}{Character w/ 324 levels,
+#' Column containing all HUGO symbols genes}
+#' \item{entrezGeneId}{Entrez Gene ID}
+#' \item{sampleId}{MSKCC Sample ID}
+#' \item{patientId}{Patient ID}
+#' \item{studyId}{Indicator for Abida et al. 2017 study}
+#' \item{center}{Cancer Center ID}
+#' \item{mutationStatus}{Somatic or germ-line mutation status}
+#' \item{variantType}{Mutation variant type}
+#' \item{chr}{Chromosome mutation observed on}
+#' \item{endPosition}{End Position}
+#' \item{fisValue}{fisValue}
+#' \item{functionalImpactScore}{functionalImpactScore}
+#' \item{keyword}{keyword}
+#' \item{linkMsa}{linkMsa}
+#' \item{linkPdb}{linkPdb}
+#' \item{linkXvar}{linkXvar}
+#' \item{molecularProfileId}{molecularProfileId}
+#' \item{mutationType}{mutationType}
+#' \item{ncbiBuild}{ncbiBuild}
+#' \item{proteinChange}{proteinChange}
+#' \item{proteinPosEnd}{proteinPosEnd}
+#' \item{proteinPosStart}{proteinPosStart}
+#' \item{referenceAllele}{referenceAllele}
+#' \item{refseqMrnaId}{refseqMrnaId}
+#' \item{startPosition}{startPosition}
+#' \item{uniquePatientKey}{uniquePatientKey}
+#' \item{uniqueSampleKey}{uniqueSampleKey}
+#' \item{validationStatus}{validationStatus}
+#' \item{variantAllele}{variantAllele}}
+#' @source \url{https://www.cbioportal.org/study/summary?id=prad_mskcc_2017}
+"mutations"
 
 
-#' Intervals sequenced in 468 panel
+#' An example IMPACT cBioPortal mutation data set in API format
 #'
-#' List of the genes and their corresponding positions sequenced in the targeted panel of IMPACT containing 468 genes.
+#' This set was created from a random sample of 200 patients from
+#' publicly available prostate cancer data from cBioPortal. The file
+#' is in API format.
 #'
-#' @format A data frame with 7872 lines
+#' @format A data frame with copy number alterations (CNA) from Abida et al.
+#' JCO Precis Oncol 2017.Retrieved from cBioPortal.There are 475 observations
+#' and 29 variables.
 #' \describe{
-#'     \item{V1}{Chromosome}
-#'     \item{V2}{Start position}
-#'     \item{V3}{End position}
-#'     \item{V4}{Strand}
-#'     \item{V5}{Interval name}
-#'     }
-"ti_468"
+#' \item{hugoGeneSymbol}{Character w/ 324 levels,
+#' Column containing all HUGO symbols genes}
+#' \item{entrezGeneId}{Entrez Gene ID}
+#' \item{molecularProfileId}{Molecular Profile ID for data set}
+#' \item{sampleId}{MSKCC Sample ID}
+#' \item{patientId}{Patient ID}
+#' \item{studyId}{Indicator for Abida et al. 2017 study}
+#' \item{alteration}{Factor, Type of CNA}
+#' \item{uniqueSampleKey}{character COLUMN_DESCRIPTION}
+#' \item{uniquePatientKey}{character COLUMN_DESCRIPTION}}
+#'
+#' @source \url{https://www.cbioportal.org/study/summary?id=prad_mskcc_2017}
+"cna"
+
+
+#' An example IMPACT cBioPortal mutation data set in API format
+#'
+#' This set was created from a random sample of 200 patients from
+#' publicly available prostate cancer data from cBioPortal. The file
+#' is in API format.
+#'
+#' @format A data frame with structural variants from Abida et al. JCO Precis Oncol 2017.
+#' Retrieved from cBioPortal.There are 94 observations and 29 variables.
+#' @format A data frame with 94 rows and 44 variables:
+#' \describe{
+#'   \item{\code{uniqueSampleKey}}{character COLUMN_DESCRIPTION}
+#'   \item{\code{uniquePatientKey}}{character COLUMN_DESCRIPTION}
+#'   \item{\code{molecularProfileId}}{character COLUMN_DESCRIPTION}
+#'   \item{\code{sampleId}}{MSKCC Sample ID}
+#'   \item{\code{patientId}}{Patient ID}
+#'   \item{\code{studyId}}{Indicator for Abida et al. 2017 study}
+#'   \item{\code{site1EntrezGeneId}}{integer COLUMN_DESCRIPTION}
+#'   \item{\code{site1HugoSymbol}}{Character w/ 31 levels,
+#' Column containing HUGO symbols genes for first site of fusion}
+#'   \item{\code{site1EnsemblTranscriptId}}{character COLUMN_DESCRIPTION}
+#'   \item{\code{site1Chromosome}}{character COLUMN_DESCRIPTION}
+#'   \item{\code{site1Position}}{integer COLUMN_DESCRIPTION}
+#'   \item{\code{site1Contig}}{character COLUMN_DESCRIPTION}
+#'   \item{\code{site1Region}}{character COLUMN_DESCRIPTION}
+#'   \item{\code{site1RegionNumber}}{integer COLUMN_DESCRIPTION}
+#'   \item{\code{site1Description}}{character COLUMN_DESCRIPTION}
+#'   \item{\code{site2EntrezGeneId}}{integer COLUMN_DESCRIPTION}
+#'   \item{\code{site2HugoSymbol}}{Character w/ 21 levels,
+#' Column containing all HUGO symbols genes for second site of fusion}
+#'   \item{\code{site2EnsemblTranscriptId}}{character COLUMN_DESCRIPTION}
+#'   \item{\code{site2Chromosome}}{character COLUMN_DESCRIPTION}
+#'   \item{\code{site2Position}}{integer COLUMN_DESCRIPTION}
+#'   \item{\code{site2Contig}}{character COLUMN_DESCRIPTION}
+#'   \item{\code{site2Region}}{character COLUMN_DESCRIPTION}
+#'   \item{\code{site2RegionNumber}}{integer COLUMN_DESCRIPTION}
+#'   \item{\code{site2Description}}{character COLUMN_DESCRIPTION}
+#'   \item{\code{site2EffectOnFrame}}{character COLUMN_DESCRIPTION}
+#'   \item{\code{ncbiBuild}}{character COLUMN_DESCRIPTION}
+#'   \item{\code{dnaSupport}}{Factor, all are `yes` in this data}
+#'   \item{\code{rnaSupport}}{Factor, all are `unknown` in this data}
+#'   \item{\code{normalReadCount}}{integer COLUMN_DESCRIPTION}
+#'   \item{\code{tumorReadCount}}{integer COLUMN_DESCRIPTION}
+#'   \item{\code{normalVariantCount}}{integer COLUMN_DESCRIPTION}
+#'   \item{\code{tumorVariantCount}}{integer COLUMN_DESCRIPTION}
+#'   \item{\code{normalPairedEndReadCount}}{integer COLUMN_DESCRIPTION}
+#'   \item{\code{tumorPairedEndReadCount}}{integer COLUMN_DESCRIPTION}
+#'   \item{\code{normalSplitReadCount}}{integer COLUMN_DESCRIPTION}
+#'   \item{\code{tumorSplitReadCount}}{integer COLUMN_DESCRIPTION}
+#'   \item{\code{annotation}}{character COLUMN_DESCRIPTION}
+#'   \item{\code{breakpointType}}{character COLUMN_DESCRIPTION}
+#'   \item{\code{connectionType}}{character COLUMN_DESCRIPTION}
+#'   \item{\code{eventInfo}}{character COLUMN_DESCRIPTION}
+#'   \item{\code{variantClass}}{character COLUMN_DESCRIPTION}
+#'   \item{\code{length}}{integer COLUMN_DESCRIPTION}
+#'   \item{\code{comments}}{character COLUMN_DESCRIPTION}
+#'   \item{\code{svStatus}}{character COLUMN_DESCRIPTION}
+#'}
+#' @source \url{https://www.cbioportal.org/study/summary?id=prad_mskcc_2017}
+"sv"
+
+
+#' An example IMPACT cBioPortal CNA in wide format
+#'
+#' This set was created from a sample of 20 patients from
+#' publicly available prostate cancer data from cBioPortal (`study_id = "gbc_mskcc_2022"`).
+#'
+#' @format A data frame with copy number alterations (CNA) retrieved from cBioPortal.
+"cna_wide"
+

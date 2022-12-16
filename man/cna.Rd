@@ -3,21 +3,32 @@
 \docType{data}
 \name{cna}
 \alias{cna}
-\title{An example copy number alteration raw calls file from IMPACT cbioPortal dataset}
+\title{An example IMPACT cBioPortal mutation data set in API format}
 \format{
-A data frame with 410 observations with 501 variables
+A data frame with copy number alterations (CNA) from Abida et al.
+JCO Precis Oncol 2017.Retrieved from cBioPortal.There are 475 observations
+and 29 variables.
 \describe{
-}
+\item{hugoGeneSymbol}{Character w/ 324 levels,
+Column containing all HUGO symbols genes}
+\item{entrezGeneId}{Entrez Gene ID}
+\item{molecularProfileId}{Molecular Profile ID for data set}
+\item{sampleId}{MSKCC Sample ID}
+\item{patientId}{Patient ID}
+\item{studyId}{Indicator for Abida et al. 2017 study}
+\item{alteration}{Factor, Type of CNA}
+\item{uniqueSampleKey}{character COLUMN_DESCRIPTION}
+\item{uniquePatientKey}{character COLUMN_DESCRIPTION}}
 }
 \source{
-\url{https://cbioportal.mskcc.org/}
+\url{https://www.cbioportal.org/study/summary?id=prad_mskcc_2017}
 }
 \usage{
 cna
 }
 \description{
-This set contains the publicly available data from cbioPortal copy number alteration
-data. The file is organized with the first column being the gene name
-and all other columns being samples.
+This set was created from a random sample of 200 patients from
+publicly available prostate cancer data from cBioPortal. The file
+is in API format.
 }
 \keyword{datasets}
