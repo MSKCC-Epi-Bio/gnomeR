@@ -8,8 +8,8 @@
 <meta name="description" content="gnomeR">
 <title>Processing Data with {gnomeR} • gnomeR</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.1.3/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.1.3/bootstrap.bundle.min.js"></script><link href="../deps/Atkinson_Hyperlegible-0.4.4/font.css" rel="stylesheet">
+<link href="../deps/bootstrap-5.2.2/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.2.2/bootstrap.bundle.min.js"></script><link href="../deps/Atkinson_Hyperlegible-0.4.4/font.css" rel="stylesheet">
 <!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Processing Data with {gnomeR}">
@@ -152,7 +152,7 @@ variable names.</p>
 MAF variable names and turn them into clean, snakecase names in
 resulting dataframes. For example:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">gnomeR</span><span class="fu">::</span><span class="va"><a href="../reference/mutations.html">mutations</a></span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="fu">gnomeR</span><span class="fu">::</span><span class="va"><a href="../reference/mutations.html">mutations</a></span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt;  [1] "hugoGeneSymbol"        "entrezGeneId"          "uniqueSampleKey"      </span></span>
 <span><span class="co">#&gt;  [4] "uniquePatientKey"      "molecularProfileId"    "sampleId"             </span></span>
 <span><span class="co">#&gt;  [7] "patientId"             "studyId"               "center"               </span></span>
@@ -164,7 +164,7 @@ resulting dataframes. For example:</p>
 <span><span class="co">#&gt; [25] "chr"                   "variantAllele"         "refseqMrnaId"         </span></span>
 <span><span class="co">#&gt; [28] "proteinPosStart"       "proteinPosEnd"</span></span></code></pre></div>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/rename_columns.html">rename_columns</a></span><span class="op">(</span><span class="fu">gnomeR</span><span class="fu">::</span><span class="va"><a href="../reference/mutations.html">mutations</a></span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/rename_columns.html">rename_columns</a></span><span class="op">(</span><span class="fu">gnomeR</span><span class="fu">::</span><span class="va"><a href="../reference/mutations.html">mutations</a></span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt;  [1] "hugo_symbol"            "entrez_gene_id"         "uniqueSampleKey"       </span></span>
 <span><span class="co">#&gt;  [4] "uniquePatientKey"       "molecular_profile_id"   "sample_id"             </span></span>
 <span><span class="co">#&gt;  [7] "patient_id"             "study_id"               "center"                </span></span>
@@ -265,9 +265,9 @@ characters as shown below:</p>
 within functions. You can also use the <code><a href="../reference/recode_cna.html">recode_cna()</a></code>
 function to do it yourself if pivoting is unnecessary:</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">gnomeR</span><span class="fu">::</span><span class="va"><a href="../reference/cna.html">cna</a></span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>alteration_recoded <span class="op">=</span> <span class="fu"><a href="../reference/recode_cna.html">recode_cna</a></span><span class="op">(</span><span class="va">alteration</span><span class="op">)</span><span class="op">)</span><span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">hugoGeneSymbol</span>, <span class="va">sampleId</span>, <span class="va">alteration</span>, <span class="va">alteration_recoded</span><span class="op">)</span><span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<code class="sourceCode R"><span><span class="fu">gnomeR</span><span class="fu">::</span><span class="va"><a href="../reference/cna.html">cna</a></span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>alteration_recoded <span class="op">=</span> <span class="fu"><a href="../reference/recode_cna.html">recode_cna</a></span><span class="op">(</span><span class="va">alteration</span><span class="op">)</span><span class="op">)</span><span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">hugoGeneSymbol</span>, <span class="va">sampleId</span>, <span class="va">alteration</span>, <span class="va">alteration_recoded</span><span class="op">)</span><span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
@@ -397,7 +397,7 @@ of event.</p>
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">all_bin</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] 10 39</span></span>
 <span> </span>
-<span><span class="va">all_bin_summary</span> <span class="op">&lt;-</span> <span class="va">all_bin</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span><span class="va">all_bin_summary</span> <span class="op">&lt;-</span> <span class="va">all_bin</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="../reference/summarize_by_gene.html">summarize_by_gene</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">all_bin_summary</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">6</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">6</span><span class="op">]</span></span>
@@ -459,12 +459,12 @@ samples, the gene is included in the summary table.</p></li>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/tbl_genomic.html">tbl_genomic</a></span><span class="op">(</span>gene_binary <span class="op">=</span> <span class="va">gene_binary</span>, gene_subset <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"PARP1"</span>, <span class="st">"ALK"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<div id="qnvcxihtms" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<div id="opztfnewhl" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>html {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 }
 
-#qnvcxihtms .gt_table {
+#opztfnewhl .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -489,7 +489,7 @@ samples, the gene is included in the summary table.</p></li>
   border-left-color: #D3D3D3;
 }
 
-#qnvcxihtms .gt_heading {
+#opztfnewhl .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -501,12 +501,12 @@ samples, the gene is included in the summary table.</p></li>
   border-right-color: #D3D3D3;
 }
 
-#qnvcxihtms .gt_caption {
+#opztfnewhl .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#qnvcxihtms .gt_title {
+#opztfnewhl .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -518,7 +518,7 @@ samples, the gene is included in the summary table.</p></li>
   border-bottom-width: 0;
 }
 
-#qnvcxihtms .gt_subtitle {
+#opztfnewhl .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -530,13 +530,13 @@ samples, the gene is included in the summary table.</p></li>
   border-top-width: 0;
 }
 
-#qnvcxihtms .gt_bottom_border {
+#opztfnewhl .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#qnvcxihtms .gt_col_headings {
+#opztfnewhl .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -551,7 +551,7 @@ samples, the gene is included in the summary table.</p></li>
   border-right-color: #D3D3D3;
 }
 
-#qnvcxihtms .gt_col_heading {
+#opztfnewhl .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -571,7 +571,7 @@ samples, the gene is included in the summary table.</p></li>
   overflow-x: hidden;
 }
 
-#qnvcxihtms .gt_column_spanner_outer {
+#opztfnewhl .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -583,15 +583,15 @@ samples, the gene is included in the summary table.</p></li>
   padding-right: 4px;
 }
 
-#qnvcxihtms .gt_column_spanner_outer:first-child {
+#opztfnewhl .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#qnvcxihtms .gt_column_spanner_outer:last-child {
+#opztfnewhl .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#qnvcxihtms .gt_column_spanner {
+#opztfnewhl .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -603,7 +603,7 @@ samples, the gene is included in the summary table.</p></li>
   width: 100%;
 }
 
-#qnvcxihtms .gt_group_heading {
+#opztfnewhl .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -629,7 +629,7 @@ samples, the gene is included in the summary table.</p></li>
   text-align: left;
 }
 
-#qnvcxihtms .gt_empty_group_heading {
+#opztfnewhl .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -644,15 +644,15 @@ samples, the gene is included in the summary table.</p></li>
   vertical-align: middle;
 }
 
-#qnvcxihtms .gt_from_md > :first-child {
+#opztfnewhl .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#qnvcxihtms .gt_from_md > :last-child {
+#opztfnewhl .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#qnvcxihtms .gt_row {
+#opztfnewhl .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -671,7 +671,7 @@ samples, the gene is included in the summary table.</p></li>
   overflow-x: hidden;
 }
 
-#qnvcxihtms .gt_stub {
+#opztfnewhl .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -684,7 +684,7 @@ samples, the gene is included in the summary table.</p></li>
   padding-right: 5px;
 }
 
-#qnvcxihtms .gt_stub_row_group {
+#opztfnewhl .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -698,11 +698,11 @@ samples, the gene is included in the summary table.</p></li>
   vertical-align: top;
 }
 
-#qnvcxihtms .gt_row_group_first td {
+#opztfnewhl .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#qnvcxihtms .gt_summary_row {
+#opztfnewhl .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -712,16 +712,16 @@ samples, the gene is included in the summary table.</p></li>
   padding-right: 5px;
 }
 
-#qnvcxihtms .gt_first_summary_row {
+#opztfnewhl .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#qnvcxihtms .gt_first_summary_row.thick {
+#opztfnewhl .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#qnvcxihtms .gt_last_summary_row {
+#opztfnewhl .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -731,7 +731,7 @@ samples, the gene is included in the summary table.</p></li>
   border-bottom-color: #D3D3D3;
 }
 
-#qnvcxihtms .gt_grand_summary_row {
+#opztfnewhl .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -741,7 +741,7 @@ samples, the gene is included in the summary table.</p></li>
   padding-right: 5px;
 }
 
-#qnvcxihtms .gt_first_grand_summary_row {
+#opztfnewhl .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -751,11 +751,11 @@ samples, the gene is included in the summary table.</p></li>
   border-top-color: #D3D3D3;
 }
 
-#qnvcxihtms .gt_striped {
+#opztfnewhl .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#qnvcxihtms .gt_table_body {
+#opztfnewhl .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -764,7 +764,7 @@ samples, the gene is included in the summary table.</p></li>
   border-bottom-color: #D3D3D3;
 }
 
-#qnvcxihtms .gt_footnotes {
+#opztfnewhl .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -778,7 +778,7 @@ samples, the gene is included in the summary table.</p></li>
   border-right-color: #D3D3D3;
 }
 
-#qnvcxihtms .gt_footnote {
+#opztfnewhl .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-left: 4px;
@@ -787,7 +787,7 @@ samples, the gene is included in the summary table.</p></li>
   padding-right: 5px;
 }
 
-#qnvcxihtms .gt_sourcenotes {
+#opztfnewhl .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -801,7 +801,7 @@ samples, the gene is included in the summary table.</p></li>
   border-right-color: #D3D3D3;
 }
 
-#qnvcxihtms .gt_sourcenote {
+#opztfnewhl .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -809,64 +809,64 @@ samples, the gene is included in the summary table.</p></li>
   padding-right: 5px;
 }
 
-#qnvcxihtms .gt_left {
+#opztfnewhl .gt_left {
   text-align: left;
 }
 
-#qnvcxihtms .gt_center {
+#opztfnewhl .gt_center {
   text-align: center;
 }
 
-#qnvcxihtms .gt_right {
+#opztfnewhl .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#qnvcxihtms .gt_font_normal {
+#opztfnewhl .gt_font_normal {
   font-weight: normal;
 }
 
-#qnvcxihtms .gt_font_bold {
+#opztfnewhl .gt_font_bold {
   font-weight: bold;
 }
 
-#qnvcxihtms .gt_font_italic {
+#opztfnewhl .gt_font_italic {
   font-style: italic;
 }
 
-#qnvcxihtms .gt_super {
+#opztfnewhl .gt_super {
   font-size: 65%;
 }
 
-#qnvcxihtms .gt_footnote_marks {
+#opztfnewhl .gt_footnote_marks {
   font-style: italic;
   font-weight: normal;
   font-size: 75%;
   vertical-align: 0.4em;
 }
 
-#qnvcxihtms .gt_asterisk {
+#opztfnewhl .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#qnvcxihtms .gt_indent_1 {
+#opztfnewhl .gt_indent_1 {
   text-indent: 5px;
 }
 
-#qnvcxihtms .gt_indent_2 {
+#opztfnewhl .gt_indent_2 {
   text-indent: 10px;
 }
 
-#qnvcxihtms .gt_indent_3 {
+#opztfnewhl .gt_indent_3 {
   text-indent: 15px;
 }
 
-#qnvcxihtms .gt_indent_4 {
+#opztfnewhl .gt_indent_4 {
   text-indent: 20px;
 }
 
-#qnvcxihtms .gt_indent_5 {
+#opztfnewhl .gt_indent_5 {
   text-indent: 25px;
 }
 </style>
@@ -895,12 +895,12 @@ samples, the gene is included in the summary table.</p></li>
 </div>
 
 tbl_genomic(gene_binary = gene_binary, freq_cutoff = .15)
-<div id="pybyrljong" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<div id="xwazlsfigz" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>html {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 }
 
-#pybyrljong .gt_table {
+#xwazlsfigz .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -925,7 +925,7 @@ tbl_genomic(gene_binary = gene_binary, freq_cutoff = .15)
   border-left-color: #D3D3D3;
 }
 
-#pybyrljong .gt_heading {
+#xwazlsfigz .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -937,12 +937,12 @@ tbl_genomic(gene_binary = gene_binary, freq_cutoff = .15)
   border-right-color: #D3D3D3;
 }
 
-#pybyrljong .gt_caption {
+#xwazlsfigz .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#pybyrljong .gt_title {
+#xwazlsfigz .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -954,7 +954,7 @@ tbl_genomic(gene_binary = gene_binary, freq_cutoff = .15)
   border-bottom-width: 0;
 }
 
-#pybyrljong .gt_subtitle {
+#xwazlsfigz .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -966,13 +966,13 @@ tbl_genomic(gene_binary = gene_binary, freq_cutoff = .15)
   border-top-width: 0;
 }
 
-#pybyrljong .gt_bottom_border {
+#xwazlsfigz .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#pybyrljong .gt_col_headings {
+#xwazlsfigz .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -987,7 +987,7 @@ tbl_genomic(gene_binary = gene_binary, freq_cutoff = .15)
   border-right-color: #D3D3D3;
 }
 
-#pybyrljong .gt_col_heading {
+#xwazlsfigz .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1007,7 +1007,7 @@ tbl_genomic(gene_binary = gene_binary, freq_cutoff = .15)
   overflow-x: hidden;
 }
 
-#pybyrljong .gt_column_spanner_outer {
+#xwazlsfigz .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1019,15 +1019,15 @@ tbl_genomic(gene_binary = gene_binary, freq_cutoff = .15)
   padding-right: 4px;
 }
 
-#pybyrljong .gt_column_spanner_outer:first-child {
+#xwazlsfigz .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#pybyrljong .gt_column_spanner_outer:last-child {
+#xwazlsfigz .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#pybyrljong .gt_column_spanner {
+#xwazlsfigz .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -1039,7 +1039,7 @@ tbl_genomic(gene_binary = gene_binary, freq_cutoff = .15)
   width: 100%;
 }
 
-#pybyrljong .gt_group_heading {
+#xwazlsfigz .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1065,7 +1065,7 @@ tbl_genomic(gene_binary = gene_binary, freq_cutoff = .15)
   text-align: left;
 }
 
-#pybyrljong .gt_empty_group_heading {
+#xwazlsfigz .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -1080,15 +1080,15 @@ tbl_genomic(gene_binary = gene_binary, freq_cutoff = .15)
   vertical-align: middle;
 }
 
-#pybyrljong .gt_from_md > :first-child {
+#xwazlsfigz .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#pybyrljong .gt_from_md > :last-child {
+#xwazlsfigz .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#pybyrljong .gt_row {
+#xwazlsfigz .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1107,7 +1107,7 @@ tbl_genomic(gene_binary = gene_binary, freq_cutoff = .15)
   overflow-x: hidden;
 }
 
-#pybyrljong .gt_stub {
+#xwazlsfigz .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1120,7 +1120,7 @@ tbl_genomic(gene_binary = gene_binary, freq_cutoff = .15)
   padding-right: 5px;
 }
 
-#pybyrljong .gt_stub_row_group {
+#xwazlsfigz .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1134,11 +1134,11 @@ tbl_genomic(gene_binary = gene_binary, freq_cutoff = .15)
   vertical-align: top;
 }
 
-#pybyrljong .gt_row_group_first td {
+#xwazlsfigz .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#pybyrljong .gt_summary_row {
+#xwazlsfigz .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1148,16 +1148,16 @@ tbl_genomic(gene_binary = gene_binary, freq_cutoff = .15)
   padding-right: 5px;
 }
 
-#pybyrljong .gt_first_summary_row {
+#xwazlsfigz .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#pybyrljong .gt_first_summary_row.thick {
+#xwazlsfigz .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#pybyrljong .gt_last_summary_row {
+#xwazlsfigz .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1167,7 +1167,7 @@ tbl_genomic(gene_binary = gene_binary, freq_cutoff = .15)
   border-bottom-color: #D3D3D3;
 }
 
-#pybyrljong .gt_grand_summary_row {
+#xwazlsfigz .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1177,7 +1177,7 @@ tbl_genomic(gene_binary = gene_binary, freq_cutoff = .15)
   padding-right: 5px;
 }
 
-#pybyrljong .gt_first_grand_summary_row {
+#xwazlsfigz .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1187,11 +1187,11 @@ tbl_genomic(gene_binary = gene_binary, freq_cutoff = .15)
   border-top-color: #D3D3D3;
 }
 
-#pybyrljong .gt_striped {
+#xwazlsfigz .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#pybyrljong .gt_table_body {
+#xwazlsfigz .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1200,7 +1200,7 @@ tbl_genomic(gene_binary = gene_binary, freq_cutoff = .15)
   border-bottom-color: #D3D3D3;
 }
 
-#pybyrljong .gt_footnotes {
+#xwazlsfigz .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1214,7 +1214,7 @@ tbl_genomic(gene_binary = gene_binary, freq_cutoff = .15)
   border-right-color: #D3D3D3;
 }
 
-#pybyrljong .gt_footnote {
+#xwazlsfigz .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-left: 4px;
@@ -1223,7 +1223,7 @@ tbl_genomic(gene_binary = gene_binary, freq_cutoff = .15)
   padding-right: 5px;
 }
 
-#pybyrljong .gt_sourcenotes {
+#xwazlsfigz .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1237,7 +1237,7 @@ tbl_genomic(gene_binary = gene_binary, freq_cutoff = .15)
   border-right-color: #D3D3D3;
 }
 
-#pybyrljong .gt_sourcenote {
+#xwazlsfigz .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -1245,64 +1245,64 @@ tbl_genomic(gene_binary = gene_binary, freq_cutoff = .15)
   padding-right: 5px;
 }
 
-#pybyrljong .gt_left {
+#xwazlsfigz .gt_left {
   text-align: left;
 }
 
-#pybyrljong .gt_center {
+#xwazlsfigz .gt_center {
   text-align: center;
 }
 
-#pybyrljong .gt_right {
+#xwazlsfigz .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#pybyrljong .gt_font_normal {
+#xwazlsfigz .gt_font_normal {
   font-weight: normal;
 }
 
-#pybyrljong .gt_font_bold {
+#xwazlsfigz .gt_font_bold {
   font-weight: bold;
 }
 
-#pybyrljong .gt_font_italic {
+#xwazlsfigz .gt_font_italic {
   font-style: italic;
 }
 
-#pybyrljong .gt_super {
+#xwazlsfigz .gt_super {
   font-size: 65%;
 }
 
-#pybyrljong .gt_footnote_marks {
+#xwazlsfigz .gt_footnote_marks {
   font-style: italic;
   font-weight: normal;
   font-size: 75%;
   vertical-align: 0.4em;
 }
 
-#pybyrljong .gt_asterisk {
+#xwazlsfigz .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#pybyrljong .gt_indent_1 {
+#xwazlsfigz .gt_indent_1 {
   text-indent: 5px;
 }
 
-#pybyrljong .gt_indent_2 {
+#xwazlsfigz .gt_indent_2 {
   text-indent: 10px;
 }
 
-#pybyrljong .gt_indent_3 {
+#xwazlsfigz .gt_indent_3 {
   text-indent: 15px;
 }
 
-#pybyrljong .gt_indent_4 {
+#xwazlsfigz .gt_indent_4 {
   text-indent: 20px;
 }
 
-#pybyrljong .gt_indent_5 {
+#xwazlsfigz .gt_indent_5 {
   text-indent: 25px;
 }
 </style>
@@ -1397,7 +1397,7 @@ You can subset to only the pathways if you choose.</p>
 <span><span class="co">#&gt;  [1] "RTK/RAS"    "Nrf2"       "PI3K"       "TGFB"       "p53"       </span></span>
 <span><span class="co">#&gt;  [6] "Wnt"        "Myc"        "Cell cycle" "Hippo"      "Notch"</span></span>
 <span></span>
-<span><span class="va">pathways</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/add_pathways.html">add_pathways</a></span><span class="op">(</span><span class="va">gene_binary</span>, pathways <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Notch"</span>, <span class="st">"p53"</span><span class="op">)</span><span class="op">)</span><span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span><span class="va">pathways</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/add_pathways.html">add_pathways</a></span><span class="op">(</span><span class="va">gene_binary</span>, pathways <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Notch"</span>, <span class="st">"p53"</span><span class="op">)</span><span class="op">)</span><span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/relocate.html" class="external-link">relocate</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">pathway_Notch</span>, <span class="va">pathway_p53</span><span class="op">)</span>, .after <span class="op">=</span> <span class="st">"sample_id"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">pathways</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">6</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">]</span></span>

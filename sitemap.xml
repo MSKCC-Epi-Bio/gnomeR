@@ -115,9 +115,6 @@
     <loc>https://mskcc-epi-bio.github.io/gnomeR/reference/pathways.html</loc>
   </url>
   <url>
-    <loc>https://mskcc-epi-bio.github.io/gnomeR/reference/pipe.html</loc>
-  </url>
-  <url>
     <loc>https://mskcc-epi-bio.github.io/gnomeR/reference/pivot_cna_longer.html</loc>
   </url>
   <url>
@@ -128,6 +125,9 @@
   </url>
   <url>
     <loc>https://mskcc-epi-bio.github.io/gnomeR/reference/recode_cna.html</loc>
+  </url>
+  <url>
+    <loc>https://mskcc-epi-bio.github.io/gnomeR/reference/reexports.html</loc>
   </url>
   <url>
     <loc>https://mskcc-epi-bio.github.io/gnomeR/reference/rename_columns.html</loc>
