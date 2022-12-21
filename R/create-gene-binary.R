@@ -46,7 +46,6 @@
 #' )
 #'
 #' @import dplyr
-#' @import dtplyr
 #' @import stringr
 
 create_gene_binary <- function(samples=NULL,

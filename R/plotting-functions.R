@@ -14,7 +14,6 @@
 #'
 #' @import
 #' dplyr
-#' dtplyr
 #' stringr
 #' ggplot2
 #' GGally
