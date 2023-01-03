@@ -42,9 +42,9 @@ add_pathways <- function(gene_binary,
   switch(!(class(custom_pathways) %in% c("NULL", "character", "list")),
          cli::cli_abort("{.code custom_pathways} must be character vector, or list"))
 
-  # if(!("sample_id" %in% names(gene_binary))) {
-  #   gene_binary <- rownames_to_column(gene_binary, var = "sample_id")
-  # }
+  if(!("sample_id" %in% names(gene_binary))) {
+    cli::cli_abort("{.code sample_id} is not in the data please add the column `sample_id` to the dataset.")
+  }
   pathways_input <- pathways
 
   pathways <- pathways %>%

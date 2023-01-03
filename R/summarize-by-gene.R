@@ -24,8 +24,8 @@ summarize_by_gene <- function(gene_binary) {
     cli::cli_abort("{.code gene_binary} must be a data.frame with sample ids as {.code rownames(gene_binary)}")
   }
 
-  if (!("sample_id" %in% names(gene_binary))) {
-    gene_binary <- tibble::rownames_to_column(gene_binary, var = "sample_id")
+  if(!("sample_id" %in% names(gene_binary))) {
+    cli::cli_abort("{.code sample_id} is not in the data please add the column `sample_id` to the dataset.")
   }
 
 
