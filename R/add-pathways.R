@@ -62,6 +62,8 @@ add_pathways <- function(gene_binary,
   all_cols <- colnames(gene_binary)
   mut_cols <- !(str_detect(all_cols, ".Amp|.Del|.fus|.cna"))
 
+  switch(is.null(custom_pathways) & count_pathways_by == "gene",
+         cli::cli_warn("Annotating the default pathways by gene may be inappropriate."))
 
   # custom_pathways:  can be list or vector------------------------------------
   if (!is.null(custom_pathways)) {
