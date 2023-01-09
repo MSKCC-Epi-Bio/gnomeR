@@ -61,19 +61,15 @@ sanitize_mutation_input <- function(mutation, include_silent, ...)  {
   }
 
   # Variant_Type ---
-  if(!("variant_type" %in% column_names) ) {
-
-    mutation <- mutation %>%
-      purrr::when(
-        ("reference_allele" %in%  column_names) & ("tumor_seq_allele2" %in% column_names) ~
-
-          mutation %>%
+    if (!("variant_type" %in% column_names)) {
+      if (("reference_allele" %in% column_names) & ("tumor_seq_allele2" %in% column_names)) {
+        mutation %>%
           mutate(
             reference_allele = as.character(.data$reference_allele),
             tumor_seq_allele2 = as.character(.data$tumor_seq_allele2),
             variant_type = case_when(
-              .data$reference_allele %in% c("A","T","C","G") &
-                .data$tumor_seq_allele2 %in% c("A","T","C","G") ~ "SNP",
+              .data$reference_allele %in% c("A", "T", "C", "G") &
+                .data$tumor_seq_allele2 %in% c("A", "T", "C", "G") ~ "SNP",
               nchar(.data$tumor_seq_allele2) < nchar(.data$reference_allele) |
                 .data$tumor_seq_allele2 == "-" ~ "DEL",
               .data$reference_allele == "-" |
@@ -81,17 +77,20 @@ sanitize_mutation_input <- function(mutation, include_silent, ...)  {
               nchar(.data$reference_allele) == 2 & nchar(.data$tumor_seq_allele2) == 2 ~ "DNP",
               nchar(.data$reference_allele) == 3 & nchar(.data$tumor_seq_allele2) == 3 ~ "TNP",
               nchar(.data$reference_allele) > 3 & nchar(.data$tumor_seq_allele2) == nchar(.data$reference_allele) ~ "ONP",
-              TRUE ~ "Undefined")),
+              TRUE ~ "Undefined"
+            )
+          )
 
+        cli::cli_warn("Column {.field variant_type} is missing from your data. We inferred variant types using {.field reference_allele} and {.field tumor_seq_allele2} columns")
+      } else {
         TRUE ~ cli::cli_abort("Column {.field variant_type} is missing from your data and {.field reference_allele} and {.field tumor_seq_allele2}
                               columns were not available from which to infer variant type.
                               To proceed, add a column specifying {.field variant_type} (e.g. {.code mutate(<your-mutation-df>, variant_type = 'SNP')}")
-      )
+      }
+    }
 
 
-    cli::cli_warn("Column {.field variant_type} is missing from your data. We inferred variant types using {.field reference_allele} and {.field tumor_seq_allele2} columns")
 
-  }
   return(mutation)
 
 

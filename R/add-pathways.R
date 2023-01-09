@@ -48,8 +48,8 @@ add_pathways <- function(gene_binary,
   pathways_input <- pathways
 
   pathways <- pathways %>%
-    purrr::when(is.null(.) ~ NULL,
-                TRUE ~ match.arg(., all_path_names, several.ok = TRUE))
+    switch(as.numeric(!is.null(pathways)) + 1, NULL,
+           match.arg(pathways, all_path_names, several.ok = TRUE))
 
 
   not_valid <- pathways_input[!(pathways_input %in% all_path_names)]
@@ -157,11 +157,10 @@ add_pathways <- function(gene_binary,
     colnames(gene_binary) <- all_cols
   }
 
-  path_out <- path_out %>%
-    purrr::when(
-      bind_pathways ~ bind_cols(gene_binary, .),
-      TRUE ~ list("gene_binary" = gene_binary,
-                  "pathways" = path_out))
+  path_out <- switch(as.numeric(bind_pathways)+1,
+                     list("gene_binary" = gene_binary,
+                          "pathways" = path_out),
+                     bind_cols(gene_binary, path_out))
 
 
   return(path_out)
@@ -191,14 +190,17 @@ add_pathways <- function(gene_binary,
 .sum_alts_in_pathway <- function(gene_binary, pathway_list_item,
                                  pathway_name,
                                  count_pathways_by) {
-  path_alt <- gene_binary %>%
-    purrr::when(
-      count_pathways_by == "alteration" ~
-        select(., any_of(unlist(pathway_list_item, use.names=FALSE))),
-      count_pathways_by == "gene" ~
-        select(., contains(unlist(pathway_list_item, use.names=FALSE)))) %>%
-    mutate(sum = rowSums(., na.rm = TRUE)) %>%
-    transmute('pathway_{pathway_name}' := if_else(sum >= 1, 1, 0))
+  path_alt <- switch(count_pathways_by,
+                     "alteration" = {
+                       gene_binary %>%
+                         select(any_of(unlist(pathway_list_item, use.names=FALSE)))
+                     },
+                     "gene" = {
+                       gene_binary %>%
+                         select(contains(unlist(pathway_list_item, use.names=FALSE))) %>%
+                         mutate(sum = rowSums(., na.rm = TRUE)) %>%
+                         transmute('pathway_{pathway_name}' := if_else(sum >= 1, 1, 0))
+                     })
 
   return(path_alt)
 }

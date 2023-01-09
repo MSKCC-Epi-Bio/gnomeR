@@ -98,31 +98,33 @@ create_gene_binary <- function(samples=NULL,
 
   specify_panel <-
     switch(class(specify_panel),
-         "character" = {
+           "character" = {
 
-           choices_arg = c("no", "impact", "IMPACT", gene_panels$gene_panel)
-           match.arg(specify_panel, choices = choices_arg)
-         },
-
-         "data.frame" = {
-
-           # check for correct column names
-           if(!("sample_id" %in% names(specify_panel)) | !("panel_id" %in% names(specify_panel))) {
-
-              cli::cli_abort(c("Dataframe passed to {.var specify_panel} must have columns for ",
-              "{.code sample_id} and {.code panel_id}."))
-           }
-
-           specify_panel %>%
-             purrr::when(
-               any(is.na(specify_panel$panel_id)) ~ cli::cli_abort("Some {.field panel_id} values in {.code sample_panel_pair} df are {.code NA}. Please explicitely indicate {.code no} for those samples instead if you wish to skip annotating these."),
-               length(setdiff(c(specify_panel$panel_id), c(gene_panels$gene_panel, "no"))) > 0 ~
-                           cli::cli_abort("Panels not known: {.val {setdiff(c(specify_panel$panel_id), c(gene_panels$gene_panel, 'no'))}}. See {.code  gnomeR::gene_panels} for known panels, or skip annotation with {.code specify_panel = 'no'} or indicating {.code 'no'} for those samples in {.field panel_id} column of sample_id-panel_id pair data frame"),
-                         TRUE ~ .)
+             choices_arg = c("no", "impact", "IMPACT", gene_panels$gene_panel)
+             match.arg(specify_panel, choices = choices_arg)
            },
 
+           "data.frame" = {
+
+             # check for correct column names
+             if(!("sample_id" %in% names(specify_panel)) | !("panel_id" %in% names(specify_panel))) {
+
+               cli::cli_abort(c("Dataframe passed to {.var specify_panel} must have columns for ",
+                                "{.code sample_id} and {.code panel_id}."))
+             }
+
+             if(any(is.na(specify_panel$panel_id))){
+               cli::cli_abort("Some {.field panel_id} values in {.code sample_panel_pair} df are {.code NA}. Please explicitely indicate {.code no} for those samples instead if you wish to skip annotating these.")
+             }
+
+             if(length(setdiff(c(specify_panel$panel_id), c(gene_panels$gene_panel, "no"))) > 0){
+               cli::cli_abort("Panels not known: {.val {setdiff(c(specify_panel$panel_id), c(gene_panels$gene_panel, 'no'))}}. See {.code  gnomeR::gene_panels} for known panels, or skip annotation with {.code specify_panel = 'no'} or indicating {.code 'no'} for those samples in {.field panel_id} column of sample_id-panel_id pair data frame")
+             }},
+
            cli::cli_abort("{.code specify_panel} must be a character vector of length 1 or a data frame.")
-         )
+
+    )
+
 
 
   # * Mutation  checks  --------
@@ -299,37 +301,30 @@ create_gene_binary <- function(samples=NULL,
 
 
   # apply filters --------------
- mutation <- mutation %>%
-   purrr::when(
-     snp_only ~ filter(., .data$variant_type == "SNP"),
-     ~.
-   ) %>%
-   purrr::when(
-     !include_silent ~ {filter(., .data$variant_classification != "Silent" |
-                                is.na(.data$variant_classification))},
-     ~.
-   ) %>%
-   purrr::when(
-     mut_type == "all" ~ .,
-     mut_type == "omit_germline" ~ {
-       filter(., .data$mutation_status != "GERMLINE" |
-         .data$mutation_status != "germline" | is.na(.data$mutation_status))
+  mutation <- switch(mut_type,
+                     "all" = {
+                       mutation
+                     },
+                     "omit_germline" = {
+                       mutation %>%
+                         filter(.data$mutation_status != "GERMLINE" |
+                                  .data$mutation_status != "germline" | is.na(.data$mutation_status))}
 
-       blank_muts <- mutation %>%
-         filter(is.na(.data$mutation_status) | .$mutation_status == "") %>%
-         nrow()
+                     ,
+                     "somatic_only" = {
+                       mutation %>%
+                         filter(.data$mutation_status == "SOMATIC" |
+                                  .data$mutation_status == "somatic")
+                     },
+                     "germline_only" = {
+                       mutation %>% filter(.data$mutation_status == "GERMLINE" |
+                                             .data$mutation_status == "germline")
+                     },
+                     {
+                       mutation
+                     }
+  )
 
-       if ((blank_muts > 0)) {
-         cli::cli_warn("{(blank_muts)} mutations marked as blank were retained in the resulting binary matrix.")
-       }
-       return(.)
-     },
-     mut_type == "somatic_only" ~ filter(., .data$mutation_status == "SOMATIC" |
-       .data$mutation_status == "somatic"),
-     mut_type == "germline_only" ~ filter(., .data$mutation_status == "GERMLINE" |
-       .data$mutation_status == "germline"),
-     TRUE ~ .
-   )
 
 
   mut_bm <- .process_binary(data = mutation, samples = samples, type = "mut")
