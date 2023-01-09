@@ -85,7 +85,6 @@ create_gene_binary <- function(samples=NULL,
     cli::cli_abort("{.code {not_df}} must be a data.frame")
   }
 
-
   # * mut_type-----
   mut_type <- match.arg(mut_type)
 
@@ -119,7 +118,8 @@ create_gene_binary <- function(samples=NULL,
 
              if(length(setdiff(c(specify_panel$panel_id), c(gene_panels$gene_panel, "no"))) > 0){
                cli::cli_abort("Panels not known: {.val {setdiff(c(specify_panel$panel_id), c(gene_panels$gene_panel, 'no'))}}. See {.code  gnomeR::gene_panels} for known panels, or skip annotation with {.code specify_panel = 'no'} or indicating {.code 'no'} for those samples in {.field panel_id} column of sample_id-panel_id pair data frame")
-             }},
+             }
+             specify_panel},
 
            cli::cli_abort("{.code specify_panel} must be a character vector of length 1 or a data frame.")
 
@@ -308,9 +308,8 @@ create_gene_binary <- function(samples=NULL,
                      "omit_germline" = {
                        mutation %>%
                          filter(.data$mutation_status != "GERMLINE" |
-                                  .data$mutation_status != "germline" | is.na(.data$mutation_status))}
-
-                     ,
+                                  .data$mutation_status != "germline" | is.na(.data$mutation_status))
+                     },
                      "somatic_only" = {
                        mutation %>%
                          filter(.data$mutation_status == "SOMATIC" |
@@ -322,8 +321,7 @@ create_gene_binary <- function(samples=NULL,
                      },
                      {
                        mutation
-                     }
-  )
+                     })
 
 
 

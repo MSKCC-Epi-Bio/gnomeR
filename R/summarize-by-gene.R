@@ -20,13 +20,17 @@
 #'   summarize_by_gene()
 #'
 summarize_by_gene <- function(gene_binary) {
-  if (!is.data.frame(gene_binary)) {
-    cli::cli_abort("{.code gene_binary} must be a data.frame with sample ids as {.code rownames(gene_binary)}")
-  }
 
-  if(!("sample_id" %in% names(gene_binary))) {
+  if(!("sample_id" %in% colnames(gene_binary))) {
     cli::cli_abort("{.code sample_id} is not in the data please add the column `sample_id` to the dataset.")
   }
+
+  # don't think we need this anymore
+  # if ("tbl" %in% class(gene_binary)) {
+  #   cli::cli_message("{.code gene_binary} must be a data.frame with sample ids as {.code rownames(gene_binary)}")
+  #
+  # }
+
 
 
   simp_gene_binary <- gene_binary %>%
@@ -45,7 +49,7 @@ summarize_by_gene <- function(gene_binary) {
       sum > 1 ~ 1,
       TRUE ~ .data$sum
     )) %>%
-    select("sample_id", "name2", "simpl_val") %>%
+    select(all_of(c("sample_id", "name2", "simpl_val"))) %>%
     distinct() %>%
     ungroup() %>%
     tidyr::pivot_wider(

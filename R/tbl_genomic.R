@@ -104,15 +104,18 @@ tbl_genomic <- function(gene_binary,
       cli::cli_warn("The following of {.code gene_subset} are not in your data: {.code { .[!(. %in% colnames(gene_binary))]}}")
 
       gene_subset <- gene_subset[(gene_subset %in% colnames(gene_binary))]}
+
+    if(freq_cutoff > 0){
+      cli::cli_inform("You've supplied both {.code gene_subset} and {.code freq_cutoff}.
+                      {.code freq_cutoff} parameter will be ignored")
+    }
+
   }else{
     gene_subset <- gene_subset
     }
 
 
-    if(freq_cutoff > 0){
-      cli::cli_inform("You've supplied both {.code gene_subset} and {.code freq_cutoff}.
-                      {.code freq_cutoff} parameter will be ignored")
-  }
+
 
 
   gene_subset <- switch(!is.null(gene_subset),
@@ -126,20 +129,17 @@ tbl_genomic <- function(gene_binary,
   )
 
   # Calc Gene Frequencies (if gene_subset is NULL) --------------------------
+
+  if(freq_cutoff_by_gene){
+    gene_binary <-gene_binary %>%
+      summarize_by_gene()
+  }
+
   gene_subset <- gene_subset %||% {
     gene_binary %>%
-      select(-all_of(by))
-    # if freq should be calc at gene level- simplify matrix first
-    # todo- if simplify matrix already called- avoid this!
-
-    gene_subset <-
-      case_when(freq_cutoff_by_gene ~ gene_subset %>%
-                  summarize_by_gene(),
-                TRUE ~ gene_subset)
-
-    gene_subset <-
+      select(-all_of(by))%>%
       ungroup() %>%
-      tidyr::pivot_longer(.data$sample_id) %>%
+      tidyr::pivot_longer(!.data$sample_id) %>%
       distinct() %>%
       group_by(.data$name) %>%
       summarise(
