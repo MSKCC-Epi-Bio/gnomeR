@@ -102,7 +102,7 @@ test_that("check freq cutoff", {
     group_by(name1) %>%
     mutate(s = sum(sum_g)) %>%
     filter(s >= .025) %>%
-    pull(name) %>% unique()
+    pull(name1) %>% unique()
 
   expect_equal(sort(by_alt$table_body$variable), sort(over_cut))
 

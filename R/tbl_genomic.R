@@ -158,14 +158,16 @@ tbl_genomic <- function(gene_binary,
   }
 
   # if freq cutoff by gene
-  gene_subset <- switch(freq_cutoff_by_gene, c(gene_subset,
-        paste0(gene_subset, ".Amp"),
-        paste0(gene_subset, ".Del"),
-        paste0(gene_subset, ".fus"),
-        paste0(gene_subset, ".cna")
-      ),
-      TRUE ~ .
-    )
+
+  # HF commented out: seems like it was already done and was throwing errors
+  # gene_subset <- switch(freq_cutoff_by_gene, c(gene_subset,
+  #       paste0(gene_subset, ".Amp"),
+  #       paste0(gene_subset, ".Del"),
+  #       paste0(gene_subset, ".fus"),
+  #       paste0(gene_subset, ".cna")
+  #     ),
+  #     TRUE ~ .
+  #   )
 
 
   # Select Genes and Make Table-----------------------------------------------
@@ -174,9 +176,14 @@ tbl_genomic <- function(gene_binary,
     select(all_of(by), any_of(c(gene_subset)))
 
 
+  if(!is.null(by)){
+     table_data %>%
+    gtsummary::tbl_summary(by = by, ...)
+  } else {
+    table_data %>%
+      gtsummary::tbl_summary(...)
+  }
 
-   table_data %>%
-    gtsummary::tbl_summary(by = by,...)
 
   # should we split results by MUT/CNA/Fusion? if not at least have to fix arranging of  these
   # also its confusing when freq_by_gene is TRUE and you see low freq alts in table
