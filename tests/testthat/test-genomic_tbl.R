@@ -4,7 +4,7 @@ test_that("works with basic input", {
   samples <- as.character(unique(mutations$sampleId))[1:10]
   gene_binary <- create_gene_binary(samples = samples, mutation = mutations, cna = cna,
                           mut_type = "somatic_only", snp_only = FALSE) %>%
-    select("FGFR1.Amp", "SOX17.Amp", "MYC.Amp", "MYC")
+    select("FGFR1.Amp", "SOX17.Amp", "MYC.Amp", "MYC", "sample_id")
 
   expect_no_error(tbl_genomic(gene_binary = gene_binary, freq_cutoff = 0))
 })
@@ -15,7 +15,7 @@ test_that("pass both gene subset and freq", {
   gene_binary <- create_gene_binary(samples = samples,
                                     mutation = gnomeR::mutations, cna = gnomeR::cna,
                                  mut_type = "somatic_only", snp_only = FALSE) %>%
-    select("FGFR1.Amp", "SOX17.Amp", "MYC.Amp", "MYC")
+    select("FGFR1.Amp", "SOX17.Amp", "MYC.Amp", "MYC", "sample_id")
 
   expect_message(tbl_genomic(gene_binary = gene_binary,
                                    gene_subset = "MYC",
@@ -72,7 +72,7 @@ test_that("check freq cutoff", {
   samples <- as.character(unique(mutations$sampleId))[1:10]
   gene_binary <- create_gene_binary(samples = samples, mutation = mutations, cna = cna,
                                  mut_type = "somatic_only", snp_only = FALSE)  %>%
-    select("FGFR1.Amp", "SOX17.Amp", "MYC.Amp", "MYC")
+    select("FGFR1.Amp", "SOX17.Amp", "MYC.Amp", "MYC", "sample_id")
 
 
   # freq_cutoff_by_gene = FALSE
@@ -81,6 +81,7 @@ test_that("check freq cutoff", {
                                    freq_cutoff_by_gene = FALSE), NA)
 
   sums <- gene_binary %>%
+    select(-'sample_id') %>%
     tidyr::pivot_longer(everything()) %>%
     group_by(name) %>%
     summarise(sum_g = sum(value, na.rm = TRUE)/nrow(gene_binary))
@@ -114,7 +115,7 @@ test_that("test by variable not in data", {
   gene_binary <- create_gene_binary(samples = samples, mutation = mutations, cna = cna,
                                  mut_type = "somatic_only",
                                  snp_only = FALSE) %>%
-    select("FGFR1.Amp", "SOX17.Amp", "MYC.Amp", "MYC")
+    select("FGFR1.Amp", "SOX17.Amp", "MYC.Amp", "MYC", "sample_id")
 
   expect_error(tbl_genomic(gene_binary = gene_binary,
                       freq_cutoff = .025,
@@ -127,7 +128,7 @@ test_that("test by variable bare or string", {
   gene_binary <- create_gene_binary(samples = samples, mutation = mutations, cna = cna,
                                  mut_type = "somatic_only",
                                  snp_only = FALSE) %>%
-    select("FGFR1.Amp", "SOX17.Amp", "MYC.Amp", "MYC")
+    select("FGFR1.Amp", "SOX17.Amp", "MYC.Amp", "MYC", "sample_id")
 
   gene_binary <- gene_binary %>%
     mutate(sex = sample(x = c("M", "F"),
@@ -153,7 +154,7 @@ test_that("test ... to tbl_summary", {
   gene_binary <- create_gene_binary(samples = samples, mutation = mutations, cna = cna,
                                     mut_type = "somatic_only",
                                     snp_only = FALSE) %>%
-    select("FGFR1.Amp", "SOX17.Amp", "MYC.Amp", "MYC")
+    select("FGFR1.Amp", "SOX17.Amp", "MYC.Amp", "MYC", "sample_id")
 
   expect_error(tbl_genomic(gene_binary = gene_binary,
                            statistic = list(all_categorical() ~"{n}")), "*")
@@ -168,7 +169,7 @@ test_that("you need to load gtsummary for ...",{
   gene_binary <- create_gene_binary(samples = samples, mutation = mutations, cna = cna,
                                     mut_type = "somatic_only",
                                     snp_only = FALSE) %>%
-    select("FGFR1.Amp", "SOX17.Amp", "MYC.Amp", "MYC")
+    select("FGFR1.Amp", "SOX17.Amp", "MYC.Amp", "MYC", "sample_id")
 
   #need to load package for `...`
   expect_no_error(tbl_genomic(gene_binary = gene_binary,
@@ -182,7 +183,7 @@ test_that("you can pass gtsummary functions to tbl_genomic()",{
   samples <- as.character(unique(mutations$sampleId))[1:10]
   gene_binary <- create_gene_binary(samples = samples, mutation = mutations, cna = cna,
                                     mut_type = "somatic_only", snp_only = FALSE) %>%
-    select(SMAD2, FGFR1.Amp, AKT1, SOX17.Amp, MYC, MYC.Amp)
+    select('SMAD2', 'FGFR1.Amp', 'AKT1', 'SOX17.Amp', 'MYC', 'MYC.Amp', 'sample_id')
 
 
 

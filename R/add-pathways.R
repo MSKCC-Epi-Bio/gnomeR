@@ -42,9 +42,8 @@ add_pathways <- function(gene_binary,
   switch(!(class(custom_pathways) %in% c("NULL", "character", "list")),
          cli::cli_abort("{.code custom_pathways} must be character vector, or list"))
 
-  # if(!("sample_id" %in% names(gene_binary))) {
-  #   gene_binary <- rownames_to_column(gene_binary, var = "sample_id")
-  # }
+  .check_required_cols(gene_binary, "sample_id", "gene_binary")
+
   pathways_input <- pathways
 
   pathways <- pathways %>%

@@ -1,6 +1,7 @@
 # gnomeR (development version)
 
 * Updated color palette functionality
+* Column with sample ID now returned in data frame resulting from `create_gene_binary()`
 
 # gnomeR 1.1.1
 
