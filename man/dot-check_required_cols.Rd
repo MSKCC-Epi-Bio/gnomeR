@@ -21,12 +21,4 @@ If it does have required columns, nothing will be returned
 \description{
 Check a Data Frame for Required Columns
 }
-\examples{
-\dontrun{
-# will return error
-.check_required_cols(gnomeR::mutations, "hugo_symbol", "mutations")
-}
-
-# no error
-.check_required_cols(rename_columns(gnomeR::mutations), "hugo_symbol")
-}
+\keyword{internal}

@@ -178,20 +178,9 @@ recode_cna <- function(alteration_vector){
 #' @param required_cols A character specifying names of columns to check
 #' @param data_name Optionally specify how the data set should be called in error message.
 #' Default is NULL and will call it a generic name.
-#'
 #' @return If data set doesn't have required columns it will return an error message.
 #' If it does have required columns, nothing will be returned
-#'
-#' @export
-#'
-#' @examples
-#' \dontrun{
-#' # will return error
-#' .check_required_cols(gnomeR::mutations, "hugo_symbol", "mutations")
-#' }
-#'
-#' # no error
-#' .check_required_cols(rename_columns(gnomeR::mutations), "hugo_symbol")
+#' @keywords internal
 
 .check_required_cols <- function(data, required_cols, data_name = NULL) {
 
