@@ -62,9 +62,7 @@ tbl_genomic <- function(gene_binary,
     stop("`gene_binary=` argument must be a tibble or data frame.", call. = FALSE)
   }
 
-  if(!("sample_id" %in% names(gene_binary))) {
-    cli::cli_abort("{.code sample_id} is not in the data please add the column `sample_id` to the dataset.")
-  }
+  .check_required_cols(gene_binary, "sample_id", "gene_binary")
 
   if (!is.null(freq_cutoff) && (freq_cutoff < 0 || freq_cutoff > 1)) {
     cli::cli_abort("Please select a {.code freq_cutoff} value between {.code 0} and {.code 1}")
