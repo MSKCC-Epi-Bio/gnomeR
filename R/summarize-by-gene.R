@@ -21,17 +21,11 @@
 #'
 summarize_by_gene <- function(gene_binary) {
 
-  if(!("sample_id" %in% colnames(gene_binary))) {
-    cli::cli_abort("{.code sample_id} is not in the data please add the column `sample_id` to the dataset.")
+  if (!is.data.frame(gene_binary)) {
+    cli::cli_abort("{.code gene_binary} must be a data.frame with sample ids as {.code rownames(gene_binary)}")
   }
 
-  # don't think we need this anymore
-  # if ("tbl" %in% class(gene_binary)) {
-  #   cli::cli_message("{.code gene_binary} must be a data.frame with sample ids as {.code rownames(gene_binary)}")
-  #
-  # }
-
-
+  .check_required_cols(gene_binary, "sample_id", "gene_binary")
 
   simp_gene_binary <- gene_binary %>%
     ungroup() %>%
