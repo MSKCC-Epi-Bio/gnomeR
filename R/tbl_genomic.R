@@ -87,49 +87,37 @@ tbl_genomic <- function(gene_binary,
 
     switch(!is.character(gene_subset),
            cli::cli_abort("Please supply a character vector for {.code gene_subset}"))
-
     switch(length(gene_subset[(gene_subset %in% colnames(gene_binary))]) == 0,
            cli::cli_abort("No genes specified in {.code gene_subset} are in your gene_binary"))
-
     switch((as.numeric(table(str_detect(gene_subset, ".Amp|.Del|.fus|.cna"))))[2] > 0, cli::cli_abort(
       "Detected one of the following in {.code gene_subset}: {.code '.Amp|.Del|.fus|.cna'} You may
           only pass gene names (eg. 'TP53'). To only include specific alterations, consider {.code dplyr::select(df, <alterations>)}
-          before passing to {.code tbl_genomic()}"
-    ))
+          before passing to {.code tbl_genomic()}"))
 
     # return only genes found in your data
-    if(length(gene_subset[!(gene_subset %in% colnames(gene_binary))]) > 0){
+    if(length(gene_subset[!(gene_subset %in% colnames(gene_binary))]) > 0) {
       cli::cli_warn("The following of {.code gene_subset} are not in your data: {.code { .[!(. %in% colnames(gene_binary))]}}")
-
       gene_subset <- gene_subset[(gene_subset %in% colnames(gene_binary))]}
 
-    if(freq_cutoff > 0){
+    # check gene frequency
+    if(!is.null(freq_cutoff)) {
       cli::cli_inform("You've supplied both {.code gene_subset} and {.code freq_cutoff}.
-                      {.code freq_cutoff} parameter will be ignored")
-    }
+                      {.code freq_cutoff} parameter will be ignored")}
 
-  }else{
-    gene_subset <- gene_subset
-    }
-
-
-
-
-
-  gene_subset <- switch(!is.null(gene_subset),
-    c(
+    # add suffix on gene subset
+    gene_subset <- c(
       gene_subset,
       paste0(gene_subset, ".Amp"),
       paste0(gene_subset, ".Del"),
       paste0(gene_subset, ".fus"),
-      paste0(gene_subset, ".cna")
-    )
-  )
+      paste0(gene_subset, ".cna"))
+    }
+
 
   # Calc Gene Frequencies (if gene_subset is NULL) --------------------------
 
   if(freq_cutoff_by_gene){
-    gene_binary <-gene_binary %>%
+    gene_binary <- gene_binary %>%
       summarize_by_gene()
   }
 
@@ -155,33 +143,14 @@ tbl_genomic <- function(gene_binary,
     cli::cli_abort("No genes in data set match your filter criteria (see {.code freq_cutoff})")
   }
 
-  # if freq cutoff by gene
-
-  # HF commented out: seems like it was already done and was throwing errors
-  # gene_subset <- switch(freq_cutoff_by_gene, c(gene_subset,
-  #       paste0(gene_subset, ".Amp"),
-  #       paste0(gene_subset, ".Del"),
-  #       paste0(gene_subset, ".fus"),
-  #       paste0(gene_subset, ".cna")
-  #     ),
-  #     TRUE ~ .
-  #   )
-
 
   # Select Genes and Make Table-----------------------------------------------
 
   table_data <- gene_binary %>%
     select(all_of(by), any_of(c(gene_subset)))
 
-
-  if(!is.null(by)){
-     table_data %>%
-    gtsummary::tbl_summary(by = by, ...)
-  } else {
-    table_data %>%
-      gtsummary::tbl_summary(...)
-  }
-
+  table_data %>%
+    gtsummary::tbl_summary(by = by,...)
 
   # should we split results by MUT/CNA/Fusion? if not at least have to fix arranging of  these
   # also its confusing when freq_by_gene is TRUE and you see low freq alts in table
