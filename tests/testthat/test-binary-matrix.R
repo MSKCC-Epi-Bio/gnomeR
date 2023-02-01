@@ -98,7 +98,7 @@ test_that("test inputting mut/fusion/cna args can leads to a data.frame output",
   #Can we obtaine correct result format when either mut/fusion/cna inputted
   expect_error(create_gene_binary())
 
-  expect_true( create_gene_binary( mutation = gnomeR::mutations) %>% is.data.frame())
+  expect_true(create_gene_binary( mutation = gnomeR::mutations) %>% is.data.frame())
 
   expect_true( create_gene_binary( fusion = gnomeR::sv) %>% is.data.frame())
 
@@ -151,7 +151,7 @@ test_that("test inclusion of NAs in mut_type ", {
   mut2$mutationStatus[11:15]<-""
 
   # NA included by default (germline_omitted)
-  # expect_warning(see <- create_gene_binary(mutation = mut2, specify_panel = "no"))
+  see <- create_gene_binary(mutation = mut2, specify_panel = "no")
   see <- create_gene_binary(mutation = mut2, specify_panel = "no")
   check <-see$TP53[which(see$sample_id=="P-0001128-T01-IM3")]
   expect_equal(check, 1)

@@ -39,28 +39,29 @@ add_pathways <- function(gene_binary,
 
   # check arguments -----------------------------------------------------------
 
+  # custom pathways
   switch(!(class(custom_pathways) %in% c("NULL", "character", "list")),
          cli::cli_abort("{.code custom_pathways} must be character vector, or list"))
 
   .check_required_cols(gene_binary, "sample_id", "gene_binary")
 
+  # user-specified pathways
   pathways_input <- pathways
 
-  pathways <- pathways %>%
-    switch(as.numeric(!is.null(pathways)) + 1, NULL,
-           match.arg(pathways, all_path_names, several.ok = TRUE))
-
+  if(!is.null(pathways)) {
+    pathways <- match.arg(pathways, all_path_names, several.ok = TRUE)
+  }
 
   not_valid <- pathways_input[!(pathways_input %in% all_path_names)]
 
   switch(length(not_valid) > 0,
          cli::cli_warn("Ignoring {.code {not_valid}}: not a known pathway. See {.code gnomeR::pathways}"))
 
+  # count pathways by
   count_pathways_by <- match.arg(count_pathways_by, c("alteration", "gene"))
 
   all_cols <- colnames(gene_binary)
   mut_cols <- !(str_detect(all_cols, ".Amp|.Del|.fus|.cna"))
-
 
   # custom_pathways:  can be list or vector------------------------------------
   if (!is.null(custom_pathways)) {
@@ -156,11 +157,9 @@ add_pathways <- function(gene_binary,
     colnames(gene_binary) <- all_cols
   }
 
-  path_out <- switch(as.numeric(bind_pathways)+1,
-                     list("gene_binary" = gene_binary,
-                          "pathways" = path_out),
-                     bind_cols(gene_binary, path_out))
-
+  path_out <- gene_binary %>%
+    select("sample_id") %>%
+    bind_cols(path_out)
 
   return(path_out)
 }
@@ -196,10 +195,10 @@ add_pathways <- function(gene_binary,
                      },
                      "gene" = {
                        gene_binary %>%
-                         select(contains(unlist(pathway_list_item, use.names=FALSE))) %>%
-                         mutate(sum = rowSums(., na.rm = TRUE)) %>%
-                         transmute('pathway_{pathway_name}' := if_else(sum >= 1, 1, 0))
-                     })
+                         select(contains(unlist(pathway_list_item, use.names=FALSE)))
+                     }) %>%
+    mutate(sum = rowSums(., na.rm = TRUE)) %>%
+    transmute('pathway_{pathway_name}' := if_else(sum >= 1, 1, 0))
 
   return(path_alt)
 }
