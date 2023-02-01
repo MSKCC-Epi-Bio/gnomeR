@@ -39,28 +39,29 @@ add_pathways <- function(gene_binary,
 
   # check arguments -----------------------------------------------------------
 
+  # custom pathways
   switch(!(class(custom_pathways) %in% c("NULL", "character", "list")),
          cli::cli_abort("{.code custom_pathways} must be character vector, or list"))
 
   .check_required_cols(gene_binary, "sample_id", "gene_binary")
 
+  # user-specified pathways
   pathways_input <- pathways
 
-  pathways <- pathways %>%
-    purrr::when(is.null(.) ~ NULL,
-                TRUE ~ match.arg(., all_path_names, several.ok = TRUE))
-
+  if(!is.null(pathways)) {
+    pathways <- match.arg(pathways, all_path_names, several.ok = TRUE)
+  }
 
   not_valid <- pathways_input[!(pathways_input %in% all_path_names)]
 
   switch(length(not_valid) > 0,
          cli::cli_warn("Ignoring {.code {not_valid}}: not a known pathway. See {.code gnomeR::pathways}"))
 
+  # count pathways by
   count_pathways_by <- match.arg(count_pathways_by, c("alteration", "gene"))
 
   all_cols <- colnames(gene_binary)
   mut_cols <- !(str_detect(all_cols, ".Amp|.Del|.fus|.cna"))
-
 
   # custom_pathways:  can be list or vector------------------------------------
   if (!is.null(custom_pathways)) {
@@ -156,12 +157,9 @@ add_pathways <- function(gene_binary,
     colnames(gene_binary) <- all_cols
   }
 
-  path_out <- path_out %>%
-    purrr::when(
-      bind_pathways ~ bind_cols(gene_binary, .),
-      TRUE ~ list("gene_binary" = gene_binary,
-                  "pathways" = path_out))
-
+  path_out <- gene_binary %>%
+    select("sample_id") %>%
+    bind_cols(path_out)
 
   return(path_out)
 }
@@ -190,12 +188,15 @@ add_pathways <- function(gene_binary,
 .sum_alts_in_pathway <- function(gene_binary, pathway_list_item,
                                  pathway_name,
                                  count_pathways_by) {
-  path_alt <- gene_binary %>%
-    purrr::when(
-      count_pathways_by == "alteration" ~
-        select(., any_of(unlist(pathway_list_item, use.names=FALSE))),
-      count_pathways_by == "gene" ~
-        select(., contains(unlist(pathway_list_item, use.names=FALSE)))) %>%
+  path_alt <- switch(count_pathways_by,
+                     "alteration" = {
+                       gene_binary %>%
+                         select(any_of(unlist(pathway_list_item, use.names=FALSE)))
+                     },
+                     "gene" = {
+                       gene_binary %>%
+                         select(contains(unlist(pathway_list_item, use.names=FALSE)))
+                     }) %>%
     mutate(sum = rowSums(., na.rm = TRUE)) %>%
     transmute('pathway_{pathway_name}' := if_else(sum >= 1, 1, 0))
 

@@ -43,7 +43,7 @@ summarize_by_gene <- function(gene_binary) {
       sum > 1 ~ 1,
       TRUE ~ .data$sum
     )) %>%
-    select("sample_id", "name2", "simpl_val") %>%
+    select(all_of(c("sample_id", "name2", "simpl_val"))) %>%
     distinct() %>%
     ungroup() %>%
     tidyr::pivot_wider(

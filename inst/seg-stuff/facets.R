@@ -257,14 +257,13 @@ facets_dat <- function (seg = NULL,
       cli::cli_abort("The path provided cannot be found")
     }
 
-    samples <- samples %>%
-      purrr::when(
-        is.null(.) ~ as.character(abbreviate(filenames, minlength = 17)),
-        TRUE ~ {
-          if (length(.) != length(filenames)) {
-            cli::cli_abort("Length of {.code samples} differs from length of {.code filenames}")
-          }
-        })
+    samples <- if(is.null(samples)){
+        as.character(abbreviate(filenames, minlength = 17))
+      } else {
+        if (length(samples) != length(filenames)) {
+          cli::cli_abort("Length of {.code samples} differs from length of {.code filenames}")
+        }
+      }
 
 
     all.dat <- data.frame()
