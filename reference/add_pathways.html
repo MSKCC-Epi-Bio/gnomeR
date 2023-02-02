@@ -61,7 +61,6 @@
 <span>  <span class="va">gene_binary</span>,</span>
 <span>  pathways <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="fu">gnomeR</span><span class="fu">::</span><span class="va"><a href="pathways.html">pathways</a></span><span class="op">)</span><span class="op">)</span>,</span>
 <span>  custom_pathways <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  bind_pathways <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  count_pathways_by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"alteration"</span>, <span class="st">"gene"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -82,11 +81,6 @@ pathways you want as <code>custom_pathways</code></p></dd>
 
 <dt>custom_pathways</dt>
 <dd><p>a vector of alterations to annotate as a pathway, or a list of custom pathways (see <code><a href="pathways.html">gnomeR::pathways</a></code> as example)</p></dd>
-
-
-<dt>bind_pathways</dt>
-<dd><p>a logical indicating whether pathway columns should be joined to main gene_binary or returned separately as a list item.
-Default is TRUE and function will <code>bind_cols()</code> and return a data.frame. If FALSE a list will be returned.</p></dd>
 
 
 <dt>count_pathways_by</dt>
