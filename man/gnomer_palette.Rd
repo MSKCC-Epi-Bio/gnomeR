@@ -23,7 +23,7 @@ or the needed number of colors if less than the total.}
 \item{type}{Either "continuous" or "discrete". Use continuous if you want
 to automatically interpolate between colours.}
 
-\item{plot_col}{Boolean value weather to plot the palette labeled with their hex codes. Default is FALSE.}
+\item{plot_col}{Boolean value weather to plot the palette labeled with their hex codes. Defalut is FALSE.}
 
 \item{reverse}{Boolean indicating whether the palette should be reversed.
 Default is FALSE.}

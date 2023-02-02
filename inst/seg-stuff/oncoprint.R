@@ -279,7 +279,6 @@
 #' #' @examples
 #' #' library(gnomeR)
 #' #' library(dplyr)
-#' #' library(dtplyr)
 #' #' samples <- as.character(unique(gnomeR::mutations))
 #' #' bin.mut <- create_gene_binary(samples = samples, mutation = gnomeR::mutations,
 #' #' mut_type = "somatic_only",
@@ -309,7 +308,6 @@
 #' #' @import
 #' #' tibble
 #' #' dplyr
-#' #' dtplyr
 #'
 #'
 #' dat_oncoprint <- function(gen_dat, clin_dat=NULL){

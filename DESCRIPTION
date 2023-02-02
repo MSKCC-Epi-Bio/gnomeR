@@ -30,26 +30,22 @@ LazyData: true
 URL: https://github.com/MSKCC-Epi-Bio/gnomeR,
     https://mskcc-epi-bio.github.io/gnomeR/
 BugReports: https://github.com/MSKCC-Epi-Bio/gnomeR/issues
-RoxygenNote: 7.2.2
+RoxygenNote: 7.2.3
 Depends: R (>= 3.6)
 biocViews: 
     ComplexHeatmap,
 Imports: 
-    magrittr,
-    dplyr,
-    ggplot2,
-    tibble,
-    dtplyr,
-    ComplexHeatmap,
-    GGally,
-    stringr,
     rlang,
+    dplyr,
+    ggplot2 (>= 3.3.2),
+    tibble,
+    ComplexHeatmap,
+    stringr,
     forcats,
     purrr,
     tidyr,
-    stats,
-    utils,
     cli,
+    GGally,
     gtsummary,
     broom.helpers,
     janitor,

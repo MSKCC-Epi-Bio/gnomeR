@@ -132,21 +132,50 @@
 #
 # })
 # # count_pathways_by ----------------------------------------------------------
-# test_that("works with count_pathways_by gene or alt ", {
-#
-#   gene <- add_pathways(gene_binary = gene_binary_ex,
-#                        pathways = NULL,
-#                        custom_pathways = c("TP53", "APC"),
-#                        count_pathways_by = "gene")
-#
-#   expect_message(alt <- add_pathways(gene_binary = gene_binary_ex,
-#                       pathways = NULL,
-#                        custom_pathways = c("TP53", "APC"),
-#                        count_pathways_by = "alteration"))
-#
-#   expect_equal(alt$pathway_custom, gene_binary_ex$TP53)
-#   expect_equal(sum(gene$pathway_custom),
-#                sum(gene_binary_ex$TP53, gene_binary_ex$TP53.Del))
-#
-# })
-#
+test_that("works with count_pathways_by gene or alt ", {
+
+  mut_valid_sample_ids<- unique(gnomeR::mutations$sampleId)[1:10]
+  gene_binary_ex <- create_gene_binary(sample=mut_valid_sample_ids,
+                                       mutation=gnomeR::mutations)
+
+  gene <- add_pathways(gene_binary = gene_binary_ex,
+                       pathways = NULL,
+                       custom_pathways = c("TP53", "APC"),
+                       count_pathways_by = "gene")
+
+  expect_message(alt <- add_pathways(gene_binary = gene_binary_ex,
+                      pathways = NULL,
+                       custom_pathways = c("TP53", "APC"),
+                       count_pathways_by = "alteration"))
+
+  expect_equal(alt$pathway_custom, gene$pathway_custom)
+
+})
+
+test_that("works with count_pathways_by gene or alt ", {
+
+  mut_valid_sample_ids <- c("P-0002375-T01-IM3", "P-0003541-T01-IM5", "P-0005571-T01-IM5")
+  gene_binary_ex <- create_gene_binary(sample=mut_valid_sample_ids,
+                                       mutation=gnomeR::mutations,
+                                       cna = gnomeR::cna)
+
+  gene <- add_pathways(gene_binary = gene_binary_ex,
+                       pathways = NULL,
+                       custom_pathways = c("TP53", "APC"),
+                       count_pathways_by = "gene")
+
+  expect_message(alt <- add_pathways(gene_binary = gene_binary_ex,
+                                     pathways = NULL,
+                                     custom_pathways = c("TP53", "APC"),
+                                     count_pathways_by = "alteration"))
+
+  expect_message(alt2 <- add_pathways(gene_binary = gene_binary_ex,
+                                     pathways = NULL,
+                                     custom_pathways = c("TP53.Del", "APC"),
+                                     count_pathways_by = "alteration"))
+
+
+})
+
+
+

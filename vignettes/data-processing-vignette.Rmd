@@ -231,7 +231,7 @@ There are a set of default pathways available in the package that can be viewed 
 # available pathways
 names(gnomeR::pathways)
 
-pathways <- add_pathways(gene_binary, pathways = c("Notch", "p53"))%>%
+pathways <- add_pathways(gene_binary, pathways = c("Notch", "p53")) %>%
   relocate(c(pathway_Notch, pathway_p53), .after = "sample_id")
 
 pathways[1:6, 1:3]
