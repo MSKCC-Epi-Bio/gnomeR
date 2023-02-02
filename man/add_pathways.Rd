@@ -8,7 +8,6 @@ add_pathways(
   gene_binary,
   pathways = c(names(gnomeR::pathways)),
   custom_pathways = NULL,
-  bind_pathways = TRUE,
   count_pathways_by = c("alteration", "gene")
 )
 }
@@ -22,9 +21,6 @@ is required to mark a 1 for that pathway. If you want gene-level pathways, use \
 pathways you want as \code{custom_pathways}}
 
 \item{custom_pathways}{a vector of alterations to annotate as a pathway, or a list of custom pathways (see \code{gnomeR::pathways} as example)}
-
-\item{bind_pathways}{a logical indicating whether pathway columns should be joined to main gene_binary or returned separately as a list item.
-Default is TRUE and function will \code{bind_cols()} and return a data.frame. If FALSE a list will be returned.}
 
 \item{count_pathways_by}{Must be one of the following: "alteration" (default), or "gene". This determines whether
 any type of gene alteration should be counted towards a pathway ("gene") or only specific types of alterations should be counted towards a pathway ("alteration")
