@@ -146,21 +146,23 @@ create_gene_binary <- function(samples = NULL,
 
   #  Make Final Sample List ----------------------------------------------------
 
+  samples_in_data <-
+    c(mutation$sample_id, fusion$sample_id, cna$sample_id) %>%
+    as.character() %>%
+    unique()
+
+
+  if(!is.null(samples) & all(!(samples %in% samples_in_data))) {
+    cli::cli_abort("None of your selected {.code samples} have alterations in your data. ")
+  }
 
   # if samples not passed we will infer it from data frames
-  switch(is.null(samples),
+  samples %||%
     cli::cli_alert_info("{.code samples} argument is {.code NULL}. We will infer your cohort inclusion and resulting data frame will include all samples with at least one alteration in {.field mutation}, {.field fusion} or {.field cna} data frames")
-  )
 
   # If user doesn't pass a vector, use samples in files as final sample list
   samples_final <- samples %||%
-    c(
-      mutation$sample_id,
-      fusion$sample_id,
-      cna$sample_id
-    ) %>%
-    as.character() %>%
-    unique()
+    samples_in_data
 
   # Binary matrix for each data type ----------------------------------------------
   mutation_binary_df <- switch(!is.null(mutation),
@@ -341,7 +343,7 @@ create_gene_binary <- function(samples = NULL,
         nrow()
 
       if ((blank_muts > 0)) {
-        cli::cli_alert_warning("{(blank_muts)} mutations marked as blank were retained in the resulting binary matrix.")
+        cli::cli_alert_warning("{(blank_muts)} mutations with mutation status marked as blank or NA were retained in the resulting binary matrix.")
       }
     },
     "somatic_only" = {

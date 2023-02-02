@@ -86,6 +86,30 @@ test_that("samples selected with no mutations ", {
 })
 
 
+test_that("no samples selected have alterations ", {
+
+  fake_mut <- gnomeR::mutations[1:10, ] %>%
+    mutate(sampleId = "a")
+
+  samples <- c("thing", "other_thing")
+
+  expect_error(gene_binary_no_fusions <- create_gene_binary(samples = samples,
+                                               mutation = fake_mut,
+                                               fusion  = gnomeR::sv), "None*")
+})
+
+test_that("some but not all samples selected have alterations ", {
+
+  fake_mut <- gnomeR::mutations[1:10, ] %>%
+    mutate(sampleId = "a")
+
+  samples <- c("a", "other_thing")
+
+  expect_no_error(gene_binary <- create_gene_binary(samples = samples, mutation = fake_mut))
+  expect_equal(sum(gene_binary[2, 2:4]), 0)
+})
+
+
 # NON UNIQUE SAMPLES in samples ARGUMENT?
 
 # Test data type arguments ------------------------------------------------
