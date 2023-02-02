@@ -15,8 +15,6 @@
 #' any type of gene alteration should be counted towards a pathway ("gene") or only specific types of alterations should be counted towards a pathway ("alteration")
 #' By default, the function assumes alteration-specific pathway annotation and all default pathways are annotated this way. If a
 #' custom pathway is passed with no suffix (e.g. `custom_pathway = 'TP53'`) it will assume it is a mutation.
-#' @param bind_pathways a logical indicating whether pathway columns should be joined to main gene_binary or returned separately as a list item.
-#' Default is TRUE and function will `bind_cols()` and return a data.frame. If FALSE a list will be returned.
 #' @keywords internal
 #' @return a data frame: each sample is a row, columns are pathways, with values of 0/1 depending on pathway alteration status.
 #' @export
@@ -31,7 +29,6 @@
 add_pathways <- function(gene_binary,
                          pathways = c(names(gnomeR::pathways)),
                          custom_pathways = NULL,
-                         bind_pathways = TRUE,
                          count_pathways_by = c("alteration", "gene")) {
 
   all_path <- gnomeR::pathways
@@ -62,6 +59,9 @@ add_pathways <- function(gene_binary,
 
   all_cols <- colnames(gene_binary)
   mut_cols <- !(str_detect(all_cols, ".Amp|.Del|.fus|.cna"))
+
+  switch(is.null(custom_pathways) & count_pathways_by == "gene",
+         cli::cli_alert_warning("Annotating the default pathways by gene may be inappropriate."))
 
   # custom_pathways:  can be list or vector------------------------------------
   if (!is.null(custom_pathways)) {
@@ -102,7 +102,7 @@ add_pathways <- function(gene_binary,
       # add mut on custom pathways when count_pathways_by == "alteration"
       if(any(purrr::map_lgl(custom_pathways, ~any(!str_detect(.x, ".Amp|.Del|.fus|.cna|.mut"))))) {
         cli::cli_inform("Assuming any gene in {.code custom_pathway} without
-        suffix {.code Amp|.Del|.fus|.cna} is a mutation in that pathway. To control this behvaiour, see argument {.code count_pathways_by}")
+        suffix {.code Amp|.Del|.fus|.cna} is specifically a mutation in that pathway. CNA and fusions will not be counted (e.g. TP53.Del). To control this behavior, see argument {.code count_pathways_by}")
       }
 
 
@@ -158,7 +158,7 @@ add_pathways <- function(gene_binary,
   }
 
   path_out <- gene_binary %>%
-    select("sample_id") %>%
+#    select("sample_id") %>%
     bind_cols(path_out)
 
   return(path_out)
