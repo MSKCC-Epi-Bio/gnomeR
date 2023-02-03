@@ -1,18 +1,13 @@
-fus_issue_chk <- function(cohort, genie_data, cbp_data, raw.data = F){
-  
-  #clean cbp data
-  cbp_fus2 <- cbp_data %>%
-    select(sample_id, site1hugo_symbol, site2hugo_symbol, event_info)%>%
-    arrange(sample_id, site1hugo_symbol, site2hugo_symbol)
-  
-  
+fus_issue_chk <- function(data){
+
+
   ##########################################################
-  ################## clean genie data#######################
+  ################## clean data#######################
   ##########################################################
-  
-  genie_sep <- suppressMessages(genie_data %>%
+
+  data_sep <- suppressMessages(data %>%
     mutate(
-    
+
     #remove leading space in fusion var
       fusion = str_trim(fusion),
     #remove endings to names
@@ -35,26 +30,26 @@ fus_issue_chk <- function(cohort, genie_data, cbp_data, raw.data = F){
     # keep the original gene-gene info somewhere in the data frame and not overwrite
     rename(event_info = fusion) %>%
     mutate(gene_order = fusion2))
-  
-  special_case <- genie_sep %>%
+
+  special_case <- data_sep %>%
     filter(str_count(fusion2, "-") > 1)%>%
     arrange(sample_id, fusion2)%>%
     select(sample_id, fusion2)%>%
     unique()
-  
+
   invest <- purrr::map2_chr(special_case$sample_id,
                             special_case$fusion2,
                             ~paste0(.x, " fusion ", .y))
-  
+
   names(invest) <- rep("!", times = length(invest))
-  
+
   if (nrow(special_case) > 0){
     cli::cli_abort(c("Some of your hugo_symbols contain more than one '-' and due to duplicate records, the program cannot identify proper gene names. Check which names should be
                      grouped together, and then replace the '-' in the paired group with '_'. Please investigate the following: ", invest))
   }
 
   # separate the two genes into their own columns
-  genie_sep1 <- suppressWarnings(genie_sep %>%
+  data_sep1 <- suppressWarnings(data_sep %>%
     #select(-hugo_symbol)%>%
     separate(fusion2, into = c("site1hugo_symbol", "site2hugo_symbol"),  "-")%>%
     select(sample_id, hugo_symbol, site1hugo_symbol, site2hugo_symbol, event_info,
@@ -65,7 +60,7 @@ fus_issue_chk <- function(cohort, genie_data, cbp_data, raw.data = F){
   # get frequency of gene fusion by hugo_symbol
   # There are cases where site 1 and 2 were flipped for a sample_id and listed x2
   # ex: TP53-APC vs APC-TP53 for the same sample would create 4 events when it should be 2
-  genie_sep_site1 <- suppressMessages(genie_sep1 %>%
+  data_sep_site1 <- suppressMessages(data_sep1 %>%
     select(hugo_symbol, site1hugo_symbol)%>%
     table()%>%
     as.data.frame()%>%
@@ -75,18 +70,18 @@ fus_issue_chk <- function(cohort, genie_data, cbp_data, raw.data = F){
 
 
   # get frequency for second site and merge to first
-  genie_sep_site_freq <- suppressMessages(genie_sep1 %>%
+  data_sep_site_freq <- suppressMessages(data_sep1 %>%
     select(hugo_symbol, site2hugo_symbol)%>%
     table()%>%
     as.data.frame()%>%
     filter(as.character(hugo_symbol) == as.character(site2hugo_symbol))%>%
     select(hugo_symbol, Freq)%>%
     rename(Freq_site2 = Freq)%>%
-    right_join(genie_sep_site1))
+    right_join(data_sep_site1))
 
 
   # make each event a row and count events and number of NA events by sample
-  genie_sep2 <- suppressMessages(genie_sep1 %>%
+  data_sep2 <- suppressMessages(data_sep1 %>%
     select(-hugo_symbol)%>%
     pivot_longer(!sample_id)%>%
     group_by(sample_id)%>%
@@ -95,7 +90,7 @@ fus_issue_chk <- function(cohort, genie_data, cbp_data, raw.data = F){
     unique())
 
   # count unique events by sample
-  genie_sep3 <- suppressMessages(genie_sep2 %>%
+  data_sep3 <- suppressMessages(data_sep2 %>%
     select(sample_id, value)%>%
     unique()%>%
     group_by(sample_id)%>%
@@ -111,31 +106,31 @@ fus_issue_chk <- function(cohort, genie_data, cbp_data, raw.data = F){
 
 
   # merge unique and raw counts together and compare. If diff is not count_na = prob
-  genie_prob_ids <- suppressMessages(genie_sep2 %>%
+  data_prob_ids <- suppressMessages(data_sep2 %>%
     select(sample_id, is_na)%>%
     group_by(sample_id)%>%
     summarize(count_na = sum(is_na),
               count = n())%>%
-    left_join(genie_sep3)%>%
+    left_join(data_sep3)%>%
     filter(count_unique != count & count - count_unique != count_na))
 
-  prob_ids <- genie_prob_ids$sample_id
+  prob_ids <- data_prob_ids$sample_id
 
   # select ids that are not an issue
-  genie_noprob_ids <- suppressMessages(genie_sep2 %>%
+  data_noprob_ids <- suppressMessages(data_sep2 %>%
     select(sample_id, is_na)%>%
     group_by(sample_id)%>%
     summarize(count_na = sum(is_na),
               count = n())%>%
-    left_join(genie_sep3)%>%
+    left_join(data_sep3)%>%
     filter(count_unique == count | count - count_unique == count_na))
 
-  noprob_ids <- genie_noprob_ids$sample_id
+  noprob_ids <- data_noprob_ids$sample_id
 
 
   # create dataset with noprob ids
 
-  genie_noprob <- suppressMessages(genie_sep1 %>%
+  data_noprob <- suppressMessages(data_sep1 %>%
     filter(sample_id %in% noprob_ids)%>%
     select(-hugo_symbol) %>%
     arrange(sample_id, site1hugo_symbol)%>%
@@ -145,18 +140,18 @@ fus_issue_chk <- function(cohort, genie_data, cbp_data, raw.data = F){
 
   # retreive full data for prob ids
 
-  genie_prob <- suppressMessages(genie_sep1 %>%
+  data_prob <- suppressMessages(data_sep1 %>%
     filter(sample_id %in% prob_ids)%>%
     select(-hugo_symbol) %>%
     arrange(sample_id, site1hugo_symbol)%>%
     unique())
 
-  num_dups <- suppressMessages(genie_prob %>%
+  num_dups <- suppressMessages(data_prob %>%
     dplyr::group_by(sample_id) %>%
     dplyr::summarise(n = dplyr::n(), .groups = "drop") %>%
     dplyr::filter(n > 1L))
 
-  genie_try <- suppressMessages(genie_sep1 %>%
+  data_try <- suppressMessages(data_sep1 %>%
     pivot_longer(starts_with("site"))%>%
     unique()%>%
     arrange(sample_id, gene_order))%>%
@@ -166,7 +161,7 @@ fus_issue_chk <- function(cohort, genie_data, cbp_data, raw.data = F){
   #split out samples among the prob ids that include intragenic and keep sep
 
   # 198 events
-  genie_probid_oksamp1 <- genie_try %>%
+  data_probid_oksamp1 <- data_try %>%
     filter(endsWith(event_info, "INTRAGENIC") | endsWith(event_info, "intragenic") | endsWith(event_info, "INTERGENIC") | endsWith(event_info, "-intragenic - Archer"))%>%
     unique()%>%
     select(-hugo_symbol)%>%
@@ -175,7 +170,7 @@ fus_issue_chk <- function(cohort, genie_data, cbp_data, raw.data = F){
     suppressMessages()
 
   # 404 events, need to check which samples and genes occur x2
-  non_intra_samps <- genie_try %>%
+  non_intra_samps <- data_try %>%
     filter(!endsWith(event_info, "INTRAGENIC") & !endsWith(event_info, "INTERGENIC"),
            !endsWith(event_info, "intragenic") & !endsWith(event_info, "-intragenic - Archer"))%>%
     unique()%>%
@@ -357,101 +352,16 @@ fus_issue_chk <- function(cohort, genie_data, cbp_data, raw.data = F){
 
   # merge all of the datasets together
 
-  genie_fus2 <- to_merge %>%
-    rbind(genie_probid_oksamp1)%>%
-    rbind(genie_noprob)%>%
+  data_fus2 <- to_merge %>%
+    rbind(data_probid_oksamp1)%>%
+    rbind(data_noprob)%>%
     arrange(sample_id, site1hugo_symbol, site2hugo_symbol)%>%
     select(-gene_order)%>%
     unique()%>%
     suppressWarnings()%>%
     suppressMessages()
-  
-  
-  #############################################################
-  ################ compare genie to cbp #######################
-  #############################################################
-  
-  # check that samples are the same
-  
-  genie_samp <- unique(genie_fus2$sample_id)
-  cbp_samp <- unique(cbp_fus2$sample_id)
-  
-  if (length(genie_samp) != length(cbp_samp)) {
-    issue_samps <- genie_samp[!(genie_samp %in% cbp_samp)]
-  } else {
-    issue_samps <- NULL
-  }
-  
-  # list samples where the number of rows doesn't match
-  cbp_num_pairs <- cbp_fus2 %>%
-    group_by(sample_id)%>%
-    mutate(cbp_n = n())%>%
-    select(c(sample_id, cbp_n))%>%
-    unique()%>%
-    suppressWarnings()%>%
-    suppressMessages()
-  
-  # compare genie to cbp number of fusions per sample id
-  comp_num_fus <- genie_fus2 %>%
-    group_by(sample_id)%>%
-    mutate(gen_n = n())%>%
-    select(c(sample_id, gen_n))%>%
-    unique()%>%
-    left_join(cbp_num_pairs)%>%
-    mutate(diff = gen_n - cbp_n)%>%
-    filter(diff != 0)%>%
-    suppressWarnings()%>%
-    suppressMessages()
-  
-  if (nrow(comp_num_fus) > 0){
-    issue_samps <- c(issue_samps, comp_num_fus$sample_id) %>%
-      unique()
-  }
-  
-  
-  #############################################################
-  ############## pull mismatched data #########################
-  #############################################################
-  
-  genie <- genie_fus2 %>%
-    filter(sample_id %in% issue_samps)
-  
-  cbp <- cbp_fus2 %>%
-    filter(sample_id %in% issue_samps)
-  
-  
-  genie_raw <- genie_fus%>%
-    filter(sample_id %in% issue_samps)%>%
-    select(sample_id, hugo_symbol, hugo_symbol, fusion)%>%
-    rename(event_info = fusion)
-  
-  cbp_raw <- cbp_fus %>%
-    filter(sample_id %in% issue_samps)%>%
-    select(sample_id, site1hugo_symbol, site2hugo_symbol, event_info)
-  
-  if (raw.data == F){
-    genie_prob <- setdiff(genie, cbp)%>%
-      mutate(dataset = "in GENIEBPC")
-    
-    cbp_prob <- setdiff(cbp, genie)%>%
-      mutate(dataset = "in CBP")
-    
-    prob <- rbind(genie_prob, cbp_prob)%>%
-      mutate(cohort_name = cohort)
-    
-  } else {
-    
-    genie_prob <-genie_raw[!(genie_raw$fusion %in% cbp_raw$event_info),] %>%
-      mutate(cohort_name = cohort)
-    
-    cbp_prob <- cbp_raw[!(cbp_raw$event_info %in% genie_raw$fusion),]%>%
-      mutate(cohort_name = cohort)
-    
-    prob <- list(genie_prob, cbp_prob)
-    names(prob) <- c("genie data", "cbp data")
-  }
-  
 
-  return(prob)
+
+  return(data_fus2)
 
   }
