@@ -1,5 +1,4 @@
 Abida
-BAM
 CMD
 CNA
 CNAs
@@ -12,7 +11,6 @@ Daian
 Defalut
 Dimitriadoy
 Entrez
-FACETs
 Foltz
 GISTIC
 Gao
@@ -29,7 +27,6 @@ NA's
 Nrf
 ORCID
 OncoKB
-OncoPrints
 Oncogenic
 Oncol
 PanCan
@@ -46,7 +43,6 @@ TP
 Wnt
 al
 args
-bangbang
 cBioPortal
 cbioPortal
 cbioportalR
@@ -58,7 +54,6 @@ del
 dplyr
 entrez
 et
-exome
 fisValue
 functionalImpactScore
 fus
@@ -69,6 +64,7 @@ gnomer
 grDevices
 gtsummary
 hemizygous
+hepatocellular
 homozygous
 hugo
 im
@@ -87,7 +83,6 @@ ncbiBuild
 oncoKB
 oncogenic
 pancan
-ploidy
 pre
 processsing
 proteinChange
@@ -107,8 +102,6 @@ startPosition
 summarising
 sv
 tbl
-teh
-th
 topgenes
 uniquePatientKey
 uniqueSampleKey

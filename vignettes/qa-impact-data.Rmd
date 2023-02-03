@@ -1,7 +1,7 @@
 ---
-title: "IMPACT Data QA Checklist"
+title: "How to QA Your IMPACT Data"
 output: rmarkdown::html_vignette
-author: Ester Drill
+author: Esther Drill
 vignette: >
   %\VignetteIndexEntry{qa-impact-data}
   %\VignetteEngine{knitr::rmarkdown}
@@ -18,23 +18,17 @@ knitr::opts_chunk$set(
 
 ```{r setup, include=FALSE, echo=FALSE,warning=FALSE}
 
-library(tidyverse)
+library(dplyr)
 library(cbioportalR)
-library(lubridate)
+library(tidyr)
 library(gnomeR)
-library(readxl)
-library(janitor)
-library(gtsummary)
-library(survival)
-library(ggsurvfit)
 
-theme_gtsummary_compact()
 
 data("clin_collab_df")
 ```
 
 
-Scenario: You are a data analyst whose collaborator has sent you a clinical file of a cohort of patients with hepatocellular cancer that she is interested in for retrospective data analysis. In particular, she wants to look at IMPACT sequencing data for the cohort and investigate associations between genomic alterations and pathological/clinical characteristics. She asks if you can get the IMPACT data and do the analysis.
+**Scenario:** You are a data analyst whose collaborator has sent you a clinical file of a cohort of patients with hepatocellular cancer that she is interested in for retrospective data analysis. In particular, she wants to look at IMPACT sequencing data for the cohort and investigate associations between genomic alterations and pathological/clinical characteristics. She asks if you can get the IMPACT data and do the analysis.
 
 She gives you a clinical file with 80 sample IDs: `clin_collab_df`. 
 
@@ -49,7 +43,7 @@ Before using cBioPortal to access the genomic data, you first want to do some QA
 
 ### Check for multiple sample IDs from the same patient
 
-One of the first things to check in your data is whether you have multiple sample IDs from the same patient. Sometimes a clinical file will have a patient_ID column as well; this one doesn't, so you can make your own. The patient ID is just the first 9 digits of the cbioportal_id:
+One of the first things to check in your data is whether you have multiple sample IDs from the same patient. Sometimes a clinical file will have a patient_ID column as well; this one doesn't, so you can make your own. The patient ID is just the first 9 digits of the `cbioportal_id`:
 
 ```{r patient_id}
 
@@ -78,7 +72,7 @@ multiple_samps
 ```
 
 There are 2 patients who each have 2 samples in the collaborator's dataset. 
-Filter the dataset to see the cbioportal_id's in question:  
+Filter the dataset to see the `cbioportal_id`'s in question:  
 ```{r count_patients }
 
 clin_collab_df %>% 
@@ -93,7 +87,7 @@ These are patients and samples to ask your collaborator about: Does using both s
 (To get more info for yourself, you can enter the patient ids into the [cBioPortal website](https://www.cbioportal.org/).
 
 
-### Check whether all cbioportal_ids's are actually in cBioPortal
+### Check whether all `cbioportal_ids` are actually in cBioPortal
 
 To do this, you need to retrieve the clinical data from cBioPortal.  
 
@@ -106,7 +100,7 @@ set_cbioportal_db(db = "public")
 ```
 
 
-Then you will use the `get_clinical_by_sample()` function from the cBioPortal package. Set the `sample_id` parameter to the cbioportal_ids from the clinical collaborator's file.  
+Then you will use the `get_clinical_by_sample()` function from the cBioPortal package. Set the `sample_id` parameter to the `cbioportal_ids` from the clinical collaborator's file.  
 Store the sample data in a file called `clin_cbio`. 
 
 ```{r get_cbio_clinical}
@@ -131,8 +125,8 @@ The sample IDs here are in the `sampleId` column.
 You may notice that this file is in "long" format and each sample has multiple rows. Later we will convert this file to "wide" format to do QA checking on attributes.
 
 
-But the first thing you want to know is whether you are able to find all of the cbioportal_ids from your `clin_collab_df` file in the `clin_cbio` file.  
-To do this, use the setdiff() function:
+But the first thing you want to know is whether you are able to find all of the `cbioportal_ids` from your `clin_collab_df` file in the `clin_cbio` file.  
+To do this, use the `setdiff()` function:
 
 ```{r check_missing}
 
