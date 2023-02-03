@@ -79,7 +79,6 @@ tbl_genomic <- function(gene_binary,
       arg_name = "by", select_single = TRUE
     )
 
-
   # check & assign gene subset -------------------------------------------------
 
   # if user passes gene_subset, we will add sufix
@@ -123,12 +122,16 @@ tbl_genomic <- function(gene_binary,
   if(is.null(gene_subset)){
 
     if(freq_cutoff_by_gene){
-      gene_binary <- gene_binary %>%
+
+      gene_binary_sum <- gene_binary %>%
+        select(-all_of(by)) %>%
         summarize_by_gene()
+
+      gene_binary <- bind_cols(select(gene_binary, all_of(by)), gene_binary_sum)
     }
 
     gene_subset <- gene_binary %>%
-      select(-all_of(by))%>%
+      select(-all_of(by)) %>%
       ungroup() %>%
       tidyr::pivot_longer(-"sample_id") %>%
       distinct() %>%
@@ -156,7 +159,7 @@ tbl_genomic <- function(gene_binary,
     select(all_of(by), any_of(c(gene_subset)))
 
   table_data %>%
-    gtsummary::tbl_summary(by = by,...)
+    gtsummary::tbl_summary(by = any_of(by),...)
 
   # should we split results by MUT/CNA/Fusion? if not at least have to fix arranging of  these
   # also its confusing when freq_by_gene is TRUE and you see low freq alts in table
