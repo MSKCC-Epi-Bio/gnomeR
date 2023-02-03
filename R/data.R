@@ -234,3 +234,19 @@
 #' @format A data frame with copy number alterations (CNA) retrieved from cBioPortal.
 "cna_wide"
 
+
+
+#' An example data set for an IMPACT analysis coming from a clinical collaborator
+#'
+#' This set was created from a sample of 20 patients from
+#' publicly available prostate cancer data from cBioPortal (`study_id = "gbc_mskcc_2022"`).
+#'
+#' @format A data frame with copy number alterations (CNA) retrieved from cBioPortal.
+#' \describe{
+#'  \item{\code{cbioportal_id}}{character with IMPACT sample ID}
+#'  \item{\code{ctype}}{character cancer type}
+#'  \item{\code{primary_mets}}{character with sample type}
+#' }
+#'
+"clin_collab_df"
+

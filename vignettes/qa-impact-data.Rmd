@@ -1,8 +1,9 @@
 ---
-title: "IMPACT_QA"
+title: "IMPACT Data QA Checklist"
 output: rmarkdown::html_vignette
+author: Ester Drill
 vignette: >
-  %\VignetteIndexEntry{IMPACT_QA}
+  %\VignetteIndexEntry{qa-impact-data}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -20,10 +21,8 @@ knitr::opts_chunk$set(
 library(tidyverse)
 library(cbioportalR)
 library(lubridate)
-library(here)
 library(gnomeR)
 library(readxl)
-library(writexl)
 library(janitor)
 library(gtsummary)
 library(survival)
@@ -31,11 +30,7 @@ library(ggsurvfit)
 
 theme_gtsummary_compact()
 
-#### https://github.com/MSKCC-Epi-Bio/gnomeR/issues/176
-
-clin_collab_df_file = here("Data","clin_collab_df.Rdata")
-load(clin_collab_df_file)  ### loads in clin_collab_df
-
+data("clin_collab_df")
 ```
 
 
@@ -52,7 +47,7 @@ The sample IDs are in the `cbioportal_id` column.
 Before using cBioPortal to access the genomic data, you first want to do some QA on the clinical data and make sure it matches up with the clinical data in cBioPortal.
 
 
-###Check for multiple sample IDs from the same patient
+### Check for multiple sample IDs from the same patient
 
 One of the first things to check in your data is whether you have multiple sample IDs from the same patient. Sometimes a clinical file will have a patient_ID column as well; this one doesn't, so you can make your own. The patient ID is just the first 9 digits of the cbioportal_id:
 
@@ -75,7 +70,7 @@ clin_collab_df %>%
 
 So it's clear that we have multiple samples per patient. To find out which patient/s, you can count the `patient_id` values and filter for >1.
 
-```{r count_patients }
+```{r }
 multiple_samps <- clin_collab_df %>%
     count(patient_id) %>%
   filter(n > 1)
@@ -98,7 +93,7 @@ These are patients and samples to ask your collaborator about: Does using both s
 (To get more info for yourself, you can enter the patient ids into the [cBioPortal website](https://www.cbioportal.org/).
 
 
-###Check whether all cbioportal_ids's are actually in cBioPortal
+### Check whether all cbioportal_ids's are actually in cBioPortal
 
 To do this, you need to retrieve the clinical data from cBioPortal.  
 
@@ -150,7 +145,7 @@ Include these in the list of cBioPortal questions to ask your collaborator.
 
 (Again, if you want to investigate a bit further, you could enter the patient cBioPortal IDs as queries into the [cBioPortal website](https://www.cbioportal.org/).
 
-###Check whether clinical information in collaborator's file (`clin_collab_df`) matches clinical information in cBioPortal (in your `clin_cbio` file).
+### Check whether clinical information in collaborator's file (`clin_collab_df`) matches clinical information in cBioPortal (in your `clin_cbio` file).
 
 Look at the `clin_collab_df` again:
 
