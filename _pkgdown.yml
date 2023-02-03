@@ -67,5 +67,6 @@ reference:
     - names_df
     - pathways
     - impact_alias_table
+    - clin_collab_df
 
 
