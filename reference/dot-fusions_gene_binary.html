@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">gnomeR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.0.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -25,7 +25,6 @@
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <a class="dropdown-item" href="../articles/data-processing-vignette.html">Processing Data with {gnomeR}</a>
-    <a class="dropdown-item" href="../articles/qa-impact-data.html">How to QA Your IMPACT Data</a>
   </div>
 </li>
 <li class="nav-item">
@@ -76,8 +75,8 @@ returned for every column of that patient row.</p></dd>
 
 
 <dt>specify_panel</dt>
-<dd><p>a character vector of length 1 with panel id (see gnomeR::gene_panels for available panels), "impact", or "no". Alternatively,
-you may pass a data frame of <code>sample_id</code>-<code>panel_id</code> pairs specifying panels for each sample for which to insert NAs indicating genes not tested. See below for details.</p></dd>
+<dd><p>Default is "no" where no panel annotation is done. Otherwise pass a character vector of length 1 with a panel id (see gnomeR::gene_panels for available panels), or "impact" for
+automated IMPACT annotation. Alternatively, you may pass a data frame of <code>sample_id</code>-<code>panel_id</code> pairs specifying panels for each sample for which to insert NAs indicating genes not tested. See below for details.</p></dd>
 
 
 <dt>recode_aliases</dt>

@@ -3,8 +3,7 @@ pkgdown: 2.0.7
 pkgdown_sha: ~
 articles:
   data-processing-vignette: data-processing-vignette.html
-  qa-impact-data: qa-impact-data.html
-last_built: 2023-02-03T21:53Z
+last_built: 2023-02-17T14:57Z
 urls:
   reference: https://mskcc-epi-bio.github.io/gnomeR/reference
   article: https://mskcc-epi-bio.github.io/gnomeR/articles

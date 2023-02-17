@@ -19,9 +19,6 @@
     <loc>https://mskcc-epi-bio.github.io/gnomeR/articles/index.html</loc>
   </url>
   <url>
-    <loc>https://mskcc-epi-bio.github.io/gnomeR/articles/qa-impact-data.html</loc>
-  </url>
-  <url>
     <loc>https://mskcc-epi-bio.github.io/gnomeR/authors.html</loc>
   </url>
   <url>
@@ -38,9 +35,6 @@
   </url>
   <url>
     <loc>https://mskcc-epi-bio.github.io/gnomeR/reference/annotate_specific_panel.html</loc>
-  </url>
-  <url>
-    <loc>https://mskcc-epi-bio.github.io/gnomeR/reference/clin_collab_df.html</loc>
   </url>
   <url>
     <loc>https://mskcc-epi-bio.github.io/gnomeR/reference/cna.html</loc>
