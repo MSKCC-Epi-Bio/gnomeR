@@ -18,17 +18,17 @@
 #' Default is NULL.
 #' @param high_level_cna_only If TRUE, only deep deletions (-2, -1.5) or high level amplifications (2) will be counted as events
 #' in the binary matrix. Gains (1) and losses (1) will be ignored. Default is `FALSE` where all CNA events are counted.
-#' @param specify_panel a character vector of length 1 with panel id (see gnomeR::gene_panels for available panels), "impact", or "no". Alternatively,
-#' you may pass a data frame of `sample_id`-`panel_id` pairs specifying panels for each sample for which to insert NAs indicating genes not tested. See below for details.
+#' @param specify_panel Default is "no" where no panel annotation is done. Otherwise pass a character vector of length 1 with a panel id (see gnomeR::gene_panels for available panels), or "impact" for
+#' automated IMPACT annotation. Alternatively, you may pass a data frame of `sample_id`-`panel_id` pairs specifying panels for each sample for which to insert NAs indicating genes not tested. See below for details.
 #' @param recode_aliases boolean specifying if automated gene name alias matching should be done. Default is TRUE. When TRUE
 #' the function will check for genes that may have more than 1 name in your data using the aliases im gnomeR::impact_alias_table alias column
 #'
 #' @section specify_panel argument:
+#'    - If `specify_panel = "no"` is passed (default) data will be returned as is without any additional NA annotations.
 #'    - If a single panel id is passed (e.g. `specify_panel = "IMPACT468"`), all genes in your data that are not tested on that panel will be set to
 #' `NA` in results for all samples (see gnomeR::gene_panels to see which genes are on each supported panels).
 #'    - If `specify_panel = "impact"` is passed, impact panel version will be inferred based on each sample_id (based on `IMX` nomenclature) and NA's will be
 #' annotated accordingly for each sample/panel pair.
-#'    - If `specify_panel = "no"` is passed (default) data will be returned as is without any additional NA annotations.
 #'    - If you wish to specify different panels for each sample, pass a data frame (with all samples included) with columns: `sample_id`, and `panel_id`. Each sample will be
 #' annotated with NAs according to that specific panel. If a sample in your data is missing from the `sample_id` column in the
 #' `specify_panel` dataframe, it will be returned with no annotation (equivalent of setting it to "no").
@@ -343,7 +343,8 @@ create_gene_binary <- function(samples = NULL,
         nrow()
 
       if ((blank_muts > 0)) {
-        cli::cli_alert_warning("{(blank_muts)} mutations with mutation status marked as blank or NA were retained in the resulting binary matrix.")
+        cli::cli_alert_warning(
+          "{(blank_muts)} mutations have {.code NA} or blank in mutation status column instead of 'SOMATIC' or 'GERMLINE'. These were assumed to be 'SOMATIC' and were retained in the resulting binary matrix.")
       }
     },
     "somatic_only" = {
