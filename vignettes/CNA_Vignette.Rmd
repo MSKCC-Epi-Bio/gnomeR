@@ -1,0 +1,20 @@
+---
+title: "CNA_Vignette"
+output: rmarkdown::html_vignette
+author: Allison Reiner, Caroline Kostrzewa
+vignette: >
+  %\VignetteIndexEntry{CNA_Vignette}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(gnomeR)
+```
