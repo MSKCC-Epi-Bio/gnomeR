@@ -20,18 +20,16 @@
 #'   summarize_by_gene()
 #'
 summarize_by_gene <- function(gene_binary) {
+
   if (!is.data.frame(gene_binary)) {
-    cli::cli_abort("{.code gene_binary} must be a data.frame with sample ids as {.code rownames(gene_binary)}")
+    cli::cli_abort("{.code gene_binary} must be a data.frame with sample ids")
   }
 
-  if (!("sample_id" %in% names(gene_binary))) {
-    gene_binary <- tibble::rownames_to_column(gene_binary, var = "sample_id")
-  }
-
+  .check_required_cols(gene_binary, "sample_id", "gene_binary")
 
   simp_gene_binary <- gene_binary %>%
     ungroup() %>%
-    tidyr::pivot_longer(-.data$sample_id) %>%
+    tidyr::pivot_longer(-"sample_id") %>%
     mutate(name2 = str_remove_all(.data$name, ".Amp|.fus|.Del|.cna")) %>%
     group_by(.data$sample_id, .data$name2) %>%
     # if all NA ~ NA. If at least one non-na 1 or 0 ~ make 1 or 0
@@ -45,12 +43,12 @@ summarize_by_gene <- function(gene_binary) {
       sum > 1 ~ 1,
       TRUE ~ .data$sum
     )) %>%
-    select("sample_id", "name2", "simpl_val") %>%
+    select(all_of(c("sample_id", "name2", "simpl_val"))) %>%
     distinct() %>%
     ungroup() %>%
     tidyr::pivot_wider(
-      id_cols = .data$sample_id, names_from = .data$name2,
-      values_from = .data$simpl_val
+      id_cols = "sample_id", names_from = "name2",
+      values_from = "simpl_val"
     )
 
   simp_gene_binary

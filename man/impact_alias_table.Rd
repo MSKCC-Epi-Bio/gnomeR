@@ -7,16 +7,17 @@
 \format{
 A data frame with 1658 rows
 \describe{
-\item{hugo_symbol}{}
-\item{alias}{Start }
-\item{entrez_id}{End }
-\item{alias_entrez_id}{}
+\item{hugo_symbol}{gene Hugo Symbol}
+\item{alias}{Alias of Hugo Symbol in \code{hugo_symbol} column}
+\item{entrez_id}{entrez ID of gene in \code{hugo_symbol}}
+\item{alias_entrez_id}{entrez ID of \code{alias} gene}
 }
 }
 \usage{
 impact_alias_table
 }
 \description{
-Table of aliases for IMPACT panel genes used for gene name resolution functionality.
+Data frame of genes and their aliases for
+IMPACT panel genes. This is used for gene name resolution functionality.
 }
 \keyword{datasets}

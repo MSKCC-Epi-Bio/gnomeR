@@ -2,17 +2,17 @@ Abida
 BAM
 CMD
 CNA
+CNAs
 CbioPortal
 Chakravarty
 Chatila
 Codecov
 Comutation
 Daian
+Defalut
 Dimitriadoy
 Entrez
-EntrezIDs
 FACETs
-Farber
 Foltz
 GISTIC
 Gao
@@ -43,15 +43,12 @@ Shmulevich
 TCGA
 TGFB
 TP
-VPN
 Wnt
-acbc
 al
 args
 bangbang
 cBioPortal
 cbioPortal
-cbioportal
 cbioportalR
 cna
 colorRampPalette
@@ -59,7 +56,7 @@ colours
 customizations
 del
 dplyr
-eg
+entrez
 et
 exome
 fisValue
@@ -70,7 +67,6 @@ germline
 ggplot
 gnomer
 grDevices
-gradientn
 gtsummary
 hemizygous
 homozygous
@@ -85,11 +81,10 @@ linkXvar
 loh
 maf
 molecularProfileId
-msk
-mskcc
 mut
 mutationType
 ncbiBuild
+oncoKB
 oncogenic
 pancan
 ploidy
@@ -101,7 +96,6 @@ proteinPosStart
 recode
 recoded
 recodes
-recoding
 rect
 referenceAllele
 refseqMrnaId
@@ -111,6 +105,7 @@ snakecase
 snvclass
 startPosition
 summarising
+sv
 tbl
 teh
 th
@@ -121,5 +116,4 @@ validationStatus
 varclass
 variantAllele
 vartype
-www
 ’s

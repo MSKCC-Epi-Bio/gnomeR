@@ -5,12 +5,20 @@
 \alias{consequence_map}
 \title{Consequence Map}
 \format{
-A data frame with 23878 rows of CNA data from
+A data frame
+\describe{
+\item{variant_classification}{character indicating type of mutation/variant classification as it appears in common mutation files}
+\item{consequence_final_coding}{final value to recode \code{variant_classification} column to}
+\item{consequence_final_coding_2}{final value to recode \code{variant_classification} column to}
+\item{consequence_final_coding_3}{final value to recode \code{variant_classification} column to}
+}
+@source \url{https://github.com/oncokb/oncokb-annotator/blob/a80ef0ce937c287778c36d45bf1cc8397539910c/AnnotatorCore.py#L118}
 }
 \usage{
 consequence_map
 }
 \description{
-Dataset of recoding values for consequence mutation data
+Data frame used as a data dictionary to recode common variant classification types
+to standardized types that can be used in oncoKB annotation.
 }
 \keyword{datasets}

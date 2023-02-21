@@ -1,26 +1,6 @@
-#' IMPACT Gene Meta Data
-#'
-#' Dataframe labeling all genes found in IMPACT along with their corresponding
-#' platform and Entrez ID.
-#'
-#' @format A data frame with 469 observations and 5 variables
-#' \describe{
-#'   \item{hugo_symbol}{Column containing all HUGO symbols genes included in IMPACT}
-#'   \item{platform_341}{Character, indicates whether each gene was included in
-#'   IMPACT platform 341. Options are `included` and `not included`}
-#'   \item{platform_410}{Character, indicates whether each gene was included in
-#'   IMPACT platform 410. Options are `included` and `not included`}
-#'   \item{platform_468}{Character, indicates whether each gene was included in
-#'   IMPACT platform 468. Options are `included` and `not included`}
-#'   \item{alias}{List of EntrezIDs corresponding to the value in the hugo_symbol column and alias list.}
-#'   \item{entrez_id}{List of known aliases corresponding to the value in the hugo_symbol column.}
-#' }
-#' @source \url{https://cbioportal.mskcc.org/}
-"impact_gene_info"
-
 #' Public Gene Panels on cBioPortal
 #'
-#' Data frame of all gene panels available in public cBioPortal
+#' Data frame of cBioPortal gene panels sourced from both public and GENIE cBioPortal instances.
 #'
 #' @format A nested data frame
 #' \describe{
@@ -31,70 +11,19 @@
 #' @source \url{https://cbioportal.mskcc.org/}
 "gene_panels"
 
-#' GENIE consortium Gene Meta Data
-#'
-#' Dataframe labeling all genes found in the GENIE consortium along with their corresponding
-#' platform and Entrez ID.
-#'
-#' @format A data frame with 469 observations and 5 variables
-#' \describe{
-#'   \item{hugo_symbol}{Column containing all HUGO symbols genes included in IMPACT}
-#'   \item{MSK_341}{Character, indicates whether each gene was included in
-#'   IMPACT platform 341. Options are `included` and `not included`}
-#'   \item{MSK_410}{Character, indicates whether each gene was included in
-#'   IMPACT platform 410. Options are `included` and `not included`}
-#'   \item{MSK_468}{Character, indicates whether each gene was included in
-#'   IMPACT platform 468. Options are `included` and `not included`}
-#'   \item{DFCI_1}{Character, indicates whether each gene was included in
-#'   the original Dana Farber Cancer Institute sequencing panel. Options are `included` and `not included`}
-#'   \item{DFCI_2}{Character, indicates whether each gene was included in
-#'   the second Dana Farber Cancer Institute sequencing panel. Options are `included` and `not included`}
-#'   \item{DFCI_3}{Character, indicates whether each gene was included in
-#'   the third Dana Farber Cancer Institute sequencing panel. Options are `included` and `not included`}
-#'   \item{DFCI_3.1}{Character, indicates whether each gene was included in
-#'   the updated third Dana Farber Cancer Institute sequencing panel. Options are `included` and `not included`}
-#'   \item{UHN_48}{Character, indicates whether each gene was included in
-#'   the first 48 genes sequencing panel of the University Health Network. Options are `included` and `not included`}
-#'   \item{UHN_50}{Character, indicates whether each gene was included in
-#'   the 50 genes sequencing panel of the University Health Network. Options are `included` and `not included`}
-#'   \item{VICC_1_SOLIDTUMOR}{Character, indicates whether each gene was included in
-#'   the sequencing panel of the Vanderbilt-Ingram Cancer Center. Options are `included` and `not included`}
-#'   \item{VICC_1_T7}{Character, indicates whether each gene was included in
-#'   the sequencing panel of the Vanderbilt-Ingram Cancer Center. Options are `included` and `not included`}
-#'   \item{VICC_1_T5A}{Character, indicates whether each gene was included in
-#'   the sequencing panel of the Vanderbilt-Ingram Cancer Center. Options are `included` and `not included`}
-#'   \item{alias}{List of EntrezIDs corresponding to the value in the hugo_symbol column and alias list.}
-#'   \item{entrez_id}{List of known aliases corresponding to the value in the hugo_symbol column.}
-#' }
-#' @source \url{https://cbioportal.mskcc.org/}
-"genie_gene_info"
 
-
-#' GENIE panel names as found in synapse data
+#' IMPACT Oncogenic Signaling Pathways
 #'
-#' Dataframe labeling all panels in the GENIE data and their corresponding names.
+#' Oncogenic Signaling Pathways curated from [Sanchez-Vega, F et al., 2018](https://pubmed.ncbi.nlm.nih.gov/29625050/).
+#' See [cBioPortal.org](http://www.cbioportal.org/) for more information
 #'
-#' @format A data frame with 469 observations and 5 variables
-#' \describe{
-#'   \item{Sequence.Assay.ID}{Column containing all panel names as found in GENIE data}
-#'   \item{Panel}{Character, indicates corresponding names in gnomeR.}
-#' }
-#' @source \url{https://cbioportal.mskcc.org/}
-"panel_names"
-
-#' IMPACT Gene Pathways
-#'
-#' Dataframe labeling all genes found in IMPACT along with their corresponding
-#' platform and Entrez ID.
-#'
-#' @format A data frame of impact genes
+#' @format A list of common cancer pathways and their associated alterations
 #' \describe{
 #'   \item{pathway}{name of pathway}
-#'   \item{genes}{vectors of genes in each pathways}
+#'   \item{genes}{vector of gene alterations in each pathways}
 #' }
-#' @source \url{https://cbioportal.mskcc.org/}
+#' @source Sanchez-Vega, F., Mina, M., Armenia, J., Chatila, W. K., Luna, A., La, K. C., Dimitriadoy, S., Liu, D. L., Kantheti, H. S., Saghafinia, S., Chakravarty, D., Daian, F., Gao, Q., Bailey, M. H., Liang, W. W., Foltz, S. M., Shmulevich, I., Ding, L., Heins, Z., Ochoa, A., … Schultz, N. (2018). Oncogenic Signaling Pathways in The Cancer Genome Atlas. Cell, 173(2), 321–337.e10. <https://doi.org/10.1016/j.cell.2018.03.035>
 "pathways"
-
 
 
 #' A segmentation file from the cbioPortal datasets
@@ -104,89 +33,49 @@
 #' @format A data frame with 30240 observations with 6 variables
 #' \describe{
 #'  \item{ID}{Factor, IMPACT sample ID}
-#'  \item{chrom}{}
-#'  \item{loc.start}{}
-#'  \item{loc.end}{}
-#'  \item{num.mark}{}
-#'  \item{seg.mean}{}
+#'  \item{chrom}{chromosome}
+#'  \item{loc.start}{start location}
+#'  \item{loc.end}{end location}
+#'  \item{num.mark}{number of probes or bins covered by the segment}
+#'  \item{seg.mean}{segment mean value, usually in log2 scale}
 #' }
 #' @source \url{https://cbioportal.mskcc.org/}
 "seg"
 
 
-
-#' Intervals sequenced in 341 panel
-#'
-#' List of the genes and their corresponding positions sequenced in the targeted panel of IMPACT containing 341 genes.
-#' @format A data frame with 6360 lines
-#' \describe{
-#'     \item{V1}{Chromosome}
-#'     \item{V2}{Start position}
-#'     \item{V3}{End position}
-#'     \item{V4}{Strand}
-#'     \item{V5}{Interval name}
-#'     }
-"ti_341"
-
-#' Intervals sequenced in 410 panel
-#'
-#' List of the genes and their corresponding positions sequenced in the targeted panel of IMPACT containing 410 genes.
-#'
-#' @format A data frame with 7016 lines
-#' \describe{
-#'     \item{V1}{Chromosome}
-#'     \item{V2}{Start position}
-#'     \item{V3}{End position}
-#'     \item{V4}{Strand}
-#'     \item{V5}{Interval name}
-#'     }
-"ti_410"
-
-
-#' Intervals sequenced in 468 panel
-#'
-#' List of the genes and their corresponding positions sequenced in the targeted panel of IMPACT containing 468 genes.
-#' @format A data frame with 7872 lines
-#' \describe{
-#'     \item{V1}{Chromosome}
-#'     \item{V2}{Start position}
-#'     \item{V3}{End position}
-#'     \item{V4}{Strand}
-#'     \item{V5}{Interval name}
-#'     }
-"ti_468"
-
 #' IMPACT Alias Tables
 #'
-#' Table of aliases for IMPACT panel genes used for gene name resolution functionality.
+#' Data frame of genes and their aliases for
+#' IMPACT panel genes. This is used for gene name resolution functionality.
 #'
 #' @format A data frame with 1658 rows
 #' \describe{
-#'     \item{hugo_symbol}{}
-#'     \item{alias}{Start }
-#'     \item{entrez_id}{End }
-#'     \item{alias_entrez_id}{}
+#'     \item{hugo_symbol}{gene Hugo Symbol}
+#'     \item{alias}{Alias of Hugo Symbol in `hugo_symbol` column}
+#'     \item{entrez_id}{entrez ID of gene in `hugo_symbol`}
+#'     \item{alias_entrez_id}{entrez ID of `alias` gene}
 #'     }
 "impact_alias_table"
 
 
-
 #' Data Frame of Column Names
 #'
-#' Table of accepted data names
+#' Data frame of accepted data names for standard genomic files. This serves as a
+#' dictionary to help disambiguate raw column names from user entered mutation,
+#' CNA or structural variant data
 #'
-#' @format A data frame with 2333 rows
+#' @format A data frame
 #' \describe{
-#'     \item{maf_column_name}{MAD columns}
-#'     \item{api_column_name}{API columns}
-#'     \item{mutation_input}{Mutation columns}
-#'     \item{fusion_input}{Fusion columns}
-#'     \item{cna_input}{CNA columns}
-#'     \item{definition}{Column Definition}
+#'     \item{maf_column_name}{data field names as they appear in common MAF file}
+#'     \item{api_column_name}{data field names as they appear in common cBioPortal API retrieved files}
+#'     \item{mutation_input}{does this field appear in mutation files?}
+#'     \item{fusion_input}{does this field appear in mutation/sv files?}
+#'     \item{cna_input}{does this field appear in CNA files?}
+#'     \item{definition}{variable definition}
 #'     \item{notes}{data notes}
-#'     \item{sc_maf_column_name}{Snake case MAF name}
-#'     \item{sc_api_column_name}{Snake case API column name}
-#'     \item{internal_column_name}{Internally used data name}
+#'     \item{sc_maf_column_name}{snake case version of `maf_column_name`}
+#'     \item{sc_api_column_name}{snake case version of `api_column_name`}
+#'     \item{internal_column_name}{name used for each field for all internal processing functions}
 #'     }
 "names_df"
 
@@ -194,9 +83,17 @@
 
 #' Consequence Map
 #'
-#' Dataset of recoding values for consequence mutation data
+#' Data frame used as a data dictionary to recode common variant classification types
+#' to standardized types that can be used in oncoKB annotation.
 #'
-#' @format A data frame with 23878 rows of CNA data from
+#' @format A data frame
+#' \describe{
+#'     \item{variant_classification}{character indicating type of mutation/variant classification as it appears in common mutation files}
+#'     \item{consequence_final_coding}{final value to recode `variant_classification` column to}
+#'     \item{consequence_final_coding_2}{final value to recode `variant_classification` column to}
+#'     \item{consequence_final_coding_3}{final value to recode `variant_classification` column to}
+#'     }
+#'     @source \url{https://github.com/oncokb/oncokb-annotator/blob/a80ef0ce937c287778c36d45bf1cc8397539910c/AnnotatorCore.py#L118}
 "consequence_map"
 
 

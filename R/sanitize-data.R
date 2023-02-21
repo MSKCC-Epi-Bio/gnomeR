@@ -15,16 +15,11 @@ sanitize_mutation_input <- function(mutation, include_silent, ...)  {
   arguments <- list(...)
 
   mutation <- rename_columns(mutation)
+  column_names <- colnames(mutation)
 
   # Check required columns & data types ------------------------------------------
   required_cols <- c("sample_id", "hugo_symbol")
-  column_names <- colnames(mutation)
-
-  which_missing <- required_cols[which(!(required_cols %in% column_names))]
-
-  if(length(which_missing) > 0) {
-    cli::cli_abort("The following required columns are missing in your mutations data: {.field {which_missing}}")
-  }
+  .check_required_cols(mutation, required_cols, "mutation")
 
   # Make sure they are character
   mutation <- mutation %>%
@@ -61,19 +56,15 @@ sanitize_mutation_input <- function(mutation, include_silent, ...)  {
   }
 
   # Variant_Type ---
-  if(!("variant_type" %in% column_names) ) {
-
-    mutation <- mutation %>%
-      purrr::when(
-        ("reference_allele" %in%  column_names) & ("tumor_seq_allele2" %in% column_names) ~
-
-          mutation %>%
+    if (!("variant_type" %in% column_names)) {
+      if (("reference_allele" %in% column_names) & ("tumor_seq_allele2" %in% column_names)) {
+        mutation %>%
           mutate(
             reference_allele = as.character(.data$reference_allele),
             tumor_seq_allele2 = as.character(.data$tumor_seq_allele2),
             variant_type = case_when(
-              .data$reference_allele %in% c("A","T","C","G") &
-                .data$tumor_seq_allele2 %in% c("A","T","C","G") ~ "SNP",
+              .data$reference_allele %in% c("A", "T", "C", "G") &
+                .data$tumor_seq_allele2 %in% c("A", "T", "C", "G") ~ "SNP",
               nchar(.data$tumor_seq_allele2) < nchar(.data$reference_allele) |
                 .data$tumor_seq_allele2 == "-" ~ "DEL",
               .data$reference_allele == "-" |
@@ -81,17 +72,20 @@ sanitize_mutation_input <- function(mutation, include_silent, ...)  {
               nchar(.data$reference_allele) == 2 & nchar(.data$tumor_seq_allele2) == 2 ~ "DNP",
               nchar(.data$reference_allele) == 3 & nchar(.data$tumor_seq_allele2) == 3 ~ "TNP",
               nchar(.data$reference_allele) > 3 & nchar(.data$tumor_seq_allele2) == nchar(.data$reference_allele) ~ "ONP",
-              TRUE ~ "Undefined")),
+              TRUE ~ "Undefined"
+            )
+          )
 
+        cli::cli_warn("Column {.field variant_type} is missing from your data. We inferred variant types using {.field reference_allele} and {.field tumor_seq_allele2} columns")
+      } else {
         TRUE ~ cli::cli_abort("Column {.field variant_type} is missing from your data and {.field reference_allele} and {.field tumor_seq_allele2}
                               columns were not available from which to infer variant type.
                               To proceed, add a column specifying {.field variant_type} (e.g. {.code mutate(<your-mutation-df>, variant_type = 'SNP')}")
-      )
+      }
+    }
 
 
-    cli::cli_warn("Column {.field variant_type} is missing from your data. We inferred variant types using {.field reference_allele} and {.field tumor_seq_allele2} columns")
 
-  }
   return(mutation)
 
 
@@ -114,16 +108,11 @@ sanitize_fusion_input <- function(fusion, ...)  {
   arguments <- list(...)
 
   fusion <- rename_columns(fusion)
+  column_names <- colnames(fusion)
 
   # Check required columns & data types ------------------------------------------
   required_cols <- c("sample_id", "site_1_hugo_symbol", "site_2_hugo_symbol")
-  column_names <- colnames(fusion)
-
-  which_missing <- required_cols[which(!(required_cols %in% column_names))]
-
-  if(length(which_missing) > 0) {
-    cli::cli_abort("The following required columns are missing in your fusions data: {.field {which_missing}}")
-  }
+  .check_required_cols(fusion, required_cols, "fusion")
 
   # Make sure they are character
   fusion <- fusion %>%
@@ -154,18 +143,11 @@ sanitize_cna_input <- function(cna, ...)  {
   arguments <- list(...)
 
   cna <- rename_columns(cna)
+  column_names <- colnames(cna)
 
   # Check required columns & data types ------------------------------------------
   required_cols <- c("hugo_symbol", "sample_id", "alteration")
-  column_names <- colnames(cna)
-
-  which_missing <- required_cols[which(!(required_cols %in% column_names))]
-
-  if(length(which_missing) > 0) {
-    cli::cli_abort("The following required columns are missing in your CNA data: {.field {which_missing}}.
-                   Is your data in wide format? If so, it must be long format. See {.code gnomeR::pivot_cna_long()} to reformat")
-  }
-
+  .check_required_cols(cna, required_cols, "cna")
 
   # Make sure hugo & alteration is character
   cna <- cna %>%

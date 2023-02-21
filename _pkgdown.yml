@@ -51,12 +51,10 @@ reference:
   - subtitle: Color Palette
   - contents:
     - gnomer_colors
-    - gnomer_cols
     - gnomer_palettes
     - gnomer_palette
-    - gnomer_pal
-    - scale_color_pancan
-    - scale_fill_pancan
+    - set_gnomer_palette
+    - reset_gnomer_palette
   - subtitle: Example Data Sets
   - contents:
     - mutations
@@ -66,14 +64,8 @@ reference:
     - cna_wide
     - consequence_map
     - gene_panels
-    - panel_names
-    - genie_gene_info
     - names_df
     - pathways
     - impact_alias_table
-    - impact_gene_info
-    - ti_341
-    - ti_410
-    - ti_468
 
 

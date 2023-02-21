@@ -91,7 +91,8 @@ test_that("gene binary with all three types of alt and impact only",{
   bin_impact <-  create_gene_binary(samples=samples,
                                    mutation = gnomeR::mutations,
                                    cna = gnomeR::cna,
-                                   fusion = gnomeR::sv)
+                                   fusion = gnomeR::sv,
+                                   specify_panel = "impact")
 
   mut_test <- gnomeR::mutations %>%
     filter(sampleId %in% samples)
@@ -196,6 +197,133 @@ test_that("endings don't match impact list", {
   summary <- sum(bin_impact$XXXTEST)
 
   expect_equal(summary, length(patients))
+})
+
+
+test_that("check df for specify panel has correct names",{
+  #select samples that are in all three types of mutations
+  samples <- gnomeR::mutations$sampleId[gnomeR::mutations$sampleId %in%
+                                          gnomeR::cna$sampleId]
+  samples <-  samples[samples %in% gnomeR::sv$sampleId]
+  samples <- unique(samples)[1:5]
+
+  sp <- as.data.frame(samples) %>%
+    mutate(panels = "IMPACT341")
+
+  mut <- gnomeR::mutations %>%
+    filter(sampleId %in% samples)
+
+  expect_error(bin_impact <-  create_gene_binary(samples=samples,
+                                    mutation = mut,
+                                    cna = gnomeR::cna,
+                                    fusion = gnomeR::sv,
+                                    specify_panel = sp), "Dataframe*")
+
+
+})
+
+
+test_that("check specify_panel with dataframe works",{
+  #select samples that are in all three types of mutations
+  samples <- gnomeR::mutations$sampleId[gnomeR::mutations$sampleId %in%
+                                          gnomeR::cna$sampleId]
+  samples <-  samples[samples %in% gnomeR::sv$sampleId]
+  samples <- unique(samples)[1:5]
+
+  sp <- as.data.frame(samples) %>%
+    mutate(panels = "IMPACT341")
+
+  mut <- gnomeR::mutations %>%
+    filter(sampleId %in% samples)
+  mut[1, 1] <- "ZZZZ"
+
+  sp <- rename(sp,
+               "sample_id" = samples,
+               "panel_id" = panels)
+
+  expect_message(bin_impact <-  create_gene_binary(samples=samples,
+                                                   mutation = mut,
+                                                   cna = gnomeR::cna,
+                                                   fusion = gnomeR::sv
+                                                   ,specify_panel = sp), "*")
+
+  # recode so one is on later panel with CSF3R
+
+  sp[1, 2] <- "IMPACT468"
+  expect_message(bin_impact2 <-  create_gene_binary(samples=samples,
+                                                 mutation = mut,
+                                                 cna = gnomeR::cna,
+                                                 fusion = gnomeR::sv,
+                                                 specify_panel = sp), "*")
+
+  expect_gt(sum(is.na(bin_impact$CSF3R)), sum(is.na(bin_impact2$CSF3R)))
+
+
+})
+
+
+test_that("check specify_panel with dataframe that doesn't have all samples",{
+  #select samples that are in all three types of mutations
+  samples <- gnomeR::mutations$sampleId[gnomeR::mutations$sampleId %in%
+                                          gnomeR::cna$sampleId]
+  samples <-  samples[samples %in% gnomeR::sv$sampleId]
+  samples <- unique(samples)[1:5]
+
+  sp <- as.data.frame(samples) %>%
+    mutate(panels = "IMPACT341")
+
+  mut <- gnomeR::mutations %>%
+    filter(sampleId %in% samples)
+
+
+  sp <- rename(sp,
+               "sample_id" = samples,
+               "panel_id" = panels)
+
+  sp <- head(sp, 1)
+
+  expect_no_message(bin_impact <-  create_gene_binary(samples=samples,
+                                                   mutation = mut,
+                                                   cna = gnomeR::cna,
+                                                   fusion = gnomeR::sv,
+                                                   specify_panel = sp))
+
+  expect_equal(sum(apply(bin_impact, 1, function(x) sum(is.na(x))) > 0), 1)
+
+
+
+})
+
+
+test_that("Returns error if missing in specify panel DF",{
+  #select samples that are in all three types of mutations
+  samples <- gnomeR::mutations$sampleId[gnomeR::mutations$sampleId %in%
+                                          gnomeR::cna$sampleId]
+  samples <-  samples[samples %in% gnomeR::sv$sampleId]
+  samples <- unique(samples)[1:5]
+
+  sp <- as.data.frame(samples) %>%
+    mutate(panels = "IMPACT341")
+
+  mut <- gnomeR::mutations %>%
+    filter(sampleId %in% samples)
+
+
+  sp <- rename(sp,
+               "sample_id" = samples,
+               "panel_id" = panels)
+
+  sp[1, 2] <- NA_character_
+
+  expect_error(bin_impact <-  create_gene_binary(samples=samples,
+                                                   mutation = mut,
+                                                   cna = gnomeR::cna,
+                                                   fusion = gnomeR::sv,
+                                                   specify_panel = sp), "*")
+
+
+
+
 })
 
 

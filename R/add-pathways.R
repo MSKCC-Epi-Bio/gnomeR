@@ -1,8 +1,12 @@
 #' Pathway Alterations
 #'
-#' Checks if certain oncogenic signaling pathways are altered.  Pathways were curated from [this paper](https://pubmed.ncbi.nlm.nih.gov/29625050/).  Please check for gene aliases before using.
+#' Input a binary matrix of patients x genes and return a dataframe with a column per pathway
+#' indicating if default or custom oncogenic signaling pathways
+#' are activated in each sample. Pathways were curated
+#' from [Sanchez-Vega, F et al., 2018](https://pubmed.ncbi.nlm.nih.gov/29625050/).
 #'
-#' Sanchez-Vega, F., Mina, M., Armenia, J., Chatila, W. K., Luna, A., La, K. C., Dimitriadoy, S., Liu, D. L., Kantheti, H. S., Saghafinia, S., Chakravarty, D., Daian, F., Gao, Q., Bailey, M. H., Liang, W. W., Foltz, S. M., Shmulevich, I., Ding, L., Heins, Z., Ochoa, A., … Schultz, N. (2018). Oncogenic Signaling Pathways in The Cancer Genome Atlas. Cell, 173(2), 321–337.e10. <https://doi.org/10.1016/j.cell.2018.03.035>
+#' Please check for gene aliases in your dataset before using.
+#'
 #'
 #' @param gene_binary a binary matrix from `gene_binary()`
 #' @param pathways a vector of pathway names to annotate. The options are `names(gnomeR::pathways)` ("RTK/RAS", "Nrf2",
@@ -15,11 +19,10 @@
 #' any type of gene alteration should be counted towards a pathway ("gene") or only specific types of alterations should be counted towards a pathway ("alteration")
 #' By default, the function assumes alteration-specific pathway annotation and all default pathways are annotated this way. If a
 #' custom pathway is passed with no suffix (e.g. `custom_pathway = 'TP53'`) it will assume it is a mutation.
-#' @param bind_pathways a logical indicating whether pathway columns should be joined to main gene_binary or returned separately as a list item.
-#' Default is TRUE and function will `bind_cols()` and return a data.frame. If FALSE a list will be returned.
 #' @keywords internal
 #' @return a data frame: each sample is a row, columns are pathways, with values of 0/1 depending on pathway alteration status.
 #' @export
+#' @source Sanchez-Vega, F., Mina, M., Armenia, J., Chatila, W. K., Luna, A., La, K. C., Dimitriadoy, S., Liu, D. L., Kantheti, H. S., Saghafinia, S., Chakravarty, D., Daian, F., Gao, Q., Bailey, M. H., Liang, W. W., Foltz, S. M., Shmulevich, I., Ding, L., Heins, Z., Ochoa, A., … Schultz, N. (2018). Oncogenic Signaling Pathways in The Cancer Genome Atlas. Cell, 173(2), 321–337.e10. <https://doi.org/10.1016/j.cell.2018.03.035>
 #'
 #' @examples
 #'
@@ -31,7 +34,6 @@
 add_pathways <- function(gene_binary,
                          pathways = c(names(gnomeR::pathways)),
                          custom_pathways = NULL,
-                         bind_pathways = TRUE,
                          count_pathways_by = c("alteration", "gene")) {
 
   all_path <- gnomeR::pathways
@@ -39,29 +41,32 @@ add_pathways <- function(gene_binary,
 
   # check arguments -----------------------------------------------------------
 
+  # custom pathways
   switch(!(class(custom_pathways) %in% c("NULL", "character", "list")),
          cli::cli_abort("{.code custom_pathways} must be character vector, or list"))
 
-  # if(!("sample_id" %in% names(gene_binary))) {
-  #   gene_binary <- rownames_to_column(gene_binary, var = "sample_id")
-  # }
+  .check_required_cols(gene_binary, "sample_id", "gene_binary")
+
+  # user-specified pathways
   pathways_input <- pathways
 
-  pathways <- pathways %>%
-    purrr::when(is.null(.) ~ NULL,
-                TRUE ~ match.arg(., all_path_names, several.ok = TRUE))
-
+  if(!is.null(pathways)) {
+    pathways <- match.arg(pathways, all_path_names, several.ok = TRUE)
+  }
 
   not_valid <- pathways_input[!(pathways_input %in% all_path_names)]
 
   switch(length(not_valid) > 0,
          cli::cli_warn("Ignoring {.code {not_valid}}: not a known pathway. See {.code gnomeR::pathways}"))
 
+  # count pathways by
   count_pathways_by <- match.arg(count_pathways_by, c("alteration", "gene"))
 
   all_cols <- colnames(gene_binary)
   mut_cols <- !(str_detect(all_cols, ".Amp|.Del|.fus|.cna"))
 
+  switch(is.null(custom_pathways) & count_pathways_by == "gene",
+         cli::cli_alert_warning("Annotating the default pathways by gene may be inappropriate."))
 
   # custom_pathways:  can be list or vector------------------------------------
   if (!is.null(custom_pathways)) {
@@ -88,23 +93,11 @@ add_pathways <- function(gene_binary,
 
     if(count_pathways_by == "alteration") {
 
-      # if counting by alteration but no evidence of fus/cna but fus/cna in data, warn
-      # if(
-      #   (any(purrr::map_lgl(custom_pathways, ~any(str_detect(.x, ".Amp|.Del|.fus|.cna")))) == FALSE) &
-      #     (any(mut_cols == FALSE))
-      #   ) {
-      #
-      #   cli::cli_warn("None of your {.code custom_pathways} have CNA (.Del/.Amp) or Fusions (.fus) but you have some in your data.
-      #                 Assuming all pathway genes are mutations and counting only mutations in your data towards that pathway.
-      #                 See {.code count_pathways_by} argument to change this`")
-      # }
-
       # add mut on custom pathways when count_pathways_by == "alteration"
       if(any(purrr::map_lgl(custom_pathways, ~any(!str_detect(.x, ".Amp|.Del|.fus|.cna|.mut"))))) {
         cli::cli_inform("Assuming any gene in {.code custom_pathway} without
-        suffix {.code Amp|.Del|.fus|.cna} is a mutation in that pathway. To control this behvaiour, see argument {.code count_pathways_by}")
+        suffix {.code .Amp|.Del|.fus|.cna} is specifically a mutation in that pathway. CNA and fusions will not be counted (e.g. TP53.Del). To control this behavior, see argument {.code count_pathways_by}")
       }
-
 
 
       custom_pathways <- purrr::map(custom_pathways, function(x) {
@@ -157,12 +150,9 @@ add_pathways <- function(gene_binary,
     colnames(gene_binary) <- all_cols
   }
 
-  path_out <- path_out %>%
-    purrr::when(
-      bind_pathways ~ bind_cols(gene_binary, .),
-      TRUE ~ list("gene_binary" = gene_binary,
-                  "pathways" = path_out))
-
+  path_out <- gene_binary %>%
+#    select("sample_id") %>%
+    bind_cols(path_out)
 
   return(path_out)
 }
@@ -191,12 +181,15 @@ add_pathways <- function(gene_binary,
 .sum_alts_in_pathway <- function(gene_binary, pathway_list_item,
                                  pathway_name,
                                  count_pathways_by) {
-  path_alt <- gene_binary %>%
-    purrr::when(
-      count_pathways_by == "alteration" ~
-        select(., any_of(unlist(pathway_list_item, use.names=FALSE))),
-      count_pathways_by == "gene" ~
-        select(., contains(unlist(pathway_list_item, use.names=FALSE)))) %>%
+  path_alt <- switch(count_pathways_by,
+                     "alteration" = {
+                       gene_binary %>%
+                         select(any_of(unlist(pathway_list_item, use.names=FALSE)))
+                     },
+                     "gene" = {
+                       gene_binary %>%
+                         select(contains(unlist(pathway_list_item, use.names=FALSE)))
+                     }) %>%
     mutate(sum = rowSums(., na.rm = TRUE)) %>%
     transmute('pathway_{pathway_name}' := if_else(sum >= 1, 1, 0))
 

@@ -3,12 +3,14 @@
 \name{add_pathways}
 \alias{add_pathways}
 \title{Pathway Alterations}
+\source{
+Sanchez-Vega, F., Mina, M., Armenia, J., Chatila, W. K., Luna, A., La, K. C., Dimitriadoy, S., Liu, D. L., Kantheti, H. S., Saghafinia, S., Chakravarty, D., Daian, F., Gao, Q., Bailey, M. H., Liang, W. W., Foltz, S. M., Shmulevich, I., Ding, L., Heins, Z., Ochoa, A., … Schultz, N. (2018). Oncogenic Signaling Pathways in The Cancer Genome Atlas. Cell, 173(2), 321–337.e10. \url{https://doi.org/10.1016/j.cell.2018.03.035}
+}
 \usage{
 add_pathways(
   gene_binary,
   pathways = c(names(gnomeR::pathways)),
   custom_pathways = NULL,
-  bind_pathways = TRUE,
   count_pathways_by = c("alteration", "gene")
 )
 }
@@ -23,9 +25,6 @@ pathways you want as \code{custom_pathways}}
 
 \item{custom_pathways}{a vector of alterations to annotate as a pathway, or a list of custom pathways (see \code{gnomeR::pathways} as example)}
 
-\item{bind_pathways}{a logical indicating whether pathway columns should be joined to main gene_binary or returned separately as a list item.
-Default is TRUE and function will \code{bind_cols()} and return a data.frame. If FALSE a list will be returned.}
-
 \item{count_pathways_by}{Must be one of the following: "alteration" (default), or "gene". This determines whether
 any type of gene alteration should be counted towards a pathway ("gene") or only specific types of alterations should be counted towards a pathway ("alteration")
 By default, the function assumes alteration-specific pathway annotation and all default pathways are annotated this way. If a
@@ -35,10 +34,13 @@ custom pathway is passed with no suffix (e.g. \code{custom_pathway = 'TP53'}) it
 a data frame: each sample is a row, columns are pathways, with values of 0/1 depending on pathway alteration status.
 }
 \description{
-Checks if certain oncogenic signaling pathways are altered.  Pathways were curated from \href{https://pubmed.ncbi.nlm.nih.gov/29625050/}{this paper}.  Please check for gene aliases before using.
+Input a binary matrix of patients x genes and return a dataframe with a column per pathway
+indicating if default or custom oncogenic signaling pathways
+are activated in each sample. Pathways were curated
+from \href{https://pubmed.ncbi.nlm.nih.gov/29625050/}{Sanchez-Vega, F et al., 2018}.
 }
 \details{
-Sanchez-Vega, F., Mina, M., Armenia, J., Chatila, W. K., Luna, A., La, K. C., Dimitriadoy, S., Liu, D. L., Kantheti, H. S., Saghafinia, S., Chakravarty, D., Daian, F., Gao, Q., Bailey, M. H., Liang, W. W., Foltz, S. M., Shmulevich, I., Ding, L., Heins, Z., Ochoa, A., … Schultz, N. (2018). Oncogenic Signaling Pathways in The Cancer Genome Atlas. Cell, 173(2), 321–337.e10. \url{https://doi.org/10.1016/j.cell.2018.03.035}
+Please check for gene aliases in your dataset before using.
 }
 \examples{
 

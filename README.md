@@ -11,17 +11,6 @@ coverage](https://codecov.io/gh/MSKCC-Epi-Bio/gnomeR/branch/main/graph/badge.svg
 
 <!-- badges: end -->
 
-<font size="5">:bangbang: :warning: **NOTE: This package is currently
-under active development with a new stable release expected November
-15th, 2022. For code written before 2022-03-23, please use the previous
-stable version (v1.1.0)**:warning::bangbang: </font>
-
-You can install the pre-2022-03-23 version with:
-
-``` r
-remotes::install_github('MSKCC-Epi-Bio/gnomeR@v1.1.0')
-```
-
 ## Installation
 
 You can install the development version of `gnomeR` from
@@ -35,7 +24,7 @@ devtools::install_github("MSKCC-Epi-Bio/gnomeR")
 Along with its companion package for cbioPortal data download:
 
 ``` r
-devtools::install_github("karissawhiting/cbioportalr")
+devtools::install_github("karissawhiting/cbioportalR")
 ```
 
 ## Introduction
@@ -45,19 +34,18 @@ processing, visualization and analysis. This is primarily targeted to
 IMPACT datasets but can also be applied to any genomic data provided by
 cBioPortal. With {gnomeR} and {cbioportalR} you can:
 
--   [**Download and gather data from
-    CbioPortal**](https://www.karissawhiting.com/cbioportalR/) - Pull
-    from cBioPortal data base by study ID or sample ID.
--   **OncoKB annotate data** - Filter genomic data for known oncogenic
-    alterations.
--   **Process genomic data** - Process retrieved mutation/maf, fusions,
-    copy-number alteration, and segmentation data (when available) into
-    an analysis-ready formats.
--   **Visualize processed data** - Create OncoPrints, heatmaps and
-    summary plots from processed data.
--   **Analyzing processed data**- Analyze associations between genomic
-    variables and clinical variables or outcomes with summary tables,
-    advanced visualizations, and univariate models.
+- [**Download and gather data from
+  CbioPortal**](https://www.karissawhiting.com/cbioportalR/) - Pull from
+  cBioPortal data base by study ID or sample ID.
+- **OncoKB annotate data (coming soon)** - Filter genomic data for known
+  oncogenic alterations.
+- **Process genomic data** - Process retrieved mutation/maf, fusions,
+  copy-number alteration, and segmentation data (when available) into an
+  analysis-ready formats.
+- **Visualize processed data** - Create summary plots from processed
+  data.
+- **Analyzing processed data**- Analyze associations between genomic
+  variables and clinical variables or outcomes.
 
 ## Getting Set up
 
@@ -87,7 +75,7 @@ cna <- gnomeR::cna
 sv <- gnomeR::sv
 
 un <-  unique(mut$sampleId)
-sample_patients <- sample(un, size = 100, replace = FALSE)
+sample_patients <- sample(un, size = 50, replace = FALSE)
 ```
 
 The main data processing function is `create_gene_binary()` which takes
@@ -98,37 +86,39 @@ resulting dataframe, even if they have no alterations.
 
 ``` r
 gen_dat <- create_gene_binary(samples = sample_patients,
-                         maf = mut,
+                         mutation = mut,
                          fusion = sv,
                          cna = cna)
 
 head(gen_dat[, 1:6])
-#>                   ERG.fus KDM5A.fus KDM5D.fus GSK3B.fus EGFR.fus PBRM1.fus
-#> P-0008869-T01-IM5       1         0         0         0        0         0
-#> P-0001242-T01-IM3       0         0         0         0        0         0
-#> P-0005806-T01-IM5       0         0         0         0        0         0
-#> P-0007346-T01-IM5       0         0         0         0        0         0
-#> P-0001861-T01-IM3       0         0         0         0        0         0
-#> P-0001202-T01-IM3       0         0         0         0        0         0
+#> # A tibble: 6 × 6
+#>   sample_id           ALK   APC    AR  ARAF   ATM
+#>   <chr>             <dbl> <dbl> <dbl> <dbl> <dbl>
+#> 1 P-0004508-T01-IM5     1     0     0     0     0
+#> 2 P-0005806-T01-IM5     0     1     0     0     0
+#> 3 P-0007006-T01-IM5     0     1     0     0     0
+#> 4 P-0008682-T01-IM5     0     1     0     0     0
+#> 5 P-0001297-T01-IM3     0     0     1     0     0
+#> 6 P-0007538-T01-IM5     0     0     0     1     0
 ```
 
 By default, mutations, CNA and fusions will be returned in separate
-columns. You can combine these at teh gene level using the following:
+columns. You can combine these at the gene level using the following:
 
 ``` r
 by_gene <- gen_dat %>% 
   summarize_by_gene()
 
 head(by_gene[,1:6])
-#> # A tibble: 6 x 6
-#>   sample_id           ERG KDM5A KDM5D GSK3B  EGFR
+#> # A tibble: 6 × 6
+#>   sample_id           ALK   APC    AR  ARAF   ATM
 #>   <chr>             <dbl> <dbl> <dbl> <dbl> <dbl>
-#> 1 P-0008869-T01-IM5     1     0     0     0     0
-#> 2 P-0001242-T01-IM3     0     0     0     0     0
-#> 3 P-0005806-T01-IM5     0     0     0     0     0
-#> 4 P-0007346-T01-IM5     0     0     0     0     0
-#> 5 P-0001861-T01-IM3     0     0     0     0     0
-#> 6 P-0001202-T01-IM3     0     0     0     0     0
+#> 1 P-0004508-T01-IM5     1     0     0     0     0
+#> 2 P-0005806-T01-IM5     0     1     1     0     1
+#> 3 P-0007006-T01-IM5     0     1     0     0     0
+#> 4 P-0008682-T01-IM5     0     1     0     0     0
+#> 5 P-0001297-T01-IM3     0     0     1     0     0
+#> 6 P-0007538-T01-IM5     0     0     0     1     0
 ```
 
 ## Visualize
@@ -144,7 +134,7 @@ Quickly visualize mutation characteristics with `ggvarclass()`,
 ggvarclass(mutation = mut)
 ```
 
-<img src="man/figures/README-unnamed-chunk-5-1.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-4-1.png" width="100%" />
 
 ## Summarize & Analyze
 
@@ -174,37 +164,12 @@ pathways using `add_pathways()`:
 
 path_by_trt <- gen_dat %>%
   add_pathways() %>%
-  select(trt_status, contains("pathway_")) %>%
+  select(sample_id, trt_status, contains("pathway_")) %>%
   tbl_genomic(by = trt_status) %>%
   gtsummary::add_p() 
 ```
 
 <img src="man/figures/README-path_by_trt.png" width="30%" />
-
-## Further analytical tools
-
-Along with mutation, cna and fusion data, {gnomeR} also allows analysis
-and visualization of
-[FACETs](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5027494/) data.
-[FACETs](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5027494/) is an
-allele-specific copy number tool and open-source software with a broad
-application to whole genome, whole-exome, as well as targeted panel
-sequencing platforms. It is a fully integrated stand-alone pipeline that
-includes sequencing BAM file post-processing, joint segmentation of
-total- and allele-specific read counts, and integer copy number calls
-corrected for tumor purity, ploidy and clonal heterogeneity, with
-comprehensive output.
-
-You can visualize this data using `facets_heatmap()`
-
-``` r
-
-select_samples <- sample(unique(seg$ID),  100)
-p.heat <- facets_heatmap(seg = seg, samples = select_samples, min_purity = 0)
-p.heat$p
-```
-
-<img src="man/figures/README-unnamed-chunk-10-1.png" width="100%" />
 
 # Contributing
 

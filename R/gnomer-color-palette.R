@@ -83,21 +83,6 @@ gnomer_colors <- c(
 
 
 
-#' Function to extract colors from \code{gnomer_colors} as hex codes
-#'
-#' @param ... Character names of gnomer_colors
-#' @export
-
-gnomer_cols <- function(...) {
-  cols <- c(...)
-
-  if (is.null(cols)) {
-    return(gnomer_colors)
-  }
-
-  unname(gnomer_colors[cols])
-}
-
 
 #' Complete list of gnomeR color palettes
 #'
@@ -113,15 +98,15 @@ gnomer_cols <- function(...) {
 #' gnomer_palettes[["pancan"]]
 
 gnomer_palettes <- list(
-  `pancan` = gnomer_cols("ACC",  "BLCA", "BRCA", "CESC", "CHOL", "COAD", "DLBC", "ESCA",
+  pancan = unname(gnomer_colors[c("ACC",  "BLCA", "BRCA", "CESC", "CHOL", "COAD", "DLBC", "ESCA",
                          "GBM",  "HNSC", "KICH", "KIRC", "KIRP", "LAML",
                           "LGG",  "LIHC", "LUAD", "LUSC", "MESO", "OV",  "PAAD", "PCPG",
                          "PRAD", "READ", "SARC", "SKCM", "STAD", "TGCT",
-                          "THCA", "THYM", "UCEC", "UCS", "UVM" ),
-  `main` = gnomer_cols("k1", "k2", "k3", "k4", "k5", "k6", "k7", "k8", "k9", "k10", "k11",
+                          "THCA", "THYM", "UCEC", "UCS", "UVM" )]),
+  main = unname(gnomer_colors[c("k1", "k2", "k3", "k4", "k5", "k6", "k7", "k8", "k9", "k10", "k11",
                        "k12", "k13", "k14", "k15", "k16", "k17", "k18", "k19", "k20", "k21","k22",
-                       "k23","k24","k25","k26","k27","k28","k29","k30", "k31","k32","k33"),
-  `sunset` = gnomer_cols("k27", "k28", "k29", "k30", "k31", "k32", "k33")
+                       "k23","k24","k25","k26","k27","k28","k29","k30", "k31","k32","k33")]),
+  sunset = unname(gnomer_colors[c("k27", "k28", "k29", "k30", "k31", "k32", "k33")])
 )
 
 
@@ -135,6 +120,10 @@ gnomer_palettes <- list(
 #' or the needed number of colors if less than the total.
 #' @param type Either "continuous" or "discrete". Use continuous if you want
 #' to automatically interpolate between colours.
+#' @param plot_col Boolean value weather to plot the palette labeled with their hex codes. Defalut is FALSE.
+#' @param reverse Boolean indicating whether the palette should be reversed.
+#' Default is FALSE.
+#' @param ... Additional parameters to pass too `grDevices::colorRampPalette`
 #'   @importFrom graphics rgb rect par image text
 #'   @importFrom grDevices colorRampPalette
 #' @return A vector of colours.
@@ -168,7 +157,8 @@ gnomer_palettes <- list(
 #' scale_fill_manual(values = gnomer_palette("pancan"))
 #'
 
-gnomer_palette <- function(name = "pancan", n, type = c("discrete", "continuous")) {
+gnomer_palette <- function(name = "pancan", n, type = c("discrete", "continuous"),
+                           plot_col = FALSE, reverse = FALSE,...) {
   type <- match.arg(type)
 
   # since the palettes in msk_palettes are named vectors, ggplot will try to match the names to levels of the variables in the data, which is not what we want. Rather we just want to use them in order, so we need to use unname() here
@@ -186,123 +176,164 @@ gnomer_palette <- function(name = "pancan", n, type = c("discrete", "continuous"
     stop("Number of requested colors greater than what palette can offer")
   }
 
-  out <- switch(type,
-                continuous = grDevices::colorRampPalette(pal)(n),
-                discrete = pal[1:n]
-  )
-  structure(out, class = "palette", name = name)
-}
+  if (reverse) { pal <- rev(pal)}
 
+  pal_swatch <- switch(type,
+         continuous = grDevices::colorRampPalette(pal,...)(n),
+         discrete = pal[1:n])
 
-#' @importFrom graphics rect par image text
-#' @importFrom grDevices rgb
-#' @export
-print.palette <- function(x, ...) {
-  n <- length(x)
-  old <- par(mar = c(0.5, 0.5, 0.5, 0.5))
-  on.exit(par(old))
-
-  image(1:n, 1, as.matrix(1:n),
-        col = x,
-        ylab = "", xaxt = "n", yaxt = "n", bty = "n"
-  )
-
-  rect(0, 0.9, n + 1, 1.1, col = rgb(1, 1, 1, 0.8), border = NA)
-  text((n + 1) / 2, 1, labels = attr(x, "name"), cex = 1, family = "serif")
-}
-
-
-#' Return function to interpolate a gnomeR color palette
-#'
-#' @param palette Character name of palette in gnomer_palettes.
-#' Options include "main", "pancan", "sunset"
-#' @param reverse Boolean indicating whether the palette should be reversed.
-#' Default to FALSE.
-#' @param ... Additional arguments to pass to colorRampPalette()
-#' @export
-
-gnomer_pal <- function(palette = "pancan", reverse = FALSE, ...) {
-  pal <- gnomer_palettes[[palette]]
-
-  if (reverse) pal <- rev(pal)
-
-  grDevices::colorRampPalette(pal, ...)
-}
-
-
-#' Color scale creator to add gnomeR colors in ggplot
-#'
-#' @description This color scale generator will interpolate between colors,
-#' even when discrete scales are provided.
-#' To use exact discrete colors, see examples in \code{gnomer_palette}
-#'
-#' @param palette Character name of palette in msk_palettes, supplied in quotes.
-#' Options include "main" (default), "pancan", "sunset".
-#' @param discrete Boolean indicating whether color aesthetic is discrete.
-#' Default is TRUE.
-#' @param reverse Boolean indicating whether the palette should be reversed.
-#' Default is FALSE.
-#' @param ... Additional arguments passed to discrete_scale() or
-#'            scale_color_gradientn(), used respectively when discrete is TRUE or FALSE
-#'
-#' @export
-#'
-#' @examples
-#'
-#' library(ggplot2)
-#'
-#' # use a discrete color scale
-#' ggplot(iris, aes(Sepal.Width, Sepal.Length, color = Species)) +
-#' geom_point(size = 4) +
-#' scale_color_pancan("pancan")
-#'
-#' # use a continuous color scale
-#' ggplot(iris, aes(Sepal.Width, Sepal.Length, color = Sepal.Length)) +
-#' geom_point(size = 4, alpha = .6) +
-#' scale_color_pancan(palette = "sunset", discrete = FALSE)
-
-scale_color_pancan <- function(palette = "main", discrete = TRUE, reverse = FALSE, ...) {
-  pal <- gnomer_pal(palette = palette, reverse = reverse)
-
-  if (discrete) {
-    ggplot2::discrete_scale("colour", paste0("gnomer_", palette), palette = pal, ...)
-  } else {
-    ggplot2::scale_color_gradientn(colours = pal(256), ...)
+  if(plot_col == FALSE){
+    pal_swatch
+  }else{
+    return(unlist(list(pal_swatch, scales::show_col(pal_swatch))))
   }
 }
 
 
-#' Fill scale creator to add gnomeR colors in ggplot
+
+
+
+
+#' Set gnomeR color palette
 #'
-#' @description This fill scale generator will interpolate between the colors
-#' in the palette provided
+#' This function sets the gnomeR color palette as the default palette for all
+#' ggplot2 objects. It does so by overriding the following four functions from
+#' the ggplot2 package: \code{scale_color_discrete()},
+#' \code{scale_fill_discrete()}, \code{scale_color_continuous()}, and
+#' \code{scale_fill_continuous()}, and places them in the specified environment.
+#' A typical workflow would include this function at the top of a script,
+#' and subsequent calls to `ggplot()` will utilize the gnomeR color palette.
 #'
-#' @param palette Character name of palette in msk_palettes, supplied in quotes.
-#' Options include "main", "pancan", "sunset" (default).
-#' @param discrete Boolean indicating whether color aesthetic is discrete or not.
-#' Default is TRUE.
-#' @param reverse Boolean indicating whether the palette should be reversed.
-#' Default is FALSE.
-#' @param ... Additional arguments passed to discrete_scale() or
-#'            scale_color_gradientn(), used respectively when discrete is TRUE or FALSE
-#' @export
-#'
+#' @param palette name of palette in gnomer_palettes, supplied in quotes.
+#' Options include `"pancan", "main", "sunset"`.
+#' Default is `"pancan"`.
+#' @param gradient name of gradient palette in `gnomer_palettes`, supplied in quotes.
+#' Options include `"pancan", "main", "sunset"`. Default is `"pancan"`.
+#' @param reverse if set to `TRUE`, will reverse the order of the color palette
+#' @param env environment in which palette will take effect. Default is `rlang::caller_env()`.
+#' @author Michael Curry
 #' @examples
-#'
 #' library(ggplot2)
 #'
-#' # use a fill color
-#' # alternative use that involves interpolation
-#' ggplot(iris, aes(x = Sepal.Length, fill = Species)) +
-#' geom_histogram(bins = 20, position = "dodge") +
-#' scale_fill_pancan()
+#' set_gnomer_palette()
+#'
+#' ggplot(mtcars, aes(wt, mpg, color = factor(cyl))) +
+#'   geom_point()
+#'
+#' # setting other gnomeR palettes
+#' set_gnomer_palette(palette = "main", gradient = "sunset")
+#'
+#' ggplot(mtcars, aes(wt, mpg, color = factor(cyl))) +
+#'   geom_point()
+#'
+#' ggplot(mtcars, aes(wt, mpg, color = cyl)) +
+#'   geom_point()
+#' @export
 
-scale_fill_pancan <- function(palette = "sunset", discrete = TRUE, reverse = FALSE, ...) {
-  pal <- gnomer_pal(palette = palette, reverse = reverse)
+set_gnomer_palette <- function(palette = c("pancan", "main", "sunset"),
+                               gradient = c("pancan", "main", "sunset"),
+                               reverse = FALSE,
+                               env = rlang::caller_env()) {
+  # choosing the gnomeR palette
+  palette <- gnomer_palettes[[match.arg(palette)]]
+  gradient <- gnomer_palettes[[match.arg(gradient)]]
 
-  if (discrete) {
-    ggplot2::discrete_scale("fill", paste0("gnomer_", palette), palette = pal, ...)
-  } else {
-    ggplot2::scale_fill_gradientn(colours = pal(256), ...)
+  # reversing palette if requested
+  if (reverse) {
+    palette <- rev(palette)
+    gradient <- rev(gradient)
   }
+
+  # helper functions that set color for continuous ggplot colors
+  # both for scales fill and color
+  gnomer_fill <- function(...,
+                       values = NULL, space = "Lab", na.value = "grey50",
+                       guide = "colourbar", aesthetics = "fill") {
+
+    continuous_scale(
+      aesthetics = aesthetics,
+      scale_name = "gnomercol",
+      palette = scales::gradient_n_pal(
+        colours = c(gradient[1], gradient[length(gradient)]),
+        values = values,
+        space = space
+      ),
+      na.value = na.value,
+      guide = guide, ...
+    )
+  }
+
+  gnomer_colour <- function(...,
+                         values = NULL, space = "Lab", na.value = "grey50",
+                         guide = "colourbar", aesthetics = "colour") {
+    continuous_scale(
+      aesthetics = aesthetics,
+      scale_name = "gnomercol",
+      palette =
+        scales::gradient_n_pal(
+          colours = c(gradient[1], gradient[length(gradient)]),
+          values = values, space = space
+        ),
+      na.value = na.value,
+      guide = guide, ...
+    )
+  }
+
+  # setting options for ggplot colors
+  withr::with_environment(
+    env = env,
+    code = {
+      options("ggplot2.discrete.colour" = unname(palette))
+      options("ggplot2.discrete.fill" = unname(palette))
+      options("ggplot2.continuous.colour" = gnomer_colour)
+      options("ggplot2.continuous.fill" = gnomer_fill)
+      options("ggplot2.binned.colour" = unname(palette))
+      options("ggplot2.binned.fill" = unname(palette))
+    }
+  )
 }
+
+
+
+#' Reset gnomeR color palette
+#'
+#' This function resets the gnomeR color palette back to the ggplot2 default palette for all
+#' ggplot2 objects. A typical workflow would include this after a call to `set_gnomer_palette()`
+#' function is no longer needed,
+#' and subsequent calls to `ggplot()` will utilize the default color palette from ggplot2.
+#'
+#'
+#' @param env environment in which palette will take effect. Default is `rlang::caller_env()`.
+#' @author Michael Curry
+#' @examples
+#' library(ggplot2)
+#'
+#' set_gnomer_palette()
+#'
+#' ggplot(mtcars, aes(wt, mpg, color = factor(cyl))) +
+#'   geom_point()
+#'
+#' reset_gnomer_palette()
+#' #default reset
+#' ggplot(mtcars, aes(wt, mpg, color = factor(cyl))) +
+#'   geom_point()
+#'
+#' @export
+
+
+reset_gnomer_palette <- function(env = rlang::caller_env()) {
+
+  # setting options for ggplot colors
+  withr::with_environment(
+    env = env,
+    code = {
+      options("ggplot2.discrete.colour" = NULL)
+      options("ggplot2.discrete.fill" = NULL)
+      options("ggplot2.continuous.colour" = NULL)
+      options("ggplot2.continuous.fill" = NULL)
+      options("ggplot2.binned.colour" = NULL)
+      options("ggplot2.binned.fill" = NULL)
+    }
+  )
+}
+
