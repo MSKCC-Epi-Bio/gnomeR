@@ -40,3 +40,6 @@ test_that("test simplify marix needs a data frame", {
 
 })
 
+
+
+
