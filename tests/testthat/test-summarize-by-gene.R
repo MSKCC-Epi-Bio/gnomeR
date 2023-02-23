@@ -41,5 +41,70 @@ test_that("test simplify marix needs a data frame", {
 })
 
 
+test_that("test that genes are properly summarized", {
+  samples <- Reduce(intersect, list(gnomeR::mutations$sampleId, gnomeR::cna$sampleId,
+                                    gnomeR::sv$sampleId))
+
+
+  expect_message(bin_impact <-  create_gene_binary(samples=samples,
+                                    mutation = gnomeR::mutations,
+                                    cna = gnomeR::cna,
+                                    fusion = gnomeR::sv,
+                                    specify_panel = "impact")%>%
+    select(c(sample_id, starts_with("ARI"), starts_with("MAPK1"), starts_with("ERG"))))
+
+
+  sum_impact <- summarize_by_gene(bin_impact)%>%
+    mutate(across(!sample_id, as.numeric))
+
+
+  bin_impact_test <- bin_impact %>%
+    tidyr::pivot_longer(!sample_id)%>%
+    mutate(name = str_remove(name, ".Amp|.Del|.fus"))%>%
+    tidyr::pivot_wider(names_from = name, values_from = value, values_fn = function (x) sum(x))%>%
+    mutate(across(!sample_id, ~ifelse(. > 0, 1, 0)))%>%
+    as.data.frame()%>%
+    relocate(colnames(sum_impact))
+
+  expect_equal(sum_impact, bin_impact_test)
+
+
+})
+
+
+test_that("test what happens to columns with all NA", {
+
+  samples <- Reduce(intersect, list(gnomeR::mutations$sampleId, gnomeR::cna$sampleId,
+                                    gnomeR::sv$sampleId))
+
+
+  bin_impact <-  create_gene_binary(samples=samples,
+                                                   mutation = gnomeR::mutations,
+                                                   cna = gnomeR::cna,
+                                                   fusion = gnomeR::sv,
+                                                   specify_panel = "impact") %>%
+                   select(c(sample_id, starts_with("AR"), starts_with("PLCG2"), starts_with("PPM1D")))
+
+
+  sum_impact <- summarize_by_gene(bin_impact)%>%
+    mutate(across(!sample_id, as.numeric))
+
+
+  bin_impact_test <- bin_impact %>%
+    tidyr::pivot_longer(!sample_id)%>%
+    mutate(name = str_remove(name, ".Amp|.Del|.fus"))%>%
+    tidyr::pivot_wider(names_from = name, values_from = value, values_fn = function (x) sum(x))%>%
+    mutate(across(!sample_id, ~ifelse(. > 0, 1, 0)))%>%
+    as.data.frame()%>%
+    relocate(colnames(sum_impact))%>%
+    mutate_if(~ all(is.na(.)), ~as.numeric(NA_integer_))
+
+  expect_equal(sum_impact, bin_impact_test)
+
+  expect_equal(ncol(as.data.frame(
+    sum_impact[,sapply(sum_impact, function(x) all(is.na(x)))])), 1)
+
+  })
+
 
 
