@@ -37,10 +37,7 @@ summarize_by_gene <- function(gene_binary) {
   all_bin2 <- all_bin2[!row.names(all_bin2) == "sample_id", ] %>%
     as.data.frame()
 
-
-  ############ still need to pull out any with all NA#################
-
-
+  # remove endings of gene names
   all_bin2 <- all_bin2 %>%
     mutate(gene = row.names(all_bin2),
            name2 = str_remove_all(gene, ".Amp|.fus|.Del|.cna"))
@@ -60,6 +57,7 @@ summarize_by_gene <- function(gene_binary) {
 
   row.names(all_bin_once) <- NULL
 
+  # genes with more than one type of event
   all_bin_more <- all_bin2 %>%
     filter(name2 %in% genes_multiple)%>%
     mutate(across(starts_with("P"), as.numeric))%>%
@@ -67,7 +65,7 @@ summarize_by_gene <- function(gene_binary) {
     group_by(name2)%>%
     summarize(across(everything(), max))
 
-
+  # bind together and transpose
   all_bin <- rbind(all_bin_once, all_bin_more) %>%
     as.matrix()%>%
     t()%>%
@@ -76,6 +74,7 @@ summarize_by_gene <- function(gene_binary) {
   colnames(all_bin) <- all_bin[row.names(all_bin) == "name2",]
 
 
+  # tidy up
   all_bin <- all_bin %>%
     mutate(sample_id = row.names(.))%>%
     mutate(across(!sample_id, as.numeric))%>%
