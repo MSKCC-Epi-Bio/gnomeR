@@ -32,9 +32,9 @@ summarize_by_gene <- function(gene_binary) {
 
   all_bin2 <- t(as.matrix(gene_binary))
 
-  colnames(all_bin2) <- all_bin2[1,]
+  colnames(all_bin2) <- all_bin2[row.names(all_bin2) == "sample_id",]
 
-  all_bin2 <- all_bin2[-1, ] %>%
+  all_bin2 <- all_bin2[!row.names(all_bin2) == "sample_id", ] %>%
     as.data.frame()
 
 
