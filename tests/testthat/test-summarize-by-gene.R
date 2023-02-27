@@ -27,3 +27,16 @@ test_that("test simplify marix needs a data frame", {
   expect_error(summarize_by_gene(gene_binary = c(1:10)))
 
 })
+
+test_that("test simplify marix needs a data frame", {
+
+    samples <- as.character(unique(gnomeR::mutations$sampleId))[1:50]
+    gen_dat <- create_gene_binary(samples = samples,
+                                  mutation = gnomeR::mutations,
+                                  fusion = gnomeR::sv)
+
+    expect_no_error(gen_dat2 <- gnomeR::summarize_by_gene(gen_dat))
+
+
+})
+

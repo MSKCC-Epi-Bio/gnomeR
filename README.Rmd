@@ -28,15 +28,6 @@ library(gnomeR)
 
 <!-- badges: end -->
 
-<font size="5">:bangbang: :warning: **NOTE: This package is currently under active development with a new stable release expected November 30th, 2022. For code written before 2022-03-23, please use the previous stable version (v1.1.0)**:warning::bangbang: </font>
-
-You can install the pre-2022-03-23 version with:
-
-```{r, eval = FALSE}
-remotes::install_github('MSKCC-Epi-Bio/gnomeR@v1.1.0')
-
-```
-
 ## Installation
 
 You can install the development version of `gnomeR` from [GitHub](https://github.com/) with:
@@ -49,7 +40,7 @@ devtools::install_github("MSKCC-Epi-Bio/gnomeR")
 Along with its companion package for cbioPortal data download:
 
 ``` r
-devtools::install_github("karissawhiting/cbioportalr")
+devtools::install_github("karissawhiting/cbioportalR")
 ```
 
 ## Introduction
@@ -57,10 +48,10 @@ devtools::install_github("karissawhiting/cbioportalr")
 the `gnomeR` package provides a consistent framework for genetic data processing, visualization and analysis. This is primarily targeted to IMPACT datasets but can also be applied to any genomic data provided by cBioPortal. With {gnomeR} and {cbioportalR} you can:
 
 - [**Download and gather data from CbioPortal**](https://www.karissawhiting.com/cbioportalR/) - Pull from cBioPortal data base by study ID or sample ID. 
-- **OncoKB annotate data** - Filter genomic data for known oncogenic alterations. 
--  **Process genomic data** - Process retrieved mutation/maf, fusions, copy-number alteration, and segmentation data (when available) into an analysis-ready formats.
-- **Visualize processed data** - Create OncoPrints, heatmaps and summary plots from processed data. 
-- **Analyzing processed data**- Analyze associations between genomic variables and clinical variables or outcomes with summary tables, advanced visualizations, and univariate models. 
+- **OncoKB annotate data (coming soon)** - Filter genomic data for known oncogenic alterations. 
+- **Process genomic data** - Process retrieved mutation/maf, fusions, copy-number alteration, and segmentation data (when available) into an analysis-ready formats.
+- **Visualize processed data** - Create summary plots from processed data. 
+- **Analyzing processed data**- Analyze associations between genomic variables and clinical variables or outcomes.
 
 ## Getting Set up
 
@@ -80,7 +71,7 @@ cna <- gnomeR::cna
 sv <- gnomeR::sv
 
 un <-  unique(mut$sampleId)
-sample_patients <- sample(un, size = 100, replace = FALSE)
+sample_patients <- sample(un, size = 50, replace = FALSE)
 
 ```
 
@@ -89,14 +80,14 @@ The main data processing function is `create_gene_binary()` which takes mutation
 
 ```{r }
 gen_dat <- create_gene_binary(samples = sample_patients,
-                         maf = mut,
+                         mutation = mut,
                          fusion = sv,
                          cna = cna)
 
 head(gen_dat[, 1:6])
 ```
 
-By default, mutations, CNA and fusions will be returned in separate columns. You can combine these at teh gene level using the following:
+By default, mutations, CNA and fusions will be returned in separate columns. You can combine these at the gene level using the following:
 
 ```{r}
 by_gene <- gen_dat %>% 
@@ -160,11 +151,9 @@ Additionally, you can analyze custom pathways, or a set of default gene pathways
 
 path_by_trt <- gen_dat %>%
   add_pathways() %>%
-  select(trt_status, contains("pathway_")) %>%
+  select(sample_id, trt_status, contains("pathway_")) %>%
   tbl_genomic(by = trt_status) %>%
   gtsummary::add_p() 
-
-
 
 ```
 
@@ -180,20 +169,6 @@ gt::gtsave(as_gt(path_by_trt), filename = here::here("man", "figures" , "README-
 
 knitr::include_graphics(here::here("man/figures/README-path_by_trt.png"))
 
-```
-
-
-## Further analytical tools
-
-Along with mutation, cna and fusion data, {gnomeR} also allows analysis and visualization of [FACETs](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5027494/) data. [FACETs](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5027494/) is an allele-specific copy number tool and open-source software with a broad application to whole genome, whole-exome, as well as targeted panel sequencing platforms. It is a fully integrated stand-alone pipeline that includes sequencing BAM file post-processing, joint segmentation of total- and allele-specific read counts, and integer copy number calls corrected for tumor purity, ploidy and clonal heterogeneity, with comprehensive output.  
-
-You can visualize this  data using `facets_heatmap()`
-
-```{r, warning=FALSE, message=FALSE}
-
-select_samples <- sample(unique(seg$ID),  100)
-p.heat <- facets_heatmap(seg = seg, samples = select_samples, min_purity = 0)
-p.heat$p
 ```
 
 

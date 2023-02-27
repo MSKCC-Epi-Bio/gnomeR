@@ -244,8 +244,8 @@ test_that("check specify_panel with dataframe works",{
   expect_message(bin_impact <-  create_gene_binary(samples=samples,
                                                    mutation = mut,
                                                    cna = gnomeR::cna,
-                                                   fusion = gnomeR::sv,
-                                                   specify_panel = sp), "*")
+                                                   fusion = gnomeR::sv
+                                                   ,specify_panel = sp), "*")
 
   # recode so one is on later panel with CSF3R
 
