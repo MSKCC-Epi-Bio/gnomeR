@@ -1,0 +1,86 @@
+hugo_symbol,entrez_gene_id,center,sample_id,fusion,dna_support,rna_support,method,frame
+PARK2,NA,MSK,GENIE-MSK-P-0002702-T01-IM3,PARK2-intragenic,yes,unknown,NA,unknown
+RNF43,NA,MSK,GENIE-MSK-P-0004140-T01-IM5,RNF43-intragenic,yes,unknown,NA,in frame
+BRAF,NA,MSK,GENIE-MSK-P-0004140-T01-IM5,BRAF-intragenic,yes,unknown,NA,in frame
+TP53,NA,MSK,GENIE-MSK-P-0004140-T02-IM5,TP53-intragenic,yes,unknown,NA,unknown
+LATS2,NA,MSK,GENIE-MSK-P-0004401-T01-IM5,ATP8A2-LATS2 fusion,yes,unknown,NA,out of frame
+TSC2,NA,MSK,GENIE-MSK-P-0004967-T01-IM5,TSC2-intragenic,yes,unknown,NA,unknown
+GPS2,NA,MSK,GENIE-MSK-P-0005011-T01-IM5,TP53-GPS2 fusion,yes,unknown,NA,unknown
+TP53,NA,MSK,GENIE-MSK-P-0005011-T01-IM5,TP53-GPS2 fusion,yes,unknown,NA,unknown
+FYN,NA,MSK,GENIE-MSK-P-0005307-T01-IM5,NT5DC1-FYN fusion,yes,unknown,NA,unknown
+RNF43,NA,MSK,GENIE-MSK-P-0005824-T01-IM5,RNF43-SUPT4H1 fusion,yes,unknown,NA,out of frame
+EP300,NA,MSK,GENIE-MSK-P-0005888-T01-IM5,EP300-intragenic,yes,unknown,NA,unknown
+TCF7L2,NA,MSK,GENIE-MSK-P-0005910-T01-IM5,LRRC27-TCF7L2 fusion,yes,unknown,NA,unknown
+SOX9,NA,MSK,GENIE-MSK-P-0006023-T02-IM5,SOX9-intragenic,yes,unknown,NA,unknown
+IDH2,NA,MSK,GENIE-MSK-P-0006138-T01-IM5,CHN1-IDH2 fusion,yes,unknown,NA,unknown
+PGR,NA,MSK,GENIE-MSK-P-0006184-T01-IM5,EXTL3-PGR fusion,yes,unknown,NA,unknown
+NF1,NA,MSK,GENIE-MSK-P-0006184-T01-IM5,MIR365-2-NF1 fusion,yes,unknown,NA,unknown
+SMARCD1,NA,MSK,GENIE-MSK-P-0006225-T01-IM5,SMARCD1-intragenic,yes,unknown,NA,in frame
+ATM,NA,MSK,GENIE-MSK-P-0006365-T01-IM5,ATM-intragenic,yes,unknown,NA,out of frame
+ASXL1,NA,MSK,GENIE-MSK-P-0007136-T01-IM5,DNMT3B-ASXL1 fusion,yes,unknown,NA,unknown
+DNMT3B,NA,MSK,GENIE-MSK-P-0007136-T01-IM5,DNMT3B-ASXL1 fusion,yes,unknown,NA,unknown
+TP53,NA,MSK,GENIE-MSK-P-0007169-T01-IM5,TP53-intragenic,yes,unknown,NA,unknown
+PARK2,NA,MSK,GENIE-MSK-P-0007169-T01-IM5,PARK2-intragenic,yes,unknown,NA,unknown
+CTNNB1,NA,MSK,GENIE-MSK-P-0007600-T01-IM5,CTNNB1-intragenic,yes,unknown,NA,unknown
+PBRM1,NA,MSK,GENIE-MSK-P-0012110-T01-IM5,PBRM1-intragenic,yes,unknown,NA,out of frame
+FH,NA,MSK,GENIE-MSK-P-0013277-T01-IM5,FH-AKAP11 fusion,yes,unknown,NA,unknown
+APC,NA,MSK,GENIE-MSK-P-0010742-T01-IM5,APC-PRMT8 fusion,yes,unknown,NA,unknown
+TMPRSS2,NA,MSK,GENIE-MSK-P-0015121-T01-IM6,TMPRSS2-MIR125B2 fusion,yes,unknown,NA,unknown
+CTNNB1,NA,MSK,GENIE-MSK-P-0012683-T01-IM5,CTNNB1-intragenic,yes,unknown,NA,unknown
+PBRM1,NA,MSK,GENIE-MSK-P-0010098-T02-IM5,PBRM1-intragenic,yes,unknown,NA,unknown
+TP53,NA,MSK,GENIE-MSK-P-0004140-T03-IM5,TP53-intragenic,yes,unknown,NA,unknown
+PTPRT,NA,MSK,GENIE-MSK-P-0015411-T01-IM6,PTPRT-MAFB fusion,yes,unknown,NA,unknown
+RBM10,NA,MSK,GENIE-MSK-P-0010159-T01-IM5,PHIP-RBM10 fusion,yes,unknown,NA,unknown
+APC,NA,MSK,GENIE-MSK-P-0014026-T01-IM5,REEP5-APC fusion,yes,unknown,NA,unknown
+APC,NA,MSK,GENIE-MSK-P-0015244-T01-IM6,APC-CPT1A fusion,yes,unknown,NA,unknown
+SMAD3,NA,MSK,GENIE-MSK-P-0015244-T01-IM6,FBXW7-SMAD3 fusion,yes,unknown,NA,unknown
+FBXW7,NA,MSK,GENIE-MSK-P-0015244-T01-IM6,FBXW7-SMAD3 fusion,yes,unknown,NA,unknown
+NTRK1,NA,MSK,GENIE-MSK-P-0013121-T02-IM5,NTRK1-LMNA fusion,yes,unknown,NA,unknown
+APC,NA,MSK,GENIE-MSK-P-0010238-T01-IM5,APC-intragenic,yes,unknown,NA,unknown
+RAD21,NA,MSK,GENIE-MSK-P-0000739-T02-IM5,RAD21-EIF3H fusion,yes,unknown,NA,in frame
+CSF3R,NA,MSK,GENIE-MSK-P-0008551-T01-IM5,CSF3R-MRPS15 fusion,yes,unknown,NA,unknown
+APC,NA,MSK,GENIE-MSK-P-0009842-T01-IM5,APC-intragenic,yes,unknown,NA,unknown
+MITF,NA,MSK,GENIE-MSK-P-0016293-T01-IM6,MITF-intragenic,yes,unknown,NA,in frame
+ARID1A,NA,MSK,GENIE-MSK-P-0016696-T01-IM6,ARID1A-intragenic,yes,unknown,NA,unknown
+NTRK1,NA,MSK,GENIE-MSK-P-0010581-T01-IM5,NTRK1-LMNA fusion,yes,unknown,NA,in frame
+XPO1,NA,MSK,GENIE-MSK-P-0010581-T01-IM5,XPO1-USP34 fusion,yes,unknown,NA,out of frame
+TCF7L2,NA,MSK,GENIE-MSK-P-0014874-T01-IM6,TCF7L2-intragenic,yes,unknown,NA,unknown
+BRAF,NA,MSK,GENIE-MSK-P-0015711-T01-IM6,BRAF-CAPZA2 fusion,yes,unknown,NA,unknown
+BRAF,NA,MSK,GENIE-MSK-P-0009757-T01-IM5,AGAP3-BRAF fusion,yes,unknown,NA,in frame
+APC,324,VICC,GENIE-VICC-509873-unk-1,APC-intragenic,yes,unknown,NA,unknown
+CDK12,51755,VICC,GENIE-VICC-212081-unk-1,CDK12-intragenic,yes,unknown,NA,unknown
+FAT1,2195,VICC,GENIE-VICC-242063-unk-1,FAT1-intragenic,yes,unknown,NA,unknown
+NF1,4763,VICC,GENIE-VICC-178194-unk-1,NF1-intragenic,yes,unknown,NA,unknown
+PIK3CG,5294,VICC,GENIE-VICC-229859-unk-2,PIK3CG-intragenic,yes,unknown,NA,unknown
+PTEN,5728,VICC,GENIE-VICC-143859-unk-1,PTEN-intragenic,yes,unknown,NA,unknown
+RNF43,54894,VICC,GENIE-VICC-168204-unk-1,RNF43-intragenic,yes,unknown,NA,unknown
+SMAD2,4087,VICC,GENIE-VICC-324835-unk-1,SMAD2-intragenic,yes,unknown,NA,unknown
+ASXL1,171023,VICC,GENIE-VICC-765745-unk-1,ASXL1-DLGAP4 truncation,yes,unknown,NA,unknown
+BCL2L1,598,VICC,GENIE-VICC-206589-unk-1,BCL2L1-DEFB118 rearrangement,yes,unknown,NA,unknown
+DOT1L,84444,VICC,GENIE-VICC-229859-unk-2,DOT1L-LSM7 rearrangement,yes,unknown,NA,unknown
+PIK3C2B,5287,VICC,GENIE-VICC-229859-unk-2,PIK3C2B-LRRN2 rearrangement,yes,unknown,NA,unknown
+AKAP11,NA,MSK,GENIE-MSK-P-0013277-T01-IM5,FH-AKAP11 fusion,yes,unknown,NA,unknown
+PRMT8,NA,MSK,GENIE-MSK-P-0010742-T01-IM5,APC-PRMT8 fusion,yes,unknown,NA,unknown
+PHIP,NA,MSK,GENIE-MSK-P-0010159-T01-IM5,PHIP-RBM10 fusion,yes,unknown,NA,unknown
+REEP5,NA,MSK,GENIE-MSK-P-0014026-T01-IM5,REEP5-APC fusion,yes,unknown,NA,unknown
+LRRC27,NA,MSK,GENIE-MSK-P-0005910-T01-IM5,LRRC27-TCF7L2 fusion,yes,unknown,NA,unknown
+CHN1,NA,MSK,GENIE-MSK-P-0006138-T01-IM5,CHN1-IDH2 fusion,yes,unknown,NA,unknown
+MRPS15,NA,MSK,GENIE-MSK-P-0008551-T01-IM5,CSF3R-MRPS15 fusion,yes,unknown,NA,unknown
+EXTL3,NA,MSK,GENIE-MSK-P-0006184-T01-IM5,EXTL3-PGR fusion,yes,unknown,NA,unknown
+MIR365-2,NA,MSK,GENIE-MSK-P-0006184-T01-IM5,MIR365-2-NF1 fusion,yes,unknown,NA,unknown
+EIF3H,NA,MSK,GENIE-MSK-P-0000739-T02-IM5,RAD21-EIF3H fusion,yes,unknown,NA,in frame
+LMNA,NA,MSK,GENIE-MSK-P-0010581-T01-IM5,NTRK1-LMNA fusion,yes,unknown,NA,in frame
+USP34,NA,MSK,GENIE-MSK-P-0010581-T01-IM5,XPO1-USP34 fusion,yes,unknown,NA,out of frame
+SUPT4H1,NA,MSK,GENIE-MSK-P-0005824-T01-IM5,RNF43-SUPT4H1 fusion,yes,unknown,NA,out of frame
+NT5DC1,NA,MSK,GENIE-MSK-P-0005307-T01-IM5,NT5DC1-FYN fusion,yes,unknown,NA,unknown
+LMNA,NA,MSK,GENIE-MSK-P-0013121-T02-IM5,NTRK1-LMNA fusion,yes,unknown,NA,unknown
+ATP8A2,NA,MSK,GENIE-MSK-P-0004401-T01-IM5,ATP8A2-LATS2 fusion,yes,unknown,NA,out of frame
+AGAP3,NA,MSK,GENIE-MSK-P-0009757-T01-IM5,AGAP3-BRAF fusion,yes,unknown,NA,in frame
+MIR125B2,NA,MSK,GENIE-MSK-P-0015121-T01-IM6,TMPRSS2-MIR125B2 fusion,yes,unknown,NA,unknown
+CPT1A,NA,MSK,GENIE-MSK-P-0015244-T01-IM6,APC-CPT1A fusion,yes,unknown,NA,unknown
+MAFB,NA,MSK,GENIE-MSK-P-0015411-T01-IM6,PTPRT-MAFB fusion,yes,unknown,NA,unknown
+CAPZA2,NA,MSK,GENIE-MSK-P-0015711-T01-IM6,BRAF-CAPZA2 fusion,yes,unknown,NA,unknown
+DEFB118,117285,VICC,GENIE-VICC-206589-unk-1,BCL2L1-DEFB118 rearrangement,yes,unknown,NA,unknown
+DLGAP4,22839,VICC,GENIE-VICC-765745-unk-1,ASXL1-DLGAP4 truncation,yes,unknown,NA,unknown
+LRRN2,10446,VICC,GENIE-VICC-229859-unk-2,PIK3C2B-LRRN2 rearrangement,yes,unknown,NA,unknown
+LSM7,51690,VICC,GENIE-VICC-229859-unk-2,DOT1L-LSM7 rearrangement,yes,unknown,NA,unknown
