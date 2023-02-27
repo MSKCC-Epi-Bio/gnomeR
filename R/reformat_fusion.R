@@ -37,11 +37,9 @@ fus_issue_chk <- function(data){
     select(sample_id, fusion2)%>%
     unique()
 
-  invest <- purrr::map2_chr(special_case$sample_id,
-                            special_case$fusion2,
-                            ~paste0(.x, " fusion ", .y))
+  invest <- special_case$sample_id
 
-  names(invest) <- rep("!", times = length(invest))
+  names(invest) <- rep("!", times = length(special_case$sample_id))
 
   if (nrow(special_case) > 0){
     cli::cli_abort(c("Some of your hugo_symbols contain more than one '-' and due to duplicate records, the program cannot identify proper gene names. Check which names should be
@@ -160,7 +158,6 @@ fus_issue_chk <- function(data){
 
   #split out samples among the prob ids that include intragenic and keep sep
 
-  # 198 events
   data_probid_oksamp1 <- data_try %>%
     filter(endsWith(event_info, "INTRAGENIC") | endsWith(event_info, "intragenic") | endsWith(event_info, "INTERGENIC") | endsWith(event_info, "-intragenic - Archer"))%>%
     unique()%>%
@@ -169,7 +166,7 @@ fus_issue_chk <- function(data){
     suppressWarnings()%>%
     suppressMessages()
 
-  # 404 events, need to check which samples and genes occur x2
+  # collect samples that are two gene fusions (ex: gene1-gene2)
   non_intra_samps <- data_try %>%
     filter(!endsWith(event_info, "INTRAGENIC") & !endsWith(event_info, "INTERGENIC"),
            !endsWith(event_info, "intragenic") & !endsWith(event_info, "-intragenic - Archer"))%>%
@@ -188,6 +185,7 @@ fus_issue_chk <- function(data){
     suppressWarnings()%>%
     suppressMessages()
 
+  # see how many events only occur once
   test_sum2 <- non_intra_samps %>%
     group_by(sample_id, value)%>%
     summarize(count = n())%>%
@@ -199,7 +197,7 @@ fus_issue_chk <- function(data){
 
   # now lets deal with the duplicates in the non_intra_samples dataset
 
-  #yes, all have multiple events for each gene
+  #check that there are multiple events for each fusion
   check <- non_intra_samps %>%
     group_by(sample_id, value)%>%
     summarize(count = n())%>%
@@ -216,12 +214,17 @@ fus_issue_chk <- function(data){
     suppressWarnings()%>%
     suppressMessages()
 
+  # selecting helper functions
   na_list <- list(c(NA, NA))
   not_all_na <- function(x) any(!is.na(x))
   not_all_null <- function(x) any(!is.null(x))
 
-
-
+  #loop through the dataset and pivot wider as many times as needed
+  #dataset columns should look like this
+  # ~sample_id, ~g1_1, ~g2_1, ..., ~g[pairnum]_1, ~g2_1, ~g2_2, ..., ~g[pairnum]_2
+  # where gx_y defines x = gene order in fusion and y = fusion id
+  #(example: TERT-APC would be g1_1 = TERT, gene g2_1 = APC and if the reverse
+  # exists we would see g1_2 = APC, g2_2 = TERT)
   get_vector <- non_intra_wide %>%
     select(-c(event_info, site1hugo_symbol, site2hugo_symbol))%>%
     mutate(genes = gene_order)%>%
@@ -243,6 +246,10 @@ fus_issue_chk <- function(data){
   pair_names <- c(paste0("pair", 1:pairnum))
 
 
+
+ # now we want to properly pair the genes together in a list and sort to be
+ # alphabetical order (ex: TERT-APC should be APC-TERT) and then only select
+  # unique events
   for(x in 1:pairnum){
     pair <- get_vector %>%
       select(sample_id, ends_with(as.character(x)))
@@ -252,13 +259,18 @@ fus_issue_chk <- function(data){
     for(y in 1:nrow(pair)){
       gene1 <- as.character(pair[y,2])
       gene2 <- as.character(pair[y,3])
+
+      # here if two gene names exist in a pair we want to alphabetize them
+      # with sort(), else empty string or single gene name
       pair$temp_pair[y] <- ifelse(is.na(gene1) & is.na(gene2), c(""),
                                      ifelse(!is.na(gene1) & is.na(gene2), c(gene1, ""),
                                       list(sort(c(gene1, gene2)))))
     }
 
+    # iterate the pair number and name column
     colnames(pair)[colnames(pair) == "temp_pair"] <- paste0("pair", x)
 
+    #join to overall dataset
     get_vector <- get_vector %>%
       left_join(pair)%>%
       suppressWarnings()%>%
@@ -267,41 +279,56 @@ fus_issue_chk <- function(data){
   }
 
 
-  # now check to see if any of these events are repeated with genes flipped
+  # now check to see if any of these events are repeated with genes flipped as
+  # described above. If so, we want to remove them
+
+  # create a shell dataset with sample_ids and the first fusion for each
+  # sample_id so we can compare to other pairs
   shell <- get_vector %>%
     select(-c(pair2:last_col()))
 
 
+  # loop through the number of pairs 2-pairnum
   for(a in 2:pairnum){
     pair <- get_vector %>%
       select(c(sample_id, starts_with("pair")))
 
     comp <- pair_names[1:(a-1)]
 
+    # set name of tested column (ex: pair3) to test_pair for ease of loop
     colnames(pair)[colnames(pair) == pair_names[a]] <- "test_pair"
 
 
-
+    # loop through all pairs before pair[a] ex(pair1 & pair2 if a = 3)
+    # and rename them test_comp
       for(c in comp){
       colnames(pair)[colnames(pair) == c] <- "test_comp"
 
+      # for each sample in dataset, set NA if the testing pair is empty
+      # or if it is identical to the comparison pair (ex: TERT-APC == TERT-APC)
+      # this ensures that the first time the gene occurs is retained
+      # and the second is removed (ex: in this situation pair2 = TERT-APC,
+      # pair3 = NA)
           for(b in 1:nrow(pair)){
             pair$test_pair[b] <- ifelse(pair$test_pair[[b]][1] == '', NA,
                     ifelse(identical(pair$test_comp[b], pair$test_pair[b]), NA,
                               pair$test_pair[b]))
           }
 
+      # reset the column name so that test_comp can be used again in next loop
       colnames(pair)[colnames(pair) == "test_comp"] <- c
 
       }
 
+      # select only the column we tested in this iteration and sample_ids
       pair <- pair %>%
         select(sample_id, test_pair)
 
+      # reset column name so that test_pair can be used again in next loop
       colnames(pair)[colnames(pair) == "test_pair"] <- pair_names[a]
 
 
-
+      # join the column tested to the shell dataset
       shell <- shell %>%
         left_join(pair)%>%
         suppressWarnings()%>%
@@ -309,6 +336,7 @@ fus_issue_chk <- function(data){
 
     }
 
+  # now that we have the pairs, we can clean things up
   get_vector <- shell %>%
     select(-c(starts_with("g")))%>%
     unnest(cols = {{pair_names}})%>%
@@ -318,17 +346,20 @@ fus_issue_chk <- function(data){
     mutate(gene_num = seq_along(value))%>%
     ungroup()%>%
     pivot_wider(values_from = value, names_from = gene_num)%>%
+    # set hugo_symbol names correctly
     rename(site1hugo_symbol = `1`, site2hugo_symbol = `2`)%>%
     suppressWarnings()%>%
     suppressMessages()
 
-
+  # join the new pairings with the rest of the dataset
+  # to get back the event info and the gene-order
   working <- get_vector%>%
     left_join(non_intra_wide) %>%
     na.omit() %>%
     suppressWarnings()%>%
-    suppressMessages()#get back the event info and the gene-order
+    suppressMessages()
 
+  #
   not_working <- get_vector%>%
     left_join(non_intra_wide) %>%
     filter(is.na(event_info))%>%
@@ -342,6 +373,7 @@ fus_issue_chk <- function(data){
     suppressWarnings()%>%
     suppressMessages()
 
+  # bind all of the fusions together
   to_merge <- working %>%
     rbind(not_working)%>%
     select(-name)%>%
@@ -351,6 +383,7 @@ fus_issue_chk <- function(data){
 
 
   # merge all of the datasets together
+  # including intragenic, non-repeated events, and above dataset
 
   data_fus2 <- to_merge %>%
     rbind(data_probid_oksamp1)%>%
