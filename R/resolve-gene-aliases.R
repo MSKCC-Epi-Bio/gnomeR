@@ -24,7 +24,13 @@
 #'
 #' colnames(recode_alias(genomic_df = mut))
 #'
-recode_alias <- function(genomic_df, alias_table = gnomeR::impact_alias_table, ...) {
+recode_alias <- function(genomic_df, default = T, custom_table, ...) {
+
+  if(default){
+    alias_table <- gnomeR::impact_alias_table
+  } else {
+    alias_table <- custom_table
+  }
 
   .check_required_cols(alias_table, "hugo_symbol", "alias")
 
