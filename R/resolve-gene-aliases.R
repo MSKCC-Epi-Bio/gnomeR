@@ -9,6 +9,7 @@
 #' and replaces those aliases with the accepted (most recent) gene name.
 #' Function uses `gnomeR::impact_alias_table` by default as reference for
 #' which aliases to replace and supports IMPACT panel alias replacement only at this time.
+#' Custom tables can be provided as long as `hugo_symbol` and `alias` columns exist.
 #'
 #' @param genomic_df a gene_binary object
 #' @param ... Other things passed
@@ -23,10 +24,12 @@
 #'
 #' colnames(recode_alias(genomic_df = mut))
 #'
-recode_alias <- function(genomic_df, ...) {
+recode_alias <- function(genomic_df, alias_table = gnomeR::impact_alias_table, ...) {
+
+  .check_required_cols(alias_table, "hugo_symbol", "alias")
 
   # get table of gene aliases (internal data)
-  alias_table <- gnomeR::impact_alias_table %>%
+  alias_table <- alias_table %>%
     dplyr::select("hugo_symbol", "alias")
 
   # recode aliases
