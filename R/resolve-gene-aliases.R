@@ -43,7 +43,7 @@
 #' "CDKN2B", "P15, MTS2, INK4B, TP15, CDK4I, p15INK4b",
 #' "CDKN2C", "INK4C, p18",
 #' "PPP6C", "PPP6C, PP6",
-#' "RB1", "RB, PPP1R130, OSRC')%>%
+#' "RB1", "RB, PPP1R130, OSRC")%>%
 #'     mutate(alias = as.list(strsplit(alias, ", ")))%>%
 #'     tidyr::unnest(alias)
 #'
