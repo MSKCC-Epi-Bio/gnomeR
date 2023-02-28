@@ -48,7 +48,7 @@
 #'     tidyr::unnest(alias)
 #'
 #' mut_cell_cycle <- mut %>%
-#'   filter(hugo_symbol %in% cell_cycle_pathway$alias)
+#'   dplyr::filter(hugo_symbol %in% cell_cycle_pathway$alias)
 #'
 #' colnames(mut_cell_cycle)
 #'
