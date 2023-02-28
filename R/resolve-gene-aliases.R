@@ -44,7 +44,7 @@
 #' "CDKN2C", "INK4C, p18",
 #' "PPP6C", "PPP6C, PP6",
 #' "RB1", "RB, PPP1R130, OSRC')%>%
-#'     mutate(alias = as.list(strsplit(alias, ", "))%>%
+#'     mutate(alias = as.list(strsplit(alias, ", ")))%>%
 #'     tidyr::unnest(alias)
 #'
 #' mut2  <- mut %>%
