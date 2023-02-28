@@ -4,7 +4,7 @@
 \alias{recode_alias}
 \title{Recode Hugo Symbol Column}
 \usage{
-recode_alias(genomic_df, ...)
+recode_alias(genomic_df, default = T, custom_table, ...)
 }
 \arguments{
 \item{genomic_df}{a gene_binary object}
@@ -20,6 +20,7 @@ any genes that have common gene name aliases,
 and replaces those aliases with the accepted (most recent) gene name.
 Function uses \code{gnomeR::impact_alias_table} by default as reference for
 which aliases to replace and supports IMPACT panel alias replacement only at this time.
+Custom tables can be provided as long as \code{hugo_symbol} and \code{alias} columns exist.
 }
 \examples{
 mut <- rename_columns(gnomeR::mutations)
