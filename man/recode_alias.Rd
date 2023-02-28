@@ -9,10 +9,16 @@ recode_alias(genomic_df, default = T, custom_table, ...)
 \arguments{
 \item{genomic_df}{a gene_binary object}
 
+\item{default}{logical value if default IMPACT aliases should be used}
+
+\item{custom_table}{a dataframe with at least two columns (hugo_symbol,
+alias) with one row for each pair (only
+include a \code{custom_table} if \code{default = F})}
+
 \item{...}{Other things passed}
 }
 \value{
-A dataframe with a recoded Hugo Symbol columns
+A dataframe with recoded Hugo Symbol columns
 }
 \description{
 Searches the Hugo Symbol column in a genomic dataframe to look for
@@ -28,5 +34,31 @@ mut <- rename_columns(gnomeR::mutations)
 colnames(mut)
 
 colnames(recode_alias(genomic_df = mut))
+
+# if we take the genes from the
+# cell cycle pathway as an example, we would create a custom_table as so:
+
+cell_cycle_pathway <- tribble(~`hugo_symbol`, ~`alias`,
+'CCND1',	'U21B31, BCL1, D11S287E, PRAD1',
+'CCNE1',	'CCNE',
+'CDK4', 'PSK-J3',
+'CDK6', 'PLSTIRE',
+'CDKN1A', 'P21, CIP1, WAF1, SDI1, CAP20, p21CIP1, p21Cip1/Waf1, p21, CDKN1',
+'CDKN1B', 'KIP1, P27KIP1',
+'CDKN2A', 'CDK4I, p16, INK4a, MTS1, CMM2, ARF, p19, p14, INK4, p16INK4a',
+'p19Arf', 'p14ARF, P16-INK4A, CDKN2, MLM',
+'CDKN2B', 'P15, MTS2, INK4B, TP15, CDK4I, p15INK4b',
+'CDKN2C', 'INK4C, p18',
+'PPP6C', 'PPP6C, PP6',
+'RB1', 'RB, PPP1R130, OSRC')\%>\%
+    mutate(alias = as.list(strsplit(alias, ", "))\%>\%
+    tidyr::unnest(alias)
+
+mut_cell_cycle <- mut \%>\%
+  filter(hugo_symbol \%in\% cell_cycle_pathway$alias)
+
+colnames(mut_cell_cycle)
+
+colnames(recode_alias(mut_cell_cycle, default = F, cell_cycle_pathway))
 
 }
