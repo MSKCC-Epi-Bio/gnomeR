@@ -241,3 +241,4 @@
 #'
 #' @format A data frame with 30 unique `sample_id` values and 62 hugo symbols listed
 #' @source \url{https://www.aacr.org/professionals/research/aacr-project-genie/bpc/}
+"sv_long"

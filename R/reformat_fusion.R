@@ -1,9 +1,11 @@
-fus_issue_chk <- function(data){
+reformat_fusion <- function(data){
 
 
   ##########################################################
   ################## clean data#######################
   ##########################################################
+
+  .required_cols(data, "fusion", "sample_id")
 
   data_sep <- suppressMessages(data %>%
     mutate(
@@ -29,7 +31,36 @@ fus_issue_chk <- function(data){
       TRUE ~ gsub('.{20}$', "", fusion)))%>%
     # keep the original gene-gene info somewhere in the data frame and not overwrite
     rename(event_info = fusion) %>%
-    mutate(gene_order = fusion2))
+    mutate(gene_order = fusion2,
+           #rename known fusions with
+           event_info = case_when(
+               startsWith(event_info, "NPHP3-AS1-STAG1") ~ "NPHP3_AS1-STAG1",
+               startsWith(event_info, "STAG1-NPHP3-AS1") ~ "STAG1-NPHP3_AS1",
+               startsWith(event_info, "RICTOR-NIPBL-AS1") ~ "RICTOR-NIPBL_AS1",
+               startsWith(event_info, "PMF1-BGLAP-RIT1") ~ "PMF1_BGLAP-RIT1",
+               startsWith(event_info, "U2AF1-MCM3AP-AS1") ~ "U2AF1-MCM3AP_AS1",
+               startsWith(event_info, "MCM3AP-AS1-U2AF1") ~ "MCM3AP_AS1-U2AF1",
+               startsWith(event_info, "MIR365-2-NF1") ~ "MIR365_2-NF1",
+               startsWith(event_info, "FAT1-F11-AS1") ~ "FAT1-F11_AS1",
+               startsWith(event_info, "TCEB1-DLGAP1-AS5") ~ "TCEB1-DLGAP1_AS5",
+               startsWith(event_info, "TAP2-HLA-DOB") ~ "TAP2-HLA_DOB",
+               startsWith(event_info, "BIVM-ERCC5-GLUD1") ~ "BIVM_ERCC5-GLUD1",
+               startsWith(event_info, "GLUD1-BIVM-ERCC5") ~ "GLUD1-BIVM_ERCC5",
+               startsWith(event_info, "CREBBP-AATK-AS1") ~ "CREBBP-AATK_AS1",
+               startsWith(event_info, "CDKN2B-AS1-CDKN2A") ~ "CDKN2B_AS1-CDKN2A",
+               startsWith(event_info, "ETV6-PRH1-PRR4") ~ "ETV6-PRH1_PRR4",
+               startsWith(event_info, "KMT2A-TMPRSS4-AS1") ~ "KMT2A-TMPRSS4_AS1",
+               startsWith(event_info, "TMPRSS4-AS1-KMT2A") ~ "TMPRSS4_AS1-KMT2A",
+               startsWith(event_info, "RNU6-19P-ETV6") ~ "RNU6_19P-ETV6",
+               startsWith(event_info, "RAD21-C8orf37-AS1") ~ "RAD21-C8orf37_AS1",
+               startsWith(event_info, "BRWD1-IT2-TMPRSS2") ~ "BRWD1_IT2-TMPRSS2",
+               startsWith(event_info, "TMPRSS2-BRWD1-IT2") ~ "TMPRSS2-BRWD1_IT2",
+               startsWith(event_info, "CTD-2151A2.1-DROSHA") ~ "CTD_2151A2.1-DROSHA",
+               startsWith(event_info, "FOXA1-NKX2-8") ~ "FOXA1-NKX2_8",
+               startsWith(event_info, "BRAF-LINC-PINT") ~ "BRAF-LINC_PINT",
+               startsWith(event_info, "MIR365-2-NF1") ~ "MIR365_2-NF1",
+               startsWith(event_info, "SOX2-OT-SOX2") ~ "SOX2_OT-SOX2",
+               TRUE ~ event_info)))
 
   special_case <- data_sep %>%
     filter(str_count(fusion2, "-") > 1)%>%
