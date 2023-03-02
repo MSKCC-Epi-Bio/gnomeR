@@ -39,10 +39,10 @@ summarize_by_gene <- function(gene_binary) {
   # Create Sample Index -----------------------------------------------------
 
   sample_index <- gene_binary %>%
-    select(sample_id) %>%
+    select("sample_id") %>%
     mutate(sample_index = paste0("samp", 1:nrow(gene_binary)))
 
-  alt_only <- as.matrix(select(gene_binary, -sample_id))
+  alt_only <- as.matrix(select(gene_binary, -"sample_id"))
   rownames(alt_only) <- sample_index$sample_index
 
   # check numeric class ---------
@@ -70,12 +70,12 @@ summarize_by_gene <- function(gene_binary) {
 
   # genes with one type of event
   all_bin_once <- transp_alt_only %>%
-    filter(gene %in% genes_single)
+    filter(.data$gene %in% genes_single)
 
   # genes with more than one type of event
   all_bin_more <- transp_alt_only %>%
-    filter(gene %in% genes_multiple) %>%
-    group_by(gene) %>%
+    filter(.data$gene %in% genes_multiple) %>%
+    group_by(.data$gene) %>%
     summarize(across(everything(), max))
 
   # bind together and transpose
@@ -88,7 +88,7 @@ summarize_by_gene <- function(gene_binary) {
   # join back to sample ID
   simp_gene_binary <- all_bin %>%
     left_join(sample_index, ., by = "sample_index") %>%
-    select(-sample_index) %>%
+    select(-c("sample_index")) %>%
     as.data.frame()
 
   simp_gene_binary

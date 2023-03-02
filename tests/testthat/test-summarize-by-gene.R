@@ -28,7 +28,7 @@ test_that("test simplify marix needs a data frame", {
 
 })
 
-test_that("test simplify marix needs a data frame", {
+test_that("test simplify matrix needs a data frame", {
 
     samples <- as.character(unique(gnomeR::mutations$sampleId))[1:50]
     gen_dat <- create_gene_binary(samples = samples,
