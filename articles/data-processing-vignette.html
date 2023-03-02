@@ -411,24 +411,22 @@ of event.</p>
 <span>  <span class="fu"><a href="../reference/summarize_by_gene.html">summarize_by_gene</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">all_bin_summary</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">6</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">6</span><span class="op">]</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 6 × 6</span></span></span>
-<span><span class="co">#&gt;   sample_id         PARP1  AKT1   ALK   APC BRCA2</span></span>
-<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> P-0001128-T01-IM3     1     1     0     0     1</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> P-0001859-T01-IM3     1     0     0     1     0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> P-0001895-T01-IM3     1     0     1     0     0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> P-0001845-T01-IM3     0     1     0     0     0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> P-0005570-T01-IM5     0     1     0     0     0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> P-0001768-T01-IM3     0     0     1     0     0</span></span>
+<span><span class="co">#&gt;           sample_id PARP1 AKT1 ALK APC BRCA2</span></span>
+<span><span class="co">#&gt; 1 P-0001128-T01-IM3     1    1   0   0     1</span></span>
+<span><span class="co">#&gt; 2 P-0001859-T01-IM3     1    0   0   1     0</span></span>
+<span><span class="co">#&gt; 3 P-0001895-T01-IM3     1    0   1   0     0</span></span>
+<span><span class="co">#&gt; 4 P-0001845-T01-IM3     0    1   0   0     0</span></span>
+<span><span class="co">#&gt; 5 P-0005570-T01-IM5     0    1   0   0     0</span></span>
+<span><span class="co">#&gt; 6 P-0001768-T01-IM3     0    0   1   0     0</span></span>
 <span> </span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">all_bin_summary</span><span class="op">)</span></span>
 <span><span class="co">#&gt;  [1] "sample_id" "PARP1"     "AKT1"      "ALK"       "APC"       "BRCA2"    </span></span>
-<span><span class="co">#&gt;  [7] "CTNNB1"    "EPHB1"     "FAT1"      "JAK1"      "SMAD2"     "MYC"      </span></span>
-<span><span class="co">#&gt; [13] "NF1"       "PDGFRA"    "PIK3R2"    "PPP2R1A"   "ROS1"      "TP53"     </span></span>
-<span><span class="co">#&gt; [19] "KMT2D"     "SPOP"      "PIK3R3"    "IRS2"      "SPEN"      "ASXL2"    </span></span>
-<span><span class="co">#&gt; [25] "KMT2C"     "CARD11"    "ERG"       "TMPRSS2"   "PTPRS"     "KDM6A"    </span></span>
-<span><span class="co">#&gt; [31] "NKX3-1"    "AR"        "TRAF7"     "TSC2"      "FGFR1"     "SOX17"    </span></span>
-<span><span class="co">#&gt; [37] "RECQL4"    "NBN"</span></span></code></pre></div>
+<span><span class="co">#&gt;  [7] "CTNNB1"    "EPHB1"     "FAT1"      "JAK1"      "SMAD2"     "NF1"      </span></span>
+<span><span class="co">#&gt; [13] "PDGFRA"    "PIK3R2"    "PPP2R1A"   "ROS1"      "TP53"      "KMT2D"    </span></span>
+<span><span class="co">#&gt; [19] "SPOP"      "PIK3R3"    "IRS2"      "SPEN"      "ASXL2"     "KMT2C"    </span></span>
+<span><span class="co">#&gt; [25] "CARD11"    "ERG"       "TMPRSS2"   "PTPRS"     "KDM6A"     "NKX3-1"   </span></span>
+<span><span class="co">#&gt; [31] "AR"        "TRAF7"     "TSC2"      "FGFR1"     "SOX17"     "RECQL4"   </span></span>
+<span><span class="co">#&gt; [37] "NBN"       "MYC"</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
@@ -469,12 +467,12 @@ samples, the gene is included in the summary table.</p></li>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/tbl_genomic.html">tbl_genomic</a></span><span class="op">(</span>gene_binary <span class="op">=</span> <span class="va">gene_binary</span>, gene_subset <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"PARP1"</span>, <span class="st">"ALK"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<div id="slvstsvzbo" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<div id="uzqdwsjcpr" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>html {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 }
 
-#slvstsvzbo .gt_table {
+#uzqdwsjcpr .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -499,7 +497,7 @@ samples, the gene is included in the summary table.</p></li>
   border-left-color: #D3D3D3;
 }
 
-#slvstsvzbo .gt_heading {
+#uzqdwsjcpr .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -511,12 +509,12 @@ samples, the gene is included in the summary table.</p></li>
   border-right-color: #D3D3D3;
 }
 
-#slvstsvzbo .gt_caption {
+#uzqdwsjcpr .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#slvstsvzbo .gt_title {
+#uzqdwsjcpr .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -528,7 +526,7 @@ samples, the gene is included in the summary table.</p></li>
   border-bottom-width: 0;
 }
 
-#slvstsvzbo .gt_subtitle {
+#uzqdwsjcpr .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -540,13 +538,13 @@ samples, the gene is included in the summary table.</p></li>
   border-top-width: 0;
 }
 
-#slvstsvzbo .gt_bottom_border {
+#uzqdwsjcpr .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#slvstsvzbo .gt_col_headings {
+#uzqdwsjcpr .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -561,7 +559,7 @@ samples, the gene is included in the summary table.</p></li>
   border-right-color: #D3D3D3;
 }
 
-#slvstsvzbo .gt_col_heading {
+#uzqdwsjcpr .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -581,7 +579,7 @@ samples, the gene is included in the summary table.</p></li>
   overflow-x: hidden;
 }
 
-#slvstsvzbo .gt_column_spanner_outer {
+#uzqdwsjcpr .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -593,15 +591,15 @@ samples, the gene is included in the summary table.</p></li>
   padding-right: 4px;
 }
 
-#slvstsvzbo .gt_column_spanner_outer:first-child {
+#uzqdwsjcpr .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#slvstsvzbo .gt_column_spanner_outer:last-child {
+#uzqdwsjcpr .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#slvstsvzbo .gt_column_spanner {
+#uzqdwsjcpr .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -613,7 +611,7 @@ samples, the gene is included in the summary table.</p></li>
   width: 100%;
 }
 
-#slvstsvzbo .gt_group_heading {
+#uzqdwsjcpr .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -639,7 +637,7 @@ samples, the gene is included in the summary table.</p></li>
   text-align: left;
 }
 
-#slvstsvzbo .gt_empty_group_heading {
+#uzqdwsjcpr .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -654,15 +652,15 @@ samples, the gene is included in the summary table.</p></li>
   vertical-align: middle;
 }
 
-#slvstsvzbo .gt_from_md > :first-child {
+#uzqdwsjcpr .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#slvstsvzbo .gt_from_md > :last-child {
+#uzqdwsjcpr .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#slvstsvzbo .gt_row {
+#uzqdwsjcpr .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -681,7 +679,7 @@ samples, the gene is included in the summary table.</p></li>
   overflow-x: hidden;
 }
 
-#slvstsvzbo .gt_stub {
+#uzqdwsjcpr .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -694,7 +692,7 @@ samples, the gene is included in the summary table.</p></li>
   padding-right: 5px;
 }
 
-#slvstsvzbo .gt_stub_row_group {
+#uzqdwsjcpr .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -708,11 +706,11 @@ samples, the gene is included in the summary table.</p></li>
   vertical-align: top;
 }
 
-#slvstsvzbo .gt_row_group_first td {
+#uzqdwsjcpr .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#slvstsvzbo .gt_summary_row {
+#uzqdwsjcpr .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -722,16 +720,16 @@ samples, the gene is included in the summary table.</p></li>
   padding-right: 5px;
 }
 
-#slvstsvzbo .gt_first_summary_row {
+#uzqdwsjcpr .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#slvstsvzbo .gt_first_summary_row.thick {
+#uzqdwsjcpr .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#slvstsvzbo .gt_last_summary_row {
+#uzqdwsjcpr .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -741,7 +739,7 @@ samples, the gene is included in the summary table.</p></li>
   border-bottom-color: #D3D3D3;
 }
 
-#slvstsvzbo .gt_grand_summary_row {
+#uzqdwsjcpr .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -751,7 +749,7 @@ samples, the gene is included in the summary table.</p></li>
   padding-right: 5px;
 }
 
-#slvstsvzbo .gt_first_grand_summary_row {
+#uzqdwsjcpr .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -761,11 +759,11 @@ samples, the gene is included in the summary table.</p></li>
   border-top-color: #D3D3D3;
 }
 
-#slvstsvzbo .gt_striped {
+#uzqdwsjcpr .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#slvstsvzbo .gt_table_body {
+#uzqdwsjcpr .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -774,7 +772,7 @@ samples, the gene is included in the summary table.</p></li>
   border-bottom-color: #D3D3D3;
 }
 
-#slvstsvzbo .gt_footnotes {
+#uzqdwsjcpr .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -788,7 +786,7 @@ samples, the gene is included in the summary table.</p></li>
   border-right-color: #D3D3D3;
 }
 
-#slvstsvzbo .gt_footnote {
+#uzqdwsjcpr .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-left: 4px;
@@ -797,7 +795,7 @@ samples, the gene is included in the summary table.</p></li>
   padding-right: 5px;
 }
 
-#slvstsvzbo .gt_sourcenotes {
+#uzqdwsjcpr .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -811,7 +809,7 @@ samples, the gene is included in the summary table.</p></li>
   border-right-color: #D3D3D3;
 }
 
-#slvstsvzbo .gt_sourcenote {
+#uzqdwsjcpr .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -819,64 +817,64 @@ samples, the gene is included in the summary table.</p></li>
   padding-right: 5px;
 }
 
-#slvstsvzbo .gt_left {
+#uzqdwsjcpr .gt_left {
   text-align: left;
 }
 
-#slvstsvzbo .gt_center {
+#uzqdwsjcpr .gt_center {
   text-align: center;
 }
 
-#slvstsvzbo .gt_right {
+#uzqdwsjcpr .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#slvstsvzbo .gt_font_normal {
+#uzqdwsjcpr .gt_font_normal {
   font-weight: normal;
 }
 
-#slvstsvzbo .gt_font_bold {
+#uzqdwsjcpr .gt_font_bold {
   font-weight: bold;
 }
 
-#slvstsvzbo .gt_font_italic {
+#uzqdwsjcpr .gt_font_italic {
   font-style: italic;
 }
 
-#slvstsvzbo .gt_super {
+#uzqdwsjcpr .gt_super {
   font-size: 65%;
 }
 
-#slvstsvzbo .gt_footnote_marks {
+#uzqdwsjcpr .gt_footnote_marks {
   font-style: italic;
   font-weight: normal;
   font-size: 75%;
   vertical-align: 0.4em;
 }
 
-#slvstsvzbo .gt_asterisk {
+#uzqdwsjcpr .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#slvstsvzbo .gt_indent_1 {
+#uzqdwsjcpr .gt_indent_1 {
   text-indent: 5px;
 }
 
-#slvstsvzbo .gt_indent_2 {
+#uzqdwsjcpr .gt_indent_2 {
   text-indent: 10px;
 }
 
-#slvstsvzbo .gt_indent_3 {
+#uzqdwsjcpr .gt_indent_3 {
   text-indent: 15px;
 }
 
-#slvstsvzbo .gt_indent_4 {
+#uzqdwsjcpr .gt_indent_4 {
   text-indent: 20px;
 }
 
-#slvstsvzbo .gt_indent_5 {
+#uzqdwsjcpr .gt_indent_5 {
   text-indent: 25px;
 }
 </style>
@@ -905,12 +903,12 @@ samples, the gene is included in the summary table.</p></li>
 </div>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/tbl_genomic.html">tbl_genomic</a></span><span class="op">(</span>gene_binary <span class="op">=</span> <span class="va">gene_binary</span>, freq_cutoff <span class="op">=</span> <span class="fl">.15</span><span class="op">)</span></span></code></pre></div>
-<div id="eygiufnlsq" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<div id="nmhffqkgsy" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>html {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 }
 
-#eygiufnlsq .gt_table {
+#nmhffqkgsy .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -935,7 +933,7 @@ samples, the gene is included in the summary table.</p></li>
   border-left-color: #D3D3D3;
 }
 
-#eygiufnlsq .gt_heading {
+#nmhffqkgsy .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -947,12 +945,12 @@ samples, the gene is included in the summary table.</p></li>
   border-right-color: #D3D3D3;
 }
 
-#eygiufnlsq .gt_caption {
+#nmhffqkgsy .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#eygiufnlsq .gt_title {
+#nmhffqkgsy .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -964,7 +962,7 @@ samples, the gene is included in the summary table.</p></li>
   border-bottom-width: 0;
 }
 
-#eygiufnlsq .gt_subtitle {
+#nmhffqkgsy .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -976,13 +974,13 @@ samples, the gene is included in the summary table.</p></li>
   border-top-width: 0;
 }
 
-#eygiufnlsq .gt_bottom_border {
+#nmhffqkgsy .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#eygiufnlsq .gt_col_headings {
+#nmhffqkgsy .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -997,7 +995,7 @@ samples, the gene is included in the summary table.</p></li>
   border-right-color: #D3D3D3;
 }
 
-#eygiufnlsq .gt_col_heading {
+#nmhffqkgsy .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1017,7 +1015,7 @@ samples, the gene is included in the summary table.</p></li>
   overflow-x: hidden;
 }
 
-#eygiufnlsq .gt_column_spanner_outer {
+#nmhffqkgsy .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1029,15 +1027,15 @@ samples, the gene is included in the summary table.</p></li>
   padding-right: 4px;
 }
 
-#eygiufnlsq .gt_column_spanner_outer:first-child {
+#nmhffqkgsy .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#eygiufnlsq .gt_column_spanner_outer:last-child {
+#nmhffqkgsy .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#eygiufnlsq .gt_column_spanner {
+#nmhffqkgsy .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -1049,7 +1047,7 @@ samples, the gene is included in the summary table.</p></li>
   width: 100%;
 }
 
-#eygiufnlsq .gt_group_heading {
+#nmhffqkgsy .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1075,7 +1073,7 @@ samples, the gene is included in the summary table.</p></li>
   text-align: left;
 }
 
-#eygiufnlsq .gt_empty_group_heading {
+#nmhffqkgsy .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -1090,15 +1088,15 @@ samples, the gene is included in the summary table.</p></li>
   vertical-align: middle;
 }
 
-#eygiufnlsq .gt_from_md > :first-child {
+#nmhffqkgsy .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#eygiufnlsq .gt_from_md > :last-child {
+#nmhffqkgsy .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#eygiufnlsq .gt_row {
+#nmhffqkgsy .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1117,7 +1115,7 @@ samples, the gene is included in the summary table.</p></li>
   overflow-x: hidden;
 }
 
-#eygiufnlsq .gt_stub {
+#nmhffqkgsy .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1130,7 +1128,7 @@ samples, the gene is included in the summary table.</p></li>
   padding-right: 5px;
 }
 
-#eygiufnlsq .gt_stub_row_group {
+#nmhffqkgsy .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1144,11 +1142,11 @@ samples, the gene is included in the summary table.</p></li>
   vertical-align: top;
 }
 
-#eygiufnlsq .gt_row_group_first td {
+#nmhffqkgsy .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#eygiufnlsq .gt_summary_row {
+#nmhffqkgsy .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1158,16 +1156,16 @@ samples, the gene is included in the summary table.</p></li>
   padding-right: 5px;
 }
 
-#eygiufnlsq .gt_first_summary_row {
+#nmhffqkgsy .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#eygiufnlsq .gt_first_summary_row.thick {
+#nmhffqkgsy .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#eygiufnlsq .gt_last_summary_row {
+#nmhffqkgsy .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1177,7 +1175,7 @@ samples, the gene is included in the summary table.</p></li>
   border-bottom-color: #D3D3D3;
 }
 
-#eygiufnlsq .gt_grand_summary_row {
+#nmhffqkgsy .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1187,7 +1185,7 @@ samples, the gene is included in the summary table.</p></li>
   padding-right: 5px;
 }
 
-#eygiufnlsq .gt_first_grand_summary_row {
+#nmhffqkgsy .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1197,11 +1195,11 @@ samples, the gene is included in the summary table.</p></li>
   border-top-color: #D3D3D3;
 }
 
-#eygiufnlsq .gt_striped {
+#nmhffqkgsy .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#eygiufnlsq .gt_table_body {
+#nmhffqkgsy .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1210,7 +1208,7 @@ samples, the gene is included in the summary table.</p></li>
   border-bottom-color: #D3D3D3;
 }
 
-#eygiufnlsq .gt_footnotes {
+#nmhffqkgsy .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1224,7 +1222,7 @@ samples, the gene is included in the summary table.</p></li>
   border-right-color: #D3D3D3;
 }
 
-#eygiufnlsq .gt_footnote {
+#nmhffqkgsy .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-left: 4px;
@@ -1233,7 +1231,7 @@ samples, the gene is included in the summary table.</p></li>
   padding-right: 5px;
 }
 
-#eygiufnlsq .gt_sourcenotes {
+#nmhffqkgsy .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1247,7 +1245,7 @@ samples, the gene is included in the summary table.</p></li>
   border-right-color: #D3D3D3;
 }
 
-#eygiufnlsq .gt_sourcenote {
+#nmhffqkgsy .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -1255,64 +1253,64 @@ samples, the gene is included in the summary table.</p></li>
   padding-right: 5px;
 }
 
-#eygiufnlsq .gt_left {
+#nmhffqkgsy .gt_left {
   text-align: left;
 }
 
-#eygiufnlsq .gt_center {
+#nmhffqkgsy .gt_center {
   text-align: center;
 }
 
-#eygiufnlsq .gt_right {
+#nmhffqkgsy .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#eygiufnlsq .gt_font_normal {
+#nmhffqkgsy .gt_font_normal {
   font-weight: normal;
 }
 
-#eygiufnlsq .gt_font_bold {
+#nmhffqkgsy .gt_font_bold {
   font-weight: bold;
 }
 
-#eygiufnlsq .gt_font_italic {
+#nmhffqkgsy .gt_font_italic {
   font-style: italic;
 }
 
-#eygiufnlsq .gt_super {
+#nmhffqkgsy .gt_super {
   font-size: 65%;
 }
 
-#eygiufnlsq .gt_footnote_marks {
+#nmhffqkgsy .gt_footnote_marks {
   font-style: italic;
   font-weight: normal;
   font-size: 75%;
   vertical-align: 0.4em;
 }
 
-#eygiufnlsq .gt_asterisk {
+#nmhffqkgsy .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#eygiufnlsq .gt_indent_1 {
+#nmhffqkgsy .gt_indent_1 {
   text-indent: 5px;
 }
 
-#eygiufnlsq .gt_indent_2 {
+#nmhffqkgsy .gt_indent_2 {
   text-indent: 10px;
 }
 
-#eygiufnlsq .gt_indent_3 {
+#nmhffqkgsy .gt_indent_3 {
   text-indent: 15px;
 }
 
-#eygiufnlsq .gt_indent_4 {
+#nmhffqkgsy .gt_indent_4 {
   text-indent: 20px;
 }
 
-#eygiufnlsq .gt_indent_5 {
+#nmhffqkgsy .gt_indent_5 {
   text-indent: 25px;
 }
 </style>
