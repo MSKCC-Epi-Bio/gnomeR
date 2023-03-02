@@ -35,7 +35,7 @@ subset_by_frequency <- function(gene_binary, t = .1) {
 
   .check_required_cols(gene_binary, "sample_id", "gene_binary")
 
-  alt_only <- select(gene_binary, -sample_id)
+  alt_only <- select(gene_binary, -"sample_id")
 
   # Remove all NA columns ----------------------------------------------
   all_na_alt <- apply(alt_only,  2, function(x) {
@@ -48,7 +48,6 @@ subset_by_frequency <- function(gene_binary, t = .1) {
 
   # Check Numeric Class -----------------------------------------------------
   is_numeric <- apply(alt_only, 2, is.numeric)
-  is_numeric[!is_numeric]
 
   if(!(all(is_numeric))) {
     cli::cli_abort("All alterations in your gene binary must be numeric and only can have values of 0, 1, or NA.
@@ -64,7 +63,7 @@ subset_by_frequency <- function(gene_binary, t = .1) {
 
   alts_over_thresh <- names(alt_freq[alt_freq >= t])
 
-  subset_binary <- select(gene_binary, sample_id,
+  subset_binary <- select(gene_binary, "sample_id",
                           all_of(alts_over_thresh))
 
   return(subset_binary)
