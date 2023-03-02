@@ -5,7 +5,9 @@
 #' with values of 0, 1 or NA.
 #' @param t Threshold value between 0 and 1 to subset by. Default is 10% (.1).
 #'
-#' @return
+#' @return a data frame with a `sample_id` column and columns for
+#' alterations over the given prevalence threshold of `t`.
+#'
 #' @export
 #'
 #' @examples

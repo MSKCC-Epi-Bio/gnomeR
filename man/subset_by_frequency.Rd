@@ -13,6 +13,10 @@ with values of 0, 1 or NA.}
 
 \item{t}{Threshold value between 0 and 1 to subset by. Default is 10\% (.1).}
 }
+\value{
+a data frame with a \code{sample_id} column and columns for
+alterations over the given prevalence threshold of \code{t}.
+}
 \description{
 Subset a Binary Matrix By Alteration Frequency Threshold
 }
