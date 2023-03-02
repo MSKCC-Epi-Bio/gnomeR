@@ -12,15 +12,122 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
+
+set.seed(20230302)
 ```
 
-```{r setup}
+```{r setup, include = FALSE, message = FALSE, results = FALSE}
 library(gnomeR)
 library(tidyverse)
 library(genieBPC)
+library(cbioportalR)
 ```
 
+## Introduction
 
+This vignette will walk through how to apply {gnomeR} functions to data from AACR Project GENIE BioPharma Collaborative (BPC). A broad overview of AACR Project GENIE BPC can be found [here](https://www.aacr.org/about-the-aacr/newsroom/news-releases/aacr-project-genie-begins-five-year-collaborative-research-project-with-36-million-in-new-funding/), while details on the clinical data structure are available on the [{genieBPC} package website](https://genie-bpc.github.io/genieBPC/articles/clinical_data_structure_vignette.html). 
 
-Documentation on AACR Project GENIE can be found ___________here__________. For the purposes of this vignette, we will be using a subset of the publicly-accessible non-small cell lung cancer version 2.0. See this vignette ___________here__________ from the {genieBPC} package for more information on how to retrieve additional data sets. 
+For the purposes of this vignette, we will use the first GENIE BPC publicly available data release of non-small cell lung cancer patients, NSCLC v2.0-public.
+
+## Setting Up
+
+To gain access to the GENIE BPC data, please follow the instructions on the [{genieBPC} `pull_data_synapse()` vignette](https://genie-bpc.github.io/genieBPC/articles/pull_data_synapse_vignette.html) to register for a Synapse account. Once your Synapse account is created and you authenticate yourself using `genieBPC::set_synapse_credentials()`, you'll be ready to pull the GENIE BPC clinical and genomic data from Synapse into your local environment:
+
+```{r, eval = FALSE}
+library(genieBPC)
+
+set_synapse_credentials()
+
+nsclc_2_0 = pull_data_synapse(cohort = "NSCLC", version = "v2.0-public")
+```
+
+The resulting `nsclc_2_0` object is a nested list of datasets, including the MAF data and copy number data.
+
+- `nsclc_2_0$NSCLC_v2.0$mutations_extended`
+- `nsclc_2_0$NSCLC_v2.0$cna`
+
+Note that while the GENIE BPC clinical data is only available via Synapse, the genomic data can be accessed via both Synapse and cBioPortal. Using the {cbioportalR} package, users can pull the GENIE BPC genomic data directly from cBioPortal:
+
+```{r, eval = FALSE}
+library(cbioportalR)
+
+cbioportalR::set_cbioportal_db("https://genie.cbioportal.org/api")
+
+mutations_extended_2_0 <- get_mutations_by_study("nsclc_public_genie_bpc")
+cna_2_0 <- get_cna_by_study("nsclc_public_genie_bpc")
+```
+
+## Data Formats
+
+Due to filtering criteria applied by cBioPortal, the genomic data from Synapse and cBioPortal do not align exactly. Specifically, the mutation data variant classification data are filtered on conditions described [here](https://docs.cbioportal.org/file-formats/#mutation-data).
+
+(expand here)
+
+## Preparing Data for Analysis
+
+The following code chunk uses the `genieBPC::create_analytic_cohort()` to create an analytic cohort of patients diagnosed with stage IV NSCLC of adenocarcinoma histology. Then, for patients with multiple genomic samples, the `genieBPC::select_unique_ngs()` function chooses the genomic sample with OncoTree code LUAD. For patients with multiple samples with OncoTree code LUAD, we will select the metastatic genomic sample. If any patients have multiple metastatic samples with OncoTree code LUAD, take the latest of the samples.
+
+Note: for patients with exactly one genomic sample, that unique genomic sample will be returned regardless of whether it meets the argument criteria specified below.
+
+```{r, eval = FALSE}
+# create analytic cohort of patients diagnosed with Stage IV adenocarcinoma
+nsclc_2_0_example <- create_analytic_cohort(
+  data_synapse = nsclc_2_0$NSCLC_v2.0,
+  stage_dx = c("Stage IV"),
+  histology = "Adenocarcinoma"
+)
+
+# select unique NGS samples for this analytic cohort
+nsclc_2_0_samples <- select_unique_ngs(
+  data_cohort = nsclc_2_0_example$cohort_ngs,
+  oncotree_code = "LUAD",
+  sample_type = "Metastasis",
+  min_max_time = "max"
+)
+```
+
+Create a dataframe of the corresponding panel and sample IDs:
+
+```{r, eval = FALSE}
+# specify sample panels and IDs
+nsclc_2_0_sample_panels <- nsclc_2_0_samples %>% 
+  select(cpt_seq_assay_id, cpt_genie_sample_id) %>%
+  rename(panel_id = cpt_seq_assay_id,
+         sample_id = cpt_genie_sample_id)
+```
+
+### Process Data with `create_gene_binary()`
+
+Using the genomic data from Synapse:
+
+```{r}
+
+```
+
+Using the genomic data from cBioPortal:
+
+```{r, eval = FALSE}
+nsclc_2_0_gen_dat_cbio <-
+  create_gene_binary(
+    mutation = mutations_extended_2_0,
+    cna = cna_2_0,
+    samples = nsclc_2_0_sample_panels$sample_id,
+    specify_panel = nsclc_2_0_sample_panels
+  )
+```
+
+### Collapse Data with `summarize_by_gene()`
+
+Using the genomic data from Synapse:
+
+```{r}
+
+```
+
+Using the genomic data from cBioPortal:
+
+```{r, eval = FALSE}
+nsclc_2_0_gen_dat_cbio %>% 
+  summarize_by_gene()
+```
 
