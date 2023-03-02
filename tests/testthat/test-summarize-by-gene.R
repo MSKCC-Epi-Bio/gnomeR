@@ -51,11 +51,11 @@ test_that("test that genes are properly summarized", {
                                     cna = gnomeR::cna,
                                     fusion = gnomeR::sv,
                                     specify_panel = "impact")%>%
-    select(c(sample_id, starts_with("ARI"), starts_with("MAPK1"), starts_with("ERG"))))
+    dplyr::select(c(sample_id, starts_with("ARI"), starts_with("MAPK1"), starts_with("ERG"))))
 
 
   sum_impact <- summarize_by_gene(bin_impact)%>%
-    mutate(across(!sample_id, as.numeric))
+    dplyr::mutate(across(!sample_id, as.numeric))
 
 
   bin_impact_test <- bin_impact %>%

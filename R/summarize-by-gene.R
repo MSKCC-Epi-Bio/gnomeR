@@ -21,97 +21,75 @@
 #'
 summarize_by_gene <- function(gene_binary) {
 
+
+  # Checks ------------------------------------------------------------------
+
   if (!is.data.frame(gene_binary)) {
     cli::cli_abort("{.code gene_binary} must be a data.frame with sample ids")
   }
 
-  defaultW <- getOption("warn")
-  options(warn = -1)
-
   .check_required_cols(gene_binary, "sample_id", "gene_binary")
 
-  all_bin2 <- t(as.matrix(gene_binary))
+  # check for repeat samples
+  if(any(table(gene_binary$sample_id) > 1)) {
+    cli::cli_abort("Your {.field gene_binary} must have unique samples in {.code sample_id} column")
+  }
 
-  colnames(all_bin2) <- all_bin2[row.names(all_bin2) == "sample_id",]
 
-  all_bin2 <- all_bin2[!row.names(all_bin2) == "sample_id", ] %>%
-    as.data.frame()
+  # Create Sample Index -----------------------------------------------------
+
+  sample_index <- gene_binary %>%
+    select(sample_id) %>%
+    mutate(sample_index = paste0("samp", 1:nrow(gene_binary)))
+
+  alt_only <- as.matrix(select(gene_binary, -sample_id))
+  rownames(alt_only) <- sample_index$sample_index
+
+  # check numeric class ---------
+  is_numeric <- apply(alt_only, 2, is.numeric)
+
+  if(!(all(is_numeric))) {
+    cli::cli_abort("All alterations in your gene binary must be numeric and only can have values of 0, 1, or NA.
+                   Please coerce the following columns to numeric before proceeding: {.field {names(is_numeric[!is_numeric])}}")
+  }
+
+  # Transpose ---------------------------------------------------------------
+
+  transp_alt_only <- as.data.frame(t(alt_only))
 
   # remove endings of gene names
-  all_bin2 <- all_bin2 %>%
-    mutate(gene = row.names(all_bin2),
-           name2 = str_remove_all(gene, ".Amp|.fus|.Del|.cna"))
+  transp_alt_only <- transp_alt_only %>%
+    mutate(gene = str_remove_all(row.names(.),
+                                 ".Amp|.fus|.Del|.cna"))
 
-  test <- all_bin2 %>%
-    group_by(name2)%>%
-    summarise(count = n())%>%
-    filter(count > 1)
+  # check for genes that have more than one alt type
+  gene_tab <- table(transp_alt_only$gene)
 
-  genes_multiple <- test$name2
+  genes_multiple <-  names(gene_tab[which(gene_tab > 1)])
+  genes_single <- names(gene_tab[which(gene_tab == 1)])
 
-  # genes only with one type of event
-  all_bin_once <- all_bin2 %>%
-    filter(!(name2 %in% genes_multiple))%>%
-    select(-gene)%>%
-    mutate(across(starts_with("P"), as.numeric))
-
-  row.names(all_bin_once) <- NULL
+  # genes with one type of event
+  all_bin_once <- transp_alt_only %>%
+    filter(gene %in% genes_single)
 
   # genes with more than one type of event
-  all_bin_more <- all_bin2 %>%
-    filter(name2 %in% genes_multiple)%>%
-    mutate(across(starts_with("P"), as.numeric))%>%
-    select(-gene)%>%
-    group_by(name2)%>%
+  all_bin_more <- transp_alt_only %>%
+    filter(gene %in% genes_multiple) %>%
+    group_by(gene) %>%
     summarize(across(everything(), max))
 
   # bind together and transpose
-  all_bin <- rbind(all_bin_once, all_bin_more) %>%
-    as.matrix()%>%
-    t()%>%
+  all_bin <- rbind(all_bin_once, all_bin_more, make.row.names = FALSE) %>%
+    tibble::column_to_rownames("gene")
+
+  all_bin <- as.data.frame(t(all_bin)) %>%
+    tibble::rownames_to_column("sample_index")
+
+  # join back to sample ID
+  simp_gene_binary <- all_bin %>%
+    left_join(sample_index, ., by = "sample_index") %>%
+    select(-sample_index) %>%
     as.data.frame()
-
-  colnames(all_bin) <- all_bin[row.names(all_bin) == "name2",]
-
-
-  # tidy up
-  all_bin <- all_bin %>%
-    mutate(sample_id = row.names(.))%>%
-    mutate(across(!sample_id, as.numeric))%>%
-    relocate(sample_id)%>%
-    filter(sample_id != "name2")
-
-  simp_gene_binary <- all_bin
-
-  row.names(simp_gene_binary) <- NULL
-
-
-  # simp_gene_binary <- gene_binary %>%
-  #   ungroup() %>%
-  #   tidyr::pivot_longer(-"sample_id") %>%
-  #   mutate(name2 = str_remove_all(.data$name, ".Amp|.fus|.Del|.cna")) %>%
-  #   group_by(.data$sample_id, .data$name2) %>%
-  #   # if all NA ~ NA. If at least one non-na 1 or 0 ~ make 1 or 0
-  #   mutate(
-  #     num_na = sum(is.na(.data$value)),
-  #     count = n(),
-  #     sum = sum(.data$value, na.rm = TRUE)
-  #   )%>%
-  #   mutate(simpl_val = case_when(
-  #     count == num_na ~ NA_real_,
-  #     sum > 1 ~ 1,
-  #     TRUE ~ .data$sum
-  #   ))
-  #  %>%
-  #   select(all_of(c("sample_id", "name2", "simpl_val"))) %>%
-  #   distinct() %>%
-  #   ungroup() %>%
-  #   tidyr::pivot_wider(
-  #     id_cols = "sample_id", names_from = "name2",
-  #     values_from = "simpl_val"
-  #   )
-
-  options(warn = defaultW)
 
   simp_gene_binary
 
