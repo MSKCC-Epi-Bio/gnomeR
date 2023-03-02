@@ -2,6 +2,7 @@
 
 * Updated color palette functionality
 * Column with sample ID now returned in data frame resulting from `create_gene_binary()`
+* `summarize_by_gene()` function was changed to run faster (#259)
 
 # gnomeR 1.1.1
 
