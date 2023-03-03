@@ -15,15 +15,20 @@ knitr::opts_chunk$set(
 )
 ```
 
+## Introduction
+
+Somatic copy number alterations (sCNA, CNA, CNV) are a predominant source of variation in cancer genomes, which contribute to cancer development, progression and resistance to therapy. A CNA refers to a change in the number of copies of a genomic segment, termed amplifications and deletions. Such changes can be broad (entire chromosome arms) or focal (small chromosomal regions larger than 1000 base pairs). Oncogene activation often occurs due to amplification & TSG deactivation often due to deletions (Nabavi & Zare, 2022). In cancer studies, it is often useful to examine the similarities and differences in copy number profiles between clinically meaningful patients subgroups or across study cohorts (See Figure 1 of https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6145837/). 
+
+In this vignette, we will introduce the forms of copy number data available via cBioPortal and walk through an example of analyzing CNA data. 
+
+
 ```{r setup, echo=F}
-#library(gnomeR)
+install.packages("devtools")
+devtools::install_github("MSKCC-Epi-Bio/gnomeR")
+library(gnomeR)
+segdata <- gnomeR::seg
 ```
 
-
-## What are copy number alterations
-- CNAs= changes in copy number of a genomic segment
-- Can be focal (0.5 kb – 85 Mb in length) or broad (entire chromosome arms) (Beroukhim et al., 2010)
-- Oncogene activation often occurs due to amplification & TSG deactivation often due to deletions (Nabavi & Zare, 2022) 
 
 ## There are 2 forms of copy number data in cBioPortal
 1. Whole number copy number
