@@ -1,13 +1,25 @@
-reformat_fusion <- function(data){
 
 
-  ##########################################################
-  ################## clean data#######################
-  ##########################################################
 
-  .required_cols(data, "fusion", "sample_id")
 
-  data_sep <- suppressMessages(data %>%
+
+
+
+reformat_fusion <- function(fusions){
+
+
+ # Checks ----------
+  if(!is.data.frame(fusions)){
+    cli::cli_abort("{.code fusion} must be a data.frame")
+  }
+
+
+  .check_required_cols(fusions, c("fusion", "sample_id", "hugo_symbol"))
+
+
+
+  # Cleandataset ------------
+  fusions_sep <- suppressMessages(fusions %>%
     mutate(
 
     #remove leading space in fusion var
@@ -29,10 +41,10 @@ reformat_fusion <- function(data){
       endsWith(fusion, " PAX5(NM_016734) rearrangement intron 8") ~ gsub('.{38}$', "", fusion),
 
       TRUE ~ gsub('.{20}$', "", fusion)))%>%
-    # keep the original gene-gene info somewhere in the data frame and not overwrite
+    # keep the original gene-gene info somewhere in the fusions frame and not overwrite
     rename(event_info = fusion) %>%
     mutate(gene_order = fusion2,
-           #rename known fusions with
+           #rename known fusions with two hypens in the name
            event_info = case_when(
                startsWith(event_info, "NPHP3-AS1-STAG1") ~ "NPHP3_AS1-STAG1",
                startsWith(event_info, "STAG1-NPHP3-AS1") ~ "STAG1-NPHP3_AS1",
@@ -62,13 +74,14 @@ reformat_fusion <- function(data){
                startsWith(event_info, "SOX2-OT-SOX2") ~ "SOX2_OT-SOX2",
                TRUE ~ event_info)))
 
-  special_case <- data_sep %>%
+  # find any remaining hugo_symbols that have 2 hyphens
+  special_case <- fusions_sep %>%
     filter(str_count(fusion2, "-") > 1)%>%
     arrange(sample_id, fusion2)%>%
     select(sample_id, fusion2)%>%
     unique()
 
-  invest <- special_case$sample_id
+  invest <- special_case$fusion2
 
   names(invest) <- rep("!", times = length(special_case$sample_id))
 
@@ -78,18 +91,19 @@ reformat_fusion <- function(data){
   }
 
   # separate the two genes into their own columns
-  data_sep1 <- suppressWarnings(data_sep %>%
+  fusions_sep1 <- suppressWarnings(fusions_sep %>%
     #select(-hugo_symbol)%>%
-    separate(fusion2, into = c("site1hugo_symbol", "site2hugo_symbol"),  "-")%>%
+    tidyr::separate(fusion2, into = c("site1hugo_symbol", "site2hugo_symbol"),  "-")%>%
     select(sample_id, hugo_symbol, site1hugo_symbol, site2hugo_symbol, event_info,
            gene_order)%>%
+    # filters out any mistakes because this should never be in the first site position
     filter(!(site1hugo_symbol %in% c("repeat", "insufficient")))%>%
     unique())
 
   # get frequency of gene fusion by hugo_symbol
   # There are cases where site 1 and 2 were flipped for a sample_id and listed x2
-  # ex: TP53-APC vs APC-TP53 for the same sample would create 4 events when it should be 2
-  data_sep_site1 <- suppressMessages(data_sep1 %>%
+  # ex: TP53-APC vs APC-TP53 for the same sample would create 4 values when it should be 2
+  site_freqs <- suppressMessages(fusions_sep1 %>%
     select(hugo_symbol, site1hugo_symbol)%>%
     table()%>%
     as.data.frame()%>%
@@ -99,18 +113,18 @@ reformat_fusion <- function(data){
 
 
   # get frequency for second site and merge to first
-  data_sep_site_freq <- suppressMessages(data_sep1 %>%
+  site_freqs <- suppressMessages(fusions_sep1 %>%
     select(hugo_symbol, site2hugo_symbol)%>%
     table()%>%
     as.data.frame()%>%
     filter(as.character(hugo_symbol) == as.character(site2hugo_symbol))%>%
     select(hugo_symbol, Freq)%>%
     rename(Freq_site2 = Freq)%>%
-    right_join(data_sep_site1))
+    right_join(site_freqs))
 
 
   # make each event a row and count events and number of NA events by sample
-  data_sep2 <- suppressMessages(data_sep1 %>%
+  fusions_sep2 <- suppressMessages(fusions_sep1 %>%
     select(-hugo_symbol)%>%
     pivot_longer(!sample_id)%>%
     group_by(sample_id)%>%
@@ -119,7 +133,7 @@ reformat_fusion <- function(data){
     unique())
 
   # count unique events by sample
-  data_sep3 <- suppressMessages(data_sep2 %>%
+  fusions_sep3 <- suppressMessages(fusions_sep2 %>%
     select(sample_id, value)%>%
     unique()%>%
     group_by(sample_id)%>%
@@ -128,38 +142,35 @@ reformat_fusion <- function(data){
     unique())
 
 
-
-
-
   # sort ids based on how many raw vs unique counts per sample
 
 
-  # merge unique and raw counts together and compare. If diff is not count_na = prob
-  data_prob_ids <- suppressMessages(data_sep2 %>%
+  # merge unique and raw counts together and compare. If diff is not count_na => problem
+  fusions_prob_ids <- suppressMessages(fusions_sep2 %>%
     select(sample_id, is_na)%>%
     group_by(sample_id)%>%
     summarize(count_na = sum(is_na),
               count = n())%>%
-    left_join(data_sep3)%>%
+    left_join(fusions_sep3)%>%
+    # unique events not equal to observed #, and difference isn't the count_na
     filter(count_unique != count & count - count_unique != count_na))
 
-  prob_ids <- data_prob_ids$sample_id
+  prob_ids <- fusions_prob_ids$sample_id
 
   # select ids that are not an issue
-  data_noprob_ids <- suppressMessages(data_sep2 %>%
+  fusions_noprob_ids <- suppressMessages(fusions_sep2 %>%
     select(sample_id, is_na)%>%
     group_by(sample_id)%>%
     summarize(count_na = sum(is_na),
               count = n())%>%
-    left_join(data_sep3)%>%
+    left_join(fusions_sep3)%>%
     filter(count_unique == count | count - count_unique == count_na))
 
-  noprob_ids <- data_noprob_ids$sample_id
+  noprob_ids <- fusions_noprob_ids$sample_id
 
+  # createdataset with noprob ids
 
-  # create dataset with noprob ids
-
-  data_noprob <- suppressMessages(data_sep1 %>%
+  fusions_noprob <- suppressMessages(fusions_sep1 %>%
     filter(sample_id %in% noprob_ids)%>%
     select(-hugo_symbol) %>%
     arrange(sample_id, site1hugo_symbol)%>%
@@ -167,38 +178,42 @@ reformat_fusion <- function(data){
 
 
 
-  # retreive full data for prob ids
+  # retreive full fusions for prob ids
 
-  data_prob <- suppressMessages(data_sep1 %>%
+  fusions_prob <- suppressMessages(fusions_sep1 %>%
     filter(sample_id %in% prob_ids)%>%
     select(-hugo_symbol) %>%
     arrange(sample_id, site1hugo_symbol)%>%
     unique())
 
-  num_dups <- suppressMessages(data_prob %>%
+  num_dups <- suppressMessages(fusions_prob %>%
     dplyr::group_by(sample_id) %>%
     dplyr::summarise(n = dplyr::n(), .groups = "drop") %>%
     dplyr::filter(n > 1L))
 
-  data_try <- suppressMessages(data_sep1 %>%
-    pivot_longer(starts_with("site"))%>%
-    unique()%>%
     arrange(sample_id, gene_order))%>%
+  fus <- suppressMessages(fusions_sep1 %>%
+                                 pivot_longer(starts_with("site"))%>%
+                                 unique()%>%
+                                 arrange(sample_id, gene_order))%>%
     suppressWarnings()
 
 
   #split out samples among the prob ids that include intragenic and keep sep
-
-  data_probid_oksamp1 <- data_try %>%
+  probid_okfusions <- suppressMessages(fusions_sep1 %>%
+                                          pivot_longer(starts_with("site"))%>%
+                                          unique()%>%
+                                          arrange(sample_id, gene_order)) %>%
     filter(endsWith(event_info, "INTRAGENIC") | endsWith(event_info, "intragenic") | endsWith(event_info, "INTERGENIC") | endsWith(event_info, "-intragenic - Archer"))%>%
     unique()%>%
     select(-hugo_symbol)%>%
     pivot_wider(id_cols = c(sample_id, gene_order, event_info))%>%
-    suppressWarnings()%>%
-    suppressMessages()
+    suppressMessages()%>%
+    suppressWarnings()
 
-  # collect samples that are two gene fusions (ex: gene1-gene2)
-  non_intra_samps <- data_try %>%
+
+  # collect samples that are two gene fusions (aka non-intra or intergenic ex: gene1-gene2)
+  non_intra_samps <- fus %>%
     filter(!endsWith(event_info, "INTRAGENIC") & !endsWith(event_info, "INTERGENIC"),
            !endsWith(event_info, "intragenic") & !endsWith(event_info, "-intragenic - Archer"))%>%
     unique()%>%
@@ -208,7 +223,7 @@ reformat_fusion <- function(data){
     suppressMessages()
 
 
-  # grab non-repeated event with id that has some duplicates
+  # grab events & id that has some duplicates
   test_sum <- non_intra_samps %>%
     group_by(sample_id, value)%>%
     summarize(count = n())%>%
@@ -226,7 +241,7 @@ reformat_fusion <- function(data){
     suppressMessages()
 
 
-  # now lets deal with the duplicates in the non_intra_samples dataset
+  # now lets deal with the duplicates in the non_intra_samplesdataset
 
   #check that there are multiple events for each fusion
   check <- non_intra_samps %>%
@@ -251,15 +266,15 @@ reformat_fusion <- function(data){
   not_all_null <- function(x) any(!is.null(x))
 
   #loop through the dataset and pivot wider as many times as needed
-  #dataset columns should look like this
+  #fusionsset columns should look like this
   # ~sample_id, ~g1_1, ~g2_1, ..., ~g[pairnum]_1, ~g2_1, ~g2_2, ..., ~g[pairnum]_2
   # where gx_y defines x = gene order in fusion and y = fusion id
   #(example: TERT-APC would be g1_1 = TERT, gene g2_1 = APC and if the reverse
   # exists we would see g1_2 = APC, g2_2 = TERT)
-  get_vector <- non_intra_wide %>%
+  one_row_per_samp <- non_intra_wide %>%
     select(-c(event_info, site1hugo_symbol, site2hugo_symbol))%>%
     mutate(genes = gene_order)%>%
-    separate(genes, into = c("g1", "g2"),  "-")%>%
+    tidyr::separate(genes, into = c("g1", "g2"),  "-")%>%
     group_by(sample_id)%>%
     mutate(test = seq_along(gene_order))%>%
     # pivot wider again to get rid of duplicates
@@ -270,84 +285,88 @@ reformat_fusion <- function(data){
 
 
   # find the number of pairs that there are max
-  temp1 <- get_vector %>%
+  temp1 <- one_row_per_samp %>%
     dplyr::select(-sample_id)
 
-  pairnum <- length(colnames(temp1))/2
-  pair_names <- c(paste0("pair", 1:pairnum))
+
+  # there have to be enough pairs to run through comparisons
+  if(length(colnames(temp1)) > 2){
+
+    pairnum <- length(colnames(temp1))/2
+    pair_names <- c(paste0("pair", 1:pairnum))
 
 
 
- # now we want to properly pair the genes together in a list and sort to be
- # alphabetical order (ex: TERT-APC should be APC-TERT) and then only select
-  # unique events
-  for(x in 1:pairnum){
-    pair <- get_vector %>%
-      select(sample_id, ends_with(as.character(x)))
+    # now we want to properly pair the genes together in a list and sort to be
+    # alphabetical order (ex: TERT-APC should be APC-TERT) and then only select
+    # unique events
+    for(x in 1:pairnum){
+      pair <- one_row_per_samp %>%
+        select(sample_id, ends_with(as.character(x)))
 
-    pair$temp_pair <- list(vector(mode='list', length=2))
+      pair$temp_pair <- list(vector(mode='list', length=2))
 
-    for(y in 1:nrow(pair)){
-      gene1 <- as.character(pair[y,2])
-      gene2 <- as.character(pair[y,3])
+      for(y in 1:nrow(pair)){
+        gene1 <- as.character(pair[y,2])
+        gene2 <- as.character(pair[y,3])
 
-      # here if two gene names exist in a pair we want to alphabetize them
-      # with sort(), else empty string or single gene name
-      pair$temp_pair[y] <- ifelse(is.na(gene1) & is.na(gene2), c(""),
-                                     ifelse(!is.na(gene1) & is.na(gene2), c(gene1, ""),
-                                      list(sort(c(gene1, gene2)))))
+        # here if two gene names exist in a pair we want to alphabetize them
+        # with sort(), else empty string or single gene name
+        pair$temp_pair[y] <- ifelse(is.na(gene1) & is.na(gene2), c(""),
+                                    ifelse(!is.na(gene1) & is.na(gene2), c(gene1, ""),
+                                           list(sort(c(gene1, gene2)))))
+      }
+
+      # iterate the pair number and name column
+      colnames(pair)[colnames(pair) == "temp_pair"] <- paste0("pair", x)
+
+      #join to overalldataset
+      one_row_per_samp <- one_row_per_samp %>%
+        left_join(pair)%>%
+        suppressWarnings()%>%
+        suppressMessages()
+
     }
 
-    # iterate the pair number and name column
-    colnames(pair)[colnames(pair) == "temp_pair"] <- paste0("pair", x)
 
-    #join to overall dataset
-    get_vector <- get_vector %>%
-      left_join(pair)%>%
-      suppressWarnings()%>%
-      suppressMessages()
+    # now check to see if any of these events are repeated with genes flipped as
+    # described above. If so, we want to remove them
 
-  }
+    # create a shelldataset with sample_ids and the first fusion for each
+    # sample_id so we can compare to other pairs
+    shell <- one_row_per_samp %>%
+      select(-c(pair2:last_col()))
 
 
-  # now check to see if any of these events are repeated with genes flipped as
-  # described above. If so, we want to remove them
+    # loop through the number of pairs 2-pairnum
+    for(a in 2:pairnum){
+      pair <- one_row_per_samp %>%
+        select(c(sample_id, starts_with("pair")))
 
-  # create a shell dataset with sample_ids and the first fusion for each
-  # sample_id so we can compare to other pairs
-  shell <- get_vector %>%
-    select(-c(pair2:last_col()))
+      comp <- pair_names[1:(a-1)]
 
-
-  # loop through the number of pairs 2-pairnum
-  for(a in 2:pairnum){
-    pair <- get_vector %>%
-      select(c(sample_id, starts_with("pair")))
-
-    comp <- pair_names[1:(a-1)]
-
-    # set name of tested column (ex: pair3) to test_pair for ease of loop
-    colnames(pair)[colnames(pair) == pair_names[a]] <- "test_pair"
+      # set name of tested column (ex: pair3) to test_pair for ease of loop
+      colnames(pair)[colnames(pair) == pair_names[a]] <- "test_pair"
 
 
-    # loop through all pairs before pair[a] ex(pair1 & pair2 if a = 3)
-    # and rename them test_comp
+      # loop through all pairs before pair[a] ex(pair1 & pair2 if a = 3)
+      # and rename them test_comp
       for(c in comp){
-      colnames(pair)[colnames(pair) == c] <- "test_comp"
+        colnames(pair)[colnames(pair) == c] <- "test_comp"
 
-      # for each sample in dataset, set NA if the testing pair is empty
-      # or if it is identical to the comparison pair (ex: TERT-APC == TERT-APC)
-      # this ensures that the first time the gene occurs is retained
-      # and the second is removed (ex: in this situation pair2 = TERT-APC,
-      # pair3 = NA)
-          for(b in 1:nrow(pair)){
-            pair$test_pair[b] <- ifelse(pair$test_pair[[b]][1] == '', NA,
-                    ifelse(identical(pair$test_comp[b], pair$test_pair[b]), NA,
-                              pair$test_pair[b]))
-          }
+        # for each sample indataset, set NA if the testing pair is empty
+        # or if it is identical to the comparison pair (ex: TERT-APC == TERT-APC)
+        # this ensures that the first time the gene occurs is retained
+        # and the second is removed (ex: in this situation pair2 = TERT-APC,
+        # pair3 = NA)
+        for(b in 1:nrow(pair)){
+          pair$test_pair[b] <- ifelse(pair$test_pair[[b]][1] == '', NA,
+                                      ifelse(identical(pair$test_comp[b], pair$test_pair[b]), NA,
+                                             pair$test_pair[b]))
+        }
 
-      # reset the column name so that test_comp can be used again in next loop
-      colnames(pair)[colnames(pair) == "test_comp"] <- c
+        # reset the column name so that test_comp can be used again in next loop
+        colnames(pair)[colnames(pair) == "test_comp"] <- c
 
       }
 
@@ -367,31 +386,43 @@ reformat_fusion <- function(data){
 
     }
 
-  # now that we have the pairs, we can clean things up
-  get_vector <- shell %>%
-    select(-c(starts_with("g")))%>%
-    unnest(cols = {{pair_names}})%>%
-    select_if(not_all_na)%>%
-    pivot_longer(!sample_id)%>%
-    group_by(sample_id, name)%>%
-    mutate(gene_num = seq_along(value))%>%
-    ungroup()%>%
-    pivot_wider(values_from = value, names_from = gene_num)%>%
-    # set hugo_symbol names correctly
-    rename(site1hugo_symbol = `1`, site2hugo_symbol = `2`)%>%
-    suppressWarnings()%>%
-    suppressMessages()
+    # now that we have the pairs, we can clean things up
 
-  # join the new pairings with the rest of the dataset
+
+    one_row_per_samp <- shell %>%
+      select(-c(starts_with("g")))%>%
+      unnest(cols = {{pair_names}})%>%
+      select_if(not_all_na)%>%
+      pivot_longer(!sample_id)%>%
+      group_by(sample_id, name)%>%
+      mutate(gene_num = seq_along(value))%>%
+      ungroup()%>%
+      pivot_wider(values_from = value, names_from = gene_num)%>%
+      # set hugo_symbol names correctly
+      rename(site1hugo_symbol = `1`, site2hugo_symbol = `2`)%>%
+      suppressWarnings()%>%
+      suppressMessages()
+
+  } else {
+    one_row_per_samp <- one_row_per_samp %>%
+      select_if(not_all_na)%>%
+      mutate(pair = "pair1")%>%
+      # set hugo_symbol names correctly
+      rename(site1hugo_symbol = g1_1, site2hugo_symbol = g2_1)
+  }
+
+
+
+  # join the new pairings with the rest of thedataset
   # to get back the event info and the gene-order
-  working <- get_vector%>%
+  new_format <- one_row_per_samp%>%
     left_join(non_intra_wide) %>%
     na.omit() %>%
     suppressWarnings()%>%
     suppressMessages()
 
   #
-  not_working <- get_vector%>%
+  not_working <- one_row_per_samp%>%
     left_join(non_intra_wide) %>%
     filter(is.na(event_info))%>%
     mutate(site2 = site1hugo_symbol)%>%
@@ -404,28 +435,33 @@ reformat_fusion <- function(data){
     suppressWarnings()%>%
     suppressMessages()
 
-  # bind all of the fusions together
-  to_merge <- working %>%
+  if(length(colnames(temp1)) > 2){
+      # bind all of the fusions together
+  to_merge <- new_format %>%
     rbind(not_working)%>%
     select(-name)%>%
-    suppressWarnings()%>%
-    suppressMessages()
+    rbind(probid_okfusions)%>%
+    rbind(fusions_noprob)
+
+  } else{
+
+    to_merge <- new_format
+
+  }
+
 
 
 
   # merge all of the datasets together
   # including intragenic, non-repeated events, and above dataset
 
-  data_fus2 <- to_merge %>%
-    rbind(data_probid_oksamp1)%>%
-    rbind(data_noprob)%>%
-    arrange(sample_id, site1hugo_symbol, site2hugo_symbol)%>%
-    select(-gene_order)%>%
+  fus2 <- to_merge %>%
+    select(sample_id, site1hugo_symbol, site2hugo_symbol, event_info)%>%
     unique()%>%
-    suppressWarnings()%>%
-    suppressMessages()
+    mutate(across(!sample_id,
+                  ~str_replace(., "_", "-")))
 
 
-  return(data_fus2)
+  return(fus2)
 
   }
