@@ -191,7 +191,6 @@ reformat_fusion <- function(fusions){
     dplyr::summarise(n = dplyr::n(), .groups = "drop") %>%
     dplyr::filter(n > 1L))
 
-    arrange(sample_id, gene_order))%>%
   fus <- suppressMessages(fusions_sep1 %>%
                                  pivot_longer(starts_with("site"))%>%
                                  unique()%>%
