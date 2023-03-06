@@ -63,9 +63,29 @@ recode_alias <- function(genomic_df, default = T, custom_table, ...) {
     alias_table <- custom_table
   }
 
+  ##Checks ----------------------------------------------------
   .check_required_cols(alias_table, "hugo_symbol", "alias")
+  .check_required_cols(genomic_df, "hugo_symbol")
 
-  # get table of gene aliases (internal data)
+  if(is.character(alias_table$alias)){
+
+    if("TRUE" %in% names(table(stringr::str_detect(alias_table$alias, ",")))) {
+
+        cli::cli_abort(
+          "You provided a group of aliases in one row. Please format your custom alias table to match
+          the gnomeR::impact_alias_table structure of one pair per row.")
+      }
+
+  } else if (is.list(alias_table$alias)){
+    cli::cli_abort(
+      "You provided a group of aliases in one row. Please format your custom alias table to match
+      the gnomeR::impact_alias_table structure of one pair per row.")
+  }
+
+
+  ##Proceed with function ------------------------------------------
+
+  # select only needed cols
   alias_table <- alias_table %>%
     dplyr::select("hugo_symbol", "alias")
 
@@ -90,7 +110,8 @@ recode_alias <- function(genomic_df, default = T, custom_table, ...) {
 
     cli::cli_warn(c(
       "To ensure gene with multiple names/aliases are correctly grouped together, the
-      following genes in your dataframe have been recoded (you can prevent this with {.code recode_aliases = FALSE}):",
+      following genes in your dataframe have been recoded (if you are running {.code create_gene_binary()}
+      you can prevent this with {.code recode_aliases = FALSE}):",
       vec_recode))
 
   }
