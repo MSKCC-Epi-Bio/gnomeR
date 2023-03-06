@@ -4,7 +4,7 @@
 \alias{recode_alias}
 \title{Recode Hugo Symbol Column}
 \usage{
-recode_alias(genomic_df, default = T, custom_table, ...)
+recode_alias(genomic_df, default = TRUE, custom_table, ...)
 }
 \arguments{
 \item{genomic_df}{a gene_binary object}
@@ -59,6 +59,6 @@ mut2  <- mut \%>\%
 
 colnames(mut2)
 
-colnames(recode_alias(mut2, default = F, cell_cycle_pathway))
+colnames(recode_alias(mut2, default = FALSE, cell_cycle_pathway))
 
 }

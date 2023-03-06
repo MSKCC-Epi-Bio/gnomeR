@@ -52,10 +52,10 @@
 #'
 #' colnames(mut2)
 #'
-#' colnames(recode_alias(mut2, default = F, cell_cycle_pathway))
+#' colnames(recode_alias(mut2, default = FALSE, cell_cycle_pathway))
 #'
 
-recode_alias <- function(genomic_df, default = T, custom_table, ...) {
+recode_alias <- function(genomic_df, default = TRUE, custom_table, ...) {
 
   if(default){
     alias_table <- gnomeR::impact_alias_table
