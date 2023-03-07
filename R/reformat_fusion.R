@@ -1,4 +1,6 @@
 reformat_fusion <- function(fusions) {
+
+
   # Checks ----------
   if (!is.data.frame(fusions)) {
     cli::cli_abort("{.code fusion} must be a data.frame")
@@ -97,27 +99,9 @@ reformat_fusion <- function(fusions) {
     filter(!(site1hugo_symbol %in% c("repeat", "insufficient"))) %>%
     unique())
 
-  # get frequency of gene fusion by hugo_symbol
+
   # There are cases where site 1 and 2 were flipped for a sample_id and listed x2
   # ex: TP53-APC vs APC-TP53 for the same sample would create 4 values when it should be 2
-  site_freqs <- suppressMessages(fusions_sep1 %>%
-    select(hugo_symbol, site1hugo_symbol) %>%
-    table() %>%
-    as.data.frame() %>%
-    filter(as.character(hugo_symbol) == as.character(site1hugo_symbol)) %>%
-    select(hugo_symbol, Freq) %>%
-    rename(Freq_site1 = Freq))
-
-
-  # get frequency for second site and merge to first
-  site_freqs <- suppressMessages(fusions_sep1 %>%
-    select(hugo_symbol, site2hugo_symbol) %>%
-    table() %>%
-    as.data.frame() %>%
-    filter(as.character(hugo_symbol) == as.character(site2hugo_symbol)) %>%
-    select(hugo_symbol, Freq) %>%
-    rename(Freq_site2 = Freq) %>%
-    right_join(site_freqs))
 
 
   # make each event a row and count events and number of NA events by sample
@@ -189,16 +173,10 @@ reformat_fusion <- function(fusions) {
     arrange(sample_id, site1hugo_symbol) %>%
     unique())
 
-  num_dups <- suppressMessages(fusions_prob %>%
-    dplyr::group_by(sample_id) %>%
-    dplyr::summarise(n = dplyr::n(), .groups = "drop") %>%
-    dplyr::filter(n > 1L))
-
 
   # split out samples among the prob ids that include intragenic
   probid_okfusions <- fusions_sep1 %>%
-    filter(is.na(site2hugo_symbol))%>%
-    select(-hugo_symbol)
+    filter(is.na(site2hugo_symbol))
 
   if (nrow(probid_okfusions) == 0) {
     intragenic <- "no"
@@ -428,7 +406,7 @@ reformat_fusion <- function(fusions) {
     to_merge <- new_format %>%
       rbind(not_working) %>%
       select(-name) %>%
-      rbind(probid_okfusions) %>%
+      rbind(probid_okfusions %>% select(-hugo_symbol)) %>%
       rbind(fusions_noprob)
   } else {
     to_merge <- new_format

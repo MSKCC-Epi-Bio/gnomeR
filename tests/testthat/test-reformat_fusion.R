@@ -54,20 +54,22 @@ test_that("runs as expected and all fusions remain in dataset", {
   a <- reformat$event_info
   b <- unique(data$fusion)
 
-  expect_false(length(a) == length(b))
-
   expect_true(length(setdiff(b, a)) == length(b) - length(a))
 
   expect_equal(nrow(reformat), 13)
 
-  ###################### now try with sample names as is ##############
+  ###################### now try with a geneA-geneB vs geneB-geneA example ##############
 
-  data <- sv_long[1:30, ]
+  samp <- sv_long %>%
+    filter(sample_id == sv_long$sample_id[1])
 
-  expect_no_error(reformat <- reformat_fusion(data))
+  samp <- rbind(samp, samp %>% mutate(fusion = "MYD88-OXSR1 fusion"))
 
-  a <- reformat$event_info
-  b <- unique(data$fusion)
+  expect_no_error(reformat2 <- reformat_fusion(samp))
+
+
+  expect_equal(nrow(reformat2), 1)
+
 
 
 
