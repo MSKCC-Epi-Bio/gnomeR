@@ -51,39 +51,25 @@ test_that("runs as expected and all fusions remain in dataset", {
   expect_no_error(reformat <- reformat_fusion(data))
 
 
-  data2 <- data %>%
-    mutate(
-      # remove leading space in fusion var
-      fusion = str_trim(fusion),
-      # remove endings of names
-      fusion2 = case_when(
-        endsWith(fusion, " fusion") ~ gsub(".{7}$", "", fusion),
-        endsWith(fusion, "-intragenic") ~ gsub(".{11}$", "", fusion),
-        endsWith(fusion, "-INTRAGENIC") ~ gsub(".{11}$", "", fusion),
-        endsWith(fusion, "-INTERGENIC") ~ gsub(".{11}$", "", fusion),
-        endsWith(fusion, "-intergenic") ~ gsub(".{11}$", "", fusion),
-        endsWith(fusion, " truncation") ~ gsub(".{11}$", "", fusion),
-        endsWith(fusion, " rearrangement") ~ gsub(".{14}$", "", fusion),
-        endsWith(fusion, " fusion - Archer") ~ gsub(".{16}$", "", fusion),
-        endsWith(fusion, " duplication") ~ gsub(".{11}$", "", fusion),
-        endsWith(fusion, " rearrangement") ~ gsub(".{13}$", "", fusion),
-        endsWith(fusion, " truncation") ~ gsub(".{10}$", "", fusion),
-        endsWith(fusion, "EZH2(NM_004456) rearrangement exon 5") ~ gsub(".{36}$", "", fusion),
-        endsWith(fusion, " PAX5(NM_016734) rearrangement intron 8") ~ gsub(".{38}$", "", fusion),
-        TRUE ~ gsub(".{20}$", "", fusion)
-      )
-    )
   a <- reformat$event_info
-  b <- unique(data2$fusion2)
+  b <- unique(data$fusion)
 
   expect_false(length(a) == length(b))
 
   expect_true(length(setdiff(b, a)) == length(b) - length(a))
 
-  expect_equal()
+  expect_equal(nrow(reformat), 13)
+
+  ###################### now try with sample names as is ##############
+
+  data <- sv_long[1:30, ]
+
+  expect_no_error(reformat <- reformat_fusion(data))
+
+  a <- reformat$event_info
+  b <- unique(data$fusion)
+
 
 
 })
 
-test <- fusions_sep1 %>% select(c(sample_id, event_info))%>% unique()
-save <- setdiff(test, fusions_fus2 %>% select(c(sample_id, event_info)))

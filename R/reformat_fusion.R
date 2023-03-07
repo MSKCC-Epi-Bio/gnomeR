@@ -9,7 +9,7 @@ reformat_fusion <- function(fusions) {
 
 
 
-  # Cleandataset ------------
+  # Clean dataset ------------
   fusions_sep <- suppressMessages(fusions %>%
     mutate(
 
