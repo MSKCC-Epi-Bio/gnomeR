@@ -158,7 +158,7 @@ Finally, the reformatted genomic data can be supplied to `create_gene_binary()` 
 The CNA data as downloaded from cBioPortal only includes high level CNA (-2, 2), so we will specify `high_level_cna_only = TRUE` to be consistent with the results based on the genomic data as downloaded from cBioPortal. 
 
 ```{r, eval = FALSE}
-nsclc_2_0_gen_dat_cbio <-
+nsclc_2_0_gen_dat_synapse <-
   create_gene_binary(
     mutation = nsclc_2_0$NSCLC_v2.0$mutations_extended,
     cna = cna_synapse_long,
@@ -181,15 +181,14 @@ nsclc_2_0_gen_dat_cbio <-
   )
 ```
 
-### Collapse Data with `summarize_by_gene()`
+We can compare the binary genomic matrices created using the genomic data downloaded from Synapse versus the genomic data downloaded from cBioPortal. We observe that they are exactly equal, and will proceed using the `nsclc_2_0_gen_dat_cbio` object.
 
-**Using the genomic data from Synapse:**
-
-```{r}
-
+```{r, eval = FALSE}
+# compare binary genomic matrices
+arsenal::comparedf(nsclc_2_0_gen_dat_synapse, nsclc_2_0_gen_dat_cbio)
 ```
 
-**Using the genomic data from cBioPortal:**
+### Collapse Data with `summarize_by_gene()`
 
 ```{r, eval = FALSE}
 nsclc_2_0_gen_dat_cbio %>% 
