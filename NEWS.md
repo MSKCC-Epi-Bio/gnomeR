@@ -2,6 +2,8 @@
 
 * Updated color palette functionality
 * Column with sample ID now returned in data frame resulting from `create_gene_binary()`
+* `summarize_by_gene()` function was changed to run faster (#259)
+* `subset_by_frequency()` added to allow users to filter for specific prevalence levels of mutations/alterations/fusions (#270)
 
 # gnomeR 1.1.1
 
