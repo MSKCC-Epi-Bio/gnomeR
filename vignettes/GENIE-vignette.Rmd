@@ -129,7 +129,7 @@ nsclc_2_0_sample_panels <- nsclc_2_0_samples %>%
          sample_id = cpt_genie_sample_id)
 ```
 
-### Process Data with `create_gene_binary()`
+## Process Data with `create_gene_binary()`
 
 The `create_gene_binary()` function takes inputs of mutations, fusions, and CNA data and returns a binary matrix with the alteration status for each gene, annotating missingness when genes were not included on a next generation sequencing panel. 
 
@@ -188,10 +188,79 @@ We can compare the binary genomic matrices created using the genomic data downlo
 arsenal::comparedf(nsclc_2_0_gen_dat_synapse, nsclc_2_0_gen_dat_cbio)
 ```
 
-### Collapse Data with `summarize_by_gene()`
+## Collapse Data with `summarize_by_gene()`
+
+We can summarize the presence of any alteration event (mutation, amplification, deletion, structural variant) with the `summarize_by_gene()` function, such that each gene is a column that captures the presence of any event regardless of alteration type.
+
+Summarizing the first 10 samples and first 10 genes:
+
+**Using the genomic data from Synapse:**
 
 ```{r, eval = FALSE}
-nsclc_2_0_gen_dat_cbio %>% 
+nsclc_2_0_gen_dat_synapse[1:10, 1:10] %>% 
   summarize_by_gene()
+```
+
+**Using the genomic data from cBioPortal**
+
+```{r, eval = FALSE}
+nsclc_2_0_gen_dat_cbio[1:10, 1:10] %>% 
+  summarize_by_gene()
+```
+
+## Analyzing Data 
+
+After the data have been transformed into a binary format, we can create summaries and visualizations to better understand the data.
+
+### Summarize Data with `tbl_genomic()`
+
+The `tbl_genomic()` function summarizes the frequency of alteration events from the binary data returned from `create_gene_binary()` or `summarize_by_gene()`. Users can specify particular genes (`gene_subset` argument) or a a minimum frequency (`freq_cutoff` argument) to include in the table. 
+
+**Using the genomic data from Synapse:**
+
+Summarizing the frequencies of KEAP1, STK11, and SMARCA4 alteration events:
+
+```{r, eval = FALSE}
+tbl_genomic(gene_binary = nsclc_2_0_gen_dat_synapse, gene_subset = c("KEAP1", "STK11", "SMARCA4"))
+```
+
+Summarizing alteration events with >=10% frequency:
+
+```{r, eval = FALSE}
+tbl_genomic(gene_binary = nsclc_2_0_gen_dat_synapse, freq_cutoff = .10)
+```
+
+**Using the genomic data from cBioPortal:**
+
+Summarizing the frequencies of KEAP1, STK11, and SMARCA4 alteration events:
+
+```{r, eval = FALSE}
+tbl_genomic(gene_binary = nsclc_2_0_gen_dat_cbio, gene_subset = c("KEAP1", "STK11", "SMARCA4"))
+```
+
+Summarizing alteration events with >=10% frequency:
+
+```{r, eval = FALSE}
+tbl_genomic(gene_binary = nsclc_2_0_gen_dat_cbio, freq_cutoff = .10)
+```
+
+### Data Visualizations
+
+We can use the `mutation_viz()` function to visualize several aspects of the mutation data, including variant classification, variant type, SNV class and top variant genes.
+
+**Using the genomic data from Synapse:**
+
+```{r, eval = FALSE}
+mutation_viz_gen_dat_synapse <- mutation_viz(nsclc_2_0$NSCLC_v2.0$mutations_extended)
+
+mutation_viz_gen_dat_synapse
+```
+
+**Using the genomic data from cBioPortal:**
+
+```{r, eval = FALSE}
+mutation_viz_gen_dat_cbio <- mutation_viz(mutations_extended_2_0)
+
+mutation_viz_gen_dat_cbio
 ```
 
