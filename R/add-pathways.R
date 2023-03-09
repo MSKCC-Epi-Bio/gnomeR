@@ -1,8 +1,12 @@
 #' Pathway Alterations
 #'
-#' Checks if certain oncogenic signaling pathways are altered.  Pathways were curated from [this paper](https://pubmed.ncbi.nlm.nih.gov/29625050/).  Please check for gene aliases before using.
+#' Input a binary matrix of patients x genes and return a dataframe with a column per pathway
+#' indicating if default or custom oncogenic signaling pathways
+#' are activated in each sample. Pathways were curated
+#' from [Sanchez-Vega, F et al., 2018](https://pubmed.ncbi.nlm.nih.gov/29625050/).
 #'
-#' Sanchez-Vega, F., Mina, M., Armenia, J., Chatila, W. K., Luna, A., La, K. C., Dimitriadoy, S., Liu, D. L., Kantheti, H. S., Saghafinia, S., Chakravarty, D., Daian, F., Gao, Q., Bailey, M. H., Liang, W. W., Foltz, S. M., Shmulevich, I., Ding, L., Heins, Z., Ochoa, A., … Schultz, N. (2018). Oncogenic Signaling Pathways in The Cancer Genome Atlas. Cell, 173(2), 321–337.e10. <https://doi.org/10.1016/j.cell.2018.03.035>
+#' Please check for gene aliases in your dataset before using.
+#'
 #'
 #' @param gene_binary a binary matrix from `gene_binary()`
 #' @param pathways a vector of pathway names to annotate. The options are `names(gnomeR::pathways)` ("RTK/RAS", "Nrf2",
@@ -18,6 +22,7 @@
 #' @keywords internal
 #' @return a data frame: each sample is a row, columns are pathways, with values of 0/1 depending on pathway alteration status.
 #' @export
+#' @source Sanchez-Vega, F., Mina, M., Armenia, J., Chatila, W. K., Luna, A., La, K. C., Dimitriadoy, S., Liu, D. L., Kantheti, H. S., Saghafinia, S., Chakravarty, D., Daian, F., Gao, Q., Bailey, M. H., Liang, W. W., Foltz, S. M., Shmulevich, I., Ding, L., Heins, Z., Ochoa, A., … Schultz, N. (2018). Oncogenic Signaling Pathways in The Cancer Genome Atlas. Cell, 173(2), 321–337.e10. <https://doi.org/10.1016/j.cell.2018.03.035>
 #'
 #' @examples
 #'
@@ -88,23 +93,11 @@ add_pathways <- function(gene_binary,
 
     if(count_pathways_by == "alteration") {
 
-      # if counting by alteration but no evidence of fus/cna but fus/cna in data, warn
-      # if(
-      #   (any(purrr::map_lgl(custom_pathways, ~any(str_detect(.x, ".Amp|.Del|.fus|.cna")))) == FALSE) &
-      #     (any(mut_cols == FALSE))
-      #   ) {
-      #
-      #   cli::cli_warn("None of your {.code custom_pathways} have CNA (.Del/.Amp) or Fusions (.fus) but you have some in your data.
-      #                 Assuming all pathway genes are mutations and counting only mutations in your data towards that pathway.
-      #                 See {.code count_pathways_by} argument to change this`")
-      # }
-
       # add mut on custom pathways when count_pathways_by == "alteration"
       if(any(purrr::map_lgl(custom_pathways, ~any(!str_detect(.x, ".Amp|.Del|.fus|.cna|.mut"))))) {
         cli::cli_inform("Assuming any gene in {.code custom_pathway} without
-        suffix {.code Amp|.Del|.fus|.cna} is specifically a mutation in that pathway. CNA and fusions will not be counted (e.g. TP53.Del). To control this behavior, see argument {.code count_pathways_by}")
+        suffix {.code .Amp|.Del|.fus|.cna} is specifically a mutation in that pathway. CNA and fusions will not be counted (e.g. TP53.Del). To control this behavior, see argument {.code count_pathways_by}")
       }
-
 
 
       custom_pathways <- purrr::map(custom_pathways, function(x) {

@@ -37,7 +37,7 @@ https://github.com/karissawhiting/cbioportalR.
 
 ## Data Formats
 
-Mutation, CNA, or structural variant (also called fusion) data may be formatted differently depending on where you source it. Below we outline some differences you may encounter when downloading data from the [cBioPortal website] (https://www.cbioportal.org/) versus pulling it via the [cBioPortal API](https://github.com/karissawhiting/cbioportalR), and review the important/required columns for each. Example data in this package was pulled using the API. 
+Mutation, CNA, or structural variant (also called fusion) data may be formatted differently depending on where you source it. Below we outline some differences you may encounter when downloading data from the [cBioPortal website](https://www.cbioportal.org/) versus pulling it via the [cBioPortal API](https://github.com/karissawhiting/cbioportalR), and review the important/required columns for each. Example data in this package was pulled using the API. 
 
 See [cBioPortal documentation](https://docs.cbioportal.org/file-formats/) for more details on different file formats supported on cBioPortal, and their data schema and coding. 
 
@@ -72,12 +72,13 @@ As you can see, some variables, such as `linkMsa`, were not transformed because 
 
 The discrete copy number data from cBioPortal contains values that would be derived from copy-number analysis algorithms like GISTIC 2.0 or RAE. CNA data is often presented in a long or wide format:
 
-    * Long-format - Each row is a CNA event for a given gene and sample, therefore samples often have multiple rows. This is most common format you will receive when downloading data using the API.
+  1. Long-format - Each row is a CNA event for a given gene and sample, therefore samples often have multiple rows. This is most common format you will receive when downloading data using the API.
+    
 ```{r }
 gnomeR::cna[1:6, ]
 ```
   
-    * Wide-format - Organized such that there is one column per sample and one row per gene. Thus, each sample's events are contained within one column. This is most common format you will receive when downloading data from the cBioPortal web browser.  
+  2. Wide-format - Organized such that there is one column per sample and one row per gene. Thus, each sample's events are contained within one column. This is most common format you will receive when downloading data from the cBioPortal web browser.  
 
 ```{r}
 gnomeR::cna_wide[1:6, 1:6]
@@ -214,7 +215,10 @@ gene_binary <- create_gene_binary(
 )
 
 tbl_genomic(gene_binary = gene_binary, gene_subset = c("PARP1", "ALK"))
+```
 
+
+```{r, include = TRUE}
 tbl_genomic(gene_binary = gene_binary, freq_cutoff = .15)
 ```
 
@@ -224,7 +228,7 @@ The `add_pathways()` function allows you add columns to your gene binary matrix 
 
 The function expects a binary matrix as obtained from the `gene_binary()` function and will return a gene binary with additional columns added for specified pathways.
 
-There are a set of default pathways available in the package that can be viewed using `gnomeR::pathways`. This new data frame will include columns for mutations, CNAs, structural variants, and pathways. You can subset to only the pathways if you choose.
+There are a set of default pathways available in the package that can be viewed using `gnomeR::pathways` ([Sanchez-Vega, F et al., 2018](https://pubmed.ncbi.nlm.nih.gov/29625050/)). This new data frame will include columns for mutations, CNAs, structural variants, and pathways. You can subset to only the pathways if you choose.
 
 
 ```{r, include = TRUE}

@@ -43,8 +43,8 @@ Default is NULL.}
 \item{high_level_cna_only}{If TRUE, only deep deletions (-2, -1.5) or high level amplifications (2) will be counted as events
 in the binary matrix. Gains (1) and losses (1) will be ignored. Default is \code{FALSE} where all CNA events are counted.}
 
-\item{specify_panel}{a character vector of length 1 with panel id (see gnomeR::gene_panels for available panels), "impact", or "no". Alternatively,
-you may pass a data frame of \code{sample_id}-\code{panel_id} pairs specifying panels for each sample for which to insert NAs indicating genes not tested. See below for details.}
+\item{specify_panel}{Default is "no" where no panel annotation is done. Otherwise pass a character vector of length 1 with a panel id (see gnomeR::gene_panels for available panels), or "impact" for
+automated IMPACT annotation. Alternatively, you may pass a data frame of \code{sample_id}-\code{panel_id} pairs specifying panels for each sample for which to insert NAs indicating genes not tested. See below for details.}
 
 \item{recode_aliases}{boolean specifying if automated gene name alias matching should be done. Default is TRUE. When TRUE
 the function will check for genes that may have more than 1 name in your data using the aliases im gnomeR::impact_alias_table alias column}
@@ -59,11 +59,11 @@ a predefined list of samples (rows are samples and columns are genes)
 \section{specify_panel argument}{
 
 \itemize{
+\item If \code{specify_panel = "no"} is passed (default) data will be returned as is without any additional NA annotations.
 \item If a single panel id is passed (e.g. \code{specify_panel = "IMPACT468"}), all genes in your data that are not tested on that panel will be set to
 \code{NA} in results for all samples (see gnomeR::gene_panels to see which genes are on each supported panels).
 \item If \code{specify_panel = "impact"} is passed, impact panel version will be inferred based on each sample_id (based on \code{IMX} nomenclature) and NA's will be
 annotated accordingly for each sample/panel pair.
-\item If \code{specify_panel = "no"} is passed (default) data will be returned as is without any additional NA annotations.
 \item If you wish to specify different panels for each sample, pass a data frame (with all samples included) with columns: \code{sample_id}, and \code{panel_id}. Each sample will be
 annotated with NAs according to that specific panel. If a sample in your data is missing from the \code{sample_id} column in the
 \code{specify_panel} dataframe, it will be returned with no annotation (equivalent of setting it to "no").
