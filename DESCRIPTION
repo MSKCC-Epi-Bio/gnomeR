@@ -56,8 +56,9 @@ Suggests:
     rmarkdown,
     testthat (>= 3.0.0),
     spelling,
-    covr,
+    covr, 
     cbioportalR
+Remotes: karissawhiting/cbioportalR
 VignetteBuilder: knitr
 Language: en-US
 Roxygen: list(markdown = TRUE)
