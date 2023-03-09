@@ -13,6 +13,7 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
+options(warn=0, error=NULL)
 ```
 
 
@@ -81,15 +82,15 @@ clin_collab_df %>%
     (multiple_samps$patient_id))
 
 ```
-<!--This code too confusing above? -->
+
 
 These are patients and samples to ask your collaborator about: Does using both samples make sense? Often times the answer is no. And if not, which sample is the most appropriate one to include? 
-(To get more info for yourself, you can enter the patient ids into the [cBioPortal website](https://www.cbioportal.org/).
+(To get more info for yourself, you can enter the patient ids into the [cBioPortal website](https://www.cbioportal.org/).)
 
 
 ### Check whether all `cbioportal_ids` are actually in cBioPortal
 
-To do this, you need to retrieve the clinical data from cBioPortal.  
+To do this, you need to retrieve the clinical data from cBioPortal using the [cbioportalR package](https://www.karissawhiting.com/cbioportalR/).  
 
 First you can set the cBioPortal database using the `set_cbioportal_db(db = "public")` function. (If you are using a private version of cBioPortal, you would set db to your institutions cBioPortal URL.) 
 
@@ -100,12 +101,11 @@ set_cbioportal_db(db = "public")
 ```
 
 
-Then you will use the `get_clinical_by_sample()` function from the cBioPortal package. Set the `sample_id` parameter to the `cbioportal_ids` from the clinical collaborator's file.  
+Then you will use the `get_clinical_by_sample()` function from the cbioportalR package. Set the `sample_id` parameter to the `cbioportal_ids` from the clinical collaborator's file.  
 Store the sample data in a file called `clin_cbio`. 
 
 ```{r get_cbio_clinical}
 
-set_cbioportal_db(db = "public")
 clin_cbio = get_clinical_by_sample(sample_id = clin_collab_df$cbioportal_id) 
 
 ```
@@ -137,7 +137,7 @@ setdiff(clin_collab_df$cbioportal_id, clin_cbio$sampleId)
 So there are two sample ID's from your clinical file (`clin_collab_df`) that are currently not found in cBioPortal (in your `clin_cbio` file). 
 Include these in the list of cBioPortal questions to ask your collaborator.
 
-(Again, if you want to investigate a bit further, you could enter the patient cBioPortal IDs as queries into the [cBioPortal website](https://www.cbioportal.org/).
+(Again, if you want to investigate a bit further, you could enter the patient cBioPortal IDs as queries into the [cBioPortal website](https://www.cbioportal.org/).)
 
 ### Check whether clinical information in collaborator's file (`clin_collab_df`) matches clinical information in cBioPortal (in your `clin_cbio` file).
 
