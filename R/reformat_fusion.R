@@ -1,3 +1,31 @@
+#' Enables users to reformat fusions files so that each fusion is listed as one row with two hugo-symbol
+#' sites instead of two rows, one for each site. This is the required format for the `create_gene_binary` function.
+#'
+#' @param fusions a data frame of fusion/structural variants that occur in a cohort. There should be a `sample_id`, `hugo_symbol`,
+#' and `fusion` column at minimum. Intragenic/intergenic fusions will have one row. Any two gene fusions will
+#' have two rows. See `gnomeR::sv_long` for an example.
+#'
+#' @return a data frame with `sample_id`, `site1hugo_symbol`, and `site2hugo_symbol` and `fusion` columns. This should match the format
+#' of the `gnomeR::sv` dataset.
+#' @export
+#' @examples
+#'
+#' sv_long1 <- gnomeR::sv_long %>%
+#'   rename_columns()%>%
+#'   reformat_fusion()
+#'
+#' samples <- unique(sv_long1$sampleId)
+#'
+#' bin.sv <- create_gene_binary(
+#'   samples = samples, fusions = sv_long1
+#' )
+#'
+#' @import dplyr
+#' @import stringr
+#' @import tidyr
+
+
+
 reformat_fusion <- function(fusions) {
 
 
@@ -107,7 +135,7 @@ reformat_fusion <- function(fusions) {
   # make each event a row and count events and number of NA events by sample
   fusions_sep2 <- suppressMessages(fusions_sep1 %>%
     select(-hugo_symbol) %>%
-    pivot_longer(!sample_id) %>%
+    tidyr::pivot_longer(!sample_id) %>%
     group_by(sample_id) %>%
     mutate(
       count = n(),
@@ -196,7 +224,7 @@ reformat_fusion <- function(fusions) {
   )%>%
     unique() %>%
     select(-hugo_symbol) %>%
-    pivot_longer(starts_with("site"))%>%
+    tidyr::pivot_longer(starts_with("site"))%>%
     arrange(sample_id, value, event_info) %>%
     suppressWarnings() %>%
     suppressMessages()
@@ -358,7 +386,7 @@ reformat_fusion <- function(fusions) {
       select(-c(starts_with("g"))) %>%
       unnest(cols = {{ pair_names }}) %>%
       select_if(not_all_na) %>%
-      pivot_longer(!sample_id) %>%
+      tidyr::pivot_longer(!sample_id) %>%
       group_by(sample_id, name) %>%
       mutate(gene_num = seq_along(value)) %>%
       ungroup() %>%
@@ -424,7 +452,8 @@ reformat_fusion <- function(fusions) {
     mutate(across(
       !sample_id,
       ~ str_replace(., "_", "-")
-    ))
+    ))%>%
+    rename(fusion = event_info)
 
 
   return(fus2)
