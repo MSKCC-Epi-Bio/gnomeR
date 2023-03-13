@@ -23,9 +23,9 @@ test_that("flags events with two hyphens", {
   expect_equal(nrow(new), 1)
 
   # should be in alphabetical order and only listed once
-  expect_equal(new$event_info[1], "NAME-TEST-MY")
+  expect_equal(new$fusion[1], "NAME-TEST-MY")
   expect_equal(paste0(new$site1hugo_symbol[1], "-", new$site2hugo_symbol[1]),
-               new$event_info[1])
+               new$fusion[1])
 
 })
 
@@ -51,7 +51,7 @@ test_that("runs as expected and all fusions remain in dataset", {
   expect_no_error(reformat <- reformat_fusion(data))
 
 
-  a <- reformat$event_info
+  a <- reformat$fusion
   b <- unique(data$fusion)
 
   expect_true(length(setdiff(b, a)) == length(b) - length(a))

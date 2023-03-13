@@ -28,8 +28,5 @@ sv_long1 <- gnomeR::sv_long \%>\%
 
 samples <- unique(sv_long1$sampleId)
 
-bin.sv <- create_gene_binary(
-  samples = samples, fusions = sv_long1
-)
 
 }
