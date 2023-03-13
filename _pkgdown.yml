@@ -32,6 +32,7 @@ reference:
     - pivot_cna_longer
     - add_pathways
     - recode_alias
+    - reformat_fusion
   - subtitle: Analyzing Data
   - contents:
     - tbl_genomic
@@ -68,5 +69,6 @@ reference:
     - names_df
     - pathways
     - impact_alias_table
+    - sv_long
 
 
