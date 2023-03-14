@@ -20,6 +20,7 @@ Kantheti
 Liang
 Liu
 MAF
+MSK
 MSKCC
 Mina
 Myc
@@ -64,10 +65,12 @@ gnomer
 grDevices
 gtsummary
 hemizygous
+hepatocellular
 homozygous
 hugo
 im
 importFrom
+ing
 inputed
 iwth
 linkMsa
@@ -101,6 +104,7 @@ startPosition
 summarising
 sv
 tbl
+tidyr
 topgenes
 uniquePatientKey
 uniqueSampleKey

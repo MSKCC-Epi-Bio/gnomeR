@@ -1,3 +1,5 @@
+# gnomeR (development version)
+
 # gnomeR 1.2.0
 
 * Updated color palette functionality
