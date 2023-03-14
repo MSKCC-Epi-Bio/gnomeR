@@ -16,6 +16,9 @@
     <loc>https://mskcc-epi-bio.github.io/gnomeR/dev/articles/index.html</loc>
   </url>
   <url>
+    <loc>https://mskcc-epi-bio.github.io/gnomeR/dev/articles/qa-impact-data.html</loc>
+  </url>
+  <url>
     <loc>https://mskcc-epi-bio.github.io/gnomeR/dev/authors.html</loc>
   </url>
   <url>
@@ -34,6 +37,9 @@
     <loc>https://mskcc-epi-bio.github.io/gnomeR/dev/reference/annotate_specific_panel.html</loc>
   </url>
   <url>
+    <loc>https://mskcc-epi-bio.github.io/gnomeR/dev/reference/clin_collab_df.html</loc>
+  </url>
+  <url>
     <loc>https://mskcc-epi-bio.github.io/gnomeR/dev/reference/cna.html</loc>
   </url>
   <url>
@@ -44,6 +50,9 @@
   </url>
   <url>
     <loc>https://mskcc-epi-bio.github.io/gnomeR/dev/reference/create_gene_binary.html</loc>
+  </url>
+  <url>
+    <loc>https://mskcc-epi-bio.github.io/gnomeR/dev/reference/dot-check_required_cols.html</loc>
   </url>
   <url>
     <loc>https://mskcc-epi-bio.github.io/gnomeR/dev/reference/dot-cna_gene_binary.html</loc>
@@ -62,9 +71,6 @@
   </url>
   <url>
     <loc>https://mskcc-epi-bio.github.io/gnomeR/dev/reference/gene_panels.html</loc>
-  </url>
-  <url>
-    <loc>https://mskcc-epi-bio.github.io/gnomeR/dev/reference/genie_gene_info.html</loc>
   </url>
   <url>
     <loc>https://mskcc-epi-bio.github.io/gnomeR/dev/reference/ggcomut.html</loc>
@@ -91,12 +97,6 @@
     <loc>https://mskcc-epi-bio.github.io/gnomeR/dev/reference/gnomer_colors.html</loc>
   </url>
   <url>
-    <loc>https://mskcc-epi-bio.github.io/gnomeR/dev/reference/gnomer_cols.html</loc>
-  </url>
-  <url>
-    <loc>https://mskcc-epi-bio.github.io/gnomeR/dev/reference/gnomer_pal.html</loc>
-  </url>
-  <url>
     <loc>https://mskcc-epi-bio.github.io/gnomeR/dev/reference/gnomer_palette.html</loc>
   </url>
   <url>
@@ -104,9 +104,6 @@
   </url>
   <url>
     <loc>https://mskcc-epi-bio.github.io/gnomeR/dev/reference/impact_alias_table.html</loc>
-  </url>
-  <url>
-    <loc>https://mskcc-epi-bio.github.io/gnomeR/dev/reference/impact_gene_info.html</loc>
   </url>
   <url>
     <loc>https://mskcc-epi-bio.github.io/gnomeR/dev/reference/index.html</loc>
@@ -121,13 +118,7 @@
     <loc>https://mskcc-epi-bio.github.io/gnomeR/dev/reference/names_df.html</loc>
   </url>
   <url>
-    <loc>https://mskcc-epi-bio.github.io/gnomeR/dev/reference/panel_names.html</loc>
-  </url>
-  <url>
     <loc>https://mskcc-epi-bio.github.io/gnomeR/dev/reference/pathways.html</loc>
-  </url>
-  <url>
-    <loc>https://mskcc-epi-bio.github.io/gnomeR/dev/reference/pipe.html</loc>
   </url>
   <url>
     <loc>https://mskcc-epi-bio.github.io/gnomeR/dev/reference/pivot_cna_longer.html</loc>
@@ -142,7 +133,13 @@
     <loc>https://mskcc-epi-bio.github.io/gnomeR/dev/reference/recode_cna.html</loc>
   </url>
   <url>
+    <loc>https://mskcc-epi-bio.github.io/gnomeR/dev/reference/reexports.html</loc>
+  </url>
+  <url>
     <loc>https://mskcc-epi-bio.github.io/gnomeR/dev/reference/rename_columns.html</loc>
+  </url>
+  <url>
+    <loc>https://mskcc-epi-bio.github.io/gnomeR/dev/reference/reset_gnomer_palette.html</loc>
   </url>
   <url>
     <loc>https://mskcc-epi-bio.github.io/gnomeR/dev/reference/resolve_alias.html</loc>
@@ -157,16 +154,16 @@
     <loc>https://mskcc-epi-bio.github.io/gnomeR/dev/reference/sanitize_mutation_input.html</loc>
   </url>
   <url>
-    <loc>https://mskcc-epi-bio.github.io/gnomeR/dev/reference/scale_color_pancan.html</loc>
-  </url>
-  <url>
-    <loc>https://mskcc-epi-bio.github.io/gnomeR/dev/reference/scale_fill_pancan.html</loc>
-  </url>
-  <url>
     <loc>https://mskcc-epi-bio.github.io/gnomeR/dev/reference/seg.html</loc>
   </url>
   <url>
+    <loc>https://mskcc-epi-bio.github.io/gnomeR/dev/reference/set_gnomer_palette.html</loc>
+  </url>
+  <url>
     <loc>https://mskcc-epi-bio.github.io/gnomeR/dev/reference/specify_impact_panels.html</loc>
+  </url>
+  <url>
+    <loc>https://mskcc-epi-bio.github.io/gnomeR/dev/reference/subset_by_frequency.html</loc>
   </url>
   <url>
     <loc>https://mskcc-epi-bio.github.io/gnomeR/dev/reference/summarize_by_gene.html</loc>
@@ -176,15 +173,6 @@
   </url>
   <url>
     <loc>https://mskcc-epi-bio.github.io/gnomeR/dev/reference/tbl_genomic.html</loc>
-  </url>
-  <url>
-    <loc>https://mskcc-epi-bio.github.io/gnomeR/dev/reference/ti_341.html</loc>
-  </url>
-  <url>
-    <loc>https://mskcc-epi-bio.github.io/gnomeR/dev/reference/ti_410.html</loc>
-  </url>
-  <url>
-    <loc>https://mskcc-epi-bio.github.io/gnomeR/dev/reference/ti_468.html</loc>
   </url>
   <url>
     <loc>https://mskcc-epi-bio.github.io/gnomeR/dev/reference/which_impact_panel.html</loc>
