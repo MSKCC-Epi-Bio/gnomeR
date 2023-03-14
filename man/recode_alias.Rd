@@ -4,18 +4,13 @@
 \alias{recode_alias}
 \title{Recode Hugo Symbol Column}
 \usage{
-recode_alias(genomic_df, default = TRUE, custom_table, ...)
+recode_alias(genomic_df, alias_table = "impact")
 }
 \arguments{
 \item{genomic_df}{a gene_binary object}
 
-\item{default}{logical value if default IMPACT aliases should be used}
-
-\item{custom_table}{a dataframe with at least two columns (hugo_symbol,
-alias) with one row for each pair (only
-include a \code{custom_table} if \code{default = F})}
-
-\item{...}{Other things passed}
+\item{alias_table}{a string indicating "impact", or a  dataframe with at least two columns (\code{hugo_symbol},
+\code{alias}) with one row for each pair.}
 }
 \value{
 A dataframe with recoded Hugo Symbol columns
@@ -29,36 +24,12 @@ which aliases to replace and supports IMPACT panel alias replacement only at thi
 Custom tables can be provided as long as \code{hugo_symbol} and \code{alias} columns exist.
 }
 \examples{
-mut <- rename_columns(gnomeR::mutations)
+mut <- rename_columns(gnomeR::mutations[1:5, ])
+mut$hugo_symbol
 
-colnames(mut)
+alias_table <- data.frame("hugo_symbol" = c("New Symbol", "New Symbol2"),
+"alias" = c("PARP1", "AKT1"))
 
-colnames(recode_alias(genomic_df = mut))
-
-# if we take the genes from the
-# cell cycle pathway as an example, we would create a custom_table as so:
-
-cell_cycle_pathway <- tibble::tribble(~hugo_symbol, ~alias,
-"CCND1",	"U21B31, BCL1, D11S287E, PRAD1",
-"CCNE1", "CCNE",
-"CDK4", "PSK-J3",
-"CDK6", "PLSTIRE",
-"CDKN1A", "P21, CIP1, WAF1, SDI1, CAP20, p21CIP1, p21Cip1/Waf1, p21, CDKN1",
-"CDKN1B", "KIP1, P27KIP1",
-"CDKN2A", "CDK4I, p16, INK4a, MTS1, CMM2, ARF, p19, p14, INK4, p16INK4a",
-"p19Arf", "p14ARF, P16-INK4A, CDKN2, MLM",
-"CDKN2B", "P15, MTS2, INK4B, TP15, CDK4I, p15INK4b",
-"CDKN2C", "INK4C, p18",
-"PPP6C", "PPP6C, PP6",
-"RB1", "RB, PPP1R130, OSRC")\%>\%
-    dplyr::mutate(alias = as.list(strsplit(alias, ", ")))\%>\%
-    tidyr::unnest(alias)
-
-mut2  <- mut \%>\%
-  dplyr::filter(hugo_symbol \%in\% cell_cycle_pathway$alias)
-
-colnames(mut2)
-
-colnames(recode_alias(mut2, default = FALSE, cell_cycle_pathway))
+recode_alias(mut, alias_table)
 
 }

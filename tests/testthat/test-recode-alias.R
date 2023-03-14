@@ -12,7 +12,7 @@ test_that("missing columns of interest", {
                                 "MYC",
                                 "BCL1")
 
-  expect_error(recode_alias(genomic_df, default = F, alias_table), "The following *")
+  expect_error(recode_alias(genomic_df, alias_table = alias_table), "The following *")
 
 })
 
@@ -33,15 +33,15 @@ test_that("warning if string of multiple aliases provided", {
                                 "MYC",
                                 "BCL1")
 
-  expect_error(recode_alias(genomic_df, default = F, alias_table), "You provided *")
-  expect_error(recode_alias(genomic_df, default = F, alias_table2), "You provided *")
-  expect_error(recode_alias(genomic_df, default = F, alias_table3), "You provided *")
+  expect_error(recode_alias(genomic_df, alias_table), "Error with*")
+  expect_error(recode_alias(genomic_df, alias_table2), "Error with*")
+  expect_error(recode_alias(genomic_df, alias_table3), "Error with*")
 })
 
 test_that("aliases are recoded properly", {
   alias_table <- tibble::tribble(~hugo_symbol, ~alias,
                                  "CCND1",	"U21B31, BCL1, D11S287E, PRAD1")%>%
-    dplyr::mutate(alias = as.list(strsplit(alias, ", ")))%>%
+    dplyr::mutate(alias = as.list(strsplit(alias, ", "))) %>%
     tidyr::unnest(alias)
 
   genomic_df <- tibble::tribble(~hugo_symbol,
@@ -49,7 +49,7 @@ test_that("aliases are recoded properly", {
                                 "MYC",
                                 "BCL1")
 
-  expect_warning(genomic_df2 <- recode_alias(genomic_df, default = F, alias_table))
+  expect_warning(genomic_df2 <- recode_alias(genomic_df, alias_table))
   expect_warning(genomic_df3 <- recode_alias(genomic_df))
 
   test <- table(genomic_df2$hugo_symbol)
