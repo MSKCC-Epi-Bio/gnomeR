@@ -180,4 +180,4 @@ Thank you to all contributors!
 
 `r usethis::use_tidy_thanks("MSKCC-Epi-Bio/gnomeR", from = "2020-01-01") %>% {glue::glue("[&#x0040;{.}](https://github.com/{.})")} %>% glue::glue_collapse(sep = ", ", last = ", and ")`
 
-
+# The End

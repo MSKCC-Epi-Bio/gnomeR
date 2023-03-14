@@ -8,6 +8,9 @@ template:
     base_font: {google: "Atkinson Hyperlegible"}
     heading_font: {google: "Atkinson Hyperlegible"}
     text-muted: "#FFFFFF"
+development:
+  mode: auto
+  version_label: default
 
 authors:
   Karissa Whiting:
@@ -42,6 +45,7 @@ reference:
     - ggtopgenes
     - gggenecor
     - ggcomut
+    - subset_by_frequency
   - subtitle: Helper Functions
   - contents:
     - which_impact_panel
@@ -67,5 +71,6 @@ reference:
     - names_df
     - pathways
     - impact_alias_table
+    - clin_collab_df
 
 
