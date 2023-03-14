@@ -44,7 +44,7 @@ recode_alias <- function(genomic_df, alias_table = "impact") {
     "character" = {
       choices_arg <- c("impact", "IMPACT")
       lc = tolower(match.arg(alias_table, choices = choices_arg))
-      switch(alias_table, "impact" = gnomeR::impact_alias_table)
+      switch(lc, "impact" = gnomeR::impact_alias_table)
       },
 
     "data.frame" = {

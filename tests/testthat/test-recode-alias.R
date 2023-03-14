@@ -51,6 +51,7 @@ test_that("aliases are recoded properly", {
 
   expect_warning(genomic_df2 <- recode_alias(genomic_df, alias_table))
   expect_warning(genomic_df3 <- recode_alias(genomic_df))
+  expect_warning(genomic_df4 <- recode_alias(genomic_df, "IMPACT"))
 
   test <- table(genomic_df2$hugo_symbol)
   test <- test[names(test) == "CCND1"]
@@ -61,6 +62,13 @@ test_that("aliases are recoded properly", {
 
 
   test <- table(genomic_df3$hugo_symbol)
+  test <- test[names(test) == "CCND1"]
+  names(test) <- NULL
+
+  expect_equal(class(test), "integer")
+  expect_equal(test, 2)
+
+  test <- table(genomic_df4$hugo_symbol)
   test <- test[names(test) == "CCND1"]
   names(test) <- NULL
 
