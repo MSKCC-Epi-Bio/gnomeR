@@ -8,13 +8,13 @@
   "codeRepository": "https://github.com/MSKCC-Epi-Bio/gnomeR",
   "issueTracker": "https://github.com/MSKCC-Epi-Bio/gnomeR/issues",
   "license": "https://spdx.org/licenses/MIT",
-  "version": "1.2.0",
+  "version": "1.2.0.9001",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
     "url": "https://r-project.org"
   },
-  "runtimePlatform": "R version 4.2.2 (2022-10-31 ucrt)",
+  "runtimePlatform": "R version 4.2.2 (2022-10-31)",
   "author": [
     {
       "@type": "Person",
@@ -118,6 +118,18 @@
         "url": "https://cran.r-project.org"
       },
       "sameAs": "https://CRAN.R-project.org/package=covr"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "cbioportalR",
+      "name": "cbioportalR",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://github.com/karissawhiting/cbioportalR"
     }
   ],
   "softwareRequirements": {
@@ -322,7 +334,7 @@
     },
     "SystemRequirements": null
   },
-  "fileSize": "2056.619KB",
+  "fileSize": "2058.21KB",
   "releaseNotes": "https://github.com/MSKCC-Epi-Bio/gnomeR/blob/master/NEWS.md",
   "readme": "https://github.com/MSKCC-Epi-Bio/gnomeR/blob/main/README.md",
   "contIntegration": ["https://github.com/MSKCC-Epi-Bio/gnomeR/actions", "https://app.codecov.io/gh/MSKCC-Epi-Bio/gnomeR?branch=main"],

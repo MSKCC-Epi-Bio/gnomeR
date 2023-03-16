@@ -8,6 +8,9 @@ template:
     base_font: {google: "Atkinson Hyperlegible"}
     heading_font: {google: "Atkinson Hyperlegible"}
     text-muted: "#FFFFFF"
+development:
+  mode: auto
+  version_label: default
 
 authors:
   Karissa Whiting:
@@ -70,5 +73,6 @@ reference:
     - pathways
     - impact_alias_table
     - sv_long
+    - clin_collab_df
 
 

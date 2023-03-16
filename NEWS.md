@@ -1,9 +1,14 @@
+# gnomeR (development version)
+
 # gnomeR 1.2.0
 
 * Updated color palette functionality
 * Column with sample ID now returned in data frame resulting from `create_gene_binary()`
 * `summarize_by_gene()` function was changed to run faster (#259)
 * `subset_by_frequency()` added to allow users to filter for specific prevalence levels of mutations/alterations/fusions (#270)
+* Removed oncoKB functionality (moving to [{oncokbR}](https://github.com/karissawhiting/oncokbR) package)
+* Fixed bugs in `tbl_genomic()` and `create_gene_binary()`. 
+* Added data processing tutorial vignette 
 
 # gnomeR 1.1.1
 
