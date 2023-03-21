@@ -97,13 +97,16 @@ Default is FALSE.</p></dd>
 
 
 <dt>specify_panel</dt>
-<dd><p>Default is "no" where no panel annotation is done. Otherwise pass a character vector of length 1 with a panel id (see gnomeR::gene_panels for available panels), or "impact" for
-automated IMPACT annotation. Alternatively, you may pass a data frame of <code>sample_id</code>-<code>panel_id</code> pairs specifying panels for each sample for which to insert NAs indicating genes not tested. See below for details.</p></dd>
+<dd><p>Default is <code>"no"</code> where no panel annotation is done. Otherwise pass a character vector of length 1 with a
+panel id (see <code><a href="gene_panels.html">gnomeR::gene_panels</a></code> for available panels), or <code>"impact"</code> for automated IMPACT annotation.
+Alternatively, you may pass a data frame of <code>sample_id</code>-<code>panel_id</code> pairs specifying panels for each sample for
+which to insert NAs indicating genes not tested. See below for details.</p></dd>
 
 
 <dt>recode_aliases</dt>
-<dd><p>boolean specifying if automated gene name alias matching should be done. Default is TRUE. When TRUE
-the function will check for genes that may have more than 1 name in your data using the aliases im gnomeR::impact_alias_table alias column</p></dd>
+<dd><p>Default is <code>"impact"</code> where function will check for IMPACT genes that may go by more than 1 name in your data and replace the alias name with the standardized gene name (see <code><a href="impact_alias_table.html">gnomeR::impact_alias_table</a></code> for reference list).
+If <code>"no"</code>, no alias annotation will be performed.
+Alternatively, you may pass a custom alias list as a data frame with columns <code>hugo_symbol</code> and <code>alias</code> specifying a custom alias table to use for checks. See below for details.</p></dd>
 
 </dl></div>
     <div class="section level2">
