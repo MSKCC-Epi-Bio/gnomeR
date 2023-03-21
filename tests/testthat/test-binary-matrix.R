@@ -322,7 +322,7 @@ test_that("test include_silent default when no variant class col", {
       cna = test_cna,
       fusion = test_fus,
       include_silent = TRUE,
-      recode_aliases = FALSE))
+      recode_aliases = "no"))
 
 })
 

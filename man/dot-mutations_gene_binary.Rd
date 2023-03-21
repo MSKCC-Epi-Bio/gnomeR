@@ -30,11 +30,14 @@ Default is FALSE.}
 
 \item{include_silent}{Boolean to keep or remove all silent mutations. TRUE keeps, FALSE removes. Default is FALSE.}
 
-\item{specify_panel}{Default is "no" where no panel annotation is done. Otherwise pass a character vector of length 1 with a panel id (see gnomeR::gene_panels for available panels), or "impact" for
-automated IMPACT annotation. Alternatively, you may pass a data frame of \code{sample_id}-\code{panel_id} pairs specifying panels for each sample for which to insert NAs indicating genes not tested. See below for details.}
+\item{specify_panel}{Default is \code{"no"} where no panel annotation is done. Otherwise pass a character vector of length 1 with a
+panel id (see \code{gnomeR::gene_panels} for available panels), or \code{"impact"} for automated IMPACT annotation.
+Alternatively, you may pass a data frame of \code{sample_id}-\code{panel_id} pairs specifying panels for each sample for
+which to insert NAs indicating genes not tested. See below for details.}
 
-\item{recode_aliases}{boolean specifying if automated gene name alias matching should be done. Default is TRUE. When TRUE
-the function will check for genes that may have more than 1 name in your data using the aliases im gnomeR::impact_alias_table alias column}
+\item{recode_aliases}{Default is \code{"impact"} where function will check for IMPACT genes that may go by more than 1 name in your data and replace the alias name with the standardized gene name (see \code{gnomeR::impact_alias_table} for reference list).
+If \code{"no"}, no alias annotation will be performed.
+Alternatively, you may pass a custom alias list as a data frame with columns \code{hugo_symbol} and \code{alias} specifying a custom alias table to use for checks. See below for details.}
 }
 \value{
 a data frame

@@ -18,12 +18,16 @@
 #' Default is NULL.
 #' @param high_level_cna_only If TRUE, only deep deletions (-2, -1.5) or high level amplifications (2) will be counted as events
 #' in the binary matrix. Gains (1) and losses (1) will be ignored. Default is `FALSE` where all CNA events are counted.
-#' @param specify_panel Default is "no" where no panel annotation is done. Otherwise pass a character vector of length 1 with a panel id (see gnomeR::gene_panels for available panels), or "impact" for
-#' automated IMPACT annotation. Alternatively, you may pass a data frame of `sample_id`-`panel_id` pairs specifying panels for each sample for which to insert NAs indicating genes not tested. See below for details.
-#' @param recode_aliases boolean specifying if automated gene name alias matching should be done. Default is TRUE. When TRUE
-#' the function will check for genes that may have more than 1 name in your data using the aliases im gnomeR::impact_alias_table alias column
+#' @param specify_panel Default is `"no"` where no panel annotation is done. Otherwise pass a character vector of length 1 with a
+#' panel id (see `gnomeR::gene_panels` for available panels), or `"impact"` for automated IMPACT annotation.
+#' Alternatively, you may pass a data frame of `sample_id`-`panel_id` pairs specifying panels for each sample for
+#' which to insert NAs indicating genes not tested. See below for details.
+#' @param recode_aliases Default is `"impact"` where function will check for IMPACT genes that may go by more than 1 name in your data and replace the alias name with the standardized gene name (see `gnomeR::impact_alias_table` for reference list).
+#' If `"no"`, no alias annotation will be performed.
+#' Alternatively, you may pass a custom alias list as a data frame with columns `hugo_symbol` and `alias` specifying a custom alias table to use for checks. See below for details.
 #'
-#' @section specify_panel argument:
+#'
+#' @section `specify_panel` argument:
 #'    - If `specify_panel = "no"` is passed (default) data will be returned as is without any additional NA annotations.
 #'    - If a single panel id is passed (e.g. `specify_panel = "IMPACT468"`), all genes in your data that are not tested on that panel will be set to
 #' `NA` in results for all samples (see gnomeR::gene_panels to see which genes are on each supported panels).
@@ -32,6 +36,17 @@
 #'    - If you wish to specify different panels for each sample, pass a data frame (with all samples included) with columns: `sample_id`, and `panel_id`. Each sample will be
 #' annotated with NAs according to that specific panel. If a sample in your data is missing from the `sample_id` column in the
 #' `specify_panel` dataframe, it will be returned with no annotation (equivalent of setting it to "no").
+#'
+#' @section `recode_aliases` argument:
+#'    - If `recode_aliases = "impact"` is passed (default), function will use `gnomeR::impact_alias_table` to find and replace any non-standard hugo symbol names with their
+#'    more common (or more recent) accepted gene name.
+#'    - If `recode_aliases = "no"` is passed, data will be returned as is without any alias replacements.
+#'    - If you have a custom table of vetted aliases you wish to use, you can pass a data frame with columns: `hugo_symbol`, and `alias`.
+#'      Each row should have one gene in the `hugo_symbol` column indicating the accepted gene name, and one gene in the `alias` column indicating an alias
+#'      you want to check for and replace. If a gene has multiple aliases to check for, each should be represented in its own separate row.
+#'      See `gnomeR::impact_alias_table` for an example of accepted data formatting.
+#'
+#'
 #' @return a data frame with sample_id and alteration binary columns with values of 0/1
 #' @export
 #' @examples
@@ -57,7 +72,7 @@ create_gene_binary <- function(samples = NULL,
                                cna = NULL,
                                high_level_cna_only = FALSE,
                                specify_panel = "no",
-                               recode_aliases = TRUE) {
+                               recode_aliases = "impact") {
   pathways <- gnomeR::pathways
   gene_panels <- gnomeR::gene_panels
 
@@ -85,7 +100,8 @@ create_gene_binary <- function(samples = NULL,
   # * mut_type-----
   mut_type <- match.arg(mut_type)
 
-  # * Specify_panel must be a known character or data frame with specified column-----
+  # * Specify Panel --------
+  # must be a known character or data frame with specified column
 
   # make tibbles into data.frames - idk if this is needed, could change switch to ifelse I think a alternative
   if ("tbl" %in% class(specify_panel)) {
@@ -118,7 +134,6 @@ create_gene_binary <- function(samples = NULL,
       },
       cli::cli_abort("{.code specify_panel} must be a character vector of length 1 or a data frame.")
     )
-
 
 
   # * Mutation  checks  --------
@@ -307,8 +322,8 @@ create_gene_binary <- function(samples = NULL,
                                    include_silent,
                                    specify_panel,
                                    recode_aliases = recode_aliases) {
-  if (recode_aliases) {
-    mutation <- recode_alias(mutation)
+  if (recode_aliases != "no") {
+    mutation <- recode_alias(mutation, alias_table = recode_aliases)
   }
 
 
@@ -390,8 +405,8 @@ create_gene_binary <- function(samples = NULL,
     tidyr::pivot_longer(-"sample_id", values_to = "hugo_symbol") %>%
     select("sample_id", "hugo_symbol")
 
-  if (recode_aliases) {
-    mutation <- recode_alias(fusion)
+  if (recode_aliases != "no") {
+    fusion <- recode_alias(fusion, alias_table = recode_aliases)
   }
 
   fusion <- fusion %>%
@@ -417,8 +432,8 @@ create_gene_binary <- function(samples = NULL,
                              specify_panel,
                              recode_aliases,
                              high_level_cna_only) {
-  if (recode_aliases) {
-    cna <- recode_alias(cna)
+  if (recode_aliases != "no") {
+    cna <- recode_alias(cna, alias_table = recode_aliases)
   }
 
   # * Remove lower level CNA if specified ----
