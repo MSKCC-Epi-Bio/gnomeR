@@ -17,37 +17,74 @@ knitr::opts_chunk$set(
 
 ## Introduction
 
-Somatic copy number alterations (sCNA, CNA, CNV) are a predominant source of variation in cancer genomes, which contribute to cancer development, progression and resistance to therapy. A CNA refers to a change in the number of copies of a genomic segment, termed amplifications and deletions. Such changes can be broad (entire chromosome arms) or focal (small chromosomal regions larger than 1000 base pairs). Oncogene activation often occurs due to amplification & TSG deactivation often due to deletions (Nabavi & Zare, 2022). In cancer studies, it is often useful to examine the similarities and differences in copy number profiles between clinically meaningful patients subgroups or across study cohorts (See Figure 1 of https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6145837/). 
+Somatic copy number alterations (sCNA, CNA, CNV) are a predominant source of variation in cancer genomes, which contribute to cancer development, progression and resistance to therapy. A CNA refers to a change in the number of copies of a genomic segment, termed amplifications and deletions. Such changes can be broad (entire chromosome arms) or focal (small chromosomal regions larger than 1000 base pairs). Oncogene activation often occurs due to amplification & TSG deactivation often due to deletions (Nabavi & Zare, 2022). In cancer studies, it is useful to examine the similarities and differences in copy number profiles between clinically meaningful patient subgroups or across study cohorts (See Figure 1 of https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6145837/). 
 
-In this vignette, we will introduce the forms of copy number data available via cBioPortal and walk through an example of analyzing CNA data. 
+In this vignette, we will introduce the forms of copy number data available on cBioPortal and walk through an example of analyzing CNA data. 
 
+##  Setting up 
 
-```{r setup, echo=F}
-install.packages("devtools")
+Make sure {gnomeR} is installed & loaded. We will also use dplyr for the purposes of this vignette. 
+
+```{r setup, message = FALSE, warning=FALSE}
+install.packages("devtools",repos="http://cran.us.r-project.org")
 devtools::install_github("MSKCC-Epi-Bio/gnomeR")
+install.packages("BiocManager")
+library(BiocManager)
 library(gnomeR)
-segdata <- gnomeR::seg
+library(tidyverse)
+
+BiocManager::install("iClusterPlus")
+library(iClusterPlus)
+
+BiocManager::install("DNAcopy")
+library(DNAcopy)
+
+library(cluster)
+
+install.packages("remotes")
+remotes::install_github("mskcc/facets")
+
 ```
 
+To explore copy number data, we will use a  sample of 500 patients from cBioPortal. Data on mutations, CNA, and structural variants for these patients are also available in the gnomeR package (`gnomeR::mutations`, `gnomeR::cna`, `gnomeR::sv`). 
 
-## There are 2 forms of copy number data in cBioPortal
-1. Whole number copy number
+Note: To access data from cBioPortal, you can use the {cbioportalR} package: 
+https://github.com/karissawhiting/cbioportalR. 
+
+
+## Data Formats
+There are 2 forms of copy number data in cBioPortal.
+1. Discrete copy number data
 2. Segmentation data (seg.means)
 
-## How to obtain each form
-1. Whole number copy number
-    - use get_cna_by_sample() from cbioportalR package
+### How to obtain each form
+1. Discrete copy number data
+    - use cbioportalR::get_cna_by_sample()
 2. Segmentation data
     - Retrieve from cbioportal.mskcc.org by inputting desired patient or sample IDs
     - Select the "CN Segments" tab on the upper left hand side of the screen
     - Click the download button with the cloud symbol, above the Save SVG button
+    - cbioportalR::get_segmeans_by_sample() coming soon
   
 ## Key Information about each form 
-1. Whole number copy number:
+1. Discrete copy number:
     - Provides gene-level copy number alteration status
-    - Amplification= 2
-    - Deletion= -2
-    <br>
+```{r, echo=FALSE}
+allowed_cna_levels <- tibble::tribble(
+               ~detailed_coding, ~numeric_coding,   ~simplified_coding,
+                      "neutral",             "0",       "neutral",
+          "homozygous deletion",            "-2",      "deletion",
+                          "loh",          "-1.5",      "deletion",
+          "hemizygous deletion",            "-1",      "deletion",
+                         "gain",             "1", "amplification",
+      "high level amplification",            "2", "amplification")
+
+allowed_cna_levels %>% knitr::kable()
+
+```
+
+<br>
+    
 **IMPORTANT**: Genes that do not have a CNA are not returned from the get_cna_by_sample function
 - Use cbioportalR::get_panel_by_sample() to obtain which version of IMPACT panel on which your samples were run
   
@@ -57,9 +94,9 @@ segdata <- gnomeR::seg
     - Num.mark = number of SNPs in the segment
     - Seg.mean = mean log2(copy number in tumor sample/ copy number in pooled normal sample) for a given segment
 
-## How seg.means data gets translated to gene-level copy number data
-- In cBioPortal, the threshold for a segment to qualify as a gene-level copy number alteration is |0.2|
-- Gene level copy number alteration must be “signed out” by the clinical bioinformatics team/pathologist
+## How seg.means data gets translated to gene-level discrete copy number data
+- In cbioportal, the threshold for a segment to qualify as part of a gene-level copy number alteration is |0.2|
+- Gene level copy number alterations must be “signed out” by the clinical bioinformatics team/pathologist
 - Can see sign out notes under the “clinical” tab in cBioPortal (column may be called "SO Comments")
 
 ## Steps to create a copy number heatmap across samples using segmentation data
@@ -74,13 +111,14 @@ Copy Number Heatmap Example (Hieronymus et al.,2018)
 2. Use the CNregions function from iClusterPlus package to obtain the minimum set of segments that capture the CNA landscape
     - All samples must have segments on every chromosome
     
+```{r include=F,echo=F}
+segdata <- segdata %>% mutate(chrom=as.numeric(chrom))
+
+segdata_condensed <- iClusterPlus::CNregions(seg=segdata)
+
+```
+
 3. Use emcncf function from FACETS package to obtain purity, ploidy and clonal heterogeneity-adjusted copy number estimates
 
 4. Plot using ComplexHeatmap package
-
-
-  
-  
-
-
 
