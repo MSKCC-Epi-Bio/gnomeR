@@ -136,6 +136,9 @@
     <loc>https://mskcc-epi-bio.github.io/gnomeR/dev/reference/reexports.html</loc>
   </url>
   <url>
+    <loc>https://mskcc-epi-bio.github.io/gnomeR/dev/reference/reformat_fusion.html</loc>
+  </url>
+  <url>
     <loc>https://mskcc-epi-bio.github.io/gnomeR/dev/reference/rename_columns.html</loc>
   </url>
   <url>
@@ -170,6 +173,9 @@
   </url>
   <url>
     <loc>https://mskcc-epi-bio.github.io/gnomeR/dev/reference/sv.html</loc>
+  </url>
+  <url>
+    <loc>https://mskcc-epi-bio.github.io/gnomeR/dev/reference/sv_long.html</loc>
   </url>
   <url>
     <loc>https://mskcc-epi-bio.github.io/gnomeR/dev/reference/tbl_genomic.html</loc>
