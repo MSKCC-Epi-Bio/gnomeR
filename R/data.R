@@ -235,6 +235,16 @@
 "cna_wide"
 
 
+#' An example of long-format fusion/sv files
+#'
+#' This set was created from a sample of 30 patients from publicly available
+#' non-small cell lung cancer data from GENIEBPC `(cohort = 'NSCLC', version = 'v2.0-public')`
+#'
+#' @format A data frame with 30 unique `sample_id` values and 62 hugo symbols listed
+#' @source \url{https://www.aacr.org/professionals/research/aacr-project-genie/bpc/}
+"sv_long"
+
+
 
 #' An example data set for an IMPACT analysis coming from a clinical collaborator
 #'
