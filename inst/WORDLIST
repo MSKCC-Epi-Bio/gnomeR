@@ -12,9 +12,11 @@ Defalut
 Dimitriadoy
 Entrez
 Foltz
+GENIEBPC
 GISTIC
 Gao
 Heins
+Intragenic
 JCO
 Kantheti
 Liang
@@ -72,6 +74,7 @@ im
 importFrom
 ing
 inputed
+intergenic
 iwth
 linkMsa
 linkPdb
@@ -84,6 +87,7 @@ mutationType
 ncbiBuild
 oncoKB
 oncogenic
+oncokbR
 pancan
 pre
 processsing

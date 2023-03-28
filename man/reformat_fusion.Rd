@@ -23,10 +23,9 @@ sites instead of two rows, one for each site. This is the required format for th
 \examples{
 
 sv_long1 <- gnomeR::sv_long \%>\%
-  rename_columns()\%>\%
+  rename_columns() \%>\%
   reformat_fusion()
 
-samples <- unique(sv_long1$sampleId)
-
+head(sv_long1)
 
 }
