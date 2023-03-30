@@ -50,7 +50,8 @@ Imports:
     broom.helpers,
     janitor,
     withr,
-    scales
+    scales,
+    lifecycle
 Suggests: 
     knitr,
     rmarkdown,
