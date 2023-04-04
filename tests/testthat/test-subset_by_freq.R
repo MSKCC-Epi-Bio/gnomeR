@@ -133,3 +133,43 @@ test_that("Correctly removes cols with all NA", {
 
 })
 
+test_that("Other columns are retained in `other_vars`", {
+
+  bm <- bind_rows(
+    "gen50" = c(rep(0, 5), rep(1, 5)),
+    "gene20" = c(rep(0, 8), rep(1, 2)),
+    "gene0" = c(rep(0, 10), rep(1, 0)),
+    "sex" = rep(c("F", "M"), 5),
+    "stage" = rep(c("I", "II"), 5)) %>%
+    mutate(sample_id = as.character(1:nrow(.)))
+
+  sub <- bm %>%
+    select(-sex, -stage) %>%
+    subset_by_frequency(t = 0)
+
+  sub2 <- bm %>%
+    subset_by_frequency(t = 0, other_vars = c(sex, stage))
+
+  expect_equal(setdiff(names(sub2), names(sub)), c("sex", "stage"))
+
+
+})
+
+test_that("Pass `other_vars` as strings works", {
+
+  bm <- bind_rows(
+    "gen50" = c(rep(0, 5), rep(1, 5)),
+    "gene20" = c(rep(0, 8), rep(1, 2)),
+    "gene0" = c(rep(0, 10), rep(1, 0)),
+    "sex" = rep(c("F", "M"), 5),
+    "stage" = rep(c("I", "II"), 5)) %>%
+    mutate(sample_id = as.character(1:nrow(.)))
+
+  sub <- bm %>%
+    subset_by_frequency(t = .1, other_vars = c(sex, stage))
+
+  sub2 <- bm %>%
+    subset_by_frequency(t = .1, other_vars = c("sex", "stage"))
+
+  expect_equal(names(sub2), names(sub))
+})

@@ -110,15 +110,13 @@ by_gene <- gen_dat %>%
   summarize_by_gene()
 
 head(by_gene[,1:6])
-#> # A tibble: 6 × 6
-#>   sample_id           ALK   APC    AR  ARAF   ATM
-#>   <chr>             <dbl> <dbl> <dbl> <dbl> <dbl>
-#> 1 P-0004508-T01-IM5     1     0     0     0     0
-#> 2 P-0005806-T01-IM5     0     1     1     0     1
-#> 3 P-0007006-T01-IM5     0     1     0     0     0
-#> 4 P-0008682-T01-IM5     0     1     0     0     0
-#> 5 P-0001297-T01-IM3     0     0     1     0     0
-#> 6 P-0007538-T01-IM5     0     0     0     1     0
+#>           sample_id ALK ARAF BLM CD79B CSF1R
+#> 1 P-0004508-T01-IM5   1    0   0     0     0
+#> 2 P-0005806-T01-IM5   0    0   0     0     0
+#> 3 P-0007006-T01-IM5   0    0   0     0     0
+#> 4 P-0008682-T01-IM5   0    0   0     0     0
+#> 5 P-0001297-T01-IM3   0    0   0     0     0
+#> 6 P-0007538-T01-IM5   0    1   0     0     1
 ```
 
 ## Visualize
@@ -151,7 +149,8 @@ gen_dat <- gen_dat %>%
 ``` r
 
 gene_tbl_trt <-  gen_dat %>%
-  tbl_genomic(freq_cutoff = .1, by = trt_status) %>%
+  subset_by_frequency(t = .1, other_vars = trt_status) %>%
+  tbl_genomic(by = trt_status) %>%
   gtsummary::add_p() 
 ```
 
@@ -181,6 +180,7 @@ By contributing to this project, you agree to abide by its terms.
 Thank you to all contributors!
 
 [@akriti21](https://github.com/akriti21),
+[@alrein-05](https://github.com/alrein-05),
 [@arorarshi](https://github.com/arorarshi),
 [@AxelitoMartin](https://github.com/AxelitoMartin),
 [@carokos](https://github.com/carokos),
@@ -193,3 +193,5 @@ Thank you to all contributors!
 [@michaelcurry1123](https://github.com/michaelcurry1123),
 [@mljaniczek](https://github.com/mljaniczek), and
 [@slb2240](https://github.com/slb2240)
+
+# The End

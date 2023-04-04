@@ -4,7 +4,7 @@
 \alias{subset_by_frequency}
 \title{Subset a Binary Matrix By Alteration Frequency Threshold}
 \usage{
-subset_by_frequency(gene_binary, t = 0.1)
+subset_by_frequency(gene_binary, t = 0.1, other_vars = NULL)
 }
 \arguments{
 \item{gene_binary}{A data frame with a row for each sample and column for each
@@ -12,6 +12,9 @@ alteration. Data frame must have a \code{sample_id} column and columns for each 
 with values of 0, 1 or NA.}
 
 \item{t}{Threshold value between 0 and 1 to subset by. Default is 10\% (.1).}
+
+\item{other_vars}{One or more column names (quoted or unquoted) in data to be retained
+in resulting data frame. Default is NULL.}
 }
 \value{
 a data frame with a \code{sample_id} column and columns for

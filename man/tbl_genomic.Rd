@@ -6,28 +6,23 @@
 \usage{
 tbl_genomic(
   gene_binary,
-  freq_cutoff = NULL,
-  freq_cutoff_by_gene = TRUE,
-  gene_subset = NULL,
   by = NULL,
+  freq_cutoff = deprecated(),
+  freq_cutoff_by_gene = deprecated(),
+  gene_subset = deprecated(),
   ...
 )
 }
 \arguments{
 \item{gene_binary}{data.frame of genetic samples}
 
-\item{freq_cutoff}{A number 0 to 1 representing the minimum percent frequency you are using to select gene's for analysis.
-Frequencies can be calculated at gene level, or alteration level (see \code{freq_cutoff_by_gene}).}
-
-\item{freq_cutoff_by_gene}{Logical indicating whether gene selection based on frequency \% should
-be calculated at the gene level, or the alteration level. Default is TRUE, indicating all
-alterations (e.g. TP53/TP53.Del/TP53.Del/TP53.fus) will be aggregated at gene level to
-determine cutoff frequencies and all alteration types for top genes will be returned.}
-
-\item{gene_subset}{Specific genes you want to summarize. This takes precedent over the \code{freq_cutoff} parameter and will
-return all alterations associated with that gene (including mutations, CNA, fusions).}
-
 \item{by}{A variable to be passed to \code{gtsummary::tbl_summary()}'s by parameter}
+
+\item{freq_cutoff}{deprecated}
+
+\item{freq_cutoff_by_gene}{deprecated}
+
+\item{gene_subset}{deprecated}
 
 \item{...}{Additional parameters that can be passed to \code{gtsummary::tbl_summary()}. To access the additional parameters you need to load \code{gtsummary}.}
 }
@@ -41,7 +36,6 @@ parameters that are accepted by \code{gtsummary::tbl_summary()}. Note the \code{
 onto the data before using the \code{by} parameter in the function.
 }
 \examples{
-library(dplyr)
 
 samples <- unique(mutations$sampleId)[1:10]
 
@@ -52,22 +46,19 @@ gene_binary <- create_gene_binary(
   mut_type = "somatic_only", snp_only = FALSE,
   specify_panel = "no"
 )
-tb1 <- tbl_genomic(gene_binary = gene_binary, freq_cutoff = .05)
-tb2 <- tbl_genomic(gene_binary = gene_binary, gene_subset = c("MYC", "TP53"))
 
-gene_binary <- gene_binary \%>\%
-  mutate(sex = sample(
-    x = c("M", "F"),
-    size = nrow(gene_binary), replace = TRUE
-  ))
-library(gtsummary) # Need to load gtsummary to access additional arguments in `...`
+tbl_genomic(
+  gene_binary = gene_binary)
+
+# Example wth `by` variable
+
+gene_binary$sex <- sample( c("M", "F"), size = nrow(gene_binary), replace = TRUE)
 
 t1 <- tbl_genomic(
   gene_binary = gene_binary,
-  by = sex,
-  freq_cutoff = .2,
-  freq_cutoff_by_gene = FALSE,
-  statistic = list(all_categorical() ~"{n}")
-)
+  by = sex
+) \%>\%
+add_p() \%>\%
+add_q()
 
 }
