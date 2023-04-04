@@ -1,5 +1,9 @@
 # gnomeR (development version)
 
+- Deprecated `freq_cutoff`, `freq_cutoff_by_gene`, and `gene_subset` arguments in `tbl_genomic()`. It is now recommended that users use `subset_by_frequency()` instead before passing data to `tbl_genomic()`.
+- Added `other_vars` argument to `subset_by_frequency()` to allow retention of other clinical vars when using function within pipeline.
+
+
 # gnomeR 1.2.0
 
 * Updated color palette functionality
