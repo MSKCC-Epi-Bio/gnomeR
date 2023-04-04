@@ -26,19 +26,18 @@
 #'   specify_panel = "no"
 #' )
 #'
-#' tbl_genomic(
-#'   gene_binary = gene_binary)
+#' tbl1 <- tbl_genomic(gene_binary)
 #'
 #' # Example wth `by` variable
 #'
 #' gene_binary$sex <- sample( c("M", "F"), size = nrow(gene_binary), replace = TRUE)
 #'
-#' t1 <- tbl_genomic(
+#' tbl2 <- tbl_genomic(
 #'   gene_binary = gene_binary,
 #'   by = sex
 #' ) %>%
-#' add_p() %>%
-#' add_q()
+#' gtsummary::add_p() %>%
+#' gtsummary::add_q()
 #'
 tbl_genomic <- function(gene_binary,
                         by = NULL,
