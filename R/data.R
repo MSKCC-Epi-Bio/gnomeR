@@ -235,7 +235,6 @@
 "cna_wide"
 
 
-
 #' An example GENIE BPC mutations data set
 #'
 #' This set was created from a sample of 100 patients from the non-small cell
@@ -255,9 +254,44 @@
 #' \item{Consequence}
 #' \item{Variant_Classification}
 #' \item{Variant_Type}
-#' \
-#' }
+#' \item{Tumor_Sample_Barcode}
 #'
+#' }
+"genie_mut"
+
+#' An example GENIE BPC mutations data set
+#'
+#' This set was created from a sample of 100 patients from the non-small cell
+#' lung cancer v.2.0-public data set.
+#'
+#' @format A data frame with CNA retrieved using {genieBPC} package. Column names are sample ids of cohort.
+#' \describe{
+#' \item{Hugo_Symbol}
+#'
+#' }
+"genie_cna"
+
+#' An example GENIE BPC mutations data set
+#'
+#' This set was created from a sample of 100 patients from the non-small cell
+#' lung cancer v.2.0-public data set. If a row exists for a given hugo symbol
+#' and tumor-sample-barcode, then the mutation was observed.
+#'
+#' @format A data frame with mutations retrieved using {genieBPC} package
+#' \describe{
+#' \item{Hugo_Symbol}
+#' \item{Entrez_Gene_Id}
+#' \item{Center}
+#' \item{Tumor_Sample_Barcode}
+#' \item{Fusion}
+#' \item{DNA_support}
+#' \item{RNA_support}
+#' \item{Method}
+#' \item{Frame}
+#'
+#' }
+"genie_fusion"
+
 
 
 #' An example of long-format fusion/sv files
