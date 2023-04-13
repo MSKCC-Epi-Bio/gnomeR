@@ -8,6 +8,9 @@ template:
     base_font: {google: "Atkinson Hyperlegible"}
     heading_font: {google: "Atkinson Hyperlegible"}
     text-muted: "#FFFFFF"
+development:
+  mode: auto
+  version_label: default
 
 authors:
   Karissa Whiting:
@@ -32,6 +35,7 @@ reference:
     - pivot_cna_longer
     - add_pathways
     - recode_alias
+    - reformat_fusion
   - subtitle: Analyzing Data
   - contents:
     - tbl_genomic
@@ -42,6 +46,7 @@ reference:
     - ggtopgenes
     - gggenecor
     - ggcomut
+    - subset_by_frequency
   - subtitle: Helper Functions
   - contents:
     - which_impact_panel
@@ -67,5 +72,7 @@ reference:
     - names_df
     - pathways
     - impact_alias_table
+    - sv_long
+    - clin_collab_df
 
 
