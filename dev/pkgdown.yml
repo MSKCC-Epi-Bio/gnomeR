@@ -2,9 +2,10 @@ pandoc: 2.19.2
 pkgdown: 2.0.7
 pkgdown_sha: ~
 articles:
+  GENIE-vignette: GENIE-vignette.html
   data-processing-vignette: data-processing-vignette.html
   qa-impact-data: qa-impact-data.html
-last_built: 2023-03-31T19:15Z
+last_built: 2023-04-18T15:37Z
 urls:
   reference: https://mskcc-epi-bio.github.io/gnomeR/reference
   article: https://mskcc-epi-bio.github.io/gnomeR/articles
