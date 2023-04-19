@@ -241,6 +241,11 @@ create_gene_binary <- function(samples = NULL,
 
       all_binary <- bind_rows(all_binary, add_no_alt_samples)
       all_binary <- all_binary[match(samples_final, all_binary$sample_id), ]
+
+      cli::cli_alert_warning(c(
+        "{length(no_alt_samples} sample{?s} that you provided {?has/have} no observed alterations (all 0 values). Please confirm with your dataset source.",
+        "If a genetic panel was provided, it has been annotated properly."
+      ))
     }
   }
 
