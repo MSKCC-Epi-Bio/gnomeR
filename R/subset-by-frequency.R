@@ -26,6 +26,8 @@ subset_by_frequency <- function(gene_binary, t = .1) {
 
   # Checks ------------------------------------------------------------------
 
+  .check_gb(gene_binary)
+
   # check threshold argument
   if(!(is.numeric(t) & (t >= 0 & t <= 1))) {
     cli::cli_abort("{.field t} must be a number between 0 and 1")

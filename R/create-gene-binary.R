@@ -291,6 +291,9 @@ create_gene_binary <- function(samples = NULL,
     ))
   }
 
+  class(all_binary) <- c("tbl_gene_binary", class(all_binary))
+
+
   # return omitted zero  samples as warning/attribute
 
   # samples_omitted <- setdiff(samples, samples_final)

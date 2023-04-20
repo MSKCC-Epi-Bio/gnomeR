@@ -22,6 +22,20 @@
 #   expect_equal(length(table(gen_dat2$TP53)), 2)
 # })
 
+test_that("only accecpts tbl_gene_binary object", {
+  fake <- data.frame(sample_id = c(rep("samp", 5)),
+                     TERT = c(rep(1, 3), 0, NA))
+
+  expect_error(summarize_by_gene(fake))
+
+  binmat <- gnomeR::create_gene_binary(mutation = gnomeR::mutations[1:10,],
+                                       cna = gnomeR::cna,
+                                       fusion = gnomeR::sv[1:10,])
+
+  expect_no_error(summarize_by_gene(binmat))
+
+})
+
 test_that("test simplify marix needs a data frame", {
 
   expect_error(summarize_by_gene(gene_binary = c(1:10)))

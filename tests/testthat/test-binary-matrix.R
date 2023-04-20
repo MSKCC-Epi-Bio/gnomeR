@@ -1,6 +1,14 @@
 
 # Test Binary Matrix  -----------------------------------------------------------
 
+# Test class of returned object --
+test_that("Check class 'gene_binary' exists",{
+  mut_valid_sample_ids<-unique(gnomeR::mutations$sampleId)[1:10]
+
+  sub <- create_gene_binary(sample=mut_valid_sample_ids, mutation=gnomeR::mutations)
+
+  expect_true("tbl_gene_binary" %in% class(sub))
+})
 
 # Test samples argument ----
 # what happens when you pass a vector? What about if you don't specify it (don't pass anything)?

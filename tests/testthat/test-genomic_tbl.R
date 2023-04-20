@@ -1,4 +1,20 @@
 # General -----------------------------------------------------------------
+test_that("only accecpts tbl_gene_binary object", {
+  fake <- data.frame(sample_id = c(rep("samp", 5)),
+                     TERT = c(rep(1, 3), 0, NA))
+
+  expect_error(tbl_genomic(fake))
+
+
+  binmat <- gnomeR::create_gene_binary(mutation = gnomeR::mutations[1:10,],
+                                       cna = gnomeR::cna,
+                                       fusion = gnomeR::sv[1:10,])
+
+  expect_no_error(tbl_genomic(binmat))
+
+})
+
+
 test_that("works with basic input", {
 
   samples <- as.character(unique(mutations$sampleId))[1:10]

@@ -41,6 +41,8 @@ add_pathways <- function(gene_binary,
 
   # check arguments -----------------------------------------------------------
 
+  .check_gb(gene_binary)
+
   # custom pathways
   switch(!(class(custom_pathways) %in% c("NULL", "character", "list")),
          cli::cli_abort("{.code custom_pathways} must be character vector, or list"))

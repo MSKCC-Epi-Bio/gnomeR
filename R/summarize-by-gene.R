@@ -24,6 +24,8 @@ summarize_by_gene <- function(gene_binary) {
 
   # Checks ------------------------------------------------------------------
 
+  .check_gb(gene_binary)
+
   if (!is.data.frame(gene_binary)) {
     cli::cli_abort("{.code gene_binary} must be a data.frame with sample ids")
   }

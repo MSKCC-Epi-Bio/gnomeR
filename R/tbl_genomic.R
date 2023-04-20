@@ -58,6 +58,8 @@ tbl_genomic <- function(gene_binary,
 
   # check arguments & prep data ------------------------------------------------
 
+  .check_gb(gene_binary)
+
   if (!inherits(gene_binary, "data.frame")) {
     stop("`gene_binary=` argument must be a tibble or data frame.", call. = FALSE)
   }
