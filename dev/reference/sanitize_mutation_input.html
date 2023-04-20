@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">gnomeR</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9001</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9002</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -24,8 +24,8 @@
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="../articles/GENIE-vignette.html">GENIE-BPC-vignette</a>
     <a class="dropdown-item" href="../articles/data-processing-vignette.html">Processing Data with {gnomeR}</a>
+    <a class="dropdown-item" href="../articles/genie-bpc-vignette.html">Analyzing GENIE BPC Using {gnomeR}</a>
     <a class="dropdown-item" href="../articles/qa-impact-data.html">How to QA Your IMPACT Data</a>
   </div>
 </li>
@@ -87,25 +87,25 @@
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">sanitize_mutation_input</span><span class="op">(</span>mutation <span class="op">=</span> <span class="fu">gnomeR</span><span class="fu">::</span><span class="va"><a href="mutations.html">mutations</a></span>, include_silent <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 725 × 29</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    hugo_symbol entrez_g…¹ uniqu…² uniqu…³ molec…⁴ sampl…⁵ patie…⁶ study…⁷ center</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> PARP1              142 UC0wMD… UC0wMD… prad_m… P-0001… P-0001… prad_m… NA    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> PARP1              142 UC0wMD… UC0wMD… prad_m… P-0001… P-0001… prad_m… NA    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> PARP1              142 UC0wMD… UC0wMD… prad_m… P-0001… P-0001… prad_m… NA    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> AKT1               207 UC0wMD… UC0wMD… prad_m… P-0001… P-0001… prad_m… MSKCC </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> AKT1               207 UC0wMD… UC0wMD… prad_m… P-0001… P-0001… prad_m… MSKCC </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> AKT1               207 UC0wMD… UC0wMD… prad_m… P-0005… P-0005… prad_m… MSKCC </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> ALK                238 UC0wMD… UC0wMD… prad_m… P-0001… P-0001… prad_m… MSKCC </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> ALK                238 UC0wMD… UC0wMD… prad_m… P-0004… P-0004… prad_m… MSKCC </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> ALK                238 UC0wMD… UC0wMD… prad_m… P-0001… P-0001… prad_m… MSKCC </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> ALK                238 UC0wMD… UC0wMD… prad_m… P-0002… P-0002… prad_m… MSKCC </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># … with 715 more rows, 20 more variables: mutation_status &lt;chr&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    hugo_symbol entrez_gene_id uniqueSampleKey                   uniquePatientKey</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                             <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>           </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> PARP1                  142 UC0wMDAxMTI4LVQwMS1JTTM6cHJhZF9t… UC0wMDAxMTI4OnB…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> PARP1                  142 UC0wMDAxODU5LVQwMS1JTTM6cHJhZF9t… UC0wMDAxODU5OnB…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> PARP1                  142 UC0wMDAxODk1LVQwMS1JTTM6cHJhZF9t… UC0wMDAxODk1OnB…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> AKT1                   207 UC0wMDAxMTI4LVQwMS1JTTM6cHJhZF9t… UC0wMDAxMTI4OnB…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> AKT1                   207 UC0wMDAxODQ1LVQwMS1JTTM6cHJhZF9t… UC0wMDAxODQ1OnB…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> AKT1                   207 UC0wMDA1NTcwLVQwMS1JTTU6cHJhZF9t… UC0wMDA1NTcwOnB…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> ALK                    238 UC0wMDAxNzY4LVQwMS1JTTM6cHJhZF9t… UC0wMDAxNzY4OnB…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> ALK                    238 UC0wMDA0NTA4LVQwMS1JTTU6cHJhZF9t… UC0wMDA0NTA4OnB…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> ALK                    238 UC0wMDAxODk1LVQwMS1JTTM6cHJhZF9t… UC0wMDAxODk1OnB…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> ALK                    238 UC0wMDAyOTg0LVQwMS1JTTM6cHJhZF9t… UC0wMDAyOTg0OnB…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 715 more rows</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 25 more variables: molecular_profile_id &lt;chr&gt;, sample_id &lt;chr&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   patient_id &lt;chr&gt;, study_id &lt;chr&gt;, center &lt;chr&gt;, mutation_status &lt;chr&gt;,</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   validation_status &lt;chr&gt;, start_position &lt;int&gt;, end_position &lt;int&gt;,</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   reference_allele &lt;chr&gt;, hgv_sp_short &lt;chr&gt;, variant_classification &lt;chr&gt;,</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   functionalImpactScore &lt;chr&gt;, fisValue &lt;dbl&gt;, linkXvar &lt;chr&gt;, linkPdb &lt;chr&gt;,</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   linkMsa &lt;chr&gt;, ncbi_build &lt;chr&gt;, variant_type &lt;chr&gt;, keyword &lt;chr&gt;,</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   chromosome &lt;chr&gt;, allele &lt;chr&gt;, refseqMrnaId &lt;chr&gt;,</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   protein_pos_start &lt;int&gt;, protein_pos_end &lt;int&gt;, and abbreviated variable …</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   linkMsa &lt;chr&gt;, ncbi_build &lt;chr&gt;, variant_type &lt;chr&gt;, keyword &lt;chr&gt;, …</span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

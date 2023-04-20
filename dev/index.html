@@ -28,7 +28,7 @@
     
     <a class="navbar-brand me-2" href="index.html">gnomeR</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9001</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9002</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -43,8 +43,8 @@
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="articles/GENIE-vignette.html">GENIE-BPC-vignette</a>
     <a class="dropdown-item" href="articles/data-processing-vignette.html">Processing Data with {gnomeR}</a>
+    <a class="dropdown-item" href="articles/genie-bpc-vignette.html">Analyzing GENIE BPC Using {gnomeR}</a>
     <a class="dropdown-item" href="articles/qa-impact-data.html">How to QA Your IMPACT Data</a>
   </div>
 </li>
@@ -82,10 +82,10 @@
 <p>You can install the development version of <code>gnomeR</code> from <a href="https://github.com/" class="external-link">GitHub</a> with:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># install.packages("devtools")</span></span>
-<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"MSKCC-Epi-Bio/gnomeR"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"MSKCC-Epi-Bio/gnomeR"</span><span class="op">)</span></span></code></pre></div>
 <p>Along with its companion package for cbioPortal data download:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"karissawhiting/cbioportalR"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"karissawhiting/cbioportalR"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
@@ -146,15 +146,13 @@
 <span>  <span class="fu"><a href="reference/summarize_by_gene.html">summarize_by_gene</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">by_gene</span><span class="op">[</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">6</span><span class="op">]</span><span class="op">)</span></span>
-<span><span class="co">#&gt; # A tibble: 6 × 6</span></span>
-<span><span class="co">#&gt;   sample_id           ALK   APC    AR  ARAF   ATM</span></span>
-<span><span class="co">#&gt;   &lt;chr&gt;             &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;</span></span>
-<span><span class="co">#&gt; 1 P-0004508-T01-IM5     1     0     0     0     0</span></span>
-<span><span class="co">#&gt; 2 P-0005806-T01-IM5     0     1     1     0     1</span></span>
-<span><span class="co">#&gt; 3 P-0007006-T01-IM5     0     1     0     0     0</span></span>
-<span><span class="co">#&gt; 4 P-0008682-T01-IM5     0     1     0     0     0</span></span>
-<span><span class="co">#&gt; 5 P-0001297-T01-IM3     0     0     1     0     0</span></span>
-<span><span class="co">#&gt; 6 P-0007538-T01-IM5     0     0     0     1     0</span></span></code></pre></div>
+<span><span class="co">#&gt;           sample_id ALK ARAF BLM CD79B CSF1R</span></span>
+<span><span class="co">#&gt; 1 P-0004508-T01-IM5   1    0   0     0     0</span></span>
+<span><span class="co">#&gt; 2 P-0005806-T01-IM5   0    0   0     0     0</span></span>
+<span><span class="co">#&gt; 3 P-0007006-T01-IM5   0    0   0     0     0</span></span>
+<span><span class="co">#&gt; 4 P-0008682-T01-IM5   0    0   0     0     0</span></span>
+<span><span class="co">#&gt; 5 P-0001297-T01-IM3   0    0   0     0     0</span></span>
+<span><span class="co">#&gt; 6 P-0007538-T01-IM5   0    1   0     0     1</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="visualize">Visualize<a class="anchor" aria-label="anchor" href="#visualize"></a>
@@ -177,7 +175,8 @@
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="va">gene_tbl_trt</span> <span class="op">&lt;-</span>  <span class="va">gen_dat</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="reference/tbl_genomic.html">tbl_genomic</a></span><span class="op">(</span>freq_cutoff <span class="op">=</span> <span class="fl">.1</span>, by <span class="op">=</span> <span class="va">trt_status</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="reference/subset_by_frequency.html">subset_by_frequency</a></span><span class="op">(</span>t <span class="op">=</span> <span class="fl">.1</span>, other_vars <span class="op">=</span> <span class="va">trt_status</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="reference/tbl_genomic.html">tbl_genomic</a></span><span class="op">(</span>by <span class="op">=</span> <span class="va">trt_status</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu">gtsummary</span><span class="fu">::</span><span class="fu"><a href="https://www.danieldsjoberg.com/gtsummary/reference/add_p.html" class="external-link">add_p</a></span><span class="op">(</span><span class="op">)</span> </span></code></pre></div>
 <p><img src="reference/figures/README-tbl_genomic_print.png" width="30%"></p>
 <p>Additionally, you can analyze custom pathways, or a set of default gene pathways using <code><a href="reference/add_pathways.html">add_pathways()</a></code>:</p>
@@ -185,7 +184,7 @@
 <code class="sourceCode R"><span></span>
 <span><span class="va">path_by_trt</span> <span class="op">&lt;-</span> <span class="va">gen_dat</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="reference/add_pathways.html">add_pathways</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">sample_id</span>, <span class="va">trt_status</span>, <span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">contains</a></span><span class="op">(</span><span class="st">"pathway_"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu">select</span><span class="op">(</span><span class="va">sample_id</span>, <span class="va">trt_status</span>, <span class="fu">contains</span><span class="op">(</span><span class="st">"pathway_"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="reference/tbl_genomic.html">tbl_genomic</a></span><span class="op">(</span>by <span class="op">=</span> <span class="va">trt_status</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu">gtsummary</span><span class="fu">::</span><span class="fu"><a href="https://www.danieldsjoberg.com/gtsummary/reference/add_p.html" class="external-link">add_p</a></span><span class="op">(</span><span class="op">)</span> </span></code></pre></div>
 <p><img src="reference/figures/README-path_by_trt.png" width="30%"></p>
@@ -196,7 +195,11 @@
 </h1>
 <p>Please note that the gnomeR project is released with a <a href="https://contributor-covenant.org/version/2/0/CODE_OF_CONDUCT.html" class="external-link">Contributor Code of Conduct</a>. By contributing to this project, you agree to abide by its terms.</p>
 <p>Thank you to all contributors!</p>
-<p><a href="https://github.com/akriti21" class="external-link">@akriti21</a>, <a href="https://github.com/arorarshi" class="external-link">@arorarshi</a>, <a href="https://github.com/AxelitoMartin" class="external-link">@AxelitoMartin</a>, <a href="https://github.com/carokos" class="external-link">@carokos</a>, <a href="https://github.com/ChristineZ-msk" class="external-link">@ChristineZ-msk</a>, <a href="https://github.com/edrill" class="external-link">@edrill</a>, <a href="https://github.com/hfuchs5" class="external-link">@hfuchs5</a>, <a href="https://github.com/jalavery" class="external-link">@jalavery</a>, <a href="https://github.com/jflynn264" class="external-link">@jflynn264</a>, <a href="https://github.com/karissawhiting" class="external-link">@karissawhiting</a>, <a href="https://github.com/michaelcurry1123" class="external-link">@michaelcurry1123</a>, <a href="https://github.com/mljaniczek" class="external-link">@mljaniczek</a>, and <a href="https://github.com/slb2240" class="external-link">@slb2240</a></p>
+<p><a href="https://github.com/akriti21" class="external-link">@akriti21</a>, <a href="https://github.com/alrein-05" class="external-link">@alrein-05</a>, <a href="https://github.com/arorarshi" class="external-link">@arorarshi</a>, <a href="https://github.com/AxelitoMartin" class="external-link">@AxelitoMartin</a>, <a href="https://github.com/carokos" class="external-link">@carokos</a>, <a href="https://github.com/ChristineZ-msk" class="external-link">@ChristineZ-msk</a>, <a href="https://github.com/edrill" class="external-link">@edrill</a>, <a href="https://github.com/hfuchs5" class="external-link">@hfuchs5</a>, <a href="https://github.com/jalavery" class="external-link">@jalavery</a>, <a href="https://github.com/jflynn264" class="external-link">@jflynn264</a>, <a href="https://github.com/karissawhiting" class="external-link">@karissawhiting</a>, <a href="https://github.com/michaelcurry1123" class="external-link">@michaelcurry1123</a>, <a href="https://github.com/mljaniczek" class="external-link">@mljaniczek</a>, and <a href="https://github.com/slb2240" class="external-link">@slb2240</a></p>
+</div>
+<div class="section level1">
+<h1 id="the-end">The End<a class="anchor" aria-label="anchor" href="#the-end"></a>
+</h1>
 </div>
 
   </main><aside class="col-md-3"><div class="links">
