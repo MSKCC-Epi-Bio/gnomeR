@@ -1,8 +1,9 @@
 ---
-title: "GENIE-BPC-vignette"
+title: "Analyzing GENIE BPC Using {gnomeR}"
 output: rmarkdown::html_vignette
+author: Samantha Brown, Jessica Lavery
 vignette: >
-  %\VignetteIndexEntry{GENIE-vignette}
+  %\VignetteIndexEntry{genie-bpc-vignette}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -18,9 +19,10 @@ set.seed(20230302)
 
 ```{r setup, include = FALSE, message = FALSE, results = FALSE}
 library(gnomeR)
-library(tidyverse)
+library(dplyr)
 library(genieBPC)
 library(cbioportalR)
+
 ```
 
 ## Introduction
@@ -47,19 +49,20 @@ Technical details regarding proper analysis of this data can be found in the fol
 
 To gain access to the GENIE BPC data, please follow the instructions on the [{genieBPC} `pull_data_synapse()` vignette](https://genie-bpc.github.io/genieBPC/articles/pull_data_synapse_vignette.html) to register for a Synapse account. Once your Synapse account is created and you authenticate yourself using `genieBPC::set_synapse_credentials()`, you'll be ready to pull the GENIE BPC clinical and genomic data from Synapse into your local environment:
 
-```{r, eval = FALSE}
-library(genieBPC)
+```{r, eval=FALSE}
 
 # if credentials are not stored in your R environment
 set_synapse_credentials(username = "username", password = "password")
+```
 
+```{r }
 # if credentials are stored in your R environment
 set_synapse_credentials()
 ```
 
 ## Obtain GENIE BPC Data
 
-```{r}
+```{r }
 # pull NSCLC v2.0-public data from Synapse into the R environment
 nsclc_2_0 = pull_data_synapse(cohort = "NSCLC", version = "v2.0-public")
 ```
@@ -72,7 +75,7 @@ The resulting `nsclc_2_0` object is a nested list of datasets, including the mut
 
 Note that while the GENIE BPC clinical data are only available via Synapse, the genomic data can be accessed via both Synapse and cBioPortal. Using the {cbioportalR} package, users can pull the GENIE BPC genomic data directly from cBioPortal:
 
-```{r, eval = FALSE}
+```{r }
 library(cbioportalR)
 
 # connect to the GENIE instance of cBioPortal
@@ -83,11 +86,11 @@ cbioportalR::set_cbioportal_db("https://genie.cbioportal.org/api")
 available_studies()
 ```
 
-```{r, eval = FALSE}
+```{r }
 # obtain genomic data for GENIE BPC NSCLC v2.0-public
 mutations_extended_2_0 <- get_mutations_by_study("nsclc_public_genie_bpc")
 cna_2_0 <- get_cna_by_study("nsclc_public_genie_bpc")
-fusions_2_0 <- get_fu
+fusions_2_0 <- get_fusions_by_study("nsclc_public_genie_bpc")
 ```
 
 ## Data Formats
@@ -102,7 +105,7 @@ The following code chunk uses the `genieBPC::create_analytic_cohort()` to create
 
 Note: for patients with exactly one genomic sample, that unique genomic sample will be returned *regardless of whether it meets the argument criteria specified below*.
 
-```{r, eval = FALSE}
+```{r }
 # create analytic cohort of patients diagnosed with Stage IV adenocarcinoma
 nsclc_2_0_example <- create_analytic_cohort(
   data_synapse = nsclc_2_0$NSCLC_v2.0,
@@ -121,7 +124,7 @@ nsclc_2_0_samples <- select_unique_ngs(
 
 Create a dataframe of the corresponding panel and sample IDs:
 
-```{r, eval = FALSE}
+```{r }
 # specify sample panels and IDs
 nsclc_2_0_sample_panels <- nsclc_2_0_samples %>% 
   select(cpt_seq_assay_id, cpt_genie_sample_id) %>%
@@ -141,29 +144,33 @@ The fusions and CNA data as downloaded from Synapse require some modifications p
 
 First, the CNA file can be transposed to match the expected input for `create_gene_binary()` using `pivot_cna_longer()`:
 
-```{r, eval = FALSE}
+```{r }
 # transpose CNA data from Synapse
 cna_synapse_long <- pivot_cna_longer(nsclc_2_0$NSCLC_v2.0$cna)
 ```
 
 **PLACEHOLDER**: Next, the fusions file can be transposed to match the expected input for `create_gene_binary()`
 
-```{r, eval = FALSE}
+```{r }
 # transpose fusions data from Synapse
-# fusions_synapse_long <- pivot_fusions_longer(nsclc_2_0$NSCLC_v2.0$fusions)
+#fusions_synapse_long <- pivot_fusions_longer(nsclc_2_0$NSCLC_v2.0$fusions)
 ```
 
 Finally, the reformatted genomic data can be supplied to `create_gene_binary()` to annotate genomic alterations for patients in the analytic cohort of interest.
 
 The CNA data as downloaded from cBioPortal only includes high level CNA (-2, 2), so we will specify `high_level_cna_only = TRUE` to be consistent with the results based on the genomic data as downloaded from cBioPortal. 
 
-```{r, eval = FALSE}
+```{r }
+# Omitting NA for now
+nsclc_2_0_sample_panels <- nsclc_2_0_sample_panels %>%
+  na.omit()
+
 nsclc_2_0_gen_dat_synapse <-
   create_gene_binary(
     mutation = nsclc_2_0$NSCLC_v2.0$mutations_extended,
     cna = cna_synapse_long,
     high_level_cna_only = TRUE,
-    fusions = fusions_synapse_long,
+ #   fusion = fusions_synapse_long,
     samples = nsclc_2_0_sample_panels$sample_id,
     specify_panel = nsclc_2_0_sample_panels
   )
@@ -171,7 +178,7 @@ nsclc_2_0_gen_dat_synapse <-
 
 **Using the genomic data from cBioPortal:**
 
-```{r, eval = FALSE}
+```{r }
 nsclc_2_0_gen_dat_cbio <-
   create_gene_binary(
     mutation = mutations_extended_2_0,
@@ -203,7 +210,7 @@ nsclc_2_0_gen_dat_synapse[1:10, 1:10] %>%
 
 **Using the genomic data from cBioPortal**
 
-```{r, eval = FALSE}
+```{r }
 nsclc_2_0_gen_dat_cbio[1:10, 1:10] %>% 
   summarize_by_gene()
 ```
@@ -220,28 +227,45 @@ The `tbl_genomic()` function summarizes the frequency of alteration events from 
 
 Summarizing the frequencies of KEAP1, STK11, and SMARCA4 alteration events:
 
-```{r, eval = FALSE}
-tbl_genomic(gene_binary = nsclc_2_0_gen_dat_synapse, gene_subset = c("KEAP1", "STK11", "SMARCA4"))
+```{r }
+
+nsclc_2_0_gen_dat_synapse_sub <- nsclc_2_0_gen_dat_synapse %>%
+  select(sample_id, KEAP1, STK11, SMARCA4)
+
+tbl_genomic(gene_binary = nsclc_2_0_gen_dat_synapse_sub)
 ```
 
 Summarizing alteration events with >=10% frequency:
 
-```{r, eval = FALSE}
-tbl_genomic(gene_binary = nsclc_2_0_gen_dat_synapse, freq_cutoff = .10)
+```{r }
+
+nsclc_2_0_gen_dat_synapse_sub <- nsclc_2_0_gen_dat_synapse %>%
+  subset_by_frequency(t = .1)
+
+tbl_genomic(gene_binary = nsclc_2_0_gen_dat_synapse_sub)
 ```
 
 **Using the genomic data from cBioPortal:**
 
 Summarizing the frequencies of KEAP1, STK11, and SMARCA4 alteration events:
 
-```{r, eval = FALSE}
-tbl_genomic(gene_binary = nsclc_2_0_gen_dat_cbio, gene_subset = c("KEAP1", "STK11", "SMARCA4"))
+```{r}
+
+nsclc_2_0_gen_dat_cbio_sub <- nsclc_2_0_gen_dat_cbio %>%
+  select(sample_id, KEAP1, STK11, SMARCA4)
+
+tbl_genomic(gene_binary = nsclc_2_0_gen_dat_cbio_sub)
+
 ```
 
 Summarizing alteration events with >=10% frequency:
 
-```{r, eval = FALSE}
-tbl_genomic(gene_binary = nsclc_2_0_gen_dat_cbio, freq_cutoff = .10)
+```{r }
+
+nsclc_2_0_gen_dat_cbio_sub <- nsclc_2_0_gen_dat_cbio %>%
+  subset_by_frequency(t = .1)
+
+tbl_genomic(gene_binary = nsclc_2_0_gen_dat_cbio_sub)
 ```
 
 ### Data Visualizations
@@ -250,7 +274,7 @@ We can use the `mutation_viz()` function to visualize several aspects of the mut
 
 **Using the genomic data from Synapse:**
 
-```{r, eval = FALSE}
+```{r }
 mutation_viz_gen_dat_synapse <- mutation_viz(nsclc_2_0$NSCLC_v2.0$mutations_extended)
 
 mutation_viz_gen_dat_synapse
@@ -258,7 +282,7 @@ mutation_viz_gen_dat_synapse
 
 **Using the genomic data from cBioPortal:**
 
-```{r, eval = FALSE}
+```{r }
 mutation_viz_gen_dat_cbio <- mutation_viz(mutations_extended_2_0)
 
 mutation_viz_gen_dat_cbio
