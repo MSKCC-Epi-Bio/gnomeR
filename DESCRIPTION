@@ -58,7 +58,8 @@ Suggests:
     testthat (>= 3.0.0),
     spelling,
     covr, 
-    cbioportalR
+    cbioportalR, 
+    genieBPC
 Remotes: karissawhiting/cbioportalR
 VignetteBuilder: knitr
 Language: en-US

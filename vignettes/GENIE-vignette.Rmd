@@ -18,7 +18,7 @@ set.seed(20230302)
 
 ```{r setup, include = FALSE, message = FALSE, results = FALSE}
 library(gnomeR)
-library(tidyverse)
+library(dplyr)
 library(genieBPC)
 library(cbioportalR)
 ```
