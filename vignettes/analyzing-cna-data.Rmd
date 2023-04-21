@@ -1,5 +1,5 @@
 ---
-title: "CNA_Vignette"
+title: "Analyzing CNA Data with {gnomeR}"
 output: rmarkdown::html_vignette
 author: Allison Reiner, Caroline Kostrzewa
 vignette: >
@@ -69,6 +69,8 @@ There are 2 forms of copy number data in cBioPortal.
 ## Key Information about each form 
 1. Discrete copy number:
     - Provides gene-level copy number alteration status
+    
+    
 ```{r, echo=FALSE}
 allowed_cna_levels <- tibble::tribble(
                ~detailed_coding, ~numeric_coding,   ~simplified_coding,
