@@ -124,7 +124,8 @@ gen_dat <- gen_dat %>%
 ```{r, tbl_genomic }
 
 gene_tbl_trt <-  gen_dat %>%
-  tbl_genomic(freq_cutoff = .1, by = trt_status) %>%
+  subset_by_frequency(t = .1, other_vars = trt_status) %>%
+  tbl_genomic(by = trt_status) %>%
   gtsummary::add_p() 
 
 
@@ -180,4 +181,4 @@ Thank you to all contributors!
 
 `r usethis::use_tidy_thanks("MSKCC-Epi-Bio/gnomeR", from = "2020-01-01") %>% {glue::glue("[&#x0040;{.}](https://github.com/{.})")} %>% glue::glue_collapse(sep = ", ", last = ", and ")`
 
-
+# The End

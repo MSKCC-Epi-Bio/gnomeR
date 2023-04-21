@@ -4,15 +4,16 @@
 \alias{recode_alias}
 \title{Recode Hugo Symbol Column}
 \usage{
-recode_alias(genomic_df, ...)
+recode_alias(genomic_df, alias_table = "impact")
 }
 \arguments{
 \item{genomic_df}{a gene_binary object}
 
-\item{...}{Other things passed}
+\item{alias_table}{a string indicating "impact", or a  dataframe with at least two columns (\code{hugo_symbol},
+\code{alias}) with one row for each pair.}
 }
 \value{
-A dataframe with a recoded Hugo Symbol columns
+A dataframe with recoded Hugo Symbol columns
 }
 \description{
 Searches the Hugo Symbol column in a genomic dataframe to look for
@@ -20,12 +21,15 @@ any genes that have common gene name aliases,
 and replaces those aliases with the accepted (most recent) gene name.
 Function uses \code{gnomeR::impact_alias_table} by default as reference for
 which aliases to replace and supports IMPACT panel alias replacement only at this time.
+Custom tables can be provided as long as \code{hugo_symbol} and \code{alias} columns exist.
 }
 \examples{
-mut <- rename_columns(gnomeR::mutations)
+mut <- rename_columns(gnomeR::mutations[1:5, ])
+mut$hugo_symbol
 
-colnames(mut)
+alias_table <- data.frame("hugo_symbol" = c("New Symbol", "New Symbol2"),
+"alias" = c("PARP1", "AKT1"))
 
-colnames(recode_alias(genomic_df = mut))
+recode_alias(mut, alias_table)
 
 }

@@ -1,7 +1,18 @@
+# gnomeR (development version)
+
+- Deprecated `freq_cutoff`, `freq_cutoff_by_gene`, and `gene_subset` arguments in `tbl_genomic()`. It is now recommended that users use `subset_by_frequency()` instead before passing data to `tbl_genomic()`.
+- Added `other_vars` argument to `subset_by_frequency()` to allow retention of other clinical vars when using function within pipeline.
+- Added IMPACT QA Vignette and GENIE BPC vignette
+
 # gnomeR 1.2.0
 
 * Updated color palette functionality
 * Column with sample ID now returned in data frame resulting from `create_gene_binary()`
+* `summarize_by_gene()` function was changed to run faster (#259)
+* `subset_by_frequency()` added to allow users to filter for specific prevalence levels of mutations/alterations/fusions (#270)
+* Removed oncoKB functionality (moving to [{oncokbR}](https://github.com/karissawhiting/oncokbR) package)
+* Fixed bugs in `tbl_genomic()` and `create_gene_binary()`. 
+* Added data processing tutorial vignette 
 
 # gnomeR 1.1.1
 

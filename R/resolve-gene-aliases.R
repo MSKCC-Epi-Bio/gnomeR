@@ -9,27 +9,67 @@
 #' and replaces those aliases with the accepted (most recent) gene name.
 #' Function uses `gnomeR::impact_alias_table` by default as reference for
 #' which aliases to replace and supports IMPACT panel alias replacement only at this time.
+#' Custom tables can be provided as long as `hugo_symbol` and `alias` columns exist.
 #'
 #' @param genomic_df a gene_binary object
-#' @param ... Other things passed
+#' @param alias_table a string indicating "impact", or a  dataframe with at least two columns (`hugo_symbol`,
+#' `alias`) with one row for each pair.
 #'
-#' @return A dataframe with a recoded Hugo Symbol columns
+#' @return A dataframe with recoded Hugo Symbol columns
 #' @export
 #'
 #' @examples
-#' mut <- rename_columns(gnomeR::mutations)
+#' mut <- rename_columns(gnomeR::mutations[1:5, ])
+#' mut$hugo_symbol
 #'
-#' colnames(mut)
+#' alias_table <- data.frame("hugo_symbol" = c("New Symbol", "New Symbol2"),
+#' "alias" = c("PARP1", "AKT1"))
 #'
-#' colnames(recode_alias(genomic_df = mut))
+#' recode_alias(mut, alias_table)
 #'
-recode_alias <- function(genomic_df, ...) {
 
-  # get table of gene aliases (internal data)
-  alias_table <- gnomeR::impact_alias_table %>%
+recode_alias <- function(genomic_df, alias_table = "impact") {
+
+  # Checks ----------------------------------------------------
+
+  .check_required_cols(genomic_df, "hugo_symbol")
+
+  # make tibbles into data.frames
+  if ("tbl" %in% class(alias_table)) {
+    alias_table <- as.data.frame(alias_table)
+  }
+
+  alias_table <- switch(
+    class(alias_table),
+    "character" = {
+      choices_arg <- c("impact", "IMPACT")
+      lc = tolower(match.arg(alias_table, choices = choices_arg))
+      switch(lc, "impact" = gnomeR::impact_alias_table)
+      },
+
+    "data.frame" = {
+      .check_required_cols(alias_table, "hugo_symbol", "alias")
+      alias_table
+    })
+
+
+  # make sure there is one gene per row
+  if (is.character(alias_table$alias)) {
+    if (any(stringr::str_detect(alias_table$alias, ","))) {
+      cli::cli_abort(
+        c("Error with {.code alias_table}. Are there multiple genes per row? You must provide a data frame with one gene-alias pair per row."),
+        c("See {.code gnomeR::impact_alias_table} for an example on how to format data.")
+      )
+    }
+  } else {
+    cli::cli_abort("Error with {.code alias_table}. Did you provide a dataframe that has columns {.code hugo_symbol} and {.code alias}?")
+  }
+
+  # select only needed cols
+  alias_table <- alias_table %>%
     dplyr::select("hugo_symbol", "alias")
 
-  # recode aliases
+  # Recode Aliases ---------------------
   genomic_df$hugo_symbol_old <- genomic_df$hugo_symbol
   genomic_df$hugo_symbol <- purrr::map_chr(genomic_df$hugo_symbol,
                                            ~resolve_alias(gene_to_check = .x,
@@ -50,7 +90,8 @@ recode_alias <- function(genomic_df, ...) {
 
     cli::cli_warn(c(
       "To ensure gene with multiple names/aliases are correctly grouped together, the
-      following genes in your dataframe have been recoded (you can prevent this with {.code recode_aliases = FALSE}):",
+      following genes in your dataframe have been recoded (if you are running {.code create_gene_binary()}
+      you can prevent this with {.code alias_table = FALSE}):",
       vec_recode))
 
   }
