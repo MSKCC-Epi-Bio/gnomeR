@@ -1,5 +1,5 @@
 ---
-title: "Analyzing GENIE BPC Using {gnomeR}"
+title: "Analyzing GENIE BPC Data Using {gnomeR}"
 output: rmarkdown::html_vignette
 author: Samantha Brown, Jessica Lavery
 vignette: >
@@ -55,7 +55,7 @@ To gain access to the GENIE BPC data, please follow the instructions on the [{ge
 set_synapse_credentials(username = "username", password = "password")
 ```
 
-```{r }
+```{r, results=FALSE}
 # if credentials are stored in your R environment
 set_synapse_credentials()
 ```
