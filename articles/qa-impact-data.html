@@ -27,7 +27,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">gnomeR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.0.9000</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.2.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -43,6 +43,7 @@
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <a class="dropdown-item" href="../articles/data-processing-vignette.html">Processing Data with {gnomeR}</a>
+    <a class="dropdown-item" href="../articles/genie-bpc-vignette.html">Analyzing GENIE BPC Data Using {gnomeR}</a>
     <a class="dropdown-item" href="../articles/qa-impact-data.html">How to QA Your IMPACT Data</a>
   </div>
 </li>
@@ -84,16 +85,53 @@ Drill</h4>
 
     
     
+<div class="section level2">
+<h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
+</h2>
+<p>The purpose of this vignette is to outline best practices for
+downloading, QA-ing and analyzing data generated from MSK IMPACT, a
+targeted tumor-sequencing test that can detect more than 468 gene
+mutations and other critical genetic changes in common and rare cancers.
+Using a hepatocellular cancer case study, we demonstrate a data analysis
+pipeline using {cbioportalR} functions that can help users generate
+reproducible analyses using this data.</p>
+</div>
+<div class="section level2">
+<h2 id="setting-up">Setting up<a class="anchor" aria-label="anchor" href="#setting-up"></a>
+</h2>
+<p>For this vignette, we will be using {cbioportalR}, a package to
+download data from the cBioPortal website. We will also be using {dplyr}
+and {tidyr} to clean and manipulate the data:</p>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/MSKCC-Epi-Bio/gnomeR" class="external-link">gnomeR</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/karissawhiting/cbioportalR" class="external-link">cbioportalR</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyr.tidyverse.org" class="external-link">tidyr</a></span><span class="op">)</span></span></code></pre></div>
+<p>To access cBioPortal data using the <a href="https://www.karissawhiting.com/cbioportalR/" class="external-link">{cbioportalR}</a>
+package, you must set the cBioPortal database using the
+<code><a href="https://karissawhiting.github.io/cbioportalR/reference/set_cbioportal_db.html" class="external-link">set_cbioportal_db()</a></code> function. To access public data, set
+this to <code>db = public</code>. If you are using a private version of
+cBioPortal, you would set the <code>db</code> argument to your
+institution’s cBioPortal URL.</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
+<span><span class="fu"><a href="https://karissawhiting.github.io/cbioportalR/reference/set_cbioportal_db.html" class="external-link">set_cbioportal_db</a></span><span class="op">(</span>db <span class="op">=</span> <span class="st">"public"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> You are successfully connected!</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #00BB00;">base_url</span> for this R session is now set to <span style="color: #0000BB;">"www.cbioportal.org/api"</span></span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="case-study">Case Study<a class="anchor" aria-label="anchor" href="#case-study"></a>
+</h2>
 <p><strong>Scenario:</strong> You are a data analyst whose collaborator
 has sent you a clinical file of a cohort of patients with hepatocellular
 cancer that she is interested in for retrospective data analysis. In
 particular, she wants to look at IMPACT sequencing data for the cohort
 and investigate associations between genomic alterations and
-pathological/clinical characteristics. She asks if you can get the
+pathological and clinical characteristics. She asks if you can get the
 IMPACT data and do the analysis.</p>
 <p>She gives you a clinical file with 80 sample IDs:
 <code>clin_collab_df</code>.</p>
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">clin_collab_df</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 6 × 3</span></span></span>
 <span><span class="co">#&gt;   cbioportal_id     ctype          primary_mets</span></span>
@@ -109,14 +147,14 @@ IMPACT data and do the analysis.</p>
 do some QA on the clinical data and make sure it matches up with the
 clinical data in cBioPortal.</p>
 <div class="section level3">
-<h3 id="check-for-multiple-sample-ids-from-the-same-patient">Check for multiple sample IDs from the same patient<a class="anchor" aria-label="anchor" href="#check-for-multiple-sample-ids-from-the-same-patient"></a>
+<h3 id="check-for-multiple-samples-per-patient">Check For Multiple Samples Per Patient<a class="anchor" aria-label="anchor" href="#check-for-multiple-samples-per-patient"></a>
 </h3>
 <p>One of the first things to check in your data is whether you have
 multiple sample IDs from the same patient. Sometimes a clinical file
 will have a patient_ID column as well; this one doesn’t, so you can make
 your own. The patient ID is just the first 9 digits of the
 <code>cbioportal_id</code>:</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="va">clin_collab_df</span> <span class="op">&lt;-</span> <span class="va">clin_collab_df</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
@@ -124,8 +162,7 @@ your own. The patient ID is just the first 9 digits of the
 <span>  <span class="op">)</span></span></code></pre></div>
 <p>If there is only one sample per patient, there should be the same
 number of samples as patients.</p>
-<!-- Karissa - This may be unnecessary? -->
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">clin_collab_df</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarize</a></span><span class="op">(</span> patients <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">patient_id</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>            samples<span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">cbioportal_id</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> </span>
@@ -136,7 +173,7 @@ number of samples as patients.</p>
 <p>So it’s clear that we have multiple samples per patient. To find out
 which patient/s, you can count the <code>patient_id</code> values and
 filter for &gt;1.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">multiple_samps</span> <span class="op">&lt;-</span> <span class="va">clin_collab_df</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html" class="external-link">count</a></span><span class="op">(</span><span class="va">patient_id</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">n</span> <span class="op">&gt;</span> <span class="fl">1</span><span class="op">)</span></span>
@@ -149,7 +186,7 @@ filter for &gt;1.</p>
 <p>There are 2 patients who each have 2 samples in the collaborator’s
 dataset. Filter the dataset to see the <code>cbioportal_id</code>’s in
 question:</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="va">clin_collab_df</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span></span>
@@ -162,47 +199,37 @@ question:</p>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> P-0012198-T02-IM5 Hepatocellular Primary      P-0012198 </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> P-0004876-T02-IM5 Hepatocellular Primary      P-0004876 </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> P-0012198-T01-IM5 Hepatocellular Primary      P-0012198</span></span></code></pre></div>
-<!--This code too confusing above? -->
 <p>These are patients and samples to ask your collaborator about: Does
 using both samples make sense? Often times the answer is no. And if not,
 which sample is the most appropriate one to include? (To get more info
-for yourself, you can enter the patient ids into the <a href="https://www.cbioportal.org/" class="external-link">cBioPortal website</a>.</p>
+for yourself, you can enter the patient ids into the <a href="https://www.cbioportal.org/" class="external-link">cBioPortal website</a>.)</p>
 </div>
 <div class="section level3">
-<h3 id="check-whether-all-cbioportal_ids-are-actually-in-cbioportal">Check whether all <code>cbioportal_ids</code> are actually in
-cBioPortal<a class="anchor" aria-label="anchor" href="#check-whether-all-cbioportal_ids-are-actually-in-cbioportal"></a>
+<h3 id="check-that-all-cbioportal_ids-are-in-cbioportal-database">Check That All <code>cbioportal_ids</code> Are In cBioPortal
+Database<a class="anchor" aria-label="anchor" href="#check-that-all-cbioportal_ids-are-in-cbioportal-database"></a>
 </h3>
-<p>To do this, you need to retrieve the clinical data from
-cBioPortal.</p>
-<p>First you can set the cBioPortal database using the
-<code>set_cbioportal_db(db = "public")</code> function. (If you are
-using a private version of cBioPortal, you would set db to your
-institutions cBioPortal URL.)</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
-<span><span class="fu">set_cbioportal_db</span><span class="op">(</span>db <span class="op">=</span> <span class="st">"public"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> You are successfully connected!</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #00BB00;">base_url</span> for this R session is now set to <span style="color: #0000BB;">"www.cbioportal.org/api"</span></span></span></code></pre></div>
-<p>Then you will use the <code>get_clinical_by_sample()</code> function
-from the cBioPortal package. Set the <code>sample_id</code> parameter to
+<p>To do this, you need to retrieve the clinical data from cBioPortal
+using <a href="https://www.karissawhiting.com/cbioportalR/" class="external-link">{cbioportalR}</a>.
+You can use the <code><a href="https://karissawhiting.github.io/cbioportalR/reference/get_clinical_by_sample.html" class="external-link">get_clinical_by_sample()</a></code> function from
+{cbioportalR} to do this. Set the <code>sample_id</code> parameter to
 the <code>cbioportal_ids</code> from the clinical collaborator’s
 file.<br>
 Store the sample data in a file called <code>clin_cbio</code>.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
-<span><span class="fu">set_cbioportal_db</span><span class="op">(</span>db <span class="op">=</span> <span class="st">"public"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> You are successfully connected!</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #00BB00;">base_url</span> for this R session is now set to <span style="color: #0000BB;">"www.cbioportal.org/api"</span></span></span>
-<span><span class="va">clin_cbio</span> <span class="op">=</span> <span class="fu">get_clinical_by_sample</span><span class="op">(</span>sample_id <span class="op">=</span> <span class="va">clin_collab_df</span><span class="op">$</span><span class="va">cbioportal_id</span><span class="op">)</span> </span>
+<span><span class="va">clin_cbio</span> <span class="op">=</span> <span class="fu"><a href="https://karissawhiting.github.io/cbioportalR/reference/get_clinical_by_sample.html" class="external-link">get_clinical_by_sample</a></span><span class="op">(</span>sample_id <span class="op">=</span> <span class="va">clin_collab_df</span><span class="op">$</span><span class="va">cbioportal_id</span><span class="op">)</span> </span>
 <span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> No `clinical_attribute` passed. Defaulting to returning</span></span>
 <span><span class="co">#&gt; all clinical attributes in <span style="color: #0000BB;">"msk_impact_2017"</span> study</span></span></code></pre></div>
 <p>(You can disregard the warning message for now, though you may be
 interested in specific clinical attributes later.)</p>
+<p><em>Note: If you are using the public version of cBioPortal, this
+function will only query the <code>msk_impact_2017</code>
+study.</em></p>
 <p>Notice that you now have 2 clinical files: one given to you by the
 collaborator (<code>clin_collab_df</code>) and one you have retrieved
 yourself from cBioPortal (<code>clin_cbio</code>).</p>
 <p>Here’s the header of <code>clin_cbio</code>:</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">clin_cbio</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt;                                uniqueSampleKey</span></span>
 <span><span class="co">#&gt; 1 UC0wMDAwMDM3LVQwMi1JTTM6bXNrX2ltcGFjdF8yMDE3</span></span>
@@ -234,7 +261,7 @@ all of the <code>cbioportal_ids</code> from your
 <code>clin_collab_df</code> file in the <code>clin_cbio</code>
 file.<br>
 To do this, use the <code><a href="https://generics.r-lib.org/reference/setops.html" class="external-link">setdiff()</a></code> function:</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="fu"><a href="https://generics.r-lib.org/reference/setops.html" class="external-link">setdiff</a></span><span class="op">(</span><span class="va">clin_collab_df</span><span class="op">$</span><span class="va">cbioportal_id</span>, <span class="va">clin_cbio</span><span class="op">$</span><span class="va">sampleId</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] "P-0066922-T02-IM7" "P-0070148-T01-IM5"</span></span></code></pre></div>
@@ -243,15 +270,16 @@ To do this, use the <code><a href="https://generics.r-lib.org/reference/setops.h
 (in your <code>clin_cbio</code> file). Include these in the list of
 cBioPortal questions to ask your collaborator.</p>
 <p>(Again, if you want to investigate a bit further, you could enter the
-patient cBioPortal IDs as queries into the <a href="https://www.cbioportal.org/" class="external-link">cBioPortal website</a>.</p>
+patient cBioPortal IDs as queries into the <a href="https://www.cbioportal.org/" class="external-link">cBioPortal website</a>.)</p>
 </div>
 <div class="section level3">
-<h3 id="check-whether-clinical-information-in-collaborators-file-clin_collab_df-matches-clinical-information-in-cbioportal-in-your-clin_cbio-file-">Check whether clinical information in collaborator’s file
-(<code>clin_collab_df</code>) matches clinical information in cBioPortal
-(in your <code>clin_cbio</code> file).<a class="anchor" aria-label="anchor" href="#check-whether-clinical-information-in-collaborators-file-clin_collab_df-matches-clinical-information-in-cbioportal-in-your-clin_cbio-file-"></a>
+<h3 id="check-clinical-data-matches-cbioportal-database">Check Clinical Data Matches cBioPortal Database<a class="anchor" aria-label="anchor" href="#check-clinical-data-matches-cbioportal-database"></a>
 </h3>
+<p>Now we need to check whether clinical information in collaborator’s
+file (<code>clin_collab_df</code>) matches clinical information in
+cBioPortal (in your <code>clin_cbio</code> file).</p>
 <p>Look at the <code>clin_collab_df</code> again:</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">clin_collab_df</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 6 × 4</span></span></span>
 <span><span class="co">#&gt;   cbioportal_id     ctype          primary_mets patient_id</span></span>
@@ -267,7 +295,7 @@ patient cBioPortal IDs as queries into the <a href="https://www.cbioportal.org/"
 variables. Because it’s a hepatocellular cancer study, all of the
 <code>ctype</code> values will be the same. To double check that, count
 <code>ctype</code>:</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">clin_collab_df</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html" class="external-link">count</a></span><span class="op">(</span><span class="va">ctype</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 1 × 2</span></span></span>
 <span><span class="co">#&gt;   ctype              n</span></span>
@@ -277,7 +305,7 @@ variables. Because it’s a hepatocellular cancer study, all of the
 <code>primary_mets</code>. To see if the <code>clin_cbio</code> file has
 an analogous variable to check, first see the attributes that are
 available in it.</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">clin_cbio</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html" class="external-link">count</a></span><span class="op">(</span><span class="va">clinicalAttributeId</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 18 × 2</span></span></span>
 <span><span class="co">#&gt;    clinicalAttributeId            n</span></span>
@@ -302,7 +330,7 @@ available in it.</p>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">18</span> TUMOR_PURITY                  77</span></span></code></pre></div>
 <p>To quickly see values associated with a particular attribute, filter
 by the attribute and count the values. For example:</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">clin_cbio</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">clinicalAttributeId</span><span class="op">==</span><span class="st">"SAMPLE_TYPE"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html" class="external-link">count</a></span><span class="op">(</span><span class="va">value</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 2 × 2</span></span></span>
 <span><span class="co">#&gt;   value          n</span></span>
@@ -315,14 +343,14 @@ convert <code>clin_cbio</code> to “wide” form (only for the
 <code>SAMPLE_TYPE</code> variable for now), merge it with
 <code>clin_collab_df</code> and then cross-tabulate the 2 variables.</p>
 <p>To convert <code>clin_cbio</code> to “wide” form:</p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="va">clin_cbio_wide</span> <span class="op">=</span> <span class="va">clin_cbio</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span> <span class="va">sampleId</span>, <span class="va">clinicalAttributeId</span>, <span class="va">value</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span> <span class="va">clinicalAttributeId</span> <span class="op">==</span> <span class="st">"SAMPLE_TYPE"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
-<span>  <span class="fu">pivot_wider</span><span class="op">(</span>names_from <span class="op">=</span> <span class="va">clinicalAttributeId</span>, values_from <span class="op">=</span> <span class="va">value</span><span class="op">)</span></span></code></pre></div>
+<span>  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_wider.html" class="external-link">pivot_wider</a></span><span class="op">(</span>names_from <span class="op">=</span> <span class="va">clinicalAttributeId</span>, values_from <span class="op">=</span> <span class="va">value</span><span class="op">)</span></span></code></pre></div>
 <p>Take a look at the “wide” file:</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">clin_cbio_wide</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt;            sampleId SAMPLE_TYPE</span></span>
 <span><span class="co">#&gt; 1 P-0000037-T02-IM3     Primary</span></span>
@@ -335,7 +363,7 @@ convert <code>clin_cbio</code> to “wide” form (only for the
 <code>clin_collab_df</code> against the <code>SAMPLE_TYPE</code>
 variable from <code>clin_cbio_wide</code>, merge the files and tabulate
 the variables.</p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">clin_merged</span> <span class="op">&lt;-</span> <span class="va">clin_cbio_wide</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">left_join</a></span><span class="op">(</span><span class="va">clin_collab_df</span>, by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"sampleId"</span> <span class="op">=</span> <span class="st">"cbioportal_id"</span><span class="op">)</span><span class="op">)</span> </span>
 <span><span class="va">clin_merged</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">primary_mets</span>, <span class="va">SAMPLE_TYPE</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt;             SAMPLE_TYPE</span></span>
@@ -345,7 +373,7 @@ the variables.</p>
 <p>There is 1 sample that has a value of “Metastasis” for the
 <code>primary_mets</code> variable but “Primary” for the
 <code>SAMPLE_TYPE</code> variable. To find the sample ID, filter:</p>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">clin_merged</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">primary_mets</span> <span class="op">==</span> <span class="st">"Metastasis"</span> <span class="op">&amp;</span> <span class="va">SAMPLE_TYPE</span> <span class="op">==</span> <span class="st">"Primary"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 1 × 5</span></span></span>
 <span><span class="co">#&gt;   sampleId          SAMPLE_TYPE ctype          primary_mets patient_id</span></span>
@@ -354,6 +382,7 @@ the variables.</p>
 <p>Include this sample in the list of questions for your collaborator.
 Either she will need to update her clinical file with the correct value
 or you/she will have to notify cBioPortal to update their database.</p>
+</div>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside>

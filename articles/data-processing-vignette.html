@@ -27,7 +27,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">gnomeR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.0</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.2.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -43,6 +43,8 @@
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <a class="dropdown-item" href="../articles/data-processing-vignette.html">Processing Data with {gnomeR}</a>
+    <a class="dropdown-item" href="../articles/genie-bpc-vignette.html">Analyzing GENIE BPC Data Using {gnomeR}</a>
+    <a class="dropdown-item" href="../articles/qa-impact-data.html">How to QA Your IMPACT Data</a>
   </div>
 </li>
 <li class="nav-item">
@@ -191,16 +193,16 @@ you will receive when downloading data using the API.</li>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">gnomeR</span><span class="fu">::</span><span class="va"><a href="../reference/cna.html">cna</a></span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">6</span>, <span class="op">]</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 6 × 9</span></span></span>
-<span><span class="co">#&gt;   hugoGeneSymbol entre…¹ uniqu…² uniqu…³ molec…⁴ sampl…⁵ patie…⁶ studyId alter…⁷</span></span>
-<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> PTPRS             <span style="text-decoration: underline;">5</span>802 UC0wMD… UC0wMD… prad_m… P-0001… P-0001… prad_m…      -<span style="color: #BB0000;">2</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> AR                 367 UC0wMD… UC0wMD… prad_m… P-0001… P-0001… prad_m…       2</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> PIK3R1            <span style="text-decoration: underline;">5</span>295 UC0wMD… UC0wMD… prad_m… P-0002… P-0002… prad_m…      -<span style="color: #BB0000;">2</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> AR                 367 UC0wMD… UC0wMD… prad_m… P-0003… P-0003… prad_m…       2</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> PTEN              <span style="text-decoration: underline;">5</span>728 UC0wMD… UC0wMD… prad_m… P-0000… P-0000… prad_m…      -<span style="color: #BB0000;">2</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> B2M                567 UC0wMD… UC0wMD… prad_m… P-0000… P-0000… prad_m…      -<span style="color: #BB0000;">2</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># … with abbreviated variable names ¹​entrezGeneId, ²​uniqueSampleKey,</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;">#   ³​uniquePatientKey, ⁴​molecularProfileId, ⁵​sampleId, ⁶​patientId, ⁷​alteration</span></span></span></code></pre></div>
+<span><span class="co">#&gt;   hugoGeneSymbol entrezGeneId uniqueSampleKey                   uniquePatientKey</span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                 <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                             <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>           </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> PTPRS                  <span style="text-decoration: underline;">5</span>802 UC0wMDAxODU5LVQwMS1JTTM6cHJhZF9t… UC0wMDAxODU5OnB…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> AR                      367 UC0wMDAxODU5LVQwMS1JTTM6cHJhZF9t… UC0wMDAxODU5OnB…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> PIK3R1                 <span style="text-decoration: underline;">5</span>295 UC0wMDAyMzA0LVQwMS1JTTM6cHJhZF9t… UC0wMDAyMzA0OnB…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> AR                      367 UC0wMDAzOTI1LVQwMS1JTTM6cHJhZF9t… UC0wMDAzOTI1OnB…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> PTEN                   <span style="text-decoration: underline;">5</span>728 UC0wMDAwODI4LVQwMi1JTTM6cHJhZF9t… UC0wMDAwODI4OnB…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> B2M                     567 UC0wMDAwODI4LVQwMi1JTTM6cHJhZF9t… UC0wMDAwODI4OnB…</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 5 more variables: molecularProfileId &lt;chr&gt;, sampleId &lt;chr&gt;,</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;">#   patientId &lt;chr&gt;, studyId &lt;chr&gt;, alteration &lt;int&gt;</span></span></span></code></pre></div>
 <ol start="2" style="list-style-type: decimal">
 <li>Wide-format - Organized such that there is one column per sample and
 one row per gene. Thus, each sample’s events are contained within one
@@ -435,27 +437,55 @@ of event.</p>
 <p>Once you have processed the data into a binary format, you may want
 to visualize and summarize it with the following helper functions:</p>
 <div class="section level3">
-<h3 id="summarize-alterations-with-tbl_genomic">Summarize Alterations with <code>tbl_genomic()</code><a class="anchor" aria-label="anchor" href="#summarize-alterations-with-tbl_genomic"></a>
+<h3 id="summarize-alterations-with-subset_by_frequency-and-tbl_genomic">Summarize Alterations with <code>subset_by_frequency()</code> and
+<code>tbl_genomic()</code><a class="anchor" aria-label="anchor" href="#summarize-alterations-with-subset_by_frequency-and-tbl_genomic"></a>
 </h3>
-<p>This function can be used to display gene summary tables. It is built
-off the {gtsummary} package and therefore you can use most
-customizations available in that package to alter the look of your
-tables.</p>
-<p>The <code>gene_binary</code> argument expects binary data as
-generated by the <code><a href="../reference/create_gene_binary.html">create_gene_binary()</a></code> or
-<code><a href="../reference/summarize_by_gene.html">summarize_by_gene()</a></code> functions. Example below shows the
-summary using gene data for ten samples.</p>
-<p><strong>Arguments to <code><a href="../reference/tbl_genomic.html">tbl_genomic()</a></code> can help customize
-your tables:</strong></p>
-<ul>
-<li><p><code>gene_subset</code> argument can be used to specify the
-genes that you want to summarize the data for.</p></li>
-<li><p><code>freq_cutoff</code> argument subsets the list of genes to
-those with events observed in at least X% of the samples. In the example
-below for <code>tb1</code>, if the gene is altered in at least 15% of
-samples, the gene is included in the summary table.</p></li>
-</ul>
+<p>You can use the <code><a href="../reference/subset_by_frequency.html">subset_by_frequency()</a></code> function along
+with <code><a href="../reference/tbl_genomic.html">tbl_genomic()</a></code> function to easily display highest
+prevalence alterations in your data set.</p>
+<p>First, subset your data set by top genes at a give threshold
+(<code>t</code>). The threshold is a value between 0 and 1 to indicate %
+prevalence cutoff to keep. You can subset at this threshold on the
+alteration level:</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">top_prev_alts</span> <span class="op">&lt;-</span> <span class="va">all_bin</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="../reference/subset_by_frequency.html">subset_by_frequency</a></span><span class="op">(</span>t <span class="op">=</span> <span class="fl">.1</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">top_prev_alts</span><span class="op">)</span></span>
+<span><span class="co">#&gt;  [1] "sample_id"   "ALK"         "PARP1"       "AKT1"        "APC"        </span></span>
+<span><span class="co">#&gt;  [6] "BRCA2"       "TP53"        "FAT1"        "SMAD2"       "SPOP"       </span></span>
+<span><span class="co">#&gt; [11] "SPEN"        "KMT2C"       "ERG.fus"     "TMPRSS2.fus" "AR.Amp"     </span></span>
+<span><span class="co">#&gt; [16] "CTNNB1"      "EPHB1"       "JAK1"        "MYC"         "NF1"        </span></span>
+<span><span class="co">#&gt; [21] "PDGFRA"      "PIK3R2"      "PPP2R1A"     "ROS1"        "KMT2D"      </span></span>
+<span><span class="co">#&gt; [26] "PIK3R3"      "IRS2"        "ASXL2"       "CARD11"      "PTPRS.Del"  </span></span>
+<span><span class="co">#&gt; [31] "KDM6A.Del"   "NKX3-1.Del"  "TRAF7.Amp"   "TSC2.Amp"    "FGFR1.Amp"  </span></span>
+<span><span class="co">#&gt; [36] "SOX17.Amp"   "RECQL4.Amp"  "MYC.Amp"     "NBN.Amp"</span></span></code></pre></div>
+<p>Or gene level:</p>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">top_prev_genes</span> <span class="op">&lt;-</span> <span class="va">all_bin_summary</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="../reference/subset_by_frequency.html">subset_by_frequency</a></span><span class="op">(</span>t <span class="op">=</span> <span class="fl">.1</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">top_prev_genes</span><span class="op">)</span></span>
+<span><span class="co">#&gt;  [1] "sample_id" "ALK"       "PARP1"     "AKT1"      "APC"       "BRCA2"    </span></span>
+<span><span class="co">#&gt;  [7] "TP53"      "FAT1"      "SMAD2"     "SPOP"      "SPEN"      "KMT2C"    </span></span>
+<span><span class="co">#&gt; [13] "ERG"       "TMPRSS2"   "AR"        "MYC"       "CTNNB1"    "EPHB1"    </span></span>
+<span><span class="co">#&gt; [19] "JAK1"      "NF1"       "PDGFRA"    "PIK3R2"    "PPP2R1A"   "ROS1"     </span></span>
+<span><span class="co">#&gt; [25] "KMT2D"     "PIK3R3"    "IRS2"      "ASXL2"     "CARD11"    "PTPRS"    </span></span>
+<span><span class="co">#&gt; [31] "KDM6A"     "NKX3-1"    "TRAF7"     "TSC2"      "FGFR1"     "SOX17"    </span></span>
+<span><span class="co">#&gt; [37] "RECQL4"    "NBN"</span></span></code></pre></div>
+<p>Next, we can pass our subset of genes or alterations to the
+<code><a href="../reference/tbl_genomic.html">tbl_genomic()</a></code> function, which can be used to display
+summary tables of alterations. It is built off the {gtsummary} package
+and therefore you can use most customizations available in that package
+to alter the look of your tables.</p>
+<p>The <code>gene_binary</code> argument expects binary data as
+generated by the <code><a href="../reference/create_gene_binary.html">create_gene_binary()</a></code>,
+<code><a href="../reference/summarize_by_gene.html">summarize_by_gene()</a></code> or <code><a href="../reference/subset_by_frequency.html">subset_by_frequency()</a></code>
+functions. Example below shows the summary using gene data for ten
+samples.</p>
+<p>In the example below for <code>tb1</code>, if the gene is altered in
+at least 15% of samples, the gene is included in the summary table.</p>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">samples</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">mutations</span><span class="op">$</span><span class="va">sampleId</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">]</span></span>
 <span></span>
 <span><span class="va">gene_binary</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/create_gene_binary.html">create_gene_binary</a></span><span class="op">(</span></span>
@@ -466,15 +496,33 @@ samples, the gene is included in the summary table.</p></li>
 <span>  specify_panel <span class="op">=</span> <span class="st">"no"</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="../reference/tbl_genomic.html">tbl_genomic</a></span><span class="op">(</span>gene_binary <span class="op">=</span> <span class="va">gene_binary</span>, gene_subset <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"PARP1"</span>, <span class="st">"ALK"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<div id="kxrvpdjyqg" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>html {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
+<span><span class="va">tbl1</span> <span class="op">&lt;-</span> <span class="va">gene_binary</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="../reference/subset_by_frequency.html">subset_by_frequency</a></span><span class="op">(</span>t <span class="op">=</span> <span class="fl">.15</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="../reference/tbl_genomic.html">tbl_genomic</a></span><span class="op">(</span><span class="op">)</span> </span></code></pre></div>
+<p>We can add additional customizations to the table with the following
+gtsummary functions:</p>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">tbl1</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu">gtsummary</span><span class="fu">::</span><span class="fu"><a href="https://www.danieldsjoberg.com/gtsummary/reference/bold_italicize_labels_levels.html" class="external-link">bold_labels</a></span><span class="op">(</span><span class="op">)</span> </span></code></pre></div>
+<div id="pyofjgjvzz" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#pyofjgjvzz table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-#kxrvpdjyqg .gt_table {
+#pyofjgjvzz thead, #pyofjgjvzz tbody, #pyofjgjvzz tfoot, #pyofjgjvzz tr, #pyofjgjvzz td, #pyofjgjvzz th {
+  border-style: none;
+}
+
+#pyofjgjvzz p {
+  margin: 0;
+  padding: 0;
+}
+
+#pyofjgjvzz .gt_table {
   display: table;
   border-collapse: collapse;
+  line-height: normal;
   margin-left: auto;
   margin-right: auto;
   color: #333333;
@@ -497,24 +545,12 @@ samples, the gene is included in the summary table.</p></li>
   border-left-color: #D3D3D3;
 }
 
-#kxrvpdjyqg .gt_heading {
-  background-color: #FFFFFF;
-  text-align: center;
-  border-bottom-color: #FFFFFF;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-}
-
-#kxrvpdjyqg .gt_caption {
+#pyofjgjvzz .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#kxrvpdjyqg .gt_title {
+#pyofjgjvzz .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -526,25 +562,37 @@ samples, the gene is included in the summary table.</p></li>
   border-bottom-width: 0;
 }
 
-#kxrvpdjyqg .gt_subtitle {
+#pyofjgjvzz .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
-  padding-top: 0;
-  padding-bottom: 6px;
+  padding-top: 3px;
+  padding-bottom: 5px;
   padding-left: 5px;
   padding-right: 5px;
   border-top-color: #FFFFFF;
   border-top-width: 0;
 }
 
-#kxrvpdjyqg .gt_bottom_border {
+#pyofjgjvzz .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#pyofjgjvzz .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#kxrvpdjyqg .gt_col_headings {
+#pyofjgjvzz .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -559,7 +607,7 @@ samples, the gene is included in the summary table.</p></li>
   border-right-color: #D3D3D3;
 }
 
-#kxrvpdjyqg .gt_col_heading {
+#pyofjgjvzz .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -579,7 +627,7 @@ samples, the gene is included in the summary table.</p></li>
   overflow-x: hidden;
 }
 
-#kxrvpdjyqg .gt_column_spanner_outer {
+#pyofjgjvzz .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -591,15 +639,15 @@ samples, the gene is included in the summary table.</p></li>
   padding-right: 4px;
 }
 
-#kxrvpdjyqg .gt_column_spanner_outer:first-child {
+#pyofjgjvzz .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#kxrvpdjyqg .gt_column_spanner_outer:last-child {
+#pyofjgjvzz .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#kxrvpdjyqg .gt_column_spanner {
+#pyofjgjvzz .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -611,7 +659,11 @@ samples, the gene is included in the summary table.</p></li>
   width: 100%;
 }
 
-#kxrvpdjyqg .gt_group_heading {
+#pyofjgjvzz .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#pyofjgjvzz .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -637,7 +689,7 @@ samples, the gene is included in the summary table.</p></li>
   text-align: left;
 }
 
-#kxrvpdjyqg .gt_empty_group_heading {
+#pyofjgjvzz .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -652,15 +704,15 @@ samples, the gene is included in the summary table.</p></li>
   vertical-align: middle;
 }
 
-#kxrvpdjyqg .gt_from_md > :first-child {
+#pyofjgjvzz .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#kxrvpdjyqg .gt_from_md > :last-child {
+#pyofjgjvzz .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#kxrvpdjyqg .gt_row {
+#pyofjgjvzz .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -679,7 +731,7 @@ samples, the gene is included in the summary table.</p></li>
   overflow-x: hidden;
 }
 
-#kxrvpdjyqg .gt_stub {
+#pyofjgjvzz .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -692,443 +744,7 @@ samples, the gene is included in the summary table.</p></li>
   padding-right: 5px;
 }
 
-#kxrvpdjyqg .gt_stub_row_group {
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: initial;
-  text-transform: inherit;
-  border-right-style: solid;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-  padding-left: 5px;
-  padding-right: 5px;
-  vertical-align: top;
-}
-
-#kxrvpdjyqg .gt_row_group_first td {
-  border-top-width: 2px;
-}
-
-#kxrvpdjyqg .gt_summary_row {
-  color: #333333;
-  background-color: #FFFFFF;
-  text-transform: inherit;
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#kxrvpdjyqg .gt_first_summary_row {
-  border-top-style: solid;
-  border-top-color: #D3D3D3;
-}
-
-#kxrvpdjyqg .gt_first_summary_row.thick {
-  border-top-width: 2px;
-}
-
-#kxrvpdjyqg .gt_last_summary_row {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-}
-
-#kxrvpdjyqg .gt_grand_summary_row {
-  color: #333333;
-  background-color: #FFFFFF;
-  text-transform: inherit;
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#kxrvpdjyqg .gt_first_grand_summary_row {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-top-style: double;
-  border-top-width: 6px;
-  border-top-color: #D3D3D3;
-}
-
-#kxrvpdjyqg .gt_striped {
-  background-color: rgba(128, 128, 128, 0.05);
-}
-
-#kxrvpdjyqg .gt_table_body {
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-}
-
-#kxrvpdjyqg .gt_footnotes {
-  color: #333333;
-  background-color: #FFFFFF;
-  border-bottom-style: none;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 2px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-}
-
-#kxrvpdjyqg .gt_footnote {
-  margin: 0px;
-  font-size: 90%;
-  padding-left: 4px;
-  padding-right: 4px;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#kxrvpdjyqg .gt_sourcenotes {
-  color: #333333;
-  background-color: #FFFFFF;
-  border-bottom-style: none;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 2px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-}
-
-#kxrvpdjyqg .gt_sourcenote {
-  font-size: 90%;
-  padding-top: 4px;
-  padding-bottom: 4px;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#kxrvpdjyqg .gt_left {
-  text-align: left;
-}
-
-#kxrvpdjyqg .gt_center {
-  text-align: center;
-}
-
-#kxrvpdjyqg .gt_right {
-  text-align: right;
-  font-variant-numeric: tabular-nums;
-}
-
-#kxrvpdjyqg .gt_font_normal {
-  font-weight: normal;
-}
-
-#kxrvpdjyqg .gt_font_bold {
-  font-weight: bold;
-}
-
-#kxrvpdjyqg .gt_font_italic {
-  font-style: italic;
-}
-
-#kxrvpdjyqg .gt_super {
-  font-size: 65%;
-}
-
-#kxrvpdjyqg .gt_footnote_marks {
-  font-style: italic;
-  font-weight: normal;
-  font-size: 75%;
-  vertical-align: 0.4em;
-}
-
-#kxrvpdjyqg .gt_asterisk {
-  font-size: 100%;
-  vertical-align: 0;
-}
-
-#kxrvpdjyqg .gt_indent_1 {
-  text-indent: 5px;
-}
-
-#kxrvpdjyqg .gt_indent_2 {
-  text-indent: 10px;
-}
-
-#kxrvpdjyqg .gt_indent_3 {
-  text-indent: 15px;
-}
-
-#kxrvpdjyqg .gt_indent_4 {
-  text-indent: 20px;
-}
-
-#kxrvpdjyqg .gt_indent_5 {
-  text-indent: 25px;
-}
-</style>
-<table class="table gt_table">
-<thead class="gt_col_headings"><tr>
-<th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="&lt;strong&gt;Characteristic&lt;/strong&gt;"><strong>Characteristic</strong></th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id='&lt;strong&gt;N = 10&lt;/strong&gt;&lt;sup class="gt_footnote_marks"&gt;1&lt;/sup&gt;'>
-<strong>N = 10</strong><sup class="gt_footnote_marks">1</sup>
-</th>
-    </tr></thead>
-<tbody class="gt_table_body">
-<tr>
-<td headers="label" class="gt_row gt_left">PARP1</td>
-<td headers="stat_0" class="gt_row gt_center">3 (30%)</td>
-</tr>
-<tr>
-<td headers="label" class="gt_row gt_left">ALK</td>
-<td headers="stat_0" class="gt_row gt_center">4 (40%)</td>
-</tr>
-</tbody>
-<tfoot class="gt_footnotes"><tr>
-<td class="gt_footnote" colspan="2">
-<sup class="gt_footnote_marks">1</sup> n (%)</td>
-    </tr></tfoot>
-</table>
-</div>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/tbl_genomic.html">tbl_genomic</a></span><span class="op">(</span>gene_binary <span class="op">=</span> <span class="va">gene_binary</span>, freq_cutoff <span class="op">=</span> <span class="fl">.15</span><span class="op">)</span></span></code></pre></div>
-<div id="jxmxuztvou" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>html {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
-}
-
-#jxmxuztvou .gt_table {
-  display: table;
-  border-collapse: collapse;
-  margin-left: auto;
-  margin-right: auto;
-  color: #333333;
-  font-size: 16px;
-  font-weight: normal;
-  font-style: normal;
-  background-color: #FFFFFF;
-  width: auto;
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #A8A8A8;
-  border-right-style: none;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #A8A8A8;
-  border-left-style: none;
-  border-left-width: 2px;
-  border-left-color: #D3D3D3;
-}
-
-#jxmxuztvou .gt_heading {
-  background-color: #FFFFFF;
-  text-align: center;
-  border-bottom-color: #FFFFFF;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-}
-
-#jxmxuztvou .gt_caption {
-  padding-top: 4px;
-  padding-bottom: 4px;
-}
-
-#jxmxuztvou .gt_title {
-  color: #333333;
-  font-size: 125%;
-  font-weight: initial;
-  padding-top: 4px;
-  padding-bottom: 4px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-bottom-color: #FFFFFF;
-  border-bottom-width: 0;
-}
-
-#jxmxuztvou .gt_subtitle {
-  color: #333333;
-  font-size: 85%;
-  font-weight: initial;
-  padding-top: 0;
-  padding-bottom: 6px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-top-color: #FFFFFF;
-  border-top-width: 0;
-}
-
-#jxmxuztvou .gt_bottom_border {
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-}
-
-#jxmxuztvou .gt_col_headings {
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-}
-
-#jxmxuztvou .gt_col_heading {
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: normal;
-  text-transform: inherit;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-  vertical-align: bottom;
-  padding-top: 5px;
-  padding-bottom: 6px;
-  padding-left: 5px;
-  padding-right: 5px;
-  overflow-x: hidden;
-}
-
-#jxmxuztvou .gt_column_spanner_outer {
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: normal;
-  text-transform: inherit;
-  padding-top: 0;
-  padding-bottom: 0;
-  padding-left: 4px;
-  padding-right: 4px;
-}
-
-#jxmxuztvou .gt_column_spanner_outer:first-child {
-  padding-left: 0;
-}
-
-#jxmxuztvou .gt_column_spanner_outer:last-child {
-  padding-right: 0;
-}
-
-#jxmxuztvou .gt_column_spanner {
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  vertical-align: bottom;
-  padding-top: 5px;
-  padding-bottom: 5px;
-  overflow-x: hidden;
-  display: inline-block;
-  width: 100%;
-}
-
-#jxmxuztvou .gt_group_heading {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: initial;
-  text-transform: inherit;
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-  vertical-align: middle;
-  text-align: left;
-}
-
-#jxmxuztvou .gt_empty_group_heading {
-  padding: 0.5px;
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: initial;
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  vertical-align: middle;
-}
-
-#jxmxuztvou .gt_from_md > :first-child {
-  margin-top: 0;
-}
-
-#jxmxuztvou .gt_from_md > :last-child {
-  margin-bottom: 0;
-}
-
-#jxmxuztvou .gt_row {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  margin: 10px;
-  border-top-style: solid;
-  border-top-width: 1px;
-  border-top-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-  vertical-align: middle;
-  overflow-x: hidden;
-}
-
-#jxmxuztvou .gt_stub {
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: initial;
-  text-transform: inherit;
-  border-right-style: solid;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#jxmxuztvou .gt_stub_row_group {
+#pyofjgjvzz .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1142,11 +758,15 @@ samples, the gene is included in the summary table.</p></li>
   vertical-align: top;
 }
 
-#jxmxuztvou .gt_row_group_first td {
+#pyofjgjvzz .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#jxmxuztvou .gt_summary_row {
+#pyofjgjvzz .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#pyofjgjvzz .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1156,16 +776,16 @@ samples, the gene is included in the summary table.</p></li>
   padding-right: 5px;
 }
 
-#jxmxuztvou .gt_first_summary_row {
+#pyofjgjvzz .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#jxmxuztvou .gt_first_summary_row.thick {
+#pyofjgjvzz .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#jxmxuztvou .gt_last_summary_row {
+#pyofjgjvzz .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1175,7 +795,7 @@ samples, the gene is included in the summary table.</p></li>
   border-bottom-color: #D3D3D3;
 }
 
-#jxmxuztvou .gt_grand_summary_row {
+#pyofjgjvzz .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1185,7 +805,7 @@ samples, the gene is included in the summary table.</p></li>
   padding-right: 5px;
 }
 
-#jxmxuztvou .gt_first_grand_summary_row {
+#pyofjgjvzz .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1195,11 +815,21 @@ samples, the gene is included in the summary table.</p></li>
   border-top-color: #D3D3D3;
 }
 
-#jxmxuztvou .gt_striped {
+#pyofjgjvzz .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#pyofjgjvzz .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#jxmxuztvou .gt_table_body {
+#pyofjgjvzz .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1208,7 +838,7 @@ samples, the gene is included in the summary table.</p></li>
   border-bottom-color: #D3D3D3;
 }
 
-#jxmxuztvou .gt_footnotes {
+#pyofjgjvzz .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1222,30 +852,8 @@ samples, the gene is included in the summary table.</p></li>
   border-right-color: #D3D3D3;
 }
 
-#jxmxuztvou .gt_footnote {
+#pyofjgjvzz .gt_footnote {
   margin: 0px;
-  font-size: 90%;
-  padding-left: 4px;
-  padding-right: 4px;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#jxmxuztvou .gt_sourcenotes {
-  color: #333333;
-  background-color: #FFFFFF;
-  border-bottom-style: none;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 2px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-}
-
-#jxmxuztvou .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -1253,131 +861,148 @@ samples, the gene is included in the summary table.</p></li>
   padding-right: 5px;
 }
 
-#jxmxuztvou .gt_left {
+#pyofjgjvzz .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#pyofjgjvzz .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#pyofjgjvzz .gt_left {
   text-align: left;
 }
 
-#jxmxuztvou .gt_center {
+#pyofjgjvzz .gt_center {
   text-align: center;
 }
 
-#jxmxuztvou .gt_right {
+#pyofjgjvzz .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#jxmxuztvou .gt_font_normal {
+#pyofjgjvzz .gt_font_normal {
   font-weight: normal;
 }
 
-#jxmxuztvou .gt_font_bold {
+#pyofjgjvzz .gt_font_bold {
   font-weight: bold;
 }
 
-#jxmxuztvou .gt_font_italic {
+#pyofjgjvzz .gt_font_italic {
   font-style: italic;
 }
 
-#jxmxuztvou .gt_super {
+#pyofjgjvzz .gt_super {
   font-size: 65%;
 }
 
-#jxmxuztvou .gt_footnote_marks {
-  font-style: italic;
-  font-weight: normal;
+#pyofjgjvzz .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
+  position: initial;
 }
 
-#jxmxuztvou .gt_asterisk {
+#pyofjgjvzz .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#jxmxuztvou .gt_indent_1 {
+#pyofjgjvzz .gt_indent_1 {
   text-indent: 5px;
 }
 
-#jxmxuztvou .gt_indent_2 {
+#pyofjgjvzz .gt_indent_2 {
   text-indent: 10px;
 }
 
-#jxmxuztvou .gt_indent_3 {
+#pyofjgjvzz .gt_indent_3 {
   text-indent: 15px;
 }
 
-#jxmxuztvou .gt_indent_4 {
+#pyofjgjvzz .gt_indent_4 {
   text-indent: 20px;
 }
 
-#jxmxuztvou .gt_indent_5 {
+#pyofjgjvzz .gt_indent_5 {
   text-indent: 25px;
 }
 </style>
-<table class="table gt_table">
-<thead class="gt_col_headings"><tr>
+<table class="table gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+<thead><tr class="gt_col_headings">
 <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="&lt;strong&gt;Characteristic&lt;/strong&gt;"><strong>Characteristic</strong></th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id='&lt;strong&gt;N = 10&lt;/strong&gt;&lt;sup class="gt_footnote_marks"&gt;1&lt;/sup&gt;'>
-<strong>N = 10</strong><sup class="gt_footnote_marks">1</sup>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id='&lt;strong&gt;N = 10&lt;/strong&gt;&lt;span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;"&gt;&lt;sup&gt;1&lt;/sup&gt;&lt;/span&gt;'>
+<strong>N = 10</strong><span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;"><sup>1</sup></span>
 </th>
     </tr></thead>
 <tbody class="gt_table_body">
 <tr>
-<td headers="label" class="gt_row gt_left">ALK</td>
+<td headers="label" class="gt_row gt_left" style="font-weight: bold;">ALK</td>
 <td headers="stat_0" class="gt_row gt_center">4 (40%)</td>
 </tr>
 <tr>
-<td headers="label" class="gt_row gt_left">AKT1</td>
+<td headers="label" class="gt_row gt_left" style="font-weight: bold;">PARP1</td>
 <td headers="stat_0" class="gt_row gt_center">3 (30%)</td>
 </tr>
 <tr>
-<td headers="label" class="gt_row gt_left">APC</td>
+<td headers="label" class="gt_row gt_left" style="font-weight: bold;">AKT1</td>
 <td headers="stat_0" class="gt_row gt_center">3 (30%)</td>
 </tr>
 <tr>
-<td headers="label" class="gt_row gt_left">BRCA2</td>
+<td headers="label" class="gt_row gt_left" style="font-weight: bold;">APC</td>
 <td headers="stat_0" class="gt_row gt_center">3 (30%)</td>
 </tr>
 <tr>
-<td headers="label" class="gt_row gt_left">PARP1</td>
+<td headers="label" class="gt_row gt_left" style="font-weight: bold;">BRCA2</td>
 <td headers="stat_0" class="gt_row gt_center">3 (30%)</td>
 </tr>
 <tr>
-<td headers="label" class="gt_row gt_left">TP53</td>
+<td headers="label" class="gt_row gt_left" style="font-weight: bold;">TP53</td>
 <td headers="stat_0" class="gt_row gt_center">3 (30%)</td>
 </tr>
 <tr>
-<td headers="label" class="gt_row gt_left">AR</td>
+<td headers="label" class="gt_row gt_left" style="font-weight: bold;">FAT1</td>
 <td headers="stat_0" class="gt_row gt_center">2 (20%)</td>
 </tr>
 <tr>
-<td headers="label" class="gt_row gt_left">FAT1</td>
+<td headers="label" class="gt_row gt_left" style="font-weight: bold;">SMAD2</td>
 <td headers="stat_0" class="gt_row gt_center">2 (20%)</td>
 </tr>
 <tr>
-<td headers="label" class="gt_row gt_left">KMT2C</td>
+<td headers="label" class="gt_row gt_left" style="font-weight: bold;">SPOP</td>
 <td headers="stat_0" class="gt_row gt_center">2 (20%)</td>
 </tr>
 <tr>
-<td headers="label" class="gt_row gt_left">MYC</td>
+<td headers="label" class="gt_row gt_left" style="font-weight: bold;">SPEN</td>
 <td headers="stat_0" class="gt_row gt_center">2 (20%)</td>
 </tr>
 <tr>
-<td headers="label" class="gt_row gt_left">SMAD2</td>
+<td headers="label" class="gt_row gt_left" style="font-weight: bold;">KMT2C</td>
 <td headers="stat_0" class="gt_row gt_center">2 (20%)</td>
 </tr>
 <tr>
-<td headers="label" class="gt_row gt_left">SPEN</td>
-<td headers="stat_0" class="gt_row gt_center">2 (20%)</td>
-</tr>
-<tr>
-<td headers="label" class="gt_row gt_left">SPOP</td>
+<td headers="label" class="gt_row gt_left" style="font-weight: bold;">AR.Amp</td>
 <td headers="stat_0" class="gt_row gt_center">2 (20%)</td>
 </tr>
 </tbody>
 <tfoot class="gt_footnotes"><tr>
 <td class="gt_footnote" colspan="2">
-<sup class="gt_footnote_marks">1</sup> n (%)</td>
+<span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;"><sup>1</sup></span> n (%)</td>
     </tr></tfoot>
 </table>
 </div>
@@ -1396,7 +1021,7 @@ be viewed using <code><a href="../reference/pathways.html">gnomeR::pathways</a><
 2018</a>). This new data frame will include columns for mutations, CNAs,
 structural variants, and pathways. You can subset to only the pathways
 if you choose.</p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># available pathways</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="fu">gnomeR</span><span class="fu">::</span><span class="va"><a href="../reference/pathways.html">pathways</a></span><span class="op">)</span></span>
 <span><span class="co">#&gt;  [1] "RTK/RAS"    "Nrf2"       "PI3K"       "TGFB"       "p53"       </span></span>
@@ -1422,22 +1047,22 @@ if you choose.</p>
 <p>The mutation_viz functions allows you to visualize data for the
 variables related to variant classification, variant type, SNV class as
 well as top variant genes.</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/mutation_viz.html">mutation_viz</a></span><span class="op">(</span><span class="va">mutations</span><span class="op">)</span></span>
 <span><span class="co">#&gt; $varclass</span></span></code></pre></div>
-<p><img src="data-processing-vignette_files/figure-html/unnamed-chunk-16-1.png" width="700"></p>
+<p><img src="data-processing-vignette_files/figure-html/unnamed-chunk-18-1.png" width="700"></p>
 <pre><code><span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $vartype</span></span></code></pre>
-<p><img src="data-processing-vignette_files/figure-html/unnamed-chunk-16-2.png" width="700"></p>
+<p><img src="data-processing-vignette_files/figure-html/unnamed-chunk-18-2.png" width="700"></p>
 <pre><code><span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $samplevar</span></span></code></pre>
-<p><img src="data-processing-vignette_files/figure-html/unnamed-chunk-16-3.png" width="700"></p>
+<p><img src="data-processing-vignette_files/figure-html/unnamed-chunk-18-3.png" width="700"></p>
 <pre><code><span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $topgenes</span></span></code></pre>
-<p><img src="data-processing-vignette_files/figure-html/unnamed-chunk-16-4.png" width="700"></p>
+<p><img src="data-processing-vignette_files/figure-html/unnamed-chunk-18-4.png" width="700"></p>
 <pre><code><span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $genecor</span></span></code></pre>
-<p><img src="data-processing-vignette_files/figure-html/unnamed-chunk-16-5.png" width="700"></p>
+<p><img src="data-processing-vignette_files/figure-html/unnamed-chunk-18-5.png" width="700"></p>
 <div class="section level4">
 <h4 id="customizing-your-colors">Customizing your colors<a class="anchor" aria-label="anchor" href="#customizing-your-colors"></a>
 </h4>
@@ -1455,7 +1080,7 @@ palettes, create a continuous palette, and/or plot palettes to show the
 user the specific colors they chose.</p>
 <p>The code below will show the first 4 colors from the
 <code>pancan</code> palette for a discrete palette.</p>
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/gnomer_palette.html">gnomer_palette</a></span><span class="op">(</span></span>
 <span>  name <span class="op">=</span> <span class="st">"pancan"</span>,</span>
 <span>  n <span class="op">=</span> <span class="fl">4</span>,</span>
@@ -1463,7 +1088,7 @@ user the specific colors they chose.</p>
 <span>  plot_col <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  reverse <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<p><img src="data-processing-vignette_files/figure-html/unnamed-chunk-17-1.png" width="700"></p>
+<p><img src="data-processing-vignette_files/figure-html/unnamed-chunk-19-1.png" width="700"></p>
 <pre><code><span><span class="co">#&gt; [1] "#67000D" "#A50F15" "#EF3B2C" "#FC9272"</span></span></code></pre>
 <p>If you wanted to make a continuous palette you can change the
 <code>type=</code> option and specify how many colors your want to use
@@ -1473,7 +1098,7 @@ gradient palette. Additionally, <code><a href="../reference/gnomer_palette.html"
 additional arguments to be passed to <code><a href="https://rdrr.io/r/grDevices/colorRamp.html" class="external-link">colorRampPalette()</a></code>
 with the parameter <code>...</code>. The example below uses 20
 colors.</p>
-<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="fu"><a href="../reference/gnomer_palette.html">gnomer_palette</a></span><span class="op">(</span></span>
 <span>  name <span class="op">=</span> <span class="st">"sunset"</span>,</span>
@@ -1482,26 +1107,26 @@ colors.</p>
 <span>  plot_col <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  reverse <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<p><img src="data-processing-vignette_files/figure-html/unnamed-chunk-18-1.png" width="700"></p>
+<p><img src="data-processing-vignette_files/figure-html/unnamed-chunk-20-1.png" width="700"></p>
 <pre><code><span><span class="co">#&gt;  [1] "#EAC800" "#EAB807" "#EAA80F" "#EA9817" "#E7892B" "#E37941" "#DF6A57"</span></span>
 <span><span class="co">#&gt;  [8] "#D85B65" "#CF4C6F" "#C73D79" "#BC2D80" "#B01C84" "#A40B88" "#96008B"</span></span>
 <span><span class="co">#&gt; [15] "#85008B" "#74008B" "#61018B" "#41088A" "#201089" "#001889"</span></span></code></pre>
 <p>Examples how to use <code><a href="../reference/gnomer_palette.html">gnomer_palette()</a></code>:</p>
-<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">iris</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="va">Sepal.Width</span>, <span class="va">Sepal.Length</span>, color <span class="op">=</span> <span class="va">Species</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">4</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html" class="external-link">scale_color_manual</a></span><span class="op">(</span>values <span class="op">=</span> <span class="fu"><a href="../reference/gnomer_palette.html">gnomer_palette</a></span><span class="op">(</span><span class="st">"pancan"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="data-processing-vignette_files/figure-html/unnamed-chunk-19-1.png" width="700"></p>
-<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<p><img src="data-processing-vignette_files/figure-html/unnamed-chunk-21-1.png" width="700"></p>
+<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># use a continuous color scale - interpolates between colors</span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">iris</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="va">Sepal.Width</span>, <span class="va">Sepal.Length</span>, color <span class="op">=</span> <span class="va">Sepal.Length</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">4</span>, alpha <span class="op">=</span> <span class="fl">.6</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_gradient.html" class="external-link">scale_color_gradientn</a></span><span class="op">(</span>colors <span class="op">=</span> </span>
 <span>                          <span class="fu"><a href="../reference/gnomer_palette.html">gnomer_palette</a></span><span class="op">(</span><span class="st">"sunset"</span>, type <span class="op">=</span> <span class="st">"continuous"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="data-processing-vignette_files/figure-html/unnamed-chunk-20-1.png" width="700"></p>
+<p><img src="data-processing-vignette_files/figure-html/unnamed-chunk-22-1.png" width="700"></p>
 </div>
 <div class="section level4">
 <h4 id="set-color-palettes-globally">Set Color Palettes Globally<a class="anchor" aria-label="anchor" href="#set-color-palettes-globally"></a>
@@ -1513,26 +1138,26 @@ discrete and gradient (appropriate for continuous variables) palette
 independently. With the examples below you can see the default colors
 change for each plot without having to call a <code>scale_*</code>
 function.</p>
-<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="fu"><a href="../reference/set_gnomer_palette.html">set_gnomer_palette</a></span><span class="op">(</span>palette <span class="op">=</span> <span class="st">"main"</span>, gradient <span class="op">=</span> <span class="st">"sunset"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">mtcars</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="va">wt</span>, <span class="va">mpg</span>, color <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">cyl</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="data-processing-vignette_files/figure-html/unnamed-chunk-21-1.png" width="700"></p>
-<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
+<p><img src="data-processing-vignette_files/figure-html/unnamed-chunk-23-1.png" width="700"></p>
+<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">mtcars</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="va">wt</span>, <span class="va">mpg</span>, color <span class="op">=</span> <span class="va">cyl</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="data-processing-vignette_files/figure-html/unnamed-chunk-21-2.png" width="700"></p>
+<p><img src="data-processing-vignette_files/figure-html/unnamed-chunk-23-2.png" width="700"></p>
 <p>You can reset the palettes back to default ggplot color palettes with
 <code><a href="../reference/reset_gnomer_palette.html">reset_gnomer_palette()</a></code>.</p>
-<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/reset_gnomer_palette.html">reset_gnomer_palette</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">mtcars</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="va">wt</span>, <span class="va">mpg</span>, color <span class="op">=</span> <span class="va">cyl</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="data-processing-vignette_files/figure-html/unnamed-chunk-22-1.png" width="700"></p>
+<p><img src="data-processing-vignette_files/figure-html/unnamed-chunk-24-1.png" width="700"></p>
 </div>
 </div>
 </div>

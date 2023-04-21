@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">gnomeR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.0</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.2.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -25,6 +25,8 @@
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <a class="dropdown-item" href="../articles/data-processing-vignette.html">Processing Data with {gnomeR}</a>
+    <a class="dropdown-item" href="../articles/genie-bpc-vignette.html">Analyzing GENIE BPC Data Using {gnomeR}</a>
+    <a class="dropdown-item" href="../articles/qa-impact-data.html">How to QA Your IMPACT Data</a>
   </div>
 </li>
 <li class="active nav-item">
@@ -50,6 +52,12 @@
       <small>Source: <a href="https://github.com/MSKCC-Epi-Bio/gnomeR/blob/HEAD/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="development version" id="gnomer-development-version">gnomeR (development version)<a class="anchor" aria-label="anchor" href="#gnomer-development-version"></a></h2>
+<ul><li>Deprecated <code>freq_cutoff</code>, <code>freq_cutoff_by_gene</code>, and <code>gene_subset</code> arguments in <code><a href="../reference/tbl_genomic.html">tbl_genomic()</a></code>. It is now recommended that users use <code><a href="../reference/subset_by_frequency.html">subset_by_frequency()</a></code> instead before passing data to <code><a href="../reference/tbl_genomic.html">tbl_genomic()</a></code>.</li>
+<li>Added <code>other_vars</code> argument to <code><a href="../reference/subset_by_frequency.html">subset_by_frequency()</a></code> to allow retention of other clinical vars when using function within pipeline.</li>
+<li>Added IMPACT QA Vignette and GENIE BPC vignette</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="1.2.0" id="gnomer-120">gnomeR 1.2.0<a class="anchor" aria-label="anchor" href="#gnomer-120"></a></h2>
 <ul><li>Updated color palette functionality</li>

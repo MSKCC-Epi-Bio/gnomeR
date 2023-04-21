@@ -14,7 +14,7 @@ a predefined list of samples (rows are samples and columns are genes)"><!-- math
     
     <a class="navbar-brand me-2" href="../index.html">gnomeR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.0</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.2.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -29,6 +29,8 @@ a predefined list of samples (rows are samples and columns are genes)"><!-- math
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <a class="dropdown-item" href="../articles/data-processing-vignette.html">Processing Data with {gnomeR}</a>
+    <a class="dropdown-item" href="../articles/genie-bpc-vignette.html">Analyzing GENIE BPC Data Using {gnomeR}</a>
+    <a class="dropdown-item" href="../articles/qa-impact-data.html">How to QA Your IMPACT Data</a>
   </div>
 </li>
 <li class="nav-item">
@@ -73,7 +75,7 @@ a predefined list of samples (rows are samples and columns are genes)</p>
 <span>  cna <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  high_level_cna_only <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  specify_panel <span class="op">=</span> <span class="st">"no"</span>,</span>
-<span>  recode_aliases <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span>  recode_aliases <span class="op">=</span> <span class="st">"impact"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -120,13 +122,16 @@ in the binary matrix. Gains (1) and losses (1) will be ignored. Default is <code
 
 
 <dt>specify_panel</dt>
-<dd><p>Default is "no" where no panel annotation is done. Otherwise pass a character vector of length 1 with a panel id (see gnomeR::gene_panels for available panels), or "impact" for
-automated IMPACT annotation. Alternatively, you may pass a data frame of <code>sample_id</code>-<code>panel_id</code> pairs specifying panels for each sample for which to insert NAs indicating genes not tested. See below for details.</p></dd>
+<dd><p>Default is <code>"no"</code> where no panel annotation is done. Otherwise pass a character vector of length 1 with a
+panel id (see <code><a href="gene_panels.html">gnomeR::gene_panels</a></code> for available panels), or <code>"impact"</code> for automated IMPACT annotation.
+Alternatively, you may pass a data frame of <code>sample_id</code>-<code>panel_id</code> pairs specifying panels for each sample for
+which to insert NAs indicating genes not tested. See below for details.</p></dd>
 
 
 <dt>recode_aliases</dt>
-<dd><p>boolean specifying if automated gene name alias matching should be done. Default is TRUE. When TRUE
-the function will check for genes that may have more than 1 name in your data using the aliases im gnomeR::impact_alias_table alias column</p></dd>
+<dd><p>Default is <code>"impact"</code> where function will check for IMPACT genes that may go by more than 1 name in your data and replace the alias name with the standardized gene name (see <code><a href="impact_alias_table.html">gnomeR::impact_alias_table</a></code> for reference list).
+If <code>"no"</code>, no alias annotation will be performed.
+Alternatively, you may pass a custom alias list as a data frame with columns <code>hugo_symbol</code> and <code>alias</code> specifying a custom alias table to use for checks. See below for details.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -136,7 +141,7 @@ the function will check for genes that may have more than 1 name in your data us
 <p>a data frame with sample_id and alteration binary columns with values of 0/1</p>
     </div>
     <div class="section level2">
-    <h2 id="specify-panel-argument">specify_panel argument<a class="anchor" aria-label="anchor" href="#specify-panel-argument"></a></h2>
+    <h2 id="specify-panel-argument"><code>specify_panel</code> argument<a class="anchor" aria-label="anchor" href="#specify-panel-argument"></a></h2>
     
 
 <ul><li><p>If <code>specify_panel = "no"</code> is passed (default) data will be returned as is without any additional NA annotations.</p></li>
@@ -147,6 +152,18 @@ annotated accordingly for each sample/panel pair.</p></li>
 <li><p>If you wish to specify different panels for each sample, pass a data frame (with all samples included) with columns: <code>sample_id</code>, and <code>panel_id</code>. Each sample will be
 annotated with NAs according to that specific panel. If a sample in your data is missing from the <code>sample_id</code> column in the
 <code>specify_panel</code> dataframe, it will be returned with no annotation (equivalent of setting it to "no").</p></li>
+</ul></div>
+    <div class="section level2">
+    <h2 id="recode-aliases-argument"><code>recode_aliases</code> argument<a class="anchor" aria-label="anchor" href="#recode-aliases-argument"></a></h2>
+    
+
+<ul><li><p>If <code>recode_aliases = "impact"</code> is passed (default), function will use <code><a href="impact_alias_table.html">gnomeR::impact_alias_table</a></code> to find and replace any non-standard hugo symbol names with their
+more common (or more recent) accepted gene name.</p></li>
+<li><p>If <code>recode_aliases = "no"</code> is passed, data will be returned as is without any alias replacements.</p></li>
+<li><p>If you have a custom table of vetted aliases you wish to use, you can pass a data frame with columns: <code>hugo_symbol</code>, and <code>alias</code>.
+Each row should have one gene in the <code>hugo_symbol</code> column indicating the accepted gene name, and one gene in the <code>alias</code> column indicating an alias
+you want to check for and replace. If a gene has multiple aliases to check for, each should be represented in its own separate row.
+See <code><a href="impact_alias_table.html">gnomeR::impact_alias_table</a></code> for an example of accepted data formatting.</p></li>
 </ul></div>
 
     <div class="section level2">

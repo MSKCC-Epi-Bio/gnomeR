@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">gnomeR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.0</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.2.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -25,6 +25,8 @@
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <a class="dropdown-item" href="../articles/data-processing-vignette.html">Processing Data with {gnomeR}</a>
+    <a class="dropdown-item" href="../articles/genie-bpc-vignette.html">Analyzing GENIE BPC Data Using {gnomeR}</a>
+    <a class="dropdown-item" href="../articles/qa-impact-data.html">How to QA Your IMPACT Data</a>
   </div>
 </li>
 <li class="nav-item">
@@ -91,6 +93,12 @@ a predefined list of samples (rows are samples and columns are genes)</dd>
           <code><a href="recode_alias.html">recode_alias()</a></code> 
         </dt>
         <dd>Recode Hugo Symbol Column</dd>
+      </dl><dl><dt>
+          
+          <code><a href="reformat_fusion.html">reformat_fusion()</a></code> 
+        </dt>
+        <dd>Enables users to reformat fusions files so that each fusion is listed as one row with two hugo-symbol
+sites instead of two rows, one for each site. This is the required format for the <code>create_gene_binary</code> function.</dd>
       </dl></div><div class="section level2">
       
       <h3 id="analyzing-data">Analyzing Data<a class="anchor" aria-label="anchor" href="#analyzing-data"></a></h3>
@@ -275,6 +283,31 @@ a predefined list of samples (rows are samples and columns are genes)</dd>
           <code><a href="impact_alias_table.html">impact_alias_table</a></code> 
         </dt>
         <dd>IMPACT Alias Tables</dd>
+      </dl><dl><dt>
+          
+          <code><a href="sv_long.html">sv_long</a></code> 
+        </dt>
+        <dd>An example of long-format fusion/sv files</dd>
+      </dl><dl><dt>
+          
+          <code><a href="clin_collab_df.html">clin_collab_df</a></code> 
+        </dt>
+        <dd>An example data set for an IMPACT analysis coming from a clinical collaborator</dd>
+      </dl><dl><dt>
+          
+          <code><a href="genie_mut.html">genie_mut</a></code> 
+        </dt>
+        <dd>An example GENIE BPC mutations data set</dd>
+      </dl><dl><dt>
+          
+          <code><a href="genie_cna.html">genie_cna</a></code> 
+        </dt>
+        <dd>An example GENIE BPC CNA data set</dd>
+      </dl><dl><dt>
+          
+          <code><a href="genie_fusion.html">genie_fusion</a></code> 
+        </dt>
+        <dd>An example GENIE BPC fusions data set</dd>
       </dl></div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside></div>
