@@ -8,6 +8,8 @@ test_that("Works with binary matrix", {
             "gene0" = c(rep(0, 10), rep(1, 0))) %>%
     mutate(sample_id = as.character(1:nrow(.)))
 
+  class(bm) <- c("tbl_gene_binary", class(bm))
+
   # 10% -----
   expect_no_error(sub <- bm %>%
     subset_by_frequency())
@@ -51,6 +53,8 @@ test_that("Error when threshold out of bounds", {
     "gene0" = c(rep(0, 10), rep(1, 0))) %>%
     mutate(sample_id = as.character(1:nrow(.)))
 
+  class(bm) <- c("tbl_gene_binary", class(bm))
+
   expect_error(sub <- bm %>%
                     subset_by_frequency(t = -1))
 
@@ -68,6 +72,8 @@ test_that("Error when missing sample ID", {
     "gene20" = c(rep(0, 8), rep(1, 2)),
     "gene0" = c(rep(0, 10), rep(1, 0)))
 
+  class(bm) <- c("tbl_gene_binary", class(bm))
+
   expect_error(sub <- bm %>%
                  subset_by_frequency(t = .5))
 
@@ -82,6 +88,8 @@ test_that("Error when non numeric cols", {
     "gene20" = c(rep(0, 8), rep(1, 2)),
     "gene0" = c(rep(0, 10), rep(1, 0))) %>%
     mutate(sample_id = as.character(1:nrow(.)))
+
+  class(bm) <- c("tbl_gene_binary", class(bm))
 
   bm <- bm %>%
     mutate(across(everything(), ~as.character(.x)))
@@ -100,12 +108,16 @@ test_that("Counts NAs correctly", {
     "gene0" = c(rep(0, 10), rep(1, 0))) %>%
     mutate(sample_id = as.character(1:nrow(.)))
 
+  class(bm) <- c("tbl_gene_binary", class(bm))
+
   bm_na <- bind_rows(
     "genenow50" = c(NA, NA, NA, NA, 0,0,0,1,1,1),
     "gen50" = c(rep(0, 5), rep(1, 5)),
     "gene20" = c(rep(0, 8), rep(1, 2)),
     "gene0" = c(rep(0, 10), rep(1, 0))) %>%
     mutate(sample_id = as.character(1:nrow(.)))
+
+  class(bm_na) <- c("tbl_gene_binary", class(bm_na))
 
   no_na <- bm %>%
     subset_by_frequency(t = .5)
@@ -126,6 +138,8 @@ test_that("Correctly removes cols with all NA", {
     "gene0" = c(rep(0, 10), rep(1, 0))) %>%
     mutate(sample_id = as.character(1:nrow(.)))
 
+  class(bm) <- c("tbl_gene_binary", class(bm))
+
   sub <- bm %>%
     subset_by_frequency(t = 0)
 
@@ -142,6 +156,8 @@ test_that("Other columns are retained in `other_vars`", {
     "sex" = rep(c("F", "M"), 5),
     "stage" = rep(c("I", "II"), 5)) %>%
     mutate(sample_id = as.character(1:nrow(.)))
+
+  class(bm) <- c("tbl_gene_binary", class(bm))
 
   sub <- bm %>%
     select(-sex, -stage) %>%
@@ -164,6 +180,8 @@ test_that("Pass `other_vars` as strings works", {
     "sex" = rep(c("F", "M"), 5),
     "stage" = rep(c("I", "II"), 5)) %>%
     mutate(sample_id = as.character(1:nrow(.)))
+
+  class(bm) <- c("tbl_gene_binary", class(bm))
 
   sub <- bm %>%
     subset_by_frequency(t = .1, other_vars = c(sex, stage))
