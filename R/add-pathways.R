@@ -1,24 +1,21 @@
 #' Pathway Alterations
 #'
-#' Input a binary matrix of patients x genes and return a dataframe with a column per pathway
+#' Input a binary matrix of patients x alerations and return a dataframe with a column per pathway
 #' indicating if default or custom oncogenic signaling pathways
-#' are activated in each sample. Pathways were curated
+#' are activated in each sample. Default package pathways were sourced
 #' from [Sanchez-Vega, F et al., 2018](https://pubmed.ncbi.nlm.nih.gov/29625050/).
 #'
-#' Please check for gene aliases in your dataset before using.
+#' Please check for gene aliases in your data set before using.
 #'
 #'
-#' @param gene_binary a binary matrix from `gene_binary()`
-#' @param pathways a vector of pathway names to annotate. The options are `names(gnomeR::pathways)` ("RTK/RAS", "Nrf2",
-#'  "PI3K", "TGFB", "p53", "Wnt", "Myc", "Cell cycle", "Hippo", "Notch"). You can pass one pathway name, multiple pathway names, or `NULL`. By default, all
-#'  pathways defined in `gnomeR::pathways` will be included. Included default pathways are alteration-specific meaning a specific type of alteration (mut/cna/fusion)
-#'  is required to mark a 1 for that pathway. If you want gene-level pathways, use `summarize_by_gene()` on your binary matrix, then add
-#'  pathways you want as `custom_pathways`
-#' @param custom_pathways a vector of alterations to annotate as a pathway, or a list of custom pathways (see `gnomeR::pathways` as example)
-#' @param count_pathways_by Must be one of the following: "alteration" (default), or "gene". This determines whether
-#' any type of gene alteration should be counted towards a pathway ("gene") or only specific types of alterations should be counted towards a pathway ("alteration")
-#' By default, the function assumes alteration-specific pathway annotation and all default pathways are annotated this way. If a
-#' custom pathway is passed with no suffix (e.g. `custom_pathway = 'TP53'`) it will assume it is a mutation.
+#' @param gene_binary a binary matrix from `create_gene_binary()`
+#' @param pathways a vector of pre-coded pathways to annotate. The options are `names(gnomeR::pathways)` ("RTK/RAS", "Nrf2",
+#'  "PI3K", "TGFB", "p53", "Wnt", "Myc", "Cell cycle", "Hippo", "Notch"). You can pass multiple pathway names, or `NULL`. By default, all
+#'  pathways defined in `gnomeR::pathways` will be included. Included default pathways are alteration-specific, meaning a specific type of alteration (mut/cna/fusion)
+#'  is required to mark a 1 for that pathway.
+#' @param custom_pathways a vector of alterations to annotate as a single pathway, or a list of custom pathways (see `gnomeR::pathways` as example).
+#' You must specify the alteration type for each gene using `.mut`, `.Amp`, `.Del` suffix, e.g. `c("TP53.mut", "CDKN2A.Amp")`. If you wish to count any type of
+#' alteration on that gene towards the pathway you can use the `.any` suffix (e.g. `c("TP53.any")`).
 #' @keywords internal
 #' @return a data frame: each sample is a row, columns are pathways, with values of 0/1 depending on pathway alteration status.
 #' @export
@@ -39,15 +36,16 @@ add_pathways <- function(gene_binary,
   all_path <- gnomeR::pathways
   all_path_names <- names(all_path)
 
-  # check arguments -----------------------------------------------------------
-
-  # custom pathways
-  switch(!(class(custom_pathways) %in% c("NULL", "character", "list")),
-         cli::cli_abort("{.code custom_pathways} must be character vector, or list"))
+  # Check arguments -----------------------------------------------------------
 
   .check_required_cols(gene_binary, "sample_id", "gene_binary")
 
-  # user-specified pathways
+  # Custom pathways ----
+  switch(!(class(custom_pathways) %in% c("NULL", "character", "list")),
+         cli::cli_abort("{.code custom_pathways} must be character vector, or list"))
+
+
+  # Default pathways ----
   pathways_input <- pathways
 
   if(!is.null(pathways)) {
