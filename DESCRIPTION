@@ -1,6 +1,6 @@
 Package: gnomeR
 Title: Wrangle and analyze IMPACT and TCGA mutation data 
-Version: 1.2.0.9001
+Version: 1.2.0.9002
 Authors@R: 
     c(person(given = "Karissa",
              family = "Whiting",
@@ -50,14 +50,16 @@ Imports:
     broom.helpers,
     janitor,
     withr,
-    scales
+    scales,
+    lifecycle
 Suggests: 
     knitr,
     rmarkdown,
     testthat (>= 3.0.0),
     spelling,
     covr, 
-    cbioportalR
+    cbioportalR, 
+    genieBPC
 Remotes: karissawhiting/cbioportalR
 VignetteBuilder: knitr
 Language: en-US
