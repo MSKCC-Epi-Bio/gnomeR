@@ -50,9 +50,8 @@ tbl_genomic <- function(gene_binary,
 
   .check_gb(gene_binary)
 
-  if (!inherits(gene_binary, "data.frame")) {
-    stop("`gene_binary=` argument must be a tibble or data frame.", call. = FALSE)
-  }
+  # need to do this to use the tidyverse
+  gene_binary <- as_tibble(unclass(gene_binary))
 
   .check_required_cols(gene_binary, "sample_id", "gene_binary")
 
@@ -99,8 +98,15 @@ tbl_genomic <- function(gene_binary,
   # Order Genes for Final Table  ---------------------------------------------
 
   order_genes <- gene_binary %>%
-    dplyr::select(-all_of(by)) %>%
-    gnomeR::subset_by_frequency(t = 0) %>%
+    dplyr::select(-all_of(by))
+
+  if(!inherits(order_genes, "tbl_gene_binary")){
+
+    class(order_genes) <- c("tbl_gene_binary", class(order_genes))
+
+  }
+
+  order_genes <- order_genes %>%
     names()
 
   table_data <- gene_binary %>%

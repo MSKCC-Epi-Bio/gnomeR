@@ -1,0 +1,1532 @@
+\nonstopmode{}
+\documentclass[a4paper]{book}
+\usepackage[times,inconsolata,hyper]{Rd}
+\usepackage{makeidx}
+\usepackage[utf8]{inputenc} % @SET ENCODING@
+% \usepackage{graphicx} % @USE GRAPHICX@
+\makeindex{}
+\begin{document}
+\chapter*{}
+\begin{center}
+{\textbf{\huge Package `gnomeR'}}
+\par\bigskip{\large \today}
+\end{center}
+\inputencoding{utf8}
+\ifthenelse{\boolean{Rd@use@hyper}}{\hypersetup{pdftitle = {gnomeR: Wrangle and analyze IMPACT and TCGA mutation data}}}{}
+\ifthenelse{\boolean{Rd@use@hyper}}{\hypersetup{pdfauthor = {Karissa Whiting; Michael Curry; Hannah Fuchs; Axel Martin; Arshi Arora}}}{}
+\begin{description}
+\raggedright{}
+\item[Title]\AsIs{Wrangle and analyze IMPACT and TCGA mutation data}
+\item[Version]\AsIs{1.2.0.9002}
+\item[Description]\AsIs{Prepare raw mutation, cna, and fusion data for analysis. Annotate OncoKB, summarize maf files, visualize results and more. }
+\item[License]\AsIs{MIT + file LICENSE}
+\item[Encoding]\AsIs{UTF-8}
+\item[LazyData]\AsIs{true}
+\item[URL]\AsIs{}\url{https://github.com/MSKCC-Epi-Bio/gnomeR}\AsIs{,
+}\url{https://mskcc-epi-bio.github.io/gnomeR/}\AsIs{}
+\item[BugReports]\AsIs{}\url{https://github.com/MSKCC-Epi-Bio/gnomeR/issues}\AsIs{}
+\item[RoxygenNote]\AsIs{7.2.3}
+\item[Depends]\AsIs{R (>= 3.6)}
+\item[biocViews]\AsIs{ComplexHeatmap,}
+\item[Imports]\AsIs{rlang,
+dplyr,
+ggplot2 (>= 3.3.2),
+tibble,
+ComplexHeatmap,
+stringr,
+forcats,
+purrr,
+tidyr (>= 1.3.0),
+cli,
+GGally,
+gtsummary,
+broom.helpers,
+janitor,
+withr,
+scales,
+lifecycle}
+\item[Suggests]\AsIs{knitr,
+rmarkdown,
+testthat (>= 3.0.0),
+spelling,
+covr,
+cbioportalR,
+genieBPC}
+\item[Remotes]\AsIs{karissawhiting/cbioportalR}
+\item[VignetteBuilder]\AsIs{knitr}
+\item[Language]\AsIs{en-US}
+\item[Roxygen]\AsIs{list(markdown = TRUE)}
+\item[Config/testthat/edition]\AsIs{3}
+\end{description}
+\Rdcontents{\R{} topics documented:}
+\inputencoding{utf8}
+\HeaderA{clin\_collab\_df}{An example data set for an IMPACT analysis coming from a clinical collaborator}{clin.Rul.collab.Rul.df}
+\keyword{datasets}{clin\_collab\_df}
+%
+\begin{Description}\relax
+This set was created from a sample of 20 patients from
+publicly available prostate cancer data from cBioPortal (\code{study\_id = "gbc\_mskcc\_2022"}).
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+clin_collab_df
+\end{verbatim}
+\end{Usage}
+%
+\begin{Format}
+A data frame with copy number alterations (CNA) retrieved from cBioPortal.
+\begin{description}
+
+\item[\code{cbioportal\_id}] character with IMPACT sample ID
+\item[\code{ctype}] character cancer type
+\item[\code{primary\_mets}] character with sample type
+
+\end{description}
+
+\end{Format}
+\inputencoding{utf8}
+\HeaderA{cna}{An example IMPACT cBioPortal mutation data set in API format}{cna}
+\keyword{datasets}{cna}
+%
+\begin{Description}\relax
+This set was created from a random sample of 200 patients from
+publicly available prostate cancer data from cBioPortal. The file
+is in API format.
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+cna
+\end{verbatim}
+\end{Usage}
+%
+\begin{Format}
+A data frame with copy number alterations (CNA) from Abida et al.
+JCO Precis Oncol 2017.Retrieved from cBioPortal.There are 475 observations
+and 29 variables.
+\begin{description}
+
+\item[hugoGeneSymbol] Character w/ 324 levels,
+Column containing all HUGO symbols genes
+\item[entrezGeneId] Entrez Gene ID
+\item[molecularProfileId] Molecular Profile ID for data set
+\item[sampleId] MSKCC Sample ID
+\item[patientId] Patient ID
+\item[studyId] Indicator for Abida et al. 2017 study
+\item[alteration] Factor, Type of CNA
+\item[uniqueSampleKey] character COLUMN\_DESCRIPTION
+\item[uniquePatientKey] character COLUMN\_DESCRIPTION
+\end{description}
+
+\end{Format}
+%
+\begin{Source}\relax
+\url{https://www.cbioportal.org/study/summary?id=prad_mskcc_2017}
+\end{Source}
+\inputencoding{utf8}
+\HeaderA{cna\_wide}{An example IMPACT cBioPortal CNA in wide format}{cna.Rul.wide}
+\keyword{datasets}{cna\_wide}
+%
+\begin{Description}\relax
+This set was created from a sample of 20 patients from
+publicly available prostate cancer data from cBioPortal (\code{study\_id = "gbc\_mskcc\_2022"}).
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+cna_wide
+\end{verbatim}
+\end{Usage}
+%
+\begin{Format}
+A data frame with copy number alterations (CNA) retrieved from cBioPortal.
+\end{Format}
+\inputencoding{utf8}
+\HeaderA{consequence\_map}{Consequence Map}{consequence.Rul.map}
+\keyword{datasets}{consequence\_map}
+%
+\begin{Description}\relax
+Data frame used as a data dictionary to recode common variant classification types
+to standardized types that can be used in oncoKB annotation.
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+consequence_map
+\end{verbatim}
+\end{Usage}
+%
+\begin{Format}
+A data frame
+\begin{description}
+
+\item[variant\_classification] character indicating type of mutation/variant classification as it appears in common mutation files
+\item[consequence\_final\_coding] final value to recode \code{variant\_classification} column to
+\item[consequence\_final\_coding\_2] final value to recode \code{variant\_classification} column to
+\item[consequence\_final\_coding\_3] final value to recode \code{variant\_classification} column to
+
+\end{description}
+
+@source \url{https://github.com/oncokb/oncokb-annotator/blob/a80ef0ce937c287778c36d45bf1cc8397539910c/AnnotatorCore.py\#L118}
+\end{Format}
+\inputencoding{utf8}
+\HeaderA{create\_gene\_binary}{Enables creation of a binary matrix from a mutation, fusion or CNA file with a predefined list of samples (rows are samples and columns are genes)}{create.Rul.gene.Rul.binary}
+%
+\begin{Description}\relax
+Enables creation of a binary matrix from a mutation, fusion or CNA file with
+a predefined list of samples (rows are samples and columns are genes)
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+create_gene_binary(
+  samples = NULL,
+  mutation = NULL,
+  mut_type = c("omit_germline", "somatic_only", "germline_only", "all"),
+  snp_only = FALSE,
+  include_silent = FALSE,
+  fusion = NULL,
+  cna = NULL,
+  high_level_cna_only = FALSE,
+  specify_panel = "no",
+  recode_aliases = "impact"
+)
+\end{verbatim}
+\end{Usage}
+%
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{samples}] a character vector specifying which samples should be included in the resulting data frame.
+Default is NULL is which case all samples with an alteration in the mutation, cna or fusions file will be used. If you specify
+a vector of samples that contain samples not in any of the passed genomic data frames, 0's (or NAs when appropriate if specifying a panel) will be
+returned for every column of that patient row.
+
+\item[\code{mutation}] A data frame of mutations in the format of a maf file.
+
+\item[\code{mut\_type}] The mutation type to be used. Options are "omit\_germline", "somatic\_only", "germline\_only" or "all". Note "all" will
+keep all mutations regardless of status (not recommended). Default is omit\_germline which includes all somatic mutations, as well as any unknown mutation types (most of which are usually somatic)
+
+\item[\code{snp\_only}] Boolean to rather the genetics events to be kept only to be SNPs (insertions and deletions will be removed).
+Default is FALSE.
+
+\item[\code{include\_silent}] Boolean to keep or remove all silent mutations. TRUE keeps, FALSE removes. Default is FALSE.
+
+\item[\code{fusion}] A data frame of fusions. If not NULL the outcome will be added to the matrix with columns ending in ".fus".
+Default is NULL.
+
+\item[\code{cna}] A data frame of copy number alterations. If inputed the outcome will be added to the matrix with columns ending in ".del" and ".amp".
+Default is NULL.
+
+\item[\code{high\_level\_cna\_only}] If TRUE, only deep deletions (-2, -1.5) or high level amplifications (2) will be counted as events
+in the binary matrix. Gains (1) and losses (1) will be ignored. Default is \code{FALSE} where all CNA events are counted.
+
+\item[\code{specify\_panel}] Default is \code{"no"} where no panel annotation is done. Otherwise pass a character vector of length 1 with a
+panel id (see \code{gnomeR::gene\_panels} for available panels), or \code{"impact"} for automated IMPACT annotation.
+Alternatively, you may pass a data frame of \code{sample\_id}-\code{panel\_id} pairs specifying panels for each sample for
+which to insert NAs indicating genes not tested. See below for details.
+
+\item[\code{recode\_aliases}] Default is \code{"impact"} where function will check for IMPACT genes that may go by more than 1 name in your data and replace the alias name with the standardized gene name (see \code{gnomeR::impact\_alias\_table} for reference list).
+If \code{"no"}, no alias annotation will be performed.
+Alternatively, you may pass a custom alias list as a data frame with columns \code{hugo\_symbol} and \code{alias} specifying a custom alias table to use for checks. See below for details.
+\end{ldescription}
+\end{Arguments}
+%
+\begin{Value}
+a data frame with sample\_id and alteration binary columns with values of 0/1
+\end{Value}
+%
+\begin{Section}{\code{specify\_panel} argument}
+
+\begin{itemize}
+
+\item{} If \code{specify\_panel = "no"} is passed (default) data will be returned as is without any additional NA annotations.
+\item{} If a single panel id is passed (e.g. \code{specify\_panel = "IMPACT468"}), all genes in your data that are not tested on that panel will be set to
+\code{NA} in results for all samples (see gnomeR::gene\_panels to see which genes are on each supported panels).
+\item{} If \code{specify\_panel = "impact"} is passed, impact panel version will be inferred based on each sample\_id (based on \code{IMX} nomenclature) and NA's will be
+annotated accordingly for each sample/panel pair.
+\item{} If you wish to specify different panels for each sample, pass a data frame (with all samples included) with columns: \code{sample\_id}, and \code{panel\_id}. Each sample will be
+annotated with NAs according to that specific panel. If a sample in your data is missing from the \code{sample\_id} column in the
+\code{specify\_panel} dataframe, it will be returned with no annotation (equivalent of setting it to "no").
+
+\end{itemize}
+
+\end{Section}
+%
+\begin{Section}{\code{recode\_aliases} argument}
+
+\begin{itemize}
+
+\item{} If \code{recode\_aliases = "impact"} is passed (default), function will use \code{gnomeR::impact\_alias\_table} to find and replace any non-standard hugo symbol names with their
+more common (or more recent) accepted gene name.
+\item{} If \code{recode\_aliases = "no"} is passed, data will be returned as is without any alias replacements.
+\item{} If you have a custom table of vetted aliases you wish to use, you can pass a data frame with columns: \code{hugo\_symbol}, and \code{alias}.
+Each row should have one gene in the \code{hugo\_symbol} column indicating the accepted gene name, and one gene in the \code{alias} column indicating an alias
+you want to check for and replace. If a gene has multiple aliases to check for, each should be represented in its own separate row.
+See \code{gnomeR::impact\_alias\_table} for an example of accepted data formatting.
+
+\end{itemize}
+
+\end{Section}
+%
+\begin{Examples}
+\begin{ExampleCode}
+mut.only <- create_gene_binary(mutation = gnomeR::mutations)
+
+samples <- gnomeR::mutations$sampleId
+
+bin.mut <- create_gene_binary(
+  samples = samples, mutation = gnomeR::mutations,
+  mut_type = "omit_germline", snp_only = FALSE,
+  include_silent = FALSE
+)
+
+\end{ExampleCode}
+\end{Examples}
+\inputencoding{utf8}
+\HeaderA{gene\_panels}{Public Gene Panels on cBioPortal}{gene.Rul.panels}
+\keyword{datasets}{gene\_panels}
+%
+\begin{Description}\relax
+Data frame of cBioPortal gene panels sourced from both public and GENIE cBioPortal instances.
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+gene_panels
+\end{verbatim}
+\end{Usage}
+%
+\begin{Format}
+A nested data frame
+\begin{description}
+
+\item[gene\_panels] Gene panel ID
+\item[genes\_in\_panel] List column of Hugo symbols of all genes in each panel
+\item[entrez\_ids\_in\_panel] List column of Entrez IDs of all genes in each panel
+
+\end{description}
+
+\end{Format}
+%
+\begin{Source}\relax
+\url{https://cbioportal.mskcc.org/}
+\end{Source}
+\inputencoding{utf8}
+\HeaderA{genie\_cna}{An example GENIE BPC CNA data set}{genie.Rul.cna}
+\keyword{datasets}{genie\_cna}
+%
+\begin{Description}\relax
+This set was created from a sample of 100 patients from the non-small cell
+lung cancer v.2.0-public data set.
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+genie_cna
+\end{verbatim}
+\end{Usage}
+%
+\begin{Format}
+A data frame with CNA retrieved using genieBPC package. Column names are sample ids of cohort.
+\end{Format}
+\inputencoding{utf8}
+\HeaderA{genie\_fusion}{An example GENIE BPC fusions data set}{genie.Rul.fusion}
+\keyword{datasets}{genie\_fusion}
+%
+\begin{Description}\relax
+This set was created from a sample of 100 patients from the non-small cell
+lung cancer v.2.0-public data set. If a row exists for a given hugo symbol
+and tumor-sample-barcode, then the mutation was observed.
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+genie_fusion
+\end{verbatim}
+\end{Usage}
+%
+\begin{Format}
+A data frame with fusions retrieved using genieBPC package
+\end{Format}
+\inputencoding{utf8}
+\HeaderA{genie\_mut}{An example GENIE BPC mutations data set}{genie.Rul.mut}
+\keyword{datasets}{genie\_mut}
+%
+\begin{Description}\relax
+This set was created from a sample of 100 patients from the non-small cell
+lung cancer v.2.0-public data set. If a row exists for a given hugo symbol
+and tumor-sample-barcode, then the mutation was observed.
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+genie_mut
+\end{verbatim}
+\end{Usage}
+%
+\begin{Format}
+A data frame with mutations retrieved using genieBPC package
+\end{Format}
+\inputencoding{utf8}
+\HeaderA{ggcomut}{Comutation Heatmap of the Top Altered Genes}{ggcomut}
+%
+\begin{Description}\relax
+Comutation Heatmap of the Top Altered Genes
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+ggcomut(mutation, n_genes = 10, ...)
+\end{verbatim}
+\end{Usage}
+%
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{mutation}] Raw mutation dataframe containing alteration data
+
+\item[\code{n\_genes}] Number of top genes to display in plot
+
+\item[\code{...}] Further create\_gene\_binary() arguments
+\end{ldescription}
+\end{Arguments}
+%
+\begin{Value}
+Comutation heatmap of the top genes
+\end{Value}
+%
+\begin{Examples}
+\begin{ExampleCode}
+ggcomut(mutation = gnomeR::mutations)
+
+\end{ExampleCode}
+\end{Examples}
+\inputencoding{utf8}
+\HeaderA{gggenecor}{Correlation Heatmap of the Top Altered Genes}{gggenecor}
+%
+\begin{Description}\relax
+Correlation Heatmap of the Top Altered Genes
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+gggenecor(mutation, n_genes = 10, ...)
+\end{verbatim}
+\end{Usage}
+%
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{mutation}] Raw mutation dataframe containing alteration data
+
+\item[\code{n\_genes}] Number of top genes to display in plot
+
+\item[\code{...}] Further create\_gene\_binary() arguments
+\end{ldescription}
+\end{Arguments}
+%
+\begin{Value}
+Correlation heatmap of the top altered genes
+\end{Value}
+%
+\begin{Examples}
+\begin{ExampleCode}
+gggenecor(gnomeR::mutations)
+
+\end{ExampleCode}
+\end{Examples}
+\inputencoding{utf8}
+\HeaderA{ggsamplevar}{Histogram of Variants Per Sample Colored By Variant Classification}{ggsamplevar}
+%
+\begin{Description}\relax
+Histogram of Variants Per Sample Colored By Variant Classification
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+ggsamplevar(mutation)
+\end{verbatim}
+\end{Usage}
+%
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{mutation}] Raw mutation dataframe containing alteration data
+\end{ldescription}
+\end{Arguments}
+%
+\begin{Value}
+Histogram of counts of variants per tumor sample
+\end{Value}
+%
+\begin{Examples}
+\begin{ExampleCode}
+ggsamplevar(gnomeR::mutations)
+
+\end{ExampleCode}
+\end{Examples}
+\inputencoding{utf8}
+\HeaderA{ggtopgenes}{Barplot of Most Frequently Altered Genes}{ggtopgenes}
+%
+\begin{Description}\relax
+Barplot of Most Frequently Altered Genes
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+ggtopgenes(mutation, n_genes = 10)
+\end{verbatim}
+\end{Usage}
+%
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{mutation}] Raw mutation dataframe containing alteration data
+
+\item[\code{n\_genes}] Number of top genes to display in plot
+\end{ldescription}
+\end{Arguments}
+%
+\begin{Value}
+Barplot of counts of top variant genes
+\end{Value}
+%
+\begin{Examples}
+\begin{ExampleCode}
+ggtopgenes(gnomeR::mutations)
+
+\end{ExampleCode}
+\end{Examples}
+\inputencoding{utf8}
+\HeaderA{ggvarclass}{Barplot of Variant Classification Counts}{ggvarclass}
+%
+\begin{Description}\relax
+Barplot of Variant Classification Counts
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+ggvarclass(mutation)
+\end{verbatim}
+\end{Usage}
+%
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{mutation}] Raw mutation dataframe containing alteration data
+\end{ldescription}
+\end{Arguments}
+%
+\begin{Value}
+Barplot of counts of each variant classification
+\end{Value}
+%
+\begin{Examples}
+\begin{ExampleCode}
+ggvarclass(gnomeR::mutations)
+
+\end{ExampleCode}
+\end{Examples}
+\inputencoding{utf8}
+\HeaderA{ggvartype}{Barplot of Variant Type Counts}{ggvartype}
+%
+\begin{Description}\relax
+Barplot of Variant Type Counts
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+ggvartype(mutation)
+\end{verbatim}
+\end{Usage}
+%
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{mutation}] Raw mutation dataframe containing alteration data
+\end{ldescription}
+\end{Arguments}
+%
+\begin{Value}
+Barplot of counts of each variant type
+\end{Value}
+%
+\begin{Examples}
+\begin{ExampleCode}
+ggvartype(gnomeR::mutations)
+
+\end{ExampleCode}
+\end{Examples}
+\inputencoding{utf8}
+\HeaderA{gnomer\_colors}{List of suggested color palettes for when you need a large palette}{gnomer.Rul.colors}
+\keyword{datasets}{gnomer\_colors}
+%
+\begin{Description}\relax
+Sometimes you just need a huge palette of fairly distinguishable colors.
+This is a named vector of Ronglai-approved colors good for things like TCGA PanCan (33 cancer types)
+or clustering solutions with high K. Run \code{gnomer\_colors} to
+see the hex codes for the study colors.
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+gnomer_colors
+\end{verbatim}
+\end{Usage}
+%
+\begin{Format}
+An object of class \code{character} of length 66.
+\end{Format}
+\inputencoding{utf8}
+\HeaderA{gnomer\_palette}{Access the colors in a gnomeR color palette}{gnomer.Rul.palette}
+\keyword{colors}{gnomer\_palette}
+%
+\begin{Description}\relax
+gnomeR colors can be accessed and used in plotting
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+gnomer_palette(
+  name = "pancan",
+  n,
+  type = c("discrete", "continuous"),
+  plot_col = FALSE,
+  reverse = FALSE,
+  ...
+)
+\end{verbatim}
+\end{Usage}
+%
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{name}] Name of desired palette, supplied in quotes. Choices are:
+"pancan" (default) (best for discrete), "main" (better for discrete), "sunset" (continuous)
+
+\item[\code{n}] Number of colors desired. If omitted, uses all colors,
+or the needed number of colors if less than the total.
+
+\item[\code{type}] Either "continuous" or "discrete". Use continuous if you want
+to automatically interpolate between colours.
+
+\item[\code{plot\_col}] Boolean value weather to plot the palette labeled with their hex codes. Defalut is FALSE.
+
+\item[\code{reverse}] Boolean indicating whether the palette should be reversed.
+Default is FALSE.
+
+\item[\code{...}] Additional parameters to pass too \code{grDevices::colorRampPalette}
+@importFrom graphics rgb rect par image text
+@importFrom grDevices colorRampPalette
+\end{ldescription}
+\end{Arguments}
+%
+\begin{Value}
+A vector of colours.
+\end{Value}
+%
+\begin{Examples}
+\begin{ExampleCode}
+
+library(ggplot2)
+
+# Print a plot showing the colors in a palette, in order
+gnomer_palette("pancan")
+
+# use a single brand color from a palette
+# here using the fourth color from the "pancan" palette
+ggplot(mtcars, aes(hp, mpg)) +
+geom_point(size = 4, color = gnomer_palette("pancan")[4])
+
+# use a discrete color scale - uses fixed colors from the requested palette
+ggplot(iris, aes(Sepal.Width, Sepal.Length, color = Species)) +
+geom_point(size = 4) +
+scale_color_manual(values = gnomer_palette("pancan"))
+
+# use a continuous color scale - interpolates between colors
+ggplot(iris, aes(Sepal.Width, Sepal.Length, color = Sepal.Length)) +
+geom_point(size = 4, alpha = .6) +
+scale_color_gradientn(colors = gnomer_palette("sunset", type = "continuous"))
+
+# use a fill color
+ggplot(iris, aes(x = Sepal.Length, fill = Species)) +
+geom_histogram(bins = 20, position = "dodge") +
+scale_fill_manual(values = gnomer_palette("pancan"))
+
+\end{ExampleCode}
+\end{Examples}
+\inputencoding{utf8}
+\HeaderA{gnomer\_palettes}{Complete list of gnomeR color palettes}{gnomer.Rul.palettes}
+\keyword{datasets}{gnomer\_palettes}
+%
+\begin{Description}\relax
+Creates color palettes based on gnomeR colors, including
+"main" which is a collection of 33 pale-yet-distinct colors which flow nicely
+(good for clustering solutions, for example), and
+"pancan" which is a collection of 33 vibrant and distinct colors, good for visualizing the
+33 TCGA PanCan cancer types.
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+gnomer_palettes
+\end{verbatim}
+\end{Usage}
+%
+\begin{Format}
+An object of class \code{list} of length 3.
+\end{Format}
+%
+\begin{Examples}
+\begin{ExampleCode}
+gnomer_palettes[["pancan"]]
+\end{ExampleCode}
+\end{Examples}
+\inputencoding{utf8}
+\HeaderA{impact\_alias\_table}{IMPACT Alias Tables}{impact.Rul.alias.Rul.table}
+\keyword{datasets}{impact\_alias\_table}
+%
+\begin{Description}\relax
+Data frame of genes and their aliases for
+IMPACT panel genes. This is used for gene name resolution functionality.
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+impact_alias_table
+\end{verbatim}
+\end{Usage}
+%
+\begin{Format}
+A data frame with 1658 rows
+\begin{description}
+
+\item[hugo\_symbol] gene Hugo Symbol
+\item[alias] Alias of Hugo Symbol in \code{hugo\_symbol} column
+\item[entrez\_id] entrez ID of gene in \code{hugo\_symbol}
+\item[alias\_entrez\_id] entrez ID of \code{alias} gene
+
+\end{description}
+
+\end{Format}
+\inputencoding{utf8}
+\HeaderA{mutations}{An example IMPACT cBioPortal mutation data set in API format}{mutations}
+\keyword{datasets}{mutations}
+%
+\begin{Description}\relax
+This set contains a random sample of 200 patients from
+publicly available prostate cancer data from cBioPortal. The file
+is in API format.
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+mutations
+\end{verbatim}
+\end{Usage}
+%
+\begin{Format}
+A data frame with mutations from Abida et al. JCO Precis Oncol 2017.
+Retrieved from cBioPortal.There are 725 observations and 29 variables.
+\begin{description}
+
+\item[hugoGeneSymbol] Character w/ 324 levels,
+Column containing all HUGO symbols genes
+\item[entrezGeneId] Entrez Gene ID
+\item[sampleId] MSKCC Sample ID
+\item[patientId] Patient ID
+\item[studyId] Indicator for Abida et al. 2017 study
+\item[center] Cancer Center ID
+\item[mutationStatus] Somatic or germ-line mutation status
+\item[variantType] Mutation variant type
+\item[chr] Chromosome mutation observed on
+\item[endPosition] End Position
+\item[fisValue] fisValue
+\item[functionalImpactScore] functionalImpactScore
+\item[keyword] keyword
+\item[linkMsa] linkMsa
+\item[linkPdb] linkPdb
+\item[linkXvar] linkXvar
+\item[molecularProfileId] molecularProfileId
+\item[mutationType] mutationType
+\item[ncbiBuild] ncbiBuild
+\item[proteinChange] proteinChange
+\item[proteinPosEnd] proteinPosEnd
+\item[proteinPosStart] proteinPosStart
+\item[referenceAllele] referenceAllele
+\item[refseqMrnaId] refseqMrnaId
+\item[startPosition] startPosition
+\item[uniquePatientKey] uniquePatientKey
+\item[uniqueSampleKey] uniqueSampleKey
+\item[validationStatus] validationStatus
+\item[variantAllele] variantAllele
+\end{description}
+
+\end{Format}
+%
+\begin{Source}\relax
+\url{https://www.cbioportal.org/study/summary?id=prad_mskcc_2017}
+\end{Source}
+\inputencoding{utf8}
+\HeaderA{mutation\_viz}{Creates a set of plot summarising a mutation file.}{mutation.Rul.viz}
+%
+\begin{Description}\relax
+Creates a set of plot summarising a mutation file.
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+mutation_viz(mutation, ...)
+\end{verbatim}
+\end{Usage}
+%
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{mutation}] Raw mutation dataframe containing alteration data
+
+\item[\code{...}] any argument belonging to the gene\_binary method
+\end{ldescription}
+\end{Arguments}
+%
+\begin{Value}
+Returns a list of the following plots:
+
+varclass Barplot of counts of each variant classification
+
+vartype Barplot of counts of each variant type
+
+snvclass Histogram of counts of each SNV class
+
+samplevar Histogram of counts variants per patient
+
+topgenes Barplot of counts of top variant genes
+
+genecor Correlation heatmap of the top 10 genes
+\end{Value}
+%
+\begin{Examples}
+\begin{ExampleCode}
+mutation_viz(gnomeR::mutations)
+
+\end{ExampleCode}
+\end{Examples}
+\inputencoding{utf8}
+\HeaderA{names\_df}{Data Frame of Column Names}{names.Rul.df}
+\keyword{datasets}{names\_df}
+%
+\begin{Description}\relax
+Data frame of accepted data names for standard genomic files. This serves as a
+dictionary to help disambiguate raw column names from user entered mutation,
+CNA or structural variant data
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+names_df
+\end{verbatim}
+\end{Usage}
+%
+\begin{Format}
+A data frame
+\begin{description}
+
+\item[maf\_column\_name] data field names as they appear in common MAF file
+\item[api\_column\_name] data field names as they appear in common cBioPortal API retrieved files
+\item[mutation\_input] does this field appear in mutation files?
+\item[fusion\_input] does this field appear in mutation/sv files?
+\item[cna\_input] does this field appear in CNA files?
+\item[definition] variable definition
+\item[notes] data notes
+\item[sc\_maf\_column\_name] snake case version of \code{maf\_column\_name}
+\item[sc\_api\_column\_name] snake case version of \code{api\_column\_name}
+\item[internal\_column\_name] name used for each field for all internal processing functions
+
+\end{description}
+
+\end{Format}
+\inputencoding{utf8}
+\HeaderA{pathways}{IMPACT Oncogenic Signaling Pathways}{pathways}
+\keyword{datasets}{pathways}
+%
+\begin{Description}\relax
+Oncogenic Signaling Pathways curated from \Rhref{https://pubmed.ncbi.nlm.nih.gov/29625050/}{Sanchez-Vega, F et al., 2018}.
+See \Rhref{http://www.cbioportal.org/}{cBioPortal.org} for more information
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+pathways
+\end{verbatim}
+\end{Usage}
+%
+\begin{Format}
+A list of common cancer pathways and their associated alterations
+\begin{description}
+
+\item[pathway] name of pathway
+\item[genes] vector of gene alterations in each pathways
+
+\end{description}
+
+\end{Format}
+%
+\begin{Source}\relax
+Sanchez-Vega, F., Mina, M., Armenia, J., Chatila, W. K., Luna, A., La, K. C., Dimitriadoy, S., Liu, D. L., Kantheti, H. S., Saghafinia, S., Chakravarty, D., Daian, F., Gao, Q., Bailey, M. H., Liang, W. W., Foltz, S. M., Shmulevich, I., Ding, L., Heins, Z., Ochoa, A., … Schultz, N. (2018). Oncogenic Signaling Pathways in The Cancer Genome Atlas. Cell, 173(2), 321–337.e10. \url{https://doi.org/10.1016/j.cell.2018.03.035}
+\end{Source}
+\inputencoding{utf8}
+\HeaderA{pivot\_cna\_longer}{Reformat Wide CNA Data to Long}{pivot.Rul.cna.Rul.longer}
+%
+\begin{Description}\relax
+Takes a numeric vector of CNA data in wide format where each column is a sample
+and each row is a hugo symbol. Function will return a long format CNA data set
+of just events (neutral/diploid instances are filtered out) and will recode events from
+numeric to descriptive (-2/-1/-1.5 is deletion, 2/1 is amplification).
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+pivot_cna_longer(wide_cna, clean_sample_ids = TRUE)
+\end{verbatim}
+\end{Usage}
+%
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{wide\_cna}] a cna dataframe in wide format (e.g. gnomeR::cna)
+
+\item[\code{clean\_sample\_ids}] \code{TRUE} by default and function will clean
+\code{sample\_id} field to replace "." with "-". If \code{FALSE},
+no modification will be made to returned \code{sample\_ids} field
+\end{ldescription}
+\end{Arguments}
+%
+\begin{Value}
+A long data frame of CNA events
+\end{Value}
+%
+\begin{Examples}
+\begin{ExampleCode}
+cna <- pivot_cna_longer(wide_cna = gnomeR::cna_wide)
+\end{ExampleCode}
+\end{Examples}
+\inputencoding{utf8}
+\HeaderA{pivot\_cna\_wider}{Pivot CNA from maf (long) version to wide version}{pivot.Rul.cna.Rul.wider}
+%
+\begin{Description}\relax
+Pivot CNA from maf (long) version to wide version
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+pivot_cna_wider(cna)
+\end{verbatim}
+\end{Usage}
+%
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{cna}] a cna dataframe in maf (long) format
+\end{ldescription}
+\end{Arguments}
+%
+\begin{Value}
+a dataframe of reformatted CNA alteration (in wide format)
+\end{Value}
+%
+\begin{Examples}
+\begin{ExampleCode}
+cna_long <- data.frame(
+    sampleId = c("P-0001276-T01-IM3","P-0001276-T01-IM3",
+                 "P-0005436-T01-IM3",
+                 "P-0001276-T01-IM3","P-0003333-T01-IM3"),
+    Hugo_Symbol = c("MLL2","KMT2D","HIST1H2BD",
+                    "HIST1H3B","KDR"),
+    alteration = c("AMPLIFICATION","AMPLIFICATION",
+                   "AMPLIFICATION","AMPLIFICATION","DELETION"))
+
+cna <- pivot_cna_wider(cna_long)
+
+ cna_long <- data.frame(
+    sampleId = c("P-0001276-T01-IM3","P-0001276-T01-IM3",
+                 "P-0005436-T01-IM3",
+                 "P-0001276-T01-IM3","P-0003333-T01-IM3"),
+    Hugo_Symbol = c("MLL2","KMT2D","HIST1H2BD",
+                    "HIST1H3B","KDR"),
+    alteration = c(2, 2, -1, 1, -2))
+
+cna <- pivot_cna_wider(cna_long)
+
+\end{ExampleCode}
+\end{Examples}
+\inputencoding{utf8}
+\HeaderA{recode\_alias}{Recode Hugo Symbol Column}{recode.Rul.alias}
+%
+\begin{Description}\relax
+Searches the Hugo Symbol column in a genomic dataframe to look for
+any genes that have common gene name aliases,
+and replaces those aliases with the accepted (most recent) gene name.
+Function uses \code{gnomeR::impact\_alias\_table} by default as reference for
+which aliases to replace and supports IMPACT panel alias replacement only at this time.
+Custom tables can be provided as long as \code{hugo\_symbol} and \code{alias} columns exist.
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+recode_alias(genomic_df, alias_table = "impact")
+\end{verbatim}
+\end{Usage}
+%
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{genomic\_df}] a gene\_binary object
+
+\item[\code{alias\_table}] a string indicating "impact", or a  dataframe with at least two columns (\code{hugo\_symbol},
+\code{alias}) with one row for each pair.
+\end{ldescription}
+\end{Arguments}
+%
+\begin{Value}
+A dataframe with recoded Hugo Symbol columns
+\end{Value}
+%
+\begin{Examples}
+\begin{ExampleCode}
+mut <- rename_columns(gnomeR::mutations[1:5, ])
+mut$hugo_symbol
+
+alias_table <- data.frame("hugo_symbol" = c("New Symbol", "New Symbol2"),
+"alias" = c("PARP1", "AKT1"))
+
+recode_alias(mut, alias_table)
+
+\end{ExampleCode}
+\end{Examples}
+\inputencoding{utf8}
+\HeaderA{recode\_cna}{Internal function to recode numeric CNA alteration values to factor values}{recode.Rul.cna}
+%
+\begin{Description}\relax
+Internal function to recode numeric CNA alteration values to factor values
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+recode_cna(alteration_vector)
+\end{verbatim}
+\end{Usage}
+%
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{alteration\_vector}] a vector of CNA alterations coded with any of the
+following levels: neutral, deletion, amplification, gain, loss, homozygous deletion,
+hemizygous deletion, loh, gain, high level amplification, 0, -1, -1.5, -2, 1, 2.
+\end{ldescription}
+\end{Arguments}
+%
+\begin{Details}\relax
+CNA is coded to the following key based on key: values below
+\begin{itemize}
+
+\item{} "neutral":  "0", "neutral",
+\item{} "deletion": "homozygous deletion", "-2",
+\item{} "deletion": "loh", "-1.5",
+\item{} "deletion": "hemizygous deletion", "-1",
+\item{} "amplification": "gain", "1",
+\item{} "amplification": high level amplification", "2",
+
+\end{itemize}
+
+\end{Details}
+%
+\begin{Value}
+a recoded CNA data set with factor alteration values. See details for code dictionary
+\end{Value}
+%
+\begin{Examples}
+\begin{ExampleCode}
+recode_cna(gnomeR::cna$alteration[1:10])
+\end{ExampleCode}
+\end{Examples}
+\inputencoding{utf8}
+\HeaderA{reformat\_fusion}{Enables users to reformat fusions files so that each fusion is listed as one row with two hugo-symbol sites instead of two rows, one for each site. This is the required format for the \code{create\_gene\_binary} function.}{reformat.Rul.fusion}
+%
+\begin{Description}\relax
+Enables users to reformat fusions files so that each fusion is listed as one row with two hugo-symbol
+sites instead of two rows, one for each site. This is the required format for the \code{create\_gene\_binary} function.
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+reformat_fusion(fusions)
+\end{verbatim}
+\end{Usage}
+%
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{fusions}] a data frame of fusion/structural variants that occur in a cohort. There should be a \code{sample\_id}, \code{hugo\_symbol},
+and \code{fusion} column at minimum. Intragenic/intergenic fusions will have one row. Any two gene fusions will
+have two rows. See \code{gnomeR::sv\_long} for an example.
+\end{ldescription}
+\end{Arguments}
+%
+\begin{Value}
+a data frame with \code{sample\_id}, \code{site1hugo\_symbol}, and \code{site2hugo\_symbol} and \code{fusion} columns. This should match the format
+of the \code{gnomeR::sv} dataset.
+\end{Value}
+%
+\begin{Examples}
+\begin{ExampleCode}
+
+sv_long1 <- gnomeR::sv_long %>%
+  rename_columns() %>%
+  reformat_fusion()
+
+head(sv_long1)
+
+\end{ExampleCode}
+\end{Examples}
+\inputencoding{utf8}
+\HeaderA{rename\_columns}{Rename columns from API results to work with gnomeR functions}{rename.Rul.columns}
+%
+\begin{Description}\relax
+Rename columns from API results to work with gnomeR functions
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+rename_columns(df_to_check)
+\end{verbatim}
+\end{Usage}
+%
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{df\_to\_check}] a data frame to check and recode names as needed
+\end{ldescription}
+\end{Arguments}
+%
+\begin{Value}
+a renamed data frame
+\end{Value}
+%
+\begin{Examples}
+\begin{ExampleCode}
+
+rename_columns(df_to_check = gnomeR::mutations)
+rename_columns(df_to_check = gnomeR::sv)
+
+\end{ExampleCode}
+\end{Examples}
+\inputencoding{utf8}
+\HeaderA{reset\_gnomer\_palette}{Reset gnomeR color palette}{reset.Rul.gnomer.Rul.palette}
+%
+\begin{Description}\relax
+This function resets the gnomeR color palette back to the ggplot2 default palette for all
+ggplot2 objects. A typical workflow would include this after a call to \code{set\_gnomer\_palette()}
+function is no longer needed,
+and subsequent calls to \code{ggplot()} will utilize the default color palette from ggplot2.
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+reset_gnomer_palette(env = rlang::caller_env())
+\end{verbatim}
+\end{Usage}
+%
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{env}] environment in which palette will take effect. Default is \code{rlang::caller\_env()}.
+\end{ldescription}
+\end{Arguments}
+%
+\begin{Author}\relax
+Michael Curry
+\end{Author}
+%
+\begin{Examples}
+\begin{ExampleCode}
+library(ggplot2)
+
+set_gnomer_palette()
+
+ggplot(mtcars, aes(wt, mpg, color = factor(cyl))) +
+  geom_point()
+
+reset_gnomer_palette()
+#default reset
+ggplot(mtcars, aes(wt, mpg, color = factor(cyl))) +
+  geom_point()
+
+\end{ExampleCode}
+\end{Examples}
+\inputencoding{utf8}
+\HeaderA{resolve\_alias}{Resolve Hugo Symbol Names with Aliases}{resolve.Rul.alias}
+%
+\begin{Description}\relax
+Resolve Hugo Symbol Names with Aliases
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+resolve_alias(gene_to_check, alias_table)
+\end{verbatim}
+\end{Usage}
+%
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{gene\_to\_check}] hugo\_symbol to be check
+
+\item[\code{alias\_table}] table containing all the aliases
+\end{ldescription}
+\end{Arguments}
+%
+\begin{Value}
+if the accepted hugo symbol is input, it is returned back.
+If an alias name is provided, the more common name/more up to date name is returned
+\end{Value}
+%
+\begin{Examples}
+\begin{ExampleCode}
+resolve_alias("MLL4", alias_table = impact_alias_table)
+
+\end{ExampleCode}
+\end{Examples}
+\inputencoding{utf8}
+\HeaderA{seg}{A segmentation file from the cbioPortal datasets}{seg}
+\keyword{datasets}{seg}
+%
+\begin{Description}\relax
+Segmentation file provided by the processing of IMPACT sequencing using FACETS
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+seg
+\end{verbatim}
+\end{Usage}
+%
+\begin{Format}
+A data frame with 30240 observations with 6 variables
+\begin{description}
+
+\item[ID] Factor, IMPACT sample ID
+\item[chrom] chromosome
+\item[loc.start] start location
+\item[loc.end] end location
+\item[num.mark] number of probes or bins covered by the segment
+\item[seg.mean] segment mean value, usually in log2 scale
+
+\end{description}
+
+\end{Format}
+%
+\begin{Source}\relax
+\url{https://cbioportal.mskcc.org/}
+\end{Source}
+\inputencoding{utf8}
+\HeaderA{set\_gnomer\_palette}{Set gnomeR color palette}{set.Rul.gnomer.Rul.palette}
+%
+\begin{Description}\relax
+This function sets the gnomeR color palette as the default palette for all
+ggplot2 objects. It does so by overriding the following four functions from
+the ggplot2 package: \code{scale\_color\_discrete()},
+\code{scale\_fill\_discrete()}, \code{scale\_color\_continuous()}, and
+\code{scale\_fill\_continuous()}, and places them in the specified environment.
+A typical workflow would include this function at the top of a script,
+and subsequent calls to \code{ggplot()} will utilize the gnomeR color palette.
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+set_gnomer_palette(
+  palette = c("pancan", "main", "sunset"),
+  gradient = c("pancan", "main", "sunset"),
+  reverse = FALSE,
+  env = rlang::caller_env()
+)
+\end{verbatim}
+\end{Usage}
+%
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{palette}] name of palette in gnomer\_palettes, supplied in quotes.
+Options include \AsIs{\texttt{"pancan", "main", "sunset"}}.
+Default is \code{"pancan"}.
+
+\item[\code{gradient}] name of gradient palette in \code{gnomer\_palettes}, supplied in quotes.
+Options include \AsIs{\texttt{"pancan", "main", "sunset"}}. Default is \code{"pancan"}.
+
+\item[\code{reverse}] if set to \code{TRUE}, will reverse the order of the color palette
+
+\item[\code{env}] environment in which palette will take effect. Default is \code{rlang::caller\_env()}.
+\end{ldescription}
+\end{Arguments}
+%
+\begin{Author}\relax
+Michael Curry
+\end{Author}
+%
+\begin{Examples}
+\begin{ExampleCode}
+library(ggplot2)
+
+set_gnomer_palette()
+
+ggplot(mtcars, aes(wt, mpg, color = factor(cyl))) +
+  geom_point()
+
+# setting other gnomeR palettes
+set_gnomer_palette(palette = "main", gradient = "sunset")
+
+ggplot(mtcars, aes(wt, mpg, color = factor(cyl))) +
+  geom_point()
+
+ggplot(mtcars, aes(wt, mpg, color = cyl)) +
+  geom_point()
+\end{ExampleCode}
+\end{Examples}
+\inputencoding{utf8}
+\HeaderA{subset\_by\_frequency}{Subset a Binary Matrix By Alteration Frequency Threshold}{subset.Rul.by.Rul.frequency}
+%
+\begin{Description}\relax
+Subset a Binary Matrix By Alteration Frequency Threshold
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+subset_by_frequency(gene_binary, t = 0.1, other_vars = NULL)
+\end{verbatim}
+\end{Usage}
+%
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{gene\_binary}] A data frame with a row for each sample and column for each
+alteration. Data frame must have a \code{sample\_id} column and columns for each alteration
+with values of 0, 1 or NA.
+
+\item[\code{t}] Threshold value between 0 and 1 to subset by. Default is 10\% (.1).
+
+\item[\code{other\_vars}] One or more column names (quoted or unquoted) in data to be retained
+in resulting data frame. Default is NULL.
+\end{ldescription}
+\end{Arguments}
+%
+\begin{Value}
+a data frame with a \code{sample\_id} column and columns for
+alterations over the given prevalence threshold of \code{t}.
+\end{Value}
+%
+\begin{Examples}
+\begin{ExampleCode}
+samples <- unique(gnomeR::mutations$sampleId)
+ gene_binary <- create_gene_binary(
+   samples = samples, mutation = mutations, cna = cna,
+   mut_type = "somatic_only",
+   include_silent = FALSE,
+   specify_panel = "impact"
+ )
+gene_binary %>%
+ subset_by_frequency()
+
+\end{ExampleCode}
+\end{Examples}
+\inputencoding{utf8}
+\HeaderA{summarize\_by\_gene}{Simplify binary matrix to one column per gene that counts any alteration type as 1}{summarize.Rul.by.Rul.gene}
+%
+\begin{Description}\relax
+This will reduce the number of columns in your binary matrix, and the
+resulting data frame will have only 1 col per gene, as opposed to separate
+columns for mutation/cna/fusion.
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+summarize_by_gene(gene_binary)
+\end{verbatim}
+\end{Usage}
+%
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{gene\_binary}] a 0/1 matrix of gene alterations
+\end{ldescription}
+\end{Arguments}
+%
+\begin{Value}
+a binary matrix with a row for each sample and one column per gene
+\end{Value}
+%
+\begin{Examples}
+\begin{ExampleCode}
+samples <- unique(gnomeR::mutations$sampleId)[1:10]
+gene_binary <- create_gene_binary(
+  samples = samples, mutation = mutations, cna = cna,
+  mut_type = "somatic_only",
+  include_silent = FALSE,
+  specify_panel = "IMPACT341"
+) %>%
+  summarize_by_gene()
+
+\end{ExampleCode}
+\end{Examples}
+\inputencoding{utf8}
+\HeaderA{sv}{An example IMPACT cBioPortal mutation data set in API format}{sv}
+\keyword{datasets}{sv}
+%
+\begin{Description}\relax
+This set was created from a random sample of 200 patients from
+publicly available prostate cancer data from cBioPortal. The file
+is in API format.
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+sv
+\end{verbatim}
+\end{Usage}
+%
+\begin{Format}
+A data frame with structural variants from Abida et al. JCO Precis Oncol 2017.
+Retrieved from cBioPortal.There are 94 observations and 29 variables.
+
+A data frame with 94 rows and 44 variables:
+\begin{description}
+
+\item[\code{uniqueSampleKey}] character COLUMN\_DESCRIPTION
+\item[\code{uniquePatientKey}] character COLUMN\_DESCRIPTION
+\item[\code{molecularProfileId}] character COLUMN\_DESCRIPTION
+\item[\code{sampleId}] MSKCC Sample ID
+\item[\code{patientId}] Patient ID
+\item[\code{studyId}] Indicator for Abida et al. 2017 study
+\item[\code{site1EntrezGeneId}] integer COLUMN\_DESCRIPTION
+\item[\code{site1HugoSymbol}] Character w/ 31 levels,
+Column containing HUGO symbols genes for first site of fusion
+\item[\code{site1EnsemblTranscriptId}] character COLUMN\_DESCRIPTION
+\item[\code{site1Chromosome}] character COLUMN\_DESCRIPTION
+\item[\code{site1Position}] integer COLUMN\_DESCRIPTION
+\item[\code{site1Contig}] character COLUMN\_DESCRIPTION
+\item[\code{site1Region}] character COLUMN\_DESCRIPTION
+\item[\code{site1RegionNumber}] integer COLUMN\_DESCRIPTION
+\item[\code{site1Description}] character COLUMN\_DESCRIPTION
+\item[\code{site2EntrezGeneId}] integer COLUMN\_DESCRIPTION
+\item[\code{site2HugoSymbol}] Character w/ 21 levels,
+Column containing all HUGO symbols genes for second site of fusion
+\item[\code{site2EnsemblTranscriptId}] character COLUMN\_DESCRIPTION
+\item[\code{site2Chromosome}] character COLUMN\_DESCRIPTION
+\item[\code{site2Position}] integer COLUMN\_DESCRIPTION
+\item[\code{site2Contig}] character COLUMN\_DESCRIPTION
+\item[\code{site2Region}] character COLUMN\_DESCRIPTION
+\item[\code{site2RegionNumber}] integer COLUMN\_DESCRIPTION
+\item[\code{site2Description}] character COLUMN\_DESCRIPTION
+\item[\code{site2EffectOnFrame}] character COLUMN\_DESCRIPTION
+\item[\code{ncbiBuild}] character COLUMN\_DESCRIPTION
+\item[\code{dnaSupport}] Factor, all are \code{yes} in this data
+\item[\code{rnaSupport}] Factor, all are \code{unknown} in this data
+\item[\code{normalReadCount}] integer COLUMN\_DESCRIPTION
+\item[\code{tumorReadCount}] integer COLUMN\_DESCRIPTION
+\item[\code{normalVariantCount}] integer COLUMN\_DESCRIPTION
+\item[\code{tumorVariantCount}] integer COLUMN\_DESCRIPTION
+\item[\code{normalPairedEndReadCount}] integer COLUMN\_DESCRIPTION
+\item[\code{tumorPairedEndReadCount}] integer COLUMN\_DESCRIPTION
+\item[\code{normalSplitReadCount}] integer COLUMN\_DESCRIPTION
+\item[\code{tumorSplitReadCount}] integer COLUMN\_DESCRIPTION
+\item[\code{annotation}] character COLUMN\_DESCRIPTION
+\item[\code{breakpointType}] character COLUMN\_DESCRIPTION
+\item[\code{connectionType}] character COLUMN\_DESCRIPTION
+\item[\code{eventInfo}] character COLUMN\_DESCRIPTION
+\item[\code{variantClass}] character COLUMN\_DESCRIPTION
+\item[\code{length}] integer COLUMN\_DESCRIPTION
+\item[\code{comments}] character COLUMN\_DESCRIPTION
+\item[\code{svStatus}] character COLUMN\_DESCRIPTION
+
+\end{description}
+
+\end{Format}
+%
+\begin{Source}\relax
+\url{https://www.cbioportal.org/study/summary?id=prad_mskcc_2017}
+\end{Source}
+\inputencoding{utf8}
+\HeaderA{sv\_long}{An example of long-format fusion/sv files}{sv.Rul.long}
+\keyword{datasets}{sv\_long}
+%
+\begin{Description}\relax
+This set was created from a sample of 30 patients from publicly available
+non-small cell lung cancer data from GENIEBPC \AsIs{\texttt{(cohort = 'NSCLC', version = 'v2.0-public')}}
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+sv_long
+\end{verbatim}
+\end{Usage}
+%
+\begin{Format}
+A data frame with 30 unique \code{sample\_id} values and 62 hugo symbols listed
+\end{Format}
+%
+\begin{Source}\relax
+\url{https://www.aacr.org/professionals/research/aacr-project-genie/bpc/}
+\end{Source}
+\inputencoding{utf8}
+\HeaderA{tbl\_genomic}{tbl\_genomic}{tbl.Rul.genomic}
+%
+\begin{Description}\relax
+This function will select genes based on user inputs or on frequency counts and then
+will pass the data.frame to \code{gtsummary::tbl\_summary()}. You can specify a \code{by} variable and other
+parameters that are accepted by \code{gtsummary::tbl\_summary()}. Note the \code{by} variable must be merged on to
+onto the data before using the \code{by} parameter in the function.
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+tbl_genomic(
+  gene_binary,
+  by = NULL,
+  freq_cutoff = deprecated(),
+  freq_cutoff_by_gene = deprecated(),
+  gene_subset = deprecated(),
+  ...
+)
+\end{verbatim}
+\end{Usage}
+%
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{gene\_binary}] data.frame of genetic samples
+
+\item[\code{by}] A variable to be passed to \code{gtsummary::tbl\_summary()}'s by parameter
+
+\item[\code{freq\_cutoff}] deprecated
+
+\item[\code{freq\_cutoff\_by\_gene}] deprecated
+
+\item[\code{gene\_subset}] deprecated
+
+\item[\code{...}] Additional parameters that can be passed to \code{gtsummary::tbl\_summary()}. To access the additional parameters you need to load \code{gtsummary}.
+\end{ldescription}
+\end{Arguments}
+%
+\begin{Value}
+A \code{tbl\_summary()} object
+\end{Value}
+%
+\begin{Examples}
+\begin{ExampleCode}
+
+samples <- unique(mutations$sampleId)[1:10]
+
+gene_binary <- create_gene_binary(
+  samples = samples,
+  mutation = gnomeR::mutations,
+  cna = gnomeR::cna,
+  mut_type = "somatic_only", snp_only = FALSE,
+  specify_panel = "no"
+)
+
+tbl1 <- tbl_genomic(gene_binary)
+
+# Example wth `by` variable
+
+gene_binary$sex <- sample( c("M", "F"), size = nrow(gene_binary), replace = TRUE)
+
+tbl2 <- tbl_genomic(
+  gene_binary = gene_binary,
+  by = sex
+) %>%
+gtsummary::add_p() %>%
+gtsummary::add_q()
+
+\end{ExampleCode}
+\end{Examples}
+\printindex{}
+\end{document}

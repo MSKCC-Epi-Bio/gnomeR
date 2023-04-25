@@ -36,21 +36,12 @@ test_that("only accecpts tbl_gene_binary object", {
 
 })
 
-test_that("test simplify marix needs a data frame", {
+test_that("test simplify marix will not take other input", {
 
-  expect_error(summarize_by_gene(gene_binary = c(1:10)))
-
-})
-
-test_that("test simplify matrix needs a data frame", {
-
-    samples <- as.character(unique(gnomeR::mutations$sampleId))[1:50]
-    gen_dat <- create_gene_binary(samples = samples,
-                                  mutation = gnomeR::mutations,
-                                  fusion = gnomeR::sv)
-
-    expect_no_error(gen_dat2 <- gnomeR::summarize_by_gene(gen_dat))
-
+  expect_error(summarize_by_gene(c(1:10)))
+  expect_error(summarize_by_gene(list(1:10)))
+  expect_error(summarize_by_gene(c("test")))
+  expect_error(summarize_by_gene(Sys.Date()))
 
 })
 
@@ -68,10 +59,9 @@ test_that("test that genes are properly summarized", {
     dplyr::select(c(sample_id, starts_with("ARI"), starts_with("MAPK1"), starts_with("ERG"))))
 
 
-  sum_impact <- summarize_by_gene(bin_impact)%>%
-    dplyr::mutate(across(!sample_id, as.numeric))
+  sum_impact <- summarize_by_gene(bin_impact)
 
-
+  # manually
   bin_impact_test <- bin_impact %>%
     tidyr::pivot_longer(!sample_id)%>%
     mutate(name = str_remove(name, ".Amp|.Del|.fus"))%>%
@@ -79,6 +69,9 @@ test_that("test that genes are properly summarized", {
     mutate(across(!sample_id, ~ifelse(. > 0, 1, 0)))%>%
     as.data.frame()%>%
     relocate(colnames(sum_impact))
+
+  # set this manually to match expected classes
+  class(bin_impact_test) <- c("tbl_gene_binary", class(bin_impact_test))
 
   expect_equal(sum_impact, bin_impact_test)
 
@@ -100,8 +93,7 @@ test_that("test what happens to columns with all NA", {
                    select(c(sample_id, starts_with("AR"), starts_with("PLCG2"), starts_with("PPM1D")))
 
 
-  sum_impact <- summarize_by_gene(bin_impact)%>%
-    mutate(across(!sample_id, as.numeric))
+  sum_impact <- summarize_by_gene(bin_impact)
 
 
   bin_impact_test <- bin_impact %>%
@@ -113,10 +105,15 @@ test_that("test what happens to columns with all NA", {
     relocate(colnames(sum_impact))%>%
     mutate_if(~ all(is.na(.)), ~as.numeric(NA_integer_))
 
+  # set this manually to match expected classes
+  class(bin_impact_test) <- c("tbl_gene_binary", class(bin_impact_test))
+
   expect_equal(sum_impact, bin_impact_test)
 
-  expect_equal(ncol(as.data.frame(
-    sum_impact[,sapply(sum_impact, function(x) all(is.na(x)))])), 1)
+  x <- ncol(as.data.frame(
+    sum_impact[,sapply(sum_impact, function(x) all(is.na(x)))]))
+
+  expect_equal(x, 1)
 
   })
 

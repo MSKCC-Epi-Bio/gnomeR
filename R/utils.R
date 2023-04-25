@@ -198,19 +198,17 @@ recode_cna <- function(alteration_vector){
 #' Check that object passed is a gene binary table
 #'
 #' @param data A data frame to check
-#' @param data_name Optionally specify how the data set should be called in error message.
-#' Default is NULL and will call it a generic name.
 #' @return If data set class does not include "tbl_gene_binary" it will return an error message.
 #' If it does, nothing will be returned.
 #' @keywords internal
 
-.check_gb <- function(data, data_name = NULL) {
+.check_gb <- function(data) {
 
-  data_name <- data_name %||% ""
-
-  if(!("tbl_gene_binary" %in% class(data))) {
-    cli::cli_abort(c("This function requires the class of your data {data_name} to include 'tbl_gene_binary'.",
+  if(!(inherits(data, "tbl_gene_binary"))) {
+    cli::cli_abort(c("This function requires the class of your data to include 'tbl_gene_binary'.",
                    "Please use `create_gene_binary()` to process the data in the correct form."))
   }
 
 }
+
+

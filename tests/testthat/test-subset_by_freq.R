@@ -1,11 +1,11 @@
 
 test_that("Works with binary matrix", {
 
-  bm <- bind_rows(
+  bm <- as.data.frame(bind_rows(
             "gene10" = c(rep(0, 9), rep(1, 1)),
             "gen50" = c(rep(0, 5), rep(1, 5)),
             "gene20" = c(rep(0, 8), rep(1, 2)),
-            "gene0" = c(rep(0, 10), rep(1, 0))) %>%
+            "gene0" = c(rep(0, 10), rep(1, 0)))) %>%
     mutate(sample_id = as.character(1:nrow(.)))
 
   class(bm) <- c("tbl_gene_binary", class(bm))
@@ -157,11 +157,17 @@ test_that("Other columns are retained in `other_vars`", {
     "stage" = rep(c("I", "II"), 5)) %>%
     mutate(sample_id = as.character(1:nrow(.)))
 
-  class(bm) <- c("tbl_gene_binary", class(bm))
+
 
   sub <- bm %>%
-    select(-sex, -stage) %>%
+    select(-sex, -stage)
+
+  class(sub) <- c("tbl_gene_binary", class(sub))
+
+  sub <- sub %>%
     subset_by_frequency(t = 0)
+
+  class(bm) <- c("tbl_gene_binary", class(bm))
 
   sub2 <- bm %>%
     subset_by_frequency(t = 0, other_vars = c(sex, stage))

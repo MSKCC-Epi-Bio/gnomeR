@@ -43,6 +43,9 @@ add_pathways <- function(gene_binary,
 
   .check_gb(gene_binary)
 
+  gene_binary <- as_tibble(unclass(gene_binary))
+
+
   # custom pathways
   switch(!(class(custom_pathways) %in% c("NULL", "character", "list")),
          cli::cli_abort("{.code custom_pathways} must be character vector, or list"))
@@ -155,6 +158,12 @@ add_pathways <- function(gene_binary,
   path_out <- gene_binary %>%
 #    select("sample_id") %>%
     bind_cols(path_out)
+
+  if (!inherits(path_out, "tbl_gene_binary")) {
+
+    class(path_out) <- c("tbl_gene_binary", class(path_out))
+
+  }
 
   return(path_out)
 }

@@ -1,6 +1,6 @@
 #' Subset a Binary Matrix By Alteration Frequency Threshold
 #'
-#' @param gene_binary A data frame with a row for each sample and column for each
+#' @param gene_binary A `tbl_gene_binary` object with a row for each sample and column for each
 #' alteration. Data frame must have a `sample_id` column and columns for each alteration
 #' with values of 0, 1 or NA.
 #' @param t Threshold value between 0 and 1 to subset by. Default is 10% (.1).
@@ -22,7 +22,15 @@
 #'gene_binary %>%
 #'  subset_by_frequency()
 #'
-subset_by_frequency <- function(gene_binary, t = .1, other_vars = NULL) {
+#'
+#'
+ subset_by_frequency <- function(x, ...) {
+   UseMethod("tbl_gene_binary")
+ }
+
+#' @export
+
+  subset_by_frequency <- function(gene_binary, t = .1, other_vars = NULL) {
 
 
   # Checks ------------------------------------------------------------------
@@ -34,19 +42,25 @@ subset_by_frequency <- function(gene_binary, t = .1, other_vars = NULL) {
     cli::cli_abort("{.field t} must be a number between 0 and 1")
   }
 
-  if (!is.data.frame(gene_binary)) {
-    cli::cli_abort("{.code gene_binary} must be a data.frame")
+  if (!inherits(gene_binary, "tbl_gene_binary")) {
+    cli::cli_abort("{.code gene_binary} must be a tbl_gene_binary object")
   }
 
-  .check_required_cols(gene_binary, "sample_id", "gene_binary")
+
 
   # Capture Other Columns to Retain -----------------------------------
 
   other_vars <-
     .select_to_varnames({{ other_vars }},
-                        data = gene_binary,
+                        data = as.data.frame(gene_binary),
                         arg_name = "other_vars"
     )
+
+  .check_required_cols(gene_binary, "sample_id", other_vars)
+
+  # must turn back to just data.frame in order to use dplyr
+  # without complex {vctrs} coding
+  gene_binary <- as_tibble(unclass(gene_binary))
 
   # data frame of only alterations
   alt_only <- select(gene_binary, -"sample_id", -any_of(other_vars))
@@ -80,7 +94,9 @@ subset_by_frequency <- function(gene_binary, t = .1, other_vars = NULL) {
                           any_of(other_vars),
                           all_of(alts_over_thresh))
 
-  class(subset_binary) <- c("tbl_gene_binary",class(subset_binary))
+  if (!inherits(subset_binary, "tbl_gene_binary")) {
+    class(subset_binary) <- c("tbl_gene_binary", class(subset_binary))
+  }
 
   return(subset_binary)
 

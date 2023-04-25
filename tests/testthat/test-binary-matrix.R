@@ -7,7 +7,8 @@ test_that("Check class 'gene_binary' exists",{
 
   sub <- create_gene_binary(sample=mut_valid_sample_ids, mutation=gnomeR::mutations)
 
-  expect_true("tbl_gene_binary" %in% class(sub))
+  expect_true(inherits(sub, "tbl_gene_binary"))
+
 })
 
 # Test samples argument ----
