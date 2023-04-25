@@ -93,6 +93,8 @@ summarize_by_gene <- function(gene_binary) {
     select(-c("sample_index")) %>%
     as.data.frame()
 
+  class(simp_gene_binary) <- c('tbl_gene_binary', class(simp_gene_binary))
+
   simp_gene_binary
 
 }

@@ -80,6 +80,8 @@ subset_by_frequency <- function(gene_binary, t = .1, other_vars = NULL) {
                           any_of(other_vars),
                           all_of(alts_over_thresh))
 
+  class(subset_binary) <- c("tbl_gene_binary",class(subset_binary))
+
   return(subset_binary)
 
 }
