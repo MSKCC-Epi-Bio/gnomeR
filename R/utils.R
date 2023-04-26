@@ -193,3 +193,20 @@ recode_cna <- function(alteration_vector){
   }
 
 }
+
+
+# paste endings
+
+.paste_endings = function(x) {
+  x[!str_detect(x, ".Amp|.Del|.fus|.cna")] <-
+    paste0(stringr::str_trim(
+      x[!str_detect(x, ".Amp|.Del|.fus|.cna")]), ".mut")
+
+  return(x)
+}
+
+  x <- c("TERT", "APC.Amp", "MYC.fus", "PTEN.Del")
+
+  .paste_endings(x)
+
+
