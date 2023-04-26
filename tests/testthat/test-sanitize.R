@@ -41,3 +41,23 @@ test_that("both sanitize functions run with no errors", {
   expect_error(sanitize_mutation_input(mutations), "The following*")
 
 })
+
+# --------------------------------------------------------------
+## added by cw on 4/26/23
+# sanitize_fusion_input(fusion)
+# colnames(fusion)
+
+# test fusion in variant classification
+
+test_that("test fusion in variant classification", {
+  mutation = gnomeR::mutations
+  mutation <- rename_columns(mutation)
+  column_names <- colnames(mutation)
+  mutation$variant_classification[mutation$variant_classification == "In_Frame_Del"] <- "fusion"
+
+  # fusions_in_maf <- mutation %>%
+  #   filter(.data$variant_classification %in% c("Fusion", "fusion"))
+  expect_error(sanitize_mutation_input(mutation, include_silent = F), "It looks like you have fusions in your mutation data frame.*")
+})
+
+
