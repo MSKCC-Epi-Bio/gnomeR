@@ -2,6 +2,7 @@
 
 - Deprecated `freq_cutoff`, `freq_cutoff_by_gene`, and `gene_subset` arguments in `tbl_genomic()`. It is now recommended that users use `subset_by_frequency()` instead before passing data to `tbl_genomic()`.
 - Added `other_vars` argument to `subset_by_frequency()` to allow retention of other clinical vars when using function within pipeline.
+- Deprecated `count_pathways_by` argument of `add_pathways()` function. Now, user must specify which specific alteration to count towards the pathway via the `.mut`, `.Amp`, `.Del`, `.fus` suffix (e.g. `custom_pathways = c('TP53.mut', 'APC.Del)`). 
 - Added IMPACT QA Vignette and GENIE BPC vignette
 
 # gnomeR 1.2.0
