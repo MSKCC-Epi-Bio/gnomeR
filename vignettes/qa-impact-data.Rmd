@@ -3,7 +3,7 @@ title: "How to QA Your IMPACT Data"
 output: rmarkdown::html_vignette
 author: Esther Drill
 vignette: >
-  %\VignetteIndexEntry{qa-impact-data}
+  %\VignetteIndexEntry{How to QA Your IMPACT Data}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

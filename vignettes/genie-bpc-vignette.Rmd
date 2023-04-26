@@ -3,7 +3,7 @@ title: "Analyzing GENIE BPC Data Using {gnomeR}"
 output: rmarkdown::html_vignette
 author: Samantha Brown, Jessica Lavery
 vignette: >
-  %\VignetteIndexEntry{genie-bpc-vignette}
+  %\VignetteIndexEntry{Analyzing GENIE BPC Data Using {gnomeR}}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
