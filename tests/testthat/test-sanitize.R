@@ -55,9 +55,25 @@ test_that("test fusion in variant classification", {
   column_names <- colnames(mutation)
   mutation$variant_classification[mutation$variant_classification == "In_Frame_Del"] <- "fusion"
 
-  # fusions_in_maf <- mutation %>%
-  #   filter(.data$variant_classification %in% c("Fusion", "fusion"))
   expect_error(sanitize_mutation_input(mutation, include_silent = F), "It looks like you have fusions in your mutation data frame.*")
 })
+
+# check suggested columns
+# mutation status column
+
+test_that("test fusion in variant classification", {
+  mutation = gnomeR::mutations
+  mutation <- rename_columns(mutation)
+  column_names <- colnames(mutation)
+  mutation = mutation %>% select(-mutation_status)
+
+  expect_warning(sanitize_mutation_input(mutation, include_silent = F), "A mutation_status column*")
+
+  mutation = mutation %>%
+    mutate(mutation_status = "SOMATIC")
+
+  expect_no_error(sanitize_mutation_input(mutation, include_silent = F))
+})
+
 
 
