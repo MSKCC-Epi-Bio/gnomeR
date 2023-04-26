@@ -75,5 +75,37 @@ test_that("test fusion in variant classification", {
   expect_no_error(sanitize_mutation_input(mutation, include_silent = F))
 })
 
+# variant type
+
+test_that("test variant type", {
+  mutation = gnomeR::mutations
+  mutation <- rename_columns(mutation)
+  column_names <- colnames(mutation)
+  mutation = mutation %>% select(-c(variant_type, reference_allele))
+
+  expect_error(sanitize_mutation_input(mutation, include_silent = F))
+})
+
+test_that("test variant type inference", {
+  mutation = gnomeR::mutations
+  mutation <- rename_columns(mutation)
+  column_names <- colnames(mutation)
+  mutation = mutation %>% select(-c(variant_type))
+  mutation$tumor_seq_allele2 = mutation$reference_allele
+
+  expect_warning(sanitize_mutation_input(mutation, include_silent = F))
+})
+
+
+test_that("test variant type inference error", {
+  mutation = gnomeR::mutations
+  mutation <- rename_columns(mutation)
+  column_names <- colnames(mutation)
+  mutation$tumor_seq_allele2 = mutation$reference_allele
+  mutation = mutation %>% select(-c(variant_type, reference_allele))
+
+  expect_error(sanitize_mutation_input(mutation, include_silent = F))
+})
+
 
 
