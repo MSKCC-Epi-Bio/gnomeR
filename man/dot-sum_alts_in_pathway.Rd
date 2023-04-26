@@ -18,8 +18,6 @@
 and only item in list}
 
 \item{pathway_name}{name of pathway}
-
-\item{count_pathways_by}{passed from \code{add_pathways()}}
 }
 \value{
 a dataframe of 1 column of 0/1s indicating pathway activated yes/no
