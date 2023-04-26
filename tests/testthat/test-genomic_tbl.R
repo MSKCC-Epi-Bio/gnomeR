@@ -76,19 +76,18 @@ test_that("test by variable bare or string", {
   })
 
 
-#THIS DOESN"T WORK NEED TO TEST MORE
-# test_that("test ... to tbl_summary", {
-#   samples <- as.character(unique(mutations$sampleId))[1:10]
-#   gene_binary <- create_gene_binary(samples = samples, mutation = mutations, cna = cna,
-#                                     mut_type = "somatic_only",
-#                                     snp_only = FALSE) %>%
-#     select(all_of(c("FGFR1.Amp", "SOX17.Amp", "MYC.Amp", "MYC", "sample_id")))
-#
-#   expect_error(tbl_genomic(gene_binary = gene_binary,
-#                            statistic = list(all_categorical() ~"{n}")), NA)
-#
-#
-#   })
+test_that("test ... to tbl_summary", {
+  samples <- as.character(unique(mutations$sampleId))[1:10]
+  gene_binary <- create_gene_binary(samples = samples, mutation = mutations, cna = cna,
+                                    mut_type = "somatic_only",
+                                    snp_only = FALSE) %>%
+    select(all_of(c("FGFR1.Amp", "SOX17.Amp", "MYC.Amp", "MYC", "sample_id")))
+
+  expect_error(tbl_genomic(gene_binary = gene_binary,
+                           statistic = list(everything() ~"{n}")), NA)
+
+
+  })
 
 
 test_that("you can pass gtsummary functions to tbl_genomic()",{
