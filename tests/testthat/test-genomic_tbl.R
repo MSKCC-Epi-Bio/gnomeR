@@ -104,3 +104,17 @@ test_that("you can pass gtsummary functions to tbl_genomic()",{
 
 })
 
+test_that("yields error if gene_binary is a matrix",{
+
+  samples <- as.character(unique(mutations$sampleId))[1:10]
+  gene_binary <- create_gene_binary(samples = samples, mutation = mutations, cna = cna,
+                                    mut_type = "somatic_only", snp_only = FALSE) %>%
+    select(all_of(c('SMAD2', 'FGFR1.Amp', 'AKT1', 'SOX17.Amp', 'MYC', 'MYC.Amp', 'sample_id')))
+
+  gene_binary <-as.matrix(gene_binary)
+
+  expect_error(tbl_genomic(gene_binary = gene_binary) %>%
+                    gtsummary::bold_labels())
+
+})
+

@@ -392,52 +392,58 @@ test_that("test include_silent silent are removed when variant class col", {
 
 })
 
-
+gnomeR::sv
 
 # Test snp_only argument --------------------------------------------------
 
-# add general tests
 # What happpens  when Variant Type is NA? - Maybe need to add warning to tell user about NAs
-# test_that("test the snp_only arg", {
-#
-#   #general tests: input T or F (default is F)
-#   expect_no_error( create_gene_binary(mutation=gnomeR::mutations, snp_only = T))
-#
-#   expect_no_warning( create_gene_binary(mutation=gnomeR::mutations,
-#                                      snp_only = T,
-#                                      recode_aliases = FALSE))
-#
-#   #TO FIX: this doesn't work with the new example dataset
-#   #0 col return if 0 SNP been inputted or there is no SNP category in Variat Type been inputted
-#   mut_snp_zero <- gnomeR::mutations %>%
-#                  dplyr::filter(.data$variantType != "SNP")
-#
-#   mut_snp_na <- mut_snp_zero
-#   mut_snp_na$variantType <- droplevels(mut_snp_na$variantType)
-#
-#   expect_equal( create_gene_binary(mutation=mut_snp_zero, snp_only = T) %>%
-#                 ncol(),
-#                 0)
-#
-#   expect_equal( create_gene_binary(mutation=mut_snp_na, snp_only = T) %>%
-#                   ncol(),
-#                 0)
+
+
+
+# Test the SNP_only argument and recode_aliases argument
+test_that("test the snp_only arg", {
+
+  #general tests: input T or F (default is F)
+  expect_no_error(gnomeR::create_gene_binary(mutation=gnomeR::mutations, snp_only = T))
+
+  expect_no_warning(gnomeR::create_gene_binary(mutation=gnomeR::mutations,
+                                     snp_only = T,
+                                     recode_aliases = "no"))
+})
+
+#   Test that 0 rows are returned if 0 SNP have been inputted or there is no SNP category in Variant Type been inputted
+
+test_that("test when SNP is NA", {
+  mut_snp_zero <- gnomeR::mutations %>%
+                 dplyr::filter(.data$variantType != "SNP")
+
+  mut_snp_na <- mut_snp_zero
+  mut_snp_na$variantType <- droplevels(factor(mut_snp_na$variantType))
+
+  expect_equal( create_gene_binary(mutation=mut_snp_zero, snp_only = T) %>%
+                nrow(),
+                0)
+
+  expect_equal( create_gene_binary(mutation=mut_snp_na, snp_only = T) %>%
+                  nrow(),
+                0)
+})
 #
 #   #What if NA for Variant Type?
 #   # note: without Variant Type, the create_gene_binary() still run without error
 #   #       snp_only=F will provide full list results and snp_only=T will provide 0 col result
 #
-#   mut_vt_na<- gnomeR::mutations %>%
-#               dplyr::mutate(Variant_Type=NA)
-#
-#   expect_true( create_gene_binary(mutation = mut_vt_na, snp_only = F) %>%
-#                length() >0 )
-#
-#   expect_equal( create_gene_binary(mutation = mut_vt_na, snp_only = T) %>%
-#                  ncol(), 0 )
-#
-#
-# })
+
+test_that("test when SNP is NA", {
+  mut_vt_na<- gnomeR::mutations %>%
+              dplyr::mutate(variantType=NA)
+
+  expect_true( create_gene_binary(mutation = mut_vt_na, snp_only = F) %>%
+               length() >0 )
+
+  expect_equal( create_gene_binary(mutation = mut_vt_na, snp_only = T) %>%
+                 nrow(), 0 )
+ })
 
 
 
