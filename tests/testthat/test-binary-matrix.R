@@ -392,7 +392,6 @@ test_that("test include_silent silent are removed when variant class col", {
 
 })
 
-gnomeR::sv
 
 # Test snp_only argument --------------------------------------------------
 
