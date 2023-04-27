@@ -8,6 +8,7 @@
 #' in resulting data frame. Default is NULL.
 #' @return a data frame with a `sample_id` column and columns for
 #' alterations on genes that were sequenced on the specified panel.
+#' @author Jessica Lavery
 #'
 #' @export
 #'
