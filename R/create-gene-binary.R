@@ -180,8 +180,14 @@ create_gene_binary <- function(samples = NULL,
     samples_in_data
 
   # Binary matrix for each data type ----------------------------------------------
-  mutation_binary_df <- switch(!is.null(mutation),
-    .mutations_gene_binary(
+
+  # create quiet versions to catch and combine messages
+  .quiet_mutations_gene_binary <- purrr::quietly(.mutations_gene_binary)
+  .quiet_cna_gene_binary <- purrr::quietly(.cna_gene_binary)
+  .quiet_fusions_gene_binary <- purrr::quietly(.fusions_gene_binary)
+
+  mutation_binary_df_all <- switch(!is.null(mutation),
+    .quiet_mutations_gene_binary(
       mutation = mutation,
       samples = samples_final,
       mut_type = mut_type,
@@ -192,10 +198,13 @@ create_gene_binary <- function(samples = NULL,
     )
   )
 
+  mutation_binary_df <- mutation_binary_df_all$result
+  mutation_binary_df_warn <- mutation_binary_df_all$warnings
+  mutation_binary_df_messages <- mutation_binary_df_all$messages
 
   # fusions
-  fusion_binary_df <- switch(!is.null(fusion),
-    .fusions_gene_binary(
+  fusion_binary_df_all <- switch(!is.null(fusion),
+    .quiet_fusions_gene_binary(
       fusion = fusion,
       samples = samples_final,
       specify_panel = specify_panel,
@@ -203,10 +212,14 @@ create_gene_binary <- function(samples = NULL,
     )
   )
 
+  fusion_binary_df <- fusion_binary_df_all$result
+  fusion_binary_df_warn <- fusion_binary_df_all$warnings
+  fusion_binary_df_messages <- fusion_binary_df_all$messages
+
 
   # cna
-  cna_binary_df <- switch(!is.null(cna),
-    .cna_gene_binary(
+  cna_binary_df_all <- switch(!is.null(cna),
+    .quiet_cna_gene_binary(
       cna = cna,
       samples = samples_final,
       specify_panel = specify_panel,
@@ -215,10 +228,17 @@ create_gene_binary <- function(samples = NULL,
     )
   )
 
+  cna_binary_df <- cna_binary_df_all$result
+  cna_binary_df_all_warn <- cna_binary_df_all$warnings
+  cna_binary_df_all_messages <- cna_binary_df_all$messages
+
   # put them all together
-
   df_list <- list(mutation_binary_df, fusion_binary_df, cna_binary_df)
+  cli::cli_inform(c(mutation_binary_df_messages, cna_binary_df_messages,
+                  fusions_binary_df_messages))
 
+  cli::cli_warn(c(mutation_binary_df_warn, cna_binary_df_warn,
+                    fusions_binary_df_warn))
 
   all_binary <- purrr::reduce(df_list[!sapply(df_list, is.null)], # remove null if present
     full_join,
@@ -242,10 +262,6 @@ create_gene_binary <- function(samples = NULL,
       all_binary <- bind_rows(all_binary, add_no_alt_samples)
       all_binary <- all_binary[match(samples_final, all_binary$sample_id), ]
 
-      cli::cli_alert_warning(c(
-        "{length(no_alt_samples} sample{?s} that you provided {?has/have} no observed alterations (all 0 values). Please confirm with your dataset source.",
-        "If a genetic panel was provided, it has been annotated properly."
-      ))
     }
   }
 
@@ -297,15 +313,16 @@ create_gene_binary <- function(samples = NULL,
   }
 
   # return omitted zero  samples as warning/attribute
+  samples_no_alts <- setdiff(samples_final, samples_in_data)
 
-  # samples_omitted <- setdiff(samples, samples_final)
-  #
-  # if(sum(samples_omitted) > 0) {
-  #   attr(all_binary, "omitted") <- samples_omitted
-  #
-  #   cli::cli_warn("i" = "{length(samples_omitted)} samples were omitted due to  not have any mutations found in the mutation file.
-  #                 To view these samples see {.code attr(<your_df>, 'omitted')}")
-  # }
+  if(length(samples_no_alts) > 0) {
+    attr(all_binary, "zero_alteration_samples") <- samples_no_alts
+
+    cli::cli_alert_info(c("{length(samples_no_alts)} {.code samples} had no alterations ",
+    "found in data sets (See {.code attr(<your_df>, 'zero_alteration_samples')} to view). ",
+    "These were retained in results as having 0 alterations."))
+
+  }
 
   return(all_binary)
 }
