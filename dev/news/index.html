@@ -58,6 +58,7 @@
 <li>Added <code>other_vars</code> argument to <code><a href="../reference/subset_by_frequency.html">subset_by_frequency()</a></code> to allow retention of other clinical vars when using function within pipeline.</li>
 <li>Deprecated <code>count_pathways_by</code> argument of <code><a href="../reference/add_pathways.html">add_pathways()</a></code> function. Now, user must specify which specific alteration to count towards the pathway via the <code>.mut</code>, <code>.Amp</code>, <code>.Del</code>, <code>.fus</code> suffix (e.g. <code>custom_pathways = c('TP53.mut', 'APC.Del)</code>).</li>
 <li>Added IMPACT QA Vignette and GENIE BPC vignette</li>
+<li>Added <code>subset_by_panel</code> function allowing users to easily subset an alteration dataframe and include only genes in a specific panel</li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="1.2.0" id="gnomer-120">gnomeR 1.2.0<a class="anchor" aria-label="anchor" href="#gnomer-120"></a></h2>
