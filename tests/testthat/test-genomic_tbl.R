@@ -104,3 +104,63 @@ test_that("you can pass gtsummary functions to tbl_genomic()",{
 
 })
 
+
+test_that("gene_binary is a tibble or dataframe",{
+
+  samples <- as.character(unique(mutations$sampleId))[1:10]
+  gene_binary <- create_gene_binary(samples = samples, mutation = mutations, cna = cna,
+                                    mut_type = "somatic_only", snp_only = FALSE) %>%
+    select(all_of(c('SMAD2', 'FGFR1.Amp', 'AKT1', 'SOX17.Amp', 'MYC', 'MYC.Amp', 'sample_id')))
+
+  gene_binary = as.list(gene_binary)
+
+  expect_error(tbl_genomic(gene_binary), "`gene_binary=` argument must be*")
+
+})
+
+test_that("check no duplicated IDs",{
+
+  samples <- as.character(unique(mutations$sampleId))[1:10]
+  gene_binary <- create_gene_binary(samples = samples, mutation = mutations, cna = cna,
+                                    mut_type = "somatic_only", snp_only = FALSE) %>%
+    select(all_of(c('SMAD2', 'FGFR1.Amp', 'AKT1', 'SOX17.Amp', 'MYC', 'MYC.Amp', 'sample_id')))
+
+  gene_binary = rbind(gene_binary, gene_binary)
+
+  expect_error(tbl_genomic(gene_binary), "Duplicate `sample_ids`*")
+
+})
+
+test_that("check freq_cutoff is not used",{
+
+  samples <- as.character(unique(mutations$sampleId))[1:10]
+  gene_binary <- create_gene_binary(samples = samples, mutation = mutations, cna = cna,
+                                    mut_type = "somatic_only", snp_only = FALSE) %>%
+    select(all_of(c('SMAD2', 'FGFR1.Amp', 'AKT1', 'SOX17.Amp', 'MYC', 'MYC.Amp', 'sample_id')))
+
+  expect_error(tbl_genomic(gene_binary, freq_cutoff = 10), "The `freq_cutoff`*")
+
+})
+
+test_that("check freq_cutoff_by_gene is not used",{
+
+  samples <- as.character(unique(mutations$sampleId))[1:10]
+  gene_binary <- create_gene_binary(samples = samples, mutation = mutations, cna = cna,
+                                    mut_type = "somatic_only", snp_only = FALSE) %>%
+    select(all_of(c('SMAD2', 'FGFR1.Amp', 'AKT1', 'SOX17.Amp', 'MYC', 'MYC.Amp', 'sample_id')))
+
+  expect_error(tbl_genomic(gene_binary, freq_cutoff_by_gene = TRUE), "The `freq_cutoff_by_gene`*")
+
+})
+
+
+test_that("check gene_subset is not used",{
+
+  samples <- as.character(unique(mutations$sampleId))[1:10]
+  gene_binary <- create_gene_binary(samples = samples, mutation = mutations, cna = cna,
+                                    mut_type = "somatic_only", snp_only = FALSE) %>%
+    select(all_of(c('SMAD2', 'FGFR1.Amp', 'AKT1', 'SOX17.Amp', 'MYC', 'MYC.Amp', 'sample_id')))
+
+  expect_error(tbl_genomic(gene_binary, gene_subset = TRUE), "The `gene_subset`*")
+
+})
