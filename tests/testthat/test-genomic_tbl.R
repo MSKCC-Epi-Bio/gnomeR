@@ -104,3 +104,16 @@ test_that("you can pass gtsummary functions to tbl_genomic()",{
 
 })
 
+test_that("freq cutoff is deprecated",{
+
+  sample_patients <- as.character(unique(mutations$sampleId))[1:10]
+
+  gen_dat <- create_gene_binary(samples = sample_patients,
+                                mutation = mut,
+                                fusion = sv,
+                                cna = cna)
+
+  expect_error(tbl_genomic(gen_dat,freq_cutoff = .1, by = trt_status))
+
+})
+
