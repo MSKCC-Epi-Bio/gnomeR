@@ -172,6 +172,10 @@ gnomer_palette <- function(name = "pancan", n, type = c("discrete", "continuous"
     n <- length(pal)
   }
 
+  if (is.numeric(n) == FALSE) {
+    stop("Specify a number of requested colors")
+  }
+
   if (type == "discrete" && n > length(pal)) {
     stop("Number of requested colors greater than what palette can offer")
   }
