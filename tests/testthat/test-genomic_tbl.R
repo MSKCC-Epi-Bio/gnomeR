@@ -164,3 +164,4 @@ test_that("check gene_subset is not used",{
   expect_error(tbl_genomic(gene_binary, gene_subset = TRUE), "The `gene_subset`*")
 
 })
+
