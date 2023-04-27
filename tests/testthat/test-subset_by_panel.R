@@ -4,7 +4,7 @@ test_that("Works with binary matrix", {
   bm <- create_gene_binary(mutation = gnomeR::mutations)
 
   # runs without error
-  expect_no_error(sub <- bm %>%
+  expect_message(sub <- bm %>%
                     subset_by_panel(panel_id = "IMPACT300"))
 
   # expect a message since not all genes sequenced on IMPACT300 are mutated
@@ -105,5 +105,5 @@ test_that("Count of genes not included is correct", {
     mutate(sample_id = as.character(1:nrow(.)))
 
   expect_message(subset_by_panel(bm_sim, panel_id = "IMPACT300"),
-                 "^There are 297")
+                 "There are 297")
 })

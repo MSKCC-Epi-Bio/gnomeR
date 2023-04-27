@@ -173,3 +173,4 @@ test_that("Pass `other_vars` as strings works", {
 
   expect_equal(names(sub2), names(sub))
 })
+

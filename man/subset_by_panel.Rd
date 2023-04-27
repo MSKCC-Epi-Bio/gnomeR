@@ -4,7 +4,7 @@
 \alias{subset_by_panel}
 \title{Subset a Binary Matrix By Genes Available on Specified Panel}
 \usage{
-subset_by_panel(gene_binary, panel_id, other_vars = NULL)
+subset_by_panel(gene_binary, panel_id = NULL, other_vars = NULL)
 }
 \arguments{
 \item{gene_binary}{A data frame with a row for each sample and column for each
@@ -32,8 +32,8 @@ gene_binary <- create_gene_binary(
   specify_panel = "impact"
 )
 subset_by_panel(gene_binary = gene_binary, panel_id = "IMPACT468")
-setdiff(unnest(gnomeR::gene_panels,
-               cols = c("genes_in_panel")) \%>\%
-          filter(gene_panel == "IMPACT300") \%>\%
-          pull(genes_in_panel), names(gene_binary))
+
+p_genes <- tidyr::unnest(gnomeR::gene_panels, cols = c("genes_in_panel"))
+p_genes <- p_genes[p_genes$gene_panel == 'IMPACT300', ]
+setdiff(p_genes$genes_in_panel, names(gene_binary))
 }

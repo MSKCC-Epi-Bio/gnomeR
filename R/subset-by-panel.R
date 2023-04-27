@@ -20,18 +20,24 @@
 #'   specify_panel = "impact"
 #' )
 #' subset_by_panel(gene_binary = gene_binary, panel_id = "IMPACT468")
-
+#'
 # get names of genes that were on the panel but that were unaltered in this sample
-#' setdiff(unnest(gnomeR::gene_panels,
-#'                cols = c("genes_in_panel")) %>%
-#'           filter(gene_panel == "IMPACT300") %>%
-#'           pull(genes_in_panel), names(gene_binary))
+#' p_genes <- tidyr::unnest(gnomeR::gene_panels, cols = c("genes_in_panel"))
+#' p_genes <- p_genes[p_genes$gene_panel == 'IMPACT300', ]
+#' setdiff(p_genes$genes_in_panel, names(gene_binary))
 
-subset_by_panel <- function(gene_binary, panel_id, other_vars = NULL){
+subset_by_panel <- function(gene_binary, panel_id = NULL, other_vars = NULL){
+
+  gene_panels <- gnomeR::gene_panels
+
   # Checks ------------------------------------------------------------------
   # check inputs
   if (!is.data.frame(gene_binary)) {
     cli::cli_abort("{.code gene_binary} must be a data.frame")
+  }
+
+  if(is.null(panel_id)) {
+    cli::cli_abort("{.code panel_id} must not be NULL")
   }
 
   .check_required_cols(gene_binary, "sample_id", "gene_binary")
@@ -77,13 +83,16 @@ subset_by_panel <- function(gene_binary, panel_id, other_vars = NULL){
   # Subset Binary Matrix -----------------------------------------------------
   # get names of genes on the specified panel
   genes_on_panel <- gnomeR::gene_panels %>%
-    filter(grepl(panel_id, gene_panel)) %>%
+    filter(grepl(panel_id, .data$gene_panel)) %>%
     unnest("genes_in_panel") %>%
-    pull(genes_in_panel)
+    dplyr::pull("genes_in_panel")
 
   # if not all genes on that panel are included in the genomic binary matrix
   if (length(setdiff(genes_on_panel, names(gene_binary))) != 0){
-    message(glue::glue("There are {length(setdiff(genes_on_panel, names(gene_binary)))} genes on the {panel_id} panel that are not altered for any patients; columns for those genes are not included in the resulting data frame. To see the names of the genes that are not mutated for any patients in the sample, run `setdiff(unnest(gnomeR::gene_panels, cols = c(\"genes_in_panel\")) %>% filter(gene_panel == panel_id) %>% pull(genes_in_panel), names(gene_binary))`"))
+
+    cli::cli_alert_info(c("There are {length(setdiff(genes_on_panel, names(gene_binary)))} genes on the {panel_id} panel that are not altered for any patients; columns for those genes are not included in the resulting data frame. ",
+    "To see the names of the genes that are not mutated for any patients in the sample, ",
+    "To view and compare genes in each panel, see {.code unnest(gnomeR::gene_panels, cols = c('genes_in_panel'))}"))
   }
 
   # subset to select only those genes
@@ -93,3 +102,4 @@ subset_by_panel <- function(gene_binary, panel_id, other_vars = NULL){
 
   return(subset_binary)
 }
+
