@@ -25,10 +25,10 @@ In this vignette, we will introduce the forms of copy number data available on c
 
 Make sure {gnomeR} is installed & loaded. We will also use dplyr for the purposes of this vignette. 
 
-```{r setup, message = FALSE, warning=FALSE}
+```{r setup, message = FALSE, warning=FALSE, echo=T, results='hide'}
 install.packages("devtools",repos="http://cran.us.r-project.org")
 devtools::install_github("MSKCC-Epi-Bio/gnomeR")
-install.packages("BiocManager")
+install.packages("BiocManager",repos = "http://cran.us.r-project.org")
 
 library(cluster)
 library(BiocManager)
@@ -42,9 +42,11 @@ BiocManager::install("DNAcopy")
 library(DNAcopy)
 
 library(cluster)
+library(ComplexHeatmap)
 
-install.packages("remotes")
+install.packages("remotes",repos = "http://cran.us.r-project.org")
 remotes::install_github("mskcc/facets")
+library(facets)
 
 ```
 
@@ -90,18 +92,18 @@ allowed_cna_levels %>% knitr::kable()
 <br>
     
 **IMPORTANT**: Genes that do not have a CNA are not returned from the get_cna_by_sample function
-- Use cbioportalR::get_panel_by_sample() to obtain which version of IMPACT panel on which your samples were run
+  - Use cbioportalR::get_panel_by_sample() to obtain which version of IMPACT panel on which your samples were run
   
   2. Segmentation data:
-    - Loc.start = genomic location where segment starts
-    - Loc.end = genomic location where segment ends
-    - Num.mark = number of SNPs in the segment
-    - Seg.mean = mean log2(copy number in tumor sample/ copy number in pooled normal sample) for a given segment
+  - Loc.start = genomic location where segment starts
+  - Loc.end = genomic location where segment ends
+  - Num.mark = number of SNPs in the segment
+  - Seg.mean = mean log2(copy number in tumor sample/ copy number in pooled normal sample) for a given segment
 
 ## How seg.means data gets translated to gene-level discrete copy number data
-- In cbioportal, the threshold for a segment to qualify as part of a gene-level copy number alteration is |0.2|
-- Gene level copy number alterations must be “signed out” by the clinical bioinformatics team/pathologist
-- Can see sign out notes under the “clinical” tab in cBioPortal (column may be called "SO Comments")
+  - In cbioportal, the threshold for a segment to qualify as part of a gene-level copy number alteration is |0.2|
+  - Gene level copy number alterations must be “signed out” by the clinical bioinformatics team/pathologist
+  - Can see sign out notes under the “clinical” tab in cBioPortal (column may be called "SO Comments")
 
 ## Steps to create a copy number heatmap across samples using segmentation data
 
@@ -109,29 +111,86 @@ allowed_cna_levels %>% knitr::kable()
 <br>
 Copy Number Heatmap Example (Hieronymus et al.,2018)
 <br>
+<br>
 
-1. Obtain seg.means data
-
-2. Reduce dimensions of the matrix and convert into segment by sample format
-    - We recommend using the CNregions function from iClusterPlus package to obtain the minimum set of segments that capture the CNA landscape
-    - All samples must have segments on every chromosome
-    - Epsilon=0.005 usually yields satisfactory results
-    
-    
-```{r include=F,echo=F}
+**1. Obtain seg.means data**
+```{r}
 segdata <- gnomeR::seg
 
 segdata <- segdata %>% mutate(chrom=as.numeric(chrom))
-
-segdata_condensed <- iClusterPlus::CNregions(seg=segdata)
-
 ```
 
-3. Use emcncf function from FACETS package to obtain purity, ploidy and clonal heterogeneity-adjusted copy number estimates
 
+**2. Reduce dimensions of the matrix and convert into segment by sample format**
 
-4. Plot using ComplexHeatmap package
+  - We recommend the CNregions function from iClusterPlus package to obtain the minimum set of segments that capture the CNA landscape
+  - All samples must have segments on every chromosome
+  - Epsilon=0.005 usually yields satisfactory results
+    
 ```{r}
+segdata_condensed <- iClusterPlus::CNregions(seg=segdata)
+```
+
+
+**3. Obtain purity, ploidy and clonal heterogeneity-adjusted copy number estimates**
+
+  - We recommend using the emcncf function from FACETS package
+```{r}
+# Read in SNP read count matrix
+# set.seed(1234)
+# datafile = system.file("extdata", "stomach.csv.gz", package="facets")
+# rcmat = facets::readSnpMatrix(datafile)
+
+# Preprocess SNP matric
+# xx = preProcSample(rcmat)
+
+# Process pre-processed data
+# oo=procSample(xx,cval=150)
+
+# Calculate tumor purity, ploidy, cell fraction
+# fit=emcncf(oo)
+```
+
+
+**4. Plot copy number data using ComplexHeatmap package**
+```{r, echo=T, warning=F,message=F}
+# Create matrix of ssample by segment data
+subber <- as.matrix(segdata_condensed)
+
+# Specify how you want chromosomes to be ordered in the heatmap
+noms <- gsub("\\.[0-9]*-[0-9]*","",colnames(subber))
+noms <- as.data.frame(noms)%>% dplyr::mutate(chr_num=parse_number(noms))
+
+# Create heatmap
+hm_fin <- ComplexHeatmap::Heatmap(
+  mat = subber,
+  name = "log2ratio",
+  column_order = order(as.numeric(gsub("column", "", colnames(subber)))),
+  column_split=noms$chr_num,
+  column_gap = unit(1.5, "mm"),
+  column_title_gp = gpar(fontsize = 6),
+  #heatmap_legend_param = Legend(title_gp = gpar(col = "red", fontsize = 6),
+  #labels_gp = gpar(col = "red", fontsize = 4)),
+  heatmap_legend_param = list(labels_gp = gpar(fontsize = 4),title_gp = gpar(col = "black", fontsize = 6),grid_width = unit(0.25, "cm")),
+  show_column_names = F,
+  show_row_names = F,
+  row_order = order(as.numeric(gsub("row", "", rownames(subber)))),
+  border = TRUE,
+  border_gp = grid::gpar(col = "gray50")
+  
+)
+
 
 ```
 
+```{r echo=F, include=F}
+png("H:/Biostatistics/ReinerA1/Projects/CNA_Info/Images/examp_heatmap5.png",width=3.5,height=2,units="in",res=300)
+draw_hm_fin <- draw(hm_fin)
+dev.off()
+```
+
+
+![Heatmap Example](H:/Biostatistics/ReinerA1/Projects/CNA_Info/Images/examp_heatmap5.png)
+
+  - each row is a sample; each column is a segment
+  
