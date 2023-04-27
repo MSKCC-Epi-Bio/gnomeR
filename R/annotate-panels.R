@@ -31,6 +31,9 @@ specify_impact_panels <- function(gene_binary) {
       stringr::str_detect(.data$sample_id, "-IM5") ~ "IMPACT410",
       stringr::str_detect(.data$sample_id, "-IM6") ~ "IMPACT468",
       stringr::str_detect(.data$sample_id, "-IM7") ~ "IMPACT505",
+      # heme panels
+      stringr::str_detect(.data$sample_id, "-IH3") ~ "IMPACT-HEME-400",
+      stringr::str_detect(.data$sample_id, "-IH4") ~ "IMPACT-HEME-468",
       TRUE ~ "no"
     ))
 

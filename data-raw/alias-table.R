@@ -58,6 +58,15 @@ api_505 <- get_gene_panel(panel_id = "IMPACT505") %>%
   transmute(gene = hugoGeneSymbol,
             entrez_id = entrezGeneId)
 
+# heme panels
+api_heme_400 <- get_gene_panel(panel_id = "IMPACT-HEME-400") %>%
+  transmute(gene = hugoGeneSymbol,
+            entrez_id = entrezGeneId)
+
+api_heme_468 <- get_gene_panel(panel_id = "IMPACT-HEME-468") %>%
+  transmute(gene = hugoGeneSymbol,
+            entrez_id = entrezGeneId)
+
 l_api <- list(
           "api_230" = api_230,
           "api_279" = api_279,
@@ -65,7 +74,10 @@ l_api <- list(
           "api_341" = api_341,
           "api_410" = api_410,
           "api_468" = api_468,
-          "api_505" = api_505)
+          "api_505" = api_505,
+          # heme panels
+          "api_heme_400" = api_heme_400,
+          "api_heme_468" = api_heme_468)
 
 # create data frame of genes
 # impact_genes <- map2_df(l_api, names(l_api),
