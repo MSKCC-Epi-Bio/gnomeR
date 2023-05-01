@@ -212,9 +212,7 @@ recode_cna <- function(alteration_vector){
     paste0(stringr::str_trim(
       names[!str_detect(names, ".Amp|.Del|.fus|.cna")]), ending)
 
-
-
-  return(x)
+  return(names)
 }
 
 
