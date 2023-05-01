@@ -37,3 +37,6 @@ p_genes <- tidyr::unnest(gnomeR::gene_panels, cols = c("genes_in_panel"))
 p_genes <- p_genes[p_genes$gene_panel == 'IMPACT300', ]
 setdiff(p_genes$genes_in_panel, names(gene_binary))
 }
+\author{
+Jessica Lavery
+}
