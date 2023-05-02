@@ -179,66 +179,94 @@ create_gene_binary <- function(samples = NULL,
   samples_final <- samples %||%
     samples_in_data
 
-  # Binary matrix for each data type ----------------------------------------------
+  # Recode Aliases -----------------------------------------------------------
+
+  # Fusions - create long version with event split by two involved genes
+  if(!is.null(fusion)) {
+    fusion <- fusion %>%
+      select(
+        "sample_id",
+        "site_1_hugo_symbol",
+        "site_2_hugo_symbol"
+      ) %>%
+      tidyr::pivot_longer(-"sample_id", values_to = "hugo_symbol") %>%
+      select("sample_id", "hugo_symbol")
+  }
+
+  if (recode_aliases != "no") {
+
+    all_alias_warnings <- c()
+
+    if(!is.null(mutation)) {
+      q_mut <- recode_alias(mutation,
+                            alias_table = recode_aliases, supress_warnings = TRUE)
+      mutation <- q_mut$genomic_df
+      q_mut_warn <- q_mut$aliases_in_data
+      all_alias_warnings <- c(all_alias_warnings, q_mut_warn)
+    }
+
+    if(!is.null(cna)) {
+      q_cna <- recode_alias(cna, alias_table = recode_aliases, supress_warnings = TRUE)
+      cna <- q_cna$genomic_df
+      q_cna_warn <- q_cna$aliases_in_data
+      all_alias_warnings <- c(all_alias_warnings, q_cna_warn)
+    }
+
+    if(!is.null(fusion)) {
+      q_fus <- recode_alias(fusion, alias_table = recode_aliases, supress_warnings = TRUE)
+      fusion <- q_fus$genomic_df
+      q_fus_warn <- q_fus$aliases_in_data
+      all_alias_warnings <- c(all_alias_warnings, q_fus_warn)
+    }
+
+    all_alias_warnings <- unique(all_alias_warnings)
+
+    if (length(all_alias_warnings) > 0) {
+      cli::cli_warn(c(
+        "To ensure gene with multiple names/aliases are correctly grouped together, the
+        following genes in your dataframe have been recoded (if you are running {.code create_gene_binary()}
+        you can prevent this with {.code alias_table = FALSE}):",
+        all_alias_warnings
+      ))
+    }
+  }
+
+
+  # Binary matrix for each data type ------------------------------------------
 
   # create quiet versions to catch and combine messages
-  .quiet_mutations_gene_binary <- purrr::quietly(.mutations_gene_binary)
-  .quiet_cna_gene_binary <- purrr::quietly(.cna_gene_binary)
-  .quiet_fusions_gene_binary <- purrr::quietly(.fusions_gene_binary)
-
-  mutation_binary_df_all <- switch(!is.null(mutation),
-    .quiet_mutations_gene_binary(
+  mutation_binary_df <- switch(!is.null(mutation),
+    .mutations_gene_binary(
       mutation = mutation,
       samples = samples_final,
       mut_type = mut_type,
       snp_only = snp_only,
       include_silent = include_silent,
-      specify_panel = specify_panel,
-      recode_aliases = recode_aliases
+      specify_panel = specify_panel
     )
   )
-
-  mutation_binary_df <- mutation_binary_df_all$result
-  mutation_binary_df_warn <- mutation_binary_df_all$warnings
-  mutation_binary_df_messages <- mutation_binary_df_all$messages
 
   # fusions
-  fusion_binary_df_all <- switch(!is.null(fusion),
-    .quiet_fusions_gene_binary(
+  fusion_binary_df <- switch(!is.null(fusion),
+    .fusions_gene_binary(
       fusion = fusion,
       samples = samples_final,
-      specify_panel = specify_panel,
-      recode_aliases = recode_aliases
+      specify_panel = specify_panel
     )
   )
 
-  fusion_binary_df <- fusion_binary_df_all$result
-  fusion_binary_df_warn <- fusion_binary_df_all$warnings
-  fusion_binary_df_messages <- fusion_binary_df_all$messages
-
-
   # cna
-  cna_binary_df_all <- switch(!is.null(cna),
-    .quiet_cna_gene_binary(
+  cna_binary_df <- switch(!is.null(cna),
+    .cna_gene_binary(
       cna = cna,
       samples = samples_final,
       specify_panel = specify_panel,
-      recode_aliases = recode_aliases,
       high_level_cna_only = high_level_cna_only
     )
   )
 
-  cna_binary_df <- cna_binary_df_all$result
-  cna_binary_df_all_warn <- cna_binary_df_all$warnings
-  cna_binary_df_all_messages <- cna_binary_df_all$messages
-
   # put them all together
   df_list <- list(mutation_binary_df, fusion_binary_df, cna_binary_df)
-  cli::cli_inform(c(mutation_binary_df_messages, cna_binary_df_messages,
-                  fusions_binary_df_messages))
-
-  cli::cli_warn(c(mutation_binary_df_warn, cna_binary_df_warn,
-                    fusions_binary_df_warn))
 
   all_binary <- purrr::reduce(df_list[!sapply(df_list, is.null)], # remove null if present
     full_join,
@@ -342,12 +370,7 @@ create_gene_binary <- function(samples = NULL,
                                    mut_type,
                                    snp_only,
                                    include_silent,
-                                   specify_panel,
-                                   recode_aliases = recode_aliases) {
-  if (recode_aliases != "no") {
-    mutation <- recode_alias(mutation, alias_table = recode_aliases)
-  }
-
+                                   specify_panel) {
 
   # apply filters --------------
 
@@ -414,22 +437,7 @@ create_gene_binary <- function(samples = NULL,
 #'
 .fusions_gene_binary <- function(fusion,
                                  samples,
-                                 specify_panel,
-                                 recode_aliases) {
-  # create long version with event split by two involved genes
-  # events are no longer
-  fusion <- fusion %>%
-    select(
-      "sample_id",
-      "site_1_hugo_symbol",
-      "site_2_hugo_symbol"
-    ) %>%
-    tidyr::pivot_longer(-"sample_id", values_to = "hugo_symbol") %>%
-    select("sample_id", "hugo_symbol")
-
-  if (recode_aliases != "no") {
-    fusion <- recode_alias(fusion, alias_table = recode_aliases)
-  }
+                                 specify_panel) {
 
   fusion <- fusion %>%
     stats::na.omit() %>%
@@ -452,11 +460,7 @@ create_gene_binary <- function(samples = NULL,
 .cna_gene_binary <- function(cna,
                              samples,
                              specify_panel,
-                             recode_aliases,
                              high_level_cna_only) {
-  if (recode_aliases != "no") {
-    cna <- recode_alias(cna, alias_table = recode_aliases)
-  }
 
   # * Remove lower level CNA if specified ----
   if (high_level_cna_only) {
