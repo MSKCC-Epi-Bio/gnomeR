@@ -173,7 +173,7 @@ create_gene_binary <- function(samples = NULL,
 
   # if samples not passed we will infer it from data frames
   samples %||%
-    cli::cli_alert_info("{.code samples} argument is {.code NULL}. We will infer your cohort inclusion and resulting data frame will include all samples with at least one alteration in {.field mutation}, {.field fusion} or {.field cna} data frames")
+    cli::cli_alert_warning("{.code samples} argument is {.code NULL}. We will infer your cohort inclusion and resulting data frame will include all samples with at least one alteration in {.field mutation}, {.field fusion} or {.field cna} data frames")
 
   # If user doesn't pass a vector, use samples in files as final sample list
   samples_final <- samples %||%
@@ -346,7 +346,7 @@ create_gene_binary <- function(samples = NULL,
   if(length(samples_no_alts) > 0) {
     attr(all_binary, "zero_alteration_samples") <- samples_no_alts
 
-    cli::cli_alert_info(c("{length(samples_no_alts)} {.code samples} had no alterations ",
+    cli::cli_alert_warning(c("{length(samples_no_alts)} {.code samples} had no alterations ",
     "found in data sets (See {.code attr(<your_df>, 'zero_alteration_samples')} to view). ",
     "These were retained in results as having 0 alterations."))
 
