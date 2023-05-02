@@ -14,7 +14,9 @@
     "name": "R",
     "url": "https://r-project.org"
   },
-  "runtimePlatform": "R version 4.2.2 (2022-10-31 ucrt)",
+
+  "runtimePlatform": "R version 4.3.0 (2023-04-21 ucrt)",
+
   "author": [
     {
       "@type": "Person",
@@ -359,7 +361,9 @@
     },
     "SystemRequirements": null
   },
+
   "fileSize": "2296.288KB",
+
   "releaseNotes": "https://github.com/MSKCC-Epi-Bio/gnomeR/blob/master/NEWS.md",
   "readme": "https://github.com/MSKCC-Epi-Bio/gnomeR/blob/main/README.md",
   "contIntegration": ["https://github.com/MSKCC-Epi-Bio/gnomeR/actions", "https://app.codecov.io/gh/MSKCC-Epi-Bio/gnomeR?branch=main"],

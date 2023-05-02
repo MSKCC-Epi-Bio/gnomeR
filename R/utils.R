@@ -194,7 +194,6 @@ recode_cna <- function(alteration_vector){
 
 }
 
-
 #' Check that object passed is a gene binary table
 #'
 #' @param data A data frame to check
@@ -210,5 +209,29 @@ recode_cna <- function(alteration_vector){
   }
 
 }
+
+
+#' Add descriptive endings to hugo symbol names that do not have one already
+#'
+#' @param names hugo symbols to check
+#' @param ending character ending to add to hugo symbol names without descriptive endings.
+#' The default is ".mut". If interested in any type of alteration, use ".any".
+#' @return a vector of hugo symbols where each entry has a descriptive ending
+#' from the following list: ".Amp", ".Del", ".fus", ".cna", ".mut".
+#' @keywords internal
+
+.paste_endings = function(names, ending = NULL) {
+
+  ending <- ending %||% ".mut"
+
+  names[!str_detect(names, ".Amp|.Del|.fus|.cna")] <-
+    paste0(stringr::str_trim(
+      names[!str_detect(names, ".Amp|.Del|.fus|.cna")]), ending)
+
+  return(names)
+}
+
+
+
 
 
