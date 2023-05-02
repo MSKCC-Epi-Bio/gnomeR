@@ -26,6 +26,9 @@ jobs:
 
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+      SYNAPSE_USERNAME: ${{ secrets.SYNAPSE_USERNAME }}
+      SYNAPSE_PASSWORD: ${{ secrets.SYNAPSE_PASSWORD }}
+      CBIOPORTAL_TOKEN: ${{ secrets.CBIOPORTAL_TOKEN }}
       R_KEEP_PKG_SOURCE: yes
 
     steps:
@@ -38,12 +41,12 @@ jobs:
           r-version: ${{ matrix.config.r }}
           http-user-agent: ${{ matrix.config.http-user-agent }}
           use-public-rspm: true
-          
+
       - uses: grimbough/bioc-actions/setup-bioc@v1
         with:
           bioc-version: release
           bioc-mirror: https://ftp.gwdg.de/pub/misc/bioconductor
-            
+
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
           extra-packages: rcmdcheck

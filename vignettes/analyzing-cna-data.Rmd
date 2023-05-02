@@ -113,13 +113,14 @@ Copy Number Heatmap Example (Hieronymus et al.,2018)
 <br>
 <br>
 
+
 **1. Obtain seg.means data**
+
 ```{r}
 segdata <- gnomeR::seg
 
 segdata <- segdata %>% mutate(chrom=as.numeric(chrom))
 ```
-
 
 **2. Reduce dimensions of the matrix and convert into segment by sample format**
 
@@ -131,10 +132,10 @@ segdata <- segdata %>% mutate(chrom=as.numeric(chrom))
 segdata_condensed <- iClusterPlus::CNregions(seg=segdata)
 ```
 
-
 **3. Obtain purity, ploidy and clonal heterogeneity-adjusted copy number estimates**
 
   - We recommend using the emcncf function from FACETS package
+
 ```{r}
 # Read in SNP read count matrix
 # set.seed(1234)
