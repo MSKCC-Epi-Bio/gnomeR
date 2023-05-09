@@ -88,6 +88,7 @@ test_that("aliases are recoded properly in create_gene_binary", {
 
   cna <- head(gnomeR::cna)
   cna$hugoGeneSymbol[1] <- "BCL1"
+  cna$hugoGeneSymbol[2] <- "U21B31"
 
   samples <- unique(c(mut$sampleId, cna$sampleId))
   expect_warning(genomic_df2 <- create_gene_binary(samples = samples,
