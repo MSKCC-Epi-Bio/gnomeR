@@ -36,6 +36,7 @@ reference:
     - add_pathways
     - recode_alias
     - reformat_fusion
+    - subset_by_panel
   - subtitle: Analyzing Data
   - contents:
     - tbl_genomic
