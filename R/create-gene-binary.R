@@ -79,7 +79,7 @@ create_gene_binary <- function(samples = NULL,
   # Check Arguments ------------------------------------------------------------
 
   if (is.null(mutation) && is.null(fusion) && is.null(cna)) {
-    cli::cli_abort("You must provided at least one of the three following arguments: {.code mutation}, {.code fusion} or {.code cna}.")
+    cli::cli_abort("You must provide at least one of the three following arguments: {.code mutation}, {.code fusion} or {.code cna}.")
   }
 
   # Check that mutation, fusion, cna is data.frame
