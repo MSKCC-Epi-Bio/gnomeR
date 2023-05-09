@@ -155,7 +155,9 @@ annotate_specific_panel <- function(gene_binary,
 
 which_impact_panel <- function(hugo_symbol) {
 
-  im_panels <- c("IMPACT341", "IMPACT410", "IMPACT468", "IMPACT505")
+  im_panels <- c("IMPACT341", "IMPACT410",
+                 "IMPACT468", "IMPACT505",
+                 "IMPACT-HEME-400", "IMPACT-HEME-468")
 
   # get table of gene aliases (internal data)
   alias_table <- gnomeR::impact_alias_table %>%
