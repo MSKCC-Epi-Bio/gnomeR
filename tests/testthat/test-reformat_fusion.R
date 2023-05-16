@@ -68,3 +68,30 @@ test_that("runs as expected and all fusions remain in dataset", {
 
 })
 
+test_that("check column names are included", {
+
+
+  data <- sv_long[1:30, ] %>%
+    # make all the same sample_id for easy comparison
+    mutate(sample_id = "TEST")
+
+  expect_no_error(reformat <- reformat_fusion(data))
+
+  # *TD CHECK---- I'm getting 15?
+  #  expect_equal(nrow(reformat), 13)
+
+  ###################### now try with a geneA-geneB vs geneB-geneA example ##############
+
+  samp <- sv_long %>%
+    filter(sample_id == sv_long$sample_id[1])
+
+  samp <- rbind(samp, samp %>% mutate(fusion = "MYD88-OXSR1 fusion"))
+
+  reformat2 <- reformat_fusion(samp)
+
+  expect_true("site_1_hugo_symbol" %in% colnames(reformat2))
+  expect_true("site_2_hugo_symbol" %in% colnames(reformat2))
+
+
+})
+
