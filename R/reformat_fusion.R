@@ -133,7 +133,8 @@ reformat_fusion <- function(fusions) {
                          cols_remove = FALSE,
                          too_many = "drop",
                          too_few = "align_start") %>%
-    rename("fusion" = "fusions_ordered")
+    rename("fusion" = "fusions_ordered")%>%
+    janitor::clean_names()
 
   fusions_unq
 }
