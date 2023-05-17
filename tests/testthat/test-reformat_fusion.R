@@ -23,8 +23,8 @@ test_that("flags events with two hyphens", {
   expect_equal(nrow(new), 1)
 
   # should be in alphabetical order and only listed once
-  expect_equal(paste0(new$site1hugo_symbol[1], "-",
-                      new$site2hugo_symbol[1]),
+  expect_equal(paste0(new$site_1_hugo_symbol[1], "-",
+                      new$site_2_hugo_symbol[1]),
                new$fusion[1])
 
 })
