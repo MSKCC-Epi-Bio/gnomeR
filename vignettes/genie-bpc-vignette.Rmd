@@ -33,6 +33,7 @@ This vignette will walk through how to apply {gnomeR} functions to data from AAC
 
 For the purposes of this vignette, we will use the first publicly available GENIE BPC data release of non-small cell lung cancer patients, NSCLC v2.0-public.
 
+<<<<<<< Updated upstream
 Additional details regarding the GENIE BPC data and the {genieBPC} R package are published in the following papers:
 
 * Lavery, J. A., Brown, S., Curry, M. A., Martin, A., Sjoberg, D. D., & Whiting, K. (2023). [A data processing pipeline for the AACR project GENIE biopharma collaborative data with the {genieBPC} R package](https://pubmed.ncbi.nlm.nih.gov/36519837/). Bioinformatics (Oxford, England), 39(1), btac796. https://doi.org/10.1093/bioinformatics/btac796
@@ -46,6 +47,9 @@ Technical details regarding proper analysis of this data can be found in the fol
 * Kehl, K. L., Uno, H., Gusev, A., Groha, S., Brown, S., Lavery, J. A., Schrag, D., & Panageas, K. S. (2023). [Elucidating Analytic Bias Due to Informative Cohort Entry in Cancer Clinico-genomic Datasets](https://pubmed.ncbi.nlm.nih.gov/36626408/). Cancer epidemiology, biomarkers & prevention: a publication of the American Association for Cancer Research, cosponsored by the American Society of Preventive Oncology, 32(3), 344–352. https://doi.org/10.1158/1055-9965.EPI-22-0875
 
 * Kehl, K. L., Riely, G. J., Lepisto, E. M., Lavery, J. A., Warner, J. L., LeNoue-Newton, M. L., Sweeney, S. M., Rudolph, J. E., Brown, S., Yu, C., Bedard, P. L., Schrag, D., Panageas, K. S., & American Association of Cancer Research (AACR) Project Genomics Evidence Neoplasia Information Exchange (GENIE) Consortium (2021). [Correlation Between Surrogate End Points and Overall Survival in a Multi-institutional Clinicogenomic Cohort of Patients With Non-Small Cell Lung or Colorectal Cancer](https://pubmed.ncbi.nlm.nih.gov/34309669/). JAMA network open, 4(7), e2117547. https://doi.org/10.1001/jamanetworkopen.2021.17547
+=======
+
+>>>>>>> Stashed changes
 
 ## Data Access
 
@@ -88,13 +92,21 @@ cbioportalR::set_cbioportal_db("https://genie.cbioportal.org/api")
 available_studies()
 ```
 
+<<<<<<< Updated upstream
 ```{r }
+=======
+```{r}
+>>>>>>> Stashed changes
 # obtain genomic data for GENIE BPC NSCLC v2.0-public
 mutations_extended_2_0 <- get_mutations_by_study("nsclc_public_genie_bpc")
 cna_2_0 <- get_cna_by_study("nsclc_public_genie_bpc")
 fusions_2_0 <- get_fusions_by_study("nsclc_public_genie_bpc")
 ```
 
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
 ## Data Formats
 
 The genomic data for GENIE BPC are stored both on Synapse and in cBioPortal. The data structure differs depending on where the genomic data are downloaded from. Therefore, the remainder of this vignette will proceed by outlining the process of annotating genomic data separately for genomic data downloaded from Synapse and genomic data downloaded from cBioPortal. 
@@ -131,7 +143,12 @@ Create a dataframe of the corresponding panel and sample IDs:
 nsclc_2_0_sample_panels <- nsclc_2_0_samples %>% 
   select(cpt_seq_assay_id, cpt_genie_sample_id) %>%
   rename(panel_id = cpt_seq_assay_id,
+<<<<<<< Updated upstream
          sample_id = cpt_genie_sample_id)
+=======
+         sample_id = cpt_genie_sample_id)%>%
+  na.omit()
+>>>>>>> Stashed changes
 ```
 
 ## Process Data with `create_gene_binary()`
@@ -151,11 +168,19 @@ First, the CNA file can be transposed to match the expected input for `create_ge
 cna_synapse_long <- pivot_cna_longer(nsclc_2_0$NSCLC_v2.0$cna)
 ```
 
+<<<<<<< Updated upstream
 **PLACEHOLDER**: Next, the fusions file can be transposed to match the expected input for `create_gene_binary()`
 
 ```{r }
 # transpose fusions data from Synapse
 #fusions_synapse_long <- pivot_fusions_longer(nsclc_2_0$NSCLC_v2.0$fusions)
+=======
+Next, the fusions file can be transposed to match the expected input for `create_gene_binary()`. See the "Processing data with {gnomeR}" vignette to see more information about how each dataset should be structured.
+
+```{r }
+# transpose fusions data from Synapse
+fusions_synapse_long <- reformat_fusion(nsclc_2_0$NSCLC_v2.0$fusions)
+>>>>>>> Stashed changes
 ```
 
 Finally, the reformatted genomic data can be supplied to `create_gene_binary()` to annotate genomic alterations for patients in the analytic cohort of interest.
@@ -172,7 +197,11 @@ nsclc_2_0_gen_dat_synapse <-
     mutation = nsclc_2_0$NSCLC_v2.0$mutations_extended,
     cna = cna_synapse_long,
     high_level_cna_only = TRUE,
+<<<<<<< Updated upstream
  #   fusion = fusions_synapse_long,
+=======
+    fusion = fusions_synapse_long,
+>>>>>>> Stashed changes
     samples = nsclc_2_0_sample_panels$sample_id,
     specify_panel = nsclc_2_0_sample_panels
   )
@@ -185,6 +214,10 @@ nsclc_2_0_gen_dat_cbio <-
   create_gene_binary(
     mutation = mutations_extended_2_0,
     cna = cna_2_0,
+<<<<<<< Updated upstream
+=======
+    fusion = fusions_2_0,
+>>>>>>> Stashed changes
     samples = nsclc_2_0_sample_panels$sample_id,
     specify_panel = nsclc_2_0_sample_panels
   )
@@ -290,3 +323,21 @@ mutation_viz_gen_dat_cbio <- mutation_viz(mutations_extended_2_0)
 mutation_viz_gen_dat_cbio
 ```
 
+<<<<<<< Updated upstream
+=======
+# Resources
+
+Additional details regarding the GENIE BPC data and the {genieBPC} R package are published in the following papers:
+
+* Lavery, J. A., Brown, S., Curry, M. A., Martin, A., Sjoberg, D. D., & Whiting, K. (2023). [A data processing pipeline for the AACR project GENIE biopharma collaborative data with the {genieBPC} R package](https://pubmed.ncbi.nlm.nih.gov/36519837/). Bioinformatics (Oxford, England), 39(1), btac796. https://doi.org/10.1093/bioinformatics/btac796
+
+* Lavery, J. A., Lepisto, E. M., Brown, S., Rizvi, H., McCarthy, C., LeNoue-Newton, M., Yu, C., Lee, J., Guo, X., Yu, T., Rudolph, J., Sweeney, S., AACR Project GENIE Consortium, Park, B. H., Warner, J. L., Bedard, P. L., Riely, G., Schrag, D., & Panageas, K. S. (2022). [A Scalable Quality Assurance Process for Curating Oncology Electronic Health Records: The Project GENIE Biopharma Collaborative Approach](https://pubmed.ncbi.nlm.nih.gov/35192403/). JCO clinical cancer informatics, 6, e2100105. https://doi.org/10.1200/CCI.21.00105
+
+Technical details regarding proper analysis of this data can be found in the following publication:
+
+* Brown, S., Lavery, J. A., Shen, R., Martin, A. S., Kehl, K. L., Sweeney, S. M., Lepisto, E. M., Rizvi, H., McCarthy, C. G., Schultz, N., Warner, J. L., Park, B. H., Bedard, P. L., Riely, G. J., Schrag, D., Panageas, K. S., & AACR Project GENIE Consortium (2022). [Implications of Selection Bias Due to Delayed Study Entry in Clinical Genomic Studies](https://pubmed.ncbi.nlm.nih.gov/34734967/). JAMA oncology, 8(2), 287–291. https://doi.org/10.1001/jamaoncol.2021.5153
+
+* Kehl, K. L., Uno, H., Gusev, A., Groha, S., Brown, S., Lavery, J. A., Schrag, D., & Panageas, K. S. (2023). [Elucidating Analytic Bias Due to Informative Cohort Entry in Cancer Clinico-genomic Datasets](https://pubmed.ncbi.nlm.nih.gov/36626408/). Cancer epidemiology, biomarkers & prevention: a publication of the American Association for Cancer Research, cosponsored by the American Society of Preventive Oncology, 32(3), 344–352. https://doi.org/10.1158/1055-9965.EPI-22-0875
+
+* Kehl, K. L., Riely, G. J., Lepisto, E. M., Lavery, J. A., Warner, J. L., LeNoue-Newton, M. L., Sweeney, S. M., Rudolph, J. E., Brown, S., Yu, C., Bedard, P. L., Schrag, D., Panageas, K. S., & American Association of Cancer Research (AACR) Project Genomics Evidence Neoplasia Information Exchange (GENIE) Consortium (2021). [Correlation Between Surrogate End Points and Overall Survival in a Multi-institutional Clinicogenomic Cohort of Patients With Non-Small Cell Lung or Colorectal Cancer](https://pubmed.ncbi.nlm.nih.gov/34309669/). JAMA network open, 4(7), e2117547. https://doi.org/10.1001/jamanetworkopen.2021.17547
+>>>>>>> Stashed changes
