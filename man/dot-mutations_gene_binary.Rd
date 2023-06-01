@@ -10,8 +10,7 @@
   mut_type,
   snp_only,
   include_silent,
-  specify_panel,
-  recode_aliases = recode_aliases
+  specify_panel
 )
 }
 \arguments{
@@ -34,10 +33,6 @@ Default is FALSE.}
 panel id (see \code{gnomeR::gene_panels} for available panels), or \code{"impact"} for automated IMPACT annotation.
 Alternatively, you may pass a data frame of \code{sample_id}-\code{panel_id} pairs specifying panels for each sample for
 which to insert NAs indicating genes not tested. See below for details.}
-
-\item{recode_aliases}{Default is \code{"impact"} where function will check for IMPACT genes that may go by more than 1 name in your data and replace the alias name with the standardized gene name (see \code{gnomeR::impact_alias_table} for reference list).
-If \code{"no"}, no alias annotation will be performed.
-Alternatively, you may pass a custom alias list as a data frame with columns \code{hugo_symbol} and \code{alias} specifying a custom alias table to use for checks. See below for details.}
 }
 \value{
 a data frame
