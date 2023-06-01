@@ -44,6 +44,9 @@ add_pathways <- function(gene_binary,
   all_path_names <- names(all_path)
   .check_required_cols(gene_binary, "sample_id", "gene_binary")
 
+  .check_gb(gene_binary)
+  gene_binary <- as_tibble(unclass(gene_binary))
+  
   # * Deprecated Arguments (will remove this in the future) ----
 
   if (lifecycle::is_present(count_pathways_by)) {
@@ -54,7 +57,6 @@ add_pathways <- function(gene_binary,
                                 You must explicitely specify in your custom pathway what types of alterations count towards pathway e.g. `custom_pathway = c('TP53.mut', 'APC.Del').
                                       If you would like to count any type of alteration on a gene towards a pathway, use the suffix `.any`, e.g. `custom_pathway = c('TP53.any', 'APC.any')")))
   }
-
 
 
   # * Default pathways ----
@@ -153,6 +155,12 @@ add_pathways <- function(gene_binary,
 
   path_out <- gene_binary %>%
     bind_cols(path_out)
+
+  if (!inherits(path_out, "tbl_gene_binary")) {
+
+    class(path_out) <- c("tbl_gene_binary", class(path_out))
+
+  }
 
   return(path_out)
 }

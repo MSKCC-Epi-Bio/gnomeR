@@ -4,9 +4,9 @@
 #' resulting data frame will have only 1 col per gene, as opposed to separate
 #' columns for mutation/cna/fusion.
 #'
-#' @param gene_binary a 0/1 matrix of gene alterations
+#' @param gene_binary a 'tbl_gene_binary' of gene alterations
 #'
-#' @return a binary matrix with a row for each sample and one column per gene
+#' @return a 'tble_gene_binary' with a row for each sample and one column per gene
 #' @export
 #'
 #' @examples
@@ -24,8 +24,10 @@ summarize_by_gene <- function(gene_binary) {
 
   # Checks ------------------------------------------------------------------
 
+  .check_gb(gene_binary)
+
   if (!is.data.frame(gene_binary)) {
-    cli::cli_abort("{.code gene_binary} must be a data.frame with sample ids")
+    cli::cli_abort("{.code gene_binary} must be a <data.frame/tbl_gene_binary> with sample ids")
   }
 
   .check_required_cols(gene_binary, "sample_id", "gene_binary")
@@ -90,6 +92,10 @@ summarize_by_gene <- function(gene_binary) {
     left_join(sample_index, ., by = "sample_index") %>%
     select(-c("sample_index")) %>%
     as.data.frame()
+
+  if (!inherits(simp_gene_binary, "tbl_gene_binary")) {
+    class(simp_gene_binary) <- c('tbl_gene_binary', class(simp_gene_binary))
+  }
 
   simp_gene_binary
 

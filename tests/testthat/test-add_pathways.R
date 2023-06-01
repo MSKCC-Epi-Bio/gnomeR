@@ -118,13 +118,50 @@ test_that("test TP53.mut and TP53 are processed the same way", {
 
 # Make sure all works with both a few default `pathways` AND `custom_pathways` passed at the same time
 
-test_that("add_pathways function works with default input", {
+test_that("only accecpts tbl_gene_binary objects", {
+  fake <- data.frame(sample_id = c(rep("samp", 5)),
+                     TERT = c(rep(1, 3), 0, NA))
+
+  expect_error(add_pathways(fake))
 
   binmat <- gnomeR::create_gene_binary(mutation = gnomeR::mutations[1:10,],
+                                       cna = gnomeR::cna,
+                                       fusion = gnomeR::sv[1:10,])
+
+  expect_no_error(add_pathways(gene_binary = binmat))
+
+  #test with passing an object in parts
+
+  binmat <- binmat %>%
+    summarize_by_gene()
+
+  binmat <- binmat %>%
+    subset_by_frequency()
+
+  expect_no_error(test <- add_pathways(gene_binary = binmat))
+
+  expect_true(inherits(test, "tbl_gene_binary"))
+
+})
+
+test_that("produces tbl_gene_binary object", {
+  fake <- data.frame(sample_id = c(rep("samp", 5)),
+                     TERT = c(rep(1, 3), 0, NA))
+
+  expect_error(add_pathways(fake))
+
+})
+
+
+test_that("add_pathways function works with default input", {
+
+  # discrepancy between . and - in names in pathway
+  binmat <- gnomeR::create_gene_binary(mutation = gnomeR::mutations[1:20,],
                                   cna = gnomeR::cna,
                                   fusion = gnomeR::sv[1:10,])
 
-  expect_error(p <- add_pathways(gene_binary = binmat), NA)
+  expect_no_error(p <- add_pathways(gene_binary = binmat, count_pathways_by = "alteration"))
+
   expect_equal(setdiff(names(p), names(binmat)), paste0("pathway_", names(gnomeR::pathways)))
 
 

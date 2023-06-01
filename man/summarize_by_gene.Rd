@@ -7,10 +7,10 @@
 summarize_by_gene(gene_binary)
 }
 \arguments{
-\item{gene_binary}{a 0/1 matrix of gene alterations}
+\item{gene_binary}{a 'tbl_gene_binary' of gene alterations}
 }
 \value{
-a binary matrix with a row for each sample and one column per gene
+a 'tble_gene_binary' with a row for each sample and one column per gene
 }
 \description{
 This will reduce the number of columns in your binary matrix, and the

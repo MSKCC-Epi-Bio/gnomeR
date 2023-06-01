@@ -7,7 +7,7 @@
 subset_by_frequency(gene_binary, t = 0.1, other_vars = NULL)
 }
 \arguments{
-\item{gene_binary}{A data frame with a row for each sample and column for each
+\item{gene_binary}{A \code{tbl_gene_binary} object with a row for each sample and column for each
 alteration. Data frame must have a \code{sample_id} column and columns for each alteration
 with values of 0, 1 or NA.}
 
@@ -33,5 +33,7 @@ samples <- unique(gnomeR::mutations$sampleId)
  )
 gene_binary \%>\%
  subset_by_frequency()
+
+
 
 }
