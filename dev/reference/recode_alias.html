@@ -20,7 +20,7 @@ Custom tables can be provided as long as hugo_symbol and alias columns exist."><
     
     <a class="navbar-brand me-2" href="../index.html">gnomeR</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9002</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9003</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -74,7 +74,7 @@ Custom tables can be provided as long as <code>hugo_symbol</code> and <code>alia
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">recode_alias</span><span class="op">(</span><span class="va">genomic_df</span>, alias_table <span class="op">=</span> <span class="st">"impact"</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">recode_alias</span><span class="op">(</span><span class="va">genomic_df</span>, alias_table <span class="op">=</span> <span class="st">"impact"</span>, supress_warnings <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -87,6 +87,10 @@ Custom tables can be provided as long as <code>hugo_symbol</code> and <code>alia
 <dd><p>a string indicating "impact", or a  dataframe with at least two columns (<code>hugo_symbol</code>,
 <code>alias</code>) with one row for each pair.</p></dd>
 
+
+<dt>supress_warnings</dt>
+<dd><p>If TRUE, function will return a list containing a dataframe of recoded results and a names vector of recoded aliases in data</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
@@ -97,14 +101,12 @@ Custom tables can be provided as long as <code>hugo_symbol</code> and <code>alia
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">mut</span> <span class="op">&lt;-</span> <span class="fu"><a href="rename_columns.html">rename_columns</a></span><span class="op">(</span><span class="fu">gnomeR</span><span class="fu">::</span><span class="va"><a href="mutations.html">mutations</a></span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, <span class="op">]</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">mut</span><span class="op">$</span><span class="va">hugo_symbol</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "PARP1" "PARP1" "PARP1" "AKT1"  "AKT1" </span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">genomic_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="rename_columns.html">rename_columns</a></span><span class="op">(</span><span class="fu">gnomeR</span><span class="fu">::</span><span class="va"><a href="mutations.html">mutations</a></span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, <span class="op">]</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">alias_table</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span><span class="st">"hugo_symbol"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"New Symbol"</span>, <span class="st">"New Symbol2"</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span><span class="st">"alias"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"PARP1"</span>, <span class="st">"AKT1"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="fu">recode_alias</span><span class="op">(</span><span class="va">mut</span>, <span class="va">alias_table</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">recode_alias</span><span class="op">(</span><span class="va">genomic_df</span>, <span class="va">alias_table</span><span class="op">)</span></span></span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>To ensure gene with multiple names/aliases are correctly grouped together, the</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> following genes in your dataframe have been recoded (if you are running</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> `create_gene_binary()` you can prevent this with `alias_table = FALSE`):</span>
@@ -125,7 +127,28 @@ Custom tables can be provided as long as <code>hugo_symbol</code> and <code>alia
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   functionalImpactScore &lt;chr&gt;, fisValue &lt;dbl&gt;, linkXvar &lt;chr&gt;, linkPdb &lt;chr&gt;,</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   linkMsa &lt;chr&gt;, ncbi_build &lt;chr&gt;, variant_type &lt;chr&gt;, keyword &lt;chr&gt;,</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   chromosome &lt;chr&gt;, allele &lt;chr&gt;, refseqMrnaId &lt;chr&gt;, …</span></span>
-<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">recode_alias</span><span class="op">(</span><span class="va">genomic_df</span>, <span class="va">alias_table</span>, supress_warnings <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $genomic_df</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 5 × 29</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   hugo_symbol entrez_gene_id uniqueSampleKey                    uniquePatientKey</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                              <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>           </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> New Symbol             142 UC0wMDAxMTI4LVQwMS1JTTM6cHJhZF9tc… UC0wMDAxMTI4OnB…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> New Symbol             142 UC0wMDAxODU5LVQwMS1JTTM6cHJhZF9tc… UC0wMDAxODU5OnB…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> New Symbol             142 UC0wMDAxODk1LVQwMS1JTTM6cHJhZF9tc… UC0wMDAxODk1OnB…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span> New Symbol2            207 UC0wMDAxMTI4LVQwMS1JTTM6cHJhZF9tc… UC0wMDAxMTI4OnB…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">5</span> New Symbol2            207 UC0wMDAxODQ1LVQwMS1JTTM6cHJhZF9tc… UC0wMDAxODQ1OnB…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 25 more variables: molecular_profile_id &lt;chr&gt;, sample_id &lt;chr&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   patient_id &lt;chr&gt;, study_id &lt;chr&gt;, center &lt;chr&gt;, mutation_status &lt;chr&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   validation_status &lt;chr&gt;, start_position &lt;int&gt;, end_position &lt;int&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   reference_allele &lt;chr&gt;, hgv_sp_short &lt;chr&gt;, variant_classification &lt;chr&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   functionalImpactScore &lt;chr&gt;, fisValue &lt;dbl&gt;, linkXvar &lt;chr&gt;, linkPdb &lt;chr&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   linkMsa &lt;chr&gt;, ncbi_build &lt;chr&gt;, variant_type &lt;chr&gt;, keyword &lt;chr&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   chromosome &lt;chr&gt;, allele &lt;chr&gt;, refseqMrnaId &lt;chr&gt;, …</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $aliases_in_data</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                             !                             ! </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "PARP1 recoded to New Symbol" "AKT1 recoded to New Symbol2" </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

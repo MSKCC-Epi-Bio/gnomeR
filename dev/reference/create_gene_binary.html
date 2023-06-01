@@ -14,7 +14,7 @@ a predefined list of samples (rows are samples and columns are genes)"><meta nam
     
     <a class="navbar-brand me-2" href="../index.html">gnomeR</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9002</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9003</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -169,7 +169,7 @@ See <code><a href="impact_alias_table.html">gnomeR::impact_alias_table</a></code
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">mut.only</span> <span class="op">&lt;-</span> <span class="fu">create_gene_binary</span><span class="op">(</span>mutation <span class="op">=</span> <span class="fu">gnomeR</span><span class="fu">::</span><span class="va"><a href="mutations.html">mutations</a></span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> `samples` argument is `NULL`. We will infer your cohort inclusion and resulting data frame will include all samples with at least one alteration in <span style="color: #00BB00;">mutation</span>, <span style="color: #00BB00;">fusion</span> or <span style="color: #00BB00;">cna</span> data frames</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> `samples` argument is `NULL`. We will infer your cohort inclusion and resulting data frame will include all samples with at least one alteration in <span style="color: #00BB00;">mutation</span>, <span style="color: #00BB00;">fusion</span> or <span style="color: #00BB00;">cna</span> data frames</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> 7 mutations have `NA` or blank in mutation status column instead of 'SOMATIC' or 'GERMLINE'. These were assumed to be 'SOMATIC' and were retained in the resulting binary matrix.</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">samples</span> <span class="op">&lt;-</span> <span class="fu">gnomeR</span><span class="fu">::</span><span class="va"><a href="mutations.html">mutations</a></span><span class="op">$</span><span class="va">sampleId</span></span></span>

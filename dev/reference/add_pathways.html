@@ -12,7 +12,7 @@ Any gene column with no suffix will be assumed to be a mutation."><meta name="ro
     
     <a class="navbar-brand me-2" href="../index.html">gnomeR</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9002</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9003</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -118,7 +118,7 @@ from <a href="https://pubmed.ncbi.nlm.nih.gov/29625050/" class="external-link">S
 <span class="r-in"><span><span class="va">gene_binary</span> <span class="op">&lt;-</span> <span class="fu"><a href="create_gene_binary.html">create_gene_binary</a></span><span class="op">(</span>mutation <span class="op">=</span> <span class="fu">gnomeR</span><span class="fu">::</span><span class="va"><a href="mutations.html">mutations</a></span>,</span></span>
 <span class="r-in"><span> cna <span class="op">=</span> <span class="fu">gnomeR</span><span class="fu">::</span><span class="va"><a href="cna.html">cna</a></span>,</span></span>
 <span class="r-in"><span> fusion <span class="op">=</span> <span class="fu">gnomeR</span><span class="fu">::</span><span class="va"><a href="sv.html">sv</a></span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> `samples` argument is `NULL`. We will infer your cohort inclusion and resulting data frame will include all samples with at least one alteration in <span style="color: #00BB00;">mutation</span>, <span style="color: #00BB00;">fusion</span> or <span style="color: #00BB00;">cna</span> data frames</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> `samples` argument is `NULL`. We will infer your cohort inclusion and resulting data frame will include all samples with at least one alteration in <span style="color: #00BB00;">mutation</span>, <span style="color: #00BB00;">fusion</span> or <span style="color: #00BB00;">cna</span> data frames</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> 7 mutations have `NA` or blank in mutation status column instead of 'SOMATIC' or 'GERMLINE'. These were assumed to be 'SOMATIC' and were retained in the resulting binary matrix.</span>
 <span class="r-in"><span><span class="va">pathway_df</span> <span class="op">&lt;-</span> <span class="fu">add_pathways</span><span class="op">(</span><span class="va">gene_binary</span>, pathways <span class="op">=</span> <span class="st">"Notch"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>

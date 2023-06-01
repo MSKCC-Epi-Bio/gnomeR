@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">gnomeR</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9002</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0.9003</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -59,7 +59,7 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">.fusions_gene_binary</span><span class="op">(</span><span class="va">fusion</span>, <span class="va">samples</span>, <span class="va">specify_panel</span>, <span class="va">recode_aliases</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">.fusions_gene_binary</span><span class="op">(</span><span class="va">fusion</span>, <span class="va">samples</span>, <span class="va">specify_panel</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -81,12 +81,6 @@ returned for every column of that patient row.</p></dd>
 panel id (see <code><a href="gene_panels.html">gnomeR::gene_panels</a></code> for available panels), or <code>"impact"</code> for automated IMPACT annotation.
 Alternatively, you may pass a data frame of <code>sample_id</code>-<code>panel_id</code> pairs specifying panels for each sample for
 which to insert NAs indicating genes not tested. See below for details.</p></dd>
-
-
-<dt>recode_aliases</dt>
-<dd><p>Default is <code>"impact"</code> where function will check for IMPACT genes that may go by more than 1 name in your data and replace the alias name with the standardized gene name (see <code><a href="impact_alias_table.html">gnomeR::impact_alias_table</a></code> for reference list).
-If <code>"no"</code>, no alias annotation will be performed.
-Alternatively, you may pass a custom alias list as a data frame with columns <code>hugo_symbol</code> and <code>alias</code> specifying a custom alias table to use for checks. See below for details.</p></dd>
 
 </dl></div>
     <div class="section level2">
