@@ -41,3 +41,71 @@ test_that("both sanitize functions run with no errors", {
   expect_error(sanitize_mutation_input(mutations), "The following*")
 
 })
+
+# --------------------------------------------------------------
+## added by cw on 4/26/23
+# sanitize_fusion_input(fusion)
+# colnames(fusion)
+
+# test fusion in variant classification
+
+test_that("test fusion in variant classification", {
+  mutation = gnomeR::mutations
+  mutation <- rename_columns(mutation)
+  column_names <- colnames(mutation)
+  mutation$variant_classification[mutation$variant_classification == "In_Frame_Del"] <- "fusion"
+
+  expect_error(sanitize_mutation_input(mutation, include_silent = F), "It looks like you have fusions in your mutation data frame.*")
+})
+
+# check suggested columns
+# mutation status column
+
+test_that("test fusion in variant classification", {
+  mutation = gnomeR::mutations
+  mutation <- rename_columns(mutation)
+  column_names <- colnames(mutation)
+  mutation = mutation %>% select(-mutation_status)
+
+  expect_warning(sanitize_mutation_input(mutation, include_silent = F), "A mutation_status column*")
+
+  mutation = mutation %>%
+    mutate(mutation_status = "SOMATIC")
+
+  expect_no_error(sanitize_mutation_input(mutation, include_silent = F))
+})
+
+# variant type
+
+test_that("test variant type", {
+  mutation = gnomeR::mutations
+  mutation <- rename_columns(mutation)
+  column_names <- colnames(mutation)
+  mutation = mutation %>% select(-c(variant_type, reference_allele))
+
+  expect_error(sanitize_mutation_input(mutation, include_silent = F))
+})
+
+test_that("test variant type inference", {
+  mutation = gnomeR::mutations
+  mutation <- rename_columns(mutation)
+  column_names <- colnames(mutation)
+  mutation = mutation %>% select(-c(variant_type))
+  mutation$tumor_seq_allele2 = mutation$reference_allele
+
+  expect_warning(sanitize_mutation_input(mutation, include_silent = F))
+})
+
+
+test_that("test variant type inference error", {
+  mutation = gnomeR::mutations
+  mutation <- rename_columns(mutation)
+  column_names <- colnames(mutation)
+  mutation$tumor_seq_allele2 = mutation$reference_allele
+  mutation = mutation %>% select(-c(variant_type, reference_allele))
+
+  expect_error(sanitize_mutation_input(mutation, include_silent = F))
+})
+
+
+

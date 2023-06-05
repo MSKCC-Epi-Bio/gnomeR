@@ -79,7 +79,7 @@ create_gene_binary <- function(samples = NULL,
   # Check Arguments ------------------------------------------------------------
 
   if (is.null(mutation) && is.null(fusion) && is.null(cna)) {
-    cli::cli_abort("You must provided at least one of the three following arguments: {.code mutation}, {.code fusion} or {.code cna}.")
+    cli::cli_abort("You must provide at least one of the three following arguments: {.code mutation}, {.code fusion} or {.code cna}.")
   }
 
   # Check that mutation, fusion, cna is data.frame
@@ -173,13 +173,68 @@ create_gene_binary <- function(samples = NULL,
 
   # if samples not passed we will infer it from data frames
   samples %||%
-    cli::cli_alert_info("{.code samples} argument is {.code NULL}. We will infer your cohort inclusion and resulting data frame will include all samples with at least one alteration in {.field mutation}, {.field fusion} or {.field cna} data frames")
+    cli::cli_alert_warning("{.code samples} argument is {.code NULL}. We will infer your cohort inclusion and resulting data frame will include all samples with at least one alteration in {.field mutation}, {.field fusion} or {.field cna} data frames")
 
   # If user doesn't pass a vector, use samples in files as final sample list
   samples_final <- samples %||%
     samples_in_data
 
-  # Binary matrix for each data type ----------------------------------------------
+  # Recode Aliases -----------------------------------------------------------
+
+  # Fusions - create long version with event split by two involved genes
+  if(!is.null(fusion)) {
+    fusion <- fusion %>%
+      select(
+        "sample_id",
+        "site_1_hugo_symbol",
+        "site_2_hugo_symbol"
+      ) %>%
+      tidyr::pivot_longer(-"sample_id", values_to = "hugo_symbol") %>%
+      select("sample_id", "hugo_symbol")
+  }
+
+  if (recode_aliases != "no") {
+
+    all_alias_warnings <- c()
+
+    if(!is.null(mutation)) {
+      q_mut <- recode_alias(mutation,
+                            alias_table = recode_aliases, supress_warnings = TRUE)
+      mutation <- q_mut$genomic_df
+      q_mut_warn <- q_mut$aliases_in_data
+      all_alias_warnings <- c(all_alias_warnings, q_mut_warn)
+    }
+
+    if(!is.null(cna)) {
+      q_cna <- recode_alias(cna, alias_table = recode_aliases, supress_warnings = TRUE)
+      cna <- q_cna$genomic_df
+      q_cna_warn <- q_cna$aliases_in_data
+      all_alias_warnings <- c(all_alias_warnings, q_cna_warn)
+    }
+
+    if(!is.null(fusion)) {
+      q_fus <- recode_alias(fusion, alias_table = recode_aliases, supress_warnings = TRUE)
+      fusion <- q_fus$genomic_df
+      q_fus_warn <- q_fus$aliases_in_data
+      all_alias_warnings <- c(all_alias_warnings, q_fus_warn)
+    }
+
+    all_alias_warnings <- unique(all_alias_warnings)
+
+    if (length(all_alias_warnings) > 0) {
+      cli::cli_warn(c(
+        "To ensure gene with multiple names/aliases are correctly grouped together, the
+        following genes in your dataframe have been recoded (if you are running {.code create_gene_binary()}
+        you can prevent this with {.code alias_table = FALSE}):",
+        all_alias_warnings
+      ))
+    }
+  }
+
+
+  # Binary matrix for each data type ------------------------------------------
+
+  # create quiet versions to catch and combine messages
   mutation_binary_df <- switch(!is.null(mutation),
     .mutations_gene_binary(
       mutation = mutation,
@@ -187,22 +242,18 @@ create_gene_binary <- function(samples = NULL,
       mut_type = mut_type,
       snp_only = snp_only,
       include_silent = include_silent,
-      specify_panel = specify_panel,
-      recode_aliases = recode_aliases
+      specify_panel = specify_panel
     )
   )
-
 
   # fusions
   fusion_binary_df <- switch(!is.null(fusion),
     .fusions_gene_binary(
       fusion = fusion,
       samples = samples_final,
-      specify_panel = specify_panel,
-      recode_aliases = recode_aliases
+      specify_panel = specify_panel
     )
   )
-
 
   # cna
   cna_binary_df <- switch(!is.null(cna),
@@ -210,15 +261,12 @@ create_gene_binary <- function(samples = NULL,
       cna = cna,
       samples = samples_final,
       specify_panel = specify_panel,
-      recode_aliases = recode_aliases,
       high_level_cna_only = high_level_cna_only
     )
   )
 
   # put them all together
-
   df_list <- list(mutation_binary_df, fusion_binary_df, cna_binary_df)
-
 
   all_binary <- purrr::reduce(df_list[!sapply(df_list, is.null)], # remove null if present
     full_join,
@@ -241,6 +289,7 @@ create_gene_binary <- function(samples = NULL,
 
       all_binary <- bind_rows(all_binary, add_no_alt_samples)
       all_binary <- all_binary[match(samples_final, all_binary$sample_id), ]
+
     }
   }
 
@@ -292,15 +341,16 @@ create_gene_binary <- function(samples = NULL,
   }
 
   # return omitted zero  samples as warning/attribute
+  samples_no_alts <- setdiff(samples_final, samples_in_data)
 
-  # samples_omitted <- setdiff(samples, samples_final)
-  #
-  # if(sum(samples_omitted) > 0) {
-  #   attr(all_binary, "omitted") <- samples_omitted
-  #
-  #   cli::cli_warn("i" = "{length(samples_omitted)} samples were omitted due to  not have any mutations found in the mutation file.
-  #                 To view these samples see {.code attr(<your_df>, 'omitted')}")
-  # }
+  if(length(samples_no_alts) > 0) {
+    attr(all_binary, "zero_alteration_samples") <- samples_no_alts
+
+    cli::cli_alert_warning(c("{length(samples_no_alts)} {.code samples} had no alterations ",
+    "found in data sets (See {.code attr(<your_df>, 'zero_alteration_samples')} to view). ",
+    "These were retained in results as having 0 alterations."))
+
+  }
 
   return(all_binary)
 }
@@ -320,12 +370,7 @@ create_gene_binary <- function(samples = NULL,
                                    mut_type,
                                    snp_only,
                                    include_silent,
-                                   specify_panel,
-                                   recode_aliases = recode_aliases) {
-  if (recode_aliases != "no") {
-    mutation <- recode_alias(mutation, alias_table = recode_aliases)
-  }
-
+                                   specify_panel) {
 
   # apply filters --------------
 
@@ -392,22 +437,7 @@ create_gene_binary <- function(samples = NULL,
 #'
 .fusions_gene_binary <- function(fusion,
                                  samples,
-                                 specify_panel,
-                                 recode_aliases) {
-  # create long version with event split by two involved genes
-  # events are no longer
-  fusion <- fusion %>%
-    select(
-      "sample_id",
-      "site_1_hugo_symbol",
-      "site_2_hugo_symbol"
-    ) %>%
-    tidyr::pivot_longer(-"sample_id", values_to = "hugo_symbol") %>%
-    select("sample_id", "hugo_symbol")
-
-  if (recode_aliases != "no") {
-    fusion <- recode_alias(fusion, alias_table = recode_aliases)
-  }
+                                 specify_panel) {
 
   fusion <- fusion %>%
     stats::na.omit() %>%
@@ -430,11 +460,7 @@ create_gene_binary <- function(samples = NULL,
 .cna_gene_binary <- function(cna,
                              samples,
                              specify_panel,
-                             recode_aliases,
                              high_level_cna_only) {
-  if (recode_aliases != "no") {
-    cna <- recode_alias(cna, alias_table = recode_aliases)
-  }
 
   # * Remove lower level CNA if specified ----
   if (high_level_cna_only) {
