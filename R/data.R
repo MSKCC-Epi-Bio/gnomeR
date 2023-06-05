@@ -57,6 +57,21 @@
 #'     }
 "impact_alias_table"
 
+#' GENIE Alias Table
+#'
+#' Data frame of genes and their aliases for all
+#' GENIE panels. This is used for gene name resolution functionality.
+#'
+#' @format A data frame with 1658 rows
+#' \describe{
+#'     \item{hugo_symbol}{gene Hugo Symbol}
+#'     \item{alias}{Alias of Hugo Symbol in `hugo_symbol` column}
+#'     \item{entrez_id}{entrez ID of gene in `hugo_symbol`}
+#'     \item{alias_entrez_id}{entrez ID of `alias` gene}
+#'     }
+"genie_alias_table"
+
+
 
 #' Data Frame of Column Names
 #'

@@ -189,13 +189,17 @@ library(genieBPC)
 
 genie_panels <- genieBPC::genie_panels
 
+# Replace MSK-IMPACT* with IMPACT* because these tend to have the newer aliases
+genie_panels <- genie_panels %>%
+  mutate(Sequence.Assay.ID = str_remove_all(Sequence.Assay.ID, "MSK-"))
+
 setdiff(genie_panels$Sequence.Assay.ID, gnomeR::gene_panels$gene_panel)
 
-genie_alias <- gnomeR::gene_panels  %>%
-  filter(gene_panel %in% genieBPC::genie_panels$Sequence.Assay.ID)
+genie_genes <- gnomeR::gene_panels  %>%
+  filter(gene_panel %in% genie_panels$Sequence.Assay.ID | gene_panel == "IMPACT505")
 
 # unnested long version
-genie_alias <- genie_alias %>%
+genie_genes <- genie_genes %>%
   unnest(everything(),
          keep_empty = TRUE) %>%
   rename("gene" = genes_in_panel,
@@ -205,7 +209,7 @@ genie_alias <- genie_alias %>%
 # * Get Aliases  --------------------------------------------------------
 
 # get all aliases for impact genes
-genie_alias <- genie_alias %>%
+genie_alias <- genie_genes %>%
   select(gene) %>%
   dplyr::mutate(alias = purrr::map(gene,
                                    ~tryCatch(get_alias(.x),
@@ -215,15 +219,15 @@ genie_alias$alias <- map(genie_alias$alias, ~as_tibble(.x))
 
 # unnested long version
 genie_alias_table <- genie_alias %>%
-  unnest(everything(), keep_empty = TRUE)
+  unnest(everything(), keep_empty = TRUE) %>%
+  rename("alias" = value)
 
 genie_alias_table %>%
   filter(gene == alias)
 
-
+# gets rid of NAs (genes with no aliases)
 genie_alias_table <- genie_alias_table %>%
-  filter(gene != alias) %>%
-  select(-value, -hugo_symbol)
+  filter(gene != alias)
 
 # This may not be needed anymore, but leave for now
 genie_alias_table$gene[map_lgl(genie_alias_table$gene, ~.x %in%
@@ -252,17 +256,22 @@ genie_alias_table$gene[map_lgl(genie_alias_table$gene, ~.x %in% genie_alias_tabl
 genie_alias_table <- genie_alias_table %>%
   rename("hugo_symbol" = gene)
 
-impact_alias_table <- impact_alias_table %>%
-  left_join(., select(impact_genes, gene, entrez_id),
+genie_genes_clean <- select(genie_genes, gene, entrez_id) %>%
+  distinct()
+
+genie_alias_table <- genie_alias_table %>%
+  left_join(., genie_genes_clean,
             by = c("hugo_symbol" = "gene")) %>%
   left_join(., select(all_genes, hugo_symbol, entrez_gene_id),
             by = c("alias" = "hugo_symbol")) %>%
   rename(alias_entrez_id = entrez_gene_id)
 
-impact_alias_table <- impact_alias_table %>%
+genie_alias_table <- genie_alias_table %>%
   distinct()
 
+setdiff(genie_alias_table$hugo_symbol, impact_alias_table$hugo_symbol)
+setdiff( impact_alias_table$hugo_symbol, genie_alias_table$hugo_symbol)
 
-usethis::use_data(impact_alias_table , overwrite = TRUE)
+usethis::use_data(genie_alias_table , overwrite = TRUE)
 
 
