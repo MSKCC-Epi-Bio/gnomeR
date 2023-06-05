@@ -6,6 +6,7 @@
 - Added IMPACT QA Vignette and GENIE BPC vignette
 - Added `subset_by_panel` function allowing users to easily subset an alteration dataframe and include only genes in a specific panel
 - Added IMPACT IH3 and IH4 panels to internal impact panels used for NA annotation in `create_gene_binary(specify_panel)`
+- Added GENIE BPC alias table so users can now use `create_gene_binary(recode_aliases = "genie")` to check and recode aliases for genes in any of the GENIE BPC panels.
 
 # gnomeR 1.2.0
 
