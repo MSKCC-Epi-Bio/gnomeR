@@ -9,7 +9,7 @@ recode_alias(genomic_df, alias_table = "impact", supress_warnings = FALSE)
 \arguments{
 \item{genomic_df}{a gene_binary object}
 
-\item{alias_table}{a string indicating "impact", or a  dataframe with at least two columns (\code{hugo_symbol},
+\item{alias_table}{a string indicating "impact" or "genie", or a dataframe with at least two columns (\code{hugo_symbol},
 \code{alias}) with one row for each pair.}
 
 \item{supress_warnings}{If TRUE, function will return a list containing a dataframe of recoded results and a names vector of recoded aliases in data}
