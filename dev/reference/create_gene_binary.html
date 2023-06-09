@@ -130,7 +130,7 @@ which to insert NAs indicating genes not tested. See below for details.</p></dd>
 
 <dt>recode_aliases</dt>
 <dd><p>Default is <code>"impact"</code> where function will check for IMPACT genes that may go by more than 1 name in your data and replace the alias name with the standardized gene name (see <code><a href="impact_alias_table.html">gnomeR::impact_alias_table</a></code> for reference list).
-If <code>"no"</code>, no alias annotation will be performed.
+If <code>"no"</code>, no alias annotation will be performed. If <code>"genie"</code>, an alias table with GENIE BPC genes will be used to check (see <code><a href="genie_alias_table.html">gnomeR::genie_alias_table</a></code> for reference list).
 Alternatively, you may pass a custom alias list as a data frame with columns <code>hugo_symbol</code> and <code>alias</code> specifying a custom alias table to use for checks. See below for details.</p></dd>
 
 </dl></div>
@@ -158,6 +158,8 @@ annotated with NAs according to that specific panel. If a sample in your data is
     
 
 <ul><li><p>If <code>recode_aliases = "impact"</code> is passed (default), function will use <code><a href="impact_alias_table.html">gnomeR::impact_alias_table</a></code> to find and replace any non-standard hugo symbol names with their
+more common (or more recent) accepted gene name.</p></li>
+<li><p>If <code>recode_aliases = "genie"</code> is passed, function will use <code><a href="genie_alias_table.html">gnomeR::genie_alias_table</a></code> to find and replace any non-standard hugo symbol names with their
 more common (or more recent) accepted gene name.</p></li>
 <li><p>If <code>recode_aliases = "no"</code> is passed, data will be returned as is without any alias replacements.</p></li>
 <li><p>If you have a custom table of vetted aliases you wish to use, you can pass a data frame with columns: <code>hugo_symbol</code>, and <code>alias</code>.
