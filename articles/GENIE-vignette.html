@@ -27,7 +27,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">gnomeR</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.2.0</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.3.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -42,8 +42,8 @@
 <li class="active nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="../articles/GENIE-vignette.html">Analyzing GENIE BPC Data Using {gnomeR}</a>
     <a class="dropdown-item" href="../articles/data-processing-vignette.html">Processing Data with {gnomeR}</a>
+    <a class="dropdown-item" href="../articles/genie-vignette.html">Analyzing GENIE BPC Data Using {gnomeR}</a>
     <a class="dropdown-item" href="../articles/qa-impact-data.html">How to QA Your IMPACT Data</a>
   </div>
 </li>
@@ -77,8 +77,8 @@
       <img src="" class="logo" alt=""><h1>Analyzing GENIE BPC Data Using {gnomeR}</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/MSKCC-Epi-Bio/gnomeR/blob/HEAD/vignettes/GENIE-vignette.Rmd" class="external-link"><code>vignettes/GENIE-vignette.Rmd</code></a></small>
-      <div class="d-none name"><code>GENIE-vignette.Rmd</code></div>
+      <small class="dont-index">Source: <a href="https://github.com/MSKCC-Epi-Bio/gnomeR/blob/HEAD/vignettes/genie-vignette.Rmd" class="external-link"><code>vignettes/genie-vignette.Rmd</code></a></small>
+      <div class="d-none name"><code>genie-vignette.Rmd</code></div>
     </div>
 
     
@@ -261,10 +261,10 @@ argument criteria specified below</em>.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># specify sample panels and IDs</span></span>
 <span><span class="va">nsclc_2_0_sample_panels</span> <span class="op">&lt;-</span> <span class="va">nsclc_2_0_samples</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
-<span>  <span class="fu">select</span><span class="op">(</span><span class="va">cpt_seq_assay_id</span>, <span class="va">cpt_genie_sample_id</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu">rename</span><span class="op">(</span>panel_id <span class="op">=</span> <span class="va">cpt_seq_assay_id</span>,</span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">cpt_seq_assay_id</span>, <span class="va">cpt_genie_sample_id</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html" class="external-link">rename</a></span><span class="op">(</span>panel_id <span class="op">=</span> <span class="va">cpt_seq_assay_id</span>,</span>
 <span>         sample_id <span class="op">=</span> <span class="va">cpt_genie_sample_id</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/stats/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">panel_id</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">panel_id</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="process-data-with-create_gene_binary">Process Data with <code>create_gene_binary()</code><a class="anchor" aria-label="anchor" href="#process-data-with-create_gene_binary"></a>
@@ -411,7 +411,7 @@ type.</p>
 <p><strong>Using the genomic data from Synapse:</strong></p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">nsclc_2_0_gen_dat_synapse</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span>, <span class="op">]</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
-<span>  <span class="fu">select</span><span class="op">(</span><span class="va">sample_id</span>, <span class="va">KRAS</span>, <span class="va">KRAS.Amp</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">sample_id</span>, <span class="va">KRAS</span>, <span class="va">KRAS.Amp</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/summarize_by_gene.html">summarize_by_gene</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt;                  sample_id KRAS</span></span>
 <span><span class="co">#&gt; 1   GENIE-DFCI-005843-1704    0</span></span>
@@ -443,7 +443,7 @@ events:</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="va">nsclc_2_0_gen_dat_synapse</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
-<span>  <span class="fu">select</span><span class="op">(</span><span class="va">sample_id</span>, <span class="va">KEAP1</span>, <span class="va">STK11</span>, <span class="va">SMARCA4</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">sample_id</span>, <span class="va">KEAP1</span>, <span class="va">STK11</span>, <span class="va">SMARCA4</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/tbl_genomic.html">tbl_genomic</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <div id="iaffeqqxcx" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#iaffeqqxcx table {
@@ -1510,7 +1510,7 @@ events:</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="va">nsclc_2_0_gen_dat_cbio</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu">select</span><span class="op">(</span><span class="va">sample_id</span>, <span class="va">KEAP1</span>, <span class="va">STK11</span>, <span class="va">SMARCA4</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">sample_id</span>, <span class="va">KEAP1</span>, <span class="va">STK11</span>, <span class="va">SMARCA4</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/tbl_genomic.html">tbl_genomic</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <div id="hfuuzbtpmg" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#hfuuzbtpmg table {
@@ -2602,19 +2602,19 @@ from cBioPortal.</p>
 <span></span>
 <span><span class="va">mutation_viz_gen_dat_cbio</span></span>
 <span><span class="co">#&gt; $varclass</span></span></code></pre></div>
-<p><img src="GENIE-vignette_files/figure-html/unnamed-chunk-17-1.png" width="700"></p>
+<p><img src="genie-vignette_files/figure-html/unnamed-chunk-17-1.png" width="700"></p>
 <pre><code><span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $vartype</span></span></code></pre>
-<p><img src="GENIE-vignette_files/figure-html/unnamed-chunk-17-2.png" width="700"></p>
+<p><img src="genie-vignette_files/figure-html/unnamed-chunk-17-2.png" width="700"></p>
 <pre><code><span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $samplevar</span></span></code></pre>
-<p><img src="GENIE-vignette_files/figure-html/unnamed-chunk-17-3.png" width="700"></p>
+<p><img src="genie-vignette_files/figure-html/unnamed-chunk-17-3.png" width="700"></p>
 <pre><code><span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $topgenes</span></span></code></pre>
-<p><img src="GENIE-vignette_files/figure-html/unnamed-chunk-17-4.png" width="700"></p>
+<p><img src="genie-vignette_files/figure-html/unnamed-chunk-17-4.png" width="700"></p>
 <pre><code><span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $genecor</span></span></code></pre>
-<p><img src="GENIE-vignette_files/figure-html/unnamed-chunk-17-5.png" width="700"></p>
+<p><img src="genie-vignette_files/figure-html/unnamed-chunk-17-5.png" width="700"></p>
 </div>
 </div>
 <div class="section level2">
