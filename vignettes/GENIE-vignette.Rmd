@@ -1,9 +1,8 @@
 ---
 title: "Analyzing GENIE BPC Data Using {gnomeR}"
 output: rmarkdown::html_vignette
-author: Samantha Brown, Jessica Lavery
 vignette: >
-  %\VignetteIndexEntry{Analyzing GENIE BPC Data Using {gnomeR}}
+  %\VignetteIndexEntry{genie-vignette}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -14,17 +13,19 @@ knitr::opts_chunk$set(
   comment = "#>"
 )
 
-knitr::knit_exit()
-
 set.seed(20230302)
+
+# exit if user doesn't have synapser, a log in, or access to data.
+if (genieBPC:::.is_connected_to_genie() == FALSE){
+  knitr::knit_exit()
+}
 ```
 
-```{r setup, include = FALSE, message = FALSE, results = FALSE}
+```{r setup, include = FALSE, message = FALSE, results = FALSE, eval=genieBPC:::.is_connected_to_genie()}
 library(gnomeR)
 library(dplyr)
 library(genieBPC)
 library(cbioportalR)
-
 ```
 
 ## Introduction
@@ -33,44 +34,31 @@ This vignette will walk through how to apply {gnomeR} functions to data from AAC
 
 For the purposes of this vignette, we will use the first publicly available GENIE BPC data release of non-small cell lung cancer patients, NSCLC v2.0-public.
 
-<<<<<<< Updated upstream
-Additional details regarding the GENIE BPC data and the {genieBPC} R package are published in the following papers:
+Note that the GENIE BPC genomic data are unique in a few particular ways:
 
-* Lavery, J. A., Brown, S., Curry, M. A., Martin, A., Sjoberg, D. D., & Whiting, K. (2023). [A data processing pipeline for the AACR project GENIE biopharma collaborative data with the {genieBPC} R package](https://pubmed.ncbi.nlm.nih.gov/36519837/). Bioinformatics (Oxford, England), 39(1), btac796. https://doi.org/10.1093/bioinformatics/btac796
-
-* Lavery, J. A., Lepisto, E. M., Brown, S., Rizvi, H., McCarthy, C., LeNoue-Newton, M., Yu, C., Lee, J., Guo, X., Yu, T., Rudolph, J., Sweeney, S., AACR Project GENIE Consortium, Park, B. H., Warner, J. L., Bedard, P. L., Riely, G., Schrag, D., & Panageas, K. S. (2022). [A Scalable Quality Assurance Process for Curating Oncology Electronic Health Records: The Project GENIE Biopharma Collaborative Approach](https://pubmed.ncbi.nlm.nih.gov/35192403/). JCO clinical cancer informatics, 6, e2100105. https://doi.org/10.1200/CCI.21.00105
-
-Technical details regarding proper analysis of this data can be found in the following publication:
-
-* Brown, S., Lavery, J. A., Shen, R., Martin, A. S., Kehl, K. L., Sweeney, S. M., Lepisto, E. M., Rizvi, H., McCarthy, C. G., Schultz, N., Warner, J. L., Park, B. H., Bedard, P. L., Riely, G. J., Schrag, D., Panageas, K. S., & AACR Project GENIE Consortium (2022). [Implications of Selection Bias Due to Delayed Study Entry in Clinical Genomic Studies](https://pubmed.ncbi.nlm.nih.gov/34734967/). JAMA oncology, 8(2), 287–291. https://doi.org/10.1001/jamaoncol.2021.5153
-
-* Kehl, K. L., Uno, H., Gusev, A., Groha, S., Brown, S., Lavery, J. A., Schrag, D., & Panageas, K. S. (2023). [Elucidating Analytic Bias Due to Informative Cohort Entry in Cancer Clinico-genomic Datasets](https://pubmed.ncbi.nlm.nih.gov/36626408/). Cancer epidemiology, biomarkers & prevention: a publication of the American Association for Cancer Research, cosponsored by the American Society of Preventive Oncology, 32(3), 344–352. https://doi.org/10.1158/1055-9965.EPI-22-0875
-
-* Kehl, K. L., Riely, G. J., Lepisto, E. M., Lavery, J. A., Warner, J. L., LeNoue-Newton, M. L., Sweeney, S. M., Rudolph, J. E., Brown, S., Yu, C., Bedard, P. L., Schrag, D., Panageas, K. S., & American Association of Cancer Research (AACR) Project Genomics Evidence Neoplasia Information Exchange (GENIE) Consortium (2021). [Correlation Between Surrogate End Points and Overall Survival in a Multi-institutional Clinicogenomic Cohort of Patients With Non-Small Cell Lung or Colorectal Cancer](https://pubmed.ncbi.nlm.nih.gov/34309669/). JAMA network open, 4(7), e2117547. https://doi.org/10.1001/jamanetworkopen.2021.17547
-=======
-
->>>>>>> Stashed changes
+* These data are heterogeneous such that they come from multiple genomic panels from multiple institutions. Gene aliases across panels may vary. 
+* The GENIE BPC fusions and copy number alterations data may differ from common data formats. Differences are described in the Data Formats subsection below.
 
 ## Data Access
 
 To gain access to the GENIE BPC data, please follow the instructions on the [{genieBPC} `pull_data_synapse()` vignette](https://genie-bpc.github.io/genieBPC/articles/pull_data_synapse_vignette.html) to register for a Synapse account. Once your Synapse account is created and you authenticate yourself using `genieBPC::set_synapse_credentials()`, you'll be ready to pull the GENIE BPC clinical and genomic data from Synapse into your local environment:
 
 ```{r, eval=FALSE}
+library(genieBPC)
 
 # if credentials are not stored in your R environment
 set_synapse_credentials(username = "username", password = "password")
-```
 
-```{r, results=FALSE}
 # if credentials are stored in your R environment
 set_synapse_credentials()
 ```
 
 ## Obtain GENIE BPC Data
 
-```{r }
+```{r, eval=genieBPC:::.is_connected_to_genie()}
 # pull NSCLC v2.0-public data from Synapse into the R environment
-nsclc_2_0 = pull_data_synapse(cohort = "NSCLC", version = "v2.0-public")
+nsclc_2_0 = pull_data_synapse(cohort = "NSCLC",
+                              version = "v2.0-public")
 ```
 
 The resulting `nsclc_2_0` object is a nested list of datasets, including the mutations, fusions, and copy number data.
@@ -81,7 +69,7 @@ The resulting `nsclc_2_0` object is a nested list of datasets, including the mut
 
 Note that while the GENIE BPC clinical data are only available via Synapse, the genomic data can be accessed via both Synapse and cBioPortal. Using the {cbioportalR} package, users can pull the GENIE BPC genomic data directly from cBioPortal:
 
-```{r }
+```{r, eval=genieBPC:::.is_connected_to_genie()}
 library(cbioportalR)
 
 # connect to the GENIE instance of cBioPortal
@@ -92,26 +80,26 @@ cbioportalR::set_cbioportal_db("https://genie.cbioportal.org/api")
 available_studies()
 ```
 
-<<<<<<< Updated upstream
-```{r }
-=======
-```{r}
->>>>>>> Stashed changes
+```{r, eval=genieBPC:::.is_connected_to_genie()}
 # obtain genomic data for GENIE BPC NSCLC v2.0-public
 mutations_extended_2_0 <- get_mutations_by_study("nsclc_public_genie_bpc")
 cna_2_0 <- get_cna_by_study("nsclc_public_genie_bpc")
 fusions_2_0 <- get_fusions_by_study("nsclc_public_genie_bpc")
 ```
 
-<<<<<<< Updated upstream
-=======
-
->>>>>>> Stashed changes
 ## Data Formats
 
 The genomic data for GENIE BPC are stored both on Synapse and in cBioPortal. The data structure differs depending on where the genomic data are downloaded from. Therefore, the remainder of this vignette will proceed by outlining the process of annotating genomic data separately for genomic data downloaded from Synapse and genomic data downloaded from cBioPortal. 
 
-Additionally, due to filtering criteria applied by cBioPortal, the genomic data from Synapse and cBioPortal do not align exactly. Specifically, the mutation data variant classification data are filtered on conditions described [here](https://docs.cbioportal.org/file-formats/#mutation-data). The CNA data as downloaded from cBioPortal only includes high level CNA (-2, 2), while the CNA data as downloaded from Synapse includes all CNA.
+### Differences Between Synapse and cBioPortal Genomic Data
+
+Please note that pulling genomic GENIE data from Synapse using `pull_data_synapse()` and pulling GENIE data from cBioPortal may result in small differences in the data due to systematic differences in the processing pipelines employed by Synapse and cBioPortal. These differences may include: 
+
+* Data formatting - Some data sets (e.g. CNA files) may appear in wide format in Synapse data versus long format in cBioPortal data, or column attributes and names may appear sightly different (e.g. fusions files).
+
+* Default filtering - By default, cBioPortal filters out Silent, Intron, IGR, 3'UTR, 5'UTR, 3'Flank and 5'Flank, except for the promoter mutations of the TERT gene. See [cBioPortal documentation](https://docs.cbioportal.org/file-formats/#mutation-data) for more details. These are retained in Synapse processing pipelines.
+
+* Hugo Symbols - Some genes have more than one accepted Hugo Symbol and may be referred to differently between data sources (e.g. `NSD3` is an alias for `WHSC1L1`). Some tools exist to help you resolve gene aliases across genomic data sources. See `gnomeR::recode_alias()`, `cbioportal::get_alias()` and vignettes from the [{gnomeR}](https://mskcc-epi-bio.github.io/gnomeR/) and [{cbioportalR}](https://www.karissawhiting.com/cbioportalR/) for more information on how to use these functions and work with gene aliases.
 
 ## Selecting a Cohort for Analysis
 
@@ -119,7 +107,7 @@ The following code chunk uses the `genieBPC::create_analytic_cohort()` to create
 
 Note: for patients with exactly one genomic sample, that unique genomic sample will be returned *regardless of whether it meets the argument criteria specified below*.
 
-```{r }
+```{r, eval=genieBPC:::.is_connected_to_genie()}
 # create analytic cohort of patients diagnosed with Stage IV adenocarcinoma
 nsclc_2_0_example <- create_analytic_cohort(
   data_synapse = nsclc_2_0$NSCLC_v2.0,
@@ -138,17 +126,13 @@ nsclc_2_0_samples <- select_unique_ngs(
 
 Create a dataframe of the corresponding panel and sample IDs:
 
-```{r }
+```{r, eval=genieBPC:::.is_connected_to_genie()}
 # specify sample panels and IDs
 nsclc_2_0_sample_panels <- nsclc_2_0_samples %>% 
   select(cpt_seq_assay_id, cpt_genie_sample_id) %>%
   rename(panel_id = cpt_seq_assay_id,
-<<<<<<< Updated upstream
-         sample_id = cpt_genie_sample_id)
-=======
-         sample_id = cpt_genie_sample_id)%>%
-  na.omit()
->>>>>>> Stashed changes
+         sample_id = cpt_genie_sample_id) %>%
+  filter(!is.na(panel_id))
 ```
 
 ## Process Data with `create_gene_binary()`
@@ -157,96 +141,72 @@ The `create_gene_binary()` function takes inputs of mutations, fusions, and CNA 
 
 It is critical to utilize the `specify_panel` argument of `create_gene_binary()`. Samples included in GENIE BPC were sequenced across multiple sequencing platforms, with the genes included varying across panels. Without the `specify_panel` argument, missingness will not be correctly annotated, and genes that were not tested will be incorrectly documented as not being altered.
 
+Note: you can optionally check and recode any older gene names to their newer Hugo Symbol in your data set by passing the `genie` option to `create_gene_binary(recode_aliases=)`.
+
 **Using the genomic data from Synapse:**
 
 The fusions and CNA data as downloaded from Synapse require some modifications prior to being supplied to the `gnomeR::create_gene_binary()` function. 
 
 First, the CNA file can be transposed to match the expected input for `create_gene_binary()` using `pivot_cna_longer()`:
 
-```{r }
+```{r, eval=genieBPC:::.is_connected_to_genie()}
 # transpose CNA data from Synapse
 cna_synapse_long <- pivot_cna_longer(nsclc_2_0$NSCLC_v2.0$cna)
 ```
 
-<<<<<<< Updated upstream
-**PLACEHOLDER**: Next, the fusions file can be transposed to match the expected input for `create_gene_binary()`
+Next, the fusions file can be transposed to match the expected input for `create_gene_binary()`
 
-```{r }
-# transpose fusions data from Synapse
-#fusions_synapse_long <- pivot_fusions_longer(nsclc_2_0$NSCLC_v2.0$fusions)
-=======
-Next, the fusions file can be transposed to match the expected input for `create_gene_binary()`. See the "Processing data with {gnomeR}" vignette to see more information about how each dataset should be structured.
-
-```{r }
+```{r, eval=genieBPC:::.is_connected_to_genie()}
 # transpose fusions data from Synapse
 fusions_synapse_long <- reformat_fusion(nsclc_2_0$NSCLC_v2.0$fusions)
->>>>>>> Stashed changes
 ```
 
 Finally, the reformatted genomic data can be supplied to `create_gene_binary()` to annotate genomic alterations for patients in the analytic cohort of interest.
 
 The CNA data as downloaded from cBioPortal only includes high level CNA (-2, 2), so we will specify `high_level_cna_only = TRUE` to be consistent with the results based on the genomic data as downloaded from cBioPortal. 
 
-```{r }
-# Omitting NA for now
-nsclc_2_0_sample_panels <- nsclc_2_0_sample_panels %>%
-  na.omit()
+Additionally, we will use the built in 'genie` option to check gene aliases (see `?create_gene_binary` for more info).
 
+```{r, eval=genieBPC:::.is_connected_to_genie()}
 nsclc_2_0_gen_dat_synapse <-
   create_gene_binary(
     mutation = nsclc_2_0$NSCLC_v2.0$mutations_extended,
     cna = cna_synapse_long,
     high_level_cna_only = TRUE,
-<<<<<<< Updated upstream
- #   fusion = fusions_synapse_long,
-=======
     fusion = fusions_synapse_long,
->>>>>>> Stashed changes
     samples = nsclc_2_0_sample_panels$sample_id,
-    specify_panel = nsclc_2_0_sample_panels
+    specify_panel = nsclc_2_0_sample_panels, 
+    recode_aliases = "genie"
   )
 ```
 
 **Using the genomic data from cBioPortal:**
 
-```{r }
+```{r, eval=genieBPC:::.is_connected_to_genie()}
 nsclc_2_0_gen_dat_cbio <-
   create_gene_binary(
     mutation = mutations_extended_2_0,
     cna = cna_2_0,
-<<<<<<< Updated upstream
-=======
     fusion = fusions_2_0,
->>>>>>> Stashed changes
     samples = nsclc_2_0_sample_panels$sample_id,
-    specify_panel = nsclc_2_0_sample_panels
+    specify_panel = nsclc_2_0_sample_panels, 
+    recode_aliases = "genie"
   )
 ```
 
-We can compare the binary genomic matrices created using the genomic data downloaded from Synapse versus the genomic data downloaded from cBioPortal. We observe that they are exactly equal, and will proceed using the `nsclc_2_0_gen_dat_cbio` object.
-
-```{r, eval = FALSE}
-# compare binary genomic matrices
-arsenal::comparedf(nsclc_2_0_gen_dat_synapse, nsclc_2_0_gen_dat_cbio)
-```
+Binary genomic matrices created using the genomic data downloaded from Synapse and cBioPortal should be equal. We will proceed using the `nsclc_2_0_gen_dat_cbio` object.
 
 ## Collapse Data with `summarize_by_gene()`
 
 We can summarize the presence of any alteration event (mutation, amplification, deletion, structural variant) with the `summarize_by_gene()` function, such that each gene is a column that captures the presence of any event regardless of alteration type.
 
-Summarizing the first 10 samples and first 10 genes:
+Summarizing the first 10 samples for KRAS alterations:
 
 **Using the genomic data from Synapse:**
 
-```{r, eval = FALSE}
-nsclc_2_0_gen_dat_synapse[1:10, 1:10] %>% 
-  summarize_by_gene()
-```
-
-**Using the genomic data from cBioPortal**
-
-```{r }
-nsclc_2_0_gen_dat_cbio[1:10, 1:10] %>% 
+```{r, eval=genieBPC:::.is_connected_to_genie()}
+nsclc_2_0_gen_dat_synapse[1:10, ] %>% 
+  select(sample_id, KRAS, KRAS.Amp) %>%
   summarize_by_gene()
 ```
 
@@ -256,76 +216,65 @@ After the data have been transformed into a binary format, we can create summari
 
 ### Summarize Data with `tbl_genomic()`
 
-The `tbl_genomic()` function summarizes the frequency of alteration events from the binary data returned from `create_gene_binary()` or `summarize_by_gene()`. Users can specify particular genes (`gene_subset` argument) or a a minimum frequency (`freq_cutoff` argument) to include in the table. 
+The `tbl_genomic()` function summarizes the frequency of alteration events from the binary data returned from `create_gene_binary()` or `summarize_by_gene()`.
 
 **Using the genomic data from Synapse:**
 
 Summarizing the frequencies of KEAP1, STK11, and SMARCA4 alteration events:
 
-```{r }
+```{r, eval=genieBPC:::.is_connected_to_genie()}
 
-nsclc_2_0_gen_dat_synapse_sub <- nsclc_2_0_gen_dat_synapse %>%
-  select(sample_id, KEAP1, STK11, SMARCA4)
-
-tbl_genomic(gene_binary = nsclc_2_0_gen_dat_synapse_sub)
+nsclc_2_0_gen_dat_synapse %>% 
+  select(sample_id, KEAP1, STK11, SMARCA4) %>%
+  tbl_genomic()
 ```
 
-Summarizing alteration events with >=10% frequency:
+Users can subset their data set to only include genes above a certain prevalence frequency threshold before passing to the function using the `subset_by_frequency()` function.
 
-```{r }
+Below, we summarize alteration events with >=10% frequency:
 
-nsclc_2_0_gen_dat_synapse_sub <- nsclc_2_0_gen_dat_synapse %>%
-  subset_by_frequency(t = .1)
+```{r, eval=genieBPC:::.is_connected_to_genie()}
 
-tbl_genomic(gene_binary = nsclc_2_0_gen_dat_synapse_sub)
+nsclc_2_0_gen_dat_synapse %>%
+  subset_by_frequency(t = 0.1) %>%
+  tbl_genomic()
 ```
 
 **Using the genomic data from cBioPortal:**
 
 Summarizing the frequencies of KEAP1, STK11, and SMARCA4 alteration events:
 
-```{r}
+```{r, eval=genieBPC:::.is_connected_to_genie()}
 
-nsclc_2_0_gen_dat_cbio_sub <- nsclc_2_0_gen_dat_cbio %>%
-  select(sample_id, KEAP1, STK11, SMARCA4)
-
-tbl_genomic(gene_binary = nsclc_2_0_gen_dat_cbio_sub)
-
+nsclc_2_0_gen_dat_cbio %>%
+  select(sample_id, KEAP1, STK11, SMARCA4) %>%
+  tbl_genomic()
 ```
 
 Summarizing alteration events with >=10% frequency:
 
-```{r }
+```{r, eval=genieBPC:::.is_connected_to_genie()}
 
-nsclc_2_0_gen_dat_cbio_sub <- nsclc_2_0_gen_dat_cbio %>%
-  subset_by_frequency(t = .1)
-
-tbl_genomic(gene_binary = nsclc_2_0_gen_dat_cbio_sub)
+nsclc_2_0_gen_dat_cbio %>%
+  subset_by_frequency(t = 0.1) %>%
+  tbl_genomic()
 ```
 
 ### Data Visualizations
 
 We can use the `mutation_viz()` function to visualize several aspects of the mutation data, including variant classification, variant type, SNV class and top variant genes.
 
-**Using the genomic data from Synapse:**
-
-```{r }
-mutation_viz_gen_dat_synapse <- mutation_viz(nsclc_2_0$NSCLC_v2.0$mutations_extended)
-
-mutation_viz_gen_dat_synapse
-```
+For the purposes of this vignette we will visualize the genomic data from cBioPortal.
 
 **Using the genomic data from cBioPortal:**
 
-```{r }
+```{r, eval=genieBPC:::.is_connected_to_genie()}
 mutation_viz_gen_dat_cbio <- mutation_viz(mutations_extended_2_0)
 
 mutation_viz_gen_dat_cbio
 ```
 
-<<<<<<< Updated upstream
-=======
-# Resources
+# References
 
 Additional details regarding the GENIE BPC data and the {genieBPC} R package are published in the following papers:
 
@@ -340,4 +289,4 @@ Technical details regarding proper analysis of this data can be found in the fol
 * Kehl, K. L., Uno, H., Gusev, A., Groha, S., Brown, S., Lavery, J. A., Schrag, D., & Panageas, K. S. (2023). [Elucidating Analytic Bias Due to Informative Cohort Entry in Cancer Clinico-genomic Datasets](https://pubmed.ncbi.nlm.nih.gov/36626408/). Cancer epidemiology, biomarkers & prevention: a publication of the American Association for Cancer Research, cosponsored by the American Society of Preventive Oncology, 32(3), 344–352. https://doi.org/10.1158/1055-9965.EPI-22-0875
 
 * Kehl, K. L., Riely, G. J., Lepisto, E. M., Lavery, J. A., Warner, J. L., LeNoue-Newton, M. L., Sweeney, S. M., Rudolph, J. E., Brown, S., Yu, C., Bedard, P. L., Schrag, D., Panageas, K. S., & American Association of Cancer Research (AACR) Project Genomics Evidence Neoplasia Information Exchange (GENIE) Consortium (2021). [Correlation Between Surrogate End Points and Overall Survival in a Multi-institutional Clinicogenomic Cohort of Patients With Non-Small Cell Lung or Colorectal Cancer](https://pubmed.ncbi.nlm.nih.gov/34309669/). JAMA network open, 4(7), e2117547. https://doi.org/10.1001/jamanetworkopen.2021.17547
->>>>>>> Stashed changes
+
