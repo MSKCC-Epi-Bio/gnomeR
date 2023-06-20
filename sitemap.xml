@@ -13,10 +13,10 @@
     <loc>https://mskcc-epi-bio.github.io/gnomeR/LICENSE.html</loc>
   </url>
   <url>
-    <loc>https://mskcc-epi-bio.github.io/gnomeR/articles/data-processing-vignette.html</loc>
+    <loc>https://mskcc-epi-bio.github.io/gnomeR/articles/GENIE-vignette.html</loc>
   </url>
   <url>
-    <loc>https://mskcc-epi-bio.github.io/gnomeR/articles/genie-bpc-vignette.html</loc>
+    <loc>https://mskcc-epi-bio.github.io/gnomeR/articles/data-processing-vignette.html</loc>
   </url>
   <url>
     <loc>https://mskcc-epi-bio.github.io/gnomeR/articles/index.html</loc>
@@ -70,6 +70,9 @@
     <loc>https://mskcc-epi-bio.github.io/gnomeR/reference/dot-mutations_gene_binary.html</loc>
   </url>
   <url>
+    <loc>https://mskcc-epi-bio.github.io/gnomeR/reference/dot-paste_endings.html</loc>
+  </url>
+  <url>
     <loc>https://mskcc-epi-bio.github.io/gnomeR/reference/dot-process_binary.html</loc>
   </url>
   <url>
@@ -77,6 +80,9 @@
   </url>
   <url>
     <loc>https://mskcc-epi-bio.github.io/gnomeR/reference/gene_panels.html</loc>
+  </url>
+  <url>
+    <loc>https://mskcc-epi-bio.github.io/gnomeR/reference/genie_alias_table.html</loc>
   </url>
   <url>
     <loc>https://mskcc-epi-bio.github.io/gnomeR/reference/genie_cna.html</loc>
@@ -182,6 +188,9 @@
   </url>
   <url>
     <loc>https://mskcc-epi-bio.github.io/gnomeR/reference/subset_by_frequency.html</loc>
+  </url>
+  <url>
+    <loc>https://mskcc-epi-bio.github.io/gnomeR/reference/subset_by_panel.html</loc>
   </url>
   <url>
     <loc>https://mskcc-epi-bio.github.io/gnomeR/reference/summarize_by_gene.html</loc>

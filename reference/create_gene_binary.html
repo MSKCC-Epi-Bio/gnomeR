@@ -28,8 +28,8 @@ a predefined list of samples (rows are samples and columns are genes)"><!-- math
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
+    <a class="dropdown-item" href="../articles/GENIE-vignette.html">Analyzing GENIE BPC Data Using {gnomeR}</a>
     <a class="dropdown-item" href="../articles/data-processing-vignette.html">Processing Data with {gnomeR}</a>
-    <a class="dropdown-item" href="../articles/genie-bpc-vignette.html">Analyzing GENIE BPC Data Using {gnomeR}</a>
     <a class="dropdown-item" href="../articles/qa-impact-data.html">How to QA Your IMPACT Data</a>
   </div>
 </li>
@@ -130,7 +130,7 @@ which to insert NAs indicating genes not tested. See below for details.</p></dd>
 
 <dt>recode_aliases</dt>
 <dd><p>Default is <code>"impact"</code> where function will check for IMPACT genes that may go by more than 1 name in your data and replace the alias name with the standardized gene name (see <code><a href="impact_alias_table.html">gnomeR::impact_alias_table</a></code> for reference list).
-If <code>"no"</code>, no alias annotation will be performed.
+If <code>"no"</code>, no alias annotation will be performed. If <code>"genie"</code>, an alias table with GENIE BPC genes will be used to check (see <code><a href="genie_alias_table.html">gnomeR::genie_alias_table</a></code> for reference list).
 Alternatively, you may pass a custom alias list as a data frame with columns <code>hugo_symbol</code> and <code>alias</code> specifying a custom alias table to use for checks. See below for details.</p></dd>
 
 </dl></div>
@@ -159,6 +159,8 @@ annotated with NAs according to that specific panel. If a sample in your data is
 
 <ul><li><p>If <code>recode_aliases = "impact"</code> is passed (default), function will use <code><a href="impact_alias_table.html">gnomeR::impact_alias_table</a></code> to find and replace any non-standard hugo symbol names with their
 more common (or more recent) accepted gene name.</p></li>
+<li><p>If <code>recode_aliases = "genie"</code> is passed, function will use <code><a href="genie_alias_table.html">gnomeR::genie_alias_table</a></code> to find and replace any non-standard hugo symbol names with their
+more common (or more recent) accepted gene name.</p></li>
 <li><p>If <code>recode_aliases = "no"</code> is passed, data will be returned as is without any alias replacements.</p></li>
 <li><p>If you have a custom table of vetted aliases you wish to use, you can pass a data frame with columns: <code>hugo_symbol</code>, and <code>alias</code>.
 Each row should have one gene in the <code>hugo_symbol</code> column indicating the accepted gene name, and one gene in the <code>alias</code> column indicating an alias
@@ -169,7 +171,7 @@ See <code><a href="impact_alias_table.html">gnomeR::impact_alias_table</a></code
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">mut.only</span> <span class="op">&lt;-</span> <span class="fu">create_gene_binary</span><span class="op">(</span>mutation <span class="op">=</span> <span class="fu">gnomeR</span><span class="fu">::</span><span class="va"><a href="mutations.html">mutations</a></span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> `samples` argument is `NULL`. We will infer your cohort inclusion and resulting data frame will include all samples with at least one alteration in <span style="color: #00BB00;">mutation</span>, <span style="color: #00BB00;">fusion</span> or <span style="color: #00BB00;">cna</span> data frames</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> `samples` argument is `NULL`. We will infer your cohort inclusion and resulting data frame will include all samples with at least one alteration in <span style="color: #00BB00;">mutation</span>, <span style="color: #00BB00;">fusion</span> or <span style="color: #00BB00;">cna</span> data frames</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> 7 mutations have `NA` or blank in mutation status column instead of 'SOMATIC' or 'GERMLINE'. These were assumed to be 'SOMATIC' and were retained in the resulting binary matrix.</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">samples</span> <span class="op">&lt;-</span> <span class="fu">gnomeR</span><span class="fu">::</span><span class="va"><a href="mutations.html">mutations</a></span><span class="op">$</span><span class="va">sampleId</span></span></span>

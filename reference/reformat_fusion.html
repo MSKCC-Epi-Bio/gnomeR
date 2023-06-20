@@ -28,8 +28,8 @@ sites instead of two rows, one for each site. This is the required format for th
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
+    <a class="dropdown-item" href="../articles/GENIE-vignette.html">Analyzing GENIE BPC Data Using {gnomeR}</a>
     <a class="dropdown-item" href="../articles/data-processing-vignette.html">Processing Data with {gnomeR}</a>
-    <a class="dropdown-item" href="../articles/genie-bpc-vignette.html">Analyzing GENIE BPC Data Using {gnomeR}</a>
     <a class="dropdown-item" href="../articles/qa-impact-data.html">How to QA Your IMPACT Data</a>
   </div>
 </li>
@@ -93,15 +93,15 @@ of the <code><a href="sv.html">gnomeR::sv</a></code> dataset.</p>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">sv_long1</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 6 × 6</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   sample_id  site1hugo_symbol site2hugo_symbol site3hugo_symbol site4hugo_symbol</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>           </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> GENIE-MSK… MYD88            OXSR1            <span style="color: #BB0000;">NA</span>               <span style="color: #BB0000;">NA</span>              </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> GENIE-MSK… RB1              <span style="color: #BB0000;">NA</span>               <span style="color: #BB0000;">NA</span>               <span style="color: #BB0000;">NA</span>              </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> GENIE-MSK… ANKRD11          <span style="color: #BB0000;">NA</span>               <span style="color: #BB0000;">NA</span>               <span style="color: #BB0000;">NA</span>              </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span> GENIE-MSK… CD74             ROS1             <span style="color: #BB0000;">NA</span>               <span style="color: #BB0000;">NA</span>              </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">5</span> GENIE-MSK… FBN2             RAD50            <span style="color: #BB0000;">NA</span>               <span style="color: #BB0000;">NA</span>              </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">6</span> GENIE-MSK… CDCA8            FANCA            <span style="color: #BB0000;">NA</span>               <span style="color: #BB0000;">NA</span>              </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 1 more variable: fusion &lt;chr&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   sample_id             site_1_hugo_symbol site_2_hugo_symbol site_3_hugo_symbol</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                 <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>              <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>              <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>             </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> GENIE-MSK-P-0005931-… MYD88              OXSR1              <span style="color: #BB0000;">NA</span>                </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> GENIE-MSK-P-0013935-… RB1                <span style="color: #BB0000;">NA</span>                 <span style="color: #BB0000;">NA</span>                </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> GENIE-MSK-P-0013835-… ANKRD11            <span style="color: #BB0000;">NA</span>                 <span style="color: #BB0000;">NA</span>                </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span> GENIE-MSK-P-0012525-… CD74               ROS1               <span style="color: #BB0000;">NA</span>                </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">5</span> GENIE-MSK-P-0014366-… FBN2               RAD50              <span style="color: #BB0000;">NA</span>                </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">6</span> GENIE-MSK-P-0010247-… CDCA8              FANCA              <span style="color: #BB0000;">NA</span>                </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 2 more variables: site_4_hugo_symbol &lt;chr&gt;, fusion &lt;chr&gt;</span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

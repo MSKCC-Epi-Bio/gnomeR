@@ -42,8 +42,8 @@
 <li class="active nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
+    <a class="dropdown-item" href="../articles/GENIE-vignette.html">Analyzing GENIE BPC Data Using {gnomeR}</a>
     <a class="dropdown-item" href="../articles/data-processing-vignette.html">Processing Data with {gnomeR}</a>
-    <a class="dropdown-item" href="../articles/genie-bpc-vignette.html">Analyzing GENIE BPC Data Using {gnomeR}</a>
     <a class="dropdown-item" href="../articles/qa-impact-data.html">How to QA Your IMPACT Data</a>
   </div>
 </li>
@@ -75,19 +75,17 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="" class="logo" alt=""><h1>Analyzing GENIE BPC Data Using {gnomeR}</h1>
-                        <h4 data-toc-skip class="author">Samantha Brown,
-Jessica Lavery</h4>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/MSKCC-Epi-Bio/gnomeR/blob/HEAD/vignettes/genie-bpc-vignette.Rmd" class="external-link"><code>vignettes/genie-bpc-vignette.Rmd</code></a></small>
-      <div class="d-none name"><code>genie-bpc-vignette.Rmd</code></div>
+      <small class="dont-index">Source: <a href="https://github.com/MSKCC-Epi-Bio/gnomeR/blob/HEAD/vignettes/GENIE-vignette.Rmd" class="external-link"><code>vignettes/GENIE-vignette.Rmd</code></a></small>
+      <div class="d-none name"><code>GENIE-vignette.Rmd</code></div>
     </div>
 
     
     
-<div class="section level2">
-<h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
-</h2>
+<div class="section level3">
+<h3 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
+</h3>
 <p>This vignette will walk through how to apply {gnomeR} functions to
 data from AACR Project Genomics Evidence Neoplasia Information Exchange
 BioPharma Collaborative (GENIE BPC). A broad overview of AACR Project
@@ -97,50 +95,20 @@ package website</a>.</p>
 <p>For the purposes of this vignette, we will use the first publicly
 available GENIE BPC data release of non-small cell lung cancer patients,
 NSCLC v2.0-public.</p>
-<p>Additional details regarding the GENIE BPC data and the {genieBPC} R
-package are published in the following papers:</p>
+<p>Note that the GENIE BPC genomic data are unique in a few particular
+ways:</p>
 <ul>
-<li><p>Lavery, J. A., Brown, S., Curry, M. A., Martin, A., Sjoberg, D.
-D., &amp; Whiting, K. (2023). <a href="https://pubmed.ncbi.nlm.nih.gov/36519837/" class="external-link">A data processing
-pipeline for the AACR project GENIE biopharma collaborative data with
-the {genieBPC} R package</a>. Bioinformatics (Oxford, England), 39(1),
-btac796. <a href="https://doi.org/10.1093/bioinformatics/btac796" class="external-link uri">https://doi.org/10.1093/bioinformatics/btac796</a></p></li>
-<li><p>Lavery, J. A., Lepisto, E. M., Brown, S., Rizvi, H., McCarthy,
-C., LeNoue-Newton, M., Yu, C., Lee, J., Guo, X., Yu, T., Rudolph, J.,
-Sweeney, S., AACR Project GENIE Consortium, Park, B. H., Warner, J. L.,
-Bedard, P. L., Riely, G., Schrag, D., &amp; Panageas, K. S. (2022). <a href="https://pubmed.ncbi.nlm.nih.gov/35192403/" class="external-link">A Scalable Quality
-Assurance Process for Curating Oncology Electronic Health Records: The
-Project GENIE Biopharma Collaborative Approach</a>. JCO clinical cancer
-informatics, 6, e2100105. <a href="https://doi.org/10.1200/CCI.21.00105" class="external-link uri">https://doi.org/10.1200/CCI.21.00105</a></p></li>
-</ul>
-<p>Technical details regarding proper analysis of this data can be found
-in the following publication:</p>
-<ul>
-<li><p>Brown, S., Lavery, J. A., Shen, R., Martin, A. S., Kehl, K. L.,
-Sweeney, S. M., Lepisto, E. M., Rizvi, H., McCarthy, C. G., Schultz, N.,
-Warner, J. L., Park, B. H., Bedard, P. L., Riely, G. J., Schrag, D.,
-Panageas, K. S., &amp; AACR Project GENIE Consortium (2022). <a href="https://pubmed.ncbi.nlm.nih.gov/34734967/" class="external-link">Implications of
-Selection Bias Due to Delayed Study Entry in Clinical Genomic
-Studies</a>. JAMA oncology, 8(2), 287–291. <a href="https://doi.org/10.1001/jamaoncol.2021.5153" class="external-link uri">https://doi.org/10.1001/jamaoncol.2021.5153</a></p></li>
-<li><p>Kehl, K. L., Uno, H., Gusev, A., Groha, S., Brown, S., Lavery, J.
-A., Schrag, D., &amp; Panageas, K. S. (2023). <a href="https://pubmed.ncbi.nlm.nih.gov/36626408/" class="external-link">Elucidating Analytic
-Bias Due to Informative Cohort Entry in Cancer Clinico-genomic
-Datasets</a>. Cancer epidemiology, biomarkers &amp; prevention: a
-publication of the American Association for Cancer Research, cosponsored
-by the American Society of Preventive Oncology, 32(3), 344–352. <a href="https://doi.org/10.1158/1055-9965.EPI-22-0875" class="external-link uri">https://doi.org/10.1158/1055-9965.EPI-22-0875</a></p></li>
-<li><p>Kehl, K. L., Riely, G. J., Lepisto, E. M., Lavery, J. A., Warner,
-J. L., LeNoue-Newton, M. L., Sweeney, S. M., Rudolph, J. E., Brown, S.,
-Yu, C., Bedard, P. L., Schrag, D., Panageas, K. S., &amp; American
-Association of Cancer Research (AACR) Project Genomics Evidence
-Neoplasia Information Exchange (GENIE) Consortium (2021). <a href="https://pubmed.ncbi.nlm.nih.gov/34309669/" class="external-link">Correlation Between
-Surrogate End Points and Overall Survival in a Multi-institutional
-Clinicogenomic Cohort of Patients With Non-Small Cell Lung or Colorectal
-Cancer</a>. JAMA network open, 4(7), e2117547. <a href="https://doi.org/10.1001/jamanetworkopen.2021.17547" class="external-link uri">https://doi.org/10.1001/jamanetworkopen.2021.17547</a></p></li>
+<li>These data are heterogeneous such that they come from multiple
+genomic panels from multiple institutions. Gene aliases across panels
+may vary.</li>
+<li>The GENIE BPC fusions and copy number alterations data may differ
+from common data formats. Differences are described in the Data Formats
+subsection below.</li>
 </ul>
 </div>
-<div class="section level2">
-<h2 id="data-access">Data Access<a class="anchor" aria-label="anchor" href="#data-access"></a>
-</h2>
+<div class="section level3">
+<h3 id="data-access">Data Access<a class="anchor" aria-label="anchor" href="#data-access"></a>
+</h3>
 <p>To gain access to the GENIE BPC data, please follow the instructions
 on the <a href="https://genie-bpc.github.io/genieBPC/articles/pull_data_synapse_vignette.html" class="external-link">{genieBPC}
 <code>pull_data_synapse()</code> vignette</a> to register for a Synapse
@@ -149,21 +117,21 @@ yourself using <code><a href="https://genie-bpc.github.io/genieBPC/reference/set
 be ready to pull the GENIE BPC clinical and genomic data from Synapse
 into your local environment:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://genie-bpc.github.io/genieBPC/" class="external-link">genieBPC</a></span><span class="op">)</span></span>
+<span></span>
 <span><span class="co"># if credentials are not stored in your R environment</span></span>
-<span><span class="fu">set_synapse_credentials</span><span class="op">(</span>username <span class="op">=</span> <span class="st">"username"</span>, password <span class="op">=</span> <span class="st">"password"</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># if credentials are stored in your R environment</span></span>
-<span><span class="fu">set_synapse_credentials</span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> You are now connected to 'Synapse' as</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">bstgeniebpc@mskcc.org</span> for this R session!</span></span></code></pre></div>
+<span><span class="fu"><a href="https://genie-bpc.github.io/genieBPC/reference/set_synapse_credentials.html" class="external-link">set_synapse_credentials</a></span><span class="op">(</span>username <span class="op">=</span> <span class="st">"username"</span>, password <span class="op">=</span> <span class="st">"password"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># if credentials are stored in your R environment</span></span>
+<span><span class="fu"><a href="https://genie-bpc.github.io/genieBPC/reference/set_synapse_credentials.html" class="external-link">set_synapse_credentials</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 </div>
-<div class="section level2">
-<h2 id="obtain-genie-bpc-data">Obtain GENIE BPC Data<a class="anchor" aria-label="anchor" href="#obtain-genie-bpc-data"></a>
-</h2>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="section level3">
+<h3 id="obtain-genie-bpc-data">Obtain GENIE BPC Data<a class="anchor" aria-label="anchor" href="#obtain-genie-bpc-data"></a>
+</h3>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># pull NSCLC v2.0-public data from Synapse into the R environment</span></span>
-<span><span class="va">nsclc_2_0</span> <span class="op">=</span> <span class="fu">pull_data_synapse</span><span class="op">(</span>cohort <span class="op">=</span> <span class="st">"NSCLC"</span>, version <span class="op">=</span> <span class="st">"v2.0-public"</span><span class="op">)</span></span>
+<span><span class="va">nsclc_2_0</span> <span class="op">=</span> <span class="fu"><a href="https://genie-bpc.github.io/genieBPC/reference/pull_data_synapse.html" class="external-link">pull_data_synapse</a></span><span class="op">(</span>cohort <span class="op">=</span> <span class="st">"NSCLC"</span>,</span>
+<span>                              version <span class="op">=</span> <span class="st">"v2.0-public"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #00BB00;">pt_char</span> has been imported for <span style="color: #0000BB;">"NSCLC_v2.0"</span></span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #00BB00;">ca_dx_index</span> has been imported for <span style="color: #0000BB;">"NSCLC_v2.0"</span></span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #00BB00;">ca_dx_non_index</span> has been imported for <span style="color: #0000BB;">"NSCLC_v2.0"</span></span></span>
@@ -186,7 +154,7 @@ datasets, including the mutations, fusions, and copy number data.</p>
 Synapse, the genomic data can be accessed via both Synapse and
 cBioPortal. Using the {cbioportalR} package, users can pull the GENIE
 BPC genomic data directly from cBioPortal:</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/karissawhiting/cbioportalR" class="external-link">cbioportalR</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># connect to the GENIE instance of cBioPortal</span></span>
@@ -202,14 +170,14 @@ BPC genomic data directly from cBioPortal:</p>
 <span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;lgl&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>               <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> erbb2_g… ERBB… <span style="color: #949494;">"</span>ERBB2 coh… TRUE        GENIE…      0 2022-09-2…            315</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> brca_ak… AACR… <span style="color: #949494;">"</span>Targeted … TRUE        GENIE…      0 2022-10-0…            428</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> genie_p… GENI… <span style="color: #949494;">"</span>GENIE v13… TRUE        GENIE…      0 2023-03-2…         <span style="text-decoration: underline;">167</span>423</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> nsclc_p… GENI… <span style="color: #949494;">"</span>NSCLC coh… TRUE        GENIE…      0 2023-03-2…           <span style="text-decoration: underline;">2</span>004</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> crc_pub… GENI… <span style="color: #949494;">"</span>CRC cohor… TRUE        GENIE…      0 2023-03-2…           <span style="text-decoration: underline;">1</span>551</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> glioma_… DFCI… <span style="color: #949494;">"</span>1,535 gli… TRUE        GENIE…      0 2023-04-1…           <span style="text-decoration: underline;">1</span>535</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">7</span> mbc_gen… Meta… <span style="color: #949494;">"</span>Breast tu… TRUE        GENIE…      0 2023-04-1…            856</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> crc_pub… GENI… <span style="color: #949494;">"</span>CRC cohor… TRUE        GENIE…      0 2023-03-2…           <span style="text-decoration: underline;">1</span>551</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> glioma_… DFCI… <span style="color: #949494;">"</span>1,535 gli… TRUE        GENIE…      0 2023-04-1…           <span style="text-decoration: underline;">1</span>535</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> mbc_gen… Meta… <span style="color: #949494;">"</span>Breast tu… TRUE        GENIE…      0 2023-04-1…            856</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> genie_p… GENI… <span style="color: #949494;">"</span>GENIE v13… TRUE        GENIE…      0 2023-06-0…         <span style="text-decoration: underline;">167</span>358</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">7</span> nsclc_p… GENI… <span style="color: #949494;">"</span>NSCLC coh… TRUE        GENIE…      0 2023-06-0…           <span style="text-decoration: underline;">2</span>004</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ 5 more variables: readPermission &lt;lgl&gt;, cancerTypeId &lt;chr&gt;,</span></span></span>
 <span><span class="co">#&gt; <span style="color: #949494;">#   referenceGenome &lt;chr&gt;, pmid &lt;chr&gt;, citation &lt;chr&gt;</span></span></span></code></pre></div>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># obtain genomic data for GENIE BPC NSCLC v2.0-public</span></span>
 <span><span class="va">mutations_extended_2_0</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://karissawhiting.github.io/cbioportalR/reference/get_mutations_by_study.html" class="external-link">get_mutations_by_study</a></span><span class="op">(</span><span class="st">"nsclc_public_genie_bpc"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Returning all data for the <span style="color: #0000BB;">"nsclc_public_genie_bpc_mutations"</span> molecular profile in the <span style="color: #0000BB;">"nsclc_public_genie_bpc"</span> study</span></span>
@@ -218,26 +186,47 @@ BPC genomic data directly from cBioPortal:</p>
 <span><span class="va">fusions_2_0</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://karissawhiting.github.io/cbioportalR/reference/get_fusions_by_study.html" class="external-link">get_fusions_by_study</a></span><span class="op">(</span><span class="st">"nsclc_public_genie_bpc"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Returning all data for the <span style="color: #0000BB;">"nsclc_public_genie_bpc_structural_variants"</span> molecular profile in the <span style="color: #0000BB;">"nsclc_public_genie_bpc"</span> study</span></span></code></pre></div>
 </div>
-<div class="section level2">
-<h2 id="data-formats">Data Formats<a class="anchor" aria-label="anchor" href="#data-formats"></a>
-</h2>
+<div class="section level3">
+<h3 id="data-formats">Data Formats<a class="anchor" aria-label="anchor" href="#data-formats"></a>
+</h3>
 <p>The genomic data for GENIE BPC are stored both on Synapse and in
 cBioPortal. The data structure differs depending on where the genomic
 data are downloaded from. Therefore, the remainder of this vignette will
 proceed by outlining the process of annotating genomic data separately
 for genomic data downloaded from Synapse and genomic data downloaded
 from cBioPortal.</p>
-<p>Additionally, due to filtering criteria applied by cBioPortal, the
-genomic data from Synapse and cBioPortal do not align exactly.
-Specifically, the mutation data variant classification data are filtered
-on conditions described <a href="https://docs.cbioportal.org/file-formats/#mutation-data" class="external-link">here</a>.
-The CNA data as downloaded from cBioPortal only includes high level CNA
-(-2, 2), while the CNA data as downloaded from Synapse includes all
-CNA.</p>
+<div class="section level4">
+<h4 id="differences-between-synapse-and-cbioportal-genomic-data">Differences Between Synapse and cBioPortal Genomic Data<a class="anchor" aria-label="anchor" href="#differences-between-synapse-and-cbioportal-genomic-data"></a>
+</h4>
+<p>Please note that pulling genomic GENIE data from Synapse using
+<code><a href="https://genie-bpc.github.io/genieBPC/reference/pull_data_synapse.html" class="external-link">pull_data_synapse()</a></code> and pulling GENIE data from cBioPortal
+may result in small differences in the data due to systematic
+differences in the processing pipelines employed by Synapse and
+cBioPortal. These differences may include:</p>
+<ul>
+<li><p>Data formatting - Some data sets (e.g. CNA files) may appear in
+wide format in Synapse data versus long format in cBioPortal data, or
+column attributes and names may appear sightly different (e.g. fusions
+files).</p></li>
+<li><p>Default filtering - By default, cBioPortal filters out Silent,
+Intron, IGR, 3’UTR, 5’UTR, 3’Flank and 5’Flank, except for the promoter
+mutations of the TERT gene. See <a href="https://docs.cbioportal.org/file-formats/#mutation-data" class="external-link">cBioPortal
+documentation</a> for more details. These are retained in Synapse
+processing pipelines.</p></li>
+<li><p>Hugo Symbols - Some genes have more than one accepted Hugo Symbol
+and may be referred to differently between data sources
+(e.g. <code>NSD3</code> is an alias for <code>WHSC1L1</code>). Some
+tools exist to help you resolve gene aliases across genomic data
+sources. See <code><a href="../reference/recode_alias.html">gnomeR::recode_alias()</a></code>,
+<code>cbioportal::get_alias()</code> and vignettes from the <a href="https://mskcc-epi-bio.github.io/gnomeR/">{gnomeR}</a> and <a href="https://www.karissawhiting.com/cbioportalR/" class="external-link">{cbioportalR}</a> for
+more information on how to use these functions and work with gene
+aliases.</p></li>
+</ul>
 </div>
-<div class="section level2">
-<h2 id="selecting-a-cohort-for-analysis">Selecting a Cohort for Analysis<a class="anchor" aria-label="anchor" href="#selecting-a-cohort-for-analysis"></a>
-</h2>
+</div>
+<div class="section level3">
+<h3 id="selecting-a-cohort-for-analysis">Selecting a Cohort for Analysis<a class="anchor" aria-label="anchor" href="#selecting-a-cohort-for-analysis"></a>
+</h3>
 <p>The following code chunk uses the
 <code><a href="https://genie-bpc.github.io/genieBPC/reference/create_analytic_cohort.html" class="external-link">genieBPC::create_analytic_cohort()</a></code> to create an analytic
 cohort of patients diagnosed with stage IV NSCLC of adenocarcinoma
@@ -250,16 +239,16 @@ OncoTree code LUAD, take the latest of the samples.</p>
 <p>Note: for patients with exactly one genomic sample, that unique
 genomic sample will be returned <em>regardless of whether it meets the
 argument criteria specified below</em>.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># create analytic cohort of patients diagnosed with Stage IV adenocarcinoma</span></span>
-<span><span class="va">nsclc_2_0_example</span> <span class="op">&lt;-</span> <span class="fu">create_analytic_cohort</span><span class="op">(</span></span>
+<span><span class="va">nsclc_2_0_example</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://genie-bpc.github.io/genieBPC/reference/create_analytic_cohort.html" class="external-link">create_analytic_cohort</a></span><span class="op">(</span></span>
 <span>  data_synapse <span class="op">=</span> <span class="va">nsclc_2_0</span><span class="op">$</span><span class="va">NSCLC_v2.0</span>,</span>
 <span>  stage_dx <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Stage IV"</span><span class="op">)</span>,</span>
 <span>  histology <span class="op">=</span> <span class="st">"Adenocarcinoma"</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># select unique NGS samples for this analytic cohort</span></span>
-<span><span class="va">nsclc_2_0_samples</span> <span class="op">&lt;-</span> <span class="fu">select_unique_ngs</span><span class="op">(</span></span>
+<span><span class="va">nsclc_2_0_samples</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://genie-bpc.github.io/genieBPC/reference/select_unique_ngs.html" class="external-link">select_unique_ngs</a></span><span class="op">(</span></span>
 <span>  data_cohort <span class="op">=</span> <span class="va">nsclc_2_0_example</span><span class="op">$</span><span class="va">cohort_ngs</span>,</span>
 <span>  oncotree_code <span class="op">=</span> <span class="st">"LUAD"</span>,</span>
 <span>  sample_type <span class="op">=</span> <span class="st">"Metastasis"</span>,</span>
@@ -269,16 +258,17 @@ argument criteria specified below</em>.</p>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">62</span> of <span style="color: #00BB00;">63</span> had a unique NGS report selected based on given criteria.</span></span>
 <span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> <span style="color: #0000BB;">1</span> of <span style="color: #00BB00;">63</span> did not have a unique NGS report selected based on the selected criteria or by having the largest panel, so a NGS report was selected at random (be sure to set a seed for reproducbility!) See `attributes(&lt;your-results&gt;)$random_samples` to view these sample IDs.</span></span></code></pre></div>
 <p>Create a dataframe of the corresponding panel and sample IDs:</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># specify sample panels and IDs</span></span>
 <span><span class="va">nsclc_2_0_sample_panels</span> <span class="op">&lt;-</span> <span class="va">nsclc_2_0_samples</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">cpt_seq_assay_id</span>, <span class="va">cpt_genie_sample_id</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html" class="external-link">rename</a></span><span class="op">(</span>panel_id <span class="op">=</span> <span class="va">cpt_seq_assay_id</span>,</span>
-<span>         sample_id <span class="op">=</span> <span class="va">cpt_genie_sample_id</span><span class="op">)</span></span></code></pre></div>
+<span>  <span class="fu">select</span><span class="op">(</span><span class="va">cpt_seq_assay_id</span>, <span class="va">cpt_genie_sample_id</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu">rename</span><span class="op">(</span>panel_id <span class="op">=</span> <span class="va">cpt_seq_assay_id</span>,</span>
+<span>         sample_id <span class="op">=</span> <span class="va">cpt_genie_sample_id</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/stats/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">panel_id</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 </div>
-<div class="section level2">
-<h2 id="process-data-with-create_gene_binary">Process Data with <code>create_gene_binary()</code><a class="anchor" aria-label="anchor" href="#process-data-with-create_gene_binary"></a>
-</h2>
+<div class="section level3">
+<h3 id="process-data-with-create_gene_binary">Process Data with <code>create_gene_binary()</code><a class="anchor" aria-label="anchor" href="#process-data-with-create_gene_binary"></a>
+</h3>
 <p>The <code><a href="../reference/create_gene_binary.html">create_gene_binary()</a></code> function takes inputs of
 mutations, fusions, and CNA data and returns a binary matrix with the
 alteration status for each gene, annotating missingness when genes were
@@ -289,6 +279,10 @@ sequenced across multiple sequencing platforms, with the genes included
 varying across panels. Without the <code>specify_panel</code> argument,
 missingness will not be correctly annotated, and genes that were not
 tested will be incorrectly documented as not being altered.</p>
+<p>Note: you can optionally check and recode any older gene names to
+their newer Hugo Symbol in your data set by passing the
+<code>genie</code> option to
+<code>create_gene_binary(recode_aliases=)</code>.</p>
 <p><strong>Using the genomic data from Synapse:</strong></p>
 <p>The fusions and CNA data as downloaded from Synapse require some
 modifications prior to being supplied to the
@@ -296,17 +290,16 @@ modifications prior to being supplied to the
 <p>First, the CNA file can be transposed to match the expected input for
 <code><a href="../reference/create_gene_binary.html">create_gene_binary()</a></code> using
 <code><a href="../reference/pivot_cna_longer.html">pivot_cna_longer()</a></code>:</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># transpose CNA data from Synapse</span></span>
 <span><span class="va">cna_synapse_long</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/pivot_cna_longer.html">pivot_cna_longer</a></span><span class="op">(</span><span class="va">nsclc_2_0</span><span class="op">$</span><span class="va">NSCLC_v2.0</span><span class="op">$</span><span class="va">cna</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> Replacing all `.` to `-` in <span style="color: #00BB00;">sample_id</span> field (e.g. `P.0001930.T01.IM3` -&gt; `P-0001930-T01-IM3`).</span></span>
 <span><span class="co">#&gt; To prevent this, use argument `clean_sample_ids = FALSE`</span></span></code></pre></div>
-<p><strong>PLACEHOLDER</strong>: Next, the fusions file can be
-transposed to match the expected input for
-<code><a href="../reference/create_gene_binary.html">create_gene_binary()</a></code></p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<p>Next, the fusions file can be transposed to match the expected input
+for <code><a href="../reference/create_gene_binary.html">create_gene_binary()</a></code></p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># transpose fusions data from Synapse</span></span>
-<span><span class="co">#fusions_synapse_long &lt;- pivot_fusions_longer(nsclc_2_0$NSCLC_v2.0$fusions)</span></span></code></pre></div>
+<span><span class="va">fusions_synapse_long</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/reformat_fusion.html">reformat_fusion</a></span><span class="op">(</span><span class="va">nsclc_2_0</span><span class="op">$</span><span class="va">NSCLC_v2.0</span><span class="op">$</span><span class="va">fusions</span><span class="op">)</span></span></code></pre></div>
 <p>Finally, the reformatted genomic data can be supplied to
 <code><a href="../reference/create_gene_binary.html">create_gene_binary()</a></code> to annotate genomic alterations for
 patients in the analytic cohort of interest.</p>
@@ -314,185 +307,144 @@ patients in the analytic cohort of interest.</p>
 CNA (-2, 2), so we will specify <code>high_level_cna_only = TRUE</code>
 to be consistent with the results based on the genomic data as
 downloaded from cBioPortal.</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Omitting NA for now</span></span>
-<span><span class="va">nsclc_2_0_sample_panels</span> <span class="op">&lt;-</span> <span class="va">nsclc_2_0_sample_panels</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/stats/na.fail.html" class="external-link">na.omit</a></span><span class="op">(</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">nsclc_2_0_gen_dat_synapse</span> <span class="op">&lt;-</span></span>
+<p>Additionally, we will use the built in
+’genie<code>option to check gene aliases (see</code>?create_gene_binary`
+for more info).</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">nsclc_2_0_gen_dat_synapse</span> <span class="op">&lt;-</span></span>
 <span>  <span class="fu"><a href="../reference/create_gene_binary.html">create_gene_binary</a></span><span class="op">(</span></span>
 <span>    mutation <span class="op">=</span> <span class="va">nsclc_2_0</span><span class="op">$</span><span class="va">NSCLC_v2.0</span><span class="op">$</span><span class="va">mutations_extended</span>,</span>
 <span>    cna <span class="op">=</span> <span class="va">cna_synapse_long</span>,</span>
 <span>    high_level_cna_only <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span> <span class="co">#   fusion = fusions_synapse_long,</span></span>
+<span>    fusion <span class="op">=</span> <span class="va">fusions_synapse_long</span>,</span>
 <span>    samples <span class="op">=</span> <span class="va">nsclc_2_0_sample_panels</span><span class="op">$</span><span class="va">sample_id</span>,</span>
-<span>    specify_panel <span class="op">=</span> <span class="va">nsclc_2_0_sample_panels</span></span>
+<span>    specify_panel <span class="op">=</span> <span class="va">nsclc_2_0_sample_panels</span>, </span>
+<span>    recode_aliases <span class="op">=</span> <span class="st">"genie"</span></span>
 <span>  <span class="op">)</span></span>
 <span><span class="co">#&gt; Warning: To ensure gene with multiple names/aliases are correctly grouped together, the</span></span>
 <span><span class="co">#&gt; following genes in your dataframe have been recoded (if you are running</span></span>
 <span><span class="co">#&gt; `create_gene_binary()` you can prevent this with `alias_table = FALSE`):</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> PARK2 recoded to PRKN</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> MRE11A recoded to MRE11</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> RFWD2 recoded to COP1</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> FAM46C recoded to TENT5C</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> WHSC1L1 recoded to NSD3</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> HIST1H3C recoded to H3C3</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> WHSC1 recoded to NSD2</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> HIST1H3B recoded to H3C2</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> TCEB1 recoded to ELOC</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> H3F3A recoded to H3-3A</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> HIST1H3G recoded to H3C8</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> HIST1H3D recoded to H3C4</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> HIST1H1C recoded to H1-2</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> HIST1H3I recoded to H3C11</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> PAK7 recoded to PAK5</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> HIST1H3E recoded to H3C6</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> HIST1H3H recoded to H3C10</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> HIST1H3F recoded to H3C7</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> FAM175A recoded to ABRAXAS1</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> HIST1H2BD recoded to H2BC5</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> HIST1H3J recoded to H3C12</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> HIST3H3 recoded to H3-4</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> H3F3C recoded to H3-5</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> FAM58A recoded to CCNQ</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> H3F3B recoded to H3-3B</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> SETD8 recoded to KMT5A</span></span>
-<span><span class="co">#&gt; Warning: To ensure gene with multiple names/aliases are correctly grouped together, the</span></span>
-<span><span class="co">#&gt; following genes in your dataframe have been recoded (if you are running</span></span>
-<span><span class="co">#&gt; `create_gene_binary()` you can prevent this with `alias_table = FALSE`):</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> FAM175A recoded to ABRAXAS1</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> FAM46C recoded to TENT5C</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> FAM58A recoded to CCNQ</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> H3F3A recoded to H3-3A</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> H3F3B recoded to H3-3B</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> H3F3C recoded to H3-5</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> HIST1H3B recoded to H3C2</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> HIST1H3C recoded to H3C3</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> HIST1H3D recoded to H3C4</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> HIST1H3E recoded to H3C6</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> HIST1H3F recoded to H3C7</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> HIST1H3G recoded to H3C8</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> HIST1H3H recoded to H3C10</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> HIST1H3I recoded to H3C11</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> HIST1H3J recoded to H3C12</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> HIST2H3C recoded to H3C14</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> HIST2H3D recoded to H3C13</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> MRE11A recoded to MRE11</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> PAK7 recoded to PAK5</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> PARK2 recoded to PRKN</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> RFWD2 recoded to COP1</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> TCEB1 recoded to ELOC</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> WHSC1 recoded to NSD2</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> WHSC1L1 recoded to NSD3</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> 14 columns have all missing values. This may occur when there are genes in your data that are not in the specified panels (see `specify_panel` argument)</span></span></code></pre></div>
+<span><span class="co">#&gt; PARK2 recoded to PRKN</span></span>
+<span><span class="co">#&gt; MRE11A recoded to MRE11</span></span>
+<span><span class="co">#&gt; RFWD2 recoded to COP1</span></span>
+<span><span class="co">#&gt; GNB2L1 recoded to RACK1</span></span>
+<span><span class="co">#&gt; FAM46C recoded to TENT5C</span></span>
+<span><span class="co">#&gt; WHSC1L1 recoded to NSD3</span></span>
+<span><span class="co">#&gt; C17orf70 recoded to FAAP100</span></span>
+<span><span class="co">#&gt; PVRL4 recoded to NECTIN4</span></span>
+<span><span class="co">#&gt; HIST1H3C recoded to H3C3</span></span>
+<span><span class="co">#&gt; BRE recoded to BABAM2</span></span>
+<span><span class="co">#&gt; C1orf86 recoded to FAAP20</span></span>
+<span><span class="co">#&gt; WHSC1 recoded to NSD2</span></span>
+<span><span class="co">#&gt; HIST1H3B recoded to H3C2</span></span>
+<span><span class="co">#&gt; TCEB1 recoded to ELOC</span></span>
+<span><span class="co">#&gt; H3F3A recoded to H3-3A</span></span>
+<span><span class="co">#&gt; HIST1H3G recoded to H3C8</span></span>
+<span><span class="co">#&gt; HIST1H3D recoded to H3C4</span></span>
+<span><span class="co">#&gt; HIST1H1C recoded to H1-2</span></span>
+<span><span class="co">#&gt; HIST1H3I recoded to H3C11</span></span>
+<span><span class="co">#&gt; PAK7 recoded to PAK5</span></span>
+<span><span class="co">#&gt; HIST1H3E recoded to H3C6</span></span>
+<span><span class="co">#&gt; HIST1H3H recoded to H3C10</span></span>
+<span><span class="co">#&gt; HIST1H3F recoded to H3C7</span></span>
+<span><span class="co">#&gt; FAM175A recoded to ABRAXAS1</span></span>
+<span><span class="co">#&gt; HIST1H2BD recoded to H2BC5</span></span>
+<span><span class="co">#&gt; HIST1H3J recoded to H3C12</span></span>
+<span><span class="co">#&gt; HIST3H3 recoded to H3-4</span></span>
+<span><span class="co">#&gt; H3F3C recoded to H3-5</span></span>
+<span><span class="co">#&gt; FAM58A recoded to CCNQ</span></span>
+<span><span class="co">#&gt; H3F3B recoded to H3-3B</span></span>
+<span><span class="co">#&gt; SETD8 recoded to KMT5A</span></span>
+<span><span class="co">#&gt; GPR124 recoded to ADGRA2</span></span>
+<span><span class="co">#&gt; C11orf30 recoded to EMSY</span></span>
+<span><span class="co">#&gt; WISP3 recoded to CCN6</span></span>
+<span><span class="co">#&gt; HIST2H3C recoded to H3C14</span></span>
+<span><span class="co">#&gt; HIST2H3D recoded to H3C13</span></span>
+<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> 64 columns have all missing values. This may occur when there are genes in your data that are not in the specified panels (see `specify_panel` argument)</span></span>
+<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> 7 `samples` had no alterations found in data sets (See `attr(&lt;your_df&gt;, 'zero_alteration_samples')` to view). These were retained in results as having 0 alterations.</span></span></code></pre></div>
 <p><strong>Using the genomic data from cBioPortal:</strong></p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">nsclc_2_0_gen_dat_cbio</span> <span class="op">&lt;-</span></span>
 <span>  <span class="fu"><a href="../reference/create_gene_binary.html">create_gene_binary</a></span><span class="op">(</span></span>
 <span>    mutation <span class="op">=</span> <span class="va">mutations_extended_2_0</span>,</span>
 <span>    cna <span class="op">=</span> <span class="va">cna_2_0</span>,</span>
+<span>    fusion <span class="op">=</span> <span class="va">fusions_2_0</span>,</span>
 <span>    samples <span class="op">=</span> <span class="va">nsclc_2_0_sample_panels</span><span class="op">$</span><span class="va">sample_id</span>,</span>
-<span>    specify_panel <span class="op">=</span> <span class="va">nsclc_2_0_sample_panels</span></span>
+<span>    specify_panel <span class="op">=</span> <span class="va">nsclc_2_0_sample_panels</span>, </span>
+<span>    recode_aliases <span class="op">=</span> <span class="st">"genie"</span></span>
 <span>  <span class="op">)</span></span>
 <span><span class="co">#&gt; Warning: To ensure gene with multiple names/aliases are correctly grouped together, the</span></span>
 <span><span class="co">#&gt; following genes in your dataframe have been recoded (if you are running</span></span>
 <span><span class="co">#&gt; `create_gene_binary()` you can prevent this with `alias_table = FALSE`):</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> HIST3H3 recoded to H3-4</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> HIST1H3B recoded to H3C2</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> HIST1H3I recoded to H3C11</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> HIST1H3D recoded to H3C4</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> HIST1H3F recoded to H3C7</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> HIST1H3C recoded to H3C3</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> HIST1H3G recoded to H3C8</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> H3F3C recoded to H3-5</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> HIST1H3E recoded to H3C6</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> HIST1H1C recoded to H1-2</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> H3F3B recoded to H3-3B</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> HIST1H3J recoded to H3C12</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> HIST1H2BD recoded to H2BC5</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> H3F3A recoded to H3-3A</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> HIST1H3H recoded to H3C10</span></span>
-<span><span class="co">#&gt; Warning: To ensure gene with multiple names/aliases are correctly grouped together, the</span></span>
-<span><span class="co">#&gt; following genes in your dataframe have been recoded (if you are running</span></span>
-<span><span class="co">#&gt; `create_gene_binary()` you can prevent this with `alias_table = FALSE`):</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> HIST2H3D recoded to H3C13</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> HIST2H3C recoded to H3C14</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> H3F3A recoded to H3-3A</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> H3F3C recoded to H3-5</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> HIST1H3J recoded to H3C12</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> HIST1H3F recoded to H3C7</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> HIST1H3G recoded to H3C8</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> HIST1H3H recoded to H3C10</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> HIST1H3I recoded to H3C11</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> HIST1H3D recoded to H3C4</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> HIST1H3E recoded to H3C6</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> 4 columns have all missing values. This may occur when there are genes in your data that are not in the specified panels (see `specify_panel` argument)</span></span></code></pre></div>
-<p>We can compare the binary genomic matrices created using the genomic
-data downloaded from Synapse versus the genomic data downloaded from
-cBioPortal. We observe that they are exactly equal, and will proceed
-using the <code>nsclc_2_0_gen_dat_cbio</code> object.</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># compare binary genomic matrices</span></span>
-<span><span class="fu">arsenal</span><span class="fu">::</span><span class="fu">comparedf</span><span class="op">(</span><span class="va">nsclc_2_0_gen_dat_synapse</span>, <span class="va">nsclc_2_0_gen_dat_cbio</span><span class="op">)</span></span></code></pre></div>
+<span><span class="co">#&gt; HIST3H3 recoded to H3-4</span></span>
+<span><span class="co">#&gt; HIST1H3B recoded to H3C2</span></span>
+<span><span class="co">#&gt; HIST1H3I recoded to H3C11</span></span>
+<span><span class="co">#&gt; HIST1H3D recoded to H3C4</span></span>
+<span><span class="co">#&gt; HIST1H3F recoded to H3C7</span></span>
+<span><span class="co">#&gt; HIST1H3C recoded to H3C3</span></span>
+<span><span class="co">#&gt; HIST1H3G recoded to H3C8</span></span>
+<span><span class="co">#&gt; H3F3C recoded to H3-5</span></span>
+<span><span class="co">#&gt; HIST1H3E recoded to H3C6</span></span>
+<span><span class="co">#&gt; HIST1H1C recoded to H1-2</span></span>
+<span><span class="co">#&gt; H3F3B recoded to H3-3B</span></span>
+<span><span class="co">#&gt; HIST1H3J recoded to H3C12</span></span>
+<span><span class="co">#&gt; HIST1H2BD recoded to H2BC5</span></span>
+<span><span class="co">#&gt; H3F3A recoded to H3-3A</span></span>
+<span><span class="co">#&gt; HIST1H3H recoded to H3C10</span></span>
+<span><span class="co">#&gt; HIST2H3D recoded to H3C13</span></span>
+<span><span class="co">#&gt; HIST2H3C recoded to H3C14</span></span>
+<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> 57 columns have all missing values. This may occur when there are genes in your data that are not in the specified panels (see `specify_panel` argument)</span></span>
+<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> 7 `samples` had no alterations found in data sets (See `attr(&lt;your_df&gt;, 'zero_alteration_samples')` to view). These were retained in results as having 0 alterations.</span></span></code></pre></div>
+<p>Binary genomic matrices created using the genomic data downloaded
+from Synapse and cBioPortal should be equal. We will proceed using the
+<code>nsclc_2_0_gen_dat_cbio</code> object.</p>
 </div>
-<div class="section level2">
-<h2 id="collapse-data-with-summarize_by_gene">Collapse Data with <code>summarize_by_gene()</code><a class="anchor" aria-label="anchor" href="#collapse-data-with-summarize_by_gene"></a>
-</h2>
+<div class="section level3">
+<h3 id="collapse-data-with-summarize_by_gene">Collapse Data with <code>summarize_by_gene()</code><a class="anchor" aria-label="anchor" href="#collapse-data-with-summarize_by_gene"></a>
+</h3>
 <p>We can summarize the presence of any alteration event (mutation,
 amplification, deletion, structural variant) with the
 <code><a href="../reference/summarize_by_gene.html">summarize_by_gene()</a></code> function, such that each gene is a
 column that captures the presence of any event regardless of alteration
 type.</p>
-<p>Summarizing the first 10 samples and first 10 genes:</p>
+<p>Summarizing the first 10 samples for KRAS alterations:</p>
 <p><strong>Using the genomic data from Synapse:</strong></p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">nsclc_2_0_gen_dat_synapse</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">]</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
-<span>  <span class="fu"><a href="../reference/summarize_by_gene.html">summarize_by_gene</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><strong>Using the genomic data from cBioPortal</strong></p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">nsclc_2_0_gen_dat_cbio</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">]</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">nsclc_2_0_gen_dat_synapse</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span>, <span class="op">]</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<span>  <span class="fu">select</span><span class="op">(</span><span class="va">sample_id</span>, <span class="va">KRAS</span>, <span class="va">KRAS.Amp</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/summarize_by_gene.html">summarize_by_gene</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Warning: There were 10 warnings in `summarize()`.</span></span>
-<span><span class="co">#&gt; The first warning was:</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> In argument: `across(everything(), max)`.</span></span>
-<span><span class="co">#&gt; Caused by warning:</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> no non-missing arguments to max; returning -Inf</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Run `dplyr::last_dplyr_warnings()` to see the 9 remaining warnings.</span></span>
-<span><span class="co">#&gt;                  sample_id CDKN2A KRAS STK11 FLT4 NFE2L2 BRAF EGFR BRCA2 ATRX</span></span>
-<span><span class="co">#&gt; 1   GENIE-DFCI-005843-1704      0    0     0    0      0    0    1     0    0</span></span>
-<span><span class="co">#&gt; 2   GENIE-DFCI-004022-1313      0    0     0    0      0    0    1     0    1</span></span>
-<span><span class="co">#&gt; 3   GENIE-DFCI-000013-8840      1    1     1    1      1    1    0     0    0</span></span>
-<span><span class="co">#&gt; 4   GENIE-DFCI-000136-6004      0    1     0    0      0    0    0     0    0</span></span>
-<span><span class="co">#&gt; 5   GENIE-DFCI-000215-8010      1    0     0    0      0    0    1     0    0</span></span>
-<span><span class="co">#&gt; 6  GENIE-DFCI-000260-11571      0    0     0    0      0    0    1     0    0</span></span>
-<span><span class="co">#&gt; 7   GENIE-DFCI-000381-9526      0    0     0    0      0    0    0     0    0</span></span>
-<span><span class="co">#&gt; 8  GENIE-DFCI-000410-10003      0    1     0    0      0    0    0     0    0</span></span>
-<span><span class="co">#&gt; 9   GENIE-DFCI-000454-5667      0    1     0    0      0    0    0     0    0</span></span>
-<span><span class="co">#&gt; 10 GENIE-DFCI-000583-11175      0    0     0    0      0    0    0     0    0</span></span></code></pre></div>
+<span><span class="co">#&gt;                  sample_id KRAS</span></span>
+<span><span class="co">#&gt; 1   GENIE-DFCI-005843-1704    0</span></span>
+<span><span class="co">#&gt; 2   GENIE-DFCI-004022-1313    0</span></span>
+<span><span class="co">#&gt; 3   GENIE-DFCI-000013-8840    1</span></span>
+<span><span class="co">#&gt; 4   GENIE-DFCI-000136-6004    1</span></span>
+<span><span class="co">#&gt; 5   GENIE-DFCI-000215-8010    0</span></span>
+<span><span class="co">#&gt; 6  GENIE-DFCI-000260-11571    0</span></span>
+<span><span class="co">#&gt; 7   GENIE-DFCI-000381-9526    0</span></span>
+<span><span class="co">#&gt; 8  GENIE-DFCI-000410-10003    1</span></span>
+<span><span class="co">#&gt; 9   GENIE-DFCI-000454-5667    1</span></span>
+<span><span class="co">#&gt; 10 GENIE-DFCI-000583-11175    0</span></span></code></pre></div>
 </div>
-<div class="section level2">
-<h2 id="analyzing-data">Analyzing Data<a class="anchor" aria-label="anchor" href="#analyzing-data"></a>
-</h2>
+<div class="section level3">
+<h3 id="analyzing-data">Analyzing Data<a class="anchor" aria-label="anchor" href="#analyzing-data"></a>
+</h3>
 <p>After the data have been transformed into a binary format, we can
 create summaries and visualizations to better understand the data.</p>
-<div class="section level3">
-<h3 id="summarize-data-with-tbl_genomic">Summarize Data with <code>tbl_genomic()</code><a class="anchor" aria-label="anchor" href="#summarize-data-with-tbl_genomic"></a>
-</h3>
+<div class="section level4">
+<h4 id="summarize-data-with-tbl_genomic">Summarize Data with <code>tbl_genomic()</code><a class="anchor" aria-label="anchor" href="#summarize-data-with-tbl_genomic"></a>
+</h4>
 <p>The <code><a href="../reference/tbl_genomic.html">tbl_genomic()</a></code> function summarizes the frequency of
 alteration events from the binary data returned from
-<code><a href="../reference/create_gene_binary.html">create_gene_binary()</a></code> or <code><a href="../reference/summarize_by_gene.html">summarize_by_gene()</a></code>.
-Users can specify particular genes (<code>gene_subset</code> argument)
-or a a minimum frequency (<code>freq_cutoff</code> argument) to include
-in the table.</p>
+<code><a href="../reference/create_gene_binary.html">create_gene_binary()</a></code> or
+<code><a href="../reference/summarize_by_gene.html">summarize_by_gene()</a></code>.</p>
 <p><strong>Using the genomic data from Synapse:</strong></p>
 <p>Summarizing the frequencies of KEAP1, STK11, and SMARCA4 alteration
 events:</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
-<span><span class="va">nsclc_2_0_gen_dat_synapse_sub</span> <span class="op">&lt;-</span> <span class="va">nsclc_2_0_gen_dat_synapse</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">sample_id</span>, <span class="va">KEAP1</span>, <span class="va">STK11</span>, <span class="va">SMARCA4</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu"><a href="../reference/tbl_genomic.html">tbl_genomic</a></span><span class="op">(</span>gene_binary <span class="op">=</span> <span class="va">nsclc_2_0_gen_dat_synapse_sub</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">nsclc_2_0_gen_dat_synapse</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<span>  <span class="fu">select</span><span class="op">(</span><span class="va">sample_id</span>, <span class="va">KEAP1</span>, <span class="va">STK11</span>, <span class="va">SMARCA4</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="../reference/tbl_genomic.html">tbl_genomic</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <div id="iaffeqqxcx" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#iaffeqqxcx table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
@@ -972,13 +924,15 @@ events:</p>
     </tr></tfoot>
 </table>
 </div>
-<p>Summarizing alteration events with &gt;=10% frequency:</p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<p>Users can subset their data set to only include genes above a certain
+prevalence frequency threshold before passing to the function using the
+<code><a href="../reference/subset_by_frequency.html">subset_by_frequency()</a></code> function.</p>
+<p>Below, we summarize alteration events with &gt;=10% frequency:</p>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
-<span><span class="va">nsclc_2_0_gen_dat_synapse_sub</span> <span class="op">&lt;-</span> <span class="va">nsclc_2_0_gen_dat_synapse</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="../reference/subset_by_frequency.html">subset_by_frequency</a></span><span class="op">(</span>t <span class="op">=</span> <span class="fl">.1</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu"><a href="../reference/tbl_genomic.html">tbl_genomic</a></span><span class="op">(</span>gene_binary <span class="op">=</span> <span class="va">nsclc_2_0_gen_dat_synapse_sub</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">nsclc_2_0_gen_dat_synapse</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="../reference/subset_by_frequency.html">subset_by_frequency</a></span><span class="op">(</span>t <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="../reference/tbl_genomic.html">tbl_genomic</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <div id="xjvydoazaw" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#xjvydoazaw table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
@@ -1553,12 +1507,11 @@ events:</p>
 <p><strong>Using the genomic data from cBioPortal:</strong></p>
 <p>Summarizing the frequencies of KEAP1, STK11, and SMARCA4 alteration
 events:</p>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
-<span><span class="va">nsclc_2_0_gen_dat_cbio_sub</span> <span class="op">&lt;-</span> <span class="va">nsclc_2_0_gen_dat_cbio</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">sample_id</span>, <span class="va">KEAP1</span>, <span class="va">STK11</span>, <span class="va">SMARCA4</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu"><a href="../reference/tbl_genomic.html">tbl_genomic</a></span><span class="op">(</span>gene_binary <span class="op">=</span> <span class="va">nsclc_2_0_gen_dat_cbio_sub</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">nsclc_2_0_gen_dat_cbio</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu">select</span><span class="op">(</span><span class="va">sample_id</span>, <span class="va">KEAP1</span>, <span class="va">STK11</span>, <span class="va">SMARCA4</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="../reference/tbl_genomic.html">tbl_genomic</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <div id="hfuuzbtpmg" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#hfuuzbtpmg table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
@@ -2039,12 +1992,11 @@ events:</p>
 </table>
 </div>
 <p>Summarizing alteration events with &gt;=10% frequency:</p>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
-<span><span class="va">nsclc_2_0_gen_dat_cbio_sub</span> <span class="op">&lt;-</span> <span class="va">nsclc_2_0_gen_dat_cbio</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="../reference/subset_by_frequency.html">subset_by_frequency</a></span><span class="op">(</span>t <span class="op">=</span> <span class="fl">.1</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu"><a href="../reference/tbl_genomic.html">tbl_genomic</a></span><span class="op">(</span>gene_binary <span class="op">=</span> <span class="va">nsclc_2_0_gen_dat_cbio_sub</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">nsclc_2_0_gen_dat_cbio</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="../reference/subset_by_frequency.html">subset_by_frequency</a></span><span class="op">(</span>t <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="../reference/tbl_genomic.html">tbl_genomic</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <div id="dxfywihyal" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#dxfywihyal table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
@@ -2617,100 +2569,97 @@ events:</p>
 </table>
 </div>
 </div>
-<div class="section level3">
-<h3 id="data-visualizations">Data Visualizations<a class="anchor" aria-label="anchor" href="#data-visualizations"></a>
-</h3>
+<div class="section level4">
+<h4 id="data-visualizations">Data Visualizations<a class="anchor" aria-label="anchor" href="#data-visualizations"></a>
+</h4>
 <p>We can use the <code><a href="../reference/mutation_viz.html">mutation_viz()</a></code> function to visualize
 several aspects of the mutation data, including variant classification,
 variant type, SNV class and top variant genes.</p>
-<p><strong>Using the genomic data from Synapse:</strong></p>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">mutation_viz_gen_dat_synapse</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mutation_viz.html">mutation_viz</a></span><span class="op">(</span><span class="va">nsclc_2_0</span><span class="op">$</span><span class="va">NSCLC_v2.0</span><span class="op">$</span><span class="va">mutations_extended</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> `samples` argument is `NULL`. We will infer your cohort inclusion and resulting data frame will include all samples with at least one alteration in <span style="color: #00BB00;">mutation</span>, <span style="color: #00BB00;">fusion</span> or <span style="color: #00BB00;">cna</span> data frames</span></span>
-<span><span class="co">#&gt; Warning: To ensure gene with multiple names/aliases are correctly grouped together, the</span></span>
-<span><span class="co">#&gt; following genes in your dataframe have been recoded (if you are running</span></span>
-<span><span class="co">#&gt; `create_gene_binary()` you can prevent this with `alias_table = FALSE`):</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> PARK2 recoded to PRKN</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> MRE11A recoded to MRE11</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> RFWD2 recoded to COP1</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> FAM46C recoded to TENT5C</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> WHSC1L1 recoded to NSD3</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> HIST1H3C recoded to H3C3</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> WHSC1 recoded to NSD2</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> HIST1H3B recoded to H3C2</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> TCEB1 recoded to ELOC</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> H3F3A recoded to H3-3A</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> HIST1H3G recoded to H3C8</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> HIST1H3D recoded to H3C4</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> HIST1H1C recoded to H1-2</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> HIST1H3I recoded to H3C11</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> PAK7 recoded to PAK5</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> HIST1H3E recoded to H3C6</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> HIST1H3H recoded to H3C10</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> HIST1H3F recoded to H3C7</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> FAM175A recoded to ABRAXAS1</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> HIST1H2BD recoded to H2BC5</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> HIST1H3J recoded to H3C12</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> HIST3H3 recoded to H3-4</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> H3F3C recoded to H3-5</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> FAM58A recoded to CCNQ</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> H3F3B recoded to H3-3B</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> SETD8 recoded to KMT5A</span></span>
-<span></span>
-<span><span class="va">mutation_viz_gen_dat_synapse</span></span>
-<span><span class="co">#&gt; $varclass</span></span></code></pre></div>
-<p><img src="genie-bpc-vignette_files/figure-html/unnamed-chunk-20-1.png" width="700"></p>
-<pre><code><span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; $vartype</span></span></code></pre>
-<p><img src="genie-bpc-vignette_files/figure-html/unnamed-chunk-20-2.png" width="700"></p>
-<pre><code><span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; $samplevar</span></span></code></pre>
-<p><img src="genie-bpc-vignette_files/figure-html/unnamed-chunk-20-3.png" width="700"></p>
-<pre><code><span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; $topgenes</span></span></code></pre>
-<p><img src="genie-bpc-vignette_files/figure-html/unnamed-chunk-20-4.png" width="700"></p>
-<pre><code><span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; $genecor</span></span></code></pre>
-<p><img src="genie-bpc-vignette_files/figure-html/unnamed-chunk-20-5.png" width="700"></p>
+<p>For the purposes of this vignette we will visualize the genomic data
+from cBioPortal.</p>
 <p><strong>Using the genomic data from cBioPortal:</strong></p>
-<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">mutation_viz_gen_dat_cbio</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mutation_viz.html">mutation_viz</a></span><span class="op">(</span><span class="va">mutations_extended_2_0</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> `samples` argument is `NULL`. We will infer your cohort inclusion and resulting data frame will include all samples with at least one alteration in <span style="color: #00BB00;">mutation</span>, <span style="color: #00BB00;">fusion</span> or <span style="color: #00BB00;">cna</span> data frames</span></span>
+<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> `samples` argument is `NULL`. We will infer your cohort inclusion and resulting data frame will include all samples with at least one alteration in <span style="color: #00BB00;">mutation</span>, <span style="color: #00BB00;">fusion</span> or <span style="color: #00BB00;">cna</span> data frames</span></span>
 <span><span class="co">#&gt; Warning: To ensure gene with multiple names/aliases are correctly grouped together, the</span></span>
 <span><span class="co">#&gt; following genes in your dataframe have been recoded (if you are running</span></span>
 <span><span class="co">#&gt; `create_gene_binary()` you can prevent this with `alias_table = FALSE`):</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> HIST3H3 recoded to H3-4</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> HIST1H3B recoded to H3C2</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> HIST1H3I recoded to H3C11</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> HIST1H3D recoded to H3C4</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> HIST1H3F recoded to H3C7</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> HIST1H3C recoded to H3C3</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> HIST1H3G recoded to H3C8</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> H3F3C recoded to H3-5</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> HIST1H3E recoded to H3C6</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> HIST1H1C recoded to H1-2</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> H3F3B recoded to H3-3B</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> HIST1H3J recoded to H3C12</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> HIST1H2BD recoded to H2BC5</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> H3F3A recoded to H3-3A</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> HIST1H3H recoded to H3C10</span></span>
+<span><span class="co">#&gt; HIST3H3 recoded to H3-4</span></span>
+<span><span class="co">#&gt; HIST1H3B recoded to H3C2</span></span>
+<span><span class="co">#&gt; HIST1H3I recoded to H3C11</span></span>
+<span><span class="co">#&gt; HIST1H3D recoded to H3C4</span></span>
+<span><span class="co">#&gt; HIST1H3F recoded to H3C7</span></span>
+<span><span class="co">#&gt; HIST1H3C recoded to H3C3</span></span>
+<span><span class="co">#&gt; HIST1H3G recoded to H3C8</span></span>
+<span><span class="co">#&gt; H3F3C recoded to H3-5</span></span>
+<span><span class="co">#&gt; HIST1H3E recoded to H3C6</span></span>
+<span><span class="co">#&gt; HIST1H1C recoded to H1-2</span></span>
+<span><span class="co">#&gt; H3F3B recoded to H3-3B</span></span>
+<span><span class="co">#&gt; HIST1H3J recoded to H3C12</span></span>
+<span><span class="co">#&gt; HIST1H2BD recoded to H2BC5</span></span>
+<span><span class="co">#&gt; H3F3A recoded to H3-3A</span></span>
+<span><span class="co">#&gt; HIST1H3H recoded to H3C10</span></span>
 <span></span>
 <span><span class="va">mutation_viz_gen_dat_cbio</span></span>
 <span><span class="co">#&gt; $varclass</span></span></code></pre></div>
-<p><img src="genie-bpc-vignette_files/figure-html/unnamed-chunk-21-1.png" width="700"></p>
+<p><img src="GENIE-vignette_files/figure-html/unnamed-chunk-17-1.png" width="700"></p>
 <pre><code><span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $vartype</span></span></code></pre>
-<p><img src="genie-bpc-vignette_files/figure-html/unnamed-chunk-21-2.png" width="700"></p>
+<p><img src="GENIE-vignette_files/figure-html/unnamed-chunk-17-2.png" width="700"></p>
 <pre><code><span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $samplevar</span></span></code></pre>
-<p><img src="genie-bpc-vignette_files/figure-html/unnamed-chunk-21-3.png" width="700"></p>
+<p><img src="GENIE-vignette_files/figure-html/unnamed-chunk-17-3.png" width="700"></p>
 <pre><code><span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $topgenes</span></span></code></pre>
-<p><img src="genie-bpc-vignette_files/figure-html/unnamed-chunk-21-4.png" width="700"></p>
+<p><img src="GENIE-vignette_files/figure-html/unnamed-chunk-17-4.png" width="700"></p>
 <pre><code><span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $genecor</span></span></code></pre>
-<p><img src="genie-bpc-vignette_files/figure-html/unnamed-chunk-21-5.png" width="700"></p>
+<p><img src="GENIE-vignette_files/figure-html/unnamed-chunk-17-5.png" width="700"></p>
 </div>
+</div>
+<div class="section level2">
+<h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
+</h2>
+<p>Additional details regarding the GENIE BPC data and the {genieBPC} R
+package are published in the following papers:</p>
+<ul>
+<li><p>Lavery, J. A., Brown, S., Curry, M. A., Martin, A., Sjoberg, D.
+D., &amp; Whiting, K. (2023). <a href="https://pubmed.ncbi.nlm.nih.gov/36519837/" class="external-link">A data processing
+pipeline for the AACR project GENIE biopharma collaborative data with
+the {genieBPC} R package</a>. Bioinformatics (Oxford, England), 39(1),
+btac796. <a href="https://doi.org/10.1093/bioinformatics/btac796" class="external-link uri">https://doi.org/10.1093/bioinformatics/btac796</a></p></li>
+<li><p>Lavery, J. A., Lepisto, E. M., Brown, S., Rizvi, H., McCarthy,
+C., LeNoue-Newton, M., Yu, C., Lee, J., Guo, X., Yu, T., Rudolph, J.,
+Sweeney, S., AACR Project GENIE Consortium, Park, B. H., Warner, J. L.,
+Bedard, P. L., Riely, G., Schrag, D., &amp; Panageas, K. S. (2022). <a href="https://pubmed.ncbi.nlm.nih.gov/35192403/" class="external-link">A Scalable Quality
+Assurance Process for Curating Oncology Electronic Health Records: The
+Project GENIE Biopharma Collaborative Approach</a>. JCO clinical cancer
+informatics, 6, e2100105. <a href="https://doi.org/10.1200/CCI.21.00105" class="external-link uri">https://doi.org/10.1200/CCI.21.00105</a></p></li>
+</ul>
+<p>Technical details regarding proper analysis of this data can be found
+in the following publication:</p>
+<ul>
+<li><p>Brown, S., Lavery, J. A., Shen, R., Martin, A. S., Kehl, K. L.,
+Sweeney, S. M., Lepisto, E. M., Rizvi, H., McCarthy, C. G., Schultz, N.,
+Warner, J. L., Park, B. H., Bedard, P. L., Riely, G. J., Schrag, D.,
+Panageas, K. S., &amp; AACR Project GENIE Consortium (2022). <a href="https://pubmed.ncbi.nlm.nih.gov/34734967/" class="external-link">Implications of
+Selection Bias Due to Delayed Study Entry in Clinical Genomic
+Studies</a>. JAMA oncology, 8(2), 287–291. <a href="https://doi.org/10.1001/jamaoncol.2021.5153" class="external-link uri">https://doi.org/10.1001/jamaoncol.2021.5153</a></p></li>
+<li><p>Kehl, K. L., Uno, H., Gusev, A., Groha, S., Brown, S., Lavery, J.
+A., Schrag, D., &amp; Panageas, K. S. (2023). <a href="https://pubmed.ncbi.nlm.nih.gov/36626408/" class="external-link">Elucidating Analytic
+Bias Due to Informative Cohort Entry in Cancer Clinico-genomic
+Datasets</a>. Cancer epidemiology, biomarkers &amp; prevention: a
+publication of the American Association for Cancer Research, cosponsored
+by the American Society of Preventive Oncology, 32(3), 344–352. <a href="https://doi.org/10.1158/1055-9965.EPI-22-0875" class="external-link uri">https://doi.org/10.1158/1055-9965.EPI-22-0875</a></p></li>
+<li><p>Kehl, K. L., Riely, G. J., Lepisto, E. M., Lavery, J. A., Warner,
+J. L., LeNoue-Newton, M. L., Sweeney, S. M., Rudolph, J. E., Brown, S.,
+Yu, C., Bedard, P. L., Schrag, D., Panageas, K. S., &amp; American
+Association of Cancer Research (AACR) Project Genomics Evidence
+Neoplasia Information Exchange (GENIE) Consortium (2021). <a href="https://pubmed.ncbi.nlm.nih.gov/34309669/" class="external-link">Correlation Between
+Surrogate End Points and Overall Survival in a Multi-institutional
+Clinicogenomic Cohort of Patients With Non-Small Cell Lung or Colorectal
+Cancer</a>. JAMA network open, 4(7), e2117547. <a href="https://doi.org/10.1001/jamanetworkopen.2021.17547" class="external-link uri">https://doi.org/10.1001/jamanetworkopen.2021.17547</a></p></li>
+</ul>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside>
