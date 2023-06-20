@@ -36,6 +36,7 @@ reference:
     - add_pathways
     - recode_alias
     - reformat_fusion
+    - subset_by_panel
   - subtitle: Analyzing Data
   - contents:
     - tbl_genomic
@@ -72,7 +73,11 @@ reference:
     - names_df
     - pathways
     - impact_alias_table
+    - genie_alias_table
     - sv_long
     - clin_collab_df
+    - genie_mut
+    - genie_cna
+    - genie_fusion
 
 

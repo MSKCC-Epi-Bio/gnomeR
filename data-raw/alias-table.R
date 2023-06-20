@@ -28,7 +28,10 @@ get_alias <- function(hugo_symbol) {
 }
 
 
-# Get IMPACT genes -----------------------------------------------------------
+# IMPACT ------------------------------------------------------------------
+
+
+# * Get IMPACT genes -----------------------------------------------------------
 
 api_230 <- get_gene_panel(panel_id = "IMPACT230") %>%
   transmute(gene = hugoGeneSymbol,
@@ -58,6 +61,15 @@ api_505 <- get_gene_panel(panel_id = "IMPACT505") %>%
   transmute(gene = hugoGeneSymbol,
             entrez_id = entrezGeneId)
 
+# heme panels
+api_heme_400 <- get_gene_panel(panel_id = "IMPACT-HEME-400") %>%
+  transmute(gene = hugoGeneSymbol,
+            entrez_id = entrezGeneId)
+
+api_heme_468 <- get_gene_panel(panel_id = "IMPACT-HEME-468") %>%
+  transmute(gene = hugoGeneSymbol,
+            entrez_id = entrezGeneId)
+
 l_api <- list(
           "api_230" = api_230,
           "api_279" = api_279,
@@ -65,7 +77,10 @@ l_api <- list(
           "api_341" = api_341,
           "api_410" = api_410,
           "api_468" = api_468,
-          "api_505" = api_505)
+          "api_505" = api_505,
+          # heme panels
+          "api_heme_400" = api_heme_400,
+          "api_heme_468" = api_heme_468)
 
 # create data frame of genes
 # impact_genes <- map2_df(l_api, names(l_api),
@@ -79,7 +94,7 @@ impact_genes <- impact_genes %>%
   unique()
 
 
-# Get Gene Entrez IDs  --------------------------------------------------------
+# * Get Gene Entrez IDs  --------------------------------------------------------
 
 # # API call to get a list of genes and entrez ids
 all_genes <- get_genes()
@@ -89,7 +104,7 @@ all_genes <- all_genes %>%
   janitor::clean_names() %>%
   rename("hugo_symbol" = hugo_gene_symbol)
 
-# Get Aliases  --------------------------------------------------------
+# * Get Aliases  --------------------------------------------------------
 
 # get all aliases for impact genes
 impact_alias <- impact_genes %>%
@@ -149,7 +164,7 @@ impact_alias_table <- impact_alias_table %>%
 
 usethis::use_data(impact_alias_table , overwrite = TRUE)
 
-# check against internal gene panels dataset ----------------------------------
+# * Check against internal gene panels dataset ----------------------------------
 # x <- gnomeR::gene_panels %>%
 #   unnest(cols = genes_in_panel)
 #
@@ -164,5 +179,99 @@ usethis::use_data(impact_alias_table , overwrite = TRUE)
 #
 # # should be zero
 # al <- compact(al)
+
+# GENIE ------------------------------------------------------------------
+
+
+# * Get GENIE genes -----------------------------------------------------------
+
+library(genieBPC)
+
+genie_panels <- genieBPC::genie_panels
+
+# Replace MSK-IMPACT* with IMPACT* because these tend to have the newer aliases
+genie_panels <- genie_panels %>%
+  mutate(Sequence.Assay.ID = str_remove_all(Sequence.Assay.ID, "MSK-"))
+
+setdiff(genie_panels$Sequence.Assay.ID, gnomeR::gene_panels$gene_panel)
+
+genie_genes <- gnomeR::gene_panels  %>%
+  filter(gene_panel %in% genie_panels$Sequence.Assay.ID | gene_panel == "IMPACT505")
+
+# unnested long version
+genie_genes <- genie_genes %>%
+  unnest(everything(),
+         keep_empty = TRUE) %>%
+  rename("gene" = genes_in_panel,
+         "entrez_id" = entrez_ids_in_panel)
+
+
+# * Get Aliases  --------------------------------------------------------
+
+# get all aliases for impact genes
+genie_alias <- genie_genes %>%
+  select(gene) %>%
+  dplyr::mutate(alias = purrr::map(gene,
+                                   ~tryCatch(get_alias(.x),
+                                             error = function(e) NA_character_)))
+
+genie_alias$alias <- map(genie_alias$alias, ~as_tibble(.x))
+
+# unnested long version
+genie_alias_table <- genie_alias %>%
+  unnest(everything(), keep_empty = TRUE) %>%
+  rename("alias" = value)
+
+genie_alias_table %>%
+  filter(gene == alias)
+
+# gets rid of NAs (genes with no aliases)
+genie_alias_table <- genie_alias_table %>%
+  filter(gene != alias)
+
+# This may not be needed anymore, but leave for now
+genie_alias_table$gene[map_lgl(genie_alias_table$gene, ~.x %in%
+                                  genie_alias_table$alias)] %>%
+  unique()
+
+genie_alias_table <- genie_alias_table %>%
+
+  # I don't think these are aliases even though they came up. They usually only come up one way
+  # I think they are separate genes although I am not sure
+  filter(!(gene == "SOS1" & alias == "HGF")) %>%
+  filter(!(gene == "HRAS" & alias == "KRAS")) %>%
+  filter(!(gene == "TP53BP1" & alias == "TP53")) %>%
+  filter(!(gene == "EZH2" & alias == "EZH1")) %>%
+
+  # are MLL2 and MLL4 interchangeable?! - JJ email on 1/25/2021 says KMT2B = MLL4
+  filter(!(gene == "KMT2D" & alias == "MLL4")) %>%
+  filter(!(gene == "KMT2B" & alias == "MLL2")) %>%
+  filter(!(gene == "ATRX" & alias == "RAD54L")) %>%
+  distinct()
+
+# check we've recoded all
+genie_alias_table$gene[map_lgl(genie_alias_table$gene, ~.x %in% genie_alias_table$alias)] %>%
+  unique()
+
+genie_alias_table <- genie_alias_table %>%
+  rename("hugo_symbol" = gene)
+
+genie_genes_clean <- select(genie_genes, gene, entrez_id) %>%
+  distinct()
+
+genie_alias_table <- genie_alias_table %>%
+  left_join(., genie_genes_clean,
+            by = c("hugo_symbol" = "gene")) %>%
+  left_join(., select(all_genes, hugo_symbol, entrez_gene_id),
+            by = c("alias" = "hugo_symbol")) %>%
+  rename(alias_entrez_id = entrez_gene_id)
+
+genie_alias_table <- genie_alias_table %>%
+  distinct()
+
+setdiff(genie_alias_table$hugo_symbol, impact_alias_table$hugo_symbol)
+setdiff( impact_alias_table$hugo_symbol, genie_alias_table$hugo_symbol)
+
+usethis::use_data(genie_alias_table , overwrite = TRUE)
 
 

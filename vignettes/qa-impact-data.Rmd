@@ -3,7 +3,7 @@ title: "How to QA Your IMPACT Data"
 output: rmarkdown::html_vignette
 author: Esther Drill
 vignette: >
-  %\VignetteIndexEntry{qa-impact-data}
+  %\VignetteIndexEntry{How to QA Your IMPACT Data}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -15,7 +15,6 @@ knitr::opts_chunk$set(
 )
 
 ```
-
 
 ```{r setup, include=FALSE, echo=FALSE,warning=FALSE}
 
@@ -30,12 +29,11 @@ data("clin_collab_df")
 
 ## Introduction
 
-The purpose of this vignette is to outline best practices for downloading, QA-ing and analyzing data generated from MSK IMPACT, a targeted tumor-sequencing test that can detect more than 468 gene mutations and other critical genetic changes in common and rare cancers. Using a hepatocellular cancer case study, we demonstrate a data analysis pipeline using {gnomeR} functions that can help users generate reproducible analyses using this data. 
+The purpose of this vignette is to outline best practices for downloading, QA-ing and analyzing data generated from MSK IMPACT, a targeted tumor-sequencing test that can detect more than 468 gene mutations and other critical genetic changes in common and rare cancers. Using a hepatocellular cancer case study, we demonstrate a data analysis pipeline using {cbioportalR} functions that can help users generate reproducible analyses using this data.
 
-##  Setting up 
+## Setting up
 
-For this vignette, we will be using {gnomeR} and {cbioportalR}, a package to download data from the cBioPortal website. We will also be using {dplyr} and {tidyr} to clean and manipulate the data:
-
+For this vignette, we will be using {cbioportalR}, a package to download data from the cBioPortal website. We will also be using {dplyr} and {tidyr} to clean and manipulate the data:
 
 ```{r message = FALSE, warning=FALSE}
 library(gnomeR)
@@ -52,12 +50,11 @@ set_cbioportal_db(db = "public")
 
 ```
 
-
 ## Case Study
 
 **Scenario:** You are a data analyst whose collaborator has sent you a clinical file of a cohort of patients with hepatocellular cancer that she is interested in for retrospective data analysis. In particular, she wants to look at IMPACT sequencing data for the cohort and investigate associations between genomic alterations and pathological and clinical characteristics. She asks if you can get the IMPACT data and do the analysis.
 
-She gives you a clinical file with 80 sample IDs: `clin_collab_df`. 
+She gives you a clinical file with 80 sample IDs: `clin_collab_df`.
 
 ```{r head_clin}
 head(clin_collab_df)
@@ -66,7 +63,6 @@ head(clin_collab_df)
 The sample IDs are in the `cbioportal_id` column.
 
 Before using cBioPortal to access the genomic data, you first want to do some QA on the clinical data and make sure it matches up with the clinical data in cBioPortal.
-
 
 ### Check For Multiple Samples Per Patient
 
@@ -88,7 +84,7 @@ clin_collab_df %>%
             samples= length(unique(cbioportal_id))) 
 ```
 
-So it's clear that we have multiple samples per patient. To find out which patient/s, you can count the `patient_id` values and filter for >1.
+So it's clear that we have multiple samples per patient. To find out which patient/s, you can count the `patient_id` values and filter for \>1.
 
 ```{r }
 multiple_samps <- clin_collab_df %>%
@@ -97,8 +93,8 @@ multiple_samps <- clin_collab_df %>%
 multiple_samps
 ```
 
-There are 2 patients who each have 2 samples in the collaborator's dataset. 
-Filter the dataset to see the `cbioportal_id`'s in question:  
+There are 2 patients who each have 2 samples in the collaborator's dataset. Filter the dataset to see the `cbioportal_id`'s in question:
+
 ```{r count_patients }
 
 clin_collab_df %>% 
@@ -108,15 +104,12 @@ clin_collab_df %>%
 
 ```
 
-
-These are patients and samples to ask your collaborator about: Does using both samples make sense? Often times the answer is no. And if not, which sample is the most appropriate one to include? 
-(To get more info for yourself, you can enter the patient ids into the [cBioPortal website](https://www.cbioportal.org/).)
-
+These are patients and samples to ask your collaborator about: Does using both samples make sense? Often times the answer is no. And if not, which sample is the most appropriate one to include? (To get more info for yourself, you can enter the patient ids into the [cBioPortal website](https://www.cbioportal.org/).)
 
 ### Check That All `cbioportal_ids` Are In cBioPortal Database
 
-To do this, you need to retrieve the clinical data from cBioPortal using [{cbioportalR}](https://www.karissawhiting.com/cbioportalR/). You can use the `get_clinical_by_sample()` function from {cbioportalR} to do this. Set the `sample_id` parameter to the `cbioportal_ids` from the clinical collaborator's file.  
-Store the sample data in a file called `clin_cbio`. 
+To do this, you need to retrieve the clinical data from cBioPortal using [{cbioportalR}](https://www.karissawhiting.com/cbioportalR/). You can use the `get_clinical_by_sample()` function from {cbioportalR} to do this. Set the `sample_id` parameter to the `cbioportal_ids` from the clinical collaborator's file.\
+Store the sample data in a file called `clin_cbio`.
 
 ```{r get_cbio_clinical}
 
@@ -126,7 +119,9 @@ clin_cbio = get_clinical_by_sample(sample_id = clin_collab_df$cbioportal_id)
 
 (You can disregard the warning message for now, though you may be interested in specific clinical attributes later.)
 
-Notice that you now have 2 clinical files: one given to you by the collaborator (`clin_collab_df`) and one you have retrieved yourself from cBioPortal (`clin_cbio`). 
+*Note: If you are using the public version of cBioPortal, this function will only query the `msk_impact_2017` study.*
+
+Notice that you now have 2 clinical files: one given to you by the collaborator (`clin_collab_df`) and one you have retrieved yourself from cBioPortal (`clin_cbio`).
 
 Here's the header of `clin_cbio`:
 
@@ -134,12 +129,9 @@ Here's the header of `clin_cbio`:
 head(clin_cbio) %>% as.data.frame()
 ```
 
+The sample IDs here are in the `sampleId` column. You may notice that this file is in "long" format and each sample has multiple rows. Later we will convert this file to "wide" format to do QA checking on attributes.
 
-The sample IDs here are in the `sampleId` column.
-You may notice that this file is in "long" format and each sample has multiple rows. Later we will convert this file to "wide" format to do QA checking on attributes.
-
-
-But the first thing you want to know is whether you are able to find all of the `cbioportal_ids` from your `clin_collab_df` file in the `clin_cbio` file.  
+But the first thing you want to know is whether you are able to find all of the `cbioportal_ids` from your `clin_collab_df` file in the `clin_cbio` file.\
 To do this, use the `setdiff()` function:
 
 ```{r check_missing}
@@ -148,8 +140,7 @@ setdiff(clin_collab_df$cbioportal_id, clin_cbio$sampleId)
 
 ```
 
-So there are two sample ID's from your clinical file (`clin_collab_df`) that are currently not found in cBioPortal (in your `clin_cbio` file). 
-Include these in the list of cBioPortal questions to ask your collaborator.
+So there are two sample ID's from your clinical file (`clin_collab_df`) that are currently not found in cBioPortal (in your `clin_cbio` file). Include these in the list of cBioPortal questions to ask your collaborator.
 
 (Again, if you want to investigate a bit further, you could enter the patient cBioPortal IDs as queries into the [cBioPortal website](https://www.cbioportal.org/).)
 
@@ -163,8 +154,7 @@ Look at the `clin_collab_df` again:
 head(clin_collab_df)
 ```
 
-Aside from `cbioportal_id`, you have cancer type (`ctype`) and sample type (`primary_mets`) variables.
-Because it's a hepatocellular cancer study, all of the `ctype` values will be the same. To double check that, count `ctype`:
+Aside from `cbioportal_id`, you have cancer type (`ctype`) and sample type (`primary_mets`) variables. Because it's a hepatocellular cancer study, all of the `ctype` values will be the same. To double check that, count `ctype`:
 
 ```{r count_ctype}
 clin_collab_df %>% count(ctype)
@@ -177,6 +167,7 @@ clin_cbio %>% count(clinicalAttributeId)
 ```
 
 To quickly see values associated with a particular attribute, filter by the attribute and count the values. For example:
+
 ```{r filter_and_count}
 clin_cbio %>% filter(clinicalAttributeId=="SAMPLE_TYPE") %>% count(value)
 ```
@@ -194,11 +185,12 @@ clin_cbio_wide = clin_cbio %>%
 ```
 
 Take a look at the "wide" file:
+
 ```{r head_wide}
 head(clin_cbio_wide) %>% as.data.frame()
 ```
 
-Now to check the `primary_mets` variable from `clin_collab_df` against the `SAMPLE_TYPE` variable from `clin_cbio_wide`, merge the files and tabulate the variables. 
+Now to check the `primary_mets` variable from `clin_collab_df` against the `SAMPLE_TYPE` variable from `clin_cbio_wide`, merge the files and tabulate the variables.
 
 ```{r compare}
 clin_merged <- clin_cbio_wide %>% left_join(clin_collab_df, by = c("sampleId" = "cbioportal_id")) 
@@ -212,5 +204,3 @@ clin_merged %>% filter(primary_mets == "Metastasis" & SAMPLE_TYPE == "Primary")
 ```
 
 Include this sample in the list of questions for your collaborator. Either she will need to update her clinical file with the correct value or you/she will have to notify cBioPortal to update their database.
-
-

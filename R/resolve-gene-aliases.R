@@ -12,23 +12,23 @@
 #' Custom tables can be provided as long as `hugo_symbol` and `alias` columns exist.
 #'
 #' @param genomic_df a gene_binary object
-#' @param alias_table a string indicating "impact", or a  dataframe with at least two columns (`hugo_symbol`,
+#' @param alias_table a string indicating "impact" or "genie", or a dataframe with at least two columns (`hugo_symbol`,
 #' `alias`) with one row for each pair.
+#' @param supress_warnings If TRUE, function will return a list containing a dataframe of recoded results and a names vector of recoded aliases in data
 #'
 #' @return A dataframe with recoded Hugo Symbol columns
 #' @export
 #'
 #' @examples
-#' mut <- rename_columns(gnomeR::mutations[1:5, ])
-#' mut$hugo_symbol
+#' genomic_df <- rename_columns(gnomeR::mutations[1:5, ])
 #'
 #' alias_table <- data.frame("hugo_symbol" = c("New Symbol", "New Symbol2"),
 #' "alias" = c("PARP1", "AKT1"))
 #'
-#' recode_alias(mut, alias_table)
-#'
+#' recode_alias(genomic_df, alias_table)
+#' recode_alias(genomic_df, alias_table, supress_warnings = TRUE)
 
-recode_alias <- function(genomic_df, alias_table = "impact") {
+recode_alias <- function(genomic_df, alias_table = "impact", supress_warnings = FALSE) {
 
   # Checks ----------------------------------------------------
 
@@ -42,9 +42,11 @@ recode_alias <- function(genomic_df, alias_table = "impact") {
   alias_table <- switch(
     class(alias_table),
     "character" = {
-      choices_arg <- c("impact", "IMPACT")
+      choices_arg <- c("impact", "IMPACT", "genie", "GENIE")
       lc = tolower(match.arg(alias_table, choices = choices_arg))
-      switch(lc, "impact" = gnomeR::impact_alias_table)
+      switch(lc,
+             "impact" = gnomeR::impact_alias_table,
+             "genie" = gnomeR::genie_alias_table)
       },
 
     "data.frame" = {
@@ -75,33 +77,48 @@ recode_alias <- function(genomic_df, alias_table = "impact") {
                                            ~resolve_alias(gene_to_check = .x,
                                                           alias_table = alias_table))
 
-  message <- genomic_df %>%
+  changed_aliases <- genomic_df %>%
     dplyr::filter(.data$hugo_symbol_old != .data$hugo_symbol) %>%
     dplyr::select("hugo_symbol_old", "hugo_symbol") %>%
     dplyr::distinct()
 
 
-  if(nrow(message) > 0) {
-    vec_recode <- purrr::map2_chr(message$hugo_symbol_old,
-                                  message$hugo_symbol,
-                                  ~paste0(.x, " recoded to ", .y))
-
-    names(vec_recode) <- rep("!", times = length(vec_recode))
-
-    cli::cli_warn(c(
-      "To ensure gene with multiple names/aliases are correctly grouped together, the
-      following genes in your dataframe have been recoded (if you are running {.code create_gene_binary()}
-      you can prevent this with {.code alias_table = FALSE}):",
-      vec_recode))
-
-  }
-
   genomic_df <- genomic_df %>%
     select(-"hugo_symbol_old")
 
-  return(genomic_df)
-}
+  result <- genomic_df
 
+  # Aliases Warnings ------------------
+  if (nrow(changed_aliases) > 0) {
+    vec_recode <- purrr::map2_chr(
+      changed_aliases$hugo_symbol_old,
+      changed_aliases$hugo_symbol,
+      ~ paste0(.x, " recoded to ", .y)
+    )
+
+    names(vec_recode) <- rep("!", times = length(vec_recode))
+  } else {
+    vec_recode <- c()
+  }
+
+  # format results according to supress warnings
+  if (supress_warnings == TRUE) {
+    result <- list("genomic_df" = genomic_df, "aliases_in_data" = vec_recode)
+  }
+
+  if (supress_warnings == FALSE) {
+    if (nrow(changed_aliases) > 0) {
+      cli::cli_warn(c(
+        "To ensure gene with multiple names/aliases are correctly grouped together, the
+        following genes in your dataframe have been recoded (if you are running {.code create_gene_binary()}
+        you can prevent this with {.code alias_table = FALSE}):",
+        vec_recode
+      ))
+    }
+    result <- genomic_df
+  }
+  return(result)
+}
 
 
 #' Resolve Hugo Symbol Names with Aliases

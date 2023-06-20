@@ -4,7 +4,8 @@
 #' alteration. Data frame must have a `sample_id` column and columns for each alteration
 #' with values of 0, 1 or NA.
 #' @param t Threshold value between 0 and 1 to subset by. Default is 10% (.1).
-#'
+#' @param other_vars One or more column names (quoted or unquoted) in data to be retained
+#' in resulting data frame. Default is NULL.
 #' @return a data frame with a `sample_id` column and columns for
 #' alterations over the given prevalence threshold of `t`.
 #'
@@ -21,7 +22,7 @@
 #'gene_binary %>%
 #'  subset_by_frequency()
 #'
-subset_by_frequency <- function(gene_binary, t = .1) {
+subset_by_frequency <- function(gene_binary, t = .1, other_vars = NULL) {
 
 
   # Checks ------------------------------------------------------------------
@@ -37,7 +38,16 @@ subset_by_frequency <- function(gene_binary, t = .1) {
 
   .check_required_cols(gene_binary, "sample_id", "gene_binary")
 
-  alt_only <- select(gene_binary, -"sample_id")
+  # Capture Other Columns to Retain -----------------------------------
+
+  other_vars <-
+    .select_to_varnames({{ other_vars }},
+                        data = gene_binary,
+                        arg_name = "other_vars"
+    )
+
+  # data frame of only alterations
+  alt_only <- select(gene_binary, -"sample_id", -any_of(other_vars))
 
   # Remove all NA columns ----------------------------------------------
   all_na_alt <- apply(alt_only,  2, function(x) {
@@ -53,7 +63,7 @@ subset_by_frequency <- function(gene_binary, t = .1) {
 
   if(!(all(is_numeric))) {
     cli::cli_abort("All alterations in your gene binary must be numeric and only can have values of 0, 1, or NA.
-                   Please coerce the following columns to numeric before proceeding: {.field {names(is_numeric[!is_numeric])}}")
+                   Please coerce the following columns to numeric, or pass them to the `other_vars` argument before proceeding: {.field {names(is_numeric[!is_numeric])}}")
   }
 
 
@@ -62,10 +72,10 @@ subset_by_frequency <- function(gene_binary, t = .1) {
   num_non_na <- apply(alt_only, 2, function(x) sum(!is.na(x)))
 
   alt_freq <- counts/num_non_na
-
-  alts_over_thresh <- names(alt_freq[alt_freq >= t])
+  alts_over_thresh <- names(sort(alt_freq[alt_freq >= t], decreasing = TRUE))
 
   subset_binary <- select(gene_binary, "sample_id",
+                          any_of(other_vars),
                           all_of(alts_over_thresh))
 
   return(subset_binary)

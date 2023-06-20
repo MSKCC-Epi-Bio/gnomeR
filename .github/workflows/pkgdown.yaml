@@ -19,6 +19,9 @@ jobs:
       group: pkgdown-${{ github.event_name != 'pull_request' || github.run_id }}
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+      SYNAPSE_USERNAME: ${{ secrets.SYNAPSE_USERNAME }}
+      SYNAPSE_PASSWORD: ${{ secrets.SYNAPSE_PASSWORD }}
+      CBIOPORTAL_TOKEN: ${{ secrets.CBIOPORTAL_TOKEN }}
     steps:
       - uses: actions/checkout@v3
 
