@@ -1,8 +1,8 @@
 ---
-title: "GENIE-BPC-vignette"
+title: "Analyzing GENIE BPC Data Using {gnomeR}"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{GENIE-vignette}
+  %\VignetteIndexEntry{genie-vignette}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -23,7 +23,7 @@ if (genieBPC:::.is_connected_to_genie() == FALSE){
 
 ```{r setup, include = FALSE, message = FALSE, results = FALSE, eval=genieBPC:::.is_connected_to_genie()}
 library(gnomeR)
-library(tidyverse)
+library(dplyr)
 library(genieBPC)
 library(cbioportalR)
 ```
@@ -57,7 +57,8 @@ set_synapse_credentials()
 
 ```{r, eval=genieBPC:::.is_connected_to_genie()}
 # pull NSCLC v2.0-public data from Synapse into the R environment
-nsclc_2_0 = pull_data_synapse(cohort = "NSCLC", version = "v2.0-public")
+nsclc_2_0 = pull_data_synapse(cohort = "NSCLC",
+                              version = "v2.0-public")
 ```
 
 The resulting `nsclc_2_0` object is a nested list of datasets, including the mutations, fusions, and copy number data.
@@ -83,7 +84,7 @@ available_studies()
 # obtain genomic data for GENIE BPC NSCLC v2.0-public
 mutations_extended_2_0 <- get_mutations_by_study("nsclc_public_genie_bpc")
 cna_2_0 <- get_cna_by_study("nsclc_public_genie_bpc")
-# fusions_2_0 <- get_fu
+fusions_2_0 <- get_fusions_by_study("nsclc_public_genie_bpc")
 ```
 
 ## Data Formats
@@ -130,7 +131,8 @@ Create a dataframe of the corresponding panel and sample IDs:
 nsclc_2_0_sample_panels <- nsclc_2_0_samples %>% 
   select(cpt_seq_assay_id, cpt_genie_sample_id) %>%
   rename(panel_id = cpt_seq_assay_id,
-         sample_id = cpt_genie_sample_id)
+         sample_id = cpt_genie_sample_id) %>%
+  filter(!is.na(panel_id))
 ```
 
 ## Process Data with `create_gene_binary()`
@@ -138,6 +140,8 @@ nsclc_2_0_sample_panels <- nsclc_2_0_samples %>%
 The `create_gene_binary()` function takes inputs of mutations, fusions, and CNA data and returns a binary matrix with the alteration status for each gene, annotating missingness when genes were not included on a next generation sequencing panel. 
 
 It is critical to utilize the `specify_panel` argument of `create_gene_binary()`. Samples included in GENIE BPC were sequenced across multiple sequencing platforms, with the genes included varying across panels. Without the `specify_panel` argument, missingness will not be correctly annotated, and genes that were not tested will be incorrectly documented as not being altered.
+
+Note: you can optionally check and recode any older gene names to their newer Hugo Symbol in your data set by passing the `genie` option to `create_gene_binary(recode_aliases=)`.
 
 **Using the genomic data from Synapse:**
 
@@ -150,16 +154,18 @@ First, the CNA file can be transposed to match the expected input for `create_ge
 cna_synapse_long <- pivot_cna_longer(nsclc_2_0$NSCLC_v2.0$cna)
 ```
 
-**PLACEHOLDER**: Next, the fusions file can be transposed to match the expected input for `create_gene_binary()`
+Next, the fusions file can be transposed to match the expected input for `create_gene_binary()`
 
 ```{r, eval=genieBPC:::.is_connected_to_genie()}
 # transpose fusions data from Synapse
-# fusions_synapse_long <- pivot_fusions_longer(nsclc_2_0$NSCLC_v2.0$fusions)
+fusions_synapse_long <- reformat_fusion(nsclc_2_0$NSCLC_v2.0$fusions)
 ```
 
 Finally, the reformatted genomic data can be supplied to `create_gene_binary()` to annotate genomic alterations for patients in the analytic cohort of interest.
 
 The CNA data as downloaded from cBioPortal only includes high level CNA (-2, 2), so we will specify `high_level_cna_only = TRUE` to be consistent with the results based on the genomic data as downloaded from cBioPortal. 
+
+Additionally, we will use the built in 'genie` option to check gene aliases (see `?create_gene_binary` for more info).
 
 ```{r, eval=genieBPC:::.is_connected_to_genie()}
 nsclc_2_0_gen_dat_synapse <-
@@ -167,9 +173,10 @@ nsclc_2_0_gen_dat_synapse <-
     mutation = nsclc_2_0$NSCLC_v2.0$mutations_extended,
     cna = cna_synapse_long,
     high_level_cna_only = TRUE,
-    # fusions = fusions_synapse_long,
+    fusion = fusions_synapse_long,
     samples = nsclc_2_0_sample_panels$sample_id,
-    specify_panel = nsclc_2_0_sample_panels
+    specify_panel = nsclc_2_0_sample_panels, 
+    recode_aliases = "genie"
   )
 ```
 
@@ -180,35 +187,26 @@ nsclc_2_0_gen_dat_cbio <-
   create_gene_binary(
     mutation = mutations_extended_2_0,
     cna = cna_2_0,
+    fusion = fusions_2_0,
     samples = nsclc_2_0_sample_panels$sample_id,
-    specify_panel = nsclc_2_0_sample_panels
+    specify_panel = nsclc_2_0_sample_panels, 
+    recode_aliases = "genie"
   )
 ```
 
-We can compare the binary genomic matrices created using the genomic data downloaded from Synapse versus the genomic data downloaded from cBioPortal. We observe that they are exactly equal, and will proceed using the `nsclc_2_0_gen_dat_cbio` object.
-
-```{r, eval=genieBPC:::.is_connected_to_genie()}
-# compare binary genomic matrices
-arsenal::comparedf(nsclc_2_0_gen_dat_synapse, nsclc_2_0_gen_dat_cbio)
-```
+Binary genomic matrices created using the genomic data downloaded from Synapse and cBioPortal should be equal. We will proceed using the `nsclc_2_0_gen_dat_cbio` object.
 
 ## Collapse Data with `summarize_by_gene()`
 
 We can summarize the presence of any alteration event (mutation, amplification, deletion, structural variant) with the `summarize_by_gene()` function, such that each gene is a column that captures the presence of any event regardless of alteration type.
 
-Summarizing the first 10 samples and first 10 genes:
+Summarizing the first 10 samples for KRAS alterations:
 
 **Using the genomic data from Synapse:**
 
 ```{r, eval=genieBPC:::.is_connected_to_genie()}
-nsclc_2_0_gen_dat_synapse[1:10, 1:10] %>% 
-  summarize_by_gene()
-```
-
-**Using the genomic data from cBioPortal**
-
-```{r, eval=genieBPC:::.is_connected_to_genie()}
-nsclc_2_0_gen_dat_cbio[1:10, 1:10] %>% 
+nsclc_2_0_gen_dat_synapse[1:10, ] %>% 
+  select(sample_id, KRAS, KRAS.Amp) %>%
   summarize_by_gene()
 ```
 
@@ -218,20 +216,28 @@ After the data have been transformed into a binary format, we can create summari
 
 ### Summarize Data with `tbl_genomic()`
 
-The `tbl_genomic()` function summarizes the frequency of alteration events from the binary data returned from `create_gene_binary()` or `summarize_by_gene()`. Users can specify particular genes (`gene_subset` argument) or a a minimum frequency (`freq_cutoff` argument) to include in the table. 
+The `tbl_genomic()` function summarizes the frequency of alteration events from the binary data returned from `create_gene_binary()` or `summarize_by_gene()`.
 
 **Using the genomic data from Synapse:**
 
 Summarizing the frequencies of KEAP1, STK11, and SMARCA4 alteration events:
 
 ```{r, eval=genieBPC:::.is_connected_to_genie()}
-tbl_genomic(gene_binary = nsclc_2_0_gen_dat_synapse, gene_subset = c("KEAP1", "STK11", "SMARCA4"))
+
+nsclc_2_0_gen_dat_synapse %>% 
+  select(sample_id, KEAP1, STK11, SMARCA4) %>%
+  tbl_genomic()
 ```
 
-Summarizing alteration events with >=10% frequency:
+Users can subset their data set to only include genes above a certain prevalence frequency threshold before passing to the function using the `subset_by_frequency()` function.
+
+Below, we summarize alteration events with >=10% frequency:
 
 ```{r, eval=genieBPC:::.is_connected_to_genie()}
-tbl_genomic(gene_binary = nsclc_2_0_gen_dat_synapse, freq_cutoff = .10)
+
+nsclc_2_0_gen_dat_synapse %>%
+  subset_by_frequency(t = 0.1) %>%
+  tbl_genomic()
 ```
 
 **Using the genomic data from cBioPortal:**
@@ -239,13 +245,19 @@ tbl_genomic(gene_binary = nsclc_2_0_gen_dat_synapse, freq_cutoff = .10)
 Summarizing the frequencies of KEAP1, STK11, and SMARCA4 alteration events:
 
 ```{r, eval=genieBPC:::.is_connected_to_genie()}
-tbl_genomic(gene_binary = nsclc_2_0_gen_dat_cbio, gene_subset = c("KEAP1", "STK11", "SMARCA4"))
+
+nsclc_2_0_gen_dat_cbio %>%
+  select(sample_id, KEAP1, STK11, SMARCA4) %>%
+  tbl_genomic()
 ```
 
 Summarizing alteration events with >=10% frequency:
 
 ```{r, eval=genieBPC:::.is_connected_to_genie()}
-tbl_genomic(gene_binary = nsclc_2_0_gen_dat_cbio, freq_cutoff = .10)
+
+nsclc_2_0_gen_dat_cbio %>%
+  subset_by_frequency(t = 0.1) %>%
+  tbl_genomic()
 ```
 
 ### Data Visualizations
