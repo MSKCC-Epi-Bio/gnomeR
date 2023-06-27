@@ -214,59 +214,44 @@ test_that("list custom pathway with NULL names", {
 
 })
 
+test_that("check bug with custom pathways not counting .all", {
 
-# These are tests of old deprecated arguments. They can be recycled or deleted
+  tdf <- tibble::tribble(
+    ~sample_id,             ~CDKN2A.fus, ~CDKN2A.Del, ~CDKN2B.fus, ~CDKN2B.Del,
+    "P-0044370-T01-IM6",           1,           0,           0,           0,
+    "P-0050457-T01-IM6",           0,           0,           0,           0,
+    "P-0001517-T01-IM3",           1,           0,           0,           0,
+    "P-0013235-T01-IM5",           0,           1,           0,           1,
+    "P-0015145-T01-IM6",           1,           1,           0,           1,
+    "P-0031480-T01-IM6",           0,           0,           0,           0,
+    "P-0001461-T01-IM3",           0,           0,           0,           0,
+    "P-0015041-T01-IM6",           0,           1,           0,           1,
+    "P-0002293-T01-IM3",           0,           1,           0,           1,
+    "P-0007501-T01-IM5",           0,           0,           0,           0,
+    "P-0029150-T01-IM6",           0,           0,           0,           0,
+    "P-0007976-T01-IM5",           0,           1,           0,           1,
+    "P-0012178-T01-IM5",           0,           0,           1,           0,
+    "P-0003927-T01-IM3",           0,           0,           0,           0,
+    "P-0049934-T01-IM6",           0,           0,           0,           0,
+    "P-0020389-T01-IM6",           0,           1,           0,           1,
+    "P-0025934-T01-IM6",           0,           0,           0,           0,
+    "P-0020162-T01-IM6",           0,           0,           0,           0,
+    "P-0006901-T01-IM5",           0,           0,           0,           0,
+    "P-0031004-T01-IM6",           0,           0,           0,           0
+  )
 
-# # # count_pathways_by ----------------------------------------------------------
-# test_that("same results when only mutations passed with count_pathways_by gene or alt ", {
-#
-#   mut_valid_sample_ids<- unique(gnomeR::mutations$sampleId)[1:10]
-#   gene_binary_ex <- create_gene_binary(sample=mut_valid_sample_ids,
-#                                        mutation=gnomeR::mutations)
-#
-#   gene <- add_pathways(gene_binary = gene_binary_ex,
-#                        pathways = NULL,
-#                        custom_pathways = c("TP53", "APC"),
-#                        count_pathways_by = "gene")
-#
-#   expect_message(alt <- add_pathways(gene_binary = gene_binary_ex,
-#                       pathways = NULL,
-#                        custom_pathways = c("TP53", "APC"),
-#                        count_pathways_by = "alteration"))
-#
-#   expect_equal(alt$pathway_custom, gene$pathway_custom)
-#
-# })
-#
-# test_that("works with count_pathways_by gene or alt ", {
-#
-#   mut_valid_sample_ids <- c("P-0002375-T01-IM3", "P-0003541-T01-IM5", "P-0005571-T01-IM5")
-#   gene_binary_ex <- create_gene_binary(sample=mut_valid_sample_ids,
-#                                        mutation=gnomeR::mutations,
-#                                        cna = gnomeR::cna)
-#
-#   gene <- add_pathways(gene_binary = gene_binary_ex,
-#                        pathways = NULL,
-#                        custom_pathways = c("TP53", "APC"),
-#                        count_pathways_by = "gene")
-#
-#   expect_message(alt <- add_pathways(gene_binary = gene_binary_ex,
-#                                      pathways = NULL,
-#                                      custom_pathways = c("TP53", "APC"),
-#                                      count_pathways_by = "alteration"))
-#
-#   expect_message(alt2 <- add_pathways(gene_binary = gene_binary_ex,
-#                                      pathways = NULL,
-#                                      custom_pathways = c("TP53.Del", "APC"),
-#                                      count_pathways_by = "alteration"))
-#
-#   expect_equal(sum(gene$pathway_custom), sum(gene_binary_ex$TP53, gene_binary_ex$TP53.Del))
-#   expect_equal(sum(alt$pathway_custom), sum(gene_binary_ex$TP53))
-#   expect_equal(sum(alt2$pathway_custom), sum(gene_binary_ex$TP53.Del))
-#
-#
-# })
-#
+  g <- tdf %>%
+    add_pathways(pathways = NULL, custom_pathways = c("CDKN2A.any", "CDKN2B.any")) %>%
+    tbl_genomic()
+
+  expect_equal(sum(apply(select(tdf, -sample_id), 1,  sum) > 0), 9)
+
+}
+
+
+
+
+)
 
 
 

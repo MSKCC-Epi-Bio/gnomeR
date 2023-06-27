@@ -108,7 +108,11 @@ add_pathways <- function(gene_binary,
 
       if(length(gene_all) > 0) {
         gene_all <-  str_remove(gene_all, ".any")
-        gene_add <- paste0(gene_all, c(".Amp", ".Del", ".fus", ".mut"))
+
+        gene_add <- purrr::map(gene_all, function(x) {
+          paste0(x, c(".Amp", ".Del", ".fus", ".mut"))
+        }) %>% unlist()
+
         x <- c(x[!str_detect(x, ".any")], gene_add)
       }
 
