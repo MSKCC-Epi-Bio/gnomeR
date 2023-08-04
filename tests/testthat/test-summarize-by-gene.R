@@ -106,5 +106,7 @@ test_that("test what happens to columns with all NA", {
 
   })
 
+test_that("all columns must be numeric to continue", {
 
+})
 
