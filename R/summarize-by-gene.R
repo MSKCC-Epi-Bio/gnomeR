@@ -5,6 +5,8 @@
 #' columns for mutation/cna/fusion.
 #'
 #' @param gene_binary a 0/1 matrix of gene alterations
+#' @param other_vars One or more column names (quoted or unquoted) in data to be retained
+#' in resulting data frame. Default is NULL.
 #'
 #' @return a binary matrix with a row for each sample and one column per gene
 #' @export
@@ -19,7 +21,7 @@
 #' ) %>%
 #'   summarize_by_gene()
 #'
-summarize_by_gene <- function(gene_binary) {
+summarize_by_gene <- function(gene_binary, other_vars = NULL) {
 
 
   # Checks ------------------------------------------------------------------
@@ -35,6 +37,14 @@ summarize_by_gene <- function(gene_binary) {
     cli::cli_abort("Your {.field gene_binary} must have unique samples in {.code sample_id} column")
   }
 
+  # Capture Other Columns to Retain -----------------------------------
+
+  other_vars <-
+    .select_to_varnames({{ other_vars }},
+                        data = gene_binary,
+                        arg_name = "other_vars"
+    )
+
 
   # Create Sample Index -----------------------------------------------------
 
@@ -42,8 +52,16 @@ summarize_by_gene <- function(gene_binary) {
     select("sample_id") %>%
     mutate(sample_index = paste0("samp", 1:nrow(gene_binary)))
 
+<<<<<<< Updated upstream
   alt_only <- as.matrix(select(gene_binary, -"sample_id"))
   rownames(alt_only) <- sample_index$sample_index
+=======
+  # data frame of only alterations
+  alt_only <- select(gene_binary, -"sample_id", -any_of(other_vars)) %>%
+    as.matrix()
+
+  row.names(alt_only) <- sample_index$sample_index
+>>>>>>> Stashed changes
 
   # check numeric class ---------
   is_numeric <- apply(alt_only, 2, is.numeric)
@@ -85,11 +103,14 @@ summarize_by_gene <- function(gene_binary) {
   all_bin <- as.data.frame(t(all_bin)) %>%
     tibble::rownames_to_column("sample_index")
 
-  # join back to sample ID
+  # join back to sample ID and other vars
   simp_gene_binary <- all_bin %>%
     left_join(sample_index, ., by = "sample_index") %>%
     select(-c("sample_index")) %>%
-    as.data.frame()
+    as.data.frame()%>%
+    left_join(gene_binary %>%
+                select(any_of(c("sample_id", other_vars))))%>%
+    suppressMessages()
 
   simp_gene_binary
 
