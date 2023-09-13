@@ -9,7 +9,7 @@
 <title>Analyzing GENIE BPC Data Using {gnomeR} • gnomeR</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.2.2/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.2.2/bootstrap.bundle.min.js"></script><link href="../deps/Atkinson_Hyperlegible-0.4.5/font.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.2.2/bootstrap.bundle.min.js"></script><link href="../deps/Atkinson_Hyperlegible-0.4.7/font.css" rel="stylesheet">
 <!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Analyzing GENIE BPC Data Using {gnomeR}">
@@ -120,15 +120,18 @@ into your local environment:</p>
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://genie-bpc.github.io/genieBPC/" class="external-link">genieBPC</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># if credentials are not stored in your R environment</span></span>
-<span><span class="fu"><a href="https://genie-bpc.github.io/genieBPC/reference/set_synapse_credentials.html" class="external-link">set_synapse_credentials</a></span><span class="op">(</span>username <span class="op">=</span> <span class="st">"username"</span>, password <span class="op">=</span> <span class="st">"password"</span><span class="op">)</span></span>
-<span></span>
+<span><span class="fu"><a href="https://genie-bpc.github.io/genieBPC/reference/set_synapse_credentials.html" class="external-link">set_synapse_credentials</a></span><span class="op">(</span>username <span class="op">=</span> <span class="st">"username"</span>, password <span class="op">=</span> <span class="st">"password"</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
 <span><span class="co"># if credentials are stored in your R environment</span></span>
-<span><span class="fu"><a href="https://genie-bpc.github.io/genieBPC/reference/set_synapse_credentials.html" class="external-link">set_synapse_credentials</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://genie-bpc.github.io/genieBPC/reference/set_synapse_credentials.html" class="external-link">set_synapse_credentials</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> You are now connected to 'Synapse' as</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">bstgeniebpc@mskcc.org</span> for this R session!</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="obtain-genie-bpc-data">Obtain GENIE BPC Data<a class="anchor" aria-label="anchor" href="#obtain-genie-bpc-data"></a>
 </h3>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># pull NSCLC v2.0-public data from Synapse into the R environment</span></span>
 <span><span class="va">nsclc_2_0</span> <span class="op">=</span> <span class="fu"><a href="https://genie-bpc.github.io/genieBPC/reference/pull_data_synapse.html" class="external-link">pull_data_synapse</a></span><span class="op">(</span>cohort <span class="op">=</span> <span class="st">"NSCLC"</span>,</span>
 <span>                              version <span class="op">=</span> <span class="st">"v2.0-public"</span><span class="op">)</span></span>
@@ -154,7 +157,7 @@ datasets, including the mutations, fusions, and copy number data.</p>
 Synapse, the genomic data can be accessed via both Synapse and
 cBioPortal. Using the {cbioportalR} package, users can pull the GENIE
 BPC genomic data directly from cBioPortal:</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/karissawhiting/cbioportalR" class="external-link">cbioportalR</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># connect to the GENIE instance of cBioPortal</span></span>
@@ -177,7 +180,7 @@ BPC genomic data directly from cBioPortal:</p>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">7</span> nsclc_p… GENI… <span style="color: #949494;">"</span>NSCLC coh… TRUE        GENIE…      0 2023-06-0…           <span style="text-decoration: underline;">2</span>004</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ 5 more variables: readPermission &lt;lgl&gt;, cancerTypeId &lt;chr&gt;,</span></span></span>
 <span><span class="co">#&gt; <span style="color: #949494;">#   referenceGenome &lt;chr&gt;, pmid &lt;chr&gt;, citation &lt;chr&gt;</span></span></span></code></pre></div>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># obtain genomic data for GENIE BPC NSCLC v2.0-public</span></span>
 <span><span class="va">mutations_extended_2_0</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://karissawhiting.github.io/cbioportalR/reference/get_mutations_by_study.html" class="external-link">get_mutations_by_study</a></span><span class="op">(</span><span class="st">"nsclc_public_genie_bpc"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Returning all data for the <span style="color: #0000BB;">"nsclc_public_genie_bpc_mutations"</span> molecular profile in the <span style="color: #0000BB;">"nsclc_public_genie_bpc"</span> study</span></span>
@@ -239,7 +242,7 @@ OncoTree code LUAD, take the latest of the samples.</p>
 <p>Note: for patients with exactly one genomic sample, that unique
 genomic sample will be returned <em>regardless of whether it meets the
 argument criteria specified below</em>.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># create analytic cohort of patients diagnosed with Stage IV adenocarcinoma</span></span>
 <span><span class="va">nsclc_2_0_example</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://genie-bpc.github.io/genieBPC/reference/create_analytic_cohort.html" class="external-link">create_analytic_cohort</a></span><span class="op">(</span></span>
 <span>  data_synapse <span class="op">=</span> <span class="va">nsclc_2_0</span><span class="op">$</span><span class="va">NSCLC_v2.0</span>,</span>
@@ -258,7 +261,7 @@ argument criteria specified below</em>.</p>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">62</span> of <span style="color: #00BB00;">63</span> had a unique NGS report selected based on given criteria.</span></span>
 <span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> <span style="color: #0000BB;">1</span> of <span style="color: #00BB00;">63</span> did not have a unique NGS report selected based on the selected criteria or by having the largest panel, so a NGS report was selected at random (be sure to set a seed for reproducbility!) See `attributes(&lt;your-results&gt;)$random_samples` to view these sample IDs.</span></span></code></pre></div>
 <p>Create a dataframe of the corresponding panel and sample IDs:</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># specify sample panels and IDs</span></span>
 <span><span class="va">nsclc_2_0_sample_panels</span> <span class="op">&lt;-</span> <span class="va">nsclc_2_0_samples</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">cpt_seq_assay_id</span>, <span class="va">cpt_genie_sample_id</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
@@ -290,14 +293,14 @@ modifications prior to being supplied to the
 <p>First, the CNA file can be transposed to match the expected input for
 <code><a href="../reference/create_gene_binary.html">create_gene_binary()</a></code> using
 <code><a href="../reference/pivot_cna_longer.html">pivot_cna_longer()</a></code>:</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># transpose CNA data from Synapse</span></span>
 <span><span class="va">cna_synapse_long</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/pivot_cna_longer.html">pivot_cna_longer</a></span><span class="op">(</span><span class="va">nsclc_2_0</span><span class="op">$</span><span class="va">NSCLC_v2.0</span><span class="op">$</span><span class="va">cna</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> Replacing all `.` to `-` in <span style="color: #00BB00;">sample_id</span> field (e.g. `P.0001930.T01.IM3` -&gt; `P-0001930-T01-IM3`).</span></span>
 <span><span class="co">#&gt; To prevent this, use argument `clean_sample_ids = FALSE`</span></span></code></pre></div>
 <p>Next, the fusions file can be transposed to match the expected input
 for <code><a href="../reference/create_gene_binary.html">create_gene_binary()</a></code></p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># transpose fusions data from Synapse</span></span>
 <span><span class="va">fusions_synapse_long</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/reformat_fusion.html">reformat_fusion</a></span><span class="op">(</span><span class="va">nsclc_2_0</span><span class="op">$</span><span class="va">NSCLC_v2.0</span><span class="op">$</span><span class="va">fusions</span><span class="op">)</span></span></code></pre></div>
 <p>Finally, the reformatted genomic data can be supplied to
@@ -310,7 +313,7 @@ downloaded from cBioPortal.</p>
 <p>Additionally, we will use the built in
 ’genie<code>option to check gene aliases (see</code>?create_gene_binary`
 for more info).</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">nsclc_2_0_gen_dat_synapse</span> <span class="op">&lt;-</span></span>
 <span>  <span class="fu"><a href="../reference/create_gene_binary.html">create_gene_binary</a></span><span class="op">(</span></span>
 <span>    mutation <span class="op">=</span> <span class="va">nsclc_2_0</span><span class="op">$</span><span class="va">NSCLC_v2.0</span><span class="op">$</span><span class="va">mutations_extended</span>,</span>
@@ -363,7 +366,7 @@ for more info).</p>
 <span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> 64 columns have all missing values. This may occur when there are genes in your data that are not in the specified panels (see `specify_panel` argument)</span></span>
 <span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> 7 `samples` had no alterations found in data sets (See `attr(&lt;your_df&gt;, 'zero_alteration_samples')` to view). These were retained in results as having 0 alterations.</span></span></code></pre></div>
 <p><strong>Using the genomic data from cBioPortal:</strong></p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">nsclc_2_0_gen_dat_cbio</span> <span class="op">&lt;-</span></span>
 <span>  <span class="fu"><a href="../reference/create_gene_binary.html">create_gene_binary</a></span><span class="op">(</span></span>
 <span>    mutation <span class="op">=</span> <span class="va">mutations_extended_2_0</span>,</span>
@@ -409,7 +412,7 @@ column that captures the presence of any event regardless of alteration
 type.</p>
 <p>Summarizing the first 10 samples for KRAS alterations:</p>
 <p><strong>Using the genomic data from Synapse:</strong></p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">nsclc_2_0_gen_dat_synapse</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span>, <span class="op">]</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">sample_id</span>, <span class="va">KRAS</span>, <span class="va">KRAS.Amp</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/summarize_by_gene.html">summarize_by_gene</a></span><span class="op">(</span><span class="op">)</span></span>
@@ -440,7 +443,7 @@ alteration events from the binary data returned from
 <p><strong>Using the genomic data from Synapse:</strong></p>
 <p>Summarizing the frequencies of KEAP1, STK11, and SMARCA4 alteration
 events:</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="va">nsclc_2_0_gen_dat_synapse</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">sample_id</span>, <span class="va">KEAP1</span>, <span class="va">STK11</span>, <span class="va">SMARCA4</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
@@ -928,7 +931,7 @@ events:</p>
 prevalence frequency threshold before passing to the function using the
 <code><a href="../reference/subset_by_frequency.html">subset_by_frequency()</a></code> function.</p>
 <p>Below, we summarize alteration events with &gt;=10% frequency:</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="va">nsclc_2_0_gen_dat_synapse</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/subset_by_frequency.html">subset_by_frequency</a></span><span class="op">(</span>t <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
@@ -1419,7 +1422,7 @@ prevalence frequency threshold before passing to the function using the
 </tr>
 <tr>
 <td headers="label" class="gt_row gt_left">GRM3</td>
-<td headers="stat_0" class="gt_row gt_center">3 (12%)</td>
+<td headers="stat_0" class="gt_row gt_center">3 (13%)</td>
 </tr>
 <tr>
 <td headers="label" class="gt_row gt_left">    Unknown</td>
@@ -1427,7 +1430,7 @@ prevalence frequency threshold before passing to the function using the
 </tr>
 <tr>
 <td headers="label" class="gt_row gt_left">RANBP2</td>
-<td headers="stat_0" class="gt_row gt_center">3 (12%)</td>
+<td headers="stat_0" class="gt_row gt_center">3 (13%)</td>
 </tr>
 <tr>
 <td headers="label" class="gt_row gt_left">    Unknown</td>
@@ -1435,7 +1438,7 @@ prevalence frequency threshold before passing to the function using the
 </tr>
 <tr>
 <td headers="label" class="gt_row gt_left">SLIT2</td>
-<td headers="stat_0" class="gt_row gt_center">3 (12%)</td>
+<td headers="stat_0" class="gt_row gt_center">3 (13%)</td>
 </tr>
 <tr>
 <td headers="label" class="gt_row gt_left">    Unknown</td>
@@ -1443,7 +1446,7 @@ prevalence frequency threshold before passing to the function using the
 </tr>
 <tr>
 <td headers="label" class="gt_row gt_left">SPTA1</td>
-<td headers="stat_0" class="gt_row gt_center">3 (12%)</td>
+<td headers="stat_0" class="gt_row gt_center">3 (13%)</td>
 </tr>
 <tr>
 <td headers="label" class="gt_row gt_left">    Unknown</td>
@@ -1507,7 +1510,7 @@ prevalence frequency threshold before passing to the function using the
 <p><strong>Using the genomic data from cBioPortal:</strong></p>
 <p>Summarizing the frequencies of KEAP1, STK11, and SMARCA4 alteration
 events:</p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="va">nsclc_2_0_gen_dat_cbio</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">sample_id</span>, <span class="va">KEAP1</span>, <span class="va">STK11</span>, <span class="va">SMARCA4</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
@@ -1992,7 +1995,7 @@ events:</p>
 </table>
 </div>
 <p>Summarizing alteration events with &gt;=10% frequency:</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="va">nsclc_2_0_gen_dat_cbio</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/subset_by_frequency.html">subset_by_frequency</a></span><span class="op">(</span>t <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
@@ -2483,7 +2486,7 @@ events:</p>
 </tr>
 <tr>
 <td headers="label" class="gt_row gt_left">GRM3</td>
-<td headers="stat_0" class="gt_row gt_center">3 (12%)</td>
+<td headers="stat_0" class="gt_row gt_center">3 (13%)</td>
 </tr>
 <tr>
 <td headers="label" class="gt_row gt_left">    Unknown</td>
@@ -2491,7 +2494,7 @@ events:</p>
 </tr>
 <tr>
 <td headers="label" class="gt_row gt_left">SLIT2</td>
-<td headers="stat_0" class="gt_row gt_center">3 (12%)</td>
+<td headers="stat_0" class="gt_row gt_center">3 (13%)</td>
 </tr>
 <tr>
 <td headers="label" class="gt_row gt_left">    Unknown</td>
@@ -2499,7 +2502,7 @@ events:</p>
 </tr>
 <tr>
 <td headers="label" class="gt_row gt_left">SPTA1</td>
-<td headers="stat_0" class="gt_row gt_center">3 (12%)</td>
+<td headers="stat_0" class="gt_row gt_center">3 (13%)</td>
 </tr>
 <tr>
 <td headers="label" class="gt_row gt_left">    Unknown</td>
@@ -2507,7 +2510,7 @@ events:</p>
 </tr>
 <tr>
 <td headers="label" class="gt_row gt_left">RANBP2</td>
-<td headers="stat_0" class="gt_row gt_center">3 (12%)</td>
+<td headers="stat_0" class="gt_row gt_center">3 (13%)</td>
 </tr>
 <tr>
 <td headers="label" class="gt_row gt_left">    Unknown</td>
@@ -2578,7 +2581,7 @@ variant type, SNV class and top variant genes.</p>
 <p>For the purposes of this vignette we will visualize the genomic data
 from cBioPortal.</p>
 <p><strong>Using the genomic data from cBioPortal:</strong></p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">mutation_viz_gen_dat_cbio</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mutation_viz.html">mutation_viz</a></span><span class="op">(</span><span class="va">mutations_extended_2_0</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> `samples` argument is `NULL`. We will infer your cohort inclusion and resulting data frame will include all samples with at least one alteration in <span style="color: #00BB00;">mutation</span>, <span style="color: #00BB00;">fusion</span> or <span style="color: #00BB00;">cna</span> data frames</span></span>
 <span><span class="co">#&gt; Warning: To ensure gene with multiple names/aliases are correctly grouped together, the</span></span>
@@ -2602,19 +2605,19 @@ from cBioPortal.</p>
 <span></span>
 <span><span class="va">mutation_viz_gen_dat_cbio</span></span>
 <span><span class="co">#&gt; $varclass</span></span></code></pre></div>
-<p><img src="genie-bpc-vignette_files/figure-html/unnamed-chunk-17-1.png" width="700"></p>
+<p><img src="genie-bpc-vignette_files/figure-html/unnamed-chunk-18-1.png" width="700"></p>
 <pre><code><span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $vartype</span></span></code></pre>
-<p><img src="genie-bpc-vignette_files/figure-html/unnamed-chunk-17-2.png" width="700"></p>
+<p><img src="genie-bpc-vignette_files/figure-html/unnamed-chunk-18-2.png" width="700"></p>
 <pre><code><span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $samplevar</span></span></code></pre>
-<p><img src="genie-bpc-vignette_files/figure-html/unnamed-chunk-17-3.png" width="700"></p>
+<p><img src="genie-bpc-vignette_files/figure-html/unnamed-chunk-18-3.png" width="700"></p>
 <pre><code><span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $topgenes</span></span></code></pre>
-<p><img src="genie-bpc-vignette_files/figure-html/unnamed-chunk-17-4.png" width="700"></p>
+<p><img src="genie-bpc-vignette_files/figure-html/unnamed-chunk-18-4.png" width="700"></p>
 <pre><code><span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $genecor</span></span></code></pre>
-<p><img src="genie-bpc-vignette_files/figure-html/unnamed-chunk-17-5.png" width="700"></p>
+<p><img src="genie-bpc-vignette_files/figure-html/unnamed-chunk-18-5.png" width="700"></p>
 </div>
 </div>
 <div class="section level2">
