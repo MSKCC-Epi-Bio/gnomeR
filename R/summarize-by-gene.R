@@ -74,9 +74,13 @@ summarize_by_gene <- function(gene_binary) {
 
   # genes with more than one type of event
   all_bin_more <- transp_alt_only %>%
-    filter(.data$gene %in% genes_multiple) %>%
+    filter(.data$gene %in% genes_multiple)
+
+  if(length(genes_multiple) > 0) {
+    all_bin_more <- all_bin_more %>%
     group_by(.data$gene) %>%
     summarize(across(everything(), max))
+  }
 
   # bind together and transpose
   all_bin <- rbind(all_bin_once, all_bin_more, make.row.names = FALSE) %>%
