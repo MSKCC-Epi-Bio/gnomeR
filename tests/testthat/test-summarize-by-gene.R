@@ -109,6 +109,7 @@ test_that("test what happens to columns with all NA", {
 
 test_that("no warning message thrown when only 1 alt type", {
 
+  samples <- gnomeR::mutations$sampleId
   bin.mut <- create_gene_binary(
     samples = samples, mutation = gnomeR::mutations,
     mut_type = "omit_germline", snp_only = FALSE,
