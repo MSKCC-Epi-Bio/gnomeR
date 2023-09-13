@@ -115,7 +115,7 @@ test_that("no warning message thrown when only 1 alt type", {
     include_silent = FALSE
   )
 
-  expect_no_warning(summarize_by_gene(bin.mut)
+  expect_no_warning(summarize_by_gene(bin.mut))
 
 
 
