@@ -1,7 +1,7 @@
 #' Rename columns from API results to work with gnomeR functions
 #'
-#' @param df_to_check a data frame to check and recode names as needed
-#'
+#' @param df_to_check A data frame to check and recode names as needed
+#' @param return_dict Returns a named vector of original column names and changed column names if `TRUE`.
 #' @return a renamed data frame
 #' @export
 #' @examples
@@ -9,7 +9,7 @@
 #' rename_columns(df_to_check = gnomeR::mutations)
 #' rename_columns(df_to_check = gnomeR::sv)
 #'
-rename_columns <- function(df_to_check) {
+rename_columns <- function(df_to_check, return_dict = FALSE) {
 
   names_df_long <- gnomeR::names_df %>%
     select(contains("_column_name")) %>%
@@ -19,26 +19,35 @@ rename_columns <- function(df_to_check) {
   which_to_replace <- intersect(names(df_to_check), unique(names_df_long$value))
 
   # create a temporary dictionary as a named vector
-  temp_dict <- names_df_long %>%
+  names_dict <- names_df_long %>%
     dplyr::filter(.data$value %in% which_to_replace) %>%
     select("internal_column_name",  "value") %>%
     dplyr::distinct() %>%
     tibble::deframe()
 
 
-  if(length(temp_dict) > 0) {
+  if(length(names_dict) > 0) {
 
     # store details on what has been changed.
-    message <- purrr::map2_chr(names(temp_dict),
-                               temp_dict,
+    message <- purrr::map2_chr(names(names_dict),
+                               names_dict,
                                ~paste0(.y, " renamed ", .x))
 
     names(message) <- rep("!", times = length(message))
 
 
     # rename those variables only
-    df_to_check %>%
+    df_to_check <- df_to_check %>%
       dplyr::rename(!!temp_dict)
+
+    if(return_dict == TRUE) {
+      return(list(
+        "renamed_df" = df_to_check,
+        "names_dict" = names_dict
+      ))
+    } else {
+      return(df_to_check)
+    }
   }
 }
 
