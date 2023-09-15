@@ -63,7 +63,6 @@ test_that("test that genes are properly summarized", {
     mutate(name = str_remove(name, ".Amp|.Del|.fus"))%>%
     tidyr::pivot_wider(names_from = name, values_from = value, values_fn = function (x) sum(x))%>%
     mutate(across(!sample_id, ~ifelse(. > 0, 1, 0)))%>%
-    as.data.frame()%>%
     relocate(colnames(sum_impact))
 
   expect_equal(sum_impact, bin_impact_test)
