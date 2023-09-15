@@ -38,7 +38,7 @@ rename_columns <- function(df_to_check, return_dict = FALSE) {
 
     # rename those variables only
     df_to_check <- df_to_check %>%
-      dplyr::rename(!!temp_dict)
+      dplyr::rename(!!names_dict)
 
     if(return_dict == TRUE) {
       return(list(
