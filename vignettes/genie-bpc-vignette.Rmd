@@ -48,6 +48,9 @@ library(genieBPC)
 
 # if credentials are not stored in your R environment
 set_synapse_credentials(username = "username", password = "password")
+```
+
+```{r, eval=genieBPC:::.is_connected_to_genie()}
 
 # if credentials are stored in your R environment
 set_synapse_credentials()
