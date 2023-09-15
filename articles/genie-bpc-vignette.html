@@ -176,8 +176,8 @@ BPC genomic data directly from cBioPortal:</p>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> crc_pub… GENI… <span style="color: #949494;">"</span>CRC cohor… TRUE        GENIE…      0 2023-03-2…           <span style="text-decoration: underline;">1</span>551</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> glioma_… DFCI… <span style="color: #949494;">"</span>1,535 gli… TRUE        GENIE…      0 2023-04-1…           <span style="text-decoration: underline;">1</span>535</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> mbc_gen… Meta… <span style="color: #949494;">"</span>Breast tu… TRUE        GENIE…      0 2023-04-1…            856</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> genie_p… GENI… <span style="color: #949494;">"</span>GENIE v13… TRUE        GENIE…      0 2023-06-0…         <span style="text-decoration: underline;">167</span>358</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">7</span> nsclc_p… GENI… <span style="color: #949494;">"</span>NSCLC coh… TRUE        GENIE…      0 2023-06-0…           <span style="text-decoration: underline;">2</span>004</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> nsclc_p… GENI… <span style="color: #949494;">"</span>NSCLC coh… TRUE        GENIE…      0 2023-06-0…           <span style="text-decoration: underline;">2</span>004</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">7</span> genie_p… GENI… <span style="color: #949494;">"</span>GENIE v14… TRUE        GENIE…      0 2023-09-1…         <span style="text-decoration: underline;">183</span>302</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ 5 more variables: readPermission &lt;lgl&gt;, cancerTypeId &lt;chr&gt;,</span></span></span>
 <span><span class="co">#&gt; <span style="color: #949494;">#   referenceGenome &lt;chr&gt;, pmid &lt;chr&gt;, citation &lt;chr&gt;</span></span></span></code></pre></div>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
@@ -416,17 +416,19 @@ type.</p>
 <code class="sourceCode R"><span><span class="va">nsclc_2_0_gen_dat_synapse</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span>, <span class="op">]</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">sample_id</span>, <span class="va">KRAS</span>, <span class="va">KRAS.Amp</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/summarize_by_gene.html">summarize_by_gene</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt;                  sample_id KRAS</span></span>
-<span><span class="co">#&gt; 1   GENIE-DFCI-005843-1704    0</span></span>
-<span><span class="co">#&gt; 2   GENIE-DFCI-004022-1313    0</span></span>
-<span><span class="co">#&gt; 3   GENIE-DFCI-000013-8840    1</span></span>
-<span><span class="co">#&gt; 4   GENIE-DFCI-000136-6004    1</span></span>
-<span><span class="co">#&gt; 5   GENIE-DFCI-000215-8010    0</span></span>
-<span><span class="co">#&gt; 6  GENIE-DFCI-000260-11571    0</span></span>
-<span><span class="co">#&gt; 7   GENIE-DFCI-000381-9526    0</span></span>
-<span><span class="co">#&gt; 8  GENIE-DFCI-000410-10003    1</span></span>
-<span><span class="co">#&gt; 9   GENIE-DFCI-000454-5667    1</span></span>
-<span><span class="co">#&gt; 10 GENIE-DFCI-000583-11175    0</span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 10 × 2</span></span></span>
+<span><span class="co">#&gt;    sample_id                KRAS</span></span>
+<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> GENIE-DFCI-005843-1704      0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> GENIE-DFCI-004022-1313      0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> GENIE-DFCI-000013-8840      1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> GENIE-DFCI-000136-6004      1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> GENIE-DFCI-000215-8010      0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> GENIE-DFCI-000260-11571     0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> GENIE-DFCI-000381-9526      0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> GENIE-DFCI-000410-10003     1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> GENIE-DFCI-000454-5667      1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> GENIE-DFCI-000583-11175     0</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="analyzing-data">Analyzing Data<a class="anchor" aria-label="anchor" href="#analyzing-data"></a>

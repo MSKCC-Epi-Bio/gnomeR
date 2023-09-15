@@ -65,13 +65,18 @@ columns for mutation/cna/fusion.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">summarize_by_gene</span><span class="op">(</span><span class="va">gene_binary</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">summarize_by_gene</span><span class="op">(</span><span class="va">gene_binary</span>, other_vars <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>gene_binary</dt>
 <dd><p>a 0/1 matrix of gene alterations</p></dd>
+
+
+<dt>other_vars</dt>
+<dd><p>One or more column names (quoted or unquoted) in data to be retained
+in resulting data frame. Default is NULL.</p></dd>
 
 </dl></div>
     <div class="section level2">
