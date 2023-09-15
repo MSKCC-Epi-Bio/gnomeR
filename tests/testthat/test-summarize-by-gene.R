@@ -106,18 +106,18 @@ test_that("test what happens to columns with all NA", {
 
   })
 
-<<<<<<< Updated upstream
-=======
+
 # test_that("all columns must be numeric to continue", {
 #
 # })
 
 test_that("other vars are retained", {
-  samples <- Reduce(intersect, list(gnomeR::mutations$sampleId, gnomeR::cna$sampleId,
+  samples <- Reduce(intersect, list(gnomeR::mutations$sampleId,
+                                    gnomeR::cna$sampleId,
                                     gnomeR::sv$sampleId))
 
 
-  bin_impact <- create_gene_binary(samples=samples,
+  bin_impact <- create_gene_binary(samples = samples,
                                     mutation = gnomeR::mutations,
                                     cna = gnomeR::cna,
                                     fusion = gnomeR::sv,
@@ -126,8 +126,8 @@ test_that("other vars are retained", {
 
   set.seed(20230828)
 
-  bin_impact$random_color = sample(c("blue", "red",
-                                     "yellow"), size = 50, replace = TRUE)
+  bin_impact$random_color = sample(c("blue", "red", "yellow"),
+                                   size = 50, replace = TRUE)
 
   expect_true("random_color" %in% names(bin_impact))
   sum_impact <- summarize_by_gene(bin_impact,
@@ -135,6 +135,7 @@ test_that("other vars are retained", {
 
   expect_true("random_color" %in% names(sum_impact))
   expect_true("blue" %in% sum_impact$random_color)
->>>>>>> Stashed changes
+})
+
 
 

@@ -52,16 +52,10 @@ summarize_by_gene <- function(gene_binary, other_vars = NULL) {
     select("sample_id") %>%
     mutate(sample_index = paste0("samp", 1:nrow(gene_binary)))
 
-<<<<<<< Updated upstream
-  alt_only <- as.matrix(select(gene_binary, -"sample_id"))
-  rownames(alt_only) <- sample_index$sample_index
-=======
-  # data frame of only alterations
-  alt_only <- select(gene_binary, -"sample_id", -any_of(other_vars)) %>%
-    as.matrix()
 
+  # data frame of only alterations
+  alt_only <- as.data.frame(select(gene_binary, -"sample_id", -any_of(other_vars)))
   row.names(alt_only) <- sample_index$sample_index
->>>>>>> Stashed changes
 
   # check numeric class ---------
   is_numeric <- apply(alt_only, 2, is.numeric)
@@ -106,13 +100,12 @@ summarize_by_gene <- function(gene_binary, other_vars = NULL) {
   # join back to sample ID and other vars
   simp_gene_binary <- all_bin %>%
     left_join(sample_index, ., by = "sample_index") %>%
-    select(-c("sample_index")) %>%
-    as.data.frame()%>%
-    left_join(gene_binary %>%
-                select(any_of(c("sample_id", other_vars))))%>%
-    suppressMessages()
+    select(-c("sample_index"))
 
-  simp_gene_binary
+  simp_gene_binary <- simp_gene_binary %>%
+    left_join(select(gene_binary, any_of(c("sample_id", other_vars))), by = "sample_id")
+
+  return(simp_gene_binary)
 
 }
 

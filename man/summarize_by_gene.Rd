@@ -4,10 +4,13 @@
 \alias{summarize_by_gene}
 \title{Simplify binary matrix to one column per gene that counts any alteration type as 1}
 \usage{
-summarize_by_gene(gene_binary)
+summarize_by_gene(gene_binary, other_vars = NULL)
 }
 \arguments{
 \item{gene_binary}{a 0/1 matrix of gene alterations}
+
+\item{other_vars}{One or more column names (quoted or unquoted) in data to be retained
+in resulting data frame. Default is NULL.}
 }
 \value{
 a binary matrix with a row for each sample and one column per gene
