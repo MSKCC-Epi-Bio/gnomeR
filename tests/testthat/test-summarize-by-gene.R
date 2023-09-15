@@ -94,7 +94,6 @@ test_that("test what happens to columns with all NA", {
     mutate(name = str_remove(name, ".Amp|.Del|.fus"))%>%
     tidyr::pivot_wider(names_from = name, values_from = value, values_fn = function (x) sum(x))%>%
     mutate(across(!sample_id, ~ifelse(. > 0, 1, 0)))%>%
-    as.data.frame()%>%
     relocate(colnames(sum_impact))%>%
     mutate_if(~ all(is.na(.)), ~as.numeric(NA_integer_))
 
