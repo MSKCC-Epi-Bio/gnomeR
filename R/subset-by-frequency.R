@@ -51,7 +51,7 @@ subset_by_frequency <- function(gene_binary, t = .1, other_vars = NULL) {
 
   # Remove all NA columns ----------------------------------------------
   all_na_alt <- apply(alt_only,  2, function(x) {
-    sum(is.na(x)) == nrow(alt_only)
+     sum(is.na(x)) == nrow(alt_only)
   })
 
   all_non_na_alt <- names(all_na_alt[!all_na_alt])

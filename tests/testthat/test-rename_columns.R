@@ -30,12 +30,17 @@
 # })
 #
 # #issue is that this is not title case
-# test_that("binary matrix runs with renamed columns without error", {
-#
-#   expect_error(
-#    gnomeR::create_gene_binary(samples = gnomeR::muations$Tumor_Sample_Barcode,
-#                               mutation = rename_columns(gnomeR::muations)), NA)
-#
-# })
-#
-#
+test_that("binary matrix runs with renamed columns without error", {
+
+  mut <- gnomeR::mutations %>%
+    dplyr::rename("Sample_ID" = sampleId)
+
+  mut2 <- rename_columns(mut)
+  expect_false(any(stringr::str_detect(names(mut2), "Sample_ID")))
+  expect_true(any(stringr::str_detect(names(mut2), "sample_id")))
+
+  expect_equal(nrow(mut), nrow(mut2))
+
+})
+
+
