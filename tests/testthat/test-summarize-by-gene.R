@@ -138,4 +138,22 @@ test_that("other vars are retained", {
 })
 
 
+test_that("no warning message thrown when only 1 alt type", {
+
+  samples <- gnomeR::mutations$sampleId
+  bin.mut <- create_gene_binary(
+    samples = samples, mutation = gnomeR::mutations,
+    mut_type = "omit_germline", snp_only = FALSE,
+    include_silent = FALSE
+  )
+
+  expect_no_warning(summarize_by_gene(bin.mut))
+
+
+
+})
+
+
+
+
 
