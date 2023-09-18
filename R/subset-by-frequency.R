@@ -59,7 +59,7 @@ subset_by_frequency <- function(gene_binary, t = .1, other_vars = NULL) {
 
 
   # Check Numeric Class -----------------------------------------------------
-  .check_numeric(alt_only)
+  .abort_if_not_numeric(alt_only)
 
 
   # Calc Frequency ----------------------------------------------------------

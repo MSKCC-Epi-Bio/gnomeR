@@ -58,7 +58,7 @@ summarize_by_gene <- function(gene_binary, other_vars = NULL) {
   row.names(alt_only) <- sample_index$sample_index
 
   # check numeric class ---------
-  .check_numeric(alt_only %>% as.data.frame())
+  .abort_if_not_numeric(alt_only)
 
   # Transpose ---------------------------------------------------------------
 
