@@ -63,7 +63,6 @@ test_that("test that genes are properly summarized", {
     mutate(name = str_remove(name, ".Amp|.Del|.fus"))%>%
     tidyr::pivot_wider(names_from = name, values_from = value, values_fn = function (x) sum(x))%>%
     mutate(across(!sample_id, ~ifelse(. > 0, 1, 0)))%>%
-    as.data.frame()%>%
     relocate(colnames(sum_impact))
 
   expect_equal(sum_impact, bin_impact_test)
@@ -95,7 +94,6 @@ test_that("test what happens to columns with all NA", {
     mutate(name = str_remove(name, ".Amp|.Del|.fus"))%>%
     tidyr::pivot_wider(names_from = name, values_from = value, values_fn = function (x) sum(x))%>%
     mutate(across(!sample_id, ~ifelse(. > 0, 1, 0)))%>%
-    as.data.frame()%>%
     relocate(colnames(sum_impact))%>%
     mutate_if(~ all(is.na(.)), ~as.numeric(NA_integer_))
 
@@ -105,6 +103,55 @@ test_that("test what happens to columns with all NA", {
     sum_impact[,sapply(sum_impact, function(x) all(is.na(x)))])), 1)
 
   })
+
+
+# test_that("all columns must be numeric to continue", {
+#
+# })
+
+test_that("other vars are retained", {
+  samples <- Reduce(intersect, list(gnomeR::mutations$sampleId,
+                                    gnomeR::cna$sampleId,
+                                    gnomeR::sv$sampleId))
+
+
+  bin_impact <- create_gene_binary(samples = samples,
+                                    mutation = gnomeR::mutations,
+                                    cna = gnomeR::cna,
+                                    fusion = gnomeR::sv,
+                                    specify_panel = "impact") %>%
+    select(c(sample_id, starts_with("AR"), starts_with("PLCG2"), starts_with("PPM1D")))
+
+  set.seed(20230828)
+
+  bin_impact$random_color = sample(c("blue", "red", "yellow"),
+                                   size = 50, replace = TRUE)
+
+  expect_true("random_color" %in% names(bin_impact))
+  sum_impact <- summarize_by_gene(bin_impact,
+                                  other_vars = "random_color")
+
+  expect_true("random_color" %in% names(sum_impact))
+  expect_true("blue" %in% sum_impact$random_color)
+})
+
+
+test_that("no warning message thrown when only 1 alt type", {
+
+  samples <- gnomeR::mutations$sampleId
+  bin.mut <- create_gene_binary(
+    samples = samples, mutation = gnomeR::mutations,
+    mut_type = "omit_germline", snp_only = FALSE,
+    include_silent = FALSE
+  )
+
+  expect_no_warning(summarize_by_gene(bin.mut))
+
+
+
+})
+
+
 
 
 

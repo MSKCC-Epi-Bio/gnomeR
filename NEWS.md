@@ -4,6 +4,10 @@
 - Added `other_vars` argument to `subset_by_frequency()` to allow retention of other clinical vars when using function within pipeline.
 - Deprecated `count_pathways_by` argument of `add_pathways()` function. Now, user must specify which specific alteration to count towards the pathway via the `.mut`, `.Amp`, `.Del`, `.fus` suffix (e.g. `custom_pathways = c('TP53.mut', 'APC.Del)`). 
 - Added IMPACT QA Vignette and GENIE BPC vignette
+- Added `subset_by_panel` function allowing users to easily subset an alteration dataframe and include only genes in a specific panel
+- Added IMPACT IH3 and IH4 panels to internal impact panels used for NA annotation in `create_gene_binary(specify_panel)`
+- Added GENIE BPC alias table so users can now use `create_gene_binary(recode_aliases = "genie")` to check and recode aliases for genes in any of the GENIE BPC panels.
+- Fixed bug in `add_pathways()` where `custom_pathways` wasn't catching all types of alterations when `GENE.all` was used due to `paste0()` vectorization.
 
 # gnomeR 1.2.0
 

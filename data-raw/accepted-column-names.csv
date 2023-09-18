@@ -2,6 +2,7 @@
 Hugo_Symbol,hugoGeneSymbol,yes,,yes,"  HUGO symbol for the gene (HUGO symbols are always in all caps). ""Unknown"" is used for regions that do not correspond to a gene",can be present in long format
 Entrez_Gene_Id,entrezGeneId,yes,yes,yes,"  Entrez gene ID (an integer). ""0"" is used for regions that do not correspond to a gene region or Ensembl ID",can be present in long format
 Tumor_Sample_Barcode,sampleId,yes,yes,yes,Aliquot barcode for the tumor sample,can be present in long format
+Sample_ID,sampleId,yes,yes,yes,,
 Patient_ID,patientId,yes,yes,yes,,can be present in long format
 Study_ID,studyId,,yes,yes,,can be present in long format
 Molecular_Profile_ID,molecularProfileId,yes,yes,yes,,can be present in long format

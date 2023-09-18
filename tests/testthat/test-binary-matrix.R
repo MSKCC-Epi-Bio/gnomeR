@@ -36,6 +36,9 @@ test_that("Check create_gene_binary() if sample entered in `sample_id` with zero
 
   # should be one more obs in data frame with samples arg specified
   expect_equal(nrow(gene_binary_with_zero) -2, length(mut_valid_sample_ids))
+
+  expect_equal(attr(gene_binary_with_zero, 'zero_alteration_samples'),
+               c("no_mutations_fake_sample", "fake"))
 })
 
 test_that("samples selected with no fusions ",  {
