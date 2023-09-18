@@ -52,18 +52,13 @@ summarize_by_gene <- function(gene_binary, other_vars = NULL) {
     select("sample_id") %>%
     mutate(sample_index = paste0("samp", 1:nrow(gene_binary)))
 
-
   # data frame of only alterations
   alt_only <- as.data.frame(select(gene_binary, -"sample_id", -any_of(other_vars)))
+
   row.names(alt_only) <- sample_index$sample_index
 
   # check numeric class ---------
-  is_numeric <- apply(alt_only, 2, is.numeric)
-
-  if(!(all(is_numeric))) {
-    cli::cli_abort("All alterations in your gene binary must be numeric and only can have values of 0, 1, or NA.
-                   Please coerce the following columns to numeric before proceeding: {.field {names(is_numeric[!is_numeric])}}")
-  }
+  .abort_if_not_numeric(alt_only)
 
   # Transpose ---------------------------------------------------------------
 

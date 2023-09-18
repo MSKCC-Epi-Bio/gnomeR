@@ -105,10 +105,6 @@ test_that("test what happens to columns with all NA", {
   })
 
 
-# test_that("all columns must be numeric to continue", {
-#
-# })
-
 test_that("other vars are retained", {
   samples <- Reduce(intersect, list(gnomeR::mutations$sampleId,
                                     gnomeR::cna$sampleId,
@@ -150,7 +146,6 @@ test_that("no warning message thrown when only 1 alt type", {
 
 
 })
-
 
 
 
