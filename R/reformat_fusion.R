@@ -57,6 +57,7 @@ reformat_fusion <- function(fusions) {
     "-AS" = "_AS",
     "HLA-" = "HLA_",
     "NKX2-" = "NKX2_",
+    "NKX3-" = "NKX3_",
 
     # specific edits
     "SOX2-OT"= "SOXOT",
@@ -128,7 +129,7 @@ reformat_fusion <- function(fusions) {
 
   fusions_unq <- fusions_unq %>%
     separate_wider_delim("fusions_ordered",
-                         names = paste0("site", 1:4, "hugo_symbol"),
+                         names = paste0("site_", 1:4, "_hugo_symbol"),
                          delim = "-",
                          cols_remove = FALSE,
                          too_many = "drop",

@@ -4,13 +4,7 @@
 \alias{.cna_gene_binary}
 \title{Make Binary Matrix From CNA data frame}
 \usage{
-.cna_gene_binary(
-  cna,
-  samples,
-  specify_panel,
-  recode_aliases,
-  high_level_cna_only
-)
+.cna_gene_binary(cna, samples, specify_panel, high_level_cna_only)
 }
 \arguments{
 \item{cna}{A data frame of copy number alterations. If inputed the outcome will be added to the matrix with columns ending in ".del" and ".amp".
@@ -25,10 +19,6 @@ returned for every column of that patient row.}
 panel id (see \code{gnomeR::gene_panels} for available panels), or \code{"impact"} for automated IMPACT annotation.
 Alternatively, you may pass a data frame of \code{sample_id}-\code{panel_id} pairs specifying panels for each sample for
 which to insert NAs indicating genes not tested. See below for details.}
-
-\item{recode_aliases}{Default is \code{"impact"} where function will check for IMPACT genes that may go by more than 1 name in your data and replace the alias name with the standardized gene name (see \code{gnomeR::impact_alias_table} for reference list).
-If \code{"no"}, no alias annotation will be performed.
-Alternatively, you may pass a custom alias list as a data frame with columns \code{hugo_symbol} and \code{alias} specifying a custom alias table to use for checks. See below for details.}
 
 \item{high_level_cna_only}{If TRUE, only deep deletions (-2, -1.5) or high level amplifications (2) will be counted as events
 in the binary matrix. Gains (1) and losses (1) will be ignored. Default is \code{FALSE} where all CNA events are counted.}

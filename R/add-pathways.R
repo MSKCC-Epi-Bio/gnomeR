@@ -52,7 +52,7 @@ add_pathways <- function(gene_binary,
                               details = c(
                                 i = c("All pathways are now counted on the specific alteration level, not the gene level and all columns in your data with no suffix (e.g. `data$TP53`) are assumed to be mutations.
                                 You must explicitely specify in your custom pathway what types of alterations count towards pathway e.g. `custom_pathway = c('TP53.mut', 'APC.Del').
-                                      If you would like to count any type of alteration on a gene towards a pathway, use the suffix `.all`, e.g. `custom_pathway = c('TP53.all', 'APC.all')")))
+                                      If you would like to count any type of alteration on a gene towards a pathway, use the suffix `.any`, e.g. `custom_pathway = c('TP53.any', 'APC.any')")))
   }
 
 
@@ -96,20 +96,24 @@ add_pathways <- function(gene_binary,
       }
     }
 
-    if(any(purrr::map_lgl(custom_pathways, ~any(!str_detect(.x, ".Amp|.Del|.fus|.mut"))))) {
+    if(any(purrr::map_lgl(custom_pathways, ~any(!str_detect(.x, ".Amp|.Del|.fus|.mut|.any"))))) {
       cli::cli_abort(c("All alterations specified in {.code custom_pathway} must have one ",
-                      "of the following suffixes specified: {.code .Amp}, {.code .Del}, {.code .fus}, {.code .mut}, {.code .all}"))
+                      "of the following suffixes specified: {.code .Amp}, {.code .Del}, {.code .fus}, {.code .mut}, {.code .any}"))
     }
 
 
-    # process GENE.all suffix in custom pathways
+    # process GENE.any suffix in custom pathways
     custom_pathways <- purrr::map(custom_pathways, function(x) {
-      gene_all <- x[str_detect(x, ".all")]
+      gene_all <- x[str_detect(x, ".any")]
 
       if(length(gene_all) > 0) {
-        gene_all <-  str_remove(gene_all, ".all")
-        gene_add <- paste0(gene_all, c(".Amp", ".Del", ".fus", ".mut"))
-        x <- c(x[!str_detect(x, ".all")], gene_add)
+        gene_all <-  str_remove(gene_all, ".any")
+
+        gene_add <- purrr::map(gene_all, function(x) {
+          paste0(x, c(".Amp", ".Del", ".fus", ".mut"))
+        }) %>% unlist()
+
+        x <- c(x[!str_detect(x, ".any")], gene_add)
       }
 
       unique(x)

@@ -5,6 +5,8 @@
 #' columns for mutation/cna/fusion.
 #'
 #' @param gene_binary a 0/1 matrix of gene alterations
+#' @param other_vars One or more column names (quoted or unquoted) in data to be retained
+#' in resulting data frame. Default is NULL.
 #'
 #' @return a binary matrix with a row for each sample and one column per gene
 #' @export
@@ -19,7 +21,7 @@
 #' ) %>%
 #'   summarize_by_gene()
 #'
-summarize_by_gene <- function(gene_binary) {
+summarize_by_gene <- function(gene_binary, other_vars = NULL) {
 
 
   # Checks ------------------------------------------------------------------
@@ -35,6 +37,14 @@ summarize_by_gene <- function(gene_binary) {
     cli::cli_abort("Your {.field gene_binary} must have unique samples in {.code sample_id} column")
   }
 
+  # Capture Other Columns to Retain -----------------------------------
+
+  other_vars <-
+    .select_to_varnames({{ other_vars }},
+                        data = gene_binary,
+                        arg_name = "other_vars"
+    )
+
 
   # Create Sample Index -----------------------------------------------------
 
@@ -42,16 +52,13 @@ summarize_by_gene <- function(gene_binary) {
     select("sample_id") %>%
     mutate(sample_index = paste0("samp", 1:nrow(gene_binary)))
 
-  alt_only <- as.matrix(select(gene_binary, -"sample_id"))
-  rownames(alt_only) <- sample_index$sample_index
+  # data frame of only alterations
+  alt_only <- as.data.frame(select(gene_binary, -"sample_id", -any_of(other_vars)))
+
+  row.names(alt_only) <- sample_index$sample_index
 
   # check numeric class ---------
-  is_numeric <- apply(alt_only, 2, is.numeric)
-
-  if(!(all(is_numeric))) {
-    cli::cli_abort("All alterations in your gene binary must be numeric and only can have values of 0, 1, or NA.
-                   Please coerce the following columns to numeric before proceeding: {.field {names(is_numeric[!is_numeric])}}")
-  }
+  .abort_if_not_numeric(alt_only)
 
   # Transpose ---------------------------------------------------------------
 
@@ -74,9 +81,13 @@ summarize_by_gene <- function(gene_binary) {
 
   # genes with more than one type of event
   all_bin_more <- transp_alt_only %>%
-    filter(.data$gene %in% genes_multiple) %>%
+    filter(.data$gene %in% genes_multiple)
+
+  if(length(genes_multiple) > 0) {
+    all_bin_more <- all_bin_more %>%
     group_by(.data$gene) %>%
     summarize(across(everything(), max))
+  }
 
   # bind together and transpose
   all_bin <- rbind(all_bin_once, all_bin_more, make.row.names = FALSE) %>%
@@ -85,13 +96,15 @@ summarize_by_gene <- function(gene_binary) {
   all_bin <- as.data.frame(t(all_bin)) %>%
     tibble::rownames_to_column("sample_index")
 
-  # join back to sample ID
+  # join back to sample ID and other vars
   simp_gene_binary <- all_bin %>%
     left_join(sample_index, ., by = "sample_index") %>%
-    select(-c("sample_index")) %>%
-    as.data.frame()
+    select(-c("sample_index"))
 
-  simp_gene_binary
+  simp_gene_binary <- simp_gene_binary %>%
+    left_join(select(gene_binary, any_of(c("sample_id", other_vars))), by = "sample_id")
+
+  return(simp_gene_binary)
 
 }
 
