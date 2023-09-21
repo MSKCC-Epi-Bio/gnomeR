@@ -51,7 +51,8 @@ Imports:
     janitor,
     withr,
     scales,
-    lifecycle
+    lifecycle,
+    vdiffr
 Suggests: 
     knitr,
     rmarkdown,

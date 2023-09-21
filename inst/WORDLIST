@@ -5,7 +5,6 @@ Bedard
 BioPharma
 Bioinformatics
 Biopharma
-CCI
 CMD
 CNA
 CNAs
@@ -20,7 +19,6 @@ Comutation
 Daian
 Defalut
 Dimitriadoy
-EPI
 Entrez
 Foltz
 GENIEBPC
@@ -88,7 +86,6 @@ Yu
 al
 args
 barcode
-bioinformatics
 biomarkers
 biopharma
 btac
@@ -100,7 +97,6 @@ colorRampPalette
 colours
 customizations
 del
-doi
 dplyr
 entrez
 et
@@ -111,23 +107,18 @@ genecor
 genieBPC
 germline
 ggplot
-github
 gnomer
 grDevices
 gtsummary
 hemizygous
 hepatocellular
 homozygous
-https
 hugo
 importFrom
 ing
 inputed
 intergenic
 iwth
-jamanetworkopen
-jamaoncol
-karissawhiting
 linkMsa
 linkPdb
 linkXvar

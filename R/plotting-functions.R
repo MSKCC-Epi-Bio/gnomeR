@@ -29,7 +29,7 @@ mutation_viz <- function(mutation, ...) {
       samplevar = ggsamplevar,
       topgenes = ggtopgenes,
       genecor = gggenecor) %>%
-      purrr::invoke_map(, mutation)
+      purrr::map(exec, !!!mutation)
 
   return(all_plots)
 }

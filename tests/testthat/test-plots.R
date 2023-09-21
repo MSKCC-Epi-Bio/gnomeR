@@ -36,7 +36,7 @@ test_that("test incorrrect palette name", {
 
 test_that("test non-numeric number of colors", {
   expect_error(gnomer_palette("pancan", "wrong", type = "discrete", plot_col = FALSE,
-                                        reverse = FALSE))
+                                        reverse = FALSE), "Specify*")
 })
 
 test_that("test missing number of colors", {
