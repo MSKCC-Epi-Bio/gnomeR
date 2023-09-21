@@ -108,4 +108,19 @@ test_that("test variant type inference error", {
 })
 
 
+test_that("test that attributes are returned", {
+
+  mutation <- rename_columns(gnomeR::mutations)
+  expect_true(!is.null(attr(mutation, "names_dict")))
+
+  cna <- rename_columns(gnomeR::cna)
+  expect_true(!is.null(attr(cna, "names_dict")))
+
+  fus <- rename_columns(gnomeR::sv)
+  expect_true(!is.null(attr(fus, "names_dict")))
+
+
+})
+
+
 

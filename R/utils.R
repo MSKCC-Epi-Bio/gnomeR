@@ -1,15 +1,16 @@
 #' Rename columns from API results to work with gnomeR functions
 #'
+#' Will return a named vector of internal column names as values and original data set names
+#' as names as an attribute (`attr(x, "names_dict")`)
 #' @param df_to_check A data frame to check and recode names as needed
-#' @param return_dict Returns a named vector of original column names and changed column names if `TRUE`.
 #' @return a renamed data frame
 #' @export
 #' @examples
 #'
 #' rename_columns(df_to_check = gnomeR::mutations)
-#' rename_columns(df_to_check = gnomeR::sv)
-#'
-rename_columns <- function(df_to_check, return_dict = FALSE) {
+#' x <- rename_columns(df_to_check = gnomeR::sv)
+#' attr(x, "names_dict")
+rename_columns <- function(df_to_check) {
 
   names_df_long <- gnomeR::names_df %>%
     select(contains("_column_name")) %>%
@@ -18,7 +19,7 @@ rename_columns <- function(df_to_check, return_dict = FALSE) {
 
   which_to_replace <- intersect(names(df_to_check), unique(names_df_long$value))
 
-  # create a temporary dictionary as a named vector
+  # create a temporary dictionary as a named vector- this should have all relevant values, including those unchanged
   names_dict <- names_df_long %>%
     dplyr::filter(.data$value %in% which_to_replace) %>%
     select("internal_column_name",  "value") %>%
@@ -40,16 +41,12 @@ rename_columns <- function(df_to_check, return_dict = FALSE) {
     df_to_check <- df_to_check %>%
       dplyr::rename(!!names_dict)
 
-    if(return_dict == TRUE) {
-      return(list(
-        "renamed_df" = df_to_check,
-        "names_dict" = names_dict
-      ))
-    } else {
-      return(df_to_check)
-    }
+    attr(df_to_check, "names_dict") <- names_dict
   }
+
+    return(df_to_check)
 }
+
 
 
 

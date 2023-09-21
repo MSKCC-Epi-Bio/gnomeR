@@ -15,6 +15,7 @@ sanitize_mutation_input <- function(mutation, include_silent, ...)  {
   arguments <- list(...)
 
   mutation <- rename_columns(mutation)
+  names_dict <- attr(mutation, "names_dict")
   column_names <- colnames(mutation)
 
   # Check required columns & data types ------------------------------------------
@@ -76,7 +77,8 @@ sanitize_mutation_input <- function(mutation, include_silent, ...)  {
             )
           )
 
-        cli::cli_warn("Column {.field variant_type} is missing from your data. We inferred variant types using {.field reference_allele} and {.field tumor_seq_allele2} columns")
+        cli::cli_warn(c("Column {.field variant_type} is missing from your data. We inferred variant types using ",
+        "{.field {first(c(names_dict['reference_allele'], 'reference_allele'), na_rm = TRUE)}} and {.field {first(c(names_dict['tumor_seq_allele2'], 'tumor_seq_allele2'), na_rm = TRUE)}} columns"))
       } else {
         cli::cli_abort("Column {.field variant_type} is missing from your data and {.field reference_allele} and {.field tumor_seq_allele2}
                               columns were not available from which to infer variant type.
