@@ -245,7 +245,8 @@ create_gene_binary <- function(samples = NULL,
       mut_type = mut_type,
       snp_only = snp_only,
       include_silent = include_silent,
-      specify_panel = specify_panel
+      specify_panel = specify_panel,
+      names_mut_dict = names_mut_dict
     )
   )
 
@@ -374,7 +375,7 @@ create_gene_binary <- function(samples = NULL,
                                    snp_only,
                                    include_silent,
                                    specify_panel,
-                                   ...) {
+                                   names_mut_dict) {
 
   # apply filters --------------
 

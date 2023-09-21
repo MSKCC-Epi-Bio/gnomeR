@@ -11,7 +11,7 @@
   snp_only,
   include_silent,
   specify_panel,
-  ...
+  names_mut_dict
 )
 }
 \arguments{
