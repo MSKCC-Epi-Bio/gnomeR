@@ -49,7 +49,7 @@ Alternatively, you may pass a data frame of \code{sample_id}-\code{panel_id} pai
 which to insert NAs indicating genes not tested. See below for details.}
 
 \item{recode_aliases}{Default is \code{"impact"} where function will check for IMPACT genes that may go by more than 1 name in your data and replace the alias name with the standardized gene name (see \code{gnomeR::impact_alias_table} for reference list).
-If \code{"no"}, no alias annotation will be performed.
+If \code{"no"}, no alias annotation will be performed. If \code{"genie"}, an alias table with GENIE BPC genes will be used to check (see \code{gnomeR::genie_alias_table} for reference list).
 Alternatively, you may pass a custom alias list as a data frame with columns \code{hugo_symbol} and \code{alias} specifying a custom alias table to use for checks. See below for details.}
 }
 \value{
@@ -77,6 +77,8 @@ annotated with NAs according to that specific panel. If a sample in your data is
 
 \itemize{
 \item If \code{recode_aliases = "impact"} is passed (default), function will use \code{gnomeR::impact_alias_table} to find and replace any non-standard hugo symbol names with their
+more common (or more recent) accepted gene name.
+\item If \code{recode_aliases = "genie"} is passed, function will use \code{gnomeR::genie_alias_table} to find and replace any non-standard hugo symbol names with their
 more common (or more recent) accepted gene name.
 \item If \code{recode_aliases = "no"} is passed, data will be returned as is without any alias replacements.
 \item If you have a custom table of vetted aliases you wish to use, you can pass a data frame with columns: \code{hugo_symbol}, and \code{alias}.

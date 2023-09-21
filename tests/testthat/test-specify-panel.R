@@ -27,7 +27,7 @@ test_that("gene binary with muts with impact specified", {
 
   expect_true("XXXTEST" %in% colnames(bin_impact))
 
-  expect_equal(class(bin_impact$XXXTEST), "logical")
+  expect_equal(class(bin_impact$XXXTEST), "numeric")
 
   testNA <- table(is.na(bin_impact$XXXTEST)) %>%
     as.data.frame()%>%

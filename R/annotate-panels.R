@@ -31,6 +31,9 @@ specify_impact_panels <- function(gene_binary) {
       stringr::str_detect(.data$sample_id, "-IM5") ~ "IMPACT410",
       stringr::str_detect(.data$sample_id, "-IM6") ~ "IMPACT468",
       stringr::str_detect(.data$sample_id, "-IM7") ~ "IMPACT505",
+      # heme panels
+      stringr::str_detect(.data$sample_id, "-IH3") ~ "IMPACT-HEME-400",
+      stringr::str_detect(.data$sample_id, "-IH4") ~ "IMPACT-HEME-468",
       TRUE ~ "no"
     ))
 
@@ -126,7 +129,10 @@ annotate_specific_panel <- function(gene_binary,
                                     na_genes, ...) {
 
   mut_sub <- gene_binary[gene_binary$sample_id %in% samples_in_panel,]
-  mut_sub[,stats::na.omit(match(na_genes, colnames(mut_sub)))] <- NA
+  index_na_genes <- stats::na.omit(match(na_genes, colnames(mut_sub)))
+
+  # By default these return logical so coerce into numeric for checks later
+  mut_sub[, index_na_genes] <- as.numeric(NA)
 
   return(mut_sub)
 
@@ -152,7 +158,9 @@ annotate_specific_panel <- function(gene_binary,
 
 which_impact_panel <- function(hugo_symbol) {
 
-  im_panels <- c("IMPACT341", "IMPACT410", "IMPACT468", "IMPACT505")
+  im_panels <- c("IMPACT341", "IMPACT410",
+                 "IMPACT468", "IMPACT505",
+                 "IMPACT-HEME-400", "IMPACT-HEME-468")
 
   # get table of gene aliases (internal data)
   alias_table <- gnomeR::impact_alias_table %>%

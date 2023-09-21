@@ -4,13 +4,15 @@
 \alias{recode_alias}
 \title{Recode Hugo Symbol Column}
 \usage{
-recode_alias(genomic_df, alias_table = "impact")
+recode_alias(genomic_df, alias_table = "impact", supress_warnings = FALSE)
 }
 \arguments{
 \item{genomic_df}{a gene_binary object}
 
-\item{alias_table}{a string indicating "impact", or a  dataframe with at least two columns (\code{hugo_symbol},
+\item{alias_table}{a string indicating "impact" or "genie", or a dataframe with at least two columns (\code{hugo_symbol},
 \code{alias}) with one row for each pair.}
+
+\item{supress_warnings}{If TRUE, function will return a list containing a dataframe of recoded results and a names vector of recoded aliases in data}
 }
 \value{
 A dataframe with recoded Hugo Symbol columns
@@ -24,12 +26,11 @@ which aliases to replace and supports IMPACT panel alias replacement only at thi
 Custom tables can be provided as long as \code{hugo_symbol} and \code{alias} columns exist.
 }
 \examples{
-mut <- rename_columns(gnomeR::mutations[1:5, ])
-mut$hugo_symbol
+genomic_df <- rename_columns(gnomeR::mutations[1:5, ])
 
 alias_table <- data.frame("hugo_symbol" = c("New Symbol", "New Symbol2"),
 "alias" = c("PARP1", "AKT1"))
 
-recode_alias(mut, alias_table)
-
+recode_alias(genomic_df, alias_table)
+recode_alias(genomic_df, alias_table, supress_warnings = TRUE)
 }
