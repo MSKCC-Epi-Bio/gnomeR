@@ -99,6 +99,11 @@ create_gene_binary <- function(samples = NULL,
     cli::cli_abort("{.code {not_df}} must be a data.frame")
   }
 
+  # * samples ------
+  if (!(is.null(samples) | is.character(samples))) {
+    cli::cli_abort("{.code samples} must be a character vector or `NULL`")
+  }
+
   # * mut_type-----
   mut_type <- match.arg(mut_type)
 
