@@ -57,6 +57,7 @@ reformat_fusion <- function(fusions) {
     "-AS" = "_AS",
     "HLA-" = "HLA_",
     "NKX2-" = "NKX2_",
+    "NKX3-" = "NKX3_",
 
     # specific edits
     "SOX2-OT"= "SOXOT",

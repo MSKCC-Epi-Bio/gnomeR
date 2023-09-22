@@ -30,11 +30,14 @@ Groha
 Guo
 Gusev
 Heins
+IGR
 IH
 Intragenic
+Intron
 JAMA
 JCO
 KEAP
+KRAS
 Kantheti
 Kehl
 LUAD
@@ -75,8 +78,10 @@ Shen
 Shmulevich
 Sjoberg
 TCGA
+TERT
 TGFB
 TP
+UTR
 Uno
 Wnt
 Yu
@@ -163,4 +168,5 @@ validationStatus
 varclass
 variantAllele
 vartype
+vectorization
 ’s

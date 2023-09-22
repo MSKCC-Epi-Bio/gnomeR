@@ -51,7 +51,7 @@ subset_by_frequency <- function(gene_binary, t = .1, other_vars = NULL) {
 
   # Remove all NA columns ----------------------------------------------
   all_na_alt <- apply(alt_only,  2, function(x) {
-    sum(is.na(x)) == nrow(alt_only)
+     sum(is.na(x)) == nrow(alt_only)
   })
 
   all_non_na_alt <- names(all_na_alt[!all_na_alt])
@@ -59,12 +59,7 @@ subset_by_frequency <- function(gene_binary, t = .1, other_vars = NULL) {
 
 
   # Check Numeric Class -----------------------------------------------------
-  is_numeric <- apply(alt_only, 2, is.numeric)
-
-  if(!(all(is_numeric))) {
-    cli::cli_abort("All alterations in your gene binary must be numeric and only can have values of 0, 1, or NA.
-                   Please coerce the following columns to numeric, or pass them to the `other_vars` argument before proceeding: {.field {names(is_numeric[!is_numeric])}}")
-  }
+  .abort_if_not_numeric(alt_only)
 
 
   # Calc Frequency ----------------------------------------------------------

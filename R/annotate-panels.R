@@ -129,7 +129,10 @@ annotate_specific_panel <- function(gene_binary,
                                     na_genes, ...) {
 
   mut_sub <- gene_binary[gene_binary$sample_id %in% samples_in_panel,]
-  mut_sub[,stats::na.omit(match(na_genes, colnames(mut_sub)))] <- NA
+  index_na_genes <- stats::na.omit(match(na_genes, colnames(mut_sub)))
+
+  # By default these return logical so coerce into numeric for checks later
+  mut_sub[, index_na_genes] <- as.numeric(NA)
 
   return(mut_sub)
 

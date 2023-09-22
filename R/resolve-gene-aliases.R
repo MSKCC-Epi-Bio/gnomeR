@@ -12,7 +12,7 @@
 #' Custom tables can be provided as long as `hugo_symbol` and `alias` columns exist.
 #'
 #' @param genomic_df a gene_binary object
-#' @param alias_table a string indicating "impact", or a  dataframe with at least two columns (`hugo_symbol`,
+#' @param alias_table a string indicating "impact" or "genie", or a dataframe with at least two columns (`hugo_symbol`,
 #' `alias`) with one row for each pair.
 #' @param supress_warnings If TRUE, function will return a list containing a dataframe of recoded results and a names vector of recoded aliases in data
 #'
@@ -42,9 +42,11 @@ recode_alias <- function(genomic_df, alias_table = "impact", supress_warnings = 
   alias_table <- switch(
     class(alias_table),
     "character" = {
-      choices_arg <- c("impact", "IMPACT")
+      choices_arg <- c("impact", "IMPACT", "genie", "GENIE")
       lc = tolower(match.arg(alias_table, choices = choices_arg))
-      switch(lc, "impact" = gnomeR::impact_alias_table)
+      switch(lc,
+             "impact" = gnomeR::impact_alias_table,
+             "genie" = gnomeR::genie_alias_table)
       },
 
     "data.frame" = {
