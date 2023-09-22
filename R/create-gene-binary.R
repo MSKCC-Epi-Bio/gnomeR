@@ -105,7 +105,7 @@ create_gene_binary <- function(samples = NULL,
   }
 
   # * mut_type-----
-  mut_type <- match.arg(mut_type)
+  mut_type <- rlang::arg_match(mut_type)
 
   # * Specify Panel --------
   # must be a known character or data frame with specified column
