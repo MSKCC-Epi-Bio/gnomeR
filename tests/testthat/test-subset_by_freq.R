@@ -84,10 +84,10 @@ test_that("Error when non numeric cols", {
     mutate(sample_id = as.character(1:nrow(.)))
 
   bm <- bm %>%
-    mutate(across(everything(), ~as.character(.x)))
+    mutate(gene10 = as.character(gene10))
 
   expect_error(sub <- bm %>%
-                 subset_by_frequency(t = .5))
+                 subset_by_frequency(t = .5), "gene10$")
 
 })
 
