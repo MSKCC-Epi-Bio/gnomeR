@@ -29,7 +29,7 @@ mutation_viz <- function(mutation, ...) {
       samplevar = ggsamplevar,
       topgenes = ggtopgenes,
       genecor = gggenecor) %>%
-      purrr::map(exec, !!!mutation)
+      purrr::map(., ~rlang::exec(.x, mutation))
 
   return(all_plots)
 }
@@ -48,7 +48,7 @@ mutation_viz <- function(mutation, ...) {
 #'
 
 add.perc<-function(x,...){geom_text(
-  aes(label=paste0(round(stat(.data$prop)*100,1),"%"), group=1),
+  aes(label=paste0(round(after_stat(.data$prop)*100,1),"%"), group=1),
   stat="count",
   hjust=0, nudge_y = -0.25,...)}
 
@@ -71,21 +71,21 @@ ggvarclass <- function(mutation) {
   # relevel Variant Classification by frequency
   mutation <- mutation %>%
     mutate(Variant_Classification =
-             stringr::str_replace_all(.data$variant_classification, "_", " ")) %>%
-    mutate(Variant_Classification = .data$variant_classification %>%
+             gsub("_", " ", .data$variant_classification)) %>%
+    mutate(Variant_Classification = .data$Variant_Classification %>%
              forcats::fct_infreq() %>%
              forcats::fct_rev())
 
-  p.class <- mutation %>%
-    ggplot(aes(x = .data$variant_classification,
-               fill = .data$variant_classification)) +
+  mutp.class <- mutation %>%
+    ggplot(aes(x = .data$Variant_Classification,
+               fill = .data$Variant_Classification)) +
     geom_bar() +
     coord_flip() +
     theme(legend.position="none") +
     ggtitle("Variant Classification Count") +
     xlab("Variant Classification")
 
-  p.class
+  mutp.class
 }
 
 #' Barplot of Variant Type Counts
@@ -222,11 +222,14 @@ ggtopgenes <- function(mutation, n_genes = 10) {
              forcats::fct_rev())
 
   p.genes <-  mutation2 %>%
-    ggplot(aes(x = .data$hugo_symbol,
-               fill = .data$variant_classification)) +
+    mutate(Variant_classification = as.factor(.data$variant_classification))%>%
+    ggplot(aes(x = .data$Hugo_Symbol,
+               fill = .data$Variant_classification)) +
     geom_bar(position = "stack") +
     coord_flip() +
-    ggtitle("Top genes variants classification") + xlab("Gene Name")
+    ggtitle("Top genes variants classification") + xlab("Gene Name")+
+    ylab("Count")+
+    labs(fill="Variant Classification")
 
   p.genes
 }

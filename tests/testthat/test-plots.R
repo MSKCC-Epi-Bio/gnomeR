@@ -232,7 +232,7 @@ test_that("set_gnomer_palette() works", {
 # plotting-functions------------------------------------------------------------
 test_that("mutation_viz works", {
   mutations1 <-
-    mutations |>
+    gnomeR::mutations |>
     filter(mutationStatus != "NA")
 
   mut_plots <- mutation_viz(mutations1)
