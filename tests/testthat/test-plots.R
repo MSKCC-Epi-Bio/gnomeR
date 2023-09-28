@@ -27,7 +27,7 @@
 # }
 #
 # )
-changes = FALSE
+changes = TRUE
 # gnomeR-color-palette ---------------------------------------------------------
 test_that("test incorrrect palette name", {
   expect_error(gnomer_palette("wrong", 4, type = "discrete", plot_col = FALSE,

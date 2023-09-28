@@ -9,3 +9,5 @@ docs
 /doc/
 /Meta/
 .svg
+tests/testthat/_snaps/
+

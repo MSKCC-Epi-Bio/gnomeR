@@ -357,21 +357,9 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=lifecycle"
     },
-    "19": {
-      "@type": "SoftwareApplication",
-      "identifier": "vdiffr",
-      "name": "vdiffr",
-      "provider": {
-        "@id": "https://cran.r-project.org",
-        "@type": "Organization",
-        "name": "Comprehensive R Archive Network (CRAN)",
-        "url": "https://cran.r-project.org"
-      },
-      "sameAs": "https://CRAN.R-project.org/package=vdiffr"
-    },
     "SystemRequirements": null
   },
-  "fileSize": "2593.74KB",
+  "fileSize": "2353.97KB",
   "releaseNotes": "https://github.com/MSKCC-Epi-Bio/gnomeR/blob/master/NEWS.md",
   "readme": "https://github.com/MSKCC-Epi-Bio/gnomeR/blob/main/README.md",
   "contIntegration": ["https://github.com/MSKCC-Epi-Bio/gnomeR/actions", "https://app.codecov.io/gh/MSKCC-Epi-Bio/gnomeR?branch=main"],
