@@ -77,8 +77,7 @@ ggvarclass <- function(mutation) {
              forcats::fct_rev())
 
   mutp.class <- mutation %>%
-    ggplot(aes(x = .data$Variant_Classification,
-               fill = .data$Variant_Classification)) +
+    ggplot(aes(x = .data$Variant_Classification)) +
     geom_bar() +
     coord_flip() +
     theme(legend.position="none") +
