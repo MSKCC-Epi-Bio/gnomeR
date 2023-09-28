@@ -142,6 +142,18 @@
         "url": "https://cran.r-project.org"
       },
       "sameAs": "https://CRAN.R-project.org/package=genieBPC"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "vdiffr",
+      "name": "vdiffr",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=vdiffr"
     }
   ],
   "softwareRequirements": {
@@ -359,7 +371,7 @@
     },
     "SystemRequirements": null
   },
-  "fileSize": "2353.97KB",
+  "fileSize": "2591.928KB",
   "releaseNotes": "https://github.com/MSKCC-Epi-Bio/gnomeR/blob/master/NEWS.md",
   "readme": "https://github.com/MSKCC-Epi-Bio/gnomeR/blob/main/README.md",
   "contIntegration": ["https://github.com/MSKCC-Epi-Bio/gnomeR/actions", "https://app.codecov.io/gh/MSKCC-Epi-Bio/gnomeR?branch=main"],
