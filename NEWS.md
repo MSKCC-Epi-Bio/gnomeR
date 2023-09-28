@@ -8,7 +8,7 @@
 - Added IMPACT IH3 and IH4 panels to internal impact panels used for NA annotation in `create_gene_binary(specify_panel)`
 - Added GENIE BPC alias table so users can now use `create_gene_binary(recode_aliases = "genie")` to check and recode aliases for genes in any of the GENIE BPC panels.
 - Fixed bug in `add_pathways()` where `custom_pathways` wasn't catching all types of alterations when `GENE.all` was used due to `paste0()` vectorization.
-- Added unit tests for gnomeR plots/visuals.
+- Added unit tests for gnomeR plots/visuals (#144).
 
 # gnomeR 1.2.0
 

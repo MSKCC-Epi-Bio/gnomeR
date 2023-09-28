@@ -6,3 +6,6 @@ doc
 Meta
 .DS_Store
 docs
+/doc/
+/Meta/
+.svg
