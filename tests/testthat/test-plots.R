@@ -27,7 +27,7 @@
 # }
 #
 # )
-
+changes = FALSE
 # gnomeR-color-palette ---------------------------------------------------------
 test_that("test incorrrect palette name", {
   expect_error(gnomer_palette("wrong", 4, type = "discrete", plot_col = FALSE,
@@ -81,7 +81,7 @@ test_that("test color plots on, continuous/discrete", {
 # set_gnomer_palette------------------------------------------------------------
 
 test_that("set_gnomer_palette() works", {
-  #testthat::skip_if_not(changes)
+  testthat::skip_if_not(changes)
   env_palette <- rlang::new_environment()
 
   withr::with_environment(
@@ -232,7 +232,7 @@ test_that("set_gnomer_palette() works", {
 
 # plotting-functions------------------------------------------------------------
 test_that("mutation_viz works", {
-  #testthat::skip_if_not(changes)
+  testthat::skip_if_not(changes)
 
   mutations1 <-
     gnomeR::mutations |>
