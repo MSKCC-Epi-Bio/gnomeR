@@ -221,6 +221,25 @@ recode_cna <- function(alteration_vector){
   return(names)
 }
 
+#' Check if all gene_binary columns except sample_id and other_vars are numeric
+#'
+#' @param alt_data a binary data frame created from `create_gene_binary()`
+#' @return an error message if not all columns are numeric
+#' @keywords internal
 
+.abort_if_not_numeric = function(alt_data){
+
+  # remove sample ID if it exists
+  alt_data <- alt_data %>%
+    select(-any_of("sample_id"))
+
+  is_numeric <- purrr::map_lgl(alt_data, is.numeric)
+  not_numeric <- names(is_numeric[!is_numeric])
+
+  if(length(not_numeric) > 0) {
+    cli::cli_abort("All alterations in your gene binary must be numeric and only can have values of 0, 1, or NA.
+                   Please coerce the following columns to numeric or pass them to the `other_vars` argument before proceeding: {.field {not_numeric}}")
+  }
+}
 
 
