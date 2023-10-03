@@ -113,9 +113,48 @@ test_that("some but not all samples selected have alterations ", {
 })
 
 
+test_that("Check func works fine when we enter mix of impact samples IM3 and IM5", {
+
+  sm <- c('P-0001446-T01-IM3', 'P-0005216-T01-IM5')
+  expect_no_error(create_gene_binary(sample=sm, mutation=gnomeR::mutations))
+  expect_equal(nrow(create_gene_binary(sample=sm, mutation=gnomeR::mutations)), 2)
+
+})
+
+
 # NON UNIQUE SAMPLES in samples ARGUMENT?
+# test_that("Check when sample ids with duplicate values are entered", {
+#
+#   mut_valid_sample_ids<- (gnomeR::mutations$sampleId)[1:10]
+#
+#   #should get unique rows after transposing
+#   sub <- create_gene_binary(sample=mut_valid_sample_ids, mutation=gnomeR::mutations)
+#   expect_equal(nrow(sub), length(unique(mut_valid_sample_ids)))
+#
+#   sub_fs <- create_gene_binary(sample=mut_valid_sample_ids, fusion =gnomeR::sv)
+#   expect_equal(nrow(sub_fs), length(unique(mut_valid_sample_ids)))
+#
+#   sub_cna <- create_gene_binary(sample=mut_valid_sample_ids, cna =gnomeR::cna)
+#   expect_equal(nrow(sub_cna), length(unique(mut_valid_sample_ids)))
+#
+# })
+
+
 
 # Test data type arguments ------------------------------------------------
+test_that("Check what happens and what message we get if samples are entered as a dataframe and not a char vect", {
+
+  # get sample IDs that are in both mutations and sv data
+  sm_inboth_mf <- merge(x=gnomeR::mutations,y=gnomeR::sv, by="sampleId") %>%
+    select(sampleId) %>%
+    unique()
+
+  #get fusion data for these IDs
+  expect_error(create_gene_binary(samples = sm_inboth_mf, fusion =gnomeR::sv))
+
+})
+
+
 
 # test with and without mut/fusion/cna args passed
 
@@ -152,8 +191,17 @@ test_that("test inputting mut/fusion/cna args can leads to a data.frame output",
 
 test_that("test incorrectly specified arg", {
 
-  expect_error(create_gene_binary(mutation = mut2,mut_type = "somatic_only",
+  mut<- gnomeR::mutations
+  expect_no_error(create_gene_binary(mutation = mut, mut_type = "somatic_only",
                              specify_panel = "no"))
+  expect_error(create_gene_binary(mutation = mut,
+                                  mut_type = "somatic only",
+                                  specify_panel = "no"))
+
+  expect_error(create_gene_binary(mutation = mut,
+                                  mut_type = "s",
+                                  specify_panel = "no"))
+
 })
 
 
@@ -178,7 +226,6 @@ test_that("test inclusion of NAs in mut_type ", {
   mut2$mutationStatus[11:15]<-""
 
   # NA included by default (germline_omitted)
-  see <- create_gene_binary(mutation = mut2, specify_panel = "no")
   see <- create_gene_binary(mutation = mut2, specify_panel = "no")
   check <-see$TP53[which(see$sample_id=="P-0001128-T01-IM3")]
   expect_equal(check, 1)

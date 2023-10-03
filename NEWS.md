@@ -9,6 +9,8 @@
 - Added GENIE BPC alias table so users can now use `create_gene_binary(recode_aliases = "genie")` to check and recode aliases for genes in any of the GENIE BPC panels.
 - Fixed bug in `add_pathways()` where `custom_pathways` wasn't catching all types of alterations when `GENE.all` was used due to `paste0()` vectorization.
 - Changed some arguments to strict matching (`rlang::arg_match()`) instead of partial matching (`match.arg()`) (e.g. `mut_type = "s"` doesn't work anymore and must be fully specified `mut_type = "somatic_only"`).
+- Added unit tests for gnomeR plots/visuals (#144).
+
 
 # gnomeR 1.2.0
 

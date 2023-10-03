@@ -59,7 +59,8 @@ Suggests:
     spelling,
     covr, 
     cbioportalR, 
-    genieBPC
+    genieBPC,
+    vdiffr
 Remotes: karissawhiting/cbioportalR
 VignetteBuilder: knitr
 Language: en-US
