@@ -66,6 +66,7 @@ Any gene column with no suffix will be assumed to be a mutation.</p>
 <span>  <span class="va">gene_binary</span>,</span>
 <span>  pathways <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="fu">gnomeR</span><span class="fu">::</span><span class="va"><a href="pathways.html">pathways</a></span><span class="op">)</span><span class="op">)</span>,</span>
 <span>  custom_pathways <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  other_vars <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  count_pathways_by <span class="op">=</span> <span class="fu">deprecated</span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -91,6 +92,11 @@ is required to mark a 1 for that pathway.</p></dd>
 <dd><p>a vector of alterations to annotate as a single pathway, or a list of custom pathways (see <code><a href="pathways.html">gnomeR::pathways</a></code> as example).
 You must specify the alteration type for each gene using <code>.mut</code>, <code>.Amp</code>, <code>.Del</code> suffix, e.g. <code>c("TP53.mut", "CDKN2A.Amp")</code>. If you wish to count any type of
 alteration on that gene towards the pathway you can use the <code>.any</code> suffix (e.g. <code>c("TP53.any")</code>).</p></dd>
+
+
+<dt>other_vars</dt>
+<dd><p>One or more column names (quoted or unquoted) in data to be retained
+in resulting data frame. Default is NULL.</p></dd>
 
 
 <dt>count_pathways_by</dt>

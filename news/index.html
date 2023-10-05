@@ -55,7 +55,7 @@
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="gnomer-development-version">gnomeR (development version)<a class="anchor" aria-label="anchor" href="#gnomer-development-version"></a></h2>
 <ul><li>Deprecated <code>freq_cutoff</code>, <code>freq_cutoff_by_gene</code>, and <code>gene_subset</code> arguments in <code><a href="../reference/tbl_genomic.html">tbl_genomic()</a></code>. It is now recommended that users use <code><a href="../reference/subset_by_frequency.html">subset_by_frequency()</a></code> instead before passing data to <code><a href="../reference/tbl_genomic.html">tbl_genomic()</a></code>.</li>
-<li>Added <code>other_vars</code> argument to <code><a href="../reference/subset_by_frequency.html">subset_by_frequency()</a></code> to allow retention of other clinical vars when using function within pipeline.</li>
+<li>Added <code>other_vars</code> argument to <code><a href="../reference/subset_by_frequency.html">subset_by_frequency()</a></code>, <code><a href="../reference/subset_by_panel.html">subset_by_panel()</a></code>, <code><a href="../reference/summarize_by_gene.html">summarize_by_gene()</a></code> and <code><a href="../reference/add_pathways.html">add_pathways()</a></code> to allow retention of other clinical vars when using functions within pipeline.</li>
 <li>Deprecated <code>count_pathways_by</code> argument of <code><a href="../reference/add_pathways.html">add_pathways()</a></code> function. Now, user must specify which specific alteration to count towards the pathway via the <code>.mut</code>, <code>.Amp</code>, <code>.Del</code>, <code>.fus</code> suffix (e.g. <code>custom_pathways = c('TP53.mut', 'APC.Del)</code>).</li>
 <li>Added IMPACT QA Vignette and GENIE BPC vignette</li>
 <li>Added <code>subset_by_panel</code> function allowing users to easily subset an alteration dataframe and include only genes in a specific panel</li>
@@ -63,6 +63,7 @@
 </li>
 <li>Added GENIE BPC alias table so users can now use <code>create_gene_binary(recode_aliases = "genie")</code> to check and recode aliases for genes in any of the GENIE BPC panels.</li>
 <li>Fixed bug in <code><a href="../reference/add_pathways.html">add_pathways()</a></code> where <code>custom_pathways</code> wasn’t catching all types of alterations when <code>GENE.all</code> was used due to <code><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0()</a></code> vectorization.</li>
+<li>Changed some arguments to strict matching (<code><a href="https://rlang.r-lib.org/reference/arg_match.html" class="external-link">rlang::arg_match()</a></code>) instead of partial matching (<code><a href="https://rdrr.io/r/base/match.arg.html" class="external-link">match.arg()</a></code>) (e.g. <code>mut_type = "s"</code> doesn’t work anymore and must be fully specified <code>mut_type = "somatic_only"</code>).</li>
 <li>Added unit tests for gnomeR plots/visuals (<a href="https://github.com/MSKCC-Epi-Bio/gnomeR/issues/144" class="external-link">#144</a>).</li>
 </ul></div>
     <div class="section level2">
