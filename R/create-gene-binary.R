@@ -152,6 +152,7 @@ create_gene_binary <- function(samples = NULL,
       include_silent = include_silent
     )
   )
+  names_mut_dict <- attr(mutation, "names_dict")
 
   # * Fusion checks  ----------
   fusion <- switch(!is.null(fusion),
@@ -249,7 +250,8 @@ create_gene_binary <- function(samples = NULL,
       mut_type = mut_type,
       snp_only = snp_only,
       include_silent = include_silent,
-      specify_panel = specify_panel
+      specify_panel = specify_panel,
+      names_mut_dict = names_mut_dict
     )
   )
 
@@ -377,7 +379,8 @@ create_gene_binary <- function(samples = NULL,
                                    mut_type,
                                    snp_only,
                                    include_silent,
-                                   specify_panel) {
+                                   specify_panel,
+                                   names_mut_dict) {
 
   # apply filters --------------
 
@@ -411,7 +414,7 @@ create_gene_binary <- function(samples = NULL,
 
       if ((blank_muts > 0)) {
         cli::cli_alert_warning(
-          "{(blank_muts)} mutations have {.code NA} or blank in mutation status column instead of 'SOMATIC' or 'GERMLINE'. These were assumed to be 'SOMATIC' and were retained in the resulting binary matrix.")
+          "{(blank_muts)} mutations have {.code NA} or blank in the {.field {dplyr::first(c(names_mut_dict['mutation_status'], 'mutation_status'), na_rm = TRUE)}} column instead of 'SOMATIC' or 'GERMLINE'. These were assumed to be 'SOMATIC' and were retained in the resulting binary matrix.")
       }
     },
     "somatic_only" = {

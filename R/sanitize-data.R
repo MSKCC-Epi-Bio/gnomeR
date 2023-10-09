@@ -15,6 +15,7 @@ sanitize_mutation_input <- function(mutation, include_silent, ...)  {
   arguments <- list(...)
 
   mutation <- rename_columns(mutation)
+  names_dict <- attr(mutation, "names_dict")
   column_names <- colnames(mutation)
 
   # Check required columns & data types ------------------------------------------
@@ -57,28 +58,29 @@ sanitize_mutation_input <- function(mutation, include_silent, ...)  {
 
   # Variant_Type ---
     if (!("variant_type" %in% column_names)) {
-      if (("reference_allele" %in% column_names) & ("tumor_seq_allele2" %in% column_names)) {
+      if (("reference_allele" %in% column_names) & ("tumor_seq_allele_2" %in% column_names)) {
         mutation %>%
           mutate(
             reference_allele = as.character(.data$reference_allele),
-            tumor_seq_allele2 = as.character(.data$tumor_seq_allele2),
+            tumor_seq_allele_2 = as.character(.data$tumor_seq_allele_2),
             variant_type = case_when(
               .data$reference_allele %in% c("A", "T", "C", "G") &
-                .data$tumor_seq_allele2 %in% c("A", "T", "C", "G") ~ "SNP",
-              nchar(.data$tumor_seq_allele2) < nchar(.data$reference_allele) |
-                .data$tumor_seq_allele2 == "-" ~ "DEL",
+                .data$tumor_seq_allele_2 %in% c("A", "T", "C", "G") ~ "SNP",
+              nchar(.data$tumor_seq_allele_2) < nchar(.data$reference_allele) |
+                .data$tumor_seq_allele_2 == "-" ~ "DEL",
               .data$reference_allele == "-" |
-                nchar(.data$tumor_seq_allele2) > nchar(.data$reference_allele) ~ "INS",
-              nchar(.data$reference_allele) == 2 & nchar(.data$tumor_seq_allele2) == 2 ~ "DNP",
-              nchar(.data$reference_allele) == 3 & nchar(.data$tumor_seq_allele2) == 3 ~ "TNP",
-              nchar(.data$reference_allele) > 3 & nchar(.data$tumor_seq_allele2) == nchar(.data$reference_allele) ~ "ONP",
+                nchar(.data$tumor_seq_allele_2) > nchar(.data$reference_allele) ~ "INS",
+              nchar(.data$reference_allele) == 2 & nchar(.data$tumor_seq_allele_2) == 2 ~ "DNP",
+              nchar(.data$reference_allele) == 3 & nchar(.data$tumor_seq_allele_2) == 3 ~ "TNP",
+              nchar(.data$reference_allele) > 3 & nchar(.data$tumor_seq_allele_2) == nchar(.data$reference_allele) ~ "ONP",
               TRUE ~ "Undefined"
             )
           )
 
-        cli::cli_warn("Column {.field variant_type} is missing from your data. We inferred variant types using {.field reference_allele} and {.field tumor_seq_allele2} columns")
+        cli::cli_warn(c("Column {.field variant_type} is missing from your data. We inferred variant types using ",
+        "{.field {dplyr::first(c(names_dict['reference_allele'], 'reference_allele'), na_rm = TRUE)}} and {.field {dplyr::first(c(names_dict['tumor_seq_allele_2'], 'tumor_seq_allele_2'), na_rm = TRUE)}} columns"))
       } else {
-        cli::cli_abort("Column {.field variant_type} is missing from your data and {.field reference_allele} and {.field tumor_seq_allele2}
+        cli::cli_abort("Column {.field variant_type} is missing from your data and {.field reference_allele} and {.field tumor_seq_allele_2}
                               columns were not available from which to infer variant type.
                               To proceed, add a column specifying {.field variant_type} (e.g. {.code mutate(<your-mutation-df>, variant_type = 'SNP')}")
       }

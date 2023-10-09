@@ -10,7 +10,8 @@
   mut_type,
   snp_only,
   include_silent,
-  specify_panel
+  specify_panel,
+  names_mut_dict
 )
 }
 \arguments{
