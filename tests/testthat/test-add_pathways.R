@@ -98,7 +98,8 @@ test_that("test TP53.mut and TP53 are processed the same way", {
 
   cust2 <- add_pathways(gene_binary = binmat2,
                         pathways = NULL,
-                        custom_pathways = c("PARP.mut", "AKT1.mut", "EGFR.Amp"))
+                        custom_pathways = c("PARP.mut", "AKT1.mut", "EGFR.Amp")) %>%
+    rename_with(., ~str_remove_all(.x, ".mut"), contains(".mut"),)
 
 
   expect_equal(cust1, cust2)
@@ -107,7 +108,8 @@ test_that("test TP53.mut and TP53 are processed the same way", {
                         custom_pathways = c("PARP.mut", "AKT1.mut"))
 
   path2 <- add_pathways(gene_binary = binmat2,
-                        custom_pathways = c("PARP.mut", "AKT1.mut"))
+                        custom_pathways = c("PARP.mut", "AKT1.mut")) %>%
+    rename_with(., ~str_remove_all(.x, ".mut"), contains(".mut"),)
 
 
   expect_equal(path1, path2)

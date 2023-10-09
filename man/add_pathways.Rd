@@ -11,6 +11,7 @@ add_pathways(
   gene_binary,
   pathways = c(names(gnomeR::pathways)),
   custom_pathways = NULL,
+  other_vars = NULL,
   count_pathways_by = deprecated()
 )
 }
@@ -25,6 +26,9 @@ is required to mark a 1 for that pathway.}
 \item{custom_pathways}{a vector of alterations to annotate as a single pathway, or a list of custom pathways (see \code{gnomeR::pathways} as example).
 You must specify the alteration type for each gene using \code{.mut}, \code{.Amp}, \code{.Del} suffix, e.g. \code{c("TP53.mut", "CDKN2A.Amp")}. If you wish to count any type of
 alteration on that gene towards the pathway you can use the \code{.any} suffix (e.g. \code{c("TP53.any")}).}
+
+\item{other_vars}{One or more column names (quoted or unquoted) in data to be retained
+in resulting data frame. Default is NULL.}
 
 \item{count_pathways_by}{deprecated}
 }
@@ -51,4 +55,3 @@ gene_binary <- create_gene_binary(mutation = gnomeR::mutations,
 pathway_df <- add_pathways(gene_binary, pathways = "Notch")
 
 }
-\keyword{internal}
