@@ -393,6 +393,10 @@ create_gene_binary <- function(samples = NULL,
     )
   }
 
+  if (!is.null(samples)){
+    mutation <- mutation %>%
+      filter(sample_id %in% samples)
+  }
 
   switch(mut_type,
     "all" = {
