@@ -38,7 +38,7 @@ subset_by_frequency <- function(gene_binary, t = .1, other_vars = NULL) {
 
   .check_required_cols(gene_binary, "sample_id", "gene_binary")
 
-  # Capture Other Columns to Retain -----------------------------------
+  # Other Vars - Capture Other Columns to Retain -----------------------------------
 
   other_vars <-
     .select_to_varnames({{ other_vars }},

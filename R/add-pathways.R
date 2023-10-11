@@ -20,8 +20,9 @@
 #' @param custom_pathways a vector of alterations to annotate as a single pathway, or a list of custom pathways (see `gnomeR::pathways` as example).
 #' You must specify the alteration type for each gene using `.mut`, `.Amp`, `.Del` suffix, e.g. `c("TP53.mut", "CDKN2A.Amp")`. If you wish to count any type of
 #' alteration on that gene towards the pathway you can use the `.any` suffix (e.g. `c("TP53.any")`).
+#' @param other_vars One or more column names (quoted or unquoted) in data to be retained
+#' in resulting data frame. Default is NULL.
 #' @param count_pathways_by deprecated
-#' @keywords internal
 #' @return a data frame: each sample is a row, columns are pathways, with values of 0/1 depending on pathway alteration status.
 #' @export
 #' @source Sanchez-Vega, F., Mina, M., Armenia, J., Chatila, W. K., Luna, A., La, K. C., Dimitriadoy, S., Liu, D. L., Kantheti, H. S., Saghafinia, S., Chakravarty, D., Daian, F., Gao, Q., Bailey, M. H., Liang, W. W., Foltz, S. M., Shmulevich, I., Ding, L., Heins, Z., Ochoa, A., … Schultz, N. (2018). Oncogenic Signaling Pathways in The Cancer Genome Atlas. Cell, 173(2), 321–337.e10. <https://doi.org/10.1016/j.cell.2018.03.035>
@@ -36,6 +37,7 @@
 add_pathways <- function(gene_binary,
                          pathways = c(names(gnomeR::pathways)),
                          custom_pathways = NULL,
+                         other_vars = NULL,
                          count_pathways_by = deprecated()) {
 
   # Check arguments -----------------------------------------------------------
@@ -70,7 +72,8 @@ add_pathways <- function(gene_binary,
          cli::cli_warn("Ignoring {.code {not_valid}}: not a known pathway. See {.code gnomeR::pathways}"))
 
 
-  # Custom pathways ----
+  # Process Custom Pathways ----
+
   switch(!(class(custom_pathways) %in% c("NULL", "character", "list")),
          cli::cli_abort("{.code custom_pathways} must be character vector, or list"))
 
@@ -127,33 +130,47 @@ add_pathways <- function(gene_binary,
   pathways <- all_path[pathways]
   final_paths <- c(custom_pathways, pathways)
 
-  # prep data ------------------------------------------------------------------
-  all_cols <- colnames(gene_binary)
+  # Prep data ------------------------------------------------------------------
+  # * Other Vars - Capture Other Columns to Retain ----------------
+
+  other_vars <-
+    .select_to_varnames({{ other_vars }},
+                        data = gene_binary,
+                        arg_name = "other_vars"
+    )
+
+  # data frame of only alterations
+  alt_only <- select(gene_binary, -"sample_id", -any_of(other_vars))
+
+
+  all_cols <- colnames(alt_only)
   mut_cols <- !(str_detect(all_cols, ".Amp|.Del|.fus"))
 
-  # rename mut cols -assume all non CNA/Fusion are mutations
+  # * Rename .mut columns (assume all non CNA/Fusion are mutations) -----
+
   if (any(mut_cols)) {
 
     # in case any columns already had .mut suffix
     all_cols[mut_cols] <- str_remove(all_cols[mut_cols], ".mut")
 
+    # now add .mut
     all_cols[mut_cols] <- paste0(all_cols[mut_cols], ".mut")
 
-    colnames(gene_binary) <- all_cols
+    colnames(alt_only) <- all_cols
   }
 
   # process pathways ---------------------------------------------------------------
-  path_out <- purrr::imap_dfc(final_paths, ~ .sum_alts_in_pathway(gene_binary = gene_binary,
+  path_out <- purrr::imap_dfc(final_paths, ~ .sum_alts_in_pathway(gene_binary = alt_only,
                                                                  pathway_list_item = .x,
                                                                  pathway_name = .y))
 
   # return data  ---------------------------------------------------------------
 
-  # remove .mut that we added
-  if (any(mut_cols)) {
-    all_cols[mut_cols] <- str_remove(all_cols[mut_cols], ".mut")
-    colnames(gene_binary) <- all_cols
-  }
+  # # remove .mut that we added
+  # if (any(mut_cols)) {
+  #   all_cols[mut_cols] <- str_remove(all_cols[mut_cols], ".mut")
+  #   colnames(alt_only) <- all_cols
+  # }
 
   path_out <- gene_binary %>%
     bind_cols(path_out)

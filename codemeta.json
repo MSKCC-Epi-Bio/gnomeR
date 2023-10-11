@@ -8,13 +8,13 @@
   "codeRepository": "https://github.com/MSKCC-Epi-Bio/gnomeR",
   "issueTracker": "https://github.com/MSKCC-Epi-Bio/gnomeR/issues",
   "license": "https://spdx.org/licenses/MIT",
-  "version": "1.2.0.9003",
+  "version": "1.3.0",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
     "url": "https://r-project.org"
   },
-  "runtimePlatform": "R version 4.2.2 (2022-10-31)",
+  "runtimePlatform": "R version 4.2.2 (2022-10-31 ucrt)",
   "author": [
     {
       "@type": "Person",
@@ -142,6 +142,18 @@
         "url": "https://cran.r-project.org"
       },
       "sameAs": "https://CRAN.R-project.org/package=genieBPC"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "vdiffr",
+      "name": "vdiffr",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=vdiffr"
     }
   ],
   "softwareRequirements": {
@@ -359,7 +371,7 @@
     },
     "SystemRequirements": null
   },
-  "fileSize": "2300.908KB",
+  "fileSize": "2581.433KB",
   "releaseNotes": "https://github.com/MSKCC-Epi-Bio/gnomeR/blob/master/NEWS.md",
   "readme": "https://github.com/MSKCC-Epi-Bio/gnomeR/blob/main/README.md",
   "contIntegration": ["https://github.com/MSKCC-Epi-Bio/gnomeR/actions", "https://app.codecov.io/gh/MSKCC-Epi-Bio/gnomeR?branch=main"],

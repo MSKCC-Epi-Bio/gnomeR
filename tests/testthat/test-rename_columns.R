@@ -1,34 +1,5 @@
-#
-#
-# #thoughts so far:
-# # still need title case for binary matrix function
-#
-# cbioportalR::set_cbioportal_db("public")
-#
-#
-# test_that("test rename_columns runs with no errors", {
-#
-#   expect_error(rename_columns(gnomeR::muations), NA)
-#
-# })
-#
-# # do we want it to display what it changed? currently does not.
-# test_that("test rename_columns does not have messages", {
-#
-#   expect_message(rename_columns(gnomeR::muations), NA)
-#
-# })
-#
-#
-# test_that("test colnames are renamed properly", {
-#
-#   expect_snapshot(
-#     waldo::compare(colnames(gnomeR::muations),
-#                    colnames(rename_columns(gnomeR::muations)))
-#   )
-#
-# })
-#
+
+
 # #issue is that this is not title case
 test_that("binary matrix runs with renamed columns without error", {
 
@@ -43,4 +14,28 @@ test_that("binary matrix runs with renamed columns without error", {
 
 })
 
+test_that("test that it returns warning message with input data column names", {
 
+  mut2 <- rename_columns(gnomeR::mutations )
+  expect_true(!is.null(attr(mut2, "names_dict")))
+
+  cna <- rename_columns(gnomeR::cna)
+  expect_true(!is.null(attr(cna, "names_dict")))
+
+  fus <- rename_columns(gnomeR::sv)
+  expect_true(!is.null(attr(fus, "names_dict")))
+
+
+})
+
+
+
+
+test_that("test that it returns warning message with input data column names", {
+
+  mut2 <- capture_messages(create_gene_binary(mutation = gnomeR::mutations))
+
+  expect_true(str_detect(mut2[2], "mutationStatus"))
+
+
+})
