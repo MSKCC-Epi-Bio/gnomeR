@@ -259,7 +259,7 @@ create_gene_binary <- function(samples = NULL,
       all_alias_warnings <- c(all_alias_warnings, q_cna_warn)
 
       if (save_var_class) {
-        cna_vc_alias <- rename_cna %>%
+        cna_vc_alias <- cna_var_class %>%
           recode_alias(.,
                        alias_table = recode_aliases,
                        supress_warnings = TRUE)%>%
