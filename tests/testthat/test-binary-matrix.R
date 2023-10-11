@@ -489,8 +489,25 @@ test_that("test include_silent silent are removed when variant class col", {
 #
 # })
 
+# Test save_var_class argument --------------------------------
+
+test_that("check attribute 'var_class' based on save_var_class", {
+
+  test_true <- create_gene_binary(mutation = gnomeR::mutations,
+                                    save_var_class = TRUE)
+
+  test_false <- create_gene_binary(mutation = gnomeR::mutations)
+
+  expect_true(!is.null(attr(test_true, "var_class")))
+  expect_true(is.null(attr(test_false, "var_class")))
+})
+
+test_that("missing a column that's needed for save_var_class", {
+  expect_error(create_gene_binary(mutation = gnomeR::mutations %>%
+                                  select(-mutationType),
+                     save_var_class = TRUE))
+})
 
 
 # Other Misc Tests --------------------------------------------------------
-
 

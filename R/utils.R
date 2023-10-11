@@ -242,4 +242,3 @@ recode_cna <- function(alteration_vector){
   }
 }
 
-

@@ -1,29 +1,51 @@
 
 # General Test ----------------------------------------------------------------
 test_that("both sanitize functions run with no errors", {
-  expect_error(sanitize_mutation_input(gnomeR::mutations, include_silent = FALSE), NA)
-  expect_error(sanitize_mutation_input(gnomeR::mutations, include_silent = TRUE), NA)
-  expect_error(sanitize_fusion_input(gnomeR::sv), NA)
+  expect_error(sanitize_mutation_input(gnomeR::mutations, include_silent = FALSE,
+                                       save_var_class = FALSE), NA)
+  expect_error(sanitize_mutation_input(gnomeR::mutations, include_silent = TRUE,
+                                       save_var_class = FALSE), NA)
+  expect_error(sanitize_mutation_input(gnomeR::mutations, include_silent = TRUE,
+                                       save_var_class = TRUE), NA)
+  expect_error(sanitize_mutation_input(gnomeR::mutations, include_silent = FALSE,
+                                       save_var_class = TRUE), NA)
+  expect_error(sanitize_cna_input(gnomeR::cna,
+                                  save_var_class = FALSE), NA)
+  expect_error(sanitize_fusion_input(gnomeR::sv,
+                                     save_var_class = FALSE), NA)
 })
 
 
 test_that("both sanitize functions run without warnings",{
-  expect_warning(sanitize_mutation_input(gnomeR::mutations, include_silent = FALSE), NA)
-  expect_warning(sanitize_mutation_input(gnomeR::mutations, include_silent = TRUE), NA)
-  expect_warning(sanitize_fusion_input(gnomeR::sv), NA)
+  expect_warning(sanitize_mutation_input(gnomeR::mutations, include_silent = FALSE,
+                                         save_var_class = FALSE), NA)
+  expect_warning(sanitize_mutation_input(gnomeR::mutations, include_silent = TRUE,
+                                         save_var_class = FALSE), NA)
+  expect_warning(sanitize_mutation_input(gnomeR::mutations, include_silent = TRUE,
+                                       save_var_class = TRUE), NA)
+  expect_warning(sanitize_mutation_input(gnomeR::mutations, include_silent = FALSE,
+                                       save_var_class = TRUE), NA)
+  expect_warning(sanitize_cna_input(gnomeR::cna,
+                                    save_var_class = FALSE), NA)
+  expect_warning(sanitize_fusion_input(gnomeR::sv,
+                                       save_var_class = FALSE), NA)
 })
 
 test_that("test to see what happens if pass sanitize a vector", {
   expect_error(sanitize_mutation_input(gnomeR::mutations %>%
                                            select(-Hugo_Symbol),
-                                       include_silent = FALSE))
+                                       include_silent = FALSE,
+                                       save_var_class = FALSE))
+  expect_error(sanitize_cna_input(gnomeR::cna %>% select(-hugoGeneSymbol),
+                                  save_var_class = FALSE))
   expect_error(sanitize_fusion_input(gnomeR::sv %>%
-                                         select(-Hugo_Symbol)))
+                                         select(-Hugo_Symbol),
+                                     save_var_class = FALSE))
 })
 
 test_that("alterations properly recoded using internal func", {
   cna <- gnomeR::cna[1:10,]%>%
-    sanitize_cna_input()
+    sanitize_cna_input(save_var_class = FALSE)
 
   expect_true("amplification" %in% names(table(cna$alteration)))
   expect_true("deletion" %in% names(table(cna$alteration)))
@@ -55,7 +77,8 @@ test_that("test fusion in variant classification", {
   column_names <- colnames(mutation)
   mutation$variant_classification[mutation$variant_classification == "In_Frame_Del"] <- "fusion"
 
-  expect_error(sanitize_mutation_input(mutation, include_silent = F), "It looks like you have fusions in your mutation data frame.*")
+  expect_error(sanitize_mutation_input(mutation, include_silent = F,
+                                       save_var_class = F), "It looks like you have fusions in your mutation data frame.*")
 })
 
 # check suggested columns
@@ -67,12 +90,14 @@ test_that("test fusion in variant classification", {
   column_names <- colnames(mutation)
   mutation = mutation %>% select(-mutation_status)
 
-  expect_warning(sanitize_mutation_input(mutation, include_silent = F), "A mutation_status column*")
+  expect_warning(sanitize_mutation_input(mutation, include_silent = F,
+                                         save_var_class = F), "A mutation_status column*")
 
   mutation = mutation %>%
     mutate(mutation_status = "SOMATIC")
 
-  expect_no_error(sanitize_mutation_input(mutation, include_silent = F))
+  expect_no_error(sanitize_mutation_input(mutation, include_silent = F,
+                                          save_var_class = F))
 })
 
 # variant type
@@ -83,7 +108,8 @@ test_that("test variant type", {
   column_names <- colnames(mutation)
   mutation = mutation %>% select(-c(variant_type, reference_allele))
 
-  expect_error(sanitize_mutation_input(mutation, include_silent = F))
+  expect_error(sanitize_mutation_input(mutation, include_silent = F,
+                                       save_var_class = F))
 })
 
 test_that("test variant type inference", {
@@ -93,7 +119,8 @@ test_that("test variant type inference", {
   mutation = mutation %>% select(-c(variant_type))
   mutation$tumor_seq_allele_2 = mutation$reference_allele
 
-  expect_warning(sanitize_mutation_input(mutation, include_silent = F))
+  expect_warning(sanitize_mutation_input(mutation, include_silent = F,
+                                         save_var_class = F))
 })
 
 
@@ -104,19 +131,23 @@ test_that("test variant type inference error", {
   mutation$tumor_seq_allele_2 = mutation$reference_allele
   mutation = mutation %>% select(-c(variant_type, reference_allele))
 
-  expect_error(sanitize_mutation_input(mutation, include_silent = F))
+  expect_error(sanitize_mutation_input(mutation, include_silent = F,
+                                       save_var_class = F))
 })
 
 
 test_that("test that attributes are returned for input data col names", {
 
-  mutation <- sanitize_mutation_input(gnomeR::mutations, include_silent = F)
+  mutation <- sanitize_mutation_input(gnomeR::mutations, include_silent = F,
+                                      save_var_class = F)
   expect_true(!is.null(attr(mutation, "names_dict")))
 
-  cna <- sanitize_cna_input(gnomeR::cna)
+  cna <- sanitize_cna_input(gnomeR::cna,
+                            save_var_class = F)
   expect_true(!is.null(attr(cna, "names_dict")))
 
-  fus <- sanitize_fusion_input(gnomeR::sv)
+  fus <- sanitize_fusion_input(gnomeR::sv,
+                               save_var_class = F)
   expect_true(!is.null(attr(fus, "names_dict")))
 
 
@@ -130,10 +161,37 @@ test_that("Check input colname is used in messaging", {
     select(-variantType) %>%
     mutate(Tumor_Seq_Allele2 = NA)
 
-  x <- capture_warning(sanitize_mutation_input(mut_maf, include_silent = FALSE))
+  x <- capture_warning(sanitize_mutation_input(mut_maf, include_silent = FALSE,
+                                               save_var_class = F))
   expect_true(str_detect(x$message, "Tumor_Seq_Allele2"))
 
 
 })
+
+# Tests for variant classifications attribute creation
+
+test_that("check var_class attr for all three alt dfs", {
+
+  mut <- sanitize_mutation_input(gnomeR::mutations, include_silent = FALSE,
+                                               save_var_class = TRUE)
+
+  cna <- sanitize_cna_input(gnomeR::cna, include_silent = FALSE,
+                            save_var_class = TRUE)
+
+  fus <- sanitize_fusion_input(gnomeR::sv, include_silent = FALSE,
+                            save_var_class = TRUE)
+
+
+  purrr::map(list(mut, cna, fus), function(x){
+    expect_true(!is.null(attr(x, "var_class")))
+    expect_true("var_class" %in% names(attr(x, "var_class")))
+  })
+
+
+  expect_true(nrow(mut) >= nrow(attr(mut, "var_class")))
+
+
+})
+
 
 
