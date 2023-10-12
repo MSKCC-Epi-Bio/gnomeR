@@ -16,7 +16,6 @@ rename_columns <- function(df_to_check) {
     select(contains("_column_name")) %>%
     tidyr::pivot_longer(-"internal_column_name")
 
-
   which_to_replace <- intersect(names(df_to_check), unique(names_df_long$value))
 
   # create a temporary dictionary as a named vector- this should have all relevant values, including those unchanged

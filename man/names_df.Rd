@@ -16,6 +16,8 @@ A data frame
 \item{notes}{data notes}
 \item{sc_maf_column_name}{snake case version of \code{maf_column_name}}
 \item{sc_api_column_name}{snake case version of \code{api_column_name}}
+\item{caps_maf_column_name}{upper case version of \code{maf_column_name}}
+\item{caps_api_column_name}{upper case version of \code{api_column_name}}
 \item{internal_column_name}{name used for each field for all internal processing functions}
 }
 }
