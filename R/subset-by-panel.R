@@ -47,7 +47,7 @@ subset_by_panel <- function(gene_binary, panel_id = NULL, other_vars = NULL){
     cli::cli_abort("The panel {panel_id} is not an available panel. See `gnomeR::gene_panels()` for the names of available panels.")
   }
 
-  # Capture Other Columns to Retain -----------------------------------
+  # Other Vars - Capture Other Columns to Retain -----------------------------------
   other_vars <-
     .select_to_varnames({{ other_vars }},
                         data = gene_binary,

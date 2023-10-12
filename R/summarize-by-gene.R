@@ -37,7 +37,7 @@ summarize_by_gene <- function(gene_binary, other_vars = NULL) {
     cli::cli_abort("Your {.field gene_binary} must have unique samples in {.code sample_id} column")
   }
 
-  # Capture Other Columns to Retain -----------------------------------
+  # Other Vars - Capture Other Columns to Retain -----------------------------------
 
   other_vars <-
     .select_to_varnames({{ other_vars }},

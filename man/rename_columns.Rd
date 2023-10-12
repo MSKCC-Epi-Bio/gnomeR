@@ -7,17 +7,18 @@
 rename_columns(df_to_check)
 }
 \arguments{
-\item{df_to_check}{a data frame to check and recode names as needed}
+\item{df_to_check}{A data frame to check and recode names as needed}
 }
 \value{
 a renamed data frame
 }
 \description{
-Rename columns from API results to work with gnomeR functions
+Will return a named vector of internal column names as values and original data set names
+as names as an attribute (\code{attr(x, "names_dict")})
 }
 \examples{
 
 rename_columns(df_to_check = gnomeR::mutations)
-rename_columns(df_to_check = gnomeR::sv)
-
+x <- rename_columns(df_to_check = gnomeR::sv)
+attr(x, "names_dict")
 }
