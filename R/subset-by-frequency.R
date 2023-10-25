@@ -6,6 +6,7 @@
 #' @param t Threshold value between 0 and 1 to subset by. Default is 10% (.1).
 #' @param other_vars One or more column names (quoted or unquoted) in data to be retained
 #' in resulting data frame. Default is NULL.
+#' @param by Variable used to subset the data. Default is NULL.
 #' @return a data frame with a `sample_id` column and columns for
 #' alterations over the given prevalence threshold of `t`.
 #'
@@ -22,7 +23,7 @@
 #'gene_binary %>%
 #'  subset_by_frequency()
 #'
-subset_by_frequency <- function(gene_binary, t = .1, other_vars = NULL) {
+subset_by_frequency <- function(gene_binary, t = .1, other_vars = NULL, by = NULL) {
 
 
   # Checks ------------------------------------------------------------------
@@ -46,11 +47,17 @@ subset_by_frequency <- function(gene_binary, t = .1, other_vars = NULL) {
                         arg_name = "other_vars"
     )
 
+  by <-
+    .select_to_varnames({{ by }},
+                        data = gene_binary,
+                        arg_name = "by"
+    )
+
   # data frame of only alterations
   alt_only <- select(gene_binary, -"sample_id", -any_of(other_vars))
 
   # Remove all NA columns ----------------------------------------------
-  all_na_alt <- apply(alt_only,  2, function(x) {
+  all_na_alt <- apply(alt_only, 2, function(x) {
      sum(is.na(x)) == nrow(alt_only)
   })
 
@@ -59,10 +66,17 @@ subset_by_frequency <- function(gene_binary, t = .1, other_vars = NULL) {
 
 
   # Check Numeric Class -----------------------------------------------------
-  .abort_if_not_numeric(alt_only)
-
+  if (is.null(by)) {
+    .abort_if_not_numeric(alt_only)
+  }
+  else {
+    .abort_if_not_numeric(select(alt_only, -by))
+  }
 
   # Calc Frequency ----------------------------------------------------------
+
+  if(is.null(by)){
+
   counts <- apply(alt_only, 2,  function(x) {sum(x, na.rm = TRUE)})
   num_non_na <- apply(alt_only, 2, function(x) sum(!is.na(x)))
 
@@ -74,5 +88,38 @@ subset_by_frequency <- function(gene_binary, t = .1, other_vars = NULL) {
                           all_of(alts_over_thresh))
 
   return(subset_binary)
+  }
+  else{
 
+  alt_data <-
+    alt_only |>
+    group_by(across(by)) |>
+    summarise_all(list(sum = ~ sum(.), total = ~ sum(!is.na(.))), na.rm = T)
+
+  alt_group_data <-
+    alt_data |>
+      pivot_longer(-by,
+                   names_to = c("gene")) |>
+      separate(gene, into = c("gene", "measure"), sep = "_") |>
+      pivot_wider(names_from = measure,
+                  values_from = value) |>
+      mutate(prop = sum/total) |>
+      arrange(desc(prop))
+
+  alts_over_thresh_grp <-
+    alt_group_data |>
+    filter(prop > t) |>
+    group_by(gene) |>
+    select(gene) |>
+    unique() |>
+    unlist() |>
+    as.vector()
+
+  subset_binary <- select(gene_binary, "sample_id", by,
+                          any_of(other_vars),
+                          all_of(alts_over_thresh_grp))
+
+  return(subset_binary)
+
+  }
 }
