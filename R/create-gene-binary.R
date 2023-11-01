@@ -187,6 +187,8 @@ create_gene_binary <- function(samples = NULL,
   samples_final <- samples %||%
     samples_in_data
 
+  samples_final <- unique(samples_final)
+
   # Recode Aliases -----------------------------------------------------------
 
   # Fusions - create long version with event split by two involved genes
@@ -403,8 +405,10 @@ create_gene_binary <- function(samples = NULL,
     },
     "omit_germline" = {
       mutation <- mutation %>%
-        filter(.data$mutation_status != "GERMLINE" |
-          .data$mutation_status != "germline" | is.na(.data$mutation_status))
+        filter((.data$mutation_status != "GERMLINE" &
+                  .data$mutation_status != "germline" &
+                  .data$mutation_status != "Germline") |
+                 is.na(.data$mutation_status))
 
       blank_muts <- mutation %>%
         filter(is.na(.data$mutation_status) |
@@ -420,11 +424,13 @@ create_gene_binary <- function(samples = NULL,
     "somatic_only" = {
       mutation <- mutation %>%
         filter(.data$mutation_status == "SOMATIC" |
+                 .data$mutation_status == "Somatic" |
           .data$mutation_status == "somatic")
     },
     "germline_only" = {
       mutation <- mutation %>% filter(.data$mutation_status == "GERMLINE" |
-        .data$mutation_status == "germline")
+                                        .data$mutation_status == "Germline" |
+                                        .data$mutation_status == "germline")
     }
   )
 
