@@ -122,22 +122,19 @@ test_that("Check func works fine when we enter mix of impact samples IM3 and IM5
 })
 
 
-# NON UNIQUE SAMPLES in samples ARGUMENT?
-# test_that("Check when sample ids with duplicate values are entered", {
-#
-#   mut_valid_sample_ids<- (gnomeR::mutations$sampleId)[1:10]
-#
-#   #should get unique rows after transposing
-#   sub <- create_gene_binary(sample=mut_valid_sample_ids, mutation=gnomeR::mutations)
-#   expect_equal(nrow(sub), length(unique(mut_valid_sample_ids)))
-#
-#   sub_fs <- create_gene_binary(sample=mut_valid_sample_ids, fusion =gnomeR::sv)
-#   expect_equal(nrow(sub_fs), length(unique(mut_valid_sample_ids)))
-#
-#   sub_cna <- create_gene_binary(sample=mut_valid_sample_ids, cna =gnomeR::cna)
-#   expect_equal(nrow(sub_cna), length(unique(mut_valid_sample_ids)))
-#
-# })
+# NON UNIQUE SAMPLES in samples ARGUMENT
+test_that("Check when non unique sample ids are entered", {
+
+  sub_mut <- gnomeR::mutations[1:10, ]
+
+  sub_dup <- create_gene_binary(samples = sub_mut$sampleId,
+                            sub_mut)
+  sub_unique <- create_gene_binary(samples = unique(sub_mut$sampleId),
+                                sub_mut)
+
+  expect_equal(sub_dup, sub_unique)
+
+})
 
 
 
@@ -254,6 +251,35 @@ test_that("test inclusion of NAs in mut_type ", {
 
 })
 
+test_that("test removal of germline samples in mut_type ", {
+  mut2 = gnomeR::mutations[1:10, ]
+  mut2$mutationStatus[1:5]<-'GERMLINE'
+  mut2$mutationStatus[6:10]<-""
+  mut2$mutationStatus[2]<-'SOMATIC'
+  mut2$mutationStatus[3]<-'germline'
+
+  # NA included with all
+  see = create_gene_binary(mutation = mut2, specify_panel = "no", mut_type = "all")
+  expect_equal(see$PARP1[which(see$sample_id=="P-0001128-T01-IM3")],1)
+
+
+  # NA no longer included with somatic_only
+  see = create_gene_binary(mutation = mut2, mut_type = "somatic_only", specify_panel = "no")
+  expect_equal(see$PARP1[which(see$sample_id=="P-0001859-T01-IM3")],1)
+  expect_equal(nrow(see),1)
+
+  # NA no longer included with germline_only
+  see = create_gene_binary(mutation = mut2, mut_type = "germline_only",
+                           specify_panel = "no")
+  expect_equal(see$PARP1[which(see$sample_id=="P-0001128-T01-IM3")],1)
+  expect_equal(nrow(see),3)
+
+  see = create_gene_binary(samples = mut2$sampleId, mutation = mut2,
+                           mut_type = "omit_germline",
+                           specify_panel = "no")
+  expect_equal(see$AKT1[which(see$sample_id=="P-0001128-T01-IM3")], 0)
+
+})
 
 
 # Test high_level_cna_only argument --------------------------------------------
