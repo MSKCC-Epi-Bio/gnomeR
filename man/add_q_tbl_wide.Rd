@@ -19,6 +19,16 @@ add_q_tbl_wide(
 \item{method}{String indicating method to be used for p-value
 adjustment. Methods from
 \link[stats:p.adjust]{stats::p.adjust} are accepted.  Default is \code{method = "fdr"}.}
+
+\item{pvalue_fun}{Function to round and format p-values.
+Default is \link[gtsummary]{style_pvalue}.
+The function must have a numeric vector input (the numeric, exact p-value),
+and return a string that is the rounded/formatted p-value (e.g.
+\code{pvalue_fun = function(x) style_pvalue(x, digits = 2)} or equivalently,
+\code{purrr::partial(style_pvalue, digits = 2)}).}
+
+\item{quiet}{Logical indicating whether to print messages in console. Default is
+\code{FALSE}}
 }
 \description{
 Adjustments to p-values are performed with \link[stats:p.adjust]{stats::p.adjust}.

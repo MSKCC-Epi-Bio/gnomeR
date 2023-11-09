@@ -180,16 +180,16 @@ test_that("test if output is correct if all three types of alt are present",
 
 
 
-            tbl <- tbl_genomic(gene_binary, wide = T)
+            tbl1 <- tbl_genomic(gene_binary, wide = T)
 
-            expect_true(map(c("Mutations",
+            expect_true(purrr::map(c("Mutations",
                                     "Amplifications",
                                     "Deletions",
                                     "Fusions"),
-              ~any(grepl(., (tbl$table_styling$header$spanning_header)))) %>%
+              ~any(grepl(., (tbl1$table_styling$header$spanning_header)))) %>%
                 unlist() %>% all())
 
 
-
-
           })
+
+
