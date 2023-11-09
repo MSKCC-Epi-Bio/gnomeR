@@ -1,4 +1,4 @@
-#' tbl_genomic_wide
+#' tbl_genomic
 #'
 #' This function will select genes based on user inputs or on frequency counts and then
 #' will pass the data.frame to `gtsummary::tbl_summary()`. You can specify a `by` variable and other
@@ -132,10 +132,11 @@ tbl_genomic <- function(gene_binary,
 
     # get names of genes
     names_genes <- gene_binary %>%
-      gnomeR::summarize_by_gene() %>%
-      dplyr::select(-"sample_id") %>%
-      colnames() %>%
+      names()%>%
+      .remove_endings()%>%
       as.vector()
+
+    names_genes <- names_genes[!names_genes %in% c('sample_id')]
 
     # create table of overall frequencies
     tbl1 <- gene_binary %>%

@@ -10,6 +10,7 @@ tbl_genomic(
   freq_cutoff = deprecated(),
   freq_cutoff_by_gene = deprecated(),
   gene_subset = deprecated(),
+  wide_format = FALSE,
   ...
 )
 }

@@ -13,7 +13,8 @@
 - A dictionary of old to new names for `rename_columns()` output is now an attribute of the returned object. Now messages can reference the original names of data columns (ex: `TumorAllele2` not `tumor_allele_2`) to make it more intuitive to users (#302).
 - Fixed bug that wasn't consistently filtering out germline samples
 - Enhanced `subset_by_frequency()` to users to select hugo_symbols if they reach a threshold in any level of a variable (ex: high risk vs low risk) (#305)
-
+- Added ability to create a "wide" table in `tbl_genomic()` where mutations,
+fusions, and CNAs are their own sections (#197)
 
 # gnomeR 1.2.0
 

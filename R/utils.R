@@ -221,6 +221,27 @@ recode_cna <- function(alteration_vector){
   return(names)
 }
 
+
+#' Remove descriptive endings to hugo symbol names (quicker summarize)
+#'
+#' @param names hugo symbols to check
+#' @return a vector of hugo symbols where each entry DOES NOT have a descriptive ending
+#' from the following list: ".Amp", ".Del", ".fus", ".cna", ".mut".
+#' @keywords internal
+#' try
+
+.remove_endings = function(names) {
+
+  names[str_detect(names, ".Amp|.Del|.fus|.cna")] <-
+    stringr::str_remove_all(
+      names[str_detect(names, ".Amp|.Del|.fus|.cna")],
+      ".Amp|.Del|.fus|.cna")
+
+  names <- unique(names)
+
+  return(names)
+}
+
 #' Check if all gene_binary columns except sample_id and other_vars are numeric
 #'
 #' @param alt_data a binary data frame created from `create_gene_binary()`

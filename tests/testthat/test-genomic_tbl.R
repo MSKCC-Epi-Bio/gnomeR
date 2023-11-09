@@ -165,3 +165,31 @@ test_that("check gene_subset is not used",{
 
 })
 
+# Wide format ------------------------------------
+
+test_that("test if output is correct if all three types of alt are present",
+          {
+            samples <- Reduce(intersect, list(gnomeR::mutations$sampleId,
+                                                         gnomeR::cna$sampleId,
+                                                         gnomeR::sv$sampleId))[1:10]
+            gene_binary <- create_gene_binary(samples = samples,
+                                              mutation = mutations,
+                                              cna = cna,
+                                              fusion = sv,
+                                              mut_type = "somatic_only")
+
+
+
+            tbl <- tbl_genomic(gene_binary, wide = T)
+
+            expect_true(map(c("Mutations",
+                                    "Amplifications",
+                                    "Deletions",
+                                    "Fusions"),
+              ~any(grepl(., (tbl$table_styling$header$spanning_header)))) %>%
+                unlist() %>% all())
+
+
+
+
+          })
