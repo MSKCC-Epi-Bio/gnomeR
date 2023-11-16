@@ -107,146 +107,106 @@ tbl_genomic <- function(gene_binary,
                   any_of(order_genes)) %>%
     dplyr::select(-"sample_id")
 
+
   # * Wide format by alteration type -----
 
   if (wide_format) {
 
-    # identify types of alterations in data
-    any_mut <- table_data %>%
-      dplyr::select(-ends_with(".Amp"),
-                    -ends_with(".Del"),
-                    -ends_with(".fus")) %>%
-      ncol() > 0
-
-    any_amp <- table_data %>%
-      dplyr::select(ends_with(".Amp")) %>%
-      ncol() > 0
-
-    any_del <- table_data %>%
-      dplyr::select(ends_with(".Del")) %>%
-      ncol() > 0
-
-    any_fus <- table_data %>%
-      dplyr::select(ends_with(".fus")) %>%
-      ncol() > 0
-
-    # get names of genes
-    names_genes <- gene_binary %>%
-      names()%>%
+    genes <- order_genes[!order_genes %in% by]%>%
       .remove_endings()%>%
-      as.vector()
+      unique()
 
-    names_genes <- names_genes[!names_genes %in% c('sample_id')]
+    # identify types of alterations in data
+
+    gene_endings <- c(".mut", ".Amp", ".Del", ".fus")
+
+    # add .mut to endings to make easier
+
+    gb_alt_all <- order_genes %>%
+      .paste_endings()
+
+    any_alt_types <- purrr::map(gene_endings,
+                          ~any(grepl(.x, gb_alt_all)))
+
+    names(any_alt_types) <- gene_endings
 
     # create table of overall frequencies
+
     tbl1 <- gene_binary %>%
-      gnomeR::summarize_by_gene() %>%
-      dplyr::select(-"sample_id") %>%
-      gtsummary::tbl_summary()
+      pivot_longer(!sample_id)%>%
+      mutate(name = .remove_endings(name))%>%
+      group_by(sample_id, name)%>%
+      slice(which.max(value))%>%
+      ungroup()%>%
+      select(-"sample_id")
+
+
+    tbl2 <- tbl1 %>%
+      split(tbl1$name)
+
+    tbl_overall <- purrr::map(1:length(names(tbl2)), function(x){
+        tbl2[[x]] %>%
+          select(-"name")%>%
+          setNames(names(tbl2)[[x]])
+      })%>%
+      do.call(cbind, .)%>%
+      gtsummary::tbl_summary(by = any_of(by))
 
     # create table of mutation frequencies
-    tbl_mut <- if (any_mut) {
 
-      mut_df <- gene_binary %>%
-        dplyr::select(all_of(by),
-                      any_of(order_genes)) %>%
-        dplyr::select(-ends_with(".Amp"),
-                      -ends_with(".Del"),
-                      -ends_with(".fus"))
+    tbls_alt_types <- purrr::map2(
+  any_alt_types,
+  gene_endings,
+  function(yes_exist, gene) {
 
-      mut_df %>%
-        dplyr::mutate(!!!setNames(rep(0, length(setdiff(names_genes, names(mut_df)))),
-                                  setdiff(names_genes, names(mut_df)))) %>%
-        dplyr::select(-"sample_id") %>%
-        gtsummary::tbl_summary()
+    if(yes_exist[[1]]){
+      data <- table_data
 
-      # table_data %>%
-      #   dplyr::select(-ends_with(".Amp"),
-      #                 -ends_with(".Del"),
-      #                 -ends_with(".fus")) %>%
-      #   gtsummary::tbl_summary()
+      # need to figure out how to add by variables HERE
+      names(data) <- c("sample_id", any_of(by),
+                       .paste_endings(names(data)[2:length(names(data))]))
+
+      data <- data %>%
+        select(any_of(by),
+               ends_with(gene))
+
+      names(data) <- .remove_endings(names(data))
+
+      genes_not_obs <- setdiff(genes, names(data))[setdiff(genes, names(data)) %in% by]
+
+      data <- data %>%
+        # need to fill in 0 for all unobserved alterations in hugo_symbol
+        dplyr::mutate(!!!setNames(rep(0, length(genes_not_obs)),
+                                  genes_not_obs))
+
+      data %>%
+        gtsummary::tbl_summary(by = any_of(by))
+    } else {
+      NULL
     }
 
-    # create table of .Amp frequencies
-    tbl_amp <- if (any_amp) {
+  }
+)
 
-      amp_df <- gene_binary %>%
-        dplyr::select(all_of(by),
-                      any_of(order_genes)) %>%
-        dplyr::select(sample_id, ends_with(".Amp")) %>%
-        dplyr::rename_with( ~ stringr::str_remove(., ".Amp"))
-
-      amp_df %>%
-        dplyr::mutate(!!!setNames(rep(0, length(setdiff(names_genes, names(amp_df)))),
-                                  setdiff(names_genes, names(amp_df)))) %>%
-        dplyr::select(-"sample_id") %>%
-        gtsummary::tbl_summary()
-
-      # table_data %>%
-      #   dplyr::select(ends_with(".Amp")) %>%
-      #   dplyr::rename_with( ~ stringr::str_remove(., '.Amp')) %>%
-      #   gtsummary::tbl_summary()
-    }
-
-    # create table of .Del frequencies
-    tbl_del <- if (any_del) {
-
-      del_df <- gene_binary %>%
-        dplyr::select(all_of(by),
-                      any_of(order_genes)) %>%
-        dplyr::select(sample_id, ends_with(".Del")) %>%
-        dplyr::rename_with( ~ stringr::str_remove(., ".Del"))
-
-      del_df %>%
-        dplyr::mutate(!!!setNames(rep(0, length(setdiff(names_genes, names(del_df)))),
-                                  setdiff(names_genes, names(del_df)))) %>%
-        dplyr::select(-"sample_id") %>%
-        gtsummary::tbl_summary()
-
-      # table_data %>%
-      #   dplyr::select(ends_with(".Del")) %>%
-      #   dplyr::rename_with( ~ stringr::str_remove(., '.Del')) %>%
-      #   gtsummary::tbl_summary()
-    }
-
-    # create table of .fus frequencies
-    tbl_fus <- if (any_fus) {
-
-      fus_df <- gene_binary %>%
-        dplyr::select(all_of(by),
-                      any_of(order_genes)) %>%
-        dplyr::select(sample_id, ends_with(".fus")) %>%
-        dplyr::rename_with( ~ stringr::str_remove(., ".fus"))
-
-      fus_df %>%
-        dplyr::mutate(!!!setNames(rep(0, length(setdiff(names_genes, names(fus_df)))),
-                                  setdiff(names_genes, names(fus_df)))) %>%
-        dplyr::select(-"sample_id") %>%
-        gtsummary::tbl_summary()
-
-      # table_data %>%
-      #   dplyr::select(ends_with(".fus")) %>%
-      #   dplyr::rename_with( ~ stringr::str_remove(., '.fus')) %>%
-      #   gtsummary::tbl_summary()
-    }
 
     # create list of tables
     tbls_list_pre <-
-      list(tbl1,
-           if (any_mut) {tbl_mut},
-           if (any_amp) {tbl_amp},
-           if (any_del) {tbl_del},
-           if (any_fus) {tbl_fus})
+      append(list(tbl_overall),
+           purrr::map2(any_alt_types,
+                       tbls_alt_types, function(x, y){
+             if (x) {y}
+           }))
 
     # drop NULL tables
     tbls_list <- tbls_list_pre %>% purrr::keep( ~ !is.null(.) )
 
+
     tab_spanner_vec <- c(
       "**Overall**",
-      if (any_mut) "**Mutations**",
-      if (any_amp) "**Amplifications**",
-      if (any_del) "**Deletions**",
-      if (any_fus) "**Fusions**"
+      purrr::map2(any_alt_types, c("**Mutations**", "**Amplifications**",
+                            "**Deletions**", "**Fusions**"),
+           ~if(.x){.y}) %>%
+        unlist()
     )
 
     # merge tables

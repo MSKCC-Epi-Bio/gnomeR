@@ -232,12 +232,9 @@ recode_cna <- function(alteration_vector){
 
 .remove_endings = function(names) {
 
-  names[str_detect(names, ".Amp|.Del|.fus|.cna")] <-
-    stringr::str_remove_all(
-      names[str_detect(names, ".Amp|.Del|.fus|.cna")],
-      ".Amp|.Del|.fus|.cna")
-
-  names <- unique(names)
+   stringr::str_remove_all(
+      names,
+      ".Amp|.Del|.fus|.cna|.mut")
 
   return(names)
 }
