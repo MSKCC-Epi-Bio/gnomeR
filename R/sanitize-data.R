@@ -19,7 +19,7 @@
   column_names <- colnames(df_to_check)
 
   # Check required columns & data types ------------------------------------------
-  # I hate data name
+  # I hate data_name
   .check_required_cols(df_to_check, required_cols, data_name)
 
   # If factor????
