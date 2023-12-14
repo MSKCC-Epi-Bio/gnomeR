@@ -19,13 +19,13 @@
   column_names <- colnames(df_to_check)
 
   # Check required columns & data types ------------------------------------------
+  # I hate data name
   .check_required_cols(df_to_check, required_cols, data_name)
 
-  # Make sure sample ID and hugo are character
-  df_to_check <- df_to_check %>%
-    mutate(sample_id = as.character(.data$sample_id),
-           hugo_symbol = as.character(.data$hugo_symbol))
+  # If factor????
+  # Maybe String Trim on all required columns
 
+  # Make sure sample ID and hugo are character
   df_to_check <- df_to_check %>%
     mutate(across(all_of(required_cols), ~as.character(.x)))
 
@@ -48,6 +48,7 @@
 sanitize_mutation_input <- function(mutation, include_silent, samples_final, ...) {
 
   # adding this again so this function can still be used on it's own
+  # CHANGE TO RENAME ONLY
   mutation = clean_and_check_cols(
     df_to_check = mutation,
     required_cols = c("sample_id", "hugo_symbol"),
