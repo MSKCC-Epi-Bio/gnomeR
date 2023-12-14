@@ -143,9 +143,29 @@ create_gene_binary <- function(samples = NULL,
     )
 
 
-  # * Mutation  checks  --------
+  # Clean and Check Columns Names -------
 
   # standardize columns names
+  mutation <- switch(!is.null(mutation),
+                     .clean_and_check_cols(
+                       df_to_check = mutation,
+                       required_cols = c("sample_id", "hugo_symbol"),
+                       data_name = "mutation"))
+
+  fusion <- switch(!is.null(fusion),
+                   .clean_and_check_cols(
+                     df_to_check = fusion,
+                     required_cols = c("sample_id", "site_1_hugo_symbol", "site_2_hugo_symbol"),
+                     data_name = "fusion"))
+
+  cna <- switch(!is.null(cna),
+                .clean_and_check_cols(
+                  df_to_check = cna,
+                  required_cols = c("hugo_symbol", "sample_id", "alteration"),
+                  data_name = "cna"))
+
+  # Sanitize Data  --------
+
   mutation <- switch(!is.null(mutation),
     sanitize_mutation_input(
       mutation = mutation,
@@ -393,10 +413,6 @@ create_gene_binary <- function(samples = NULL,
     )
   }
 
-  if (!is.null(samples)){
-    mutation <- mutation %>%
-      filter(sample_id %in% samples)
-  }
 
   switch(mut_type,
     "all" = {
