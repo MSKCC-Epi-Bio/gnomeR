@@ -4,7 +4,7 @@
 \alias{sanitize_fusion_input}
 \title{Check fusion data frame to ensure columns are correct}
 \usage{
-sanitize_fusion_input(fusion, ...)
+sanitize_fusion_input(fusion, samples_final)
 }
 \arguments{
 \item{fusion}{a fusion data frame}

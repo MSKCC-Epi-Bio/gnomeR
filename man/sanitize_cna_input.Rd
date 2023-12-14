@@ -4,7 +4,7 @@
 \alias{sanitize_cna_input}
 \title{Check CNA data frame to ensure columns are correct}
 \usage{
-sanitize_cna_input(cna, ...)
+sanitize_cna_input(cna, samples_final, ...)
 }
 \arguments{
 \item{cna}{a cna data frame}

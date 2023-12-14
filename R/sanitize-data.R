@@ -1,14 +1,15 @@
-#' Checks MAF input columns to ensure column names are correct
+#' Checks genomic input file columns to ensure column names are correct
 #'
-#' @param mutation Raw maf dataframe containing alteration data
-#' @param include_silent Silent mutations will be removed if FALSE (default). Variant classification column is needed.
-#' @param ... other arguments passed from create_gene_binary() (recode.aliases).
+#' @param df_to_check Raw maf dataframe containing alteration data
+#' @param required_cols A character specifying names of columns to check
+#' @param data_name Optionally specify how the data set should be called in error message.
+#' Default is NULL and will call it a generic name.
 #' @return a corrected maf file or an error if problems with maf
 #' @keywords internal
 #' @export
 #'
 #' @examples
-#' .clean_mutation_cols(mutation = gnomeR::mutations, include_silent = FALSE)
+#' .clean_and_check_cols(mutation = gnomeR::mutations, data_name = "mutation")
 #'
 .clean_and_check_cols <- function(df_to_check,
                                  required_cols = c("sample_id", "hugo_symbol"),

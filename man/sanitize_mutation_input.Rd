@@ -4,7 +4,7 @@
 \alias{sanitize_mutation_input}
 \title{Checks MAF input to ensure column names are correct and renamed genes are corrected}
 \usage{
-sanitize_mutation_input(mutation, include_silent, ...)
+sanitize_mutation_input(mutation, include_silent, samples_final, ...)
 }
 \arguments{
 \item{mutation}{Raw maf dataframe containing alteration data}

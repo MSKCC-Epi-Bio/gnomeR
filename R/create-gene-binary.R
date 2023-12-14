@@ -164,28 +164,6 @@ create_gene_binary <- function(samples = NULL,
                   required_cols = c("hugo_symbol", "sample_id", "alteration"),
                   data_name = "cna"))
 
-  # Sanitize Data  --------
-
-  mutation <- switch(!is.null(mutation),
-    sanitize_mutation_input(
-      mutation = mutation,
-      include_silent = include_silent
-    )
-  )
-
-  # * Fusion checks  ----------
-  fusion <- switch(!is.null(fusion),
-    sanitize_fusion_input(fusion)
-  )
-
-  # * CNA checks  ------------
-  cna <- switch(!is.null(cna),
-    {
-      sanitize_cna_input(cna)
-    }
-  )
-
-
   #  Make Final Sample List ----------------------------------------------------
 
   samples_in_data <-
@@ -205,6 +183,32 @@ create_gene_binary <- function(samples = NULL,
   # If user doesn't pass a vector, use samples in files as final sample list
   samples_final <- samples %||%
     samples_in_data
+
+  # Sanitize Data and Filter to Final Samples List  --------
+
+  mutation <- switch(!is.null(mutation),
+    sanitize_mutation_input(
+      mutation = mutation,
+      samples_final = samples_final,
+      include_silent = include_silent
+    )
+  )
+
+  fusion <- switch(!is.null(fusion),
+    sanitize_fusion_input(
+      fusion,
+      samples_final = samples_final)
+  )
+
+  cna <- switch(!is.null(cna),
+    {
+      sanitize_cna_input(
+        cna,
+        samples_final = samples_final)
+    }
+  )
+
+
 
   # Recode Aliases -----------------------------------------------------------
 
