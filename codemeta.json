@@ -8,13 +8,13 @@
   "codeRepository": "https://github.com/MSKCC-Epi-Bio/gnomeR",
   "issueTracker": "https://github.com/MSKCC-Epi-Bio/gnomeR/issues",
   "license": "https://spdx.org/licenses/MIT",
-  "version": "1.3.0",
+  "version": "1.2.0.9004",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
     "url": "https://r-project.org"
   },
-  "runtimePlatform": "R version 4.2.2 (2022-10-31 ucrt)",
+  "runtimePlatform": "R version 4.2.3 (2023-03-15)",
   "author": [
     {
       "@type": "Person",
@@ -371,7 +371,7 @@
     },
     "SystemRequirements": null
   },
-  "fileSize": "2582.696KB",
+  "fileSize": "2349.143KB",
   "releaseNotes": "https://github.com/MSKCC-Epi-Bio/gnomeR/blob/master/NEWS.md",
   "readme": "https://github.com/MSKCC-Epi-Bio/gnomeR/blob/main/README.md",
   "contIntegration": ["https://github.com/MSKCC-Epi-Bio/gnomeR/actions", "https://app.codecov.io/gh/MSKCC-Epi-Bio/gnomeR?branch=main"],
