@@ -151,6 +151,9 @@ create_gene_binary <- function(samples = NULL,
                        df_to_check = mutation,
                        required_cols = c("sample_id", "hugo_symbol")))
 
+  # grab name dict to use later in warnings
+  names_mut_dict <- attr(mutation, "names_dict")
+
   fusion <- switch(!is.null(fusion),
                    .clean_and_check_cols(
                      df_to_check = fusion,
@@ -161,7 +164,7 @@ create_gene_binary <- function(samples = NULL,
                   df_to_check = cna,
                   required_cols = c("hugo_symbol", "sample_id", "alteration")))
 
-  #  Make Final Sample List ----------------------------------------------------
+  # Final Sample List ----------------------------------------------------
 
   samples_in_data <-
     c(mutation$sample_id, fusion$sample_id, cna$sample_id) %>%
@@ -179,34 +182,40 @@ create_gene_binary <- function(samples = NULL,
 
   # If user doesn't pass a vector, use samples in files as final sample list
   samples_final <- samples %||%
-    samples_in_data
-
-  samples_final <- unique(samples_final)
+    samples_in_data %>%
+    unique()
 
 
   # Sanitize Data and Filter to Final Samples List  --------
 
-  mutation <- switch(!is.null(mutation),
-    .sanitize_mutation_input(
-      mutation = mutation,
-      samples_final = samples_final,
-      include_silent = include_silent
-    )
-  )
+  if(!is.null(mutation)) {
 
-  fusion <- switch(!is.null(fusion),
-    .sanitize_fusion_input(
-      fusion,
-      samples_final = samples_final)
-  )
+    # check for other columns that may affect later filtering (e.g. silent mutations)
+    mutation <- mutation %>%
+      .filter_to_sample_list(., samples_final) %>%
+      .check_for_silent(., include_silent = include_silent) %>%
+      .check_for_fus_in_mut(.) %>%
+      .infer_mutation_status() %>%
+      .infer_variant_type(., names_mut_dict = names_mut_dict)
 
-  cna <- switch(!is.null(cna),
-    {
-      .sanitize_cna_input(
-        cna,
-        samples_final = samples_final)
-    }
-  )
+  }
+
+
+  if(!is.null(fusion)) {
+    fusion <- .filter_to_sample_list(
+      fusion, samples_final = samples_final)
+  }
+
+
+  if(!is.null(cna)) {
+
+    # Recode CNA Alterations
+    cna <- .filter_to_sample_list(
+      cna, samples_final = samples_final) %>%
+      mutate(alteration = tolower(str_trim(as.character(.data$alteration)))) %>%
+      mutate(alteration = recode_cna(.data$alteration))
+  }
+
 
   # Recode Aliases -----------------------------------------------------------
 
