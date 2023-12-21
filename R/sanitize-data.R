@@ -2,15 +2,19 @@
 #'
 #' @param mutation Raw maf dataframe containing alteration data
 #' @param include_silent Silent mutations will be removed if FALSE (default). Variant classification column is needed.
+#' @param save_var_class logical object that will save variant classifications if TRUE. This is needed for oncoprints.
+#'   Default is FALSE.
 #' @param ... other arguments passed from create_gene_binary() (recode.aliases).
 #' @return a corrected maf file or an error if problems with maf
 #' @keywords internal
 #' @export
 #'
 #' @examples
-#' sanitize_mutation_input(mutation = gnomeR::mutations, include_silent = FALSE)
+#' sanitize_mutation_input(mutation = gnomeR::mutations, include_silent = FALSE,
+#'   save_var_class = FALSE)
 #'
-sanitize_mutation_input <- function(mutation, include_silent, ...)  {
+sanitize_mutation_input <- function(mutation, include_silent,
+                                    save_var_class, ...)  {
 
   arguments <- list(...)
 
@@ -21,6 +25,7 @@ sanitize_mutation_input <- function(mutation, include_silent, ...)  {
   # Check required columns & data types ------------------------------------------
   required_cols <- c("sample_id", "hugo_symbol")
   .check_required_cols(mutation, required_cols, "mutation")
+
 
   # Make sure they are character
   mutation <- mutation %>%
@@ -34,6 +39,12 @@ sanitize_mutation_input <- function(mutation, include_silent, ...)  {
                    or add a {.var variant_classification} column.")
   }
 
+
+  if (save_var_class && !("variant_classification" %in% names(mutation))){
+    cli::cli_abort("No {.var variant_classification} column found therefore
+                   values cannot be saved. Please set {.code save_var_class = FALSE}
+                   or add a {.var variant_classification} column.")
+  }
 
   if("variant_classification" %in% column_names) {
   # Check for Fusions-  Old API used to return fusions --------------
@@ -87,6 +98,16 @@ sanitize_mutation_input <- function(mutation, include_silent, ...)  {
     }
 
 
+  if (save_var_class){
+    attr(mutation, "var_class") <- mutation %>%
+      group_by(.data$sample_id, .data$hugo_symbol, .data$variant_classification) %>%
+      filter(row_number()==1) %>%
+      ungroup()%>%
+      select(.data$hugo_symbol, .data$sample_id, .data$variant_classification)%>%
+      mutate(type = "mutation")%>%
+      rename(var_class = variant_classification)
+  }
+
 
   return(mutation)
 
@@ -105,7 +126,7 @@ sanitize_mutation_input <- function(mutation, include_silent, ...)  {
 #' @examples
 #' fus <- sanitize_fusion_input(fusion = gnomeR::sv)
 #'
-sanitize_fusion_input <- function(fusion, ...)  {
+sanitize_fusion_input <- function(fusion, save_var_class, ...)  {
 
   arguments <- list(...)
 
@@ -116,12 +137,30 @@ sanitize_fusion_input <- function(fusion, ...)  {
   required_cols <- c("sample_id", "site_1_hugo_symbol", "site_2_hugo_symbol")
   .check_required_cols(fusion, required_cols, "fusion")
 
+  if (save_var_class && !("class" %in% names(fusion))){
+    cli::cli_abort("No {.var class} column in {.field fusion} was not found therefore
+                   values cannot be saved. Please set {.code save_var_class = FALSE}
+                   or add a {.var class} column.")
+  }
+
+
   # Make sure they are character
   fusion <- fusion %>%
     mutate(sample_id = as.character(.data$sample_id),
            site_1_hugo_symbol = as.character(.data$site_1_hugo_symbol),
            site_2_hugo_symbol = as.character(.data$site_2_hugo_symbol))
 
+  if (save_var_class){
+    attr(fusion, "var_class") <- fusion %>%
+      pivot_longer(cols = ends_with("symbol"), names_to = "site")%>%
+      rename(hugo_symbol = value) %>%
+      group_by(.data$sample_id, .data$hugo_symbol, .data$class) %>%
+      filter(row_number()==1) %>%
+      ungroup() %>%
+      select(hugo_symbol, sample_id, class)%>%
+      mutate(type = "fusion")%>%
+      rename(var_class = class)
+  }
 
   return(fusion)
 }
@@ -140,7 +179,7 @@ sanitize_fusion_input <- function(fusion, ...)  {
 #'
 #' cna <- sanitize_cna_input(cna = cna)
 #'
-sanitize_cna_input <- function(cna, ...)  {
+sanitize_cna_input <- function(cna, save_var_class = FALSE, ...)  {
 
   arguments <- list(...)
 
@@ -159,6 +198,16 @@ sanitize_cna_input <- function(cna, ...)  {
   # recode alterations
   cna <- cna %>%
     mutate(alteration = recode_cna(.data$alteration))
+
+  if (save_var_class){
+    attr(cna, "var_class") <- cna %>%
+      group_by(.data$sample_id, .data$hugo_symbol, .data$alteration) %>%
+      filter(row_number()==1) %>%
+      ungroup() %>%
+      select(hugo_symbol, sample_id, alteration)%>%
+      mutate(type = "CNA")%>%
+      rename(var_class = alteration)
+  }
 
   return(cna)
 }
