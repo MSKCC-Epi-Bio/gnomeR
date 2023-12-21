@@ -41,7 +41,7 @@ subset_by_panel <- function(gene_binary, panel_id = NULL, other_vars = NULL){
     cli::cli_abort("{.code panel_id} must not be NULL")
   }
 
-  .check_required_cols(gene_binary, "sample_id", "gene_binary")
+  .check_required_cols(gene_binary, "sample_id")
 
   if (!(panel_id %in% c(gene_panels$gene_panel))){
     cli::cli_abort("The panel {panel_id} is not an available panel. See `gnomeR::gene_panels()` for the names of available panels.")

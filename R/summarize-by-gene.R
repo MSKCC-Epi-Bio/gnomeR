@@ -30,7 +30,7 @@ summarize_by_gene <- function(gene_binary, other_vars = NULL) {
     cli::cli_abort("{.code gene_binary} must be a data.frame with sample ids")
   }
 
-  .check_required_cols(gene_binary, "sample_id", "gene_binary")
+  .check_required_cols(gene_binary, "sample_id")
 
   # check for repeat samples
   if(any(table(gene_binary$sample_id) > 1)) {

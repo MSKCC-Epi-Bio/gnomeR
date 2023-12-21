@@ -122,6 +122,21 @@ ggvartype <- function(mutation) {
 
 }
 
+#' #' Utility Function to Extract SNV
+#' #'
+#' #' @param x string
+#' #' @param n number of characters from right
+#' #'
+#' #' @return string
+#' #' @noRd
+#' #' @examples
+#' #' substrRight("Hello", 2)
+#' #'
+#' substrRight <- function(x, n) {
+#'   x <- as.character(x)
+#'   substr(x, nchar(x) - n + 1, nchar(x))
+#' }
+
 
 # ggsnvclass <- function(mutation) {
 #

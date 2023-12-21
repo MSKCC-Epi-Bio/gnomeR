@@ -149,20 +149,17 @@ create_gene_binary <- function(samples = NULL,
   mutation <- switch(!is.null(mutation),
                      .clean_and_check_cols(
                        df_to_check = mutation,
-                       required_cols = c("sample_id", "hugo_symbol"),
-                       data_name = "mutation"))
+                       required_cols = c("sample_id", "hugo_symbol")))
 
   fusion <- switch(!is.null(fusion),
                    .clean_and_check_cols(
                      df_to_check = fusion,
-                     required_cols = c("sample_id", "site_1_hugo_symbol", "site_2_hugo_symbol"),
-                     data_name = "fusion"))
+                     required_cols = c("sample_id", "site_1_hugo_symbol", "site_2_hugo_symbol")))
 
   cna <- switch(!is.null(cna),
                 .clean_and_check_cols(
                   df_to_check = cna,
-                  required_cols = c("hugo_symbol", "sample_id", "alteration"),
-                  data_name = "cna"))
+                  required_cols = c("hugo_symbol", "sample_id", "alteration")))
 
   #  Make Final Sample List ----------------------------------------------------
 
@@ -187,7 +184,7 @@ create_gene_binary <- function(samples = NULL,
   # Sanitize Data and Filter to Final Samples List  --------
 
   mutation <- switch(!is.null(mutation),
-    sanitize_mutation_input(
+    .sanitize_mutation_input(
       mutation = mutation,
       samples_final = samples_final,
       include_silent = include_silent
@@ -195,14 +192,14 @@ create_gene_binary <- function(samples = NULL,
   )
 
   fusion <- switch(!is.null(fusion),
-    sanitize_fusion_input(
+    .sanitize_fusion_input(
       fusion,
       samples_final = samples_final)
   )
 
   cna <- switch(!is.null(cna),
     {
-      sanitize_cna_input(
+      .sanitize_cna_input(
         cna,
         samples_final = samples_final)
     }

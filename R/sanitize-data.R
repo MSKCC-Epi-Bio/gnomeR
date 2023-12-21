@@ -1,59 +1,13 @@
-#' Checks genomic input file columns to ensure column names are correct
-#'
-#' @param df_to_check Raw maf dataframe containing alteration data
-#' @param required_cols A character specifying names of columns to check
-#' @param data_name Optionally specify how the data set should be called in error message.
-#' Default is NULL and will call it a generic name.
-#' @return a corrected maf file or an error if problems with maf
-#' @keywords internal
-#' @export
-#'
-#' @examples
-#' .clean_and_check_cols(mutation = gnomeR::mutations, data_name = "mutation")
-#'
-.clean_and_check_cols <- function(df_to_check,
-                                 required_cols = c("sample_id", "hugo_symbol"),
-                                 data_name = NULL)  {
 
-  mutation <- rename_columns(df_to_check)
-  column_names <- colnames(df_to_check)
-
-  # Check required columns & data types ------------------------------------------
-  # I hate data_name
-  .check_required_cols(df_to_check, required_cols, data_name)
-
-  # If factor????
-  # Maybe String Trim on all required columns
-
-  # Make sure sample ID and hugo are character
-  df_to_check <- df_to_check %>%
-    mutate(across(all_of(required_cols), ~as.character(.x)))
-
-  return(df_to_check)
-
-}
 
 #' Checks MAF input to ensure column names are correct and renamed genes are corrected
 #'
 #' @param mutation Raw maf dataframe containing alteration data
 #' @param include_silent Silent mutations will be removed if FALSE (default). Variant classification column is needed.
-#' @param ... other arguments passed from create_gene_binary() (recode.aliases).
 #' @return a corrected maf file or an error if problems with maf
 #' @keywords internal
-#' @export
-#'
-#' @examples
-#' sanitize_mutation_input(mutation = gnomeR::mutations, include_silent = FALSE)
-#'
-sanitize_mutation_input <- function(mutation, include_silent, samples_final, ...) {
 
-  # adding this again so this function can still be used on it's own
-  # CHANGE TO RENAME ONLY
-  mutation = clean_and_check_cols(
-    df_to_check = mutation,
-    required_cols = c("sample_id", "hugo_symbol"),
-    data_name = "mutation"
-  )
+.sanitize_mutation_input <- function(mutation, include_silent, samples_final = NULL) {
 
   column_names <- colnames(mutation)
 
@@ -61,7 +15,7 @@ sanitize_mutation_input <- function(mutation, include_silent, samples_final, ...
   # * I don't think this can be NULL so maybe can remove the `if` check for NULL.
   if (!is.null(samples_final)){
     mutation <- mutation %>%
-      filter(sample_id %in% samples_final)
+      filter(.data$sample_id %in% samples_final)
   }
 
   # if include_silent FALSE, check for variant classification column -----
@@ -131,29 +85,16 @@ sanitize_mutation_input <- function(mutation, include_silent, samples_final, ...
 #' Check fusion data frame to ensure columns are correct
 #'
 #' @param fusion a fusion data frame
-#' @param ... other arguments passed from create_gene_binary()
-#'
 #' @return a checked data frame
 #' @keywords internal
-#' @export
-#' @examples
-#' fus <- sanitize_fusion_input(fusion = gnomeR::sv)
-#'
-sanitize_fusion_input <- function(fusion, samples_final)  {
 
-  # Check required columns & data types ------------------------------------------
-  # adding this again so this function can still be used on it's own
-  fusion = clean_and_check_cols(
-    df_to_check = fusion,
-    required_cols = c("sample_id", "site_1_hugo_symbol", "site_2_hugo_symbol"),
-    data_name = "fusion"
-  )
+.sanitize_fusion_input <- function(fusion, samples_final = NULL)  {
 
   # Filter to final sample list ---------
   # * I don't think this can be NULL so maybe can remove the `if` check for NULL.
   if (!is.null(samples_final)){
     fusion <- fusion %>%
-      filter(sample_id %in% samples_final)
+      filter(.data$sample_id %in% samples_final)
   }
 
   return(fusion)
@@ -164,30 +105,16 @@ sanitize_fusion_input <- function(fusion, samples_final)  {
 #' Check CNA data frame to ensure columns are correct
 #'
 #' @param cna a cna data frame
-#' @param ... other arguments passed from create_gene_binary()
-#'
 #' @return a checked data frame
 #' @keywords internal
-#' @export
-#' @examples
-#'
-#' cna <- sanitize_cna_input(cna = cna)
-#'
-sanitize_cna_input <- function(cna, samples_final, ...)  {
 
-  # Check required columns & data types ------------------------------------------
-  # adding this again so this function can still be used on it's own
-  cna = clean_and_check_cols(
-    df_to_check = cna,
-    required_cols = c("hugo_symbol", "sample_id", "alteration"),
-    data_name = "cna"
-  )
+.sanitize_cna_input <- function(cna, samples_final = NULL)  {
 
   # Filter to final sample list ---------
   # * I don't think this can be NULL so maybe can remove the `if` check for NULL.
   if (!is.null(samples_final)){
     cna <- cna %>%
-      filter(sample_id %in% samples_final)
+      filter(.data$sample_id %in% samples_final)
   }
 
   # Make sure hugo & alteration is character and recode

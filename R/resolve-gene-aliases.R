@@ -50,7 +50,7 @@ recode_alias <- function(genomic_df, alias_table = "impact", supress_warnings = 
       },
 
     "data.frame" = {
-      .check_required_cols(alias_table, "hugo_symbol", "alias")
+      .check_required_cols(alias_table, "hugo_symbol")
       alias_table
     })
 

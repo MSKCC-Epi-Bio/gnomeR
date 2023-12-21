@@ -36,7 +36,7 @@ subset_by_frequency <- function(gene_binary, t = .1, other_vars = NULL) {
     cli::cli_abort("{.code gene_binary} must be a data.frame")
   }
 
-  .check_required_cols(gene_binary, "sample_id", "gene_binary")
+  .check_required_cols(gene_binary, "sample_id")
 
   # Other Vars - Capture Other Columns to Retain -----------------------------------
 

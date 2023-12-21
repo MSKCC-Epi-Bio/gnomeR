@@ -1,3 +1,7 @@
+
+# Basic Data Cleaning -----------------------------------------------------
+
+
 #' Rename columns from API results to work with gnomeR functions
 #'
 #' @param df_to_check a data frame to check and recode names as needed
@@ -43,21 +47,58 @@ rename_columns <- function(df_to_check) {
 }
 
 
+#' Check a Data Frame for Required Columns
+#'
+#' @param data A data frame to check
+#' @param required_cols A character specifying names of columns to check
+#' @return If data set doesn't have required columns it will return an error message.
+#' If it does have required columns, nothing will be returned
+#' @keywords internal
 
-#' Utility Function to Extract SNV
-#'
-#' @param x string
-#' @param n number of characters from right
-#'
-#' @return string
-#' @noRd
-#' @examples
-#' substrRight("Hello", 2)
-#'
-substrRight <- function(x, n) {
-  x <- as.character(x)
-  substr(x, nchar(x) - n + 1, nchar(x))
+.check_required_cols <- function(data, required_cols) {
+
+  # Get the name of the data object
+  data_name <- deparse(substitute(data))
+
+  column_names <- colnames(data)
+  which_missing <- required_cols[which(!(required_cols %in% column_names))]
+
+  if(length(which_missing) > 0) {
+    cli::cli_abort("The following required columns are missing in your {.field {data_name}} data: {.var {which_missing}}")
+  }
 }
+
+#' Checks genomic input file columns to ensure column names are correct
+#'
+#' @param df_to_check Raw maf dataframe containing alteration data
+#' @param required_cols A character specifying names of columns to check
+#' @return a corrected maf file or an error if problems with maf
+#' @keywords internal
+#' @examples
+#' gnomeR:::.clean_and_check_cols(df_to_check = gnomeR::mutations)
+#'
+.clean_and_check_cols <- function(df_to_check,
+                                  required_cols = c("sample_id", "hugo_symbol"))  {
+
+  df_to_check <- rename_columns(df_to_check)
+  column_names <- colnames(df_to_check)
+
+  # Check required columns & data types ------------------------------------------
+  .check_required_cols(df_to_check,
+                       required_cols = required_cols)
+
+  # Make sure sample ID and hugo are character
+  df_to_check <- df_to_check %>%
+    mutate(across(all_of(required_cols), ~as.character(.x)))
+
+  return(df_to_check)
+
+}
+
+
+
+# CNA Recode -----------------------------------------------------
+
 
 #' Internal function to recode numeric CNA alteration values to factor values
 #'
@@ -128,7 +169,7 @@ recode_cna <- function(alteration_vector){
     return(recoded_alterations)
   }
 
-
+# Binary Matrix Processing  -----------------------------------------------------
 
 
 #' Create binary data.frames depending on type of mutation data
@@ -171,29 +212,7 @@ recode_cna <- function(alteration_vector){
     ungroup()
 }
 
-
-#' Check a Data Frame for Required Columns
-#'
-#' @param data A data frame to check
-#' @param required_cols A character specifying names of columns to check
-#' @param data_name Optionally specify how the data set should be called in error message.
-#' Default is NULL and will call it a generic name.
-#' @return If data set doesn't have required columns it will return an error message.
-#' If it does have required columns, nothing will be returned
-#' @keywords internal
-
-.check_required_cols <- function(data, required_cols, data_name = NULL) {
-
-  data_name <- data_name %||% ""
-  column_names <- colnames(data)
-  which_missing <- required_cols[which(!(required_cols %in% column_names))]
-
-  if(length(which_missing) > 0) {
-    cli::cli_abort("The following required columns are missing in your {data_name} data: {.field {which_missing}}")
-  }
-
-}
-
+# Small Misc Utils  -----------------------------------------------------
 
 #' Add descriptive endings to hugo symbol names that do not have one already
 #'

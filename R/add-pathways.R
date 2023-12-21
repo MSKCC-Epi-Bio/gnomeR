@@ -44,7 +44,7 @@ add_pathways <- function(gene_binary,
 
   all_path <- gnomeR::pathways
   all_path_names <- names(all_path)
-  .check_required_cols(gene_binary, "sample_id", "gene_binary")
+  .check_required_cols(gene_binary, "sample_id")
 
   # * Deprecated Arguments (will remove this in the future) ----
 

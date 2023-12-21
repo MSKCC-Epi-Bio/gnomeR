@@ -4,15 +4,12 @@
 \alias{.check_required_cols}
 \title{Check a Data Frame for Required Columns}
 \usage{
-.check_required_cols(data, required_cols, data_name = NULL)
+.check_required_cols(data, required_cols)
 }
 \arguments{
 \item{data}{A data frame to check}
 
 \item{required_cols}{A character specifying names of columns to check}
-
-\item{data_name}{Optionally specify how the data set should be called in error message.
-Default is NULL and will call it a generic name.}
 }
 \value{
 If data set doesn't have required columns it will return an error message.

@@ -128,10 +128,13 @@ molecularProfileId
 mut
 mutationType
 ncbiBuild
+nchar
+noRd
 oncoKB
 oncogenic
 oncokbR
 pancan
+param
 pre
 processsing
 proteinChange
@@ -148,6 +151,8 @@ samplevar
 snakecase
 snvclass
 startPosition
+substr
+substrRight
 summarising
 sv
 tbl
