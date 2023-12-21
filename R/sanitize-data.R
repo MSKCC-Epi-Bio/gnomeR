@@ -71,9 +71,11 @@
           )
         )
 
-      cli::cli_warn("Column {.field variant_type} is missing from your data. We inferred variant types using {.field reference_allele} and {.field tumor_seq_allele2} columns")
-    } else {
-      cli::cli_abort("Column {.field variant_type} is missing from your data and {.field reference_allele} and {.field tumor_seq_allele2}
+
+        cli::cli_warn(c("Column {.field variant_type} is missing from your data. We inferred variant types using ",
+        "{.field {dplyr::first(c(names_dict['reference_allele'], 'reference_allele'), na_rm = TRUE)}} and {.field {dplyr::first(c(names_dict['tumor_seq_allele_2'], 'tumor_seq_allele_2'), na_rm = TRUE)}} columns"))
+      } else {
+        cli::cli_abort("Column {.field variant_type} is missing from your data and {.field reference_allele} and {.field tumor_seq_allele_2}
                               columns were not available from which to infer variant type.
                               To proceed, add a column specifying {.field variant_type} (e.g. {.code mutate(<your-mutation-df>, variant_type = 'SNP')}")
     }

@@ -79,7 +79,7 @@ test_that("test variant type inference", {
   mutation <- rename_columns(mutation)
   column_names <- colnames(mutation)
   mutation = mutation %>% select(-c(variant_type))
-  mutation$tumor_seq_allele2 = mutation$reference_allele
+  mutation$tumor_seq_allele_2 = mutation$reference_allele
 
   expect_warning(.sanitize_mutation_input(mutation, include_silent = F))
 })
@@ -89,12 +89,40 @@ test_that("test variant type inference error", {
   mutation = gnomeR::mutations
   mutation <- rename_columns(mutation)
   column_names <- colnames(mutation)
-  mutation$tumor_seq_allele2 = mutation$reference_allele
+  mutation$tumor_seq_allele_2 = mutation$reference_allele
   mutation = mutation %>% select(-c(variant_type, reference_allele))
 
   expect_error(.sanitize_mutation_input(mutation, include_silent = F))
 })
 
+
+test_that("test that attributes are returned for input data col names", {
+
+  mutation <- sanitize_mutation_input(gnomeR::mutations, include_silent = F)
+  expect_true(!is.null(attr(mutation, "names_dict")))
+
+  cna <- sanitize_cna_input(gnomeR::cna)
+  expect_true(!is.null(attr(cna, "names_dict")))
+
+  fus <- sanitize_fusion_input(gnomeR::sv)
+  expect_true(!is.null(attr(fus, "names_dict")))
+
+
+})
+
+
+
+test_that("Check input colname is used in messaging", {
+
+  mut_maf <- gnomeR::mutations %>%
+    select(-variantType) %>%
+    mutate(Tumor_Seq_Allele2 = NA)
+
+  x <- capture_warning(sanitize_mutation_input(mut_maf, include_silent = FALSE))
+  expect_true(str_detect(x$message, "Tumor_Seq_Allele2"))
+
+
+})
 
 
 # Test Specific Utils -----------------------------------------------------

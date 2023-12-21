@@ -181,6 +181,9 @@ create_gene_binary <- function(samples = NULL,
   samples_final <- samples %||%
     samples_in_data
 
+  samples_final <- unique(samples_final)
+
+
   # Sanitize Data and Filter to Final Samples List  --------
 
   mutation <- switch(!is.null(mutation),
@@ -204,8 +207,6 @@ create_gene_binary <- function(samples = NULL,
         samples_final = samples_final)
     }
   )
-
-
 
   # Recode Aliases -----------------------------------------------------------
 
@@ -270,7 +271,8 @@ create_gene_binary <- function(samples = NULL,
       mut_type = mut_type,
       snp_only = snp_only,
       include_silent = include_silent,
-      specify_panel = specify_panel
+      specify_panel = specify_panel,
+      names_mut_dict = names_mut_dict
     )
   )
 
@@ -398,7 +400,8 @@ create_gene_binary <- function(samples = NULL,
                                    mut_type,
                                    snp_only,
                                    include_silent,
-                                   specify_panel) {
+                                   specify_panel,
+                                   names_mut_dict) {
 
   # apply filters --------------
 
@@ -421,8 +424,10 @@ create_gene_binary <- function(samples = NULL,
     },
     "omit_germline" = {
       mutation <- mutation %>%
-        filter(.data$mutation_status != "GERMLINE" |
-          .data$mutation_status != "germline" | is.na(.data$mutation_status))
+        filter((.data$mutation_status != "GERMLINE" &
+                  .data$mutation_status != "germline" &
+                  .data$mutation_status != "Germline") |
+                 is.na(.data$mutation_status))
 
       blank_muts <- mutation %>%
         filter(is.na(.data$mutation_status) |
@@ -432,17 +437,19 @@ create_gene_binary <- function(samples = NULL,
 
       if ((blank_muts > 0)) {
         cli::cli_alert_warning(
-          "{(blank_muts)} mutations have {.code NA} or blank in mutation status column instead of 'SOMATIC' or 'GERMLINE'. These were assumed to be 'SOMATIC' and were retained in the resulting binary matrix.")
+          "{(blank_muts)} mutations have {.code NA} or blank in the {.field {dplyr::first(c(names_mut_dict['mutation_status'], 'mutation_status'), na_rm = TRUE)}} column instead of 'SOMATIC' or 'GERMLINE'. These were assumed to be 'SOMATIC' and were retained in the resulting binary matrix.")
       }
     },
     "somatic_only" = {
       mutation <- mutation %>%
         filter(.data$mutation_status == "SOMATIC" |
+                 .data$mutation_status == "Somatic" |
           .data$mutation_status == "somatic")
     },
     "germline_only" = {
       mutation <- mutation %>% filter(.data$mutation_status == "GERMLINE" |
-        .data$mutation_status == "germline")
+                                        .data$mutation_status == "Germline" |
+                                        .data$mutation_status == "germline")
     }
   )
 
