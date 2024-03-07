@@ -371,7 +371,11 @@
     },
     "SystemRequirements": null
   },
+<<<<<<< HEAD
+  "fileSize": "2592.545KB",
+=======
   "fileSize": "2349.143KB",
+>>>>>>> 5759088716465e8c53bb986d334221a9ece5bc4f
   "releaseNotes": "https://github.com/MSKCC-Epi-Bio/gnomeR/blob/master/NEWS.md",
   "readme": "https://github.com/MSKCC-Epi-Bio/gnomeR/blob/main/README.md",
   "contIntegration": ["https://github.com/MSKCC-Epi-Bio/gnomeR/actions", "https://app.codecov.io/gh/MSKCC-Epi-Bio/gnomeR?branch=main"],

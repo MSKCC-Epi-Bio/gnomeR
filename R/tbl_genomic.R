@@ -44,6 +44,7 @@ tbl_genomic <- function(gene_binary,
                         freq_cutoff = deprecated(),
                         freq_cutoff_by_gene = deprecated(),
                         gene_subset = deprecated(),
+                        wide_format = FALSE,
                         ...) {
 
   # Check arguments & prep data ------------------------------------------------
@@ -90,8 +91,8 @@ tbl_genomic <- function(gene_binary,
 
   by <-
     .select_to_varnames({{ by }},
-      data = gene_binary,
-      arg_name = "by", select_single = TRUE
+                        data = gene_binary,
+                        arg_name = "by", select_single = TRUE
     )
 
   # Order Genes for Final Table  ---------------------------------------------
@@ -106,9 +107,117 @@ tbl_genomic <- function(gene_binary,
                   any_of(order_genes)) %>%
     dplyr::select(-"sample_id")
 
+
+  # * Wide format by alteration type -----
+
+  if (wide_format) {
+
+    genes <- order_genes[!order_genes %in% by]%>%
+      .remove_endings()%>%
+      unique()
+
+    # identify types of alterations in data
+
+    gene_endings <- c(".mut", ".Amp", ".Del", ".fus")
+
+    # add .mut to endings to make easier
+
+    gb_alt_all <- order_genes %>%
+      .paste_endings()
+
+    any_alt_types <- purrr::map(gene_endings,
+                          ~any(grepl(.x, gb_alt_all)))
+
+    names(any_alt_types) <- gene_endings
+
+    # create table of overall frequencies
+
+    tbl1 <- gene_binary %>%
+      pivot_longer(!sample_id)%>%
+      mutate(name = .remove_endings(name))%>%
+      group_by(sample_id, name)%>%
+      slice(which.max(value))%>%
+      ungroup()%>%
+      select(-"sample_id")
+
+
+    tbl2 <- tbl1 %>%
+      split(tbl1$name)
+
+    tbl_overall <- purrr::map(1:length(names(tbl2)), function(x){
+        tbl2[[x]] %>%
+          select(-"name")%>%
+          setNames(names(tbl2)[[x]])
+      })%>%
+      do.call(cbind, .)%>%
+      gtsummary::tbl_summary(by = any_of(by))
+
+    # create table of mutation frequencies
+
+    tbls_alt_types <- purrr::map2(
+  any_alt_types,
+  gene_endings,
+  function(yes_exist, gene) {
+
+    if(yes_exist[[1]]){
+      data <- table_data
+
+      # need to figure out how to add by variables HERE
+      names(data) <- c("sample_id", any_of(by),
+                       .paste_endings(names(data)[2:length(names(data))]))
+
+      data <- data %>%
+        select(any_of(by),
+               ends_with(gene))
+
+      names(data) <- .remove_endings(names(data))
+
+      genes_not_obs <- setdiff(genes, names(data))[setdiff(genes, names(data)) %in% by]
+
+      data <- data %>%
+        # need to fill in 0 for all unobserved alterations in hugo_symbol
+        dplyr::mutate(!!!setNames(rep(0, length(genes_not_obs)),
+                                  genes_not_obs))
+
+      data %>%
+        gtsummary::tbl_summary(by = any_of(by))
+    } else {
+      NULL
+    }
+
+  }
+)
+
+
+    # create list of tables
+    tbls_list_pre <-
+      append(list(tbl_overall),
+           purrr::map2(any_alt_types,
+                       tbls_alt_types, function(x, y){
+             if (x) {y}
+           }))
+
+    # drop NULL tables
+    tbls_list <- tbls_list_pre %>% purrr::keep( ~ !is.null(.) )
+
+
+    tab_spanner_vec <- c(
+      "**Overall**",
+      purrr::map2(any_alt_types, c("**Mutations**", "**Amplifications**",
+                            "**Deletions**", "**Fusions**"),
+           ~if(.x){.y}) %>%
+        unlist()
+    )
+
+    # merge tables
+    gtsummary::tbl_merge(tbls_list,
+                         tab_spanner = tab_spanner_vec)
+
+  }
+
   # Construct Final Table  ---------------------------------------------------
 
-  final_table <- table_data %>%
+  else {final_table <- table_data %>%
     gtsummary::tbl_summary(by = any_of(by),...)
 
   if (!is.null(by)) {
@@ -116,6 +225,6 @@ tbl_genomic <- function(gene_binary,
       gtsummary::add_overall()
   }
 
-  final_table
+  final_table}
 
 }
