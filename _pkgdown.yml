@@ -51,6 +51,7 @@ reference:
     - recode_cna
     - rename_columns
     - resolve_alias
+    - extract_patient_id
   - subtitle: Color Palette
   - contents:
     - gnomer_colors

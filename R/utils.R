@@ -135,7 +135,29 @@ recode_cna <- function(alteration_vector){
   }
 
 
+#' Extract IMPACT Patient ID From Sample ID
+#'
+#' @param sample_id A character vector of IMPACT Tumor sample IDs
+#'
+#' @return Returns a vector of patient IDs
+#' @export
+#'
+#' @examples
+#' sample_id = c("P-0000071-T01-IM3", "P-0000072-T02-IM4", "P-0000073-T03-IM5")
+#' extract_patient_id(sample_id)
+#'
+extract_patient_id <- function(sample_id) {
 
+  # Checks ----------------------------------------------------------------
+  wrong_format <- sample_id[!stringr::str_detect(sample_id, "^P-\\d{1,}-T.*")]
+
+  if (length(wrong_format) > 0) {
+    cli::cli_abort("Some {.code sample_id} values do not match the expected IMPACT sample format (e.g `P-0000XX-T01-IM3`)")
+  }
+
+  patient_id = stringr::str_replace(sample_id, "-T.*", "")
+  return(patient_id)
+}
 
 #' Create binary data.frames depending on type of mutation data
 #'
@@ -217,6 +239,24 @@ recode_cna <- function(alteration_vector){
   names[!str_detect(names, ".Amp|.Del|.fus|.cna")] <-
     paste0(stringr::str_trim(
       names[!str_detect(names, ".Amp|.Del|.fus|.cna")]), ending)
+
+  return(names)
+}
+
+
+#' Remove descriptive endings to hugo symbol names (quicker summarize)
+#'
+#' @param names hugo symbols to check
+#' @return a vector of hugo symbols where each entry DOES NOT have a descriptive ending
+#' from the following list: ".Amp", ".Del", ".fus", ".cna", ".mut".
+#' @keywords internal
+#' try
+
+.remove_endings = function(names) {
+
+   stringr::str_remove_all(
+      names,
+      ".Amp|.Del|.fus|.cna|.mut")
 
   return(names)
 }
