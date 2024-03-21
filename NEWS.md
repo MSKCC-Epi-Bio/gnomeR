@@ -17,6 +17,7 @@
 - Enhanced `subset_by_frequency()` to users to select hugo_symbols if they reach a threshold in any level of a variable (ex: high risk vs low risk) (#305)
 
 
+
 # gnomeR 1.2.0
 
 * Updated color palette functionality
