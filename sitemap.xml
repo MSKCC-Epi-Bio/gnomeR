@@ -61,13 +61,28 @@
     <loc>https://mskcc-epi-bio.github.io/gnomeR/reference/dot-abort_if_not_numeric.html</loc>
   </url>
   <url>
+    <loc>https://mskcc-epi-bio.github.io/gnomeR/reference/dot-check_for_fus_in_mut.html</loc>
+  </url>
+  <url>
     <loc>https://mskcc-epi-bio.github.io/gnomeR/reference/dot-check_required_cols.html</loc>
+  </url>
+  <url>
+    <loc>https://mskcc-epi-bio.github.io/gnomeR/reference/dot-clean_and_check_cols.html</loc>
   </url>
   <url>
     <loc>https://mskcc-epi-bio.github.io/gnomeR/reference/dot-cna_gene_binary.html</loc>
   </url>
   <url>
+    <loc>https://mskcc-epi-bio.github.io/gnomeR/reference/dot-filter_to_sample_list.html</loc>
+  </url>
+  <url>
     <loc>https://mskcc-epi-bio.github.io/gnomeR/reference/dot-fusions_gene_binary.html</loc>
+  </url>
+  <url>
+    <loc>https://mskcc-epi-bio.github.io/gnomeR/reference/dot-infer_mutation_status.html</loc>
+  </url>
+  <url>
+    <loc>https://mskcc-epi-bio.github.io/gnomeR/reference/dot-infer_variant_type.html</loc>
   </url>
   <url>
     <loc>https://mskcc-epi-bio.github.io/gnomeR/reference/dot-mutations_gene_binary.html</loc>
@@ -173,15 +188,6 @@
   </url>
   <url>
     <loc>https://mskcc-epi-bio.github.io/gnomeR/reference/resolve_alias.html</loc>
-  </url>
-  <url>
-    <loc>https://mskcc-epi-bio.github.io/gnomeR/reference/sanitize_cna_input.html</loc>
-  </url>
-  <url>
-    <loc>https://mskcc-epi-bio.github.io/gnomeR/reference/sanitize_fusion_input.html</loc>
-  </url>
-  <url>
-    <loc>https://mskcc-epi-bio.github.io/gnomeR/reference/sanitize_mutation_input.html</loc>
   </url>
   <url>
     <loc>https://mskcc-epi-bio.github.io/gnomeR/reference/seg.html</loc>
