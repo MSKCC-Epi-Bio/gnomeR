@@ -1,5 +1,6 @@
 # gnomeR (development version)
-
+- More explicit separation between which are exported vs internal-only functions.
+- Removed the sanitize_mutations(), sanitize_cna(), sanitize_fusions() functions and instead replaced them with smaller, more modular and explicit functions that do all the same tasks. (#328)
 - Added `extract_patient_id()` function to get IMPACT patient ID from sample ID
 - Deprecated `freq_cutoff`, `freq_cutoff_by_gene`, and `gene_subset` arguments in `tbl_genomic()`. It is now recommended that users use `subset_by_frequency()` instead before passing data to `tbl_genomic()`.
 - Added `other_vars` argument to `subset_by_frequency()`, `subset_by_panel()`, `summarize_by_gene()` and `add_pathways()` to allow retention of other clinical vars when using functions within pipeline.
@@ -14,6 +15,7 @@
 - A dictionary of old to new names for `rename_columns()` output is now an attribute of the returned object. Now messages can reference the original names of data columns (ex: `TumorAllele2` not `tumor_allele_2`) to make it more intuitive to users (#302).
 - Fixed bug that wasn't consistently filtering out germline samples
 - Enhanced `subset_by_frequency()` to users to select hugo_symbols if they reach a threshold in any level of a variable (ex: high risk vs low risk) (#305)
+
 
 
 # gnomeR 1.2.0

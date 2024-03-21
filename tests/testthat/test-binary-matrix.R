@@ -468,6 +468,17 @@ test_that("test include_silent silent are removed when variant class col", {
 
 })
 
+# Test messaging for mutationStatus works properly -------------------
+
+# See issue #293 and AM's repex
+
+test_that("mutationStatus error properly output", {
+  mut_valid_sample_ids<-unique(gnomeR::mutations$sampleId)[1:10]
+  expect_message(create_gene_binary(sample=mut_valid_sample_ids, mutation=gnomeR::mutations),
+                 NA)
+
+
+})
 
 
 # Test snp_only argument --------------------------------------------------

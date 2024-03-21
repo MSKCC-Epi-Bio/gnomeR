@@ -52,7 +52,7 @@ tbl_genomic <- function(gene_binary,
     stop("`gene_binary=` argument must be a tibble or data frame.", call. = FALSE)
   }
 
-  .check_required_cols(gene_binary, "sample_id", "gene_binary")
+  .check_required_cols(gene_binary, "sample_id")
 
   if("sample_id" %in% names(gene_binary)) {
     if(any(table(gene_binary$sample_id) > 1)) {
