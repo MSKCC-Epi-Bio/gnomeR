@@ -36,18 +36,6 @@
 #'   add_global_p() %>%
 #'   add_q()
 #' }
-#' @section Example Output:
-#' \if{html}{Example 1}
-#'
-#' \if{html}{\out{
-#' `r man_create_image_tag(file = "add_q_ex1.png", width = "65")`
-#' }}
-#'
-#' \if{html}{Example 2}
-#'
-#' \if{html}{\out{
-#' `r man_create_image_tag(file = "add_q_ex2.png", width = "60")`
-#' }}
 
 add_q_tbl_wide <- function(x, method = "fdr", pvalue_fun = NULL, n_comp = NULL, quiet = NULL) {
   updated_call_list <- c(x$call_list, list(add_q = match.call()))

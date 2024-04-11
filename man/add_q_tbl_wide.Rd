@@ -33,21 +33,6 @@ and return a string that is the rounded/formatted p-value (e.g.
 \description{
 Adjustments to p-values are performed with \link[stats:p.adjust]{stats::p.adjust}.
 }
-\section{Example Output}{
-
-\if{html}{Example 1}
-
-\if{html}{\out{
-`r man_create_image_tag(file = "add_q_ex1.png", width = "65")`
-}}
-
-\if{html}{Example 2}
-
-\if{html}{\out{
-`r man_create_image_tag(file = "add_q_ex2.png", width = "60")`
-}}
-}
-
 \examples{
 \dontshow{if (broom.helpers::.assert_package("car", pkg_search = "gtsummary", boolean = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 \donttest{
