@@ -12,7 +12,7 @@
 #' @param gene_subset deprecated
 #' @param wide_format Specifies whether to stratify tbl_genomic by alteration
 #'   type such that the resulting table will include one column per alteration
-#'   type and an overall summary column. Default is FALSE.
+#'   type and an overall summary column. Default is `wide_format = FALSE`.
 #' @param by A variable to be passed to `gtsummary::tbl_summary()`'s by
 #'   parameter
 #' @param ... Additional parameters that can be passed to
