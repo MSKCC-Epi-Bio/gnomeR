@@ -9,7 +9,11 @@
 .create_wide_format(gene_binary_df, order_genes_df, table_data_df)
 }
 \arguments{
-\item{table_data_df}{}
+\item{gene_binary_df}{data.frame of genetic samples}
+
+\item{order_genes_df}{data.frame}
+
+\item{table_data_df}{data.frame}
 }
 \value{
 wide format 'tbl_genomic' by alteration type
