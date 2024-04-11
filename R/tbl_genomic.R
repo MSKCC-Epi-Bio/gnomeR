@@ -1,16 +1,23 @@
 #' tbl_genomic
 #'
-#' This function will select genes based on user inputs or on frequency counts and then
-#' will pass the data.frame to `gtsummary::tbl_summary()`. You can specify a `by` variable and other
-#' parameters that are accepted by `gtsummary::tbl_summary()`. Note the `by` variable must be merged on to
-#' onto the data before using the `by` parameter in the function.
+#' This function will select genes based on user inputs or on frequency counts
+#' and then will pass the data.frame to `gtsummary::tbl_summary()`. You can
+#' specify a `by` variable and other parameters that are accepted by
+#' `gtsummary::tbl_summary()`. Note the `by` variable must be merged on to onto
+#' the data before using the `by` parameter in the function.
 #'
 #' @param gene_binary data.frame of genetic samples
 #' @param freq_cutoff deprecated
 #' @param freq_cutoff_by_gene deprecated
 #' @param gene_subset deprecated
-#' @param by A variable to be passed to `gtsummary::tbl_summary()`'s by parameter
-#' @param ... Additional parameters that can be passed to `gtsummary::tbl_summary()`. To access the additional parameters you need to load `gtsummary`.
+#' @param wide_format Specifies whether to stratify tbl_genomic by alteration
+#'   type such that the resulting table will include one column per alteration
+#'   type and an overall summary column. Default is `wide_format = FALSE`.
+#' @param by A variable to be passed to `gtsummary::tbl_summary()`'s by
+#'   parameter
+#' @param ... Additional parameters that can be passed to
+#'   `gtsummary::tbl_summary()`. To access the additional parameters you need to
+#'   load `gtsummary`.
 #' @return A `tbl_summary()` object
 #' @export
 #'
@@ -183,8 +190,6 @@ tbl_genomic <- function(gene_binary,
     # # add .mut to endings to make easier
     # order_alts_explicit <- order_alts %>%
     #   .paste_endings()
-#
-
 
     # create each table
     which_alt_types[which_alt_types == TRUE]
@@ -209,23 +214,47 @@ tbl_genomic <- function(gene_binary,
            ~if(.x){.y}) %>%
         unlist()
     )
+        # need to figure out how to add by variables HERE
+        names(data) <- c("sample_id", any_of(by),
+                         .paste_endings(names(data)[2:length(names(data))]))
 
-    # merge tables
-    gtsummary::tbl_merge(tbls_list,
-                         tab_spanner = tab_spanner_vec)
+        data <- data %>%
+          dplyr::select(any_of(by),
+                        ends_with(gene))
 
-  }
+        names(data) <- .remove_endings(names(data))
+
+        genes_not_obs <- dplyr::setdiff(genes, names(data))[dplyr::setdiff(genes, names(data)) %in% by]
+
+    }
+  )
 
 
-  else {final_table <- table_data %>%
-    gtsummary::tbl_summary(by = any_of(by),...)
+  # create list of tables
+  tbls_list_wide_pre <-
+    append(list(tbl_overall),
+           purrr::map2(any_alt_types,
+                       tbls_alt_types, function(x, y){
+                         if (x) {y}
+                       }))
 
-  if (!is.null(by)) {
-    final_table <- final_table %>%
-      gtsummary::add_overall()
-  }
+  # drop NULL tables
+  tbls_list_wide <- tbls_list_wide_pre %>% purrr::keep( ~ !is.null(.) )
 
-  final_table}
+
+  tab_spanner_vec <- c(
+    "**Overall**",
+    purrr::map2(any_alt_types, c("**Mutations**", "**Amplifications**",
+                                 "**Deletions**", "**Fusions**"),
+                ~if(.x){.y}) %>%
+      unlist()
+  )
+
+  # merge tables
+  final_table_wide <- gtsummary::tbl_merge(tbls_list_wide,
+                                           tab_spanner = tab_spanner_vec)
+
+  return(final_table_wide)
 
 # Assign Class ------------------------------------------------------------
 
@@ -273,3 +302,4 @@ make_alt_table <- function(alt_type = ".mut",
 
 
 }
+

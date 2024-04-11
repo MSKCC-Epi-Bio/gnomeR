@@ -36,6 +36,8 @@
 #'   add_global_p() %>%
 #'   add_q()
 #'
+#' }
+
 add_q_tbl_wide <- function(x, method = "fdr", pvalue_fun = NULL, n_comp = NULL, quiet = NULL) {
   updated_call_list <- c(x$call_list, list(add_q = match.call()))
   # setting defaults -----------------------------------------------------------
