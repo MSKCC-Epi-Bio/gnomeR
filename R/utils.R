@@ -254,11 +254,11 @@ extract_patient_id <- function(sample_id) {
 
 .remove_endings = function(names) {
 
-   stringr::str_remove_all(
+   new_names <- stringr::str_remove_all(
       names,
       ".Amp|.Del|.fus|.cna|.mut")
 
-  return(names)
+  return(new_names)
 }
 
 #' Check if all gene_binary columns except sample_id and other_vars are numeric

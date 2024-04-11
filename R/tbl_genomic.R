@@ -95,116 +95,117 @@ tbl_genomic <- function(gene_binary,
                         arg_name = "by", select_single = TRUE
     )
 
-  # Order Genes for Final Table  ---------------------------------------------
+  # * Wide ------------
 
-  order_genes <- gene_binary %>%
-    dplyr::select(-all_of(by)) %>%
-    gnomeR::subset_by_frequency(t = 0) %>%
-    names()
+  # create data set with only alterations
+  alts_only <- gene_binary %>%
+    dplyr::select(-all_of(by), -sample_id)
 
-  table_data <- gene_binary %>%
-    dplyr::select(all_of(by),
-                  any_of(order_genes)) %>%
-    dplyr::select(-"sample_id")
+  # create data set with all endings (including .mut if needed)
+  alts_only_with_endings <- alts_only
+  names(alts_only_with_endings) <- .paste_endings(names(alts_only))
+
+  # identify types of alterations in data
+  possible_alt_endings <-  c(".mut", ".Amp", ".Del", ".fus")
+
+  which_alt_types <- purrr::map_lgl(possible_alt_endings,
+                              ~any(grepl(.x, names(alts_only_with_endings))))
+
+  names(which_alt_types) <- possible_alt_endings
+  which_alt_types_no_mut <- which_alt_types[names(which_alt_types) != ".mut"]
+
+  more_than_1_type <- (sum(which_alt_types_no_mut) > 0)
+
+  if(wide_format == TRUE & !more_than_1_type) {
+
+    wide_format = FALSE
+    cli::cli_alert_warning("No .Amp, .Del or .fus found in your data. Ignoring `wide_format = TRUE` and returning a table of one column of summarized alterations (`wide_format = FALSE`).")
+
+  }
+
+# Long Table -----------------------------------------------------------
 
 
-  # * Wide format by alteration type -----
+  if(wide_format == FALSE) {
+
+    # * Order Genes for Final Table  ---------------------------------------------
+
+    order_genes <- gene_binary %>%
+      dplyr::select(-all_of(by)) %>%
+      gnomeR::subset_by_frequency(t = 0) %>%
+      names()
+
+    table_data <- gene_binary %>%
+      dplyr::select(all_of(by),
+                    any_of(order_genes)) %>%
+      dplyr::select(-"sample_id")
+
+    # * Construct Final Table  ---------------------------------------------------
+
+    final_table <- table_data %>%
+      gtsummary::tbl_summary(by = any_of(by),...)
+
+    if (!is.null(by)) {
+      final_table <- final_table %>%
+        gtsummary::add_overall()
+    }
+
+    final_table
+  }
+
+  # Wide Table -----------------------------------------------------------
 
   if (wide_format) {
 
-    genes <- order_genes[!order_genes %in% by]%>%
-      .remove_endings()%>%
-      unique()
+    # * Get Gene Level Totals and Order -----------
+    gene_level_binary <- summarize_by_gene(gene_binary, other_vars = any_of(by))
 
-    # identify types of alterations in data
+    gene_level_alts_only <- gene_level_binary %>%
+      select(-sample_id, -any_of(by))
 
-    gene_endings <- c(".mut", ".Amp", ".Del", ".fus")
+    order_genes <- names(gene_level_alts_only)[order(apply(gene_level_alts_only, 2, sum),
+                                                   decreasing = TRUE)]
 
-    # add .mut to endings to make easier
-
-    gb_alt_all <- order_genes %>%
-      .paste_endings()
-
-    any_alt_types <- purrr::map(gene_endings,
-                          ~any(grepl(.x, gb_alt_all)))
-
-    names(any_alt_types) <- gene_endings
-
-    # create table of overall frequencies
-
-    tbl1 <- gene_binary %>%
-      pivot_longer(!sample_id)%>%
-      mutate(name = .remove_endings(name))%>%
-      group_by(sample_id, name)%>%
-      slice(which.max(value))%>%
-      ungroup()%>%
-      select(-"sample_id")
+    # * Create overall n table --------------
+    gene_total_table <- gene_level_alts_only %>%
+      tbl_summary()
 
 
-    tbl2 <- tbl1 %>%
-      split(tbl1$name)
+    # * Create Each Alt Type Table ------------------
 
-    tbl_overall <- purrr::map(1:length(names(tbl2)), function(x){
-        tbl2[[x]] %>%
-          select(-"name")%>%
-          setNames(names(tbl2)[[x]])
-      })%>%
-      do.call(cbind, .)%>%
-      gtsummary::tbl_summary(by = any_of(by))
+    gene_binary_with_endings <- gene_binary %>%
+      select(sample_id, any_of(by)) %>%
+      bind_rows(alts_only_with_endings)
 
-    # create table of mutation frequencies
-
-    tbls_alt_types <- purrr::map2(
-  any_alt_types,
-  gene_endings,
-  function(yes_exist, gene) {
-
-    if(yes_exist[[1]]){
-      data <- table_data
-
-      # need to figure out how to add by variables HERE
-      names(data) <- c("sample_id", any_of(by),
-                       .paste_endings(names(data)[2:length(names(data))]))
-
-      data <- data %>%
-        select(any_of(by),
-               ends_with(gene))
-
-      names(data) <- .remove_endings(names(data))
-
-      genes_not_obs <- setdiff(genes, names(data))[setdiff(genes, names(data)) %in% by]
-
-      data <- data %>%
-        # need to fill in 0 for all unobserved alterations in hugo_symbol
-        dplyr::mutate(!!!setNames(rep(0, length(genes_not_obs)),
-                                  genes_not_obs))
-
-      data %>%
-        gtsummary::tbl_summary(by = any_of(by))
-    } else {
-      NULL
-    }
-
-  }
-)
+    # # identify types of alterations in data
+    # possible_alt_endings <- c(".mut", ".Amp", ".Del", ".fus")
+    #
+    # # add .mut to endings to make easier
+    # order_alts_explicit <- order_alts %>%
+    #   .paste_endings()
+#
 
 
-    # create list of tables
-    tbls_list_pre <-
-      append(list(tbl_overall),
-           purrr::map2(any_alt_types,
-                       tbls_alt_types, function(x, y){
-             if (x) {y}
-           }))
+    # create each table
+    which_alt_types[which_alt_types == TRUE]
 
-    # drop NULL tables
-    tbls_list <- tbls_list_pre %>% purrr::keep( ~ !is.null(.) )
+    tbls_list <- purrr::map(c(".mut", ".Amp", ".Del", ".fus"),
+                     ~make_alt_table(alt_type = .x,
+                                     data_with_endings = gene_binary_with_endings,
+                                     order_genes = order_genes))
+
+    names(tbls_list) <- c(".mut", ".Amp", ".Del", ".fus")
+    tbls_list <- tbls_list %>% purrr::keep( ~ !is.null(.) )
+
+    tbls_list$overall <- gene_total_table
 
 
+
+  # Construct Final Table  ---------------------------------------------------
     tab_spanner_vec <- c(
       "**Overall**",
-      purrr::map2(any_alt_types, c("**Mutations**", "**Amplifications**",
-                            "**Deletions**", "**Fusions**"),
+      purrr::map2(which_alt_types,
+                  c("**Mutations**", "**Amplifications**", "**Deletions**", "**Fusions**"),
            ~if(.x){.y}) %>%
         unlist()
     )
@@ -215,7 +216,6 @@ tbl_genomic <- function(gene_binary,
 
   }
 
-  # Construct Final Table  ---------------------------------------------------
 
   else {final_table <- table_data %>%
     gtsummary::tbl_summary(by = any_of(by),...)
@@ -226,5 +226,50 @@ tbl_genomic <- function(gene_binary,
   }
 
   final_table}
+
+# Assign Class ------------------------------------------------------------
+
+
+  if (wide_format) {
+    class(final_table) <- c("tbl_genomic_wide", class(final_table))
+  } else {
+    class(final_table) <- c("tbl_genomic", class(final_table))
+
+  }
+
+}
+
+
+
+
+
+# Individual Alt Type Tables ----------------------------------------------
+
+make_alt_table <- function(alt_type = ".mut",
+         data_with_endings = gene_binary_with_endings,
+         order_genes) {
+
+  any_alts <- gene_binary_with_endings  %>%
+    select(ends_with(alt_type))
+
+
+  if(ncol(any_alts) > 0) {
+    alt_type_df <- gene_binary_with_endings  %>%
+      select(sample_id, any_of(by), ends_with(alt_type))
+
+    names(alt_type_df) <- .remove_endings(names(alt_type_df))
+
+  # genes_not_obs <- setdiff(genes, names(data))[setdiff(genes, names(data)) %in% by]
+  #
+  # data <- data %>%
+  # # need to fill in 0 for all unobserved alterations in hugo_symbol
+  # dplyr::mutate(!!!setNames(rep(0, length(genes_not_obs)),
+  # genes_not_obs))
+
+    alt_type_df %>%
+      select(any_of(order_genes)) %>%
+      gtsummary::tbl_summary(by = any_of(by))
+  }
+
 
 }

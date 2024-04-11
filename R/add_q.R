@@ -1,43 +1,24 @@
-#' Add a column of q-values to account for
-#' multiple comparisons
+#' Adds p-values to gtsummary table
 #'
-#' Adjustments to p-values are performed with [stats::p.adjust].
-#'
-#' @param x a `gtsummary` object
-#' @param method String indicating method to be used for p-value
-#' adjustment. Methods from
-#' [stats::p.adjust] are accepted.  Default is `method = "fdr"`.
-#' @inheritParams gtsummary::tbl_regression
-#' @inheritParams gtsummary::add_global_p
-#' @author Esther Drill, Daniel D. Sjoberg
-#' @family tbl_summary tools
-#' @family tbl_svysummary tools
-#' @family tbl_regression tools
-#' @family tbl_uvregression tools
+#' @param x Object created from a gtsummary function
+#' @param ... Additional arguments passed to other methods.
+#' @keywords internal
+#' @author Daniel D. Sjoberg
+#' @seealso [add_p.tbl_summary], [add_p.tbl_cross], [add_p.tbl_svysummary], [add_p.tbl_survfit], [add_p.tbl_continuous]
 #' @export
-#' @examplesIf broom.helpers::.assert_package("car", pkg_search = "gtsummary", boolean = TRUE)
-#' \donttest{
-#' # Example 1 ----------------------------------
-#' add_q_ex1 <-
-#'   trial[c("trt", "age", "grade", "response")] %>%
-#'   tbl_summary(by = trt) %>%
-#'   add_p() %>%
-#'   add_q()
-#'
-#' # Example 2 ----------------------------------
-#' add_q_ex2 <-
-#'   trial[c("trt", "age", "grade", "response")] %>%
-#'   tbl_uvregression(
-#'     y = response,
-#'     method = glm,
-#'     method.args = list(family = binomial),
-#'     exponentiate = TRUE
-#'   ) %>%
-#'   add_global_p() %>%
-#'   add_q()
-#'
-add_q_tbl_wide <- function(x, method = "fdr", pvalue_fun = NULL, n_comp = NULL, quiet = NULL) {
+add_q <- function(x, ...) {
+  UseMethod("add_q")
+}
+
+add_q.default <- gtsummary::add_q
+
+add_q.tbl_genomic_wide <- function(x,
+                                   method = "fdr",
+                                   pvalue_fun = NULL,
+                                   quiet = NULL) {
+
   updated_call_list <- c(x$call_list, list(add_q = match.call()))
+
   # setting defaults -----------------------------------------------------------
   quiet <- quiet %||% get_theme_element("pkgwide-lgl:quiet") %||% FALSE
 
@@ -51,10 +32,6 @@ add_q_tbl_wide <- function(x, method = "fdr", pvalue_fun = NULL, n_comp = NULL, 
          call. = FALSE
     )
   }
-
-  ## Sammi's edits
-  n_comp <- length(which(!is.na(x$table_body$p.value)))
-  ## end Sammi's edits
 
   # setting defaults from gtsummary theme --------------------------------------
   pvalue_fun <-
@@ -73,14 +50,14 @@ add_q_tbl_wide <- function(x, method = "fdr", pvalue_fun = NULL, n_comp = NULL, 
 
   # perform multiple comparisons -----------------------------------------------
   expr_p.adjust <-
-    ## Sammi: added `n = n_comp` argument
-    rlang::expr(stats::p.adjust(x$table_body$p.value, method = !!method, n = n_comp)) %>%
+    rlang::expr(stats::p.adjust(x$table_body$p.value, method = !!method)) %>%
     deparse()
   if (quiet == FALSE) {
     rlang::inform(glue("add_q: Adjusting p-values with\n`{expr_p.adjust}`"))
   }
 
-  x$table_body$q.value <- x$table_body$p.value %>% stats::p.adjust(method = method)
+  x$table_body$q.value <- x$table_body$p.value %>%
+    stats::p.adjust(method = method)
 
   # update table_styling -------------------------------------------------------
   # footnote text
