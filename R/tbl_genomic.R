@@ -147,9 +147,9 @@ tbl_genomic <- function(gene_binary,
 #' the resulting table will include one column per alteration type and an
 #' overall summary column.
 #'
-#' @param gene_binary_df
-#' @param order_genes_df
-#' @param table_data_df
+#' @param gene_binary_df data.frame of genetic samples
+#' @param order_genes_df data.frame
+#' @param table_data_df data.frame
 #'
 #' @return wide format 'tbl_genomic' by alteration type
 #' @keywords internal
