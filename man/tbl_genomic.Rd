@@ -17,7 +17,8 @@ tbl_genomic(
 \arguments{
 \item{gene_binary}{data.frame of genetic samples}
 
-\item{by}{A variable to be passed to \code{gtsummary::tbl_summary()}'s by parameter}
+\item{by}{A variable to be passed to \code{gtsummary::tbl_summary()}'s by
+parameter}
 
 \item{freq_cutoff}{deprecated}
 
@@ -25,16 +26,23 @@ tbl_genomic(
 
 \item{gene_subset}{deprecated}
 
-\item{...}{Additional parameters that can be passed to \code{gtsummary::tbl_summary()}. To access the additional parameters you need to load \code{gtsummary}.}
+\item{wide_format}{Specifies whether to stratify tbl_genomic by alteration
+type such that the resulting table will include one column per alteration
+type and an overall summary column. Default is \code{wide_format = FALSE}.}
+
+\item{...}{Additional parameters that can be passed to
+\code{gtsummary::tbl_summary()}. To access the additional parameters you need to
+load \code{gtsummary}.}
 }
 \value{
 A \code{tbl_summary()} object
 }
 \description{
-This function will select genes based on user inputs or on frequency counts and then
-will pass the data.frame to \code{gtsummary::tbl_summary()}. You can specify a \code{by} variable and other
-parameters that are accepted by \code{gtsummary::tbl_summary()}. Note the \code{by} variable must be merged on to
-onto the data before using the \code{by} parameter in the function.
+This function will select genes based on user inputs or on frequency counts
+and then will pass the data.frame to \code{gtsummary::tbl_summary()}. You can
+specify a \code{by} variable and other parameters that are accepted by
+\code{gtsummary::tbl_summary()}. Note the \code{by} variable must be merged on to onto
+the data before using the \code{by} parameter in the function.
 }
 \examples{
 
