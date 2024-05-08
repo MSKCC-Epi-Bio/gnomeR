@@ -252,7 +252,7 @@ ggtopgenes <- function(mutation, n_genes = 10) {
 #'
 #' @param mutation Raw mutation dataframe containing alteration data
 #' @param n_genes Number of top genes to display in plot
-#' @param genes Vector of genes to display in plot
+#' @param select_genes Vector of genes to display in plot
 #' @param ... Further create_gene_binary() arguments
 #' @return Correlation heatmap of the top altered genes
 #' @export
@@ -261,16 +261,16 @@ ggtopgenes <- function(mutation, n_genes = 10) {
 #' gggenecor(gnomeR::mutations)
 #'
 #'
-gggenecor <- function(mutation, n_genes = 10, genes = NULL, ...) {
+gggenecor <- function(mutation, n_genes = 10, select_genes = NULL, ...) {
 
   mutation <- rename_columns(mutation)
 
   # If vector of genes is specified, override n_genes argument
-  n_genes = ifelse(is.null(genes), n_genes, length(genes))
+  n_genes = ifelse(is.null(select_genes), n_genes, length(select_genes))
 
-  if(!is.null(genes)){
+  if(!is.null(select_genes)){
     bin.mutation <- create_gene_binary(mutation = mutation,...) %>%
-      select(all_of(genes))
+      select(all_of(select_genes))
   }
   else {
     bin.mutation <- create_gene_binary(mutation = mutation,...) %>%
@@ -296,7 +296,7 @@ gggenecor <- function(mutation, n_genes = 10, genes = NULL, ...) {
 #'
 #' @param mutation Raw mutation dataframe containing alteration data
 #' @param n_genes Number of top genes to display in plot,
-#' @param genes Vector of genes to display in plot
+#' @param select_genes Vector of genes to display in plot
 #' @param ... Further create_gene_binary() arguments#'
 #' @return Comutation heatmap of the top genes
 #' @export
