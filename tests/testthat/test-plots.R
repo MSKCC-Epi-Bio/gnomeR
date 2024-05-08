@@ -244,6 +244,12 @@ test_that("mutation_viz works", {
 
   ggcomut_plot <- ggcomut(mutations1)
 
+  ggcomut_plot_select <- ggcomut(mutations1, n_genes = 10, select_genes = c("ALK", "BRAF", "FOXA1", "KRAS", "STK11", "TP53"))
+
+  gggenecor_plot <- gggenecor(mutations1)
+
+  gggenecor_plot_select <- gggenecor(mutations1, n_genes = 10, select_genes = c("ALK", "BRAF", "FOXA1", "KRAS", "STK11", "TP53"))
+
   vdiffr::expect_doppelganger(
     "mutation_viz_varclass", mut_plots$varclass)
 
@@ -264,6 +270,15 @@ test_that("mutation_viz works", {
 
   vdiffr::expect_doppelganger(
     "ggcomut_plot", ggcomut_plot)
+
+  vdiffr::expect_doppelganger(
+    "ggcomut_plot_select_genes", ggcomut_plot_select)
+
+  vdiffr::expect_doppelganger(
+    "gggenecor_plot", gggenecor_plot)
+
+  vdiffr::expect_doppelganger(
+    "gggenecor_plot_select_genes", gggenecor_plot_select)
 })
 
 # test_that("varclass plot works", {
@@ -286,6 +301,4 @@ test_that("mutation_viz works", {
 #   vdiffr::expect_doplleganger("varclass", plot1_ggplot)
 #
 # })
-
-# testthat::test_file("C:\\Users\\toumban\\OneDrive - Memorial Sloan Kettering Cancer Center\\Desktop\\gnomeR\\tests\\testthat\\test-plots.R")
 

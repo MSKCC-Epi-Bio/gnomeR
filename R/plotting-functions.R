@@ -122,20 +122,20 @@ ggvartype <- function(mutation) {
 
 }
 
-#' #' Utility Function to Extract SNV
-#' #'
-#' #' @param x string
-#' #' @param n number of characters from right
-#' #'
-#' #' @return string
-#' #' @noRd
-#' #' @examples
-#' #' substrRight("Hello", 2)
-#' #'
-#' substrRight <- function(x, n) {
-#'   x <- as.character(x)
-#'   substr(x, nchar(x) - n + 1, nchar(x))
-#' }
+#' Utility Function to Extract SNV
+#'
+#' @param x string
+#' @param n number of characters from right
+#'
+#' @return string
+#' @noRd
+#' @examples
+#' substrRight("Hello", 2)
+#'
+# substrRight <- function(x, n) {
+#   x <- as.character(x)
+#   substr(x, nchar(x) - n + 1, nchar(x))
+# }
 
 
 # ggsnvclass <- function(mutation) {
@@ -252,6 +252,7 @@ ggtopgenes <- function(mutation, n_genes = 10) {
 #'
 #' @param mutation Raw mutation dataframe containing alteration data
 #' @param n_genes Number of top genes to display in plot
+#' @param genes Vector of genes to display in plot
 #' @param ... Further create_gene_binary() arguments
 #' @return Correlation heatmap of the top altered genes
 #' @export
@@ -259,52 +260,74 @@ ggtopgenes <- function(mutation, n_genes = 10) {
 #' @examples
 #' gggenecor(gnomeR::mutations)
 #'
-gggenecor <- function(mutation, n_genes = 10, ...) {
+#'
+gggenecor <- function(mutation, n_genes = 10, genes = NULL, ...) {
 
   mutation <- rename_columns(mutation)
 
-  bin.mutation <- create_gene_binary(mutation = mutation,...) %>%
-    select(-"sample_id")
+  # If vector of genes is specified, override n_genes argument
+  n_genes = ifelse(is.null(genes), n_genes, length(genes))
 
-  keep <- names(sort(apply(bin.mutation,2,
-                           function(x){sum(x)}),
-                     decreasing = T))
-  keep <- keep[1:min(length(keep),n_genes)]
-  bin.mutation <- bin.mutation[,keep]
+  if(!is.null(genes)){
+    bin.mutation <- create_gene_binary(mutation = mutation,...) %>%
+      select(all_of(genes))
+  }
+  else {
+    bin.mutation <- create_gene_binary(mutation = mutation,...) %>%
+      select(-"sample_id")
+
+    keep <- names(sort(apply(bin.mutation,2,
+                             function(x){sum(x)}),
+                       decreasing = T))
+    keep <- keep[1:min(length(keep),n_genes)]
+    bin.mutation <- bin.mutation[,keep]
+  }
 
   p.corr <- GGally::ggcorr(dat = bin.mutation,
                            cor_matrix = stats::cor(bin.mutation),
                            limits = NULL)
 
   p.corr
-
 }
-
-
-
 
 
 #'
 #' Comutation Heatmap of the Top Altered Genes
 #'
 #' @param mutation Raw mutation dataframe containing alteration data
-#' @param n_genes Number of top genes to display in plot
-#' @param ... Further create_gene_binary() arguments
+#' @param n_genes Number of top genes to display in plot,
+#' @param genes Vector of genes to display in plot
+#' @param ... Further create_gene_binary() arguments#'
 #' @return Comutation heatmap of the top genes
 #' @export
 #'
 #' @examples
 #' ggcomut(mutation = gnomeR::mutations)
 #'
-ggcomut <- function(mutation, n_genes = 10, ...) {
+ggcomut <- function(mutation, n_genes = 10, select_genes = NULL, ...) {
 
-  bin.mutation <- create_gene_binary(mutation = mutation,...) %>%
-    select(-"sample_id")
-  keep <- names(sort(apply(bin.mutation,2,
-                           function(x){sum(x)}),
-                     decreasing = T))
-  keep <- keep[1:min(length(keep),n_genes)]
-  bin.mutation <- bin.mutation[,keep]
+  # Check if vector of genes is greater than 1
+  if(length(select_genes) == 1) {
+    cli::cli_abort("{.field select_genes} vector must include more than 1 gene")
+  }
+
+  # If vector of genes is specified, override n_genes argument
+  n_genes = ifelse(is.null(select_genes), n_genes, length(select_genes))
+
+  if(!is.null(select_genes)){
+    bin.mutation <- create_gene_binary(mutation = mutation,...) %>%
+      select(all_of(select_genes))
+  }
+  else {
+    bin.mutation <- create_gene_binary(mutation = mutation,...) %>%
+      select(-"sample_id")
+
+    keep <- names(sort(apply(bin.mutation,2,
+                             function(x){sum(x)}),
+                       decreasing = T))
+    keep <- keep[1:min(length(keep),n_genes)]
+    bin.mutation <- bin.mutation[,keep]
+  }
 
   co.mut <- apply(bin.mutation,2,function(x){
     apply(bin.mutation,2,function(y){
