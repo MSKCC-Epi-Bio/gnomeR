@@ -147,3 +147,32 @@ extract_patient_id <- function(sample_id) {
   return(patient_id)
 }
 
+
+
+# Function to check color palette combos that are not color-blind friendly ------------------------------------------------------
+
+
+#' @param pal Select from "pancan", "main" or "sunset"
+#'
+#' @return Returns every combination of hex codes that are NOT discernible to color blind people
+#' @export
+#' @examples
+#' noncolorblindfriendlypairs(pal="main")
+#'
+#'
+noncolorblindfriendlypairs <- function(pal = c("pancan","main","sunset")){
+
+  # Select a palette
+  pal <- match.arg(pal)
+
+  # Returns statistics for each palette (tolerance tells you the minimum number needed for color blind person to be able to see different colors)
+  p1 <-  colorblindcheck::palette_check(gnomer_palettes[[pal]])
+
+  # Outputs the indices of which hex codes are NOT distinguishable from eachother for colorblind
+  m1 <- unique(do.call(rbind,lapply(c("pro", "tri","deu"), function(x)
+    which(colorblindcheck::palette_dist(gnomeR::gnomer_palettes[[pal]], cvd=x) < p1$tolerance[1]-.001,
+          arr.ind = TRUE))))
+
+  data.frame(pair1 =gnomeR::gnomer_palettes[[pal]][m1[,1]], pair2 = gnomer_palettes[[pal]][m1[,2]])
+
+}

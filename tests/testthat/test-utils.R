@@ -11,3 +11,11 @@ test_that("test error thrown when non IMPACT ID", {
   expect_error(extract_patient_id(sample_id))
 
 })
+
+# Test noncolorblindfriendlypairs() function
+
+test_that("test that the non-color blind friendly palettes are properly outputted", {
+
+  expect_no_error(noncolorblindfriendlypairs(pal="main"))
+
+})
