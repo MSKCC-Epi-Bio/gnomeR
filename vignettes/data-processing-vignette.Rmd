@@ -174,27 +174,39 @@ colnames(all_bin)
 
 Sometimes researchers will be interested in specific changes to DNA sequences at targeted places on a chromosome and allele. 
 
-For example, a few distinct mutations of the TERT gene have been associated with brain tumorgenesis: C228T and C250T.  [1](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8945783/) In both situations, C is swapped for a T in the DNA sequence. For more background information on the biological mechanisms of TERT regulation, please reference the following article [here](https://jcp.bmj.com/content/72/4/281).
+For example, a few distinct mutations of the TERT gene have been associated with brain tumorgenesis: C228T and C250T.  [1](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8945783/) In both situations, nucleic acid C is swapped for T. For more background information on the biological mechanisms of TERT regulation, please reference the following article [here](https://jcp.bmj.com/content/72/4/281).
 
 Let's say you want to differentiate C228T and C250T from any other TERT mutations. Using a MAF file, you can use the `chromosome` and `start_position` variables to pinpoint the location of these mutations on the TERT gene and classify them by a new `hugo_symbol` using `add_point_muts()`. If you are unsure of these values, [Gene Cards](https://www.genecards.org/) is a helpful resource. Below are examples using the [MSK-IMPACT Clinical Sequencing Cohort](https://www.cbioportal.org/study/summary?id=msk_impact_2017) from cBioPortal used in a [prior study](https://pubmed.ncbi.nlm.nih.gov/28481359/).
 
+The `add_point_mutation()` function has four arguments:
+- `chr_num` - number to identify chromosome
+- `start_pos` - the start position of the mutation we are interesed in, which can be found on Gene Cards
+- `new_name` - a string to indicate what the point mutation should be called moving forward
+- `mutually_exclusive` - logical, default = `TRUE`, indicating if this point mutation should be considered mutually exclusive from the overall gene of interest. This affects mutational frequency calculations and interpretations of results. For example, say you had 10 TERT mutations across 20 individuals and two are TERT.C228T point mutations. By default, the mutational frequencies would be calculated as 40% for TERT (8/20) and 10% for TERT.C228T. If set to false, the mutation frequencies would be 50% for any TERT mutation (10/20) and 10% for TERT.C228T (2/20).
 
 ```{r}
 # load in IMPACT data
+# would need an API token from cBioPortal to access data
 
-impact_df <- cbioportalR::get_cbioportal_token()
+cbioportalR::set_cbioportal_db("public")
+
+impact_df <- cbioportalR::get_mutations_by_study(study_id = 'msk_impact_2017')
 
 # find number of TERT mutations in dataset regardless of
-gnomeR::mutations %>% 
+impact_df %>% 
   count(hugoGeneSymbol) %>%
   filter(hugoGeneSymbol == "TERT")
 
-TERT_point_muts <- gnomeR::mutations %>%
+TERT_point_muts <- impact_df %>%
+  filter(hugoGeneSymbol == "TERT")%>%
   # the start position could be a set value, or a pattern
   # that can be searched for in the data
   add_point_mut(chr_num = 5, start_pos = '1295228', new_name = 'TERT.C228T', mutually_exclusive = T) %>%
   add_point_mut(chr_num = 5, start_pos = '250$', new_name = 'TERT.C250T', mutually_exclusive = T)
-  
+
+# see new counts of hugo symbols
+count(TERT_point_muts, hugo_symbol)
+
 ```
 
 ### Collapse Data with `summarize_by_gene()`
