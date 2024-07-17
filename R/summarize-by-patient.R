@@ -1,8 +1,14 @@
-#' Simplify binary matrix to one column per gene that counts any alteration type as 1
+#' Simplify binary matrix to one column per patient that counts any alteration
+#' type across all samples as 1
 #'
 #' This will reduce the number of columns in your binary matrix, and the
 #' resulting data frame will have only 1 col per gene, as opposed to separate
 #' columns for mutation/cna/fusion.
+#'
+#' Note that if samples to the same patient were sequenced on different panels,
+#' any indication of an alteration is counted as an alteration, but the absence
+#' of an alteration is only defined when all sequencing panels included the gene
+#' and indicated that it was not altered.
 #'
 #' @param gene_binary a 0/1 matrix of gene alterations
 #' @param other_vars One or more column names (quoted or unquoted) in data to be retained
@@ -19,9 +25,9 @@
 #'   include_silent = FALSE,
 #'   specify_panel = "IMPACT341"
 #' ) %>%
-#'   summarize_by_gene()
+#'   summarize_by_patient()
 #'
-summarize_by_gene <- function(gene_binary, other_vars = NULL) {
+summarize_by_patient <- function(gene_binary, other_vars = NULL) {
 
 
   # Checks ------------------------------------------------------------------
@@ -31,11 +37,6 @@ summarize_by_gene <- function(gene_binary, other_vars = NULL) {
   }
 
   .check_required_cols(gene_binary, "sample_id")
-
-  # check for repeat samples
-  if(any(table(gene_binary$sample_id) > 1)) {
-    cli::cli_abort("Your {.field gene_binary} must have unique samples in {.code sample_id} column")
-  }
 
   # Other Vars - Capture Other Columns to Retain -----------------------------------
 
@@ -99,10 +100,51 @@ summarize_by_gene <- function(gene_binary, other_vars = NULL) {
   # join back to sample ID and other vars
   simp_gene_binary <- all_bin %>%
     left_join(sample_index, ., by = "sample_index") %>%
-    select(-c("sample_index"))
+    select(-c("sample_index")) %>%
+    # identify patients
+    mutate(patient_id = gnomeR::extract_patient_id(sample_id)) %>%
+    # determine number of samples per patient
+    group_by(patient_id) %>%
+    mutate(n_samples = n()) %>%
+    ungroup() %>%
+    select(-sample_id)
 
-  simp_gene_binary <- simp_gene_binary %>%
-    left_join(select(gene_binary, any_of(c("sample_id", other_vars))), by = "sample_id")
+  # summarize genomic information across patients
+  # separate patients w/ only 1 sample vs multiple samples to improve run time
+  simp_gene_binary_pt_single <- simp_gene_binary %>%
+    filter(n_samples == 1)
+
+  if (nrow(simp_gene_binary %>%
+           filter(n_samples > 1)) >0){
+
+    simp_gene_binary_pt_multiple <- simp_gene_binary %>%
+      filter(n_samples > 1) %>%
+      group_by(patient_id) %>%
+      summarize(across(.cols = c(everything()),
+                       .fns = ~case_when(
+                         # if any alteration, indicate altered
+                         max(c(.x, 0), na.rm = TRUE) == 1 ~ 1,
+                         # no alteration only if no NAs (no na.rm)
+                         max(.x) == 0 ~ 0
+                       )),
+                .groups = "drop")
+
+    simp_gene_binary_pt <- bind_rows(simp_gene_binary_pt_single,
+                                     simp_gene_binary_pt_multiple) %>%
+      select(-n_samples)
+    } else {
+    simp_gene_binary_pt <- simp_gene_binary_pt_single %>%
+      select(-n_samples)
+    }
+
+
+  simp_gene_binary <- left_join(simp_gene_binary_pt,
+                                gene_binary %>%
+                                  mutate(patient_id = gnomeR::extract_patient_id(sample_id)) %>%
+                                  select(any_of(c("patient_id", other_vars))) %>%
+                                  distinct(),
+                                by = "patient_id") %>%
+    select(patient_id, everything())
 
   return(simp_gene_binary)
 
