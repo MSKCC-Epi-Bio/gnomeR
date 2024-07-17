@@ -102,24 +102,24 @@ summarize_by_patient <- function(gene_binary, other_vars = NULL) {
     left_join(sample_index, ., by = "sample_index") %>%
     select(-c("sample_index")) %>%
     # identify patients
-    mutate(patient_id = gnomeR::extract_patient_id(sample_id)) %>%
+    mutate(patient_id = gnomeR::extract_patient_id(.data$sample_id)) %>%
     # determine number of samples per patient
-    group_by(patient_id) %>%
+    group_by(.data$patient_id) %>%
     mutate(n_samples = n()) %>%
     ungroup() %>%
-    select(-sample_id)
+    select(-.data$sample_id)
 
   # summarize genomic information across patients
   # separate patients w/ only 1 sample vs multiple samples to improve run time
   simp_gene_binary_pt_single <- simp_gene_binary %>%
-    filter(n_samples == 1)
+    filter(.data$n_samples == 1)
 
   if (nrow(simp_gene_binary %>%
-           filter(n_samples > 1)) >0){
+           filter(.data$n_samples > 1)) >0){
 
     simp_gene_binary_pt_multiple <- simp_gene_binary %>%
-      filter(n_samples > 1) %>%
-      group_by(patient_id) %>%
+      filter(.data$n_samples > 1) %>%
+      group_by(.data$patient_id) %>%
       summarize(across(.cols = c(everything()),
                        .fns = ~case_when(
                          # if any alteration, indicate altered
@@ -131,20 +131,20 @@ summarize_by_patient <- function(gene_binary, other_vars = NULL) {
 
     simp_gene_binary_pt <- bind_rows(simp_gene_binary_pt_single,
                                      simp_gene_binary_pt_multiple) %>%
-      select(-n_samples)
+      select(-.data$n_samples)
     } else {
     simp_gene_binary_pt <- simp_gene_binary_pt_single %>%
-      select(-n_samples)
+      select(-.data$n_samples)
     }
 
 
   simp_gene_binary <- left_join(simp_gene_binary_pt,
                                 gene_binary %>%
-                                  mutate(patient_id = gnomeR::extract_patient_id(sample_id)) %>%
+                                  mutate(patient_id = gnomeR::extract_patient_id(.data$sample_id)) %>%
                                   select(any_of(c("patient_id", other_vars))) %>%
                                   distinct(),
                                 by = "patient_id") %>%
-    select(patient_id, everything())
+    select(.data$patient_id, everything())
 
   return(simp_gene_binary)
 
