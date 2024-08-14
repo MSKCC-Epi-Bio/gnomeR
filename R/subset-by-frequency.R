@@ -97,8 +97,8 @@ subset_by_frequency <- function(gene_binary, t = .1, other_vars = NULL, by = NUL
 
     alt_data <-
       alt_only |>
-      group_by(by) |>
-      summarise(across(-c(by), sum = ~ sum(.), total = ~ sum(!is.na(.))), na.rm = T)
+      group_by(across(any_of(by))) |>
+      summarise_all(list(sum = ~ sum(.), total = ~ sum(!is.na(.))), na.rm = T)
 
     alt_group_data <-
       alt_data |>
@@ -107,12 +107,12 @@ subset_by_frequency <- function(gene_binary, t = .1, other_vars = NULL, by = NUL
       separate(gene, into = c("gene", "measure"), sep = "_") |>
       pivot_wider(names_from = measure,
                   values_from = value) |>
-      mutate(prop = sum/total) |>
-      arrange(desc(prop))
+      mutate(propo = sum/total) |>
+      arrange(desc(propo))
 
     alts_over_thresh_grp <-
       alt_group_data |>
-      filter(prop > t) |>
+      filter(propo > t) |>
       group_by(gene) |>
       select(gene) |>
       unique() |>
