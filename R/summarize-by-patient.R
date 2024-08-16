@@ -23,9 +23,11 @@
 #'   samples = samples, mutation = mutations, cna = cna,
 #'   mut_type = "somatic_only",
 #'   include_silent = FALSE,
-#'   specify_panel = "IMPACT341"
-#' ) %>%
-#'   summarize_by_patient()
+#'   specify_panel = "IMPACT341")
+#'
+#' gene_binary$patient_id = extract_patient_id(gene_binary$sample_id)
+#'
+#' summarize_by_patient(gene_binary)
 #'
 summarize_by_patient <- function(gene_binary, other_vars = NULL) {
 
@@ -36,7 +38,15 @@ summarize_by_patient <- function(gene_binary, other_vars = NULL) {
     cli::cli_abort("{.code gene_binary} must be a data.frame with sample ids")
   }
 
-  .check_required_cols(gene_binary, "sample_id")
+  # !!! I think we should allow sample ID as input but not require it
+  # .check_required_cols(
+  #   gene_binary,
+  #   c("sample_id"))
+
+  .check_required_cols(
+    gene_binary,
+    c("patient_id"),
+    add_to_message = c(i = "To extract patient IDs from IMPACT sample IDs (e.g. `P-XXXXXX-TXX-IMX`), use {.code gnomeR::extract_patient_id(data$sample_id)}"))
 
   # Other Vars - Capture Other Columns to Retain -----------------------------------
 
@@ -49,12 +59,14 @@ summarize_by_patient <- function(gene_binary, other_vars = NULL) {
 
   # Create Sample Index -----------------------------------------------------
 
+
   sample_index <- gene_binary %>%
-    select("sample_id") %>%
+    select("patient_id") %>%
     mutate(sample_index = paste0("samp", 1:nrow(gene_binary)))
 
   # data frame of only alterations
-  alt_only <- as.data.frame(select(gene_binary, -"sample_id", -any_of(other_vars)))
+
+  alt_only <- as.data.frame(select(gene_binary, -"patient_id", -any_of("sample_id"), -any_of(other_vars)))
 
   row.names(alt_only) <- sample_index$sample_index
 
@@ -102,12 +114,10 @@ summarize_by_patient <- function(gene_binary, other_vars = NULL) {
     left_join(sample_index, ., by = "sample_index") %>%
     select(-c("sample_index")) %>%
     # identify patients
-    mutate(patient_id = gnomeR::extract_patient_id(.data$sample_id)) %>%
     # determine number of samples per patient
     group_by(.data$patient_id) %>%
     mutate(n_samples = n()) %>%
-    ungroup() %>%
-    select(-.data$sample_id)
+    ungroup()
 
   # summarize genomic information across patients
   # separate patients w/ only 1 sample vs multiple samples to improve run time
@@ -131,20 +141,19 @@ summarize_by_patient <- function(gene_binary, other_vars = NULL) {
 
     simp_gene_binary_pt <- bind_rows(simp_gene_binary_pt_single,
                                      simp_gene_binary_pt_multiple) %>%
-      select(-.data$n_samples)
+      select(-"n_samples")
     } else {
     simp_gene_binary_pt <- simp_gene_binary_pt_single %>%
-      select(-.data$n_samples)
+      select(-"n_samples")
     }
 
-
+  # !!!! Discuss this
   simp_gene_binary <- left_join(simp_gene_binary_pt,
                                 gene_binary %>%
-                                  mutate(patient_id = gnomeR::extract_patient_id(.data$sample_id)) %>%
                                   select(any_of(c("patient_id", other_vars))) %>%
                                   distinct(),
                                 by = "patient_id") %>%
-    select(.data$patient_id, everything())
+    select("patient_id", everything())
 
   return(simp_gene_binary)
 

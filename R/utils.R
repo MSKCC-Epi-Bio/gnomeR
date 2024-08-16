@@ -8,11 +8,12 @@
 #'
 #' @param data A data frame to check
 #' @param required_cols A character specifying names of columns to check
+#' @param add_to_message a vector (preferrably named) of text to add to the error message for specific cases
 #' @return If data set doesn't have required columns it will return an error message.
 #' If it does have required columns, nothing will be returned
 #' @keywords internal
 
-.check_required_cols <- function(data, required_cols) {
+.check_required_cols <- function(data, required_cols, add_to_message = NULL) {
 
   # Get the name of the data object
   data_name <- deparse(substitute(data))
@@ -21,7 +22,12 @@
   which_missing <- required_cols[which(!(required_cols %in% column_names))]
 
   if(length(which_missing) > 0) {
-    cli::cli_abort("The following required columns are missing in your {.field {data_name}} data: {.var {which_missing}}")
+    message <-
+      c("Can't find required columns:", set_names(c(which_missing), "x"))
+
+    add_to_message <- add_to_message %||% ""
+    message <- c(message, add_to_message)
+    cli::cli_abort(message)
   }
 }
 

@@ -33,8 +33,10 @@ gene_binary <- create_gene_binary(
   samples = samples, mutation = mutations, cna = cna,
   mut_type = "somatic_only",
   include_silent = FALSE,
-  specify_panel = "IMPACT341"
-) \%>\%
-  summarize_by_patient()
+  specify_panel = "IMPACT341")
+
+gene_binary$patient_id = extract_patient_id(gene_binary$sample_id)
+
+summarize_by_patient(gene_binary)
 
 }

@@ -30,7 +30,7 @@ LazyData: true
 URL: https://github.com/MSKCC-Epi-Bio/gnomeR,
     https://mskcc-epi-bio.github.io/gnomeR/
 BugReports: https://github.com/MSKCC-Epi-Bio/gnomeR/issues
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.1
 Depends: R (>= 3.6)
 biocViews: 
     ComplexHeatmap,
