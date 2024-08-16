@@ -12,7 +12,7 @@ test_that("missing columns of interest", {
                                 "MYC",
                                 "BCL1")
 
-  expect_error(recode_alias(genomic_df, alias_table = alias_table), "The following *")
+  expect_error(recode_alias(genomic_df, alias_table = alias_table), "Can't find required*")
 
 })
 
