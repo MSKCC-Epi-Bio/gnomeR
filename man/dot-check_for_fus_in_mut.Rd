@@ -6,6 +6,9 @@
 \usage{
 .check_for_fus_in_mut(mutation)
 }
+\arguments{
+\item{mutation}{a mutation maf data frame}
+}
 \value{
 a data frame if no fusions found
 }

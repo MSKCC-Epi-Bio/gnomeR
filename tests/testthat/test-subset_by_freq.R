@@ -248,3 +248,39 @@ test_that("Check categorical `by` variable works", {
   expect_equal(setdiff(names(bm), names(sub1)), c("gene20", "gene10", "gene0"))
 })
 
+test_that("Check only one `by` variable passed", {
+
+  bm <- bind_rows(
+    "gen50" = c(rep(0, 5), rep(1, 5)),
+    "gene20" = c(rep(0, 8), rep(1, 2)),
+    "gene0" = c(rep(0, 10), rep(1, 0)),
+    "sex" = rep(c("F", "M"), 5),
+    "stage" = rep(c("I", "II"), 5)) %>%
+    mutate(sample_id = as.character(1:nrow(.)))
+
+  expect_error(bm |>
+                 subset_by_frequency(t = .1,
+                                     other_vars = NULL,
+                                     by = c(sex, stage)),
+               "Error in `by=` argument--select only")
+
+})
+
+test_that("Check that `other_vars` and `by` don't overlap", {
+
+  bm <- bind_rows(
+    "gen50" = c(rep(0, 5), rep(1, 5)),
+    "gene20" = c(rep(0, 8), rep(1, 2)),
+    "gene0" = c(rep(0, 10), rep(1, 0)),
+    "sex" = rep(c("F", "M"), 5),
+    "stage" = rep(c("I", "II"), 5)) %>%
+    mutate(sample_id = as.character(1:nrow(.)))
+
+  expect_error(subset_by_frequency(bm, t = .1,
+                                     other_vars = c(sex, stage),
+                                     by = sex),
+               "`other_vars` cannot")
+
+})
+
+
