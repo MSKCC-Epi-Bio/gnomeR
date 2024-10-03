@@ -46,7 +46,6 @@ Imports:
     tidyr (>= 1.3.0),
     cli,
     GGally,
-    gtsummary,
     broom.helpers,
     janitor,
     withr,
@@ -61,7 +60,9 @@ Suggests:
     cbioportalR, 
     genieBPC,
     vdiffr
-Remotes: karissawhiting/cbioportalR
+Remotes: 
+    karissawhiting/cbioportalR, 
+    ddsjoberg/gtsummary
 VignetteBuilder: knitr
 Language: en-US
 Roxygen: list(markdown = TRUE)

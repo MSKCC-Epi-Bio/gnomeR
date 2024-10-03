@@ -231,7 +231,8 @@ gene_binary <- create_gene_binary(
   specify_panel = "no"
 )
 
-tbl1 <- gene_binary %>% subset_by_frequency(t = .15) %>%
+tbl1 <- gene_binary %>% 
+  subset_by_frequency(t = .15) %>%
   tbl_genomic() 
 ```
 
