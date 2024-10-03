@@ -50,20 +50,21 @@ Imports:
     janitor,
     withr,
     scales,
-    lifecycle
+    lifecycle,
+    gtsummary (>= 2.0.2.9009)
 Suggests: 
     knitr,
     rmarkdown,
     testthat (>= 3.0.0),
     spelling,
-    covr, 
-    cbioportalR, 
+    covr,
+    cbioportalR (>= 1.1.0),
     genieBPC,
     vdiffr
-Remotes: 
-    karissawhiting/cbioportalR, 
-    ddsjoberg/gtsummary
 VignetteBuilder: knitr
 Language: en-US
 Roxygen: list(markdown = TRUE)
 Config/testthat/edition: 3
+Remotes:  
+    ddsjoberg/gtsummary,
+    karissawhiting/cbioportalR
