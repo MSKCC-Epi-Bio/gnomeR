@@ -16,6 +16,9 @@ knitr::opts_chunk$set(
 set.seed(20230302)
 
 # exit if user doesn't have synapser, a log in, or access to data.
+
+genieBPC::set_synapse_credentials()
+
 if (genieBPC:::.is_connected_to_genie() == FALSE){
   knitr::knit_exit()
 }

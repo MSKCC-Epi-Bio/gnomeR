@@ -18,6 +18,7 @@ knitr::opts_chunk$set(
 library(dplyr)
 library(gtsummary)
 library(gnomeR)
+
 ```
 
 # gnomeR
