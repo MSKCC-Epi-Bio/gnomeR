@@ -1,222 +1,76 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>https://mskcc-epi-bio.github.io/gnomeR/404.html</loc>
-  </url>
-  <url>
-    <loc>https://mskcc-epi-bio.github.io/gnomeR/CODE_OF_CONDUCT.html</loc>
-  </url>
-  <url>
-    <loc>https://mskcc-epi-bio.github.io/gnomeR/LICENSE-text.html</loc>
-  </url>
-  <url>
-    <loc>https://mskcc-epi-bio.github.io/gnomeR/LICENSE.html</loc>
-  </url>
-  <url>
-    <loc>https://mskcc-epi-bio.github.io/gnomeR/articles/data-processing-vignette.html</loc>
-  </url>
-  <url>
-    <loc>https://mskcc-epi-bio.github.io/gnomeR/articles/genie-bpc-vignette.html</loc>
-  </url>
-  <url>
-    <loc>https://mskcc-epi-bio.github.io/gnomeR/articles/index.html</loc>
-  </url>
-  <url>
-    <loc>https://mskcc-epi-bio.github.io/gnomeR/articles/qa-impact-data.html</loc>
-  </url>
-  <url>
-    <loc>https://mskcc-epi-bio.github.io/gnomeR/authors.html</loc>
-  </url>
-  <url>
-    <loc>https://mskcc-epi-bio.github.io/gnomeR/index.html</loc>
-  </url>
-  <url>
-    <loc>https://mskcc-epi-bio.github.io/gnomeR/news/index.html</loc>
-  </url>
-  <url>
-    <loc>https://mskcc-epi-bio.github.io/gnomeR/reference/add_pathways.html</loc>
-  </url>
-  <url>
-    <loc>https://mskcc-epi-bio.github.io/gnomeR/reference/annotate_any_panel.html</loc>
-  </url>
-  <url>
-    <loc>https://mskcc-epi-bio.github.io/gnomeR/reference/annotate_specific_panel.html</loc>
-  </url>
-  <url>
-    <loc>https://mskcc-epi-bio.github.io/gnomeR/reference/clin_collab_df.html</loc>
-  </url>
-  <url>
-    <loc>https://mskcc-epi-bio.github.io/gnomeR/reference/cna.html</loc>
-  </url>
-  <url>
-    <loc>https://mskcc-epi-bio.github.io/gnomeR/reference/cna_wide.html</loc>
-  </url>
-  <url>
-    <loc>https://mskcc-epi-bio.github.io/gnomeR/reference/consequence_map.html</loc>
-  </url>
-  <url>
-    <loc>https://mskcc-epi-bio.github.io/gnomeR/reference/create_gene_binary.html</loc>
-  </url>
-  <url>
-    <loc>https://mskcc-epi-bio.github.io/gnomeR/reference/dot-abort_if_not_numeric.html</loc>
-  </url>
-  <url>
-    <loc>https://mskcc-epi-bio.github.io/gnomeR/reference/dot-check_for_fus_in_mut.html</loc>
-  </url>
-  <url>
-    <loc>https://mskcc-epi-bio.github.io/gnomeR/reference/dot-check_required_cols.html</loc>
-  </url>
-  <url>
-    <loc>https://mskcc-epi-bio.github.io/gnomeR/reference/dot-clean_and_check_cols.html</loc>
-  </url>
-  <url>
-    <loc>https://mskcc-epi-bio.github.io/gnomeR/reference/dot-cna_gene_binary.html</loc>
-  </url>
-  <url>
-    <loc>https://mskcc-epi-bio.github.io/gnomeR/reference/dot-filter_to_sample_list.html</loc>
-  </url>
-  <url>
-    <loc>https://mskcc-epi-bio.github.io/gnomeR/reference/dot-fusions_gene_binary.html</loc>
-  </url>
-  <url>
-    <loc>https://mskcc-epi-bio.github.io/gnomeR/reference/dot-infer_mutation_status.html</loc>
-  </url>
-  <url>
-    <loc>https://mskcc-epi-bio.github.io/gnomeR/reference/dot-infer_variant_type.html</loc>
-  </url>
-  <url>
-    <loc>https://mskcc-epi-bio.github.io/gnomeR/reference/dot-mutations_gene_binary.html</loc>
-  </url>
-  <url>
-    <loc>https://mskcc-epi-bio.github.io/gnomeR/reference/dot-paste_endings.html</loc>
-  </url>
-  <url>
-    <loc>https://mskcc-epi-bio.github.io/gnomeR/reference/dot-process_binary.html</loc>
-  </url>
-  <url>
-    <loc>https://mskcc-epi-bio.github.io/gnomeR/reference/dot-sum_alts_in_pathway.html</loc>
-  </url>
-  <url>
-    <loc>https://mskcc-epi-bio.github.io/gnomeR/reference/extract_patient_id.html</loc>
-  </url>
-  <url>
-    <loc>https://mskcc-epi-bio.github.io/gnomeR/reference/gene_panels.html</loc>
-  </url>
-  <url>
-    <loc>https://mskcc-epi-bio.github.io/gnomeR/reference/genie_alias_table.html</loc>
-  </url>
-  <url>
-    <loc>https://mskcc-epi-bio.github.io/gnomeR/reference/genie_cna.html</loc>
-  </url>
-  <url>
-    <loc>https://mskcc-epi-bio.github.io/gnomeR/reference/genie_fusion.html</loc>
-  </url>
-  <url>
-    <loc>https://mskcc-epi-bio.github.io/gnomeR/reference/genie_mut.html</loc>
-  </url>
-  <url>
-    <loc>https://mskcc-epi-bio.github.io/gnomeR/reference/ggcomut.html</loc>
-  </url>
-  <url>
-    <loc>https://mskcc-epi-bio.github.io/gnomeR/reference/gggenecor.html</loc>
-  </url>
-  <url>
-    <loc>https://mskcc-epi-bio.github.io/gnomeR/reference/ggsamplevar.html</loc>
-  </url>
-  <url>
-    <loc>https://mskcc-epi-bio.github.io/gnomeR/reference/ggtopgenes.html</loc>
-  </url>
-  <url>
-    <loc>https://mskcc-epi-bio.github.io/gnomeR/reference/ggvarclass.html</loc>
-  </url>
-  <url>
-    <loc>https://mskcc-epi-bio.github.io/gnomeR/reference/ggvartype.html</loc>
-  </url>
-  <url>
-    <loc>https://mskcc-epi-bio.github.io/gnomeR/reference/gnomeR-package.html</loc>
-  </url>
-  <url>
-    <loc>https://mskcc-epi-bio.github.io/gnomeR/reference/gnomer_colors.html</loc>
-  </url>
-  <url>
-    <loc>https://mskcc-epi-bio.github.io/gnomeR/reference/gnomer_palette.html</loc>
-  </url>
-  <url>
-    <loc>https://mskcc-epi-bio.github.io/gnomeR/reference/gnomer_palettes.html</loc>
-  </url>
-  <url>
-    <loc>https://mskcc-epi-bio.github.io/gnomeR/reference/impact_alias_table.html</loc>
-  </url>
-  <url>
-    <loc>https://mskcc-epi-bio.github.io/gnomeR/reference/index.html</loc>
-  </url>
-  <url>
-    <loc>https://mskcc-epi-bio.github.io/gnomeR/reference/mutation_viz.html</loc>
-  </url>
-  <url>
-    <loc>https://mskcc-epi-bio.github.io/gnomeR/reference/mutations.html</loc>
-  </url>
-  <url>
-    <loc>https://mskcc-epi-bio.github.io/gnomeR/reference/names_df.html</loc>
-  </url>
-  <url>
-    <loc>https://mskcc-epi-bio.github.io/gnomeR/reference/pathways.html</loc>
-  </url>
-  <url>
-    <loc>https://mskcc-epi-bio.github.io/gnomeR/reference/pivot_cna_longer.html</loc>
-  </url>
-  <url>
-    <loc>https://mskcc-epi-bio.github.io/gnomeR/reference/pivot_cna_wider.html</loc>
-  </url>
-  <url>
-    <loc>https://mskcc-epi-bio.github.io/gnomeR/reference/recode_alias.html</loc>
-  </url>
-  <url>
-    <loc>https://mskcc-epi-bio.github.io/gnomeR/reference/recode_cna.html</loc>
-  </url>
-  <url>
-    <loc>https://mskcc-epi-bio.github.io/gnomeR/reference/reexports.html</loc>
-  </url>
-  <url>
-    <loc>https://mskcc-epi-bio.github.io/gnomeR/reference/reformat_fusion.html</loc>
-  </url>
-  <url>
-    <loc>https://mskcc-epi-bio.github.io/gnomeR/reference/rename_columns.html</loc>
-  </url>
-  <url>
-    <loc>https://mskcc-epi-bio.github.io/gnomeR/reference/reset_gnomer_palette.html</loc>
-  </url>
-  <url>
-    <loc>https://mskcc-epi-bio.github.io/gnomeR/reference/resolve_alias.html</loc>
-  </url>
-  <url>
-    <loc>https://mskcc-epi-bio.github.io/gnomeR/reference/seg.html</loc>
-  </url>
-  <url>
-    <loc>https://mskcc-epi-bio.github.io/gnomeR/reference/set_gnomer_palette.html</loc>
-  </url>
-  <url>
-    <loc>https://mskcc-epi-bio.github.io/gnomeR/reference/specify_impact_panels.html</loc>
-  </url>
-  <url>
-    <loc>https://mskcc-epi-bio.github.io/gnomeR/reference/subset_by_frequency.html</loc>
-  </url>
-  <url>
-    <loc>https://mskcc-epi-bio.github.io/gnomeR/reference/subset_by_panel.html</loc>
-  </url>
-  <url>
-    <loc>https://mskcc-epi-bio.github.io/gnomeR/reference/summarize_by_gene.html</loc>
-  </url>
-  <url>
-    <loc>https://mskcc-epi-bio.github.io/gnomeR/reference/sv.html</loc>
-  </url>
-  <url>
-    <loc>https://mskcc-epi-bio.github.io/gnomeR/reference/sv_long.html</loc>
-  </url>
-  <url>
-    <loc>https://mskcc-epi-bio.github.io/gnomeR/reference/tbl_genomic.html</loc>
-  </url>
-  <url>
-    <loc>https://mskcc-epi-bio.github.io/gnomeR/reference/which_impact_panel.html</loc>
-  </url>
+<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
+<url><loc>https://mskcc-epi-bio.github.io/gnomeR/404.html</loc></url>
+<url><loc>https://mskcc-epi-bio.github.io/gnomeR/CODE_OF_CONDUCT.html</loc></url>
+<url><loc>https://mskcc-epi-bio.github.io/gnomeR/LICENSE-text.html</loc></url>
+<url><loc>https://mskcc-epi-bio.github.io/gnomeR/LICENSE.html</loc></url>
+<url><loc>https://mskcc-epi-bio.github.io/gnomeR/articles/data-processing-vignette.html</loc></url>
+<url><loc>https://mskcc-epi-bio.github.io/gnomeR/articles/genie-bpc-vignette.html</loc></url>
+<url><loc>https://mskcc-epi-bio.github.io/gnomeR/articles/index.html</loc></url>
+<url><loc>https://mskcc-epi-bio.github.io/gnomeR/articles/qa-impact-data.html</loc></url>
+<url><loc>https://mskcc-epi-bio.github.io/gnomeR/authors.html</loc></url>
+<url><loc>https://mskcc-epi-bio.github.io/gnomeR/index.html</loc></url>
+<url><loc>https://mskcc-epi-bio.github.io/gnomeR/news/index.html</loc></url>
+<url><loc>https://mskcc-epi-bio.github.io/gnomeR/reference/add_pathways.html</loc></url>
+<url><loc>https://mskcc-epi-bio.github.io/gnomeR/reference/annotate_any_panel.html</loc></url>
+<url><loc>https://mskcc-epi-bio.github.io/gnomeR/reference/annotate_specific_panel.html</loc></url>
+<url><loc>https://mskcc-epi-bio.github.io/gnomeR/reference/clin_collab_df.html</loc></url>
+<url><loc>https://mskcc-epi-bio.github.io/gnomeR/reference/cna.html</loc></url>
+<url><loc>https://mskcc-epi-bio.github.io/gnomeR/reference/cna_wide.html</loc></url>
+<url><loc>https://mskcc-epi-bio.github.io/gnomeR/reference/consequence_map.html</loc></url>
+<url><loc>https://mskcc-epi-bio.github.io/gnomeR/reference/create_gene_binary.html</loc></url>
+<url><loc>https://mskcc-epi-bio.github.io/gnomeR/reference/dot-abort_if_not_numeric.html</loc></url>
+<url><loc>https://mskcc-epi-bio.github.io/gnomeR/reference/dot-check_for_fus_in_mut.html</loc></url>
+<url><loc>https://mskcc-epi-bio.github.io/gnomeR/reference/dot-check_required_cols.html</loc></url>
+<url><loc>https://mskcc-epi-bio.github.io/gnomeR/reference/dot-clean_and_check_cols.html</loc></url>
+<url><loc>https://mskcc-epi-bio.github.io/gnomeR/reference/dot-cna_gene_binary.html</loc></url>
+<url><loc>https://mskcc-epi-bio.github.io/gnomeR/reference/dot-filter_to_sample_list.html</loc></url>
+<url><loc>https://mskcc-epi-bio.github.io/gnomeR/reference/dot-fusions_gene_binary.html</loc></url>
+<url><loc>https://mskcc-epi-bio.github.io/gnomeR/reference/dot-infer_mutation_status.html</loc></url>
+<url><loc>https://mskcc-epi-bio.github.io/gnomeR/reference/dot-infer_variant_type.html</loc></url>
+<url><loc>https://mskcc-epi-bio.github.io/gnomeR/reference/dot-mutations_gene_binary.html</loc></url>
+<url><loc>https://mskcc-epi-bio.github.io/gnomeR/reference/dot-paste_endings.html</loc></url>
+<url><loc>https://mskcc-epi-bio.github.io/gnomeR/reference/dot-process_binary.html</loc></url>
+<url><loc>https://mskcc-epi-bio.github.io/gnomeR/reference/dot-sum_alts_in_pathway.html</loc></url>
+<url><loc>https://mskcc-epi-bio.github.io/gnomeR/reference/extract_patient_id.html</loc></url>
+<url><loc>https://mskcc-epi-bio.github.io/gnomeR/reference/gene_panels.html</loc></url>
+<url><loc>https://mskcc-epi-bio.github.io/gnomeR/reference/genie_alias_table.html</loc></url>
+<url><loc>https://mskcc-epi-bio.github.io/gnomeR/reference/genie_cna.html</loc></url>
+<url><loc>https://mskcc-epi-bio.github.io/gnomeR/reference/genie_fusion.html</loc></url>
+<url><loc>https://mskcc-epi-bio.github.io/gnomeR/reference/genie_mut.html</loc></url>
+<url><loc>https://mskcc-epi-bio.github.io/gnomeR/reference/ggcomut.html</loc></url>
+<url><loc>https://mskcc-epi-bio.github.io/gnomeR/reference/gggenecor.html</loc></url>
+<url><loc>https://mskcc-epi-bio.github.io/gnomeR/reference/ggsamplevar.html</loc></url>
+<url><loc>https://mskcc-epi-bio.github.io/gnomeR/reference/ggtopgenes.html</loc></url>
+<url><loc>https://mskcc-epi-bio.github.io/gnomeR/reference/ggvarclass.html</loc></url>
+<url><loc>https://mskcc-epi-bio.github.io/gnomeR/reference/ggvartype.html</loc></url>
+<url><loc>https://mskcc-epi-bio.github.io/gnomeR/reference/gnomeR-package.html</loc></url>
+<url><loc>https://mskcc-epi-bio.github.io/gnomeR/reference/gnomer_colors.html</loc></url>
+<url><loc>https://mskcc-epi-bio.github.io/gnomeR/reference/gnomer_palette.html</loc></url>
+<url><loc>https://mskcc-epi-bio.github.io/gnomeR/reference/gnomer_palettes.html</loc></url>
+<url><loc>https://mskcc-epi-bio.github.io/gnomeR/reference/impact_alias_table.html</loc></url>
+<url><loc>https://mskcc-epi-bio.github.io/gnomeR/reference/index.html</loc></url>
+<url><loc>https://mskcc-epi-bio.github.io/gnomeR/reference/mutation_viz.html</loc></url>
+<url><loc>https://mskcc-epi-bio.github.io/gnomeR/reference/mutations.html</loc></url>
+<url><loc>https://mskcc-epi-bio.github.io/gnomeR/reference/names_df.html</loc></url>
+<url><loc>https://mskcc-epi-bio.github.io/gnomeR/reference/pathways.html</loc></url>
+<url><loc>https://mskcc-epi-bio.github.io/gnomeR/reference/pivot_cna_longer.html</loc></url>
+<url><loc>https://mskcc-epi-bio.github.io/gnomeR/reference/pivot_cna_wider.html</loc></url>
+<url><loc>https://mskcc-epi-bio.github.io/gnomeR/reference/recode_alias.html</loc></url>
+<url><loc>https://mskcc-epi-bio.github.io/gnomeR/reference/recode_cna.html</loc></url>
+<url><loc>https://mskcc-epi-bio.github.io/gnomeR/reference/reexports.html</loc></url>
+<url><loc>https://mskcc-epi-bio.github.io/gnomeR/reference/reformat_fusion.html</loc></url>
+<url><loc>https://mskcc-epi-bio.github.io/gnomeR/reference/rename_columns.html</loc></url>
+<url><loc>https://mskcc-epi-bio.github.io/gnomeR/reference/reset_gnomer_palette.html</loc></url>
+<url><loc>https://mskcc-epi-bio.github.io/gnomeR/reference/resolve_alias.html</loc></url>
+<url><loc>https://mskcc-epi-bio.github.io/gnomeR/reference/seg.html</loc></url>
+<url><loc>https://mskcc-epi-bio.github.io/gnomeR/reference/set_gnomer_palette.html</loc></url>
+<url><loc>https://mskcc-epi-bio.github.io/gnomeR/reference/specify_impact_panels.html</loc></url>
+<url><loc>https://mskcc-epi-bio.github.io/gnomeR/reference/subset_by_frequency.html</loc></url>
+<url><loc>https://mskcc-epi-bio.github.io/gnomeR/reference/subset_by_panel.html</loc></url>
+<url><loc>https://mskcc-epi-bio.github.io/gnomeR/reference/summarize_by_gene.html</loc></url>
+<url><loc>https://mskcc-epi-bio.github.io/gnomeR/reference/sv.html</loc></url>
+<url><loc>https://mskcc-epi-bio.github.io/gnomeR/reference/sv_long.html</loc></url>
+<url><loc>https://mskcc-epi-bio.github.io/gnomeR/reference/tbl_genomic.html</loc></url>
+<url><loc>https://mskcc-epi-bio.github.io/gnomeR/reference/which_impact_panel.html</loc></url>
 </urlset>
+
