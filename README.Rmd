@@ -54,6 +54,8 @@ the `gnomeR` package provides a consistent framework for genetic data processing
 - **Visualize processed data** - Create summary plots from processed data. 
 - **Analyzing processed data**- Analyze associations between genomic variables and clinical variables or outcomes.
 
+{gnomeR} is now also apart of the [gnomeverse](https://mskcc-epi-bio.github.io/genomeverse/), which is a collection of R packages that are designed to work together seamlessly to create reproducible clinico-genomic analysis pipelines.
+
 ## Getting Set up
 
 {gnomeR} works with any genomic data that follows cBioPortal guidelines for [mutation](https://docs.cbioportal.org/5.1-data-loading/data-loading/file-formats#data-file-5), [CNA](https://docs.cbioportal.org/5.1-data-loading/data-loading/file-formats#discrete-copy-number-data), or [fusion](https://docs.cbioportal.org/5.1-data-loading/data-loading/file-formats#structural-variant-data) data file formats.
