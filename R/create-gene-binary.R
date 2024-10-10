@@ -3,7 +3,7 @@
 #' Enables creation of a binary matrix from a mutation, fusion or CNA file with
 #' a predefined list of samples (rows are samples and columns are genes)
 #' @param samples a character vector specifying which samples should be included in the resulting data frame.
-#' Default is NULL is which case all samples with an alteration in the mutation, cna or fusions file will be used. If you specify
+#' Default is NULL in which case all samples with an alteration in the mutation, cna or fusions file will be used. If you specify
 #' a vector of samples that contain samples not in any of the passed genomic data frames, 0's (or NAs when appropriate if specifying a panel) will be
 #' returned for every column of that patient row.
 #' @param mutation A data frame of mutations in the format of a maf file.
