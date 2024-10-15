@@ -220,6 +220,40 @@ test_that("other vars are retained", {
 
   # one patient retains two observations
   expect_length(sum_impact$patient_id, 40)
+
+  sum_impact_no_other_var <- summarize_by_patient(select(bin_impact, -random_color))
+
+  # expect that keeping additional var creates a data frame with more rows
+  expect_gt(nrow(sum_impact), nrow(sum_impact_no_other_var))
+})
+
+
+
+test_that("other vars resulting in non-unique samples will throw warning", {
+  samples <- gnomeR::mutations  %>%
+    head(50) %>%
+    pull(sampleId) %>%
+    unique()
+
+  bin_impact <- create_gene_binary(samples = samples,
+                                   mutation = gnomeR::mutations,
+                                   cna = gnomeR::cna,
+                                   fusion = gnomeR::sv,
+                                   specify_panel = "impact") %>%
+    mutate(patient_id = gnomeR::extract_patient_id(sample_id)) %>%
+    select(c(sample_id, patient_id, starts_with("AR"), starts_with("PLCG2"), starts_with("PPM1D")))
+
+  set.seed(20230828)
+
+  bin_impact$random_color = sample(c("blue", "red", "yellow"),
+                                   size = length(samples), replace = TRUE)
+
+  expect_true("random_color" %in% names(bin_impact))
+
+  expect_message(summarize_by_patient(bin_impact,
+                                     other_vars = "random_color"))
+
+
 })
 
 

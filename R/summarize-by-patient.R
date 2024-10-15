@@ -147,13 +147,22 @@ summarize_by_patient <- function(gene_binary, other_vars = NULL) {
       select(-"n_samples")
     }
 
-  # !!!! Discuss this
+  # Join data
   simp_gene_binary <- left_join(simp_gene_binary_pt,
                                 gene_binary %>%
                                   select(any_of(c("patient_id", other_vars))) %>%
                                   distinct(),
                                 by = "patient_id") %>%
     select("patient_id", everything())
+
+  # warn if not unique resulting data
+  n_occur <- data.frame(table(simp_gene_binary$patient_id))
+  n_occur[n_occur$Freq > 1,]
+  dupe_samp_in_result <- n_occur$Var1[n_occur$Freq > 1]
+
+  if(length(dupe_samp_in_result) > 0) {
+    cli::cli_alert_warning("Returned data is not unique (1 row per patient) due to non-distinct values in data passed to {.code other_vars} argument. See {head(dupe_samp_in_result, 3)} ...")
+  }
 
   return(simp_gene_binary)
 
