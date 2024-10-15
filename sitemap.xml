@@ -18,6 +18,7 @@
 <url><loc>https://mskcc-epi-bio.github.io/gnomeR/reference/create_gene_binary.html</loc></url>
 <url><loc>https://mskcc-epi-bio.github.io/gnomeR/reference/dot-abort_if_not_numeric.html</loc></url>
 <url><loc>https://mskcc-epi-bio.github.io/gnomeR/reference/dot-check_for_fus_in_mut.html</loc></url>
+<url><loc>https://mskcc-epi-bio.github.io/gnomeR/reference/dot-check_for_silent.html</loc></url>
 <url><loc>https://mskcc-epi-bio.github.io/gnomeR/reference/dot-check_required_cols.html</loc></url>
 <url><loc>https://mskcc-epi-bio.github.io/gnomeR/reference/dot-clean_and_check_cols.html</loc></url>
 <url><loc>https://mskcc-epi-bio.github.io/gnomeR/reference/dot-cna_gene_binary.html</loc></url>
@@ -66,6 +67,7 @@
 <url><loc>https://mskcc-epi-bio.github.io/gnomeR/reference/subset_by_frequency.html</loc></url>
 <url><loc>https://mskcc-epi-bio.github.io/gnomeR/reference/subset_by_panel.html</loc></url>
 <url><loc>https://mskcc-epi-bio.github.io/gnomeR/reference/summarize_by_gene.html</loc></url>
+<url><loc>https://mskcc-epi-bio.github.io/gnomeR/reference/summarize_by_patient.html</loc></url>
 <url><loc>https://mskcc-epi-bio.github.io/gnomeR/reference/sv.html</loc></url>
 <url><loc>https://mskcc-epi-bio.github.io/gnomeR/reference/sv_long.html</loc></url>
 <url><loc>https://mskcc-epi-bio.github.io/gnomeR/reference/tbl_genomic.html</loc></url>
