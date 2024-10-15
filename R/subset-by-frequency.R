@@ -6,6 +6,7 @@
 #' @param t Threshold value between 0 and 1 to subset by. Default is 10% (.1).
 #' @param other_vars One or more column names (quoted or unquoted) in data to be retained
 #' in resulting data frame. Default is NULL.
+#' @param by Variable used to subset the data. Default is NULL.
 #' @return a data frame with a `sample_id` column and columns for
 #' alterations over the given prevalence threshold of `t`.
 #'
@@ -22,12 +23,12 @@
 #'gene_binary %>%
 #'  subset_by_frequency()
 #'
-subset_by_frequency <- function(gene_binary, t = .1, other_vars = NULL) {
+subset_by_frequency <- function(gene_binary, t = .1, other_vars = NULL, by = NULL) {
 
 
   # Checks ------------------------------------------------------------------
 
-  # check threshold argument
+  # check threshold `t` argument
   if(!(is.numeric(t) & (t >= 0 & t <= 1))) {
     cli::cli_abort("{.field t} must be a number between 0 and 1")
   }
@@ -46,11 +47,24 @@ subset_by_frequency <- function(gene_binary, t = .1, other_vars = NULL) {
                         arg_name = "other_vars"
     )
 
+  # Define by variable
+
+  by <-
+    .select_to_varnames({{ by }},
+                        data = gene_binary,
+                        arg_name = "by", select_single = TRUE
+    )
+
+  # Check if 'by' is in 'other_vars' (only if both are non-NULL)
+  if (!is.null(by) && !is.null(other_vars) && by %in% other_vars) {
+    cli::cli_abort("{.code other_vars} cannot overlap with {.code by}.")
+  }
+
   # data frame of only alterations
   alt_only <- select(gene_binary, -"sample_id", -any_of(other_vars))
 
   # Remove all NA columns ----------------------------------------------
-  all_na_alt <- apply(alt_only,  2, function(x) {
+  all_na_alt <- apply(alt_only, 2, function(x) {
      sum(is.na(x)) == nrow(alt_only)
   })
 
@@ -59,20 +73,63 @@ subset_by_frequency <- function(gene_binary, t = .1, other_vars = NULL) {
 
 
   # Check Numeric Class -----------------------------------------------------
-  .abort_if_not_numeric(alt_only)
+
+  if (is.null(by)) {
+    .abort_if_not_numeric(alt_only)
+  }
+  else {
+    .abort_if_not_numeric(select(alt_only, -any_of(by)))
+  }
 
 
   # Calc Frequency ----------------------------------------------------------
-  counts <- apply(alt_only, 2,  function(x) {sum(x, na.rm = TRUE)})
-  num_non_na <- apply(alt_only, 2, function(x) sum(!is.na(x)))
 
-  alt_freq <- counts/num_non_na
-  alts_over_thresh <- names(sort(alt_freq[alt_freq >= t], decreasing = TRUE))
+  if(is.null(by)){
 
-  subset_binary <- select(gene_binary, "sample_id",
-                          any_of(other_vars),
-                          all_of(alts_over_thresh))
+    counts <- apply(alt_only, 2,  function(x) {sum(x, na.rm = TRUE)})
+    num_non_na <- apply(alt_only, 2, function(x) sum(!is.na(x)))
+
+    alt_freq <- counts/num_non_na
+    alts_over_thresh <- names(sort(alt_freq[alt_freq >= t], decreasing = TRUE))
+
+    subset_binary <- select(gene_binary, "sample_id",
+                            any_of(other_vars),
+                            all_of(alts_over_thresh))
 
   return(subset_binary)
 
+  }
+  else{
+
+    alt_data <-
+      alt_only |>
+      group_by(across(all_of(by))) |>
+      summarise(across(everything(),
+                         list(sum = ~ sum(., na.rm = TRUE),
+                              total = ~ sum(!is.na(.), na.rm = T))))
+
+    alt_group_data <-
+      alt_data |>
+      pivot_longer(-any_of(by),
+                   names_to = c("gene")) |>
+      separate("gene", into = c("gene", "measure"), sep = "_") |>
+      pivot_wider(names_from = "measure",
+                  values_from = "value") |>
+      mutate(propo = .data$sum/.data$total) |>
+      arrange(desc(.data$propo))
+
+    alts_over_thresh_grp <-
+      alt_group_data |>
+      filter(.data$propo > t) |>
+      pull("gene") |>
+      unique()
+
+    subset_binary <- select(gene_binary, "sample_id",
+                            any_of(by),
+                            any_of(other_vars),
+                            all_of(alts_over_thresh_grp))
+
+    return(subset_binary)
+
+  }
 }

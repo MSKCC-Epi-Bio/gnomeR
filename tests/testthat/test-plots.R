@@ -287,5 +287,4 @@ test_that("mutation_viz works", {
 #
 # })
 
-# testthat::test_file("C:\\Users\\toumban\\OneDrive - Memorial Sloan Kettering Cancer Center\\Desktop\\gnomeR\\tests\\testthat\\test-plots.R")
 

@@ -18,6 +18,7 @@ knitr::opts_chunk$set(
 library(dplyr)
 library(gtsummary)
 library(gnomeR)
+
 ```
 
 # gnomeR
@@ -52,6 +53,8 @@ the `gnomeR` package provides a consistent framework for genetic data processing
 - **Process genomic data** - Process retrieved mutation/maf, fusions, copy-number alteration, and segmentation data (when available) into an analysis-ready formats.
 - **Visualize processed data** - Create summary plots from processed data. 
 - **Analyzing processed data**- Analyze associations between genomic variables and clinical variables or outcomes.
+
+{gnomeR} is part of [gnomeverse](https://mskcc-epi-bio.github.io/genomeverse/), a collection of R packages designed to work together seamlessly to create reproducible clinico-genomic analysis pipelines.
 
 ## Getting Set up
 

@@ -7,6 +7,10 @@ Authors@R:
              role = c("aut", "cre"),
              email = "karissa.whiting@gmail.com",
              comment = c(ORCID = "0000-0002-4683-1868")), 
+     person(given = "Jessica",
+             family = "Lavery",
+             role = "aut",
+             comment = c(ORCID = "0000-0002-2746-5647")), 
      person(given = "Michael",
              family = "Curry",
              role = "aut",
@@ -46,23 +50,25 @@ Imports:
     tidyr (>= 1.3.0),
     cli,
     GGally,
-    gtsummary,
     broom.helpers,
     janitor,
     withr,
     scales,
-    lifecycle
+    lifecycle,
+    gtsummary (>= 2.0.2.9009)
 Suggests: 
     knitr,
     rmarkdown,
     testthat (>= 3.0.0),
     spelling,
-    covr, 
-    cbioportalR, 
+    covr,
+    cbioportalR (>= 1.1.0),
     genieBPC,
     vdiffr
-Remotes: karissawhiting/cbioportalR
 VignetteBuilder: knitr
 Language: en-US
 Roxygen: list(markdown = TRUE)
 Config/testthat/edition: 3
+Remotes:  
+    ddsjoberg/gtsummary,
+    karissawhiting/cbioportalR

@@ -7,7 +7,7 @@
 .infer_variant_type(mutation, names_mut_dict = names_mut_dict)
 }
 \arguments{
-\item{mutation}{data frame}
+\item{mutation}{mutation maf file data frame}
 }
 \value{
 a mutation data frame with a variant type column

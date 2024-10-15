@@ -7,7 +7,7 @@
 .infer_mutation_status(mutation)
 }
 \arguments{
-\item{mutation}{a mutation data frame}
+\item{mutation}{a mutation maf data frame}
 }
 \value{
 a mutations data frame with a mutation status column

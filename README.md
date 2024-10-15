@@ -47,6 +47,11 @@ cBioPortal. With {gnomeR} and {cbioportalR} you can:
 - **Analyzing processed data**- Analyze associations between genomic
   variables and clinical variables or outcomes.
 
+{gnomeR} is part of
+[gnomeverse](https://mskcc-epi-bio.github.io/genomeverse/), a collection
+of R packages designed to work together seamlessly to create
+reproducible clinico-genomic analysis pipelines.
+
 ## Getting Set up
 
 {gnomeR} works with any genomic data that follows cBioPortal guidelines
@@ -110,13 +115,15 @@ by_gene <- gen_dat %>%
   summarize_by_gene()
 
 head(by_gene[,1:6])
-#>           sample_id ALK ARAF BLM CD79B CSF1R
-#> 1 P-0004508-T01-IM5   1    0   0     0     0
-#> 2 P-0005806-T01-IM5   0    0   0     0     0
-#> 3 P-0007006-T01-IM5   0    0   0     0     0
-#> 4 P-0008682-T01-IM5   0    0   0     0     0
-#> 5 P-0001297-T01-IM3   0    0   0     0     0
-#> 6 P-0007538-T01-IM5   0    1   0     0     1
+#> # A tibble: 6 × 6
+#>   sample_id           ALK  ARAF   BLM CD79B CSF1R
+#>   <chr>             <dbl> <dbl> <dbl> <dbl> <dbl>
+#> 1 P-0004508-T01-IM5     1     0     0     0     0
+#> 2 P-0005806-T01-IM5     0     0     0     0     0
+#> 3 P-0007006-T01-IM5     0     0     0     0     0
+#> 4 P-0008682-T01-IM5     0     0     0     0     0
+#> 5 P-0001297-T01-IM3     0     0     0     0     0
+#> 6 P-0007538-T01-IM5     0     1     0     0     1
 ```
 
 ## Visualize
@@ -183,15 +190,21 @@ Thank you to all contributors!
 [@alrein-05](https://github.com/alrein-05),
 [@arorarshi](https://github.com/arorarshi),
 [@AxelitoMartin](https://github.com/AxelitoMartin),
+[@brombergm](https://github.com/brombergm),
 [@carokos](https://github.com/carokos),
 [@ChristineZ-msk](https://github.com/ChristineZ-msk),
+[@ddsjoberg](https://github.com/ddsjoberg),
 [@edrill](https://github.com/edrill),
 [@hfuchs5](https://github.com/hfuchs5),
 [@jalavery](https://github.com/jalavery),
 [@jflynn264](https://github.com/jflynn264),
 [@karissawhiting](https://github.com/karissawhiting),
 [@michaelcurry1123](https://github.com/michaelcurry1123),
-[@mljaniczek](https://github.com/mljaniczek), and
-[@slb2240](https://github.com/slb2240)
+[@mljaniczek](https://github.com/mljaniczek),
+[@slb2240](https://github.com/slb2240),
+[@stl2137](https://github.com/stl2137),
+[@toumban1](https://github.com/toumban1),
+[@whitec4](https://github.com/whitec4), and
+[@Yukodeng](https://github.com/Yukodeng)
 
 # The End

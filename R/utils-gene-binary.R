@@ -58,7 +58,7 @@
 
 #' Infer mutation status and assume somatic if none
 #'
-#' @param mutation a mutation data frame
+#' @param mutation a mutation maf data frame
 #' @return a mutations data frame with a mutation status column
 #' @keywords internal
 .infer_mutation_status <- function(mutation) {
@@ -78,7 +78,7 @@
 #'
 #' Infers variant_type from reference_allele or tumor_seq_allele data
 #'
-#' @param mutation data frame
+#' @param mutation mutation maf file data frame
 #' @return a mutation data frame with a variant type column
 #' @keywords internal
 .infer_variant_type <- function(mutation, names_mut_dict = names_mut_dict) {
