@@ -12,6 +12,8 @@ template:
 authors:
   Karissa Whiting:
     href: "https://www.karissawhiting.com/"
+  Jessica Lavery:
+    href: "https://github.com/jalavery/"
   Mike Curry:
     href: "https://github.com/michaelcurry1123/"
   Hannah Fuchs:
@@ -28,6 +30,7 @@ reference:
   - contents:
     - create_gene_binary
     - summarize_by_gene
+    - summarize_by_patient
     - pivot_cna_wider
     - pivot_cna_longer
     - add_pathways

@@ -4,12 +4,14 @@
 \alias{.check_required_cols}
 \title{Check a Data Frame for Required Columns}
 \usage{
-.check_required_cols(data, required_cols)
+.check_required_cols(data, required_cols, add_to_message = NULL)
 }
 \arguments{
 \item{data}{A data frame to check}
 
 \item{required_cols}{A character specifying names of columns to check}
+
+\item{add_to_message}{a vector (preferrably named) of text to add to the error message for specific cases}
 }
 \value{
 If data set doesn't have required columns it will return an error message.

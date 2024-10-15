@@ -15,6 +15,8 @@
 
 }
 
+#' Check for silent mutations
+#'
 #' @param mutation Raw maf dataframe containing alteration data
 #' @param include_silent Silent mutations will be removed if FALSE (default). Variant classification column is needed.
 #' @return a corrected maf file or an error if problems with maf
@@ -34,7 +36,7 @@
 
 #' Check for fusions in maf file
 #'
-#' @param mutation a mutation maf data frame
+#' @param mutation data frame of mutations (e.g. MAF)
 #' @return a data frame if no fusions found
 #' @keywords internal
 .check_for_fus_in_mut <- function(mutation) {

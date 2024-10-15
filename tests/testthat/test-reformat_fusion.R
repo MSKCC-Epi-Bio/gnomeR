@@ -1,7 +1,7 @@
 
 # data checks ---------------------------
 test_that("required columns are included & is data.frame", {
-  expect_error(reformat_fusion(gnomeR::sv_long %>% select(-fusion)), "The following*")
+  expect_error(reformat_fusion(gnomeR::sv_long %>% select(-fusion)), "Can't find*")
   expect_error(reformat_fusion(gnomeR::sv_long$hugo_symbol), "`fusion`*")
 })
 
