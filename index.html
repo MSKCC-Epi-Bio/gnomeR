@@ -37,8 +37,6 @@
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
 <li><a class="dropdown-item" href="articles/data-processing-vignette.html">Processing Data with {gnomeR}</a></li>
-    <li><a class="dropdown-item" href="articles/genie-bpc-vignette.html">Analyzing GENIE BPC Data Using {gnomeR}</a></li>
-    <li><a class="dropdown-item" href="articles/qa-impact-data.html">How to QA Your IMPACT Data</a></li>
   </ul>
 </li>
 <li class="nav-item"><a class="nav-link" href="news/index.html">Changelog</a></li>
@@ -88,6 +86,7 @@
 <li>
 <strong>Analyzing processed data</strong>- Analyze associations between genomic variables and clinical variables or outcomes.</li>
 </ul>
+<p>{gnomeR} is part of <a href="https://mskcc-epi-bio.github.io/genomeverse/" class="external-link">gnomeverse</a>, a collection of R packages designed to work together seamlessly to create reproducible clinico-genomic analysis pipelines.</p>
 </div>
 <div class="section level2">
 <h2 id="getting-set-up">Getting Set up<a class="anchor" aria-label="anchor" href="#getting-set-up"></a>
@@ -131,13 +130,15 @@
 <span>  <span class="fu"><a href="reference/summarize_by_gene.html">summarize_by_gene</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">by_gene</span><span class="op">[</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">6</span><span class="op">]</span><span class="op">)</span></span>
-<span><span class="co">#&gt;           sample_id ALK ARAF BLM CD79B CSF1R</span></span>
-<span><span class="co">#&gt; 1 P-0004508-T01-IM5   1    0   0     0     0</span></span>
-<span><span class="co">#&gt; 2 P-0005806-T01-IM5   0    0   0     0     0</span></span>
-<span><span class="co">#&gt; 3 P-0007006-T01-IM5   0    0   0     0     0</span></span>
-<span><span class="co">#&gt; 4 P-0008682-T01-IM5   0    0   0     0     0</span></span>
-<span><span class="co">#&gt; 5 P-0001297-T01-IM3   0    0   0     0     0</span></span>
-<span><span class="co">#&gt; 6 P-0007538-T01-IM5   0    1   0     0     1</span></span></code></pre></div>
+<span><span class="co">#&gt; # A tibble: 6 × 6</span></span>
+<span><span class="co">#&gt;   sample_id           ALK  ARAF   BLM CD79B CSF1R</span></span>
+<span><span class="co">#&gt;   &lt;chr&gt;             &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; 1 P-0004508-T01-IM5     1     0     0     0     0</span></span>
+<span><span class="co">#&gt; 2 P-0005806-T01-IM5     0     0     0     0     0</span></span>
+<span><span class="co">#&gt; 3 P-0007006-T01-IM5     0     0     0     0     0</span></span>
+<span><span class="co">#&gt; 4 P-0008682-T01-IM5     0     0     0     0     0</span></span>
+<span><span class="co">#&gt; 5 P-0001297-T01-IM3     0     0     0     0     0</span></span>
+<span><span class="co">#&gt; 6 P-0007538-T01-IM5     0     1     0     0     1</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="visualize">Visualize<a class="anchor" aria-label="anchor" href="#visualize"></a>
@@ -180,7 +181,7 @@
 </h1>
 <p>Please note that the gnomeR project is released with a <a href="https://contributor-covenant.org/version/2/0/CODE_OF_CONDUCT.html" class="external-link">Contributor Code of Conduct</a>. By contributing to this project, you agree to abide by its terms.</p>
 <p>Thank you to all contributors!</p>
-<p><a href="https://github.com/akriti21" class="external-link">@akriti21</a>, <a href="https://github.com/alrein-05" class="external-link">@alrein-05</a>, <a href="https://github.com/arorarshi" class="external-link">@arorarshi</a>, <a href="https://github.com/AxelitoMartin" class="external-link">@AxelitoMartin</a>, <a href="https://github.com/carokos" class="external-link">@carokos</a>, <a href="https://github.com/ChristineZ-msk" class="external-link">@ChristineZ-msk</a>, <a href="https://github.com/edrill" class="external-link">@edrill</a>, <a href="https://github.com/hfuchs5" class="external-link">@hfuchs5</a>, <a href="https://github.com/jalavery" class="external-link">@jalavery</a>, <a href="https://github.com/jflynn264" class="external-link">@jflynn264</a>, <a href="https://github.com/karissawhiting" class="external-link">@karissawhiting</a>, <a href="https://github.com/michaelcurry1123" class="external-link">@michaelcurry1123</a>, <a href="https://github.com/mljaniczek" class="external-link">@mljaniczek</a>, and <a href="https://github.com/slb2240" class="external-link">@slb2240</a></p>
+<p><a href="https://github.com/akriti21" class="external-link">@akriti21</a>, <a href="https://github.com/alrein-05" class="external-link">@alrein-05</a>, <a href="https://github.com/arorarshi" class="external-link">@arorarshi</a>, <a href="https://github.com/AxelitoMartin" class="external-link">@AxelitoMartin</a>, <a href="https://github.com/brombergm" class="external-link">@brombergm</a>, <a href="https://github.com/carokos" class="external-link">@carokos</a>, <a href="https://github.com/ChristineZ-msk" class="external-link">@ChristineZ-msk</a>, <a href="https://github.com/ddsjoberg" class="external-link">@ddsjoberg</a>, <a href="https://github.com/edrill" class="external-link">@edrill</a>, <a href="https://github.com/hfuchs5" class="external-link">@hfuchs5</a>, <a href="https://github.com/jalavery" class="external-link">@jalavery</a>, <a href="https://github.com/jflynn264" class="external-link">@jflynn264</a>, <a href="https://github.com/karissawhiting" class="external-link">@karissawhiting</a>, <a href="https://github.com/michaelcurry1123" class="external-link">@michaelcurry1123</a>, <a href="https://github.com/mljaniczek" class="external-link">@mljaniczek</a>, <a href="https://github.com/slb2240" class="external-link">@slb2240</a>, <a href="https://github.com/stl2137" class="external-link">@stl2137</a>, <a href="https://github.com/toumban1" class="external-link">@toumban1</a>, <a href="https://github.com/whitec4" class="external-link">@whitec4</a>, and <a href="https://github.com/Yukodeng" class="external-link">@Yukodeng</a></p>
 </div>
 <div class="section level1">
 <h1 id="the-end">The End<a class="anchor" aria-label="anchor" href="#the-end"></a>
@@ -222,6 +223,7 @@
 <ul class="list-unstyled">
 <li>
 <a href="https://www.karissawhiting.com/" class="external-link">Karissa Whiting</a> <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0002-4683-1868" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
+<li>Jessica Lavery <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0002-2746-5647" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
 <li>Michael Curry <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0002-0261-4044" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
 <li>
 <a href="https://github.com/hfuchs5/" class="external-link">Hannah Fuchs</a> <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0003-2426-0096" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
@@ -243,7 +245,7 @@
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by <a href="https://www.karissawhiting.com/" class="external-link">Karissa Whiting</a>, Michael Curry, <a href="https://github.com/hfuchs5/" class="external-link">Hannah Fuchs</a>, Axel Martin, Arshi Arora.</p>
+  <p>Developed by <a href="https://www.karissawhiting.com/" class="external-link">Karissa Whiting</a>, Jessica Lavery, Michael Curry, <a href="https://github.com/hfuchs5/" class="external-link">Hannah Fuchs</a>, Axel Martin, Arshi Arora.</p>
 </div>
 
 <div class="pkgdown-footer-right">
