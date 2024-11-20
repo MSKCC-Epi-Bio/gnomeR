@@ -147,3 +147,51 @@ extract_patient_id <- function(sample_id) {
   return(patient_id)
 }
 
+
+# Add point mutations ------------------------------------------------
+
+#' Annotates point mutations of interest
+#'
+#' @param df Raw maf dataframe containing mutation data
+#' @param gene_name Hugo symbol of gene of interest
+#' @param chr_num Number of the chromosome with gene of interest
+#' @param start_pos String referencing the start of the gene point location.
+#' @param new_name String providing a name for this point mutation
+#' @param mutually_exclusive Boolean determining if the point mutation should be
+#' mutually exclusive from any other mutation on the gene or not. The default is `TRUE`.
+#' @return  a data frame with updated hugo symbols for point mutations
+#' @export
+#'
+
+add_point_mut <- function(df, gene_name, chr_num, start_pos, new_name,
+                          mutually_exclusive = T){
+
+  df <- .clean_and_check_cols(df) %>%
+    mutate(start_position = as.character(start_position))
+
+  if (mutually_exclusive){
+    pm_df <- df %>%
+      mutate(hugo_symbol = case_when(
+        chromosome == chr_num & grepl(start_pos, start_position) ~ new_name,
+        TRUE ~ hugo_symbol
+      ))
+  } else {
+
+    # select only the rows that have the point mutation of interest
+    pm_only <- df %>%
+      mutate(hugo_symbol = case_when(
+        chromosome == chr_num & grepl(start_pos, start_position) ~ new_name,
+        TRUE ~ hugo_symbol
+      )) %>%
+      filter(.data$hugo_symbol == new_name)
+
+    # The point mutation will be counted as both the original
+    # hugo_symbol and also the new point mutation, so combine rows
+    pm_df <- pf %>%
+      rbind(pm_only)
+
+  }
+
+  return (pm_df)
+
+}
