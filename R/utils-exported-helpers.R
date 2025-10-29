@@ -237,3 +237,112 @@ extract_patient_id <- function(sample_id) {
 }
 
 
+#' Variable selector
+#'
+#' Function takes `select()`-like inputs and converts the selector to
+#' a character vector of variable names. Functions accepts tidyselect syntax,
+#' and additional selector functions defined within the package
+#'
+#' @param select A single object selecting variables, e.g. `c(age, stage)`,
+#' `starts_with("age")`
+#' @param data A data frame to select columns from. Default is NULL
+#' @param var_info A data frame of variable names and attributes. May also pass
+#' a character vector of variable names. Default is NULL
+#' @param arg_name Optional string indicating the source argument name. This
+#' helps in the error messaging. Default is NULL.
+#' @param select_single Logical indicating whether the result must be a single
+#' variable. Default is `FALSE`
+#'
+#' @return A character vector of variable names
+#' @keywords internal
+#' @export
+.select_to_varnames <- function(select, data = NULL, var_info = NULL,
+                                arg_name = NULL, select_single = FALSE) {
+
+  if (is.null(data) && is.null(var_info)) {
+    cli::cli_abort("At least one of {.arg data} or {.arg var_info} must be specified.")
+  }
+
+  select <- rlang::enquo(select)
+
+  # if NULL passed, return NULL
+  if (rlang::quo_is_null(select)) {
+    return(NULL)
+  }
+
+  # if var_info is provided, scope it
+  if (!is.null(var_info)) data <- scope_tidy(var_info, data)
+
+  # determine if selecting input begins with `var()`
+  select_input_starts_var <-
+    !rlang::quo_is_symbol(select) && # if not a symbol (ie name)
+    tryCatch(
+      identical(
+        eval(as.list(rlang::quo_get_expr(select)) |> purrr::pluck(1)),
+        dplyr::vars
+      ),
+      error = function(e) FALSE
+    )
+
+  # performing selecting
+  res <-
+    tryCatch(
+      {
+        if (select_input_starts_var) {
+          # `vars()` was deprecated on June 6, 2022, gtsummary will stop
+          # exporting `vars()` at some point as well.
+          paste(
+            "Use of {.code vars()} is now {.strong deprecated} and support will soon be removed.",
+            "Please replace calls to {.code vars()} with {.code c()}."
+          ) |>
+            cli::cli_alert_warning()
+
+          # `vars()` evaluates to a list of quosures; unquoting them in `select()`
+          names(dplyr::select(data, !!!rlang::eval_tidy(select)))
+        } else {
+          names(dplyr::select(data, !!select))
+        }
+      },
+      error = function(e) {
+        if (!is.null(arg_name)) {
+          error_msg <- stringr::str_glue(
+            "Error in `{arg_name}=` argument input. Select from ",
+            "{paste(sQuote(names(data)), collapse = ', ')}"
+          )
+        } else {
+          error_msg <- as.character(e)
+        } # nocov
+        cli::cli_abort(error_msg, call = NULL)
+      }
+    )
+
+  # assuring only a single column is selected
+  if (select_single == TRUE && length(res) > 1) {
+    .select_single_error_msg(res, arg_name = arg_name)
+  }
+
+  # if nothing is selected, return a NULL
+  if (length(res) == 0) {
+    return(NULL)
+  }
+
+  res
+}
+
+
+.select_single_error_msg <- function(selected, arg_name) {
+  if (!rlang::is_empty(arg_name)) {
+    stringr::str_glue(
+      "Error in `{arg_name}=` argument--select only a single column. ",
+      "The following columns were selected, ",
+      "{paste(sQuote(selected), collapse = ', ')}"
+    ) |>
+      cli::cli_abort(call = NULL)
+  }
+  stringr::str_glue(
+    "Error in selector--select only a single column. ",
+    "The following columns were selected, ",
+    "{paste(sQuote(selected), collapse = ', ')}"
+  ) |>
+    cli::cli_abort(call = NULL)
+}

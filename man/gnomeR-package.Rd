@@ -22,6 +22,7 @@ Useful links:
 
 Authors:
 \itemize{
+  \item Jessica Lavery (\href{https://orcid.org/0000-0002-2746-5647}{ORCID})
   \item Michael Curry (\href{https://orcid.org/0000-0002-0261-4044}{ORCID})
   \item Hannah Fuchs (\href{https://orcid.org/0000-0003-2426-0096}{ORCID})
   \item Axel Martin \email{axel.steph.martin@gmail.com} (\href{https://orcid.org/YOUR-ORCID-ID}{ORCID})
