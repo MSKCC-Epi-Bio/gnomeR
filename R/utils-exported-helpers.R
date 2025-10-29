@@ -147,3 +147,93 @@ extract_patient_id <- function(sample_id) {
   return(patient_id)
 }
 
+
+#' Convert formula selector to a named list
+#' Functions takes a list of formulas, a named list, or a combination of named
+#' elements with formula elements and returns a named list.
+#' For example, `list(age = 1, starts_with("stage") ~ 2)`.
+#'
+#' @section Shortcuts:
+#' A shortcut for specifying an option be applied to all columns/variables
+#' is omitting the LHS of the formula.
+#' For example, `list(~ 1)` is equivalent to passing `list(everything() ~ 1)`.
+#'
+#' Additionally, a single formula may be passed instead of placing a single
+#' formula in a list; e.g. `everything() ~ 1` is equivalent to
+#' passing `list(everything() ~ 1)`
+#'
+#' @param x list of selecting formulas
+#' @param type_check A predicate function that checks the elements passed on
+#' the RHS of the formulas in `x=` (or the element in a named list)
+#' satisfy the function.
+#' @param type_check_msg When the `type_check=` fails, the string provided
+#' here will be printed as the error message. When `NULL`, a generic
+#' error message will be printed.
+#' @param null_allowed Are `NULL` values accepted for the right hand side of
+#' formulas?
+#' @inheritParams .select_to_varnames
+#' @keywords internal
+#' @export
+.formula_list_to_named_list <- function(x, data = NULL, var_info = NULL,
+                                        arg_name = NULL, select_single = FALSE,
+                                        type_check = NULL, type_check_msg = NULL,
+                                        null_allowed = TRUE) {
+
+  # if NULL provided, return NULL ----------------------------------------------
+  if (is.null(x)) {
+    return(NULL)
+  }
+
+  # converting to list if single element passed --------------------------------
+  if (inherits(x, "formula")) {
+    x <- list(x)
+  }
+
+  # checking the input is valid ------------------------------------------------
+  .check_valid_input(x = x, arg_name = arg_name, type_check = type_check)
+
+  # convert to a named list ----------------------------------------------------
+  len_x <- length(x)
+  named_list <- vector(mode = "list", length = len_x)
+  for (i in seq_len(len_x)) {
+    if (rlang::is_named(x[i])) {
+      named_list[i] <- list(x[i])
+    } else if (rlang::is_formula(x[[i]])) {
+      named_list[i] <-
+        .single_formula_to_list(x[[i]],
+                                data = data,
+                                var_info = var_info,
+                                arg_name = arg_name,
+                                select_single = select_single,
+                                type_check = type_check,
+                                type_check_msg = type_check_msg,
+                                null_allowed = null_allowed
+        ) |>
+        list()
+    } else {
+      .formula_select_error(arg_name = arg_name)
+    }
+
+    .rhs_checks(
+      x = named_list[i][[1]], arg_name = arg_name, type_check = type_check,
+      type_check_msg = type_check_msg, null_allowed = null_allowed
+    )
+  }
+  named_list <- purrr::flatten(named_list)
+
+  # removing duplicates (using the last one listed if variable occurs more than once)
+  rd <- function(x) {
+    x <- rev(x)
+    x <- !duplicated(x)
+    rev(x)
+  }
+  tokeep <- names(named_list) |> rd()
+  result <- named_list[tokeep]
+
+  if (isTRUE(select_single) && length(result) > 1) {
+    .select_single_error_msg(names(result), arg_name = arg_name)
+  }
+  result
+}
+
+
