@@ -1,3 +1,5 @@
+# gnomeR 1.2.2
+
 # gnomeR 1.2.1
 - More explicit separation between which are exported vs internal-only functions.
 - Removed the sanitize_mutations(), sanitize_cna(), sanitize_fusions() functions and instead replaced them with smaller, more modular and explicit functions that do all the same tasks. (#328)
