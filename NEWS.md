@@ -1,4 +1,7 @@
+
 # gnomeR 1.2.2
+- Cleaned up dependencies
+- Removed {broom.helpers} dependency and added necessary utility functions as internal functions  
 
 # gnomeR 1.2.1
 - More explicit separation between which are exported vs internal-only functions.
