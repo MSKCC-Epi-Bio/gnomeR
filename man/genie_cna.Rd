@@ -5,7 +5,7 @@
 \alias{genie_cna}
 \title{An example GENIE BPC CNA data set}
 \format{
-A data frame with CNA retrieved using {genieBPC} package. Column names are sample ids of cohort.
+A data frame with CNA retrieved using \pkg{genieBPC} package. Column names are sample ids of cohort.
 }
 \usage{
 genie_cna

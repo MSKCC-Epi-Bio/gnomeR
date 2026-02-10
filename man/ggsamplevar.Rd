@@ -10,13 +10,7 @@
 #' @return string
 #' @noRd
 #' @examples
-#' substrRight("Hello", 2)
-#'
-substrRight <- function(x, n) {
-x <- as.character(x)
-substr(x, nchar(x) - n + 1, nchar(x))
-}
-Histogram of Variants Per Sample Colored By Variant Classification}
+#' substrRight("Hello", 2)}
 \usage{
 ggsamplevar(mutation)
 }
@@ -27,20 +21,6 @@ ggsamplevar(mutation)
 Histogram of counts of variants per tumor sample
 }
 \description{
-#' Utility Function to Extract SNV
-#'
-#' @param x string
-#' @param n number of characters from right
-#'
-#' @return string
-#' @noRd
-#' @examples
-#' substrRight("Hello", 2)
-#'
-substrRight <- function(x, n) {
-x <- as.character(x)
-substr(x, nchar(x) - n + 1, nchar(x))
-}
 Histogram of Variants Per Sample Colored By Variant Classification
 }
 \examples{

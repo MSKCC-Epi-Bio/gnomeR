@@ -5,7 +5,7 @@
 \alias{genie_mut}
 \title{An example GENIE BPC mutations data set}
 \format{
-A data frame with mutations retrieved using {genieBPC} package
+A data frame with mutations retrieved using \pkg{genieBPC} package
 }
 \usage{
 genie_mut

@@ -131,11 +131,13 @@ ggvartype <- function(mutation) {
 #' #' @noRd
 #' #' @examples
 #' #' substrRight("Hello", 2)
-#' #'
-#' substrRight <- function(x, n) {
-#'   x <- as.character(x)
-#'   substr(x, nchar(x) - n + 1, nchar(x))
-#' }
+#'
+
+
+# substrRight <- function(x, n) {
+#   x <- as.character(x)
+#   substr(x, nchar(x) - n + 1, nchar(x))
+# }
 
 
 # ggsnvclass <- function(mutation) {
