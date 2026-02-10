@@ -20,7 +20,7 @@
 ## Citation
 
 Source:
-[`DESCRIPTION`](https://github.com/MSKCC-Epi-Bio/gnomeR/blob/main/DESCRIPTION)
+[`DESCRIPTION`](https://github.com/MSKCC-Epi-Bio/gnomeR/blob/v1.2.2/DESCRIPTION)
 
 Whiting K, Lavery J, Curry M, Fuchs H, Martin A, Arora A (2026).
 *gnomeR: Wrangle and analyze IMPACT and TCGA mutation data*. R package
