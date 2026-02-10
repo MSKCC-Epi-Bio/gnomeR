@@ -8,13 +8,13 @@
   "codeRepository": "https://github.com/MSKCC-Epi-Bio/gnomeR",
   "issueTracker": "https://github.com/MSKCC-Epi-Bio/gnomeR/issues",
   "license": "https://spdx.org/licenses/MIT",
-  "version": "1.2.0.9004",
+  "version": "1.2.2",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
     "url": "https://r-project.org"
   },
-  "runtimePlatform": "R version 4.2.3 (2023-03-15)",
+  "runtimePlatform": "R version 4.5.2 (2025-10-31)",
   "author": [
     {
       "@type": "Person",
@@ -22,6 +22,12 @@
       "familyName": "Whiting",
       "email": "karissa.whiting@gmail.com",
       "@id": "https://orcid.org/0000-0002-4683-1868"
+    },
+    {
+      "@type": "Person",
+      "givenName": "Jessica",
+      "familyName": "Lavery",
+      "@id": "https://orcid.org/0000-0002-2746-5647"
     },
     {
       "@type": "Person",
@@ -39,8 +45,7 @@
       "@type": "Person",
       "givenName": "Axel",
       "familyName": "Martin",
-      "email": "axel.steph.martin@gmail.com",
-      "@id": "https://orcid.org/YOUR-ORCID-ID"
+      "email": "axel.steph.martin@gmail.com"
     },
     {
       "@type": "Person",
@@ -123,13 +128,14 @@
       "@type": "SoftwareApplication",
       "identifier": "cbioportalR",
       "name": "cbioportalR",
+      "version": ">= 1.1.0",
       "provider": {
         "@id": "https://cran.r-project.org",
         "@type": "Organization",
         "name": "Comprehensive R Archive Network (CRAN)",
         "url": "https://cran.r-project.org"
       },
-      "sameAs": "https://github.com/karissawhiting/cbioportalR"
+      "sameAs": "https://CRAN.R-project.org/package=cbioportalR"
     },
     {
       "@type": "SoftwareApplication",
@@ -154,6 +160,18 @@
         "url": "https://cran.r-project.org"
       },
       "sameAs": "https://CRAN.R-project.org/package=vdiffr"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "cbioportalR",
+      "name": "cbioportalR",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=cbioportalR"
     }
   ],
   "softwareRequirements": {
@@ -299,30 +317,6 @@
     },
     "13": {
       "@type": "SoftwareApplication",
-      "identifier": "gtsummary",
-      "name": "gtsummary",
-      "provider": {
-        "@id": "https://cran.r-project.org",
-        "@type": "Organization",
-        "name": "Comprehensive R Archive Network (CRAN)",
-        "url": "https://cran.r-project.org"
-      },
-      "sameAs": "https://CRAN.R-project.org/package=gtsummary"
-    },
-    "14": {
-      "@type": "SoftwareApplication",
-      "identifier": "broom.helpers",
-      "name": "broom.helpers",
-      "provider": {
-        "@id": "https://cran.r-project.org",
-        "@type": "Organization",
-        "name": "Comprehensive R Archive Network (CRAN)",
-        "url": "https://cran.r-project.org"
-      },
-      "sameAs": "https://CRAN.R-project.org/package=broom.helpers"
-    },
-    "15": {
-      "@type": "SoftwareApplication",
       "identifier": "janitor",
       "name": "janitor",
       "provider": {
@@ -333,7 +327,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=janitor"
     },
-    "16": {
+    "14": {
       "@type": "SoftwareApplication",
       "identifier": "withr",
       "name": "withr",
@@ -345,7 +339,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=withr"
     },
-    "17": {
+    "15": {
       "@type": "SoftwareApplication",
       "identifier": "scales",
       "name": "scales",
@@ -357,7 +351,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=scales"
     },
-    "18": {
+    "16": {
       "@type": "SoftwareApplication",
       "identifier": "lifecycle",
       "name": "lifecycle",
@@ -369,10 +363,23 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=lifecycle"
     },
+    "17": {
+      "@type": "SoftwareApplication",
+      "identifier": "gtsummary",
+      "name": "gtsummary",
+      "version": ">= 2.0.2.9009",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=gtsummary"
+    },
     "SystemRequirements": null
   },
-  "fileSize": "2352.03KB",
-  "releaseNotes": "https://github.com/MSKCC-Epi-Bio/gnomeR/blob/master/NEWS.md",
+  "fileSize": "2364.708KB",
+  "releaseNotes": "https://github.com/MSKCC-Epi-Bio/gnomeR/blob/main/NEWS.md",
   "readme": "https://github.com/MSKCC-Epi-Bio/gnomeR/blob/main/README.md",
   "contIntegration": ["https://github.com/MSKCC-Epi-Bio/gnomeR/actions", "https://app.codecov.io/gh/MSKCC-Epi-Bio/gnomeR?branch=main"],
   "keywords": ["r", "r-package", "genomics", "mutations"]

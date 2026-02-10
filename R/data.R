@@ -254,7 +254,7 @@
 #' lung cancer v.2.0-public data set. If a row exists for a given hugo symbol
 #' and tumor-sample-barcode, then the mutation was observed.
 #'
-#' @format A data frame with mutations retrieved using {genieBPC} package
+#' @format A data frame with mutations retrieved using \pkg{genieBPC} package
 "genie_mut"
 
 #' An example GENIE BPC CNA data set
@@ -262,7 +262,7 @@
 #' This set was created from a sample of 100 patients from the non-small cell
 #' lung cancer v.2.0-public data set.
 #'
-#' @format A data frame with CNA retrieved using {genieBPC} package. Column names are sample ids of cohort.
+#' @format A data frame with CNA retrieved using \pkg{genieBPC} package. Column names are sample ids of cohort.
 "genie_cna"
 
 #' An example GENIE BPC fusions data set
@@ -271,7 +271,7 @@
 #' lung cancer v.2.0-public data set. If a row exists for a given hugo symbol
 #' and tumor-sample-barcode, then the mutation was observed.
 #'
-#' @format A data frame with fusions retrieved using {genieBPC} package
+#' @format A data frame with fusions retrieved using \pkg{genieBPC} package
 "genie_fusion"
 
 #' An example of long-format fusion/sv files

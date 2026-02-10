@@ -5,7 +5,7 @@
 \alias{genie_fusion}
 \title{An example GENIE BPC fusions data set}
 \format{
-A data frame with fusions retrieved using {genieBPC} package
+A data frame with fusions retrieved using \pkg{genieBPC} package
 }
 \usage{
 genie_fusion
