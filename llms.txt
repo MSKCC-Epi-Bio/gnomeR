@@ -1,0 +1,341 @@
+# gnomeR
+
+## Installation
+
+You can install the development version of `gnomeR` from
+[GitHub](https://github.com/) with:
+
+``` r
+# install.packages("devtools")
+devtools::install_github("MSKCC-Epi-Bio/gnomeR")
+```
+
+Along with its companion package for cbioPortal data download:
+
+``` r
+devtools::install_github("karissawhiting/cbioportalR")
+```
+
+## Introduction
+
+the `gnomeR` package provides a consistent framework for genetic data
+processing, visualization and analysis. This is primarily targeted to
+IMPACT datasets but can also be applied to any genomic data provided by
+cBioPortal. With {gnomeR} and {cbioportalR} you can:
+
+- [**Download and gather data from
+  CbioPortal**](https://www.karissawhiting.com/cbioportalR/) - Pull from
+  cBioPortal data base by study ID or sample ID.
+- **OncoKB annotate data (coming soon)** - Filter genomic data for known
+  oncogenic alterations.
+- **Process genomic data** - Process retrieved mutation/maf, fusions,
+  copy-number alteration, and segmentation data (when available) into an
+  analysis-ready formats.
+- **Visualize processed data** - Create summary plots from processed
+  data.
+- **Analyzing processed data**- Analyze associations between genomic
+  variables and clinical variables or outcomes.
+
+{gnomeR} is part of
+[gnomeverse](https://mskcc-epi-bio.github.io/genomeverse/), a collection
+of R packages designed to work together seamlessly to create
+reproducible clinico-genomic analysis pipelines.
+
+## Getting Set up
+
+{gnomeR} works with any genomic data that follows cBioPortal guidelines
+for
+[mutation](https://docs.cbioportal.org/5.1-data-loading/data-loading/file-formats#data-file-5),
+[CNA](https://docs.cbioportal.org/5.1-data-loading/data-loading/file-formats#discrete-copy-number-data),
+or
+[fusion](https://docs.cbioportal.org/5.1-data-loading/data-loading/file-formats#structural-variant-data)
+data file formats.
+
+If you wish to pull the data directly from cBioPortal, see how to get
+set up with credentials with the
+[{cbioportalR}](https://karissawhiting.github.io/cbioportalR/) package.
+
+## Processing Genomic Data
+
+The below examples uses the data sets `mutatations`, `sv`, `cna` which
+were pulled from cBioPortal and are included in the package as example
+data sets. We will sample 100 samples for examples:
+
+``` r
+set.seed(123)
+
+mut <- gnomeR::mutations
+cna <- gnomeR::cna
+sv <- gnomeR::sv
+
+un <-  unique(mut$sampleId)
+sample_patients <- sample(un, size = 50, replace = FALSE)
+```
+
+The main data processing function is
+[`create_gene_binary()`](https://mskcc-epi-bio.github.io/gnomeR/reference/create_gene_binary.md)
+which takes mutation, CNA and fusion files as input, and outputs a
+binary matrix of N rows (number of samples) by M genes included in the
+data set. We can specify which patients are included which will force
+all patients in resulting dataframe, even if they have no alterations.
+
+``` r
+gen_dat <- create_gene_binary(samples = sample_patients,
+                         mutation = mut,
+                         fusion = sv,
+                         cna = cna)
+
+head(gen_dat[, 1:6])
+#> # A tibble: 6 × 6
+#>   sample_id           ALK   APC    AR  ARAF   ATM
+#>   <chr>             <dbl> <dbl> <dbl> <dbl> <dbl>
+#> 1 P-0004508-T01-IM5     1     0     0     0     0
+#> 2 P-0005806-T01-IM5     0     1     0     0     0
+#> 3 P-0007006-T01-IM5     0     1     0     0     0
+#> 4 P-0008682-T01-IM5     0     1     0     0     0
+#> 5 P-0001297-T01-IM3     0     0     1     0     0
+#> 6 P-0007538-T01-IM5     0     0     0     1     0
+```
+
+By default, mutations, CNA and fusions will be returned in separate
+columns. You can combine these at the gene level using the following:
+
+``` r
+by_gene <- gen_dat %>% 
+  summarize_by_gene()
+
+head(by_gene[,1:6])
+#> # A tibble: 6 × 6
+#>   sample_id           ALK  ARAF   BLM CD79B CSF1R
+#>   <chr>             <dbl> <dbl> <dbl> <dbl> <dbl>
+#> 1 P-0004508-T01-IM5     1     0     0     0     0
+#> 2 P-0005806-T01-IM5     0     0     0     0     0
+#> 3 P-0007006-T01-IM5     0     0     0     0     0
+#> 4 P-0008682-T01-IM5     0     0     0     0     0
+#> 5 P-0001297-T01-IM3     0     0     0     0     0
+#> 6 P-0007538-T01-IM5     0     1     0     0     1
+```
+
+## Visualize
+
+You can visualize your processed and raw alteration data sets using
+{gnomeR}’s many data visualization functions.
+
+Quickly visualize mutation characteristics with
+[`ggvarclass()`](https://mskcc-epi-bio.github.io/gnomeR/reference/ggvarclass.md),
+[`ggvartype()`](https://mskcc-epi-bio.github.io/gnomeR/reference/ggvartype.md),
+`ggsnvclass()`,
+[`ggsamplevar()`](https://mskcc-epi-bio.github.io/gnomeR/reference/ggsamplevar.md),
+[`ggtopgenes()`](https://mskcc-epi-bio.github.io/gnomeR/reference/ggtopgenes.md),
+[`gggenecor()`](https://mskcc-epi-bio.github.io/gnomeR/reference/gggenecor.md),
+and
+[`ggcomut()`](https://mskcc-epi-bio.github.io/gnomeR/reference/ggcomut.md).
+
+``` r
+ggvarclass(mutation = mut)
+```
+
+![](reference/figures/README-unnamed-chunk-4-1.png)
+
+## Summarize & Analyze
+
+You can tabulate summarize your genomic data frame using the
+[`tbl_genomic()`](https://mskcc-epi-bio.github.io/gnomeR/reference/tbl_genomic.md)
+function, a wrapper for
+[`gtsummary::tbl_summary()`](https://www.danieldsjoberg.com/gtsummary/reference/tbl_summary.html).
+
+``` r
+
+gen_dat <- gen_dat %>%
+  dplyr::mutate(trt_status = sample(x = c("pre-trt", "post-trt"),
+       size = nrow(gen_dat), replace = TRUE)) 
+```
+
+``` r
+
+gene_tbl_trt <-  gen_dat %>%
+  subset_by_frequency(t = .1, other_vars = trt_status) %>%
+  tbl_genomic(by = trt_status) %>%
+  gtsummary::add_p() 
+```
+
+![](reference/figures/README-tbl_genomic_print.png)
+
+Additionally, you can analyze custom pathways, or a set of default gene
+pathways using
+[`add_pathways()`](https://mskcc-epi-bio.github.io/gnomeR/reference/add_pathways.md):
+
+``` r
+
+path_by_trt <- gen_dat %>%
+  add_pathways() %>%
+  select(sample_id, trt_status, contains("pathway_")) %>%
+  tbl_genomic(by = trt_status) %>%
+  gtsummary::add_p() 
+```
+
+![](reference/figures/README-path_by_trt.png)
+
+# Contributing
+
+Please note that the gnomeR project is released with a [Contributor Code
+of
+Conduct](https://contributor-covenant.org/version/2/0/CODE_OF_CONDUCT.html).
+By contributing to this project, you agree to abide by its terms.
+
+Thank you to all contributors!
+
+[@akriti21](https://github.com/akriti21),
+[@alrein-05](https://github.com/alrein-05),
+[@arorarshi](https://github.com/arorarshi),
+[@AxelitoMartin](https://github.com/AxelitoMartin),
+[@brombergm](https://github.com/brombergm),
+[@carokos](https://github.com/carokos),
+[@ChristineZ-msk](https://github.com/ChristineZ-msk),
+[@ddsjoberg](https://github.com/ddsjoberg),
+[@edrill](https://github.com/edrill),
+[@hfuchs5](https://github.com/hfuchs5),
+[@jalavery](https://github.com/jalavery),
+[@jflynn264](https://github.com/jflynn264),
+[@karissawhiting](https://github.com/karissawhiting),
+[@michaelcurry1123](https://github.com/michaelcurry1123),
+[@mljaniczek](https://github.com/mljaniczek),
+[@slb2240](https://github.com/slb2240),
+[@stl2137](https://github.com/stl2137),
+[@toumban1](https://github.com/toumban1),
+[@whitec4](https://github.com/whitec4), and
+[@Yukodeng](https://github.com/Yukodeng)
+
+# The End
+
+# Package index
+
+### Processing Data
+
+- [`create_gene_binary()`](https://mskcc-epi-bio.github.io/gnomeR/reference/create_gene_binary.md)
+  : Enables creation of a binary matrix from a mutation, fusion or CNA
+  file with a predefined list of samples (rows are samples and columns
+  are genes)
+
+- [`summarize_by_gene()`](https://mskcc-epi-bio.github.io/gnomeR/reference/summarize_by_gene.md)
+  : Simplify binary matrix to one column per gene that counts any
+  alteration type as 1
+
+- [`summarize_by_patient()`](https://mskcc-epi-bio.github.io/gnomeR/reference/summarize_by_patient.md)
+  : Simplify binary matrix to one column per patient that counts any
+  alteration type across all samples as 1
+
+- [`pivot_cna_wider()`](https://mskcc-epi-bio.github.io/gnomeR/reference/pivot_cna_wider.md)
+  : Pivot CNA from maf (long) version to wide version
+
+- [`pivot_cna_longer()`](https://mskcc-epi-bio.github.io/gnomeR/reference/pivot_cna_longer.md)
+  : Reformat Wide CNA Data to Long
+
+- [`add_pathways()`](https://mskcc-epi-bio.github.io/gnomeR/reference/add_pathways.md)
+  : Pathway Alterations
+
+- [`recode_alias()`](https://mskcc-epi-bio.github.io/gnomeR/reference/recode_alias.md)
+  : Recode Hugo Symbol Column
+
+- [`reformat_fusion()`](https://mskcc-epi-bio.github.io/gnomeR/reference/reformat_fusion.md)
+  :
+
+  Enables users to reformat fusions files so that each fusion is listed
+  as one row with two hugo-symbol sites instead of two rows, one for
+  each site. This is the required format for the `create_gene_binary`
+  function.
+
+- [`subset_by_panel()`](https://mskcc-epi-bio.github.io/gnomeR/reference/subset_by_panel.md)
+  : Subset a Binary Matrix By Genes Available on Specified Panel
+
+### Analyzing Data
+
+- [`tbl_genomic()`](https://mskcc-epi-bio.github.io/gnomeR/reference/tbl_genomic.md)
+  : tbl_genomic
+- [`mutation_viz()`](https://mskcc-epi-bio.github.io/gnomeR/reference/mutation_viz.md)
+  : Creates a set of plot summarising a mutation file.
+- [`ggvarclass()`](https://mskcc-epi-bio.github.io/gnomeR/reference/ggvarclass.md)
+  : Barplot of Variant Classification Counts
+- [`ggvartype()`](https://mskcc-epi-bio.github.io/gnomeR/reference/ggvartype.md)
+  : Barplot of Variant Type Counts
+- [`ggsamplevar()`](https://mskcc-epi-bio.github.io/gnomeR/reference/ggsamplevar.md)
+  : \#' Utility Function to Extract SNV \#' \#' @param x string \#'
+  @param n number of characters from right \#' \#' @return string \#'
+  @noRd \#' @examples \#' substrRight("Hello", 2)
+- [`ggtopgenes()`](https://mskcc-epi-bio.github.io/gnomeR/reference/ggtopgenes.md)
+  : Barplot of Most Frequently Altered Genes
+- [`gggenecor()`](https://mskcc-epi-bio.github.io/gnomeR/reference/gggenecor.md)
+  : Correlation Heatmap of the Top Altered Genes
+- [`ggcomut()`](https://mskcc-epi-bio.github.io/gnomeR/reference/ggcomut.md)
+  : Comutation Heatmap of the Top Altered Genes
+- [`subset_by_frequency()`](https://mskcc-epi-bio.github.io/gnomeR/reference/subset_by_frequency.md)
+  : Subset a Binary Matrix By Alteration Frequency Threshold
+
+### Helper Functions
+
+- [`which_impact_panel()`](https://mskcc-epi-bio.github.io/gnomeR/reference/which_impact_panel.md)
+  : provide a list of impact panels a provided gene is found within
+- [`recode_cna()`](https://mskcc-epi-bio.github.io/gnomeR/reference/recode_cna.md)
+  : Function to recode numeric CNA alteration values to factor values
+- [`rename_columns()`](https://mskcc-epi-bio.github.io/gnomeR/reference/rename_columns.md)
+  : Rename columns from API results to work with gnomeR functions
+- [`resolve_alias()`](https://mskcc-epi-bio.github.io/gnomeR/reference/resolve_alias.md)
+  : Resolve Hugo Symbol Names with Aliases
+- [`extract_patient_id()`](https://mskcc-epi-bio.github.io/gnomeR/reference/extract_patient_id.md)
+  : Extract IMPACT Patient ID From Sample ID
+
+### Color Palette
+
+- [`gnomer_colors`](https://mskcc-epi-bio.github.io/gnomeR/reference/gnomer_colors.md)
+  : List of suggested color palettes for when you need a large palette
+- [`gnomer_palettes`](https://mskcc-epi-bio.github.io/gnomeR/reference/gnomer_palettes.md)
+  : Complete list of gnomeR color palettes
+- [`gnomer_palette()`](https://mskcc-epi-bio.github.io/gnomeR/reference/gnomer_palette.md)
+  : Access the colors in a gnomeR color palette
+- [`set_gnomer_palette()`](https://mskcc-epi-bio.github.io/gnomeR/reference/set_gnomer_palette.md)
+  : Set gnomeR color palette
+- [`reset_gnomer_palette()`](https://mskcc-epi-bio.github.io/gnomeR/reference/reset_gnomer_palette.md)
+  : Reset gnomeR color palette
+
+### Example Data Sets
+
+- [`mutations`](https://mskcc-epi-bio.github.io/gnomeR/reference/mutations.md)
+  : An example IMPACT cBioPortal mutation data set in API format
+- [`cna`](https://mskcc-epi-bio.github.io/gnomeR/reference/cna.md) : An
+  example IMPACT cBioPortal mutation data set in API format
+- [`sv`](https://mskcc-epi-bio.github.io/gnomeR/reference/sv.md) : An
+  example IMPACT cBioPortal mutation data set in API format
+- [`seg`](https://mskcc-epi-bio.github.io/gnomeR/reference/seg.md) : A
+  segmentation file from the cbioPortal datasets
+- [`cna_wide`](https://mskcc-epi-bio.github.io/gnomeR/reference/cna_wide.md)
+  : An example IMPACT cBioPortal CNA in wide format
+- [`consequence_map`](https://mskcc-epi-bio.github.io/gnomeR/reference/consequence_map.md)
+  : Consequence Map
+- [`gene_panels`](https://mskcc-epi-bio.github.io/gnomeR/reference/gene_panels.md)
+  : Public Gene Panels on cBioPortal
+- [`names_df`](https://mskcc-epi-bio.github.io/gnomeR/reference/names_df.md)
+  : Data Frame of Column Names
+- [`pathways`](https://mskcc-epi-bio.github.io/gnomeR/reference/pathways.md)
+  : IMPACT Oncogenic Signaling Pathways
+- [`impact_alias_table`](https://mskcc-epi-bio.github.io/gnomeR/reference/impact_alias_table.md)
+  : IMPACT Alias Tables
+- [`genie_alias_table`](https://mskcc-epi-bio.github.io/gnomeR/reference/genie_alias_table.md)
+  : GENIE Alias Table
+- [`sv_long`](https://mskcc-epi-bio.github.io/gnomeR/reference/sv_long.md)
+  : An example of long-format fusion/sv files
+- [`clin_collab_df`](https://mskcc-epi-bio.github.io/gnomeR/reference/clin_collab_df.md)
+  : An example data set for an IMPACT analysis coming from a clinical
+  collaborator
+- [`genie_mut`](https://mskcc-epi-bio.github.io/gnomeR/reference/genie_mut.md)
+  : An example GENIE BPC mutations data set
+- [`genie_cna`](https://mskcc-epi-bio.github.io/gnomeR/reference/genie_cna.md)
+  : An example GENIE BPC CNA data set
+- [`genie_fusion`](https://mskcc-epi-bio.github.io/gnomeR/reference/genie_fusion.md)
+  : An example GENIE BPC fusions data set
+
+# Articles
+
+### All vignettes
+
+- [Processing Data with
+  {gnomeR}](https://mskcc-epi-bio.github.io/gnomeR/articles/data-processing-vignette.md):

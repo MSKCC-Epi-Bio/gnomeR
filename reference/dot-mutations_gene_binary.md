@@ -1,0 +1,64 @@
+# Make Binary Matrix From Mutation data frame
+
+Make Binary Matrix From Mutation data frame
+
+## Usage
+
+``` r
+.mutations_gene_binary(
+  mutation,
+  samples,
+  mut_type,
+  snp_only,
+  include_silent,
+  specify_panel,
+  names_mut_dict
+)
+```
+
+## Arguments
+
+- mutation:
+
+  A data frame of mutations in the format of a maf file.
+
+- samples:
+
+  a character vector specifying which samples should be included in the
+  resulting data frame. Default is NULL is which case all samples with
+  an alteration in the mutation, cna or fusions file will be used. If
+  you specify a vector of samples that contain samples not in any of the
+  passed genomic data frames, 0's (or NAs when appropriate if specifying
+  a panel) will be returned for every column of that patient row.
+
+- mut_type:
+
+  The mutation type to be used. Options are "omit_germline",
+  "somatic_only", "germline_only" or "all". Note "all" will keep all
+  mutations regardless of status (not recommended). Default is
+  omit_germline which includes all somatic mutations, as well as any
+  unknown mutation types (most of which are usually somatic)
+
+- snp_only:
+
+  Boolean to rather the genetics events to be kept only to be SNPs
+  (insertions and deletions will be removed). Default is FALSE.
+
+- include_silent:
+
+  Boolean to keep or remove all silent mutations. TRUE keeps, FALSE
+  removes. Default is FALSE.
+
+- specify_panel:
+
+  Default is `"no"` where no panel annotation is done. Otherwise pass a
+  character vector of length 1 with a panel id (see
+  [`gnomeR::gene_panels`](https://mskcc-epi-bio.github.io/gnomeR/reference/gene_panels.md)
+  for available panels), or `"impact"` for automated IMPACT annotation.
+  Alternatively, you may pass a data frame of `sample_id`-`panel_id`
+  pairs specifying panels for each sample for which to insert NAs
+  indicating genes not tested. See below for details.
+
+## Value
+
+a data frame
