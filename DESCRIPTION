@@ -1,6 +1,6 @@
 Package: gnomeR
 Title: Wrangle and analyze IMPACT and TCGA mutation data 
-Version: 1.2.0.9004
+Version: 1.2.1
 Authors@R: 
     c(person(given = "Karissa",
              family = "Whiting",
@@ -69,6 +69,6 @@ VignetteBuilder: knitr
 Language: en-US
 Roxygen: list(markdown = TRUE)
 Config/testthat/edition: 3
-Remotes:  
+Remotes: 
     ddsjoberg/gtsummary,
     karissawhiting/cbioportalR
