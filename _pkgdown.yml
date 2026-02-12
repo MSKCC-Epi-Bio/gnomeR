@@ -29,6 +29,7 @@ reference:
   - subtitle: Processing Data
   - contents:
     - create_gene_binary
+    - create_protein_change_binary
     - summarize_by_gene
     - summarize_by_patient
     - pivot_cna_wider

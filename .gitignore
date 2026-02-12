@@ -10,4 +10,4 @@ docs
 /Meta/
 .svg
 tests/testthat/_snaps/
-
+scribble.Rmd
